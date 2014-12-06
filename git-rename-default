@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# taken from:
+# http://stackoverflow.com/questions/8762601/how-do-i-rename-my-git-master-branch-to-release
+#  answered on Jan 6 '12 at 18:37
+#  by Adam Dymitruk
+
+git checkout -b release master    # create and switch to the release branch
+git push -u origin release        # push the release branch to the remote and track it
+git branch -d master              # delete local master
+
+# NOTE: this delete will fail on GitHub by default since the
+# 'master' branch is the default branch.
+# To allow this delete to go through, go to the 'Settings' page
+# in your repo on GitHub and change the 'Default branch' from 'master'
+# to 'release'
+git push --delete origin master   # delete remote master
+
+git remote prune origin           # delete the remote tracking branch
