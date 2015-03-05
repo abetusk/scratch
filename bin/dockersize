@@ -1,0 +1,25 @@
+#!/bin/bash
+
+id="$1"
+
+z=`echo -e "GET /images/json HTTP/1.0\r\n" | nc -U /var/run/docker.sock | tail -n +4`
+
+filt='.[].RepoTags[]'
+if [ "$id" != "" ]; then
+  filt='.[] | select( .RepoTags[] | contains("'$id'") )'
+fi
+
+while read l; do
+  vsize=`echo "$l" | jq -r .VirtualSize`
+  img=`echo "$l" | jq -r .Id | cut -c1-8`
+  tags=`echo "$l" | jq -r .RepoTags[]`
+  #h_vsize=`numfmt --to=iec-i --suffix=B --format "%3f" $vsize`
+  h_vsize=`numfmt --to=iec-i --suffix=B $vsize`
+
+  echo $h_vsize $img $tags
+
+done < <( echo "$z" | jq -c "$filt" )
+
+#echo "$z" | jq '.[].RepoTags[] | select( . | contains("'$id'") )' 
+
+
