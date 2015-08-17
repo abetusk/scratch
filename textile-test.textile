@@ -1,0 +1,26 @@
+h1. A textile test in GitHub
+
+meow meow meow
+
+p((.  *meow*
+
+# meow
+## meow
+## meow
+## meow meow meow
+### mew
+
+h2=. mew?
+
+p{color:red: margin:30px}. meow!
+
+h2<>. meow
+
+h2((. meow
+
+h2)). meow
+
+bq=. mew?
+
+
+
