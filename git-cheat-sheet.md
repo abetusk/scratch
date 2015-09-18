@@ -35,8 +35,8 @@ Crap, just commited password file but haven't pushed
     git config --global alias.undo-commit 'reset --soft HEAD^'
     git undo-commit
 
-Yeah!  Someone merged my pull request...how do I merge it back into mine?
--------------------------------------------------------------------------
+Someone merged my pull request...how do I merge it back into mine?
+------------------------------------------------------------------
 
     git checkout release
     git remote add {{remote_name}} {{remote_url}}
