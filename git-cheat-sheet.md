@@ -1,9 +1,7 @@
 ### Rename local branch
 
-```bash
-git branch -m {{oldname}} {{newname}}
-git branch -m {{newname}}
-```
+    git branch -m {{oldname}} {{newname}}
+    git branch -m {{newname}}
 
 ### Pretty git log history
 
