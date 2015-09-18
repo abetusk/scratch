@@ -49,3 +49,15 @@ remotes?
 
     git remote -v
 
+Clone all submodules
+--------------------
+
+    git clone --recurseive {{repo_url}}
+    
+Forgot to recursively clone submodules
+--------------------------------------
+
+    cd {{repo}}
+    git submodule update --init
+
+    
