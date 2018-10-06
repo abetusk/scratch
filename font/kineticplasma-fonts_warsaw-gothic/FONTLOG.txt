@@ -1,0 +1,5 @@
+Changelog:
+
+New name: "Warsaw Gothic", New uppercase R, new lowercase G, new lowercase L, new lowercase R, new lowercase A, tweaked number 1, tweaked number 4, new lowercase double s/sharp s, addition of some punctuation marks not included in League Gothic, new weights including Italics, Extended, and Outline variants.
+
+Changes made by Cannot Into Space Fonts.
