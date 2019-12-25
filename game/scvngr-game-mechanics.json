@@ -1,0 +1,244 @@
+{
+  "source":"https://techcrunch.com/2010/08/25/scvngr-game-mechanics/",
+  "retrieved":"2017-12-14T10:19:11+00:00",
+  "data": [
+    {
+      "name":"Achievement",
+      "definition":"A virtual or physical representation of having accomplished something. These are often viewed as rewards in and of themselves.",
+      "example":"a badge, a level, a reward, points, really anything defined as a reward can be a reward."
+    },
+    {
+      "name":"Appointment Dynamic",
+      "definition":"A dynamic in which to succeed, one must return at a predefined time to take some action. Appointment dynamics are often deeply related to interval based reward schedules or avoidance dyanmics.",
+      "example":"Cafe World and Farmville where if you return at a set time to do something you get something good, and if you don’t something bad happens."
+    },
+    {
+      "name":"Avoidance",
+      "definition":"The act of inducing player behavior not by giving a reward, but by not instituting a punishment. Produces consistent level of activity, timed around the schedule.",
+      "example":"Press a lever every 30 seconds to not get shocked."
+    },
+    {
+      "name":"Behavioral Contrast",
+      "definition":"The theory defining how behavior can shift greatly based on changed expectations.",
+      "example":"A monkey presses a lever and is given lettuce. The monkey is happy and continues to press the lever. Then it gets a grape one time. The monkey is delighted. The next time it presses the lever it gets lettuce again. Rather than being happy, as it was before, it goes ballistic throwing the lettuce at the experimenter. (In some experiments, a second monkey is placed in the cage, but tied to a rope so it can’t access the lettuce or lever. After the grape reward is removed, the first monkey beats up the second monkey even though it obviously had nothing to do with the removal. The anger is truly irrational.)"
+    },
+    {
+      "name":"Behavioral Momentum",
+      "definition":"The tendency of players to keep doing what they have been doing.",
+      "example":"From Jesse Schell’s awesome Dice talk: “I have spent ten hours playing Farmville. I am a smart person and wouldn’t spend 10 hours on something unless it was useful. Therefore this must be useful, so I can keep doing it.”"
+
+    },
+    {
+      "name":"Blissful Productivity",
+      "definition":"The idea that playing in a game makes you happier working hard, than you would be relaxing. Essentially, we’re optimized as human beings by working hard, and doing meaningful and rewarding work.",
+      "example":"From Jane McGonical’s Ted Talk wherein she discusses how World of Warcraft players play on average 22 hours / week (a part time job), often after a full days work. They’re willing to work hard, perhaps harder than in real life, because of their blissful productivity in the game world."
+
+    },
+    {
+      "name":"Cascading Information Theory",
+      "definition":"The theory that information should be released in the minimum possible snippets to gain the appropriate level of understanding at each point during a game narrative.",
+      "example":"showing basic actions first, unlocking more as you progress through levels. Making building on SCVNGR a simple but staged process to avoid information overload."
+    },
+    {
+      "name":"Chain Schedules",
+      "definition":"the practice of linking a reward to a series of contingencies. Players tend to treat these as simply the individual contingencies. Unlocking one step in the contingency is often viewed as an individual reward by the player.",
+      "example":"Kill 10 orcs to get into the dragons cave, every 30 minutes the dragon appears."
+    },
+    {
+      "name":"Communal Discovery",
+      "definition":"The game dynamic wherein an entire community is rallied to work together to solve a riddle, a problem or a challenge. Immensely viral and very fun.",
+      "example":"DARPA balloon challenge, the cottage industries that appear around McDonalds monopoly to find “Boardwalk”"
+    },
+    {
+      "name":"Companion Gaming",
+      "definition":"Games that can be played across multiple platforms",
+      "example":"Games that be played on iphone, facebook, xbox with completely seamless cross platform gameplay."
+    },
+    {
+      "name":"Contingency",
+      "definition":"The problem that the player must overcome in the three part paradigm of reward schedules.",
+      "example":"10 orcs block your path"
+    },
+    {
+      "name":"Countdown",
+      "definition":"The dynamic in which players are only given a certain amount of time to do something. This will create an activity graph that causes increased initial activity increasing frenetically until time runs out, which is a forced extinction.",
+      "example":"Bejeweled Blitz with 30 seconds to get as many points as you can. Bonus rounds. Timed levels"
+
+    },
+    {
+      "name":"Cross Situational Leader-boards",
+      "definition":"This occurs when one ranking mechanism is applied across multiple (unequal and isolated) gaming scenarios. Players often perceive that these ranking scenarios are unfair as not all players were presented with an “equal” opportunity to win.",
+      "example":"Players are arbitrarily sent into one of three paths. The winner is determined by the top scorer overall (i.e. across the paths). Since the players can only do one path (and can’t pick), they will perceive inequity in the game scenario and get upset."
+    },
+    {
+      "name":"Disincentives",
+      "definition":"a game element that uses a penalty (or altered situation) to induce behavioral shift",
+      "example":"losing health points, amazon’s checkout line removing all links to tunnel the buyer to purchase, speeding traps"
+    },
+    {
+      "name":"Endless Games",
+      "definition":"Games that do not have an explicit end. Most applicable to casual games that can refresh their content or games where a static (but positive) state is a reward of its own.",
+      "example":"Farmville (static state is its own victory), SCVNGR (challenges constantly are being built by the community to refresh content)"
+    },
+    {
+      "name":"Envy",
+      "definition":"The desire to have what others have. In order for this to be effective seeing what other people have (voyeurism) must be employed.",
+      "example":"my friend has this item and I want it!"
+    },
+    {
+      "name":"Epic Meaning",
+      "definition":"players will be highly motivated if they believe they are working to achieve something great, something awe-inspiring, something bigger than themselves.",
+      "example":"From Jane McGonical’s Ted Talk where she discusses Warcraft’s ongoing story line and “epic meaning” that involves each individual has motivated players to participate outside the game and create the second largest wiki in the world to help them achieve their individual quests and collectively their epic meanings."
+    },
+    {
+      "name":"Extinction",
+      "definition":"Extinction is the term used to refer to the action of stopping providing a reward. This tends to create anger in players as they feel betrayed by no longer receiving the reward they have come to expect. It generally induces negative behavioral momentum.",
+      "example":"killing 10 orcs no longer gets you a level up"
+    },
+    {
+      "name":"Fixed Interval Reward Schedules",
+      "definition":"Fixed interval schedules provide a reward after a fixed amount of time, say 30 minutes. This tends to create a low engagement after a reward, and then gradually increasing activity until a reward is given, followed by another lull in engagement.",
+      "example":"Farmville, wait 30 minutes, crops have appeared"
+    },
+    {
+      "name":"Fixed Ratio Reward Schedule",
+      "definition":"A fixed ratio schedule provides rewards after a fixed number of actions. This creates cyclical nadirs of engagement (because the first action will not create any reward so incentive is low) and then bursts of activity as the reward gets closer and closer.",
+      "example":"kill 20 ships, get a level up, visit five locations, get a badge"
+    },
+    {
+      "name":"Free Lunch",
+      "definition":"A dynamic in which a player feels that they are getting something for free due to someone else having done work. It’s critical that work is perceived to have been done (just not by the player in question) to avoid breaching trust in the scenario. The player must feel that they’ve “lucked” into something.",
+      "example":"Groupon. By virtue of 100 other people having bought the deal, you get it for cheap. There is no sketchiness b/c you recognize work has been done (100 people are spending money) but you yourself didn’t have to do it."
+    },
+    {
+      "name":"Fun Once, Fun Always",
+      "definition":"The concept that an action in enjoyable to repeat all the time. Generally this has to do with simple actions. There is often also a limitation to the total level of enjoyment of the action.",
+      "example":"the theory behind the check-in everywhere and the check-in and the default challenges on SCVNGR."
+    },
+    {
+      "name":"Interval Reward Schedules",
+      "definition":"Interval based reward schedules provide a reward after a certain amount of time. There are two flavors: variable and fixed.",
+      "example":"wait N minutes, collect rent"
+    },
+    {
+      "name":"Lottery",
+      "definition":"A game dynamic in which the winner is determined solely by chance. This creates a high level of anticipation. The fairness is often suspect, however winners will generally continue to play indefinitely while losers will quickly abandon the game, despite the random nature of the distinction between the two.",
+      "example":"many forms of gambling, scratch tickets."
+    },
+    {
+      "name":"Loyalty",
+      "definition":"The concept of feeling a positive sustained connection to an entity leading to a feeling of partial ownership. Often reinforced with a visual representation.",
+      "example":"fealty in WOW, achieving status at physical places (mayorship, being on the wall of favorite customers)"
+    },
+    {
+      "name":"Meta Game",
+      "definition":"a game which exists layered within another game. These generally are discovered rather than explained (lest they cause confusion) and tend to appeal to ~2% of the total gameplaying audience. They are dangerous as they can induce confusion (if made too overt) but are powerful as they’re greatly satisfying to those who find them.",
+      "example":"hidden questions / achievements within world of warcraft that require you to do special (and hard to discover) activities as you go through other quests"
+    },
+    {
+      "name":"Micro Leader-boards",
+      "definition":"The rankings of all individuals in a micro-set. Often great for distributed game dynamics where you want many micro-competitions or desire to induce loyalty.",
+      "example":"Be the top scorers at Joe’s bar this week and get a free appetizer"
+    },
+    {
+      "name":"Modifiers",
+      "definition":"An item that when used affects other actions. Generally modifiers are earned after having completed a series of challenges or core functions.",
+      "example":"A X2 modifier that doubles the points on the next action you take."
+    },
+    {
+      "name":"Moral Hazard of Game Play",
+      "definition":"The risk that by rewarding people manipulatively in a game you remove the actual moral value of the action and replace it with an ersatz game-based reward. The risk that by providing too many incentives to take an action, the incentive of actually enjoying the action taken is lost. The corollary to this is that if the points or rewards are taken away, then the person loses all motivation to take the (initially fun on its own) action.",
+      "example":"Paraphrased from Jesse Schell “If I give you points every time you brush your teeth, you’ll stop brushing your teeth b/c it’s good for you and then only do it for the points. If the points stop flowing, your teeth will decay.”"
+    },
+    {
+      "name":"Ownership",
+      "definition":"The act of controlling something, having it be *your* property.",
+      "example":"Ownership is interesting on a number of levels, from taking over places, to controlling a slot, to simply owning popularity by having a digital representation of many friends."
+    },
+    {
+      "name":"Pride",
+      "definition":"the feeling of ownership and joy at an accomplishment",
+      "example":"I have ten badges. I own them. They are mine. There are many like them, but these are mine. Hooray."
+    },
+    {
+      "name":"Privacy",
+      "definition":"The concept that certain information is private, not for public distribution. This can be a demotivator (I won’t take an action because I don’t want to share this) or a motivator (by sharing this I reinforce my own actions).",
+      "example":"Scales the publish your daily weight onto Twitter (these are real and are proven positive motivator for staying on your diet). Or having your location publicly broadcast anytime you do anything (which is invasive and can should be avoided)."
+    },
+    {
+      "name":"Progression Dynamic",
+      "definition":"a dynamic in which success is granularly displayed and measured through the process of completing itemized tasks.",
+      "example":"a progress bar, leveling up from paladin level 1 to paladin level 60"
+    },
+    {
+      "name":"Ratio Reward Schedules",
+      "definition":"Ratio schedules provide a reward after a number of actions. There are two flavors: variable and fixed.",
+      "example":"kill 10 orcs, get a power up."
+    },
+    {
+      "name":"Real-time v. Delayed Mechanics",
+      "definition":"Realtime information flow is uninhibited by delay. Delayed information is only released after a certain interval.",
+      "example":"Realtime scores cause instant reaction (gratification or demotivation). Delayed causes ambiguity which can incent more action due to the lack of certainty of ranking."
+    },
+    {
+      "name":"Reinforcer",
+      "definition":"The reward given if the expected action is carried out in the three part paradigm of reward schedules.",
+      "example":"receiving a level up after killing 10 orcs."
+    },
+    {
+      "name":"Response",
+      "definition":"The expected action from the player in the three part paradigm of reward schedules.",
+      "example":"the player takes the action to kill 10 orcs"
+    },
+    {
+      "name":"Reward Schedules",
+      "definition":"the timeframe and delivery mechanisms through which rewards (points, prizes, level ups) are delivered. Three main parts exist in a reward schedule; contingency, response and reinforcer.",
+      "example":"getting a level up for killing 10 orcs, clearing a row in Tetris, getting fresh crops in Farmville"
+    },
+    {
+      "name":"Rolling Physical Goods",
+      "definition":"A physical good (one with real value) that can be won by anyone on an ongoing basis as long as they meet some characteristic. However, that characteristic rolls from player to player.",
+      "example":"top scorer deals, mayor deals"
+    },
+    {
+      "name":"Shell Game",
+      "definition":"a game in which the player is presented with the illusion of choice but is actually in a situation that guides them to the desired outcome of the operator.",
+      "example":"3 Card Monty, lotteries, gambling"
+    },
+    {
+      "name":"Social Fabric of Games",
+      "definition":"the idea that people like one another better after they’ve played games with them, have a higher level of trust and a great willingness to work together.",
+      "example":"From Jane McGonicgal’s TED talk where she suggests that it takes a lot of trust to play a game with someone because you need them to spend their time with you, play by the same rules, shoot for the same goals."
+    },
+    {
+      "name":"Status",
+      "definition":"The rank or level of a player. Players are often motivated by trying to reach a higher level or status.",
+      "example":"white paladin level 20 in WOW."
+    },
+    {
+      "name":"Urgent Optimism",
+      "definition":"Extreme self motivation. The desire to act immediately to tackle an obstacle combined with the belief that we have a reasonable hope of success.",
+      "example":"From Jane McGonical’s TED talk. The idea that in proper games an “epic win” or just “win” is possible and therefore always worth acting for."
+    },
+    {
+      "name":"Variable Interval Reward Schedules",
+      "definition":"Variable interval reward schedules provide a reward after a roughly consistent amount of time. This tends to create a reasonably high level of activity over time, as the player could receive a reward at any time but never the burst as created under a fixed schedule. This system is also more immune to the nadir right after the receiving of a reward, but also lacks the zenith of activity before a reward in unlocked due to high levels of ambiguity.",
+      "example":"Wait roughly 30 minutes, a new weapon appears. Check back as often as you want but that won’t speed it up. Generally players are bad at realizing that."
+    },
+    {
+      "name":"Variable Ratio Reward Schedule",
+      "definition":"A variable ratio reward schedule provides rewards after a roughly consistent but unknown amount of actions. This creates a relatively high consistent rate of activity (as there could always be a reward after the next action) with a slight increase as the expected reward threshold is reached, but never the huge burst of a fixed ratio schedule. It’s also more immune to nadirs in engagement after a reward is acheived.",
+      "example":"kill something like 20 ships, get a level up. Visit a couple locations (roughly five) get a badge"
+    },
+    {
+      "name":"Viral Game Mechanics",
+      "definition":"A game element that requires multiple people to play (or that can be played better with multiple people)",
+      "example":"Farmville making you more successful in the game if you invite your friends, the social check-in"
+    },
+    {
+      "name":"Virtual Items",
+      "definition":"Digital prizes, rewards, objects found or taken within the course of a game. Often these can be traded or given away.",
+      "example":"Gowalla’s items, Facebook gifts, badges"
+    }
+  ]
+}
