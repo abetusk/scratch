@@ -1,0 +1,9 @@
+There are five major styles:
+
+* oblong circle
+* oblong circle within circle whose perimeter is joined by lines
+* region filled with oblong circles
+* region filled with 'space filling' (small) circles
+* region filled with rotationally symmetric circles
+
+Filled in regions can be considered degenerate cases of lines.
