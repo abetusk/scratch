@@ -1,0 +1,58 @@
+#!/bin/bash
+
+VERSION=0.1.0
+
+ifn="$1"
+
+if [[ "$ifn" == "" ]] ; then
+  echo "provide ifn"
+  exit
+fi
+
+function ngc_position {
+  _ifn="$1"
+
+  offsetx=10
+  offsety=15
+
+  if [[ "$_ifn" == "" ]] ; then
+    echo "provide file"
+    exit 1
+  fi
+
+  dos2unix $_ifn
+  sed -i 's/;.*//' $_ifn
+
+  mx=`ngc_bounds $_ifn | grep min_x | cut -f2 -d' '`
+  my=`ngc_bounds $_ifn | grep min_y | cut -f2 -d' '`
+
+  shiftx=` echo "-($mx) + $offsetx" | bc -l`
+  shifty=` echo "-($my) + $offsety" | bc -l`
+
+  tfn=`mktemp`
+
+  #echo "G0 F5000" > $tfn
+  grecode -shift "$shiftx" "$shifty" $_ifn | \
+    grep -v '^(' >> $tfn 2> /dev/null
+  mv $tfn $_ifn
+
+  echo ">>>? $_ifn"
+
+  rm -f $tfn
+}
+
+tmpfn=`mktemp`
+
+svg=`basename $ifn .scad`.svg
+ngc=`basename $ifn .scad`.ngc
+
+
+openscad -o "$svg" "$ifn"
+svg2ngc "$svg" 2> /dev/null
+ngc_position "$ngc" 2> /dev/null
+
+sed -i 's/F800/F150/g' "$ngc"
+sed -i 's/G0\(.*\)S\(.*\)/G0\1 F5000 S\2/g' "$ngc"
+
+
+rm $tmpfn
