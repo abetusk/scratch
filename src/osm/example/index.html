@@ -1,0 +1,59 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>OpenLayers Demo</title>
+    <style type="text/css">
+      html, body, #basicMap {
+          width: 100%;
+          height: 100%;
+          margin: 0;
+      }
+
+      .olControlZoomOut { display: none; }
+      .olControlZoomIn { display: none; }
+
+           .olControlAttribution {
+                bottom: 5vh;
+                font-size: 3vh;
+                right: 5vw;
+            }
+            #customZoom {
+                z-index: 1001;
+                position: relative;
+                top: 10px;
+                left: 10px;
+            }
+            #customZoom a {
+                text-decoration: none;
+                position: absolute;
+                display: block;
+                width: 50px;
+                text-align: center;
+                font-weight: bold;
+                color: #fff;
+                background: #369;
+                border: 1px solid #ccc;
+                border-radius: 3px;
+            }
+            #customZoom a:hover {
+                background: #036;
+            }
+            #customZoomOut {
+                top: 25px;
+            }
+
+    </style>
+    <script src="OpenLayers.js"></script>
+    <script src='example-osm.js'></script>
+  </head>
+  <body onload="init();">
+    <div id="basicMap" class='smallmap'>
+      <div id="customZoom">
+        <a href="#customZoomIn" id="customZoomIn">in</a>
+        <a href="#customZoomOut" id="customZoomOut">out</a>
+      </div>
+    </div>
+    <div id="basicMap_small" style='height:300px; width:340px;'></div>
+  </body>
+</html>
+
