@@ -29,6 +29,10 @@ Memphis Group Inspired Palette
 | #353954 | #ffffff | #3377dc | #fdb50e | #ef3062 |
 
 
+|   |   |   |   |   |
+|---|---|---|---|---|
+| ![c](img/672394.svg) | ![c](img/f725a0.svg) | ![c](img/fad141.svg) | ![c](img/0cb2c0.svg) | ![c](img/e8e6d9.svg) |
+| #672394 | #f725a0 | #fad141 | #0cb2c0 | #e8e6d9 |
 
 
 References
