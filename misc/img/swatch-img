@@ -1,0 +1,20 @@
+#!/usr/bin/python
+
+import sys
+
+color='#ffffff'
+
+x=100
+y=100
+
+if len(sys.argv) > 1:
+  color=sys.argv[1]
+  if len(sys.argv) > 2:
+    x = int(sys.argv[2])
+    if len(sys.argv) > 3:
+      y = int(sys.argv[3])
+
+
+print '<svg viewBox="0 0 ' + str(x) + " " + str(y) +  '" xmlns="http://www.w3.org/2000/svg">'
+print '  <rect width="' + str(x) + '" height="' + str(y) + '" fill="' + str(color) + '" />'
+print '</svg>'
