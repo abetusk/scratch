@@ -144,6 +144,9 @@ function draw_gabor_func_complex(opt) {
       val_r = gabor_filter_real(x,y,opt.lambda,opt.theta,opt.psi,opt.sigma,opt.gamma);
       val_i = gabor_filter_imag(x,y,opt.lambda,opt.theta,opt.psi,opt.sigma,opt.gamma);
 
+      val_r = (val_r + 1.0)/2.0;
+      val_i = (val_i + 1.0)/2.0;
+
       _ang = Math.atan2(val_i, val_r);
       _r = Math.sqrt(val_r*val_r + val_i*val_i);
 
