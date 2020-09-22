@@ -12,3 +12,15 @@ Electronics Notes
 
 * `MAX3232` - max232 rs232 chip (3v-5v) ([digikey](https://www.digikey.com/product-detail/en/texas-instruments/MAX3232ECDR/296-19851-1-ND/1120592))
 
+
+---
+
+### Project Ideas
+
+* Bike invader
+* GRBL shield
+* Kears
+* BLDC driver + encoder
+* Inverted cross earring
+* OLED business card
+
