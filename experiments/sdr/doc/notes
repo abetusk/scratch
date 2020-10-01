@@ -5,3 +5,33 @@ https://www.rtl-sdr.com/rtl-sdr-tutorial-cheap-ais-ship-tracking/
 https://github.com/dgiardini/rtl-ais
 
 https://github.com/freerange/ais-on-sdr/wiki
+
+---
+
+gqrx - general purpose radio spectrum analyzer
+
+---
+
+I'm having some trouble getting audio to work on gqrx.
+It's working and I'm getting audio from an FM station (91.7 in Ithaca)
+using Mode `WFM`.
+Recording (using the `Rec` button under the audio section) creates
+a `.wav` file that captures the appropriate audio.
+
+
+There's an option to push the audio through UDP (also in the `Audio`
+section).
+I don't see where to change it but the default port is 7355.
+
+From [here](https://gqrx.dk/doc/streaming-audio-over-udp#more-157),
+this works to play:
+
+```
+nc -l -u 7355 | aplay -r 48k -f S16_LE -t raw -c 1
+```
+
+---
+
+https://github.com/steve-m/kalibrate-rtl
+
+https://github.com/dgiardini/rtl-ais
