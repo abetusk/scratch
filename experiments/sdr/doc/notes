@@ -35,3 +35,17 @@ nc -l -u 7355 | aplay -r 48k -f S16_LE -t raw -c 1
 https://github.com/steve-m/kalibrate-rtl
 
 https://github.com/dgiardini/rtl-ais
+
+---
+
+# ./src/kal  -s 850
+Found 1 device(s):
+  0:  Generic RTL2832U OEM
+
+Using device 0: Generic RTL2832U OEM
+Found Rafael Micro R820T tuner
+Exact sample rate is: 270833.002142 Hz
+[R82XX] PLL not locked!
+kal: Scanning for GSM-850 base stations.
+GSM-850:
+
