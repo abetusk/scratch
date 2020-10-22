@@ -1,0 +1,103 @@
+#!/usr/bin/python3
+#
+# Licnese: CC0
+#
+
+import os, sys, re, json
+import svg.path as svgpath
+import getopt
+
+ERROR = 1e-12
+NSEGMENT = 32
+
+def print_gp(path):
+
+  for _p in path:
+    n = NSEGMENT
+    N = int( _p.length(ERROR)*float(n) + 0.5 )
+    for idx in range(N):
+      s = float(idx)/float(N)
+      pnt = _p.point(s)
+      print(pnt.real, -pnt.imag)
+    print()
+
+
+def print_ngc(path):
+
+  S = 1.0
+  F0 = 800
+  F1 = 400
+
+  for _p in path:
+    n = NSEGMENT
+    N = int( _p.length(ERROR)*float(n) + 0.5 )
+
+    first = True
+    for idx in range(N):
+      s = float(idx)/float(N)
+      pnt = _p.point(s)
+
+      if first:
+        print("G0", "X", pnt.real, "Y", -pnt.imag, "F", F0)
+
+
+      first = False
+      print("G1", "X", pnt.real, "Y", -pnt.imag, "S", S, "F", F1)
+    print()
+
+
+
+long_opt_list = ["help", "ngc", "segment=", "error="]
+
+print_out = print_gp
+
+def usage(fp):
+  fp.write("\nsvgpath2gp usage:\n")
+  fp.write("\n")
+  fp.write("  svgpath2gp [-h] [--ngc] <ifn>\n")
+  fp.write("\n")
+  fp.write("  [--ngc]     Output simple (laser) ngc\n")
+  fp.write("  [--error]   Set error (default " + str(ERROR) + ")\n")
+  fp.write("  [--segment] Set number of segments per unit (default " + str(NSEGMENT) + ")\n")
+  fp.write("  [-h]        Help (this screen)\n")
+  fp.write("\n")
+
+
+try:
+  opts,args = getopt.getopt(sys.argv[1:], "h", long_opt_list)
+except getopt.GetoptError:
+  usage(sys.stderr)
+  sys.exit(1)
+
+ifn = ""
+
+if len(args) >= 1:
+  ifn = args[0]
+else:
+  sys.stderr.write("provide input file\n")
+  usage(sys.stderr)
+  sys.exit(-1)
+
+for opt,arg in opts:
+  if opt== "--ngc":
+    print_out = print_ngc
+  elif opt == "--help" or opt == '-h':
+    usage(sys.stdout)
+    sys.exit(0)
+  elif opt == "--error":
+    ERROR = float(arg)
+
+  elif opt == "--segment":
+    NSEGMENT = float(arg)
+
+with open(ifn) as fp:
+  for line in fp:
+    line = line.strip()
+    if len(line) == 0: continue
+    if line[0]=='#': continue
+    toks = re.split("  *| *, *", line)
+
+    path = svgpath.parse_path(line)
+
+    print_out(path)
+
