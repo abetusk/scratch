@@ -1,0 +1,34 @@
+#!/bin/bash
+#
+# License: CC0
+#
+
+datafn="$HOME/data/personal/todo.json"
+
+opt="$1"
+
+
+if [[ "$opt" == "" ]] ;  then
+  opt=`date +'%Y-%m-%d'`
+elif [[ "$opt"  == "yesterday" ]] ; then
+  opt=`date --date yesterday +'%Y-%m-%d'`
+elif [[ "$opt"  == "today" ]] ; then
+  opt=`date +'%Y-%m-%d'`
+elif [[ "$opt" == "help" ]] ; then
+  echo ""
+  echo "usage:"
+  echo ""
+  echo "  todo [yesterday|today|all|<YYYY-MM-DD] [help]"
+  echo ""
+  echo "  parse JSON file from '$datafn' and display"
+  echo ""
+  exit 0
+fi
+
+
+
+if [[ "$opt" == "all" ]] ; then
+  jq . $HOME/data/personal/todo.json
+else
+  jq '.["'$opt'"] | { "'$opt'":. }' "$datafn"
+fi
