@@ -66,6 +66,21 @@ var narrative_optimistic = [
   "The possible future"
 ];
 
+function _irand(param0, param1) {
+  var _start = 0, _range = 2;
+  if (typeof param0 !== "undefined") {
+    if (typeof param1 !== "undefined") {
+      _start = param0;
+      _range = param1;
+    }
+    else {
+      _range = param0;
+    }
+  }
+
+  return Math.floor(Math.random()*_range) + _start;
+}
+
 var narrative = narrative_fatalistic;
 
 function tarot_reading_celtic_cross(tarot_data) {
@@ -142,7 +157,17 @@ if (verbose_reading) {
     //console.log(narrative[ii] + " ... is ... " + ans[ii].meaning);
 
     if (ans[ii].modifier == "light") {
-      console.log(narrative[ii] + ", you should consider ... " + ans[ii].meaning);
+      var phrases = [
+        "you should consider",
+        "you should contemplate",
+        "think over" ];
+
+      var idx = _irand(phrases.length);
+      console.log(idx);
+      var phrase = phrases[ _irand(phrases.length) ];
+
+      //console.log(narrative[ii] + ", you should consider ... " + ans[ii].meaning);
+      console.log(narrative[ii] + ", " + phrase + " ... " + ans[ii].meaning);
     }
     else {
       console.log(narrative[ii] + ", you should be wary of  ... " + ans[ii].meaning);
@@ -155,10 +180,39 @@ else {
   for (var ii=0; ii<ans.length; ii++) {
 
     if (ans[ii].modifier == "light") {
-      console.log(ans[ii].name + " (" + ans[ii].modifier + "): " + narrative[ii] + ", you should consider ... " + ans[ii].meaning);
+
+      var phrases = [
+        //"you should consider",
+        "consider"
+        //"you should contemplate",
+        //"contemplate",
+        //"examine",
+        //"weigh"
+        //"deliberate on",
+        //"think over"
+      ];
+
+      var phrase = phrases[ _irand(phrases.length) ];
+
+      //console.log(ans[ii].name + " (" + ans[ii].modifier + "): " + narrative[ii] + ", you should consider ... " + ans[ii].meaning);
+      console.log(ans[ii].name + " (" + ans[ii].modifier + "): " + narrative[ii] + ", " + phrase + " ... " + ans[ii].meaning);
     }
     else {
-      console.log(ans[ii].name + " (" + ans[ii].modifier + "): " + narrative[ii] + ", you should be wary of  ... " + ans[ii].meaning);
+      var phrases = [
+        "be wary of",
+        "avoid",
+        //"abstain from",
+        "steer clear of",
+        "forgo",
+        "refain from",
+        "resist",
+        "stop",
+        "be suspicious of"
+      ];
+
+      var phrase = phrases[ _irand(phrases.length) ];
+
+      console.log(ans[ii].name + " (" + ans[ii].modifier + "): " + narrative[ii] + ", " + phrase + " ... " + ans[ii].meaning);
     }
 
     console.log("---");
