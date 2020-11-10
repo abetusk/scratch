@@ -44,6 +44,8 @@ struct option longopt[] = {
 
 void show_help(FILE *fp) {
   fprintf(fp, "\n");
+  fprintf(fp, "noise image\n");
+  fprintf(fp, "\n");
   fprintf(fp, "usage:    noimg [-W width] [-H height] [-A alpha] [-h] [-x x] [-y y] [-s s] <file>\n");
   fprintf(fp, "\n");
   fprintf(fp, "  -H|--height <height>       height\n");
@@ -162,7 +164,7 @@ int main(int argc, char **argv) {
 
   if ((opt.width <= 0) ||
       (opt.height <= 0)) {
-    fprintf(stderr, "width and height mustbe sane\n");
+    fprintf(stderr, "width and height must > 0\n");
     show_help(stderr);
     exit(-1);
   }
