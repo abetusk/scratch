@@ -71,6 +71,7 @@ give them an item.
 | n/a | `My [relation] used to read poetry to me` | give scroll | `It's been so long since I've seen this poem` |
 | n/a | `My [relation] used to play the flute for me` | play flute | `It's been so long since I've heard that tune` |
 | n/a | `My [relation] used to make the most wonderful potions for me` | give potion | `This reminds me of the potions my [relation] used to give me` |
+| n/a | `Would you like to join me for tea?` | serve tea | `How nice it is to drink a hot cup of tea with good company` |
 
 * spider
 * eye
