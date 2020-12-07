@@ -468,5 +468,5 @@ References
 * [6](https://github.com/abetusk/papers/blob/release/Probability/1089229510-mitzemacher.pdf)
 * [7](https://github.com/abetusk/papers/blob/release/ComplexityCriticality/scale-free-networks-are-rare_broido-clauset.pdf)
 * [8](https://github.com/abetusk/papers/blob/release/Music/patel2003.pdf)
-* [9](https://github.com/abetusk/papers/blob/release/Music/rhythm-msuci_Patel_Daniel.pdf))
+* [9](https://github.com/abetusk/papers/blob/release/Music/rhythm-msuci_Patel_Daniel.pdf)
 * [10](https://github.com/abetusk/papers/blob/release/Music/measures-consonances_honingh.pdf)
