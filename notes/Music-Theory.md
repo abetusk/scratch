@@ -450,7 +450,10 @@ var scale = []
 for (var exponent=0; exponent<12; exponent++) { scale.push( Math.floor(440.0*Math.pow(2.0, exponent/12.0))) ; }
 ```
 
+License
+---
 
+The license of this text, code and any other digital artifact, insofar as its able to, is licensed under a CC0 (Creative Commons 0) license.
 
 
 References
