@@ -34,3 +34,4 @@ References
 * [0](https://hackernoon.com/a-complete-beginners-guide-to-installing-a-bitcoin-full-node-on-linux-2018-edition-cb8e384479ea)
 * [1](https://en.bitcoinwiki.org/wiki/Bitcoind)
 * [2](https://github.com/bitcoin/bitcoin/blob/master/doc/build-unix.md)
+* [3](https://github.com/BlockchainCommons/Learning-Bitcoin-from-the-Command-Line)

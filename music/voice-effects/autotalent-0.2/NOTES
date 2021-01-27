@@ -1,0 +1,8 @@
+```
+echo "ladspa-register" | ecasound -c
+```
+
+References
+---
+
+* [ecasound examples](https://ecasound.seul.org/ecasound/Documentation/examples.html)

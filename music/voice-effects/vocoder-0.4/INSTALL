@@ -1,0 +1,2 @@
+You'll need to have LADSPA installed (or at least the ladspa.h). Edit the
+Makefile to taste and then do a "make" and "make install".

@@ -1,0 +1,40 @@
+LADSPA Vocoder Plugin Release v0.3
+
+Whats new for v0.3:
+You can now change the vocoder bands in real time.
+
+Whats new for v0.2:
+Uhh, nothing really, mostly just a documentation update :)
+
+See file COPYRIGHT for information about copyright status of this package.
+See file INSTALL for information about how to compile and install this
+package.
+
+This is basically an adaption of Achim Settelmeier's Vocoder program to
+LADSPA. Really all I have done is wrap his vocoder code in a LADSPA plugin.
+
+Achim Settelmeier's <settel-linux@sirlab.de> Vocoder program can be found at:
+http://www.sirlab.de/linux/
+
+There is also a good description of how a vocoder works on the above mentioned
+site.
+
+I'll start by admitting that I don't really know how this code works :) I just
+somewhat blindly converted it to LADSPA. So I'm sure my description is not
+entirely correct. Sometime I'll actually try and figure out how the code works
+and perhaps optimize it better. Perhaps you don't know what a vocoder is, but
+I'm sure you have heard one before. Vocoders are often used to add a robotic
+effect to vocals in music.
+
+This vocoder plugin has 2 AUDIO inputs and 1 OUTPUT (of course). The first
+INPUT is the "Formant" signal which is usually someone's voice. The second
+INPUT is the "Carrier" signal which is some sort of continuous synth sound.
+The "Carrier" signal is modulated to the "Formant".
+There are a number of LADSPA controls. The first one is the "Number of bands"
+which is how many frequency bands to use (current maximum is 16). The rest of
+the controls set the level of each individual band and should have a value
+between 0.0 and 1.0. The lower numbered bands are lower in frequency the
+higher numbered bands are higher in frequency.
+
+
+Happy robots use Linux and LADSPA!

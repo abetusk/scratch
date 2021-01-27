@@ -1,0 +1,54 @@
+#!/bin/bash
+
+# -el:autotalent,'Concert A (Hz)','Fixed pitch (semitones w.r.t. A)','Pull to fixed pitch','A','Bb','B','C','Db','D','Eb','E','F','Gb','G','Ab','Correction
+#... strength','Correction smoothness','Pitch shift (scale notes)','Output scale rotate (scale notes)','LFO depth','LFO rate (Hz)','LFO shape
+#... (square->sine->tri)','LFO symmetry','LFO quantization','Formant correction','Formant warp','Mix','Detected pitch (semitones w.r.t. A)','Pitch detection
+#... confidence','latency'
+
+# runs ok..
+# can't tell any difference from output to input
+#
+##                                                                -   %      = A b B C d D e E F g G a ! / # @  _  ~ ^ | * & >  :  { < \  
+#ecasound -i autotalent-0.2-demo01.mp3 -o out.mp3 -el:autotalent,440,-10.763,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,.44,0,0,0,0,0,0,.98,0,0,0
+
+#  -   Conert A (Hz)
+#  %   Fixed pitch (semitones)
+#  =   Pull to fixed pitch
+#  A   A (note)
+#  b   Bb (note)
+#  B   A (note)
+#  C   C (note)
+#  d   Db (note)
+#  D   D (note)
+#  e   Eb (note)
+#  E   E (note)
+#  F   F (note)
+#  g   Gb (note)
+#  G   G (note)
+#  a   Ab (note)
+#  !   Correction strength
+#  /   Correction smoothness
+#  #   Pitch shift
+#  @   Output scale
+#  _   LFO depth
+#  ~   LFO Hz
+#  ^   LFO shape
+#  |   LFO symmetry
+#  *   LFO quantization
+#  &   Format correction
+#  >   Format warp
+#  :   Mix
+#  {   Detected pitch
+#  <   Pitch detection confidence
+#  \   latency
+
+# with an actual effect
+###                                                                -   %      = A  b B  C d D  e E  F g   G a ! / # @  _  ~ ^ | * & >  :  {     <  \  
+#ecasound -i autotalent-0.2-demo01.mp3 -o out1.mp3 -el:autotalent,440,-10.763,0,0,-1,0,-1,0,0,-1,0,-1,0,-1,0,1,1,0,0,.44,0,1,1,0,1,0,1.0,0.03,0.98,0
+
+
+# 'real-time' demo
+##                                                                  -   %      = A  b B  C d D  e E  F g   G a ! / # @  _  ~ ^ | * & >  :  {     <  \   
+mpg123 -s autotalent-0.2-demo01.mp3 | \
+  ecasound -i:stdin -o alsa -el:autotalent,440,-10.763,0,0,-1,0,-1,0,0,-1,0,-1,0,-1,0,1,1,0,0,.44,0,1,1,0,1,0,1.0,0.03,0.98,0
+
