@@ -1,0 +1,190 @@
+#!/bin/bash
+
+ifn=out.wav
+ofn=out_auto.wav
+
+if [[ "$1" != "" ]] ; then
+  ifn="$1"
+fi
+
+if [[ "$2" != "" ]] ; then
+  ofn="$2"
+fi
+
+#sox+ out.wav ladspa autotalent.so 440 -10.763 0 0 -1 0 -1 0 0 -1 0 -1 0 -1 0 1 1 0 0 .44 0 1 1 0 1 0 1.0 0.03 0.98 0
+
+ahz=440
+
+#semitones=0
+semitones=-60
+#semitones=-10.763
+
+pulltofixedpitch=0
+#pulltofixedpitch=1
+
+A=0
+b=0
+B=0
+C=0
+d=0
+D=0
+e=0
+E=0
+F=0
+g=0
+G=0
+a=0
+
+A=1
+b=1
+B=1
+C=1
+d=1
+D=1
+e=1
+E=1
+F=1
+g=1
+G=1
+a=1
+
+corr_strength=1
+#corr_smooth=1
+corr_smooth=0
+
+pitch_shift=0
+out_scale=0
+
+lfo_depth=0.44
+lfo_hz=0
+lfo_shape=1
+lfo_symm=1
+lfo_quant=0
+
+format_corr=1
+format_warp=0
+
+mix=1.0
+detect_pitch=0.03
+detect_conf=0.98
+latency=0
+
+sox -v 0.5 \
+  $ifn \
+  $ofn \
+  ladspa autotalent.so \
+  $ahz \
+  $semitones \
+  $pulltofixedpitch \
+    \
+  $A \
+  $b \
+  $B \
+  $C \
+  $d \
+  $D \
+  $e \
+  $E \
+  $F \
+  $g \
+  $G \
+  $a \
+    \
+  $corr_strength \
+  $corr_smooth \
+  $pitch_shift \
+  $out_scale \
+    \
+  $lfo_depth \
+  $lfo_hz \
+  $lfo_shape \
+  $lfo_symm \
+  $lfo_quant \
+    \
+  $format_corr \
+  $format_warp \
+  $mix \
+  $detect_pitch \
+  $detect_conf \
+  $latency
+
+echo sox -v 0.5 \
+  $ifn \
+  $ofn \
+  ladspa autotalent.so \
+  $ahz \
+  $semitones \
+  $pulltofixedpitch \
+    \
+  $A \
+  $b \
+  $B \
+  $C \
+  $d \
+  $D \
+  $e \
+  $E \
+  $F \
+  $g \
+  $G \
+  $a \
+    \
+  $corr_strength \
+  $corr_smooth \
+  $pitch_shift \
+  $out_scale \
+    \
+  $lfo_depth \
+  $lfo_hz \
+  $lfo_shape \
+  $lfo_symm \
+  $lfo_quant \
+    \
+  $format_corr \
+  $format_warp \
+  $mix \
+  $detect_pitch \
+  $detect_conf \
+  $latency
+
+
+# values from the blog post screenshot
+#
+# 440 \
+# -10.763 \
+# 0 \
+# 
+# 0 \
+# -1 \
+# 0 \
+# -1 \
+# 0 \
+# 0 \
+# -1 \
+# 0 \
+# -1 \
+# 0 \
+# -1 \
+# 0 \
+# 
+# 1 \
+# 1 \
+# 
+# 0 \
+# 0 \
+# 
+# .44 \
+# 0 \
+# 1 \
+# 1 \
+# 0 \
+# 
+# 1 \
+# 0 \
+# 
+# 1.0 \
+# 0.03 \
+# 0.98 \
+# 0
+
+
