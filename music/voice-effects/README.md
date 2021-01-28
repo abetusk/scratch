@@ -108,7 +108,7 @@ $ sox+ out_auto.wav -n spectrogram -L -R50:20000 -o ../assets/auto_spectrogram.p
 
 | | |
 |---|---|
-| ![original spectrogram](asets/orig_spectrogram.png) | ![autotuned spectrogram](assets/auto_spectrogram.png) |
+| ![original spectrogram](assets/orig_spectrogram.png) | ![autotuned spectrogram](assets/auto_spectrogram.png) |
 
 I'm not sure the picture is so enlightening.
 If you squint just right, you can see in the autotuned version that there are what looks like 12 discrete steps from 190s to 232s where it goes from
