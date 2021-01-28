@@ -97,7 +97,7 @@ Verifying Autotalent
 ---
 
 
-Use this [video](https://www.youtube.com/watch?v=aId2LNZEuKo) (CC-BY-SA from NUMO TV), available as an [mp3](../assets/20hz-199931hz.mp3) in this repo.
+Use this [video](https://www.youtube.com/watch?v=aId2LNZEuKo) (CC-BY-SA from NUMO TV), available as an [mp3](assets/20hz-199931hz.mp3) in this repo.
 
 ```
 $ ffmpeg -i ../assets/20hz-19931hz.mp3 out.wav
