@@ -14,15 +14,6 @@ more rigorous documents will have.
 This document is created in the hopes that it helps others, like me,
 that found introductions to music theory lacking.
 
-Music encompasses many different aspects of perception, physics and
-computation.
-Instruments can be thought of as tones that are generated from underlying
-oscillators that combine to create it's "timbre".
-Each instrument is a complex combination of frequencies that are then
-combined in different ways to produce notes.
-Notes are combined in various patterns to create musical scores and songs,
-each that can be at different tempo and combinations.
-
 For someone just learning about music theory or how to create music,
 the switching of scales from low level oscillator tweaking to higher level
 musical score composition, can be daunting.
@@ -39,6 +30,45 @@ resources as a kind of "for your information", that are there should they
 want to investigate further.
 
 
+Music encompasses many different aspects of perception, physics and
+computation.
+Instruments can be thought of as tones that are generated from underlying
+oscillators that combine to create it's "timbre".
+Each instrument is a complex combination of frequencies that are then
+combined in different ways to produce notes.
+Notes are combined in various patterns to create musical scores and songs,
+each of which can be combined in different ways and at different tempos.
+
+To give a cartoon of the hierarchy, a "Musical Hierarchy of Importance",
+reminiscent of Maslow's "Hierarchy of Need" can be drawn:
+
+![Musical Hierarchy of Importance](img/music_theory_hierarchy.svg)
+
+Here, the "timbre" is meant to describe the "sound" of a particular
+instrument, an oboe versus a flute, say.
+The "tempo" is the pacing of the notes, including the beats per minute
+and the note duration.
+The "composition" is how to organize instruments and their melodies
+into a larger score.
+The top most tier, "effect", is a catch-all for what is arguably the end
+goal of a musical score or piece, the story or emotional intent of
+the piece.
+
+Each level is not independent of the other, where timbre can influence
+the composition and tempo, etc.
+Nevertheless, the cartoon is an attempt to highlight the different
+aspects of music theory and the importance of each stratification,
+where most people will respond to the sound of the instruments first,
+the tempo next and the composition later.
+
+The other three tiers are, in some sense, the logistics in service
+to the end goal, even though the delineation isn't clear cut.
+
+This text will almost exclusively talk about the bottom three tiers
+of the pyramid in the hopes that this will provide a foundation to
+help with musical creation.
+
+
 The Human Auditory System and Psychoacoustics
 ---
 
@@ -51,13 +81,15 @@ nerve fibers.
 
 The sound frequencies perceived by the human ear are not linear.
 The human ear has a range of approximately 20Hz (vibrations per second)
-to 20,000Hz, depending on the individual person, age and other factors.
+to 20,000Hz (20kHz), depending on the individual person, age and other factors.
 For most people, the sensitivity of the human ear peaks at around 3,000Hz to
 4,000Hz.
 
+![Perceived Human Hearing](img/Perceived_Human_Hearing.svg)
+
 Though sensitivity is variable throughout the 20Hz to 20kHz spectrum,
 a good approximation is to consider human hearing as having logarithmic
-sensitivity  ([*](#Note 0)).
+sensitivity  ([*](#Note 0)). 
 This means that, for the most part, humans will perceive a doubling of frequency
 as a single increment in tone.
 
@@ -76,9 +108,9 @@ the same amount of "hardware" ([*](#Note 1])).
 Humans are the only animal, as far as we know, that can do both beat synchronization and
 melody pitch shifting [1](#1).
 That is, humans are the only animals that can recognize a beat and recognize a melody that's
-been shifted up an octave.
+also been doubled in frequency, or shifted up an octave.
 It is the author's opinion that these differences most likely stem from humans being the only
-animal on earth ([*](#Note 2)) that also has complex language.
+animal on earth ([*](#Note 2)) that also have complex language.
 
 Though the reasons for why we perceive music the way we do is open for debate, there is good
 evidence for some basic facts of why people find certain tones, combinations of tones and beat tempos
@@ -223,7 +255,11 @@ If we settle on choosing 7 out of the twelve, we can see that removing as many n
 can and further separating the two "left over" notes that are forced to be right next to some other note,
 we arrive at the diatonic scales.
 
-With the restrictions from above, there are only 7 different combinations.
+Another way to say this is that if we settle on 7 notes and make sure the notes that are only a
+single step apart are as far away to each other as can be, there are only 7 permutations of
+of this "whole step" and "half step" sequence.
+
+The restrictions from above give us 7 different combinations leading to the diatonic scales.
 Each of these combinations has their own name which are listed here:
 
 | Diatonic Scale | Note Offset | example | Step Sequence |
@@ -266,6 +302,13 @@ in the scale and modified by whether the chord is a major, minor, augmented or d
 A capital Greek numeral is used if it's a major chord (`[+0,+4,+7]`), a lower case numeral is used if it's a minor chord (`[+0,+3,+7]`)
 and a small 'o' is placed as a superscript if it's a diminished chord (`[+0,+3,+6]`).
 
+The choice of wording for "major" or "minor" chords is meant to denote that a major chord will feel more "resolved" or "powerful"
+than a minor chord, which is often described as "unresolved" or "sour".
+Though I can agree that major and minor chords have those perceptual characteristics, I find it a bit confusing as there are only
+three combinations of notes in each chord with the equivalent reduced fraction representation.
+The only reason that I can come up with is that perhaps the lower frequency notes are heard as louder than the higher frequency
+notes and so their spectrum dominates the perception.
+
 ---
 
 An observant reader will notice that each of the diatonic scales in the above is constructed from the pattern
@@ -277,11 +320,13 @@ an octave change up or down, depending.
 
 The hidden assumption with a choice of diatonic scale is that any melody or note choice will 'hover' around the root note or chord.
 This root note is often called a "tonic note".
+The implication is that any melody in a scale will dance around the tonic note with some general combination of hitting the tonic
+note at periodic intervals or staying close to the tonic note.
 
 ---
 
 As a final note, the diatonic scales are said to have "moods" associated with them.
-Though obviously highly suggestive and almost surely culturally dependent, here is a list:
+Though obviously highly subjective and almost surely culturally dependent, here is a list:
 
 | Diatonic Scale |  "Mood" |
 |------|------|
@@ -342,6 +387,8 @@ The four fundamental waveforms can be combined with varying amplitudes or freque
 sounds.
 
 #### Attack, Decay, Sustain, Release (ADSR)
+
+![ADSR envelope](img/ADSR_parameter.svg)
 
 One common way to create sounds is to do a so-called 'subtractive' synthesis.
 
