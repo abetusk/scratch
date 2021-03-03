@@ -9,6 +9,7 @@ import getopt
 
 ERROR = 1e-12
 NSEGMENT = 32
+YMUL = -1.0
 
 def print_gp(path):
 
@@ -19,7 +20,7 @@ def print_gp(path):
     for idx in range(N+1):
       s = float(idx)/float(N)
       pnt = _p.point(s)
-      print(pnt.real, -pnt.imag)
+      print(pnt.real, YMUL*float(pnt.imag))
     print()
 
 # Try to combine paths that have the same
@@ -40,20 +41,20 @@ def print_gp_combine(path):
 
       if firstpass:
         prev_x = pnt.real
-        prev_y = -pnt.imag
+        prev_y = YMUL*float(pnt.imag)
 
-      if (idx==0) and ((prev_x != pnt.real) or (prev_y != -pnt.imag)):
+      if (idx==0) and ((prev_x != pnt.real) or (prev_y != YMUL*float(pnt.imag))):
         print()
       else:
 
         # don't print duplicate
         #
-        if (prev_x != pnt.real) or (prev_y != -pnt.imag):
-          print(pnt.real, -pnt.imag)
+        if (prev_x != pnt.real) or (prev_y != YMUL*float(pnt.imag)):
+          print(pnt.real, YMUL*float(pnt.imag))
 
       firstpass = False
       prev_x = pnt.real
-      prev_y = -pnt.imag
+      prev_y = YMUL*float(pnt.imag)
   print()
 
 
@@ -73,16 +74,16 @@ def print_ngc(path):
       pnt = _p.point(s)
 
       if first:
-        print("G0", "X", pnt.real, "Y", -pnt.imag, "F", F0)
+        print("G0", "X", pnt.real, "Y", YMUL*float(pnt.imag), "F", F0)
 
 
       first = False
-      print("G1", "X", pnt.real, "Y", -pnt.imag, "S", S, "F", F1)
+      print("G1", "X", pnt.real, "Y", YMUL*float(pnt.imag), "S", S, "F", F1)
     print()
 
 
 
-long_opt_list = ["help", "ngc", "combine", "segment=", "error="]
+long_opt_list = ["help", "ngc", "combine", "segment=", "error=", "reverse-y"]
 
 print_out = print_gp
 
@@ -91,11 +92,12 @@ def usage(fp):
   fp.write("\n")
   fp.write("  svgpath2gp [-h] [--ngc] <ifn>\n")
   fp.write("\n")
-  fp.write("  [--ngc]     Output simple (laser) ngc\n")
-  fp.write("  [--error]   Set error (default " + str(ERROR) + ")\n")
-  fp.write("  [--segment] Set number of segments per unit (default " + str(NSEGMENT) + ")\n")
-  fp.write("  [--combine] Combine paths if the previous path ends where the new one begins (don't print newline)\n")
-  fp.write("  [-h]        Help (this screen)\n")
+  fp.write("  [--ngc]       Output simple (laser) ngc\n")
+  fp.write("  [--error err] Set error (default " + str(ERROR) + ")\n")
+  fp.write("  [--segment s] Set number of segments per unit (default " + str(NSEGMENT) + ")\n")
+  fp.write("  [--combine]   Combine paths if the previous path ends where the new one begins (don't print newline)\n")
+  fp.write("  [--reverse-y] reverse (negate) y coordinate\n")
+  fp.write("  [-h]          Help (this screen)\n")
   fp.write("\n")
 
 
@@ -127,6 +129,9 @@ for opt,arg in opts:
 
   elif opt == "--segment":
     NSEGMENT = float(arg)
+
+  elif opt == "--reverse-y":
+    YMUL = 1.0
 
 with open(ifn) as fp:
   for line in fp:
