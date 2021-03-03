@@ -1,0 +1,260 @@
+/**
+ * Copyright 2017 Google Inc. All Rights Reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/* retrieved from https://glitch.com/edit/#!/tenori-off on 2021-03-03 */
+
+* {
+  box-sizing: border-box;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+body {
+  font-family: monospace;
+  margin: 1em;
+  text-align: center;
+  --pink: #E61E8C;
+  --blue: #4DEEEA;
+  --purple: #2A298B;
+  --yellow: #FFED5E;
+  --green: #74EE16;
+  
+  font-size: 14px;
+  color: var(--purple);
+  position: relative;
+}
+
+h1 {
+  font-family: 'Monoton', monospace;
+  font-weight: normal;
+  font-size: 60px;
+  color: var(--pink);
+  margin: 0;
+  text-shadow: -4px 4px 0 var(--blue);
+}
+
+h2 {
+  font-family: "Press Start 2P", "Helvetica Neue", helvetica, arial, sans-serif;
+  font-weight: normal;
+  font-size: 16px;
+}
+
+h3 {
+  display: inline-block;
+  font-family: "Press Start 2P", "Helvetica Neue", helvetica, arial, sans-serif;
+  font-weight: normal;
+  font-size: 16px;
+  vertical-align: middle;
+}
+
+footer {
+  text-align: center;
+  padding: 14px; 
+  margin: 24px auto;
+  border-top: 4px solid var(--blue);
+  max-width: 500px;
+}
+
+a:link, a:visited {
+  font-weight: bold;
+  color: var(--pink);
+}
+
+.container {
+  text-align: center;
+  line-height: 1;
+  letter-spacing: 0px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;  
+}
+
+/* Thank you Glitch for these styles!! */
+.glitcheroni {
+  font-family: "Press Start 2P", "Helvetica Neue", helvetica, arial, sans-serif;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 600;
+  border: solid var(--purple) 2px;
+  color: var(--purple);
+  border-radius: 5px;
+  background: white;
+  -webkit-box-shadow: 4px 4px 0 var(--purple);
+  box-shadow: 4px 4px 0 var(--purple);
+}
+
+.dialog {
+  font-family: monospace;
+  font-weight: 100;
+  background: white;
+  padding: 24px;
+  z-index: 10;
+  position: fixed;
+  top: 100px;
+  left: 50%;
+  width: 100%;
+  max-width: 500px;
+  transform: translateX(-50%);
+}
+
+.dialog > p > b {
+  background: var(--yellow);
+  padding: 3px;
+  border-radius: 3px;
+}
+
+/***********************
+ * Action buttons
+ ***********************/
+.controls {
+  cursor: pointer;
+  padding: 10px 12px;
+  margin: 4px;
+}
+
+
+[disabled] {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.controls > input {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  border: none;
+  background: none;
+  box-shadow: none;
+  padding: 0;
+  margin: 0;
+  margin-left: 4px;
+  width: 60px;
+}
+
+button.controls:hover {
+  background-color: var(--yellow) !important;
+  -webkit-box-shadow: 2px 2px 0 var(--purple);
+  box-shadow: 2px 2px 0 var(--purple);
+}
+
+button.controls.synth {
+  background-color: var(--pink);
+  color: white;
+}
+
+button.controls.drums {
+  background-color: var(--blue);
+}
+
+#btnPlay {
+  background-color: var(--green);
+}
+
+/***********************
+ * Note pixels
+ ***********************/
+button.pixel {
+  display: inline-block;
+  -webkit-appearance: none;
+  -webkit-border-radius:0px;
+  appearance: none;
+  font-size: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+  cursor: pointer;
+  margin: 2px;
+  font-family: monospace;
+  background: var(--yellow);
+  height: 25px;
+  width: 25px;
+  border: none;
+  border-radius: 5px;
+  padding: 0;
+}
+
+button.pixel:hover {
+  opacity: 0.7;
+}
+
+button.pixel.on.synth {
+  background: var(--pink);
+  xbox-shadow: 0 0 5px var(--pink);
+}
+
+button.pixel.on.drums {
+  background: var(--blue);
+  xbox-shadow: 0 0 5px var(--blue);
+}
+
+button.pixel.ripple.synth {
+  background: var(--pink);
+  opacity: 0.3;
+  box-shadow: 0 0 5px var(--pink);
+}
+
+button.pixel.ripple.drums {
+  background: var(--blue);
+  opacity: 0.3;
+  box-shadow: 0 0 5px var(--purple);
+}
+
+.playing .pixel.on.active {
+  transform: scale(1.5);
+  z-index:10;
+}
+
+.playing .bar {
+  background: var(--green) !important; 
+  opacity: 1 !important;
+}
+
+@media (max-width: 500px) {
+  h1 {
+    font-size: 40px;
+  }
+  .glitchButtonElement > img {
+    width: 30px;
+  }
+  .glitcheroni {
+    font-size: 10px;
+  }
+  button.pixel {
+    height: calc(90vw / 20);
+    width: calc(90vw / 20);
+    margin: 1px;
+    border-radius: 4px;
+  }
+  button.controls {
+    padding: 8px;
+    margin: 4px 0;
+  }
+  .controls > input {
+    width: 40px;
+  }
+}
+
+@media (max-width: 360px) {
+  h3 {
+    font-size: 13px;
+  }
+  .glitcheroni {
+   font-size: 8px; 
+  }
+  button.pixel {
+    height: calc(80vw / 20);
+    width: calc(80vw / 20);
+  }
+}
