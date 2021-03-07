@@ -1,6 +1,12 @@
 // License: CC0
 
-$fn=32;
+// TODO:
+// work out positioning spacer on bottom for watch
+// make sure height for under support is correct
+// split into printable portions
+// print to verify
+
+$fn=40;
 
 SCREEN_W = 25;
 SCREEN_H = 20;
@@ -12,6 +18,21 @@ OUTER_H = 51;
 OUTER_Z = 9.5;
 
 arm_r = 2.75;
+
+LIP = 1.25;
+LIP_H = 2;
+INNER_WALL = 2;
+INNER_BOTTOM_INSET = 8;
+
+SUPPORT_DH = 40;
+SUPPORT_DW = 25.5;
+SUPPORT_Z = 8;
+SUPPORT_R = 0.75;
+
+UNDER_SUPPORT_DH = 33;
+UNDER_SUPPORT_DW = 15;
+UNDER_SUPPORT_Z = 4;
+UNDER_SUPPORT_R = 1.5;
 
 module lilplus(s,w,_r) {
   _s = s/2 - _r;
@@ -123,7 +144,7 @@ module lilback() {
   ox = OUTER_W/2;
   oy = OUTER_H/2;
   oz = OUTER_Z/2;
-  oz = OUTER_Z/2 + 3;
+  oz = OUTER_Z/2 + 1;
 
 
   trude = 10;
@@ -149,41 +170,77 @@ module lilback() {
 
       };
 
-        // left lil cheek
-        translate([0,0,oz-_or])
-        hull() {
-          translate([-(ox-_or), (oy-_or)]) sphere(_or);
-          translate([ (ox-_or), (oy-_or)]) sphere(_or);
-          translate([ (ox-_or),10]) sphere(_or);
-          translate([ (-_or+ww),-(oy-_or)]) sphere(_or);
-          translate([-(ox-_or),-(oy-_or)]) sphere(_or);
+      // left lil cheek
+      translate([0,0,oz-_or])
+      hull() {
+        translate([-(ox-_or), (oy-_or)]) sphere(_or);
+        translate([ (ox-_or), (oy-_or)]) sphere(_or);
+        translate([ (ox-_or),10]) sphere(_or);
+        translate([ (-_or+ww),-(oy-_or)]) sphere(_or);
+        translate([-(ox-_or),-(oy-_or)]) sphere(_or);
 
-          translate([-(ox-_or), (oy-_or),uz]) sphere(_or);
-          translate([ (ox-_or), (oy-_or),uz]) sphere(_or);
-          translate([ (ox-_or)/3,-(oy-_or),uz]) sphere(_or);
-          translate([-(ox-_or),-(oy-_or),uz]) sphere(_or);
+        translate([-(ox-_or), (oy-_or),uz]) sphere(_or);
+        translate([ (ox-_or), (oy-_or),uz]) sphere(_or);
+        translate([ (ox-_or)/3,-(oy-_or),uz]) sphere(_or);
+        translate([-(ox-_or),-(oy-_or),uz]) sphere(_or);
 
-        };
+      };
 
-        // right lil cheeck
-        translate([0,0,oz-_or])
-        hull() {
-          translate([ (ox-_or), (oy-_or)]) sphere(_or);
-          translate([-(ox-_or), (oy-_or)]) sphere(_or);
-          translate([-(ox-_or),10]) sphere(_or);
-          translate([ (_or-ww),-(oy-_or)]) sphere(_or);
-          translate([(ox-_or),-(oy-_or)]) sphere(_or);
+      // right lil cheeck
+      translate([0,0,oz-_or])
+      hull() {
+        translate([ (ox-_or), (oy-_or)]) sphere(_or);
+        translate([-(ox-_or), (oy-_or)]) sphere(_or);
+        translate([-(ox-_or),10]) sphere(_or);
+        translate([ (_or-ww),-(oy-_or)]) sphere(_or);
+        translate([(ox-_or),-(oy-_or)]) sphere(_or);
 
-          translate([ (ox-_or), (oy-_or),uz]) sphere(_or);
-          translate([-(ox-_or), (oy-_or),uz]) sphere(_or);
-          translate([-(ox-_or)/3,-(oy-_or),uz]) sphere(_or);
-          translate([(ox-_or),-(oy-_or),uz]) sphere(_or);
-        };
+        translate([ (ox-_or), (oy-_or),uz]) sphere(_or);
+        translate([-(ox-_or), (oy-_or),uz]) sphere(_or);
+        translate([-(ox-_or)/3,-(oy-_or),uz]) sphere(_or);
+        translate([(ox-_or),-(oy-_or),uz]) sphere(_or);
+      };
+
+      translate([0,0,oz+4])
+      hull() {
+        translate( [-(ox-_or), 10] ) sphere(_or);
+        translate( [ (ox-_or), 10] ) sphere(_or);
+        translate( [ (ox-_or),-10] ) sphere(_or);
+        translate( [-(ox-_or),-10] ) sphere(_or);
+        translate( [-(ox-_or), 10,-8] ) sphere(_or);
+        translate( [ (ox-_or), 10,-8] ) sphere(_or);
+        translate( [ (ox-_or),-10,-8] ) sphere(_or);
+        translate( [-(ox-_or),-10,-8] ) sphere(_or);
+      }
+
+      translate([0,0,oz+4])
+      hull() {
+        translate( [-(ox-_or), (oy-_or)] ) sphere(_or);
+        translate( [-(ox-_or-4), (oy-_or)] ) sphere(_or);
+        translate( [-(ox-_or-4),-(oy-_or)] ) sphere(_or);
+        translate( [-(ox-_or),-(oy-_or)] ) sphere(_or);
+        translate( [-(ox-_or), (oy-_or),-8] ) sphere(_or);
+        translate( [-(ox-_or-4), (oy-_or),-8] ) sphere(_or);
+        translate( [-(ox-_or-4),-(oy-_or),-8] ) sphere(_or);
+        translate( [-(ox-_or),-(oy-_or),-8] ) sphere(_or);
+      }
+
+      translate([0,0,oz+4])
+      hull() {
+        translate( [ (ox-_or), (oy-_or)] ) sphere(_or);
+        translate( [ (ox-_or-4), (oy-_or)] ) sphere(_or);
+        translate( [ (ox-_or-4),-(oy-_or)] ) sphere(_or);
+        translate( [ (ox-_or),-(oy-_or)] ) sphere(_or);
+        translate( [ (ox-_or), (oy-_or),-8] ) sphere(_or);
+        translate( [ (ox-_or-4), (oy-_or),-8] ) sphere(_or);
+        translate( [ (ox-_or-4),-(oy-_or),-8] ) sphere(_or);
+        translate( [ (ox-_or),-(oy-_or),-8] ) sphere(_or);
+      }
 
       // side pills
       //
       //translate([-ox,-oy/2+3,0]) rotate(90, [1,0,0]) rotate(90, [0,1,0]) lilpill(3, 3, 2);
-      translate([-ox+1,-c0y-4,0]) rotate(90, [1,0,0]) rotate(90, [0,1,0]) lilpill(3, 3, 2);
+      translate([-ox+1,-c0y-3,0]) rotate(90, [1,0,0]) rotate(90, [0,1,0]) lilpill(3, 3, 2);
 
       //translate([ ox,-oy/2+3,0]) rotate(90, [1,0,0]) rotate(90, [0,1,0]) lilpill(3, 3, 2);
       translate([ ox-1,-c0y-3,0]) rotate(90, [1,0,0]) rotate(90, [0,1,0]) lilpill(3, 3, 2);
@@ -195,6 +252,17 @@ module lilback() {
 
     };
 
+
+    translate( [-(ox-_or-2), 10, oz+5*_or/2 + 0.125] ) lilrect(0.5,36.5,0.25);
+    translate( [ (ox-_or-2), 10, oz+5*_or/2 + 0.125] ) lilrect(0.5,36.5,0.25);
+    translate( [ 0, -8, oz+5*_or/2 + 0.125] ) lilrect(30,0.5,0.25);
+
+    translate( [-11, -5.5, oz+5*_or/2] ) lilcircle(0.75,0.25);
+    translate( [ 11, -5.5, oz+5*_or/2] ) lilcircle(0.75,0.25);
+
+    translate( [0, -20,8.5]) rotate(90, [0,1,0]) cylinder( h=1*(2*ox-2*_or), r=1, center=true);
+    translate( [0,  20,8.5]) rotate(90, [0,1,0]) cylinder( h=1*(2*ox-2*_or), r=1, center=true);
+/*
     // middle ridges
     translate([-11,0,oz]) rotate(90, [0,0,1]) lilpill(15,1.25,0.45);
     translate([-3.75,0,oz]) rotate(90, [0,0,1]) lilpill(15,1.25,0.45);
@@ -222,7 +290,7 @@ module lilback() {
     translate([ 13,-20,oz]) lilcircle(0.5,0.125);
     translate([-13,-13,oz]) lilcircle(0.5,0.125);
     translate([ 13,-13,oz]) lilcircle(0.5,0.125);
-
+*/
     
   }
 
@@ -388,7 +456,7 @@ module access_holes() {
   usbx = 10;
   usby = 22.5;
 
-  color([0.5,0,0])
+  //color([0.5,0,0])
   translate([0,c0y,bz]) rotate(90,[0,1,0]) linear_extrude(height=trude, center=true) 
   union() {
     hull() {
@@ -400,7 +468,7 @@ module access_holes() {
     }
   }
 
-  color([0.5,0,0])
+  //color([0.5,0,0])
   translate([c0x,c0y,bz]) rotate(90,[0,1,0]) linear_extrude(height=trude, center=true) 
   union() {
     hull() {
@@ -412,7 +480,7 @@ module access_holes() {
     }
   }
 
-  color([0.5,0,0])
+  //color([0.5,0,0])
   translate([0,c1y,bz]) rotate(90,[0,1,0]) linear_extrude(height=trude, center=true) 
   union() {
     hull() {
@@ -425,7 +493,7 @@ module access_holes() {
   }
 
 
-  color([0.5,0,0])
+  //color([0.5,0,0])
   translate([c0x,c1y,bz]) rotate(90,[0,1,0]) linear_extrude(height=trude, center=true) 
   union() {
     hull() {
@@ -437,7 +505,7 @@ module access_holes() {
     }
   }
 
-  color([0.5,0.0])
+  //color([0.5,0.0])
   translate([0,usby,bz]) rotate(90,[0,1,0]) rotate(-90, [0,0,1]) linear_extrude(height=trude, center=true)
   hull() {
     for (i = [0:len(usb_p)-1]) {
@@ -445,7 +513,7 @@ module access_holes() {
     }
   }
 
-  color([0,0,0.2])
+  //color([0,0,0.2])
   translate([17,26,0])
     cube([30,30,40], center=true);
 
@@ -471,7 +539,7 @@ module access_holes_bottom() {
   usbx = 10;
   usby = 22.5;
 
-  color([0.5,0,0])
+  //color([0.5,0,0])
   translate([0,c0y,bz]) rotate(90,[0,1,0]) linear_extrude(height=trude, center=true) 
   union() {
     hull() {
@@ -483,7 +551,7 @@ module access_holes_bottom() {
     }
   }
 
-  color([0.5,0,0])
+  //color([0.5,0,0])
   translate([c0x,c0y,bz]) rotate(90,[0,1,0]) linear_extrude(height=trude, center=true) 
   union() {
     hull() {
@@ -495,7 +563,7 @@ module access_holes_bottom() {
     }
   }
 
-  color([0.5,0,0])
+  //color([0.5,0,0])
   translate([0,c1y,bz]) rotate(90,[0,1,0]) linear_extrude(height=trude, center=true) 
   union() {
     hull() {
@@ -508,7 +576,7 @@ module access_holes_bottom() {
   }
 
 
-  color([0.5,0,0])
+  //color([0.5,0,0])
   translate([c0x,c1y,bz]) rotate(90,[0,1,0]) linear_extrude(height=trude, center=true) 
   union() {
     hull() {
@@ -520,7 +588,7 @@ module access_holes_bottom() {
     }
   }
 
-  color([0.5,0.0])
+  //color([0.5,0.0])
   translate([35,0,0]) translate([0,usby,bz]) rotate(90,[0,1,0]) rotate(90, [0,0,1]) linear_extrude(height=trude, center=true)
   hull() {
     for (i = [0:len(usb_p)-1]) {
@@ -539,17 +607,35 @@ module access_holes_bottom() {
 //color([75/256,154/256,135/256]) translate([OUTER_W/2 - 2.5,OUTER_H/2 - 2.5,-10]) watcho();
 
 module fin() {
-  difference() {
-    color([75/256,154/256,135/256])  translate([17,23,2]) watcho_face();
-    access_holes();
+  cx = 17;
+  cy = 23;
+  cz = 2;
+  union() {
+    difference() {
+      //color([75/256,154/256,135/256]) 
+      translate([cx,cy,cz]) watcho_face();
+      access_holes();
+    }
+
+    translate([cx,cy,cz]) 
+    union() {
+      translate([ (OUTER_W/2-3*LIP/2), 0, -LIP_H/2]) cube([LIP, 10, LIP_H], center=true);
+      translate([-(OUTER_W/2-3*LIP/2), 7, -LIP_H/2]) cube([LIP, 4, LIP_H], center=true);
+      translate([-(OUTER_W/2-3*LIP/2),-8, -LIP_H/2]) cube([LIP, 4, LIP_H], center=true);
+      translate([ 0, (OUTER_H/2-3*LIP/2), -LIP_H/2]) cube([25, LIP, LIP_H], center=true);
+      translate([ 0,-(OUTER_H/2-3*LIP/2), -LIP_H/2]) cube([25, LIP, LIP_H], center=true);
+    }
   }
 }
 
 module fin1() {
-  difference() {
+  cx = 17;
+  cy = 23;
+  cz = 2;
+  union() {
     
     difference() {
-      translate([17,23,2]) 
+      translate([cx,cy,cz]) 
       difference() {
 
         union() {
@@ -561,21 +647,105 @@ module fin1() {
             translate([-7,-24,0]) lilfoot();
             translate([ 7,-24,0]) lilfoot();
           }
-        }
 
+
+        };
+
+        // cut off lower half
         translate([0,0,-20/2]) cube([OUTER_W+25, OUTER_H+25, 20],center=true);
-        translate([0,0, 1]) cube([OUTER_W-5,OUTER_H-5,4], center=true);
+
+        // inset
+        translate([0,0, 1]) cube([OUTER_W-2*INNER_WALL,OUTER_H-2*INNER_WALL,INNER_BOTTOM_INSET], center=true);
+
+        //
+        translate([0,0, 1]) cube([OUTER_W-2*LIP,OUTER_H-2*LIP,LIP_H], center=true);
       }
       access_holes_bottom();
     }
-    //wip
-  //  access_holes();
+
+    translate([cx,cy+SUPPORT_DH/2,cz-2.5]) linear_extrude(height=SUPPORT_Z) hull() {
+      translate([-SUPPORT_DW/2.0, 0, 0]) circle(SUPPORT_R);
+      translate([ SUPPORT_DW/2.0, 0, 0]) circle(SUPPORT_R);
+    };
+    translate([cx,cy-SUPPORT_DH/2,cz-2.5]) linear_extrude(height=SUPPORT_Z) hull() {
+      translate([-SUPPORT_DW/2.0, 0, 0]) circle(SUPPORT_R);
+      translate([ SUPPORT_DW/2.0, 0, 0]) circle(SUPPORT_R);
+    };
+
+    translate([cx,cy+UNDER_SUPPORT_DH/2,cz-1]) linear_extrude(height=UNDER_SUPPORT_Z) hull() {
+      translate([-UNDER_SUPPORT_DW/2.0, 0, 0]) circle(UNDER_SUPPORT_R);
+      translate([ UNDER_SUPPORT_DW/2.0, 0, 0]) circle(UNDER_SUPPORT_R);
+    };
+    translate([cx,cy-UNDER_SUPPORT_DH/2,cz-1]) linear_extrude(height=UNDER_SUPPORT_Z) hull() {
+      translate([-UNDER_SUPPORT_DW/2.0, 0, 0]) circle(UNDER_SUPPORT_R);
+      translate([ UNDER_SUPPORT_DW/2.0, 0, 0]) circle(UNDER_SUPPORT_R);
+    };
   }
 }
 
-fin();
-translate([34,0,0]) rotate(180,[0,1,0]) fin1();
+module layout_both() {
+  rotate(180, [0,1,0]) fin();
+  translate([50,0,0]) rotate(180,[0,1,0]) fin1();
+}
 
+//layout_both();
+
+module layout_preview() {
+  fin();
+  translate([50,0,0]) fin1();
+}
+
+//layout_preview();
+
+module layout_explode() {
+  fin();
+  translate([34,0,-5]) rotate(180, [0,1,0]) fin1();
+}
+
+//layout_explode();
+
+module layout_for3dprint() {
+
+  translate([0,0,-5])
+  difference() {
+    fin();
+    translate([0,0,0]) cube([100, 100, 10],center=true);
+  }
+
+  translate([80,0,5]) rotate(180,[0,1,0]) 
+  difference() {
+    fin();
+    translate([0,0,9.9]) cube([100, 100, 10],center=true);
+  }
+
+  translate([0,-60,-8])
+  difference() {
+    fin1();
+    translate([0,0,2.75]) cube([100,100,10], center=true);
+  }
+
+  translate([80,-60,7]) rotate(180,[0,1,0])
+  difference() {
+    fin1();
+    translate([0,0,12.75]) cube([100,100,10], center=true);
+  }
+}
+
+layout_for3dprint();
+
+/*
+translate([80,-60,7.5])
+color([0,0.25,0.2],0.5)
+rotate(180,[0,1,0]) import("dos_bottom_24mm.stl");
+*/
+
+//fin();
+//translate([34,0,0]) rotate(180,[0,1,0]) fin1();
+//translate([50,0,0]) fin1();
+
+
+//rotate(180, [0,1,0]) fin();
+//translate([50,0,0]) rotate(180,[0,1,0]) fin1();
 
 //import("uno_top.stl");
 //translate([100,0,0]) import("uno_bottom_24mm.stl");
