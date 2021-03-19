@@ -718,20 +718,65 @@ module layout_for3dprint() {
     translate([0,0,9.9]) cube([100, 100, 10],center=true);
   }
 
-  translate([0,-60,-8])
+  translate([0,-60,-7.75])
   difference() {
     fin1();
     translate([0,0,2.75]) cube([100,100,10], center=true);
   }
 
-  translate([80,-60,7]) rotate(180,[0,1,0])
+  translate([80,-60,7.75]) rotate(180,[0,1,0])
   difference() {
     fin1();
     translate([0,0,12.75]) cube([100,100,10], center=true);
   }
 }
 
+
+module layout_for3dprint0() {
+
+  translate([0,0,-5])
+  difference() {
+    fin();
+    translate([0,0,0]) cube([100, 100, 10],center=true);
+  }
+
+}
+
+module layout_for3dprint1() {
+
+  translate([80,0,5]) rotate(180,[0,1,0]) 
+  difference() {
+    fin();
+    translate([0,0,9.9]) cube([100, 100, 10],center=true);
+  }
+
+}
+
+module layout_for3dprint2() {
+
+  translate([0,-60,-7.75])
+  difference() {
+    fin1();
+    translate([0,0,2.75]) cube([100,100,10], center=true);
+  }
+
+}
+
+module layout_for3dprint3() {
+
+  translate([80,-60,7.75]) rotate(180,[0,1,0])
+  difference() {
+    fin1();
+    translate([0,0,12.75]) cube([100,100,10], center=true);
+  }
+}
+
+
 layout_for3dprint();
+//layout_for3dprint0();
+//layout_for3dprint1();
+//layout_for3dprint2();
+//layout_for3dprint3();
 
 /*
 translate([80,-60,7.5])

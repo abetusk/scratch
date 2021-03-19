@@ -9,6 +9,7 @@
 * Acupuncture Bloodletting
 * Color Attack Therapy
 * Edlritch multi level marketing scheme
+* Death by despair
 
 ---
 

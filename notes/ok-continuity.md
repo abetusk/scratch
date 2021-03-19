@@ -15,7 +15,7 @@ apt-get purge -y libreoffice libreoffice-base-core libreoffice-common \
 apt-get autoremove
 
 apt-get install -y \
-  python3-virtualenv python3-scipy python3-numpy libatlas-base-dev python3-audio \
+  python3-virtualenv python3-scipy python3-numpy libatlas-base-dev python3-audioread \
   vim espeak mplayer jq
 pip3 uninstall virtualenv
 pip3 install virtualenv
@@ -34,7 +34,7 @@ pushd bin
 cat > virtualenv <<EOF
 #!/bin/bash
 
-python3 /usr/lib/python3/dist-packages/virtualenv.py "$@"
+python3 /usr/lib/python3/dist-packages/virtualenv.py "\$@"
 EOF
 popd
 
@@ -67,8 +67,12 @@ curl -LO https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/deepspee
 curl -LO https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/audio-0.9.3.tar.gz
 tar xvf audio-0.9.3.tar.gz
 rm ./audio-0.9.3.tar.gz
+```
 
+Here is a test run (on the pi):
 
+```
+deepspeech --model deepspeech-0.9.3-models.tflite --scorer deepspeech-0.9.3-models.scorer --audio audio/2830-3980-0043.wav 
 ```
 
 ```

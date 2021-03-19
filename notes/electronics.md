@@ -12,7 +12,9 @@ Electronics Notes
 
 * `MAX3232` - max232 rs232 chip (3v-5v) ([digikey](https://www.digikey.com/product-detail/en/texas-instruments/MAX3232ECDR/296-19851-1-ND/1120592))
 
+--
 
+* `0603 betafpv` ([amazon](https://www.amazon.com/BETAFPV-16000KV-Brushless-Motor-Meteor65/dp/B079HXLJJ5?th=1))
 ---
 
 ### Project Ideas
