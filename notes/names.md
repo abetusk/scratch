@@ -8,6 +8,13 @@ Names
 * Heavy Future
 * Impending Flush
 * Panglossian Pessimist
+* Nightmare cast
+* Elder space
+* Demon IC
+* Magic Smoke Binding (Package), Bind Magic Smoke
+* Black Smoke Pack Binding
+* Exorcise Magic Smoke, Magic Smoke Summoning, Conjure Magic Smoke
+* Invoke LED Glamour
 
 ---
 
