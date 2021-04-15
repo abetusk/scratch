@@ -2,7 +2,24 @@
 //
 
 
+function seedstring() {
+  var s = "abcdefghijklmnopqrustvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  var _r = "";
+  for (var i=0; i<32; i++) {
+    var idx = Math.floor(Math.random() * s.length);
+    _r += s[idx];
+  }
+  return _r;
+}
+
+var seed = seedstring();
+
 var fs = require("fs");
+
+var srand = require("./seedrandom.js");
+srand(seed, { "global": true });
+
+console.log("seed:", seed);
 
 var dat = fs.readFileSync("./tarot_interpretations.json");
 var tarot = JSON.parse(dat);
@@ -160,7 +177,10 @@ if (verbose_reading) {
       var phrases = [
         "you should consider",
         "you should contemplate",
-        "think over" ];
+        "think over",
+        "try to aim for"
+
+      ];
 
       var idx = _irand(phrases.length);
       console.log(idx);
@@ -183,7 +203,12 @@ else {
 
       var phrases = [
         //"you should consider",
-        "consider"
+        "consider",
+        "aim for",
+        "try",
+        "explore",
+        "look into"
+
         //"you should contemplate",
         //"contemplate",
         //"examine",
