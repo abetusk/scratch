@@ -43,13 +43,15 @@ def print_gp_combine(path):
         prev_x = pnt.real
         prev_y = YMUL*float(pnt.imag)
 
-      if (idx==0) and ((prev_x != pnt.real) or (prev_y != YMUL*float(pnt.imag))):
+      #if (idx==0) and ((prev_x != pnt.real) or (prev_y != YMUL*float(pnt.imag))):
+      if (idx==0) and ( (abs(prev_x - pnt.real) > ERROR) or (abs(prev_y - YMUL*float(pnt.imag)) > ERROR)):
         print()
       else:
 
         # don't print duplicate
         #
-        if (prev_x != pnt.real) or (prev_y != YMUL*float(pnt.imag)):
+        #if (prev_x != pnt.real) or (prev_y != YMUL*float(pnt.imag)):
+        if (abs(prev_x - pnt.real) > ERROR) or (abs(prev_y - YMUL*float(pnt.imag)) > ERROR):
           print(pnt.real, YMUL*float(pnt.imag))
 
       firstpass = False
