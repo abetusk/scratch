@@ -1,7 +1,7 @@
 A Biased, Incomplete and Amateur Introduction to Music Theory
 ===
 
-Introduction
+Forward
 ---
 
 This document is to introduce the reader to the basics of music theory through the
@@ -15,7 +15,7 @@ This document is created in the hopes that it helps others, like me,
 that found introductions to music theory lacking.
 
 For someone just learning about music theory or how to create music,
-the switching of scales from low level oscillator tweaking to higher level
+the switching of contexts, from low level oscillator tweaking to higher level
 musical score composition, can be daunting.
 This text is an attempt to provide a brief, biased and highly amateurish
 introduction to those concepts that can hopefully be used as a starting point
@@ -28,6 +28,9 @@ technical.
 The reader is encouraged to not get intimidated and to consider the technical
 resources as a kind of "for your information", that are there should they
 want to investigate further.
+
+Introduction
+---
 
 
 Music encompasses many different aspects of perception, physics and
@@ -52,13 +55,13 @@ The "composition" is how to organize instruments and their melodies
 into a larger score.
 The top most tier, "effect", is a catch-all for what is arguably the end
 goal of a musical score or piece, the story or emotional intent of
-the piece.
+the musical piece.
 
 Each level is not independent of the other, where timbre can influence
 the composition and tempo, etc.
 Nevertheless, the cartoon is an attempt to highlight the different
-aspects of music theory and the importance of each stratification,
-where most people will respond to the sound of the instruments first,
+aspects of music theory and the importance of each stratification.
+Most people will respond to the sound of the instruments first,
 the tempo next and the composition later.
 
 The other three tiers are, in some sense, the logistics in service
@@ -89,7 +92,7 @@ For most people, the sensitivity of the human ear peaks at around 3,000Hz to
 
 Though sensitivity is variable throughout the 20Hz to 20kHz spectrum,
 a good approximation is to consider human hearing as having logarithmic
-sensitivity  ([*](#Note 0)). 
+sensitivity  ([x](#Note 0)). 
 This means that, for the most part, humans will perceive a doubling of frequency
 as a single increment in tone.
 
@@ -101,16 +104,16 @@ The reason for this is most likely evolutionary, as nature evolved to perceive b
 the stampeding of elephants (~20Hz) to the buzzing of a mosquitoes (~400Hz) to recognizing
 bird song (~8kHz).
 A logarithmic scale prioritizes fidelity of the exponent in favor of the 'low order bits' for
-the same amount of "hardware" ([*](#Note 1])).
+the same amount of "hardware" ([x](#Note 1])).
 
 ### Language
 
 Humans are the only animal, as far as we know, that can do both beat synchronization and
-melody pitch shifting [1](#1).
+melody pitch shifting ([1](#1)).
 That is, humans are the only animals that can recognize a beat and recognize a melody that's
 also been doubled in frequency, or shifted up an octave.
 It is the author's opinion that these differences most likely stem from humans being the only
-animal on earth ([*](#Note 2)) that also have complex language.
+animal on earth ([x](#Note 2)) that also have complex language.
 
 Though the reasons for why we perceive music the way we do is open for debate, there is good
 evidence for some basic facts of why people find certain tones, combinations of tones and beat tempos
@@ -121,19 +124,19 @@ pleasing.
 It has been observed and well accepted that music follows many of the patterns of language.
 This includes rhythm and tempo, matching features of the tempo of speech and word length.
 
-Power laws [2](#2) are ubiquitous in nature, including showing up in musical rhythm spectra [3](#3) as
-well as word frequency and word length [4](#4). 
-Though beyond the scope of this document, power laws show up because of their 'stability' property [5](#5)
-and are the convergent distribution for sums of identically distributed random variables ([*](#Note 3)).
-There are many methods of generating power law distributions, some of which quite simple [6](#6) ([*](#Note 4)).
+Power laws ([2](#2)) are ubiquitous in nature, including showing up in musical rhythm spectra ([3](#3)) as
+well as word frequency and word length ([4](#4)). 
+Though beyond the scope of this document, power laws show up because of their 'stability' property ([5](#5))
+and are the convergent distribution for sums of identically distributed random variables ([x](#Note 3)).
+There are many methods of generating power law distributions, some of which quite simple ([6](#6)) ([x](#Note 4)).
 
 
 One insight from the perception of rhythm is that recognizing a melody's tempo is considered by some to be the
-most defining characteristic [8](#8).
+most defining musical characteristic ([8](#8)).
 This means that though the individual notes are important, the tempo is the characteristic that is
 most strongly recognized.
 There is some research to suggest that language might have an influence on the types of rhythm that show
-up in their corresponding culture [9](#9), giving further evidence for the connection between language
+up in their corresponding culture ([9](#9)), giving further evidence for the connection between language
 and musical rhythm.
 
 Most people will find notes played to a steady single beat note rhythm to be monotonous.
@@ -157,7 +160,7 @@ For example, an octave could be the interval from 440Hz to 880Hz.
 
 For most "western" music, a 12 note scale is used, often called the "chromatic scale".
 Though the choice of frequency for each note within a scale can be intricate, one simple
-choice is to take each note in the chromatic scale as the 12th root of 2 ([*](#Note 5)).
+choice is to take each note in the chromatic scale as the 12th root of 2 ([x](#Note 5)).
 
 This choice means that by the 12th note, the frequency doubles, feeding into a new octave.
 
@@ -172,7 +175,7 @@ from the ordered set $(A, A^\sharp or B^\flat, B, B, C, C^\sharp or D^\flat, D, 
 
 There is some overlap in note names.
 For example $A^\sharp$ and $B^\flat$ represent the same note.
-The reason for the note naming conventions, including the redundancy is note names, is probably a historical
+The reason for the note naming conventions, including the redundancy in note names, is probably a historical
 artifact and won't be discussed much further in this document.
 Unless specifically needed, the "sharp" notation ($\sharp$) will be used over the "flat" notation ($\flat$).
 
@@ -190,7 +193,7 @@ For example, most people will not find the following combination of notes unplea
 most people will find the following set of notes to be unpleasant or incongruous: `[440, 466, 493]`.
 
 By a certain measure, the 12 note scale produces a rich set of combinations of notes that have a small reduced fraction
-representation and enough variety [10](#10).
+representation and enough variety ([10](#10)).
 Care has to be taken when using mathematics of this sort to validate cultural norms.
 The 12 note scale is a western product and other cultures have different scale sizes, variations within the note scales in
 addition to a host of other differentiating factors.
@@ -215,7 +218,7 @@ Here is a table of the ratio of the larger frequency to the smaller one for $ \e
 | $2^{ \frac{ 10 }{ 12 }} $ | $ \frac{ 16 }{ 9 }$ |
 | $2^{ \frac{11 }{ 12} } $ | $ \frac{ 17 }{ 9 }$ |
 
-Taking two notes right next to each other in this 12 note scale produces a reduced fraction that is "large" ([*](#Note 6)),
+Taking two notes right next to each other in this 12 note scale produces a reduced fraction that is "large" ([x](#Note 6)),
 whereas taking the third and the seventh produce reduced fractions that are "small".
 
 There's a lot of ways to waive away the complexity.
@@ -279,10 +282,12 @@ Restricting to notes within the diatonic scale allows a restriction of notes
 that generally sound good with each other while still allowing enough variation.
 
 Once a diatonic scale is chosen, one can then build three note chords from within them.
-If the constructed 3 note chords, or "triads", follow a restriction that they
-can only be 3 or 4 steps from the previous note, a chord table can be built.
+If the constructed 3 note chords follow a restriction that each note
+can only be 3 or 4 steps from the previous note in the chord, a table of all
+possible chords can be built.
 
-Here is the table of 3 chords for each of the diatonic scales:
+Here is the table of 3 chords for each of the diatonic scales, along with the names of each of
+the chords:
 
 | Diatonic Scale | 1 | 2 | 3 | 4 | 5 | 6 | 7 |
 |---|---|---|---|---|---|---|---|
@@ -362,7 +367,7 @@ To give a brief overview of this section, here are the salient points:
 Instrument Synthesis
 ---
 
-Two quality of a musical instrument's sound is often called it's "timbre".
+The quality of a musical instrument's sound is often called it's "timbre".
 Though the definition of timbre is hard to pin down, for the purposes of this text, it will be
 roughly understood to be the Fourier coefficients as they evolve through time.
 
