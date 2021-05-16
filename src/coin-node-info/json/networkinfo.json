@@ -1,0 +1,48 @@
+{
+  "version": 1140300,
+  "subversion": "/Shibetoshi:1.14.3/",
+  "protocolversion": 70015,
+  "localservices": "0000000000000005",
+  "localrelay": true,
+  "timeoffset": -1,
+  "networkactive": true,
+  "connections": 8,
+  "networks": [
+    {
+      "name": "ipv4",
+      "limited": false,
+      "reachable": true,
+      "proxy": "",
+      "proxy_randomize_credentials": false
+    }, 
+    {
+      "name": "ipv6",
+      "limited": false,
+      "reachable": true,
+      "proxy": "",
+      "proxy_randomize_credentials": false
+    }, 
+    {
+      "name": "onion",
+      "limited": true,
+      "reachable": false,
+      "proxy": "",
+      "proxy_randomize_credentials": false
+    }
+  ],
+  "relayfee": 1.00000000,
+  "incrementalfee": 0.00001000,
+  "localaddresses": [
+    {
+      "address": "2603:7080:a344:c600::7",
+      "port": 22556,
+      "score": 1
+    }, 
+    {
+      "address": "2603:7080:a344:c600:22f6:ee7a:8dd:8c20",
+      "port": 22556,
+      "score": 1
+    }
+  ],
+  "warnings": ""
+}

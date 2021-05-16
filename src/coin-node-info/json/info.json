@@ -1,0 +1,17 @@
+{
+  "version": 1140300,
+  "protocolversion": 70015,
+  "walletversion": 130000,
+  "balance": 0.00000000,
+  "blocks": 43763,
+  "timeoffset": -1,
+  "connections": 8,
+  "proxy": "",
+  "difficulty": 303.2547041917467,
+  "testnet": false,
+  "keypoololdest": 1620983187,
+  "keypoolsize": 100,
+  "paytxfee": 0.00000000,
+  "relayfee": 1.00000000,
+  "errors": ""
+}
