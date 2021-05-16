@@ -4,9 +4,9 @@
   "protocolversion": 70015,
   "localservices": "0000000000000005",
   "localrelay": true,
-  "timeoffset": -1,
+  "timeoffset": -2,
   "networkactive": true,
-  "connections": 8,
+  "connections": 9,
   "networks": [
     {
       "name": "ipv4",
