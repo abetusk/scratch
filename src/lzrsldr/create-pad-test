@@ -1,0 +1,84 @@
+#!/usr/bin/python3
+#
+# units in deci-thou
+
+import os
+import math
+
+region_size = 25000.0
+
+pad_size = [ 400, 600, 800, 1000, 1200, 1400 ]
+pad_space = [ 400, 600, 800, 1000, 1200, 1400 ]
+
+#pad_size = [ 400, 600 ]
+#pad_space = [ 400, 600 ]
+
+def _sq(x,y,w,h):
+  _p = [ [ x + w/2.0, y + h/2.0 ],
+         [ x + w/2.0, y - h/2.0 ],
+         [ x - w/2.0, y - h/2.0 ],
+         [ x - w/2.0, y + h/2.0 ] ]
+  return _p
+
+def _hxgn(x,y,w):
+  s = w/2.0
+  _sqrt2 = math.sqrt(2)
+  l = ((2.0*_sqrt2) / (2.0 + _sqrt2)) * s
+  _p = [ [ x + s, y + l/2.0 ],
+         [ x + s, y - l/2.0 ],
+         [ x + l/2.0, y - s ],
+         [ x - l/2.0, y - s ],
+         [ x - s, y - l/2.0 ],
+         [ x - s, y + l/2.0 ],
+         [ x - l/2.0, y + s ],
+         [ x + l/2.0, y + s ] ]
+  return _p
+
+def _print_sq(x0,y0):
+  for _psz_idx, _psz in enumerate(pad_size):
+    for _psp_idx, _psp in enumerate(pad_space):
+
+      tot_w = _psz + _psp
+
+      n_pad = int(region_size / tot_w)
+
+      bx = x0 + float(_psz_idx) * region_size
+      by = y0 + float(_psp_idx) * region_size
+
+      for idx_x in range(n_pad):
+        for idx_y in range(n_pad):
+          x = bx + (float(idx_x) * tot_w) + tot_w/2.0
+          y = by + (float(idx_y) * tot_w) + tot_w/2.0
+
+          s = _sq(x,y, _psz, _psz)
+          for xy in s:
+            print(xy[0], xy[1])
+          print("")
+
+
+def _print_hxgn(x0,y0):
+  for _psz_idx, _psz in enumerate(pad_size):
+    for _psp_idx, _psp in enumerate(pad_space):
+
+      tot_w = _psz + _psp
+
+      n_pad = int(region_size / tot_w) - 1
+
+      bx = x0 + float(_psz_idx) * region_size
+      by = y0 + float(_psp_idx) * region_size
+
+      for idx_x in range(n_pad):
+        for idx_y in range(n_pad):
+          x = bx + (float(idx_x) * tot_w) + tot_w/2.0
+          y = by + (float(idx_y) * tot_w) + tot_w/2.0
+          if (idx_y % 2) == 1:
+            x += tot_w/2.0
+
+          s = _hxgn(x,y, _psz)
+          for xy in s:
+            print(xy[0], xy[1])
+          print("")
+
+_print_sq(0,0)
+#_print_hxgn(0,0)
+#_print_hxgn(0,160000)
