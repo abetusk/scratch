@@ -29,7 +29,7 @@ body {
           transition: opacity .2s ease-in;
 
 
-  user-select: none;
+  /* user-select: none; */
 
   background: #efefef;
   color: hsl(240,30,10);
@@ -37,11 +37,17 @@ body {
   text-align: center;
   /* text-transform: uppercase; */
 
+  /*
   -webkit-touch-callout: none; /* iOS Safari */
+  /*
     -webkit-user-select: none; /* Safari */
+    /*
      -khtml-user-select: none; /* Konqueror HTML */
+     /*
        -moz-user-select: none; /* Firefox */
+       /*
         -ms-user-select: none; /* Internet Explorer/Edge */
+        /*
             user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome and Opera */
 
