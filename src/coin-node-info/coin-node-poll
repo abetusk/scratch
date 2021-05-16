@@ -1,0 +1,14 @@
+#!/bin/bash
+
+export d='./html/json'
+export SLEEPY=5
+
+
+while [ true ] ; do
+  echo "..."
+  dogecoin-cli getpeerinfo > $d/peerinfo.json
+  dogecoin-cli getinfo > $d/info.json
+  dogecoin-cli getnetworkinfo > $d/networkinfo.json
+  dogecoin-cli getblockchaininfo > $d/blockchaininfo.json
+  sleep $SLEEPY
+done
