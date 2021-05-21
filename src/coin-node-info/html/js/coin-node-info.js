@@ -139,8 +139,8 @@ function pop_peerinfo(dat_str) {
 }
 
 function get_coin_info_data() {
-  retrieve_json("/json/blockchaininfo.json", pop_blockchaininfo);
-  retrieve_json("/json/info.json", pop_info);
-  retrieve_json("/json/networkinfo.json", pop_networkinfo);
-  retrieve_json("/json/peerinfo.json", pop_peerinfo);
+  retrieve_json("json/blockchaininfo.json", pop_blockchaininfo);
+  retrieve_json("json/info.json", pop_info);
+  retrieve_json("json/networkinfo.json", pop_networkinfo);
+  retrieve_json("json/peerinfo.json", pop_peerinfo);
 }

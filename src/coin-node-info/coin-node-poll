@@ -1,6 +1,7 @@
 #!/bin/bash
 
-export d='./html/json'
+#export d='./html/json'
+export d='/var/www/html/dogecoin/json'
 export SLEEPY=5
 
 
