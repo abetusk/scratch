@@ -1,0 +1,10 @@
+#!/bin/bash
+#
+# from https://github.com/dogecoin/dogecoin/issues/1722
+#
+
+wget -q api.blockchair.com/dogecoin/nodes -O - | \
+  egrep -o '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' > dogecoinNodeList.txt
+sed -i 's/^/addnode=/' dogecoinNodeList.txt
+cat dogecoinNodeList.txt | tee -a dogecoin.conf
+
