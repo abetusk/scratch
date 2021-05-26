@@ -9,7 +9,8 @@
 * Acupuncture Bloodletting
 * Color Attack Therapy
 * Edlritch multi level marketing scheme
-* Death by despair
+* Death by despair / death of despair
+* Blitter heart
 
 ---
 
