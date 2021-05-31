@@ -32,454 +32,61 @@
 
       <div class='pure-u-1-2 col'>
         <span style='font-size:3em; font-weight:bold; color:#555555;'>Noixer</span>
+        <br>
+        <small>An ambient noise mixer</small>
       </div>
 
       <div class='pure-u-1-4 col'>
-        <button class='bdropinp bkey' id='ui_generate' onclick='_click();'>x</button>
+        <button class='bdropinp bkey' id='ui_generate' onclick='_stop_all();'>stop all</button>
       </div>
 
 
     </div>
+
+    <!-- -->
 
     <hr class='style12'>
 
-    <!-- ***** -->
-
-    <!--
-    <h3 style='font-weight:bold; color:#555;'>Relax</h3>
-    -->
-
-    <div class='pure-g row'>
-      <div class='pure-u-1-4 col' style='margin-top:3vh;'>
-        <span style='font-size:1.3em; font-weight:bold; color:#555; top:50%;'>
-          rain
-        </span>
-      </div>
-
-      <div class='pure-u-1-4 col'>
-        <button class='bdropinp bkey' id='ui_generate' onclick='_click_change("audio0.toggle");'>
-        </button>
-      </div>
-
-      <div class='pure-u-1-2 col'>
-        <input
-          id='audio0.volume'
-          type='range'
-          value='1.0'
-          min="0"
-          max="1.0"
-          step=".05"
-          onchange='_slider_change("audio0.volume");'
-          oninput='_slider_change("audio0.volume");' >
-      </div>
-    </div>
-
-    <div class='pure-g row'>
-      <div class='pure-u-1-4 col' style='margin-top:3vh;'>
-        <span style='font-size:1.3em; font-weight:bold; color:#555; top:50%;'>
-          waterfall
-        </span>
-      </div>
-      <div class='pure-u-1-4 col'>
-        <button class='bdropinp bkey' id='ui_generate' onclick='_click_change("audio1.toggle");'></button>
-      </div>
-
-      <div class='pure-u-1-2 col'>
-        <input
-          id='audio1.volume'
-          type='range'
-          value='1.0'
-          min="0"
-          max="1.0"
-          step=".05"
-          onchange='_slider_change("audio1.volume");'
-          oninput='_slider_change("audio1.volume");' >
-      </div>
-
-    </div>
-
-    <div class='pure-g row'>
-      <div class='pure-u-1-4 col' style='margin-top:3vh;'>
-        <span style='font-size:1.3em; font-weight:bold; color:#555; top:50%;'>
-          fishtank
-        </span>
-      </div>
-
-      <div class='pure-u-1-4 col'>
-        <button class='bdropinp bkey' id='ui_generate' onclick='_click_change("audio2.toggle");'></button>
-      </div>
-
-      <div class='pure-u-1-2 col'>
-        <input
-          id='audio2.volume'
-          type='range'
-          value='1.0'
-          min="0"
-          max="1.0"
-          step=".05"
-          onchange='_slider_change("audio2.volume");'
-          oninput='_slider_change("audio2.volume");' >
-      </div>
-    </div>
-
-    <div class='pure-g row'>
-      <div class='pure-u-1-4 col' style='margin-top:3vh;'>
-        <span style='font-size:1.3em; font-weight:bold; color:#555; top:50%;'>
-          frogs
-        </span>
-      </div>
-
-      <div class='pure-u-1-4 col'>
-        <button class='bdropinp bkey' id='ui_generate' onclick='_click_change("audio3.toggle");'></button>
-      </div>
-
-      <div class='pure-u-1-2 col'>
-        <input
-          id='audio3.volume'
-          type='range'
-          value='1.0'
-          min="0"
-          max="1.0"
-          step=".05"
-          onchange='_slider_change("audio3.volume");'
-          oninput='_slider_change("audio3.volume");' >
-      </div>
-    </div>
-
-    <div class='pure-g row'>
-      <div class='pure-u-1-4 col' style='margin-top:3vh;'>
-        <span style='font-size:1.3em; font-weight:bold; color:#555; top:50%;'>
-          chimes
-        </span>
-      </div>
-
-      <div class='pure-u-1-4 col'>
-        <button class='bdropinp bkey' id='ui_generate' onclick='_click_change("audio4.toggle");'></button>
-      </div>
-
-      <div class='pure-u-1-2 col'>
-        <input
-          id='audio4.volume'
-          type='range'
-          value='1.0'
-          min="0"
-          max="1.0"
-          step=".05"
-          onchange='_slider_change("audio4.volume");'
-          oninput='_slider_change("audio4.volume");' >
-      </div>
-    </div>
-
-    <div class='pure-g row'>
-      <div class='pure-u-1-4 col' style='margin-top:3vh;'>
-        <span style='font-size:1.3em; font-weight:bold; color:#555; top:50%;'>
-          bar
-        </span>
-      </div>
-
-      <div class='pure-u-1-4 col'>
-        <button class='bdropinp bkey' id='ui_generate' onclick='_click_change("audio5.toggle");'></button>
-      </div>
-
-      <div class='pure-u-1-2 col'>
-        <input
-          id='audio5.volume'
-          type='range'
-          value='1.0'
-          min="0"
-          max="1.0"
-          step=".05"
-          onchange='_slider_change("audio5.volume");'
-          oninput='_slider_change("audio5.volume");' >
-      </div>
-    </div>
-
-    <div class='pure-g row'>
-      <div class='pure-u-1-4 col' style='margin-top:3vh;'>
-        <span style='font-size:1.3em; font-weight:bold; color:#555; top:50%;'>
-          purr
-        </span>
-      </div>
-
-      <div class='pure-u-1-4 col'>
-        <button class='bdropinp bkey' id='ui_generate' onclick='_click_change("audio6.toggle");'></button>
-      </div>
-
-      <div class='pure-u-1-2 col'>
-        <input
-          id='audio6.volume'
-          type='range'
-          value='1.0'
-          min="0"
-          max="1.0"
-          step=".05"
-          onchange='_slider_change("audio6.volume");'
-          oninput='_slider_change("audio6.volume");' >
-      </div>
-    </div>
-
-    <div class='pure-g row'>
-      <div class='pure-u-1-4 col'>bowl</div>
-      <div class='pure-u-1-4 col'>
-        <button class='bdropinp bkey' id='ui_generate' onclick='_click_change("audio7.toggle");'></button>
-      </div>
-
-      <div class='pure-u-1-2 col'>
-        <input
-          id='audio7.volume'
-          type='range'
-          value='1.0'
-          min="0"
-          max="1.0"
-          step=".05"
-          onchange='_slider_change("audio7.volume");'
-          oninput='_slider_change("audio7.volume");' >
-      </div>
-    </div>
-
-    <div class='pure-g row'>
-      <div class='pure-u-1-4 col'>voices</div>
-      <div class='pure-u-1-4 col'>
-        <button class='bdropinp bkey' id='ui_generate' onclick='_click_change("audio9.toggle");'></button>
-      </div>
-
-      <div class='pure-u-1-2 col'>
-        <input
-          id='audio9.volume'
-          type='range'
-          value='1.0'
-          min="0"
-          max="1.0"
-          step=".05"
-          onchange='_slider_change("audio9.volume");'
-          oninput='_slider_change("audio9.volume");' >
-      </div>
-    </div>
-
-    <div class='pure-g row'>
-      <div class='pure-u-1-4 col'>campfire</div>
-      <div class='pure-u-1-4 col'>
-        <button class='bdropinp bkey' id='ui_generate' onclick='_click_change("audio10.toggle");'></button>
-      </div>
-
-      <div class='pure-u-1-2 col'>
-        <input
-          id='audio10.volume'
-          type='range'
-          value='1.0'
-          min="0"
-          max="1.0"
-          step=".05"
-          onchange='_slider_change("audio10.volume");'
-          oninput='_slider_change("audio10.volume");' >
-      </div>
-    </div>
-
-    <div class='pure-g row'>
-      <div class='pure-u-1-4 col'>subway</div>
-      <div class='pure-u-1-4 col'>
-        <button class='bdropinp bkey' id='ui_generate' onclick='_click_change("audio11.toggle");'></button>
-      </div>
-
-      <div class='pure-u-1-2 col'>
-        <input
-          id='audio11.volume'
-          type='range'
-          value='1.0'
-          min="0"
-          max="1.0"
-          step=".05"
-          onchange='_slider_change("audio11.volume");'
-          oninput='_slider_change("audio11.volume");' >
-      </div>
-    </div>
-
-    <div class='pure-g row'>
-      <div class='pure-u-1-4 col'>waves</div>
-      <div class='pure-u-1-4 col'>
-        <button class='bdropinp bkey' id='ui_generate' onclick='_click_change("audio12.toggle");'></button>
-      </div>
-
-      <div class='pure-u-1-2 col'>
-        <input
-          id='audio12.volume'
-          type='range'
-          value='1.0'
-          min="0"
-          max="1.0"
-          step=".05"
-          onchange='_slider_change("audio12.volume");'
-          oninput='_slider_change("audio12.volume");' >
-      </div>
-    </div>
-
-    <div class='pure-g row'>
-      <div class='pure-u-1-4 col'>dryer</div>
-      <div class='pure-u-1-4 col'>
-        <button class='bdropinp bkey' id='ui_generate' onclick='_click_change("audio13.toggle");'></button>
-      </div>
-
-      <div class='pure-u-1-2 col'>
-        <input
-          id='audio13.volume'
-          type='range'
-          value='1.0'
-          min="0"
-          max="1.0"
-          step=".05"
-          onchange='_slider_change("audio13.volume");'
-          oninput='_slider_change("audio13.volume");' >
-      </div>
-    </div>
-
-    <div class='pure-g row'>
-      <div class='pure-u-1-4 col'>birds</div>
-      <div class='pure-u-1-4 col'>
-        <button class='bdropinp bkey' id='ui_generate' onclick='_click_change("audio14.toggle");'></button>
-      </div>
-
-      <div class='pure-u-1-2 col'>
-        <input
-          id='audio14.volume'
-          type='range'
-          value='1.0'
-          min="0"
-          max="1.0"
-          step=".05"
-          onchange='_slider_change("audio14.volume");'
-          oninput='_slider_change("audio14.volume");' >
-      </div>
-    </div>
-
-    <div class='pure-g row'>
-      <div class='pure-u-1-4 col'>prayer</div>
-      <div class='pure-u-1-4 col'>
-        <button class='bdropinp bkey' id='ui_generate' onclick='_click_change("audio15.toggle");'></button>
-      </div>
-
-      <div class='pure-u-1-2 col'>
-        <input
-          id='audio15.volume'
-          type='range'
-          value='1.0'
-          min="0"
-          max="1.0"
-          step=".05"
-          onchange='_slider_change("audio15.volume");'
-          oninput='_slider_change("audio15.volume");' >
-      </div>
-    </div>
-
-    <div class='pure-g row'>
-      <div class='pure-u-1-4 col'>city</div>
-      <div class='pure-u-1-4 col'>
-        <button class='bdropinp bkey' id='ui_generate' onclick='_click_change("audio16.toggle");'></button>
-      </div>
-
-      <div class='pure-u-1-2 col'>
-        <input
-          id='audio16.volume'
-          type='range'
-          value='1.0'
-          min="0"
-          max="1.0"
-          step=".05"
-          onchange='_slider_change("audio16.volume");'
-          oninput='_slider_change("audio16.volume");' >
-      </div>
-    </div>
-
-    <div class='pure-g row'>
-      <div class='pure-u-1-4 col'>choir</div>
-      <div class='pure-u-1-4 col'>
-        <button class='bdropinp bkey' id='ui_generate' onclick='_click_change("audio17.toggle");'></button>
-      </div>
-
-      <div class='pure-u-1-2 col'>
-        <input
-          id='audio17.volume'
-          type='range'
-          value='1.0'
-          min="0"
-          max="1.0"
-          step=".05"
-          onchange='_slider_change("audio17.volume");'
-          oninput='_slider_change("audio17.volume");' >
-      </div>
-    </div>
-
-
-    <div class='pure-g row'>
-      <div class='pure-u-1-4 col'>police scanner</div>
-      <div class='pure-u-1-4 col'>
-        <button class='bdropinp bkey' id='ui_generate' onclick='_click_change("audio18.toggle");'></button>
-      </div>
-
-      <div class='pure-u-1-2 col'>
-        <input
-          id='audio18.volume'
-          type='range'
-          value='1.0'
-          min="0"
-          max="1.0"
-          step=".05"
-          onchange='_slider_change("audio18.volume");'
-          oninput='_slider_change("audio18.volume");' >
-      </div>
-    </div>
-
-
-    <div class='pure-g row'>
-      <div class='pure-u-1-4 col'>church bells</div>
-      <div class='pure-u-1-4 col'>
-        <button class='bdropinp bkey' id='ui_generate' onclick='_click_change("audio19.toggle");'></button>
-      </div>
-
-      <div class='pure-u-1-2 col'>
-        <input
-          id='audio19.volume'
-          type='range'
-          value='1.0'
-          min="0"
-          max="1.0"
-          step=".05"
-          onchange='_slider_change("audio19.volume");'
-          oninput='_slider_change("audio19.volume");' >
-      </div>
-    </div>
-
-    <div id='ui_info'>
-      <audio id="audio0" src="assets/156049__ali-k__spring-night-rain2-evosmos-salonika-03-15-15-05.mp3" preload="auto"></audio>
-      <audio id="audio1" src="assets/155940__ali-k__small-waterfall-pentalofos-salonika-21-33-30-04.mp3" preload="auto"></audio>
-      <audio id="audio2" src="assets/197804__7778__indoor-fish-tank-without-bubble-strips-ambiance.mp3" preload="auto"></audio>
-      <audio id="audio3" src="assets/32655__greysound__frogsandcrickets-excerptb-jma-24bit-48k.mp3" preload="auto"></audio>
-      <audio id="audio4" src="assets/525052__smand__wind-chime-small.mp3" preload="auto"></audio>
-      <audio id="audio5" src="assets/394290__epicwizard__bar-crowd-in-belgrade.mp3" preload="auto"></audio>
-      <audio id="audio6" src="assets/252645__yetcop__cat-purr-gato-ronroneando.mp3" preload="auto"></audio>
-      <audio id="audio7" src="assets/521549__buddhassoundofsilence__singing-bowl-deep-sound.mp3" preload="auto"></audio>
-      <audio id="audio9" src="assets/273643__sanctuarymuch__ethereal-voices.mp3" preload="auto"></audio>
-      <audio id="audio10" src="assets/433783__cagancelik__campfire.mp3" preload="auto"></audio>
-      <audio id="audio11" src="assets/60956__muvee69__int-subway-station.mp3" preload="auto"></audio>
-      <audio id="audio12" src="assets/450755__florianreichelt__waves-of-hawaii.mp3" preload="auto"></audio>
-      <audio id="audio13" src="assets/234458__theonlycanvas__dryer.mp3" preload="auto"></audio>
-      <audio id="audio14" src="assets/517042__sonidosreales245__forestday-bw-66.mp3" preload="auto"></audio>
-      <audio id="audio15" src="assets/345029__3bagbrew__evening-call-to-prayer.mp3" preload="auto"></audio>
-      <audio id="audio17" src="assets/530715__jjbbllkk__rmr-morphagene-reels-choirs-02.mp3" preload="auto"></audio>
-      <audio id="audio18" src="assets/320351__guardian2433__police-radio-chatter.mp3" preload="auto"></audio>
-      <audio id="audio19" src="assets/501115__felix-blume__peal-of-church-bells-on-sunday-in-paris.mp3" preload="auto"></audio>
-
-      <audio id="audio16" src="assets/448378__keng-wai-chane-chick-te__city-brussels-street-morning.mp3" preload="auto"></audio>
-      <!--
-      <audio id="audio16" src="assets/wtf.mp3" preload="auto"></audio>
-      -->
-
-
-
-    </div>
+    <div id='ui_container'></div>
+    <div id='ui_sounds'></div>
 
     <hr class='style12'>
 
-    <!-- ***** -->
+    <!-- -->
+
+    <div class='pure-g rowH'>
+      <div class='pure-u-1-4 col'> </div>
+      <div class='pure-u-1-2 col'>
+        <span style='font-size:3em; font-weight:bold; color:#555555;'>Presets</span>
+      </div>
+      <div class='pure-u-1-4 col'> </div>
+    </div>
+
+    <div id='ui_preset'></div>
+
+    <hr class='style12'>
+
+    <!-- -->
+
+    <div class='pure-g row'> </div>
+
+    <div class='pure-g rowM'>
+      <div class='pure-u-1-3 col'></div>
+      <div class='pure-u-1-3 col'>
+        Source for this web page is released to the public domain (CC0) and can be found on <a href='https://github.com/abetusk/noixer'>GitHub</a>.
+      </div>
+      <div class='pure-u-1-3 col'></div>
+    </div>
+
+    <div class='pure-g rowM'>
+      <div class='pure-u-1-3 col'></div>
+      <div class='pure-u-1-3 col'>
+        All sounds come from <a href='https://freesound.org'>Freesound.org</a> and are public domain (CC0).
+      </div>
+      <div class='pure-u-1-3 col'></div>
+    </div>
+
+    <hr class='style12'>
 
   </body>
 
