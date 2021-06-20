@@ -64,9 +64,9 @@ function jsonsvg2svg_def(x) {
   var _type = x.type;
 
   var lines = [];
-  if (_type == "linearGradient") {
+  if ((_type == "linearGradient") || (_type == "radialGradient")) {
 
-    var _line = "<linearGradient ";
+    var _line = "<" + _type + " ";
 
     for (var _key in x) {
       if ((_key === "stops") ||
@@ -94,10 +94,56 @@ function jsonsvg2svg_def(x) {
       }
     }
 
-    lines.push("</linearGradient>")
+    lines.push("</" + _type + ">")
   }
 
   return lines;
+}
+
+function jsonsvg2svg_defs(defs) {
+
+  if (typeof defs === "undefined") { return ""; }
+
+  for (var def_idx=0; def_idx<defs.length; def_idx++) {
+    var x = defs[def_idx];
+    var _type = x.type;
+
+    var lines = [];
+    if (_type == "linearGradient") {
+
+      var _line = "<linearGradient ";
+
+      for (var _key in x) {
+        if ((_key === "stops") ||
+            (_key === "type")) {
+          continue;
+        }
+        _line += " " + _key + "=\"" + x[_key] + "\"";
+      }
+
+      _line += ">";
+      lines.push( _line );
+
+      if ("stops" in x) {
+        for (var ii=0; ii<x.stops.length; ii++) {
+          var _stop_line = "<stop ";
+          for (var _key in x.stops[ii]) {
+            if (_key === "color" ) {
+              _stop_line += " style=\"stop-color:" + x.stops[ii][_key] + ";stop-opacity:1.0;\"";
+              continue;
+            }
+            _stop_line += " " + _key + "=\"" + x.stops[ii][_key] + "\"";
+          }
+          _stop_line += "/>";
+          lines.push( _stop_line );
+        }
+      }
+
+      lines.push("</linearGradient>")
+    }
+  }
+
+  return lines.join("\n");
 }
 
 function jsonsvg2svg(_x) {
@@ -243,6 +289,9 @@ g_data["max_depth"] = 2;
 g_data["scale"] = 0.5;
 g_data["complexity"] = 4;
 
+g_data["svg_width"] = 720.0;
+g_data["svg_height"] = 720.0;
+
 //            crown
 //      horn          horn
 //         arm     arm
@@ -292,7 +341,7 @@ g_data["complexity"] = 4;
 //
 //
 //
-function _recur(ctx, base) {
+function _recur(ctx, base, sched) {
   if (typeof ctx === "undefined") { return ""; }
 
   var scale = ctx.scale;
@@ -306,10 +355,70 @@ function _recur(ctx, base) {
 
   var ret_str = "";
 
+  if (top_level) {
+    ret_str += base.svg_header;
+    ret_str += jsonsvg2svg_defs(base.defs);
+
+  }
+
   var base_specs = base.specs;
   var base_meta = base.meta;
   var base_bbox = base.bbox;
 
+  // nesting logic
+  //
+  if ("nesting" in base.specs) {
+    var sub_idx = _irnd(ctx.data.length);
+    var sub_name = ctx.data[sub_idx].name;
+
+    for (var nest_idx=0; nest_idx<base.specs.nesting.length; nest_idx++) {
+
+      var sub = Object.assign({}, ctx.data[sub_idx]);
+
+      var sub_anchor_point = [ sub.specs.anchor[0].point.x, sub.specs.anchor[0].point.y ];
+      var sub_anchor_deg = _deg( sub.specs.anchor[0].normal.x, sub.specs.anchor[0].normal.y );
+
+      var nest_anchor_deg = _deg( 0, -1 );
+
+      var nest_bbox = base.specs.nesting[nest_idx];
+      var base_attach = [ nest_bbox.x.min + ((nest_bbox.x.max - nest_bbox.x.min) / 2.0),
+                          (nest_bbox.y.max) ];
+
+      var nest_dx = Math.abs(nest_bbox.x.max - nest_bbox.x.min);
+      var nest_dy = Math.abs(nest_bbox.y.max - nest_bbox.y.min);
+      var min_dim = ( (nest_dx < nest_dy) ? nest_dx : nest_dy );
+
+      var nest_scale = min_dim / ctx.svg_width;
+
+      // nest areas are always axis aligned, pointing up
+      //
+      var deg = nest_anchor_deg - sub_anchor_deg;
+
+      var t_str_s = "<g transform=\"";
+      t_str_s += " translate(" + base_attach[0].toString() + " " + base_attach[1].toString() + ")";
+      t_str_s += " scale(" + (nest_scale).toString() + " " + (nest_scale).toString() + ")";
+      t_str_s += " rotate(" + (deg).toString() + ")";
+      t_str_s += " translate(" + (-sub_anchor_point[0]).toString() + " " + (-sub_anchor_point[1]).toString() + ")";
+      t_str_s += "\">";
+
+      var t_str_e = "</g>";
+
+
+      //console.log(sub.defs);
+      ret_str += jsonsvg2svg_defs(sub.defs);
+
+      ret_str += t_str_s;
+      ret_str += jsonsvg2svg_child(sub.layers);
+      ret_str += t_str_e;
+
+    }
+  }
+
+
+
+
+  // attach to logic
+  //
   var candidate_attach_list = [];
   for (var spec_key in base_specs) {
     if ((spec_key === "anchor") || (spec_key === "nesting")) { continue; }
@@ -317,15 +426,7 @@ function _recur(ctx, base) {
   }
   var attach_list = _choose(candidate_attach_list, complexity);
 
-
-  if (top_level) {
-    ret_str += base.svg_header;
-  }
-
-
   for (var attach_list_idx=0; attach_list_idx < attach_list.length; attach_list_idx++) {
-    //var sub = _choose(ctx.data, 1)[0];
-
     var sub_idx = _irnd(ctx.data.length);
     var sub_name = ctx.data[sub_idx].name;
 
@@ -333,7 +434,7 @@ function _recur(ctx, base) {
 
     for (var aidx=0; aidx < base.specs[attach_id].length; aidx++) {
 
-      var sub = Object.assign({}, ctx.data[sub_idx]);
+      var sub = Object.assign({}, ctx.symbol[sub_name]);
 
       var _invert = ( ((aidx%2)==0) ? false : true );
       var f = (_invert ? -1.0 : 1.0);
@@ -342,11 +443,10 @@ function _recur(ctx, base) {
       var base_attach_deg = _deg( base.specs[attach_id][aidx].normal.x, base.specs[attach_id][aidx].normal.y );
 
       var sub_anchor_point = [ sub.specs.anchor[0].point.x, sub.specs.anchor[0].point.y ];
-      var sub_anchor_deg = _deg( sub.specs.anchor[0].normal.x, sub.specs.anchor[0].normal.y );
+      var sub_anchor_deg = _deg( sub.specs.anchor[0].normal.x, f*sub.specs.anchor[0].normal.y );
 
       var deg = base_attach_deg - sub_anchor_deg;
-
-      if (_invert) { deg = 180.0 - deg; }
+      if (_invert) { deg *= -1; }
 
       var t_str_s = "<g transform=\"";
       t_str_s += " translate(" + base_attach_point[0].toString() + " " + base_attach_point[1].toString() + ")";
@@ -357,11 +457,12 @@ function _recur(ctx, base) {
 
       var t_str_e = "</g>";
 
+      ret_str += jsonsvg2svg_defs(sub.defs);
       ret_str += t_str_s;
 
-      var sub_copy = { ...sub };
-
-      ret_str += jsonsvg2svg_child(sub_copy.layers);
+      // render svg from svgjson data
+      //
+      ret_str += jsonsvg2svg_child(sub.layers);
 
       ret_str += _recur(ctx, sub);
       ret_str += t_str_e;
