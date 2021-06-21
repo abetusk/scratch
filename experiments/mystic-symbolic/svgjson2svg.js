@@ -148,9 +148,14 @@ function _deg(x,y) { return Math.atan2(y,x)*180.0/Math.PI; }
 // ------------------
 
 
+var arg_str = "";
 var fn = "";
 if (process.argv.length >= 3) {
   fn = process.argv[2];
+
+  if (process.argv.length >= 4) {
+    arg_str = process.argv[3];
+  }
 }
 
 if (fn.length == 0) {
@@ -475,8 +480,6 @@ function _preprocess_svgjson(adata, primary_color, secondary_color) {
 function mystic_symbolic_random(ctx, base, primary_color, secondary_color, bg_color) {
   if (typeof ctx === "undefined") { return ""; }
   base = ( (typeof base === "undefined") ? ctx.data[ _irnd(ctx.data.length) ] : base ) ;
-  //var primary_color = "#ff0000";
-  //var secondary_color = "#0000ff";
 
   bg_color = ((typeof bg_color === "undefined") ? "#000000" : bg_color);
 
@@ -498,8 +501,11 @@ function mystic_symbolic_random(ctx, base, primary_color, secondary_color, bg_co
     ret_str += "<g transform=\"translate(360 360) scale(0.5 0.5) translate(-360 -360)\">\n";
 
     if (_include_background_rect) {
+      var w = ctx.svg_width;
+      var h = ctx.svg_height;
       _bg = bg_color;
-      ret_str += "<rect x=\"-720\" y=\"-720\" width=\"2160\" height=\"2160\" fill=\"" + _bg + "\" data-is-background=\"true\">\n</rect>\n";
+      ret_str += "<rect x=\"-" + w.toString() + "\" y=\"-" + h.toString() + "\" ";
+      ret_str += "width=\"" + (3*w).toString() + "\" height=\"" + (3*h).toString() + "\" fill=\"" + _bg + "\" data-is-background=\"true\">\n</rect>\n";
     }
     ret_str += jsonsvg2svg_defs(base.defs, primary_color, secondary_color);
   }
@@ -640,6 +646,195 @@ function mystic_symbolic_random(ctx, base, primary_color, secondary_color, bg_co
   return ret_str;
 }
 
+// -----
+// -----
+// -----
+// -----
+
+function mystic_symbolic_sched(ctx, sched, primary_color, secondary_color, bg_color) {
+  if (typeof ctx === "undefined") { return ""; }
+  //base = ( (typeof base === "undefined") ? ctx.data[ _irnd(ctx.data.length) ] : base ) ;
+
+  if (typeof sched === "string") {
+    sched = { "base": sched };
+  }
+  var base = ctx.symbol[sched.base];
+
+  bg_color = ((typeof bg_color === "undefined") ? "#000000" : bg_color);
+
+  var _include_background_rect = true;
+
+  var scale = ctx.scale;
+
+  var top_level = false;
+
+  if (ctx.cur_depth == 0) { top_level = true; }
+  ctx.cur_depth++;
+
+  var ret_str = "";
+
+  if (top_level) {
+
+    ret_str += base.svg_header;
+
+    ret_str += "<g transform=\"translate(360 360) scale(0.5 0.5) translate(-360 -360)\">\n";
+
+    if (_include_background_rect) {
+      var w = ctx.svg_width;
+      var h = ctx.svg_height;
+      _bg = bg_color;
+      ret_str += "<rect x=\"-" + w.toString() + "\" y=\"-" + h.toString() + "\" ";
+      ret_str += "width=\"" + (3*w).toString() + "\" height=\"" + (3*h).toString() + "\" fill=\"" + _bg + "\" data-is-background=\"true\">\n</rect>\n";
+    }
+    ret_str += jsonsvg2svg_defs(base.defs, primary_color, secondary_color);
+  }
+
+  var base_specs = base.specs;
+  var base_meta = base.meta;
+  var base_bbox = base.bbox;
+
+  var attach_list = [];
+  if ("attach" in sched) {
+    for (var key in sched.attach) {
+      attach_list.push(key);
+    }
+  }
+
+  for (var attach_list_idx=0; attach_list_idx < attach_list.length; attach_list_idx++) {
+
+    // if attach id is in our schedule...
+    // find the sub component name
+    //
+    var attach_id = attach_list[attach_list_idx];
+    var sched_mod_data = sched.attach[attach_id];
+
+    // make sure we have it in our compnent and
+    // skip the nesting, as that will be handled below
+    //
+    if (!(attach_id in base.specs)) { continue; }
+    if (attach_id === "nesting") { continue; }
+
+    var reuse_svg = "";
+    for (var aidx=0; aidx < base.specs[attach_id].length; aidx++) {
+
+      var sub_name = "";
+      var m_aidx = aidx % sched_mod_data.length
+      if (typeof sched_mod_data[m_aidx] === "string") {
+        sub_name = sched_mod_data[m_aidx];
+      }
+      else {
+        sub_name = sched_mod_data[m_aidx].base;
+      }
+
+      var sub_sched = sched.attach[attach_id][m_aidx];
+
+      var sub = Object.assign({}, ctx.symbol[sub_name]);
+
+      var _invert = ( ((aidx%2)==0) ? false : true );
+      var f = (_invert ? -1.0 : 1.0);
+
+      var base_attach_point = [ base.specs[attach_id][aidx].point.x, base.specs[attach_id][aidx].point.y ];
+      var base_attach_deg = _deg( base.specs[attach_id][aidx].normal.x, base.specs[attach_id][aidx].normal.y );
+
+      //console.log("sub_name:", sub_name, "sub_sched:", sub_sched, "aidx:", aidx, "m_aidx:", m_aidx, attach_id, sched);
+
+      var sub_anchor_point = [ sub.specs.anchor[0].point.x, sub.specs.anchor[0].point.y ];
+      var sub_anchor_deg = _deg( sub.specs.anchor[0].normal.x, f*sub.specs.anchor[0].normal.y );
+
+      var deg = base_attach_deg - sub_anchor_deg;
+      if (_invert) { deg *= -1; }
+
+      var t_str_s = "<g transform=\"";
+      t_str_s += " translate(" + base_attach_point[0].toString() + " " + base_attach_point[1].toString() + ")";
+      t_str_s += " scale(" + scale.toString() + " " + (f*scale).toString() + ")";
+      t_str_s += " rotate(" + (deg).toString() + ")";
+      t_str_s += " translate(" + (-sub_anchor_point[0]).toString() + " " + (-sub_anchor_point[1]).toString() + ")";
+      t_str_s += "\">";
+
+      var t_str_e = "</g>";
+
+
+      //if (aidx == 0) {
+        ret_str += jsonsvg2svg_defs(sub.defs, primary_color, secondary_color);
+        reuse_svg = mystic_symbolic_sched(ctx, sub_sched, primary_color, secondary_color);
+      //}
+
+      ret_str += t_str_s;
+      ret_str += reuse_svg;
+      ret_str += t_str_e;
+
+    }
+
+  }
+
+  // nesting logic
+  //
+  ret_str += base.svg_inner;
+
+  if (("attach" in sched) && ("nesting" in sched.attach) && ("nesting" in base.specs)) {
+
+    for (var nest_idx=0; nest_idx<base.specs.nesting.length; nest_idx++) {
+
+      var sched_nest_n = sched.attach.nesting.length;
+
+      var sub_sched = {};
+      if (typeof sched.attach.nesting[nest_idx % sched_nest_n] === "string") {
+        sub_sched = {"base":sched.attach.nesting[nest_idx % sched_nest_n]};
+      }
+      else {
+        sub_sched = sched.attach.nesting[nest_idx % sched_nest_n];
+      }
+      var sub_name = sub_sched.base;
+
+      var sub = Object.assign({}, ctx.symbol[sub_name]);
+
+      var sub_anchor_point = [ sub.specs.anchor[0].point.x, sub.specs.anchor[0].point.y ];
+      var sub_anchor_deg = _deg( sub.specs.anchor[0].normal.x, sub.specs.anchor[0].normal.y );
+
+      var nest_anchor_deg = _deg( 0, -1 );
+
+      var nest_bbox = base.specs.nesting[nest_idx];
+      var base_attach = [ nest_bbox.x.min + ((nest_bbox.x.max - nest_bbox.x.min) / 2.0),
+                          (nest_bbox.y.max) ];
+
+      var nest_dx = Math.abs(nest_bbox.x.max - nest_bbox.x.min);
+      var nest_dy = Math.abs(nest_bbox.y.max - nest_bbox.y.min);
+      var min_dim = ( (nest_dx < nest_dy) ? nest_dx : nest_dy );
+
+      var nest_scale = min_dim / ctx.svg_width;
+
+      // nest areas are always axis aligned, pointing up
+      //
+      var deg = nest_anchor_deg - sub_anchor_deg;
+
+      var t_str_s = "<g transform=\"";
+      t_str_s += " translate(" + base_attach[0].toString() + " " + base_attach[1].toString() + ")";
+      t_str_s += " scale(" + (nest_scale).toString() + " " + (nest_scale).toString() + ")";
+      t_str_s += " rotate(" + (deg).toString() + ")";
+      t_str_s += " translate(" + (-sub_anchor_point[0]).toString() + " " + (-sub_anchor_point[1]).toString() + ")";
+      t_str_s += "\">";
+
+      var t_str_e = "</g>";
+
+      //ret_str += jsonsvg2svg_defs(sub.defs, secondary_color, primary_color );
+      ret_str += jsonsvg2svg_defs(sub.defs, primary_color, secondary_color );
+
+      ret_str += t_str_s;
+      //ret_str += mystic_symbolic_sched(ctx, sub_sched, secondary_color, primary_color);
+      ret_str += mystic_symbolic_sched(ctx, sub_sched, secondary_color, primary_color);
+      ret_str += t_str_e;
+
+    }
+  }
+
+  if (top_level) {
+    ret_str += "</g>\n";
+    ret_str += base.svg_footer;
+  }
+
+  ctx.cur_depth-=1;
+  return ret_str;
+}
 
 
 var prim_hue = Math.random();
@@ -648,7 +843,7 @@ var prim_val = _rnd(0.75, 1.0);
 
 var seco_hue = prim_hue + 0.35;
 var seco_sat = 1.0 - prim_sat;
-var seco_val = 1.0 - prim_val;
+var seco_val = _rnd(0.25, 0.6);
 if (seco_hue > 1.0) { seco_hue -= 1.0; }
 
 var bg_hue = prim_hue - 0.35;
@@ -675,9 +870,297 @@ g_data["complexity"] = 4;
 g_data["svg_width"] = 720.0;
 g_data["svg_height"] = 720.0;
 
-var base_symbol = g_data.symbol["angel"];
-base_symbol = undefined;
+var base_symbol = g_data.symbol["eye_up"];
 
-console.log( mystic_symbolic_random(g_data, base_symbol, primary_color, secondary_color, bg_color) );
+var sched = {
+  "base" : "globe",
+  "attach" : {
+    "nest" : "eye_up",
+    "crown" : "circle",
+    "arm" : "cube_die",
+    "leg" : "cloud",
+    "tail" : "rabbit"
+  }
+};
+
+var ts = "globe(eye_up).crown(circle).arm(cube_die).leg(cloud).tail(rabbit)";
+
+//var ts = "globe @ eye_up ^ circle ~ cube_die | cloud . rabbit"
+var ts = "globe @ (eye_up @ angel ) ^ circle ~ cube_die | cloud . rabbit"
+//var ts = "globe @ eye_up ^ [circle,circle_spiral] ~ cube_die | cloud . rabbit"
+//var ts = "globe @ eye_up ^ [circle,circle_spiral,:] ~ cube_die | cloud . rabbit"
+
+ts = "globe @ ( eye_up @ angel ) ";
+
+
+var repri=
+"   ^   " +
+" ~( )~ " +
+"   .   " +
+"  | |  " ;
+
+
+
+function mystic_symbolic_dsl2sched_ring(_s) {
+  if (typeof _s === "undefined") { return {}; }
+  var s = _s.replace(/ /g, '');
+  if ((s.length) == 0) { return {}; }
+
+  //console.log("ring::", _s);
+
+  var ret = { "tok":"", "obj":[], "del_idx":0, "state":"" };
+
+  if (s[0] != '[') { return {}; }
+
+
+  var cur_idx = 1;
+  while (cur_idx < s.length) {
+    var r = mystic_symbolic_dsl2sched(s.slice(cur_idx));
+    if ("error" in r) { return r; }
+
+    cur_idx += r.del_idx;
+
+    if (r.tok.legth != 0) {
+      //console.log("ring>> push tok", r.tok);
+      ret.obj.push(r.tok);
+    }
+    else {
+      //console.log("ring>> push obj", r.obj);
+      ret.obj.push(r.obj);
+    }
+
+    //console.log("???", ret.obj);
+
+    if (r.state == "#list#end") { break; }
+    if (r.state != "#list#sep") {
+      //console.log("ring>>>", JSON.stringify(r));
+      return { "error":"ring error" };
+    }
+
+  }
+
+  ret.del_idx = cur_idx;
+
+  //console.log("ring#ret::", JSON.stringify(ret));
+
+  return ret;
+}
+
+function mystic_symbolic_dsl2sched(_s) {
+  if (typeof _s === "undefined") { return {}; }
+
+  var s = _s.replace(/ /g, '');
+
+  //console.log("sched>>", s);
+
+  var sched = { "base": "" };
+  var base_str = "";
+  var cur_tok = "";
+
+  var state = "base";
+
+  var tok_kw = {
+    "@" : "nesting",
+    "^" : "crown",
+    "!" : "horn",
+    "~" : "arm",
+    "|" : "leg",
+    "." : "tail",
+    ":" : "#list#null",
+    "," : "#list#sep",
+    "[" : "#list#beg",
+    "]" : "#list#end",
+    "(" : "#sub#beg",
+    ")" : "#sub#end"
+  };
+
+  var tok_kw_skip = {
+    ":" : "#list#null",
+    "," : "#list#sep",
+    "[" : "#list#beg",
+    //"]" : "#list#end",
+    "(" : "#sub#beg"
+    //")" : "#sub#end"
+  }
+
+  var state_skip = {
+    "#list#null" : 1,
+    "#list#sep" : 1,
+    "#list#beg" : 1,
+    //"#list#end" : 1,
+    "#sub#beg" : 1
+    //"#sub#end" : 1
+  }
+
+  var cur_idx = 0;
+  var cur_obj = {};
+  var cur_val_type = "";
+  var cur_tok = "";
+  while (cur_idx < s.length) {
+
+    //console.log("[", cur_idx, "]", s[cur_idx]);
+
+    if (s[cur_idx] in tok_kw) {
+      //console.log(cur_idx, "'" + cur_tok +"'", "(", state, ")");
+
+      // we're changing state, so take our current token
+      // and add it the appropriate current state structure
+      // element.
+      //
+      var new_state = tok_kw[s[cur_idx]];
+
+      // proces previous state
+      //
+      if (state == "base") {
+        sched["base"] = cur_tok;
+      }
+      else if (!(s[cur_idx] in tok_kw_skip)) {
+
+        //console.log("....state:", state);
+
+        if (!("attach" in sched)) { sched["attach"] = {}; }
+        if (!(state in sched.attach)) {
+          sched.attach[state] = [];
+        }
+
+        if (cur_val_type == "string") {
+
+        //if (cur_tok.length > 0) {
+          //sched.attach[state].push({"base":cur_tok});
+          sched.attach[state].push(cur_tok);
+        }
+        else if (cur_val_type == "object") {
+
+          //console.log("sched>> adding", JSON.stringify(cur_obj), "to state, ", state);
+
+          sched.attach[state].push(cur_obj);
+        }
+        else if (cur_val_type == "array") {
+          sched.attach[state].push(...cur_obj);
+        }
+        else {
+          return { "error":"unknown val type '" + cur_val_type + "' (" + s + ")" };
+        }
+      }
+      else {
+        //console.log("...skipped...");
+      }
+
+      //console.log("??", cur_idx);
+
+      if (new_state == "#list#beg") {
+
+
+        var ret = mystic_symbolic_dsl2sched_ring(s.slice(cur_idx));
+        if ("error" in ret) { return ret; }
+
+        //console.log("listbeg finished", JSON.stringify(ret));
+
+        cur_obj = ret.obj;
+        cur_idx += ret.del_idx;
+        cur_val_type = "array";
+        continue;
+      }
+      else if ((new_state == "#list#sep") || (new_state == "#list#end")) {
+        return { "obj": sched, "tok": cur_tok, "del_idx": (cur_idx+1), "state":new_state };
+      }
+
+      else if (new_state == "#sub#beg") {
+
+        //console.log("subbeg beg");
+
+        cur_idx++;
+        var ret = mystic_symbolic_dsl2sched(s.slice(cur_idx));
+        if ("error" in ret) { return ret; }
+
+
+        cur_tok = ret.tok;
+        cur_obj = ret.obj;
+        cur_idx += ret.del_idx;
+        cur_val_type = "object";
+
+        //console.log("#sub#beg finished", "state:", state, "new_state", new_state, "cur_idx:", cur_idx, "now s[]:", s[cur_idx], JSON.stringify(ret));
+
+        continue;
+      }
+      else if (new_state == "#sub#end") {
+        return { "obj": sched, "tok": cur_tok, "del_idx": (cur_idx+1), "state":new_state, "val_type":cur_val_type };
+      }
+
+      else {
+        state = new_state;
+        //return { "error": "unexpected state:" + new_state + " at index " + i.toString() + " ('..." + s.slice(i-10,i+10) + "...')"  };
+
+        //console.log("new state ", new_state);
+      }
+
+      //console.log("cp", cur_idx);
+
+      cur_tok = "";
+      cur_obj = {};
+      state = new_state;
+
+      cur_idx++;
+
+    }
+    else if ( (("a".charCodeAt(0) <= s.charCodeAt(cur_idx)) &&
+               (s.charCodeAt(cur_idx) <= "z".charCodeAt(0))) ||
+              (("A".charCodeAt(0) <= s.charCodeAt(cur_idx)) &&
+               (s.charCodeAt(cur_idx) <= "Z".charCodeAt(0))) ||
+              (s.charCodeAt(cur_idx) == "_".charCodeAt(0)) ) {
+      cur_tok += s[cur_idx];
+      cur_val_type = "string";
+      cur_idx++;
+    }
+    else {
+      //return {"error" : "invalide character at " + i.toString() + " (" + s.slice(i-10,i+10) +")" };
+      return {"error" : "invalide character (" + s[cur_idx] + ") at " + cur_idx.toString() + " (" + s +")" };
+    }
+
+  }
+
+  //console.log("fuuuuu", cur_tok, cur_obj, cur_val_type);
+
+  // proces previous state
+  //
+  if (state == "base") {
+    sched["base"] = cur_tok;
+  }
+  else {
+  //else if (!(s[cur_idx] in tok_kw_skip)) {
+    if (!("attach" in sched)) { sched["attach"] = {}; }
+    if (!(state in sched.attach)) {
+      sched.attach[state] = [];
+    }
+
+    if (cur_val_type == "string") {
+      sched.attach[state].push(cur_tok);
+    }
+    else if (cur_val_type == "array") {
+
+      //console.log("sched>> adding", JSON.stringify(cur_obj), "to state, ", state);
+
+      sched.attach[state].push(...cur_obj);
+    }
+    else if (cur_val_type == "object") {
+      sched.attach[state].push(cur_obj);
+    }
+    else {
+      return { "error":"unknown val type '" + cur_val_type + "' (" + s + ")" };
+    }
+  }
+
+  return sched;
+}
+
+//var r = mystic_symbolic_dsl2sched(ts );
+var sched  = mystic_symbolic_dsl2sched( arg_str );
+//console.log(JSON.stringify(sched, undefined, 2));
+
+//console.log( mystic_symbolic_random(g_data, base_symbol, primary_color, secondary_color, bg_color) );
+console.log( mystic_symbolic_sched(g_data, sched , primary_color, secondary_color, bg_color) );
+process.exit();
+
 console.log("<!-- primary(", prim_hue, prim_sat, prim_val,"), secondary(", seco_hue, seco_sat, seco_val, ") bg(", bg_hue, bg_sat, bg_val, ") -->");
+console.log("<!-- ", primary_color, secondary_color, bg_color, "-->");
 
