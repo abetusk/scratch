@@ -653,7 +653,6 @@ function mystic_symbolic_random(ctx, base, primary_color, secondary_color, bg_co
 
 function mystic_symbolic_sched(ctx, sched, primary_color, secondary_color, bg_color) {
   if (typeof ctx === "undefined") { return ""; }
-  //base = ( (typeof base === "undefined") ? ctx.data[ _irnd(ctx.data.length) ] : base ) ;
 
   if (typeof sched === "string") {
     sched = { "base": sched };
@@ -736,8 +735,6 @@ function mystic_symbolic_sched(ctx, sched, primary_color, secondary_color, bg_co
       var base_attach_point = [ base.specs[attach_id][aidx].point.x, base.specs[attach_id][aidx].point.y ];
       var base_attach_deg = _deg( base.specs[attach_id][aidx].normal.x, base.specs[attach_id][aidx].normal.y );
 
-      //console.log("sub_name:", sub_name, "sub_sched:", sub_sched, "aidx:", aidx, "m_aidx:", m_aidx, attach_id, sched);
-
       var sub_anchor_point = [ sub.specs.anchor[0].point.x, sub.specs.anchor[0].point.y ];
       var sub_anchor_deg = _deg( sub.specs.anchor[0].normal.x, f*sub.specs.anchor[0].normal.y );
 
@@ -753,11 +750,8 @@ function mystic_symbolic_sched(ctx, sched, primary_color, secondary_color, bg_co
 
       var t_str_e = "</g>";
 
-
-      //if (aidx == 0) {
-        ret_str += jsonsvg2svg_defs(sub.defs, primary_color, secondary_color);
-        reuse_svg = mystic_symbolic_sched(ctx, sub_sched, primary_color, secondary_color);
-      //}
+      ret_str += jsonsvg2svg_defs(sub.defs, primary_color, secondary_color);
+      reuse_svg = mystic_symbolic_sched(ctx, sub_sched, primary_color, secondary_color);
 
       ret_str += t_str_s;
       ret_str += reuse_svg;
@@ -767,10 +761,10 @@ function mystic_symbolic_sched(ctx, sched, primary_color, secondary_color, bg_co
 
   }
 
+  ret_str += jsonsvg2svg_child(base.layers, primary_color, secondary_color);
+
   // nesting logic
   //
-  ret_str += base.svg_inner;
-
   if (("attach" in sched) && ("nesting" in sched.attach) && ("nesting" in base.specs)) {
 
     for (var nest_idx=0; nest_idx<base.specs.nesting.length; nest_idx++) {
@@ -816,11 +810,8 @@ function mystic_symbolic_sched(ctx, sched, primary_color, secondary_color, bg_co
 
       var t_str_e = "</g>";
 
-      //ret_str += jsonsvg2svg_defs(sub.defs, secondary_color, primary_color );
-      ret_str += jsonsvg2svg_defs(sub.defs, primary_color, secondary_color );
-
+      ret_str += jsonsvg2svg_defs(sub.defs, secondary_color, primary_color );
       ret_str += t_str_s;
-      //ret_str += mystic_symbolic_sched(ctx, sub_sched, secondary_color, primary_color);
       ret_str += mystic_symbolic_sched(ctx, sub_sched, secondary_color, primary_color);
       ret_str += t_str_e;
 
@@ -1107,6 +1098,8 @@ function mystic_symbolic_dsl2sched(_s) {
                (s.charCodeAt(cur_idx) <= "z".charCodeAt(0))) ||
               (("A".charCodeAt(0) <= s.charCodeAt(cur_idx)) &&
                (s.charCodeAt(cur_idx) <= "Z".charCodeAt(0))) ||
+              (("0".charCodeAt(0) <= s.charCodeAt(cur_idx)) &&
+               (s.charCodeAt(cur_idx) <= "9".charCodeAt(0))) ||
               (s.charCodeAt(cur_idx) == "_".charCodeAt(0)) ) {
       cur_tok += s[cur_idx];
       cur_val_type = "string";
