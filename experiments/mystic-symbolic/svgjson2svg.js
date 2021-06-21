@@ -98,6 +98,19 @@ function _irnd(n) {
   return Math.floor(Math.random()*n);
 }
 
+// _rnd()     : 0...1
+// _rnd(a)    : 0...a
+// -rnd(a,b)  : a...b
+//
+function _rnd(a,b) {
+  a = ((typeof a === "undefined") ? 1.0 : a);
+  if (typeof b === "undefined") {
+    return Math.random()*a;
+  }
+
+  return (Math.random()*(b-a) + a);
+}
+
 // Choose random element from array
 //
 function _crnd(a) {
@@ -327,6 +340,9 @@ function jsonsvg2svg_child(x, primary_color, secondary_color) {
           real_prop_key = remap[prop_key];
         }
 
+        // experiment
+        if (real_prop_key == "stroke-width") { _val = 4; }
+
         _line += " " + real_prop_key + "=\"" + _val + "\"";
 
       }
@@ -456,11 +472,13 @@ function _preprocess_svgjson(adata, primary_color, secondary_color) {
 //
 //
 //
-function mystic_symbolic_random(ctx, base, primary_color, secondary_color) {
+function mystic_symbolic_random(ctx, base, primary_color, secondary_color, bg_color) {
   if (typeof ctx === "undefined") { return ""; }
   base = ( (typeof base === "undefined") ? ctx.data[ _irnd(ctx.data.length) ] : base ) ;
   //var primary_color = "#ff0000";
   //var secondary_color = "#0000ff";
+
+  bg_color = ((typeof bg_color === "undefined") ? "#000000" : bg_color);
 
   var _include_background_rect = true;
 
@@ -480,7 +498,7 @@ function mystic_symbolic_random(ctx, base, primary_color, secondary_color) {
     ret_str += "<g transform=\"translate(360 360) scale(0.5 0.5) translate(-360 -360)\">\n";
 
     if (_include_background_rect) {
-      _bg = "#000000";
+      _bg = bg_color;
       ret_str += "<rect x=\"-720\" y=\"-720\" width=\"2160\" height=\"2160\" fill=\"" + _bg + "\" data-is-background=\"true\">\n</rect>\n";
     }
     ret_str += jsonsvg2svg_defs(base.defs, primary_color, secondary_color);
@@ -622,42 +640,44 @@ function mystic_symbolic_random(ctx, base, primary_color, secondary_color) {
   return ret_str;
 }
 
-var prim_hue = Math.random();
-var prim_sat = (Math.random()*0.3) + 0.6;
-//var prim_val = Math.random();
-var prim_val = (Math.random()*0.6) + 0.3;
 
-var seco_hue = prim_hue + 0.5;
-var seco_sat = (Math.random()*0.3) + 0.6;
-//var seco_val = Math.random();
-var seco_val = (Math.random()*0.6) + 0.3;
+
+var prim_hue = Math.random();
+var prim_sat = _rnd(0.45, 0.60);
+var prim_val = _rnd(0.75, 1.0);
+
+var seco_hue = prim_hue + 0.35;
+var seco_sat = 1.0 - prim_sat;
+var seco_val = 1.0 - prim_val;
 if (seco_hue > 1.0) { seco_hue -= 1.0; }
+
+var bg_hue = prim_hue - 0.35;
+var bg_sat = (Math.random()*.5);
+var bg_val = (Math.random()*0.5)+0.5;
+
+if (bg_hue < 0.0) { bg_hue += 1.0; }
 
 var prim_rgb = HSVtoRGB(prim_hue, prim_sat, prim_val);
 var seco_rgb = HSVtoRGB(seco_hue, seco_sat, seco_val);
+var bg_rgb = HSVtoRGB(bg_hue, bg_sat, bg_val);
 
 var primary_color = _rgb2hex(prim_rgb.r, prim_rgb.g, prim_rgb.b);
 var secondary_color = _rgb2hex(seco_rgb.r, seco_rgb.g, seco_rgb.b);
+var bg_color = _rgb2hex(bg_rgb.r, bg_rgb.g, bg_rgb.b);
 
-//primary_color = undefined;
-//secondary_color = undefined;
-
-//var sched  = { "symbol": "hands_giving", "attach": { "leg": 
-
-var g_data = _preprocess_svgjson(adata, primary_color, secondary_color);
+var g_data = _preprocess_svgjson(adata, primary_color, secondary_color, bg_color);
 g_data["cur_depth"] = 0;
 g_data["max_depth"] = 1;
-g_data["max_nest_depth"] = 2;
+g_data["max_nest_depth"] = 1;
 g_data["scale"] = 0.5;
 g_data["complexity"] = 4;
 
 g_data["svg_width"] = 720.0;
 g_data["svg_height"] = 720.0;
 
-//var base_symbol = g_data.symbol["hands_claddagh"];
 var base_symbol = g_data.symbol["angel"];
 base_symbol = undefined;
 
-console.log( mystic_symbolic_random(g_data, base_symbol, primary_color, secondary_color) );
+console.log( mystic_symbolic_random(g_data, base_symbol, primary_color, secondary_color, bg_color) );
+console.log("<!-- primary(", prim_hue, prim_sat, prim_val,"), secondary(", seco_hue, seco_sat, seco_val, ") bg(", bg_hue, bg_sat, bg_val, ") -->");
 
-//example0_a();
