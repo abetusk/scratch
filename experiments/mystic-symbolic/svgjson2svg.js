@@ -582,7 +582,9 @@ function mystic_symbolic_random(ctx, base, primary_color, secondary_color, bg_co
 
   // nesting logic
   //
-  ret_str += base.svg_inner;
+  //ret_str += base.svg_inner;
+  ret_str += jsonsvg2svg_child(base.layers, primary_color, secondary_color);
+
   if (("nesting" in base.specs) && (ctx.cur_depth <= ctx.max_nest_depth)) {
 
     var sub_idx = _irnd(ctx.data.length);
@@ -854,7 +856,7 @@ var bg_color = _rgb2hex(bg_rgb.r, bg_rgb.g, bg_rgb.b);
 var g_data = _preprocess_svgjson(adata, primary_color, secondary_color, bg_color);
 g_data["cur_depth"] = 0;
 g_data["max_depth"] = 1;
-g_data["max_nest_depth"] = 1;
+g_data["max_nest_depth"] = 2;
 g_data["scale"] = 0.5;
 g_data["complexity"] = 4;
 
@@ -989,10 +991,7 @@ function mystic_symbolic_dsl2sched(_s) {
   var cur_tok = "";
   while (cur_idx < s.length) {
 
-    //console.log("[", cur_idx, "]", s[cur_idx]);
-
     if (s[cur_idx] in tok_kw) {
-      //console.log(cur_idx, "'" + cur_tok +"'", "(", state, ")");
 
       // we're changing state, so take our current token
       // and add it the appropriate current state structure
@@ -1007,22 +1006,15 @@ function mystic_symbolic_dsl2sched(_s) {
       }
       else if (!(s[cur_idx] in tok_kw_skip)) {
 
-        //console.log("....state:", state);
-
         if (!("attach" in sched)) { sched["attach"] = {}; }
         if (!(state in sched.attach)) {
           sched.attach[state] = [];
         }
 
         if (cur_val_type == "string") {
-
-        //if (cur_tok.length > 0) {
-          //sched.attach[state].push({"base":cur_tok});
           sched.attach[state].push(cur_tok);
         }
         else if (cur_val_type == "object") {
-
-          //console.log("sched>> adding", JSON.stringify(cur_obj), "to state, ", state);
 
           sched.attach[state].push(cur_obj);
         }
@@ -1033,19 +1025,13 @@ function mystic_symbolic_dsl2sched(_s) {
           return { "error":"unknown val type '" + cur_val_type + "' (" + s + ")" };
         }
       }
-      else {
-        //console.log("...skipped...");
-      }
-
-      //console.log("??", cur_idx);
+      else { }
 
       if (new_state == "#list#beg") {
 
 
         var ret = mystic_symbolic_dsl2sched_ring(s.slice(cur_idx));
         if ("error" in ret) { return ret; }
-
-        //console.log("listbeg finished", JSON.stringify(ret));
 
         cur_obj = ret.obj;
         cur_idx += ret.del_idx;
@@ -1058,8 +1044,6 @@ function mystic_symbolic_dsl2sched(_s) {
 
       else if (new_state == "#sub#beg") {
 
-        //console.log("subbeg beg");
-
         cur_idx++;
         var ret = mystic_symbolic_dsl2sched(s.slice(cur_idx));
         if ("error" in ret) { return ret; }
@@ -1070,8 +1054,6 @@ function mystic_symbolic_dsl2sched(_s) {
         cur_idx += ret.del_idx;
         cur_val_type = "object";
 
-        //console.log("#sub#beg finished", "state:", state, "new_state", new_state, "cur_idx:", cur_idx, "now s[]:", s[cur_idx], JSON.stringify(ret));
-
         continue;
       }
       else if (new_state == "#sub#end") {
@@ -1080,12 +1062,7 @@ function mystic_symbolic_dsl2sched(_s) {
 
       else {
         state = new_state;
-        //return { "error": "unexpected state:" + new_state + " at index " + i.toString() + " ('..." + s.slice(i-10,i+10) + "...')"  };
-
-        //console.log("new state ", new_state);
       }
-
-      //console.log("cp", cur_idx);
 
       cur_tok = "";
       cur_obj = {};
@@ -1106,13 +1083,10 @@ function mystic_symbolic_dsl2sched(_s) {
       cur_idx++;
     }
     else {
-      //return {"error" : "invalide character at " + i.toString() + " (" + s.slice(i-10,i+10) +")" };
       return {"error" : "invalide character (" + s[cur_idx] + ") at " + cur_idx.toString() + " (" + s +")" };
     }
 
   }
-
-  //console.log("fuuuuu", cur_tok, cur_obj, cur_val_type);
 
   // proces previous state
   //
@@ -1120,7 +1094,6 @@ function mystic_symbolic_dsl2sched(_s) {
     sched["base"] = cur_tok;
   }
   else {
-  //else if (!(s[cur_idx] in tok_kw_skip)) {
     if (!("attach" in sched)) { sched["attach"] = {}; }
     if (!(state in sched.attach)) {
       sched.attach[state] = [];
@@ -1130,9 +1103,6 @@ function mystic_symbolic_dsl2sched(_s) {
       sched.attach[state].push(cur_tok);
     }
     else if (cur_val_type == "array") {
-
-      //console.log("sched>> adding", JSON.stringify(cur_obj), "to state, ", state);
-
       sched.attach[state].push(...cur_obj);
     }
     else if (cur_val_type == "object") {
@@ -1146,12 +1116,73 @@ function mystic_symbolic_dsl2sched(_s) {
   return sched;
 }
 
-//var r = mystic_symbolic_dsl2sched(ts );
-var sched  = mystic_symbolic_dsl2sched( arg_str );
-//console.log(JSON.stringify(sched, undefined, 2));
+// simple sentences...loose a lot of complexity and nuance
+//
+function sched2sentence(sched, is_root) {
+  is_root = ((typeof is_root === "undefined") ? true : is_root);
 
-//console.log( mystic_symbolic_random(g_data, base_symbol, primary_color, secondary_color, bg_color) );
-console.log( mystic_symbolic_sched(g_data, sched , primary_color, secondary_color, bg_color) );
+  var sentence = (sched.base.match(/^[aeiouAEIOU]/) ? "an " : "a ");
+  sentence += sched.base;
+
+  var attach_order = ["nesting", "crown", "horn", "arm", "leg", "tail"];
+  var count=0;
+
+  var attach_count=0;
+  for (var akey in sched.attach) { attach_count++; }
+
+  for (var ii=0; ii<attach_order.length; ii++) {
+    var attach_id = attach_order[ii];
+    if (!(attach_id in sched.attach)) { continue; }
+
+    if (count>0) {
+      if (count == (attach_count-1)) { sentence += " and"; }
+      else { sentence += ","; }
+    }
+    else {
+      sentence += " with"
+    }
+
+    if (typeof sched.attach[attach_id][0] === "string") {
+      var ele = sched.attach[attach_id][0]; 
+
+      sentence += (ele.match(/^[aeiouAEIOU]/) ? " an" : " a");
+      sentence += " " + ele;
+      if (attach_id=="nesting") {
+        sentence += " inside of it";
+      }
+      else {
+        sentence += " for";
+        //sentence += (attach_id.match(/^[aeiouAEIOU]/) ? " an" : " a");
+        sentence += " its";
+        sentence += " " + attach_id;
+      }
+    }
+    else {
+      //sentence += " that has " + (attach_id.match(/^[aeiouAEIOU]/) ? "an " : "a ") + attach_id + " with ";
+      sentence += " that has " + attach_id + "s with ";
+      sentence += sched2sentence(sched.attach[attach_id][0], is_root);
+    }
+    count++;
+  }
+
+  return sentence;
+}
+
+
+if (arg_str == "random") {
+  console.log( mystic_symbolic_random(g_data, undefined, primary_color, secondary_color, bg_color) );
+}
+else if (typeof arg_str === "undefined") {
+  console.log( mystic_symbolic_random(g_data, undefined, primary_color, secondary_color, bg_color) );
+}
+else {
+  var sched  = mystic_symbolic_dsl2sched( arg_str );
+
+  var sentence = sched2sentence(sched);
+
+  console.log( mystic_symbolic_sched(g_data, sched , primary_color, secondary_color, bg_color) );
+  console.log("<!--", sentence, " -->");
+}
 process.exit();
 
 console.log("<!-- primary(", prim_hue, prim_sat, prim_val,"), secondary(", seco_hue, seco_sat, seco_val, ") bg(", bg_hue, bg_sat, bg_val, ") -->");
