@@ -22,7 +22,11 @@ var parser = pegjs.generate(gram_str);
 
 try {
 //var res = parser.parse(" cup@[crescent_interlock,[bob,stairs_smaller,cc],[clock,arm]] ");
+//var res = parser.parse(" cup@sword^crescent_interlock!bob~pipe|stairs_smaller.cc");
 var res = parser.parse(" cup@([sword,crescent_interlock,[bob@pipe,stairs_smaller,cc],[clock,arm]]) ");
+//var res = parser.parse(" cup@([bob@pipe,stairs_smaller,clock])");
+//var res = parser.parse(" cup@[bob@pipe,stairs_smaller,clock]");
+//var res = parser.parse(" cup@([bob,stairs_smaller,clock]@pipe)");
 //var res = parser.parse(" arm@(bob@clock)");
 //var res = parser.parse(" (arm@bob)@clock");
 }
@@ -31,65 +35,73 @@ catch (e) {
   process.exit();
 }
 
+function create_node() {
+  return {
+    "type":"basic",
+    "base" : [],
+    "nesting":[],
+    "horn":[],
+    "crown":[],
+    "arm":[],
+    "leg":[],
+    "tail":[]
+  };
+
+}
+
+
 function _default_emit(ctx, v) {
   console.log(v.type, v.path, v.ele);
 }
 
-//WIP!!!
 function __default_emit(ctx, v) {
   console.log(v.type, v.path, v.level, v.ele);
-  var attach_list = { "nesting":1, "crown":1, "horn":1, "arm":1, "leg":1, "tail":1 }
+
+  var attach_list = {
+    "/nesting":"nesting",
+    "/crown":"crown",
+    "/horn":"horn",
+    "/arm":"arm",
+    "/leg":"leg",
+    "/tail":"tail"
+  }
 
   var ele = v.ele;
   var path = v.path;
   var data = ctx.data;
 
-  for (var ii=0; ii<path.length; ii++) {
-    var path_ele = path[ii];
+  var cur_data = ctx.data;
+  for (var ii=0; ii<v.path.length; ii++) {
 
-    if (path_ele == "base") {
-      if (!(path_ele in data)) {
-        data["base"] = [];
+    if (v.path[ii] == "base") {
+      if (!("base" in cur_data)) {
+        cur_data["base"] = [ create_node() ];
+        cur_data = cur_data.base[0];
       }
     }
+    else if (v.path[ii] in attach_list) {
+      var attach_id = attach_list[v.path[ii]];
+      if (!(attach_id in cur_data)) {
+        cur_data[attach_id] = [ create_node ];
+        cur_data = cur_data[attach_id][0];
+        continue;
+      }
+
+
+    }
+
+  }
+
+
+  var parent_data = ctx.parent_data;
+  if (v.type == "ele") {
+    parent_data.push(v.ele);
+    return;
   }
 
   return;
 
-  var cur_data = ctx.data;
-  for (var ii=0; ii<(v.path.length-1); ii++) {
 
-    console.log(">>>", ii, v.path[ii], cur_data);
-
-    if (v.path[ii] == "base") {
-      if (!("base" in cur_data)) {
-        cur_data["base"] = [];
-      }
-      var new_data = {};
-      cur_data.base.push(new_data);
-      cur_data = new_data;
-    }
-    else if (v.path[ii] in attach_list) {
-      var attach_id = v.path[ii];
-      if (!(attach_id in cur_data)) {
-        cur_data[attach_id] = [];
-      }
-      var new_data = {};
-      cur_data[attach_id].push(new_data);
-      cur_data = new_data;
-    }
-    else {
-      var x = v.path[ii].split("_");
-      var rr_type = x[0];
-      var rr_idx = parseInt(x[1]);
-
-      console.log(">>>", rr_type, rr_idx, cur_data);
-    }
-  }
-  if (!("base" in cur_data)) {
-    cur_data["base"] = [];
-  }
-  cur_data.base.push(v.ele);
 }
 
 function convert_ast(ctx, data, emit) {
@@ -100,18 +112,56 @@ function convert_ast(ctx, data, emit) {
 
   if (data.t == "base") {
     emit(ctx, {"type": "ele", "path":ctx.level, "ele":data.e});
+
+    ctx.cur_node[ctx.cur_attach].push(data.e);
   }
 
+  /*
+  else if (data.t == "nesting") {
+
+    var prv_attach = ctx.cur_attach;
+    var new_node = create_node();
+    var prv_node = ctx.cur_node;
+    ctx.cur_node["nesting"].push( new_node );
+    ctx.cur_node = new_node;
+    ctx.cur_attach = "base";
+
+    ctx.level.push("nesting" + ctx.sub_num);
+    ctx.sub_num++;
+    convert_ast(ctx, data.e);
+    ctx.level.pop();
+
+    ctx.cur_node = prv_node;
+    ctx.cur_attach = prv_attach;
+  }
+  */
+
   else if (data.t in attach_list) {
-    ctx.level.push("/" + data.t);
+
+    ctx.cur_attach = data.t;
+
+    ctx.level.pop();
+    ctx.level.push(data.t);
     convert_ast(ctx, data.e);
     ctx.level.pop();
   }
 
   else if (data.t == "sub") {
-    ctx.level.push("base");
+
+    var prv_attach = ctx.cur_attach;
+    var new_node = create_node();
+    var prv_node = ctx.cur_node;
+    ctx.cur_node[ctx.cur_attach].push( new_node );
+    ctx.cur_node = new_node;
+    ctx.cur_attach = "base";
+
+    ctx.level.push("sub_" + ctx.sub_num);
+    ctx.sub_num++;
     convert_ast(ctx, data.e);
     ctx.level.pop();
+
+    ctx.cur_node = prv_node;
+    ctx.cur_attach = prv_attach;
   }
 
   else if (data.t == "ring_expr") {
@@ -119,19 +169,50 @@ function convert_ast(ctx, data, emit) {
   }
 
   else if (data.t == "ring") {
+
+    var prv_attach = ctx.cur_attach;
+    var new_node = create_node();
+    var prv_node = ctx.cur_node;
+    ctx.cur_node[ctx.cur_attach].push( new_node );
+    ctx.cur_node = new_node;
+    ctx.cur_attach = "base";
+
     ctx.level.push("ring_" + ctx.ring_num);
     ctx.ring_num++;
     convert_ast(ctx, data.l);
     ctx.level.pop();
 
-
+    ctx.cur_node = prv_node;
+    ctx.cur_attach = prv_attach;
   }
   else if (data.t == "ring_list") {
+
+    var prv_attach = ctx.cur_attach;
+    var new_node = create_node();
+    var prv_node = ctx.cur_node;
+    ctx.cur_node[ctx.cur_attach].push( new_node );
+    ctx.cur_node = new_node;
+    ctx.cur_attach = "base";
+
     convert_ast(ctx, data.e);
+
+    ctx.cur_node = prv_node;
+    ctx.cur_attach = prv_attach;
+
     convert_ast(ctx, data.l);
   }
   else if (data.t == "ring_end") {
+    var prv_attach = ctx.cur_attach;
+    var new_node = create_node();
+    var prv_node = ctx.cur_node;
+    ctx.cur_node[ctx.cur_attach].push( new_node );
+    ctx.cur_node = new_node;
+    ctx.cur_attach = "base";
+
     convert_ast(ctx, data.e);
+
+    ctx.cur_node = prv_node;
+    ctx.cur_attach = prv_attach;
   }
 
   else if (data.t == "rnd_expr") {
@@ -146,13 +227,11 @@ function convert_ast(ctx, data, emit) {
 
   }
   else if (data.t == "rnd_list") {
-   // emit(ctx, {"type": "rnd", "path":ctx.level, "level":ctx.level_n, "ele":data.e});
     convert_ast(ctx, data.e);
     convert_ast(ctx, data.l);
   }
   else if (data.t == "rnd_end") {
     convert_ast(ctx, data.e);
-    //emit(ctx, {"type": "rnd", "path":ctx.level, "level":ctx.level_n, "ele":data.e});
   }
 
 
@@ -166,12 +245,38 @@ function convert_ast(ctx, data, emit) {
 
 }
 
+function cleanup(data) {
+  var attach_list = {"base":1, "nesting":1, "horn":1, "crown":1, "arm":1, "leg":1, "tail":1};
+  var res = {};
+
+  if (typeof data === "string") { return data; }
+  for (var key in attach_list) {
+    if (data[key].length==0) { continue; }
+    if (!(key in res)) { res[key] = []; }
+    for (var ii=0; ii<data[key].length; ii++) {
+      res[key].push( cleanup(data[key][ii]) );
+    }
+  }
+  return res;
+}
+
+
 console.log(JSON.stringify(res, undefined, 2));
 
-var ctx = { "data":{},"level": ["base" ],  "ring_num":0, "rnd_num":0};
+var ctx = { "data":{},"level": [],  "ring_num":0, "rnd_num":0, "sub_num":0};
+ctx["orig_data"] = res;
+ctx.data = create_node();
+ctx["cur_node"]  = ctx.data;
+ctx["cur_attach"] = "base";
 convert_ast(ctx, res);
 
+
+
 console.log(JSON.stringify(ctx.data, undefined, 2));
+
+console.log("===================fin=====================");
+var fin_data = cleanup(ctx.data);
+console.log(JSON.stringify(fin_data, undefined, 2));
 
 process.exit();
 
