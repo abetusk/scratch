@@ -1,3 +1,6 @@
+// License CC0
+//
+
 var fs = require("fs");
 
 // https://pegjs.org/online
@@ -18,15 +21,75 @@ var parser = pegjs.generate(gram_str);
 //var res = parser.parse(" [crescent_interlock,[bob,stairs_smaller,cc]] ");
 
 try {
-var res = parser.parse(" cup@[crescent_interlock,[bob,stairs_smaller,cc]] ");
+//var res = parser.parse(" cup@[crescent_interlock,[bob,stairs_smaller,cc],[clock,arm]] ");
+var res = parser.parse(" cup@([sword,crescent_interlock,[bob@pipe,stairs_smaller,cc],[clock,arm]]) ");
+//var res = parser.parse(" arm@(bob@clock)");
+//var res = parser.parse(" (arm@bob)@clock");
 }
 catch (e) {
   console.log("got PEG error:", e);
   process.exit();
 }
 
-function _default_emit(v) {
+function _default_emit(ctx, v) {
+  console.log(v.type, v.path, v.ele);
+}
+
+//WIP!!!
+function __default_emit(ctx, v) {
   console.log(v.type, v.path, v.level, v.ele);
+  var attach_list = { "nesting":1, "crown":1, "horn":1, "arm":1, "leg":1, "tail":1 }
+
+  var ele = v.ele;
+  var path = v.path;
+  var data = ctx.data;
+
+  for (var ii=0; ii<path.length; ii++) {
+    var path_ele = path[ii];
+
+    if (path_ele == "base") {
+      if (!(path_ele in data)) {
+        data["base"] = [];
+      }
+    }
+  }
+
+  return;
+
+  var cur_data = ctx.data;
+  for (var ii=0; ii<(v.path.length-1); ii++) {
+
+    console.log(">>>", ii, v.path[ii], cur_data);
+
+    if (v.path[ii] == "base") {
+      if (!("base" in cur_data)) {
+        cur_data["base"] = [];
+      }
+      var new_data = {};
+      cur_data.base.push(new_data);
+      cur_data = new_data;
+    }
+    else if (v.path[ii] in attach_list) {
+      var attach_id = v.path[ii];
+      if (!(attach_id in cur_data)) {
+        cur_data[attach_id] = [];
+      }
+      var new_data = {};
+      cur_data[attach_id].push(new_data);
+      cur_data = new_data;
+    }
+    else {
+      var x = v.path[ii].split("_");
+      var rr_type = x[0];
+      var rr_idx = parseInt(x[1]);
+
+      console.log(">>>", rr_type, rr_idx, cur_data);
+    }
+  }
+  if (!("base" in cur_data)) {
+    cur_data["base"] = [];
+  }
+  cur_data.base.push(v.ele);
 }
 
 function convert_ast(ctx, data, emit) {
@@ -36,19 +99,18 @@ function convert_ast(ctx, data, emit) {
 
 
   if (data.t == "base") {
-    emit({"type": "ele", "path":ctx.level, "level":ctx.level_n, "ele":data.e});
+    emit(ctx, {"type": "ele", "path":ctx.level, "ele":data.e});
   }
 
   else if (data.t in attach_list) {
-    ctx.level[ctx.level_n] = data.t;
+    ctx.level.push("/" + data.t);
     convert_ast(ctx, data.e);
+    ctx.level.pop();
   }
 
   else if (data.t == "sub") {
     ctx.level.push("base");
-    ctx.level_n++;
     convert_ast(ctx, data.e);
-    ctx.level_n--;
     ctx.level.pop();
   }
 
@@ -57,37 +119,40 @@ function convert_ast(ctx, data, emit) {
   }
 
   else if (data.t == "ring") {
+    ctx.level.push("ring_" + ctx.ring_num);
+    ctx.ring_num++;
     convert_ast(ctx, data.l);
-  }
-  else if (data.t == "ring_list") {
-    ctx.level.push("base");
-    ctx.level_n++;
-    convert_ast(ctx, data.e);
-    ctx.level_n--;
     ctx.level.pop();
 
+
+  }
+  else if (data.t == "ring_list") {
+    convert_ast(ctx, data.e);
     convert_ast(ctx, data.l);
   }
   else if (data.t == "ring_end") {
-    ctx.level.push("base");
-    ctx.level_n++;
     convert_ast(ctx, data.e);
-    ctx.level_n--;
-    ctx.level.pop();
   }
 
   else if (data.t == "rnd_expr") {
     convert_ast(ctx, data.e);
   }
   else if (data.t == "rnd") {
+    ctx.level.push("rnd_" + ctx.rnd_num);
+    ctx.rnd_num++;
     convert_ast(ctx, data.l);
+    ctx.level.pop();
+
+
   }
   else if (data.t == "rnd_list") {
-    emit({"type": "rnd", "path":ctx.level, "level":ctx.level_n, "ele":data.e});
+   // emit(ctx, {"type": "rnd", "path":ctx.level, "level":ctx.level_n, "ele":data.e});
+    convert_ast(ctx, data.e);
     convert_ast(ctx, data.l);
   }
   else if (data.t == "rnd_end") {
-    emit({"type": "rnd", "path":ctx.level, "level":ctx.level_n, "ele":data.e});
+    convert_ast(ctx, data.e);
+    //emit(ctx, {"type": "rnd", "path":ctx.level, "level":ctx.level_n, "ele":data.e});
   }
 
 
@@ -103,8 +168,11 @@ function convert_ast(ctx, data, emit) {
 
 console.log(JSON.stringify(res, undefined, 2));
 
-var ctx = { "level": ["base" ], "level_n":0};
+var ctx = { "data":{},"level": ["base" ],  "ring_num":0, "rnd_num":0};
 convert_ast(ctx, res);
+
+console.log(JSON.stringify(ctx.data, undefined, 2));
+
 process.exit();
 
 
