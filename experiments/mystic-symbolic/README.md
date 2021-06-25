@@ -32,7 +32,7 @@ Here is a simple character to highlight the syntax:
 | `!` | horn | |
 | `~` | arm | |
 | `@` | nesting | |
-| `|` | leg | |
+| `\|` | leg | |
 | `.` | tail | |
 | `()` | sub-expression | |
 | `[]` | ring | |
