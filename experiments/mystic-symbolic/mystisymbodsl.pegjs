@@ -15,17 +15,17 @@ expr
 
 attach
   = ws "@" e:expr { return {"t":"nesting", "e":e}; }
-  / ws "@" e:expr a:attach+ { return {"t":"nesting", "e":e, "a":a}; }
+//  / ws "@" e:expr a:attach+ { return {"t":"nesting", "e":e, "a":a}; }
   / ws "^" e:expr { return { "t":"crown", "e":e }; }
-  / ws "^" e:expr a:attach+ { return { "t":"crown", "e":e, "a":a}; }
+//  / ws "^" e:expr a:attach+ { return { "t":"crown", "e":e, "a":a}; }
   / ws "!" e:expr { return { "t":"horn", "e":e }; }
-  / ws "!" e:expr a:attach+ { return { "t":"horn", "e":e, "a":a}; }
+//  / ws "!" e:expr a:attach+ { return { "t":"horn", "e":e, "a":a}; }
   / ws "~" e:expr { return { "t":"arm", "e":e }; }
-  / ws "~" e:expr a:attach+ { return { "t":"arm", "e":e, "a":a}; }
+//  / ws "~" e:expr a:attach+ { return { "t":"arm", "e":e, "a":a}; }
   / ws "|" e:expr { return { "t":"leg", "e":e }; }
-  / ws "|" e:expr a:attach+ { return { "t":"leg", "e":e, "a":a}; }
+//  / ws "|" e:expr a:attach+ { return { "t":"leg", "e":e, "a":a}; }
   / ws "." e:expr { return { "t":"tail", "e":e }; }
-  / ws "." e:expr a:attach+ { return { "t":"tail", "e":e, "a":a}; }
+//  / ws "." e:expr a:attach+ { return { "t":"tail", "e":e, "a":a}; }
 
 ring
   = ws "[" r:ring_list "]" ws { return { "t":"ring", "l":r }; }

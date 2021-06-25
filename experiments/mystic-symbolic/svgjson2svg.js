@@ -20,6 +20,8 @@ var parser = pegjs.generate(gram_str);
 //var res = parser.parse(" crescent_interlock @ ({*,-bob}@(stairs_smaller^cc)) ~ woman ! goat_hind ^ [wing_angel,cup,sword] | ([bone_vertical,bone]) ");
 //var res = parser.parse(" [crescent_interlock,[bob,stairs_smaller,cc]] ");
 
+/*
+
 try {
 //var res = parser.parse(" cup@[crescent_interlock,[bob,stairs_smaller,cc],[clock,arm]] ");
 //var res = parser.parse(" cup@sword^crescent_interlock!bob~pipe|stairs_smaller.cc");
@@ -34,6 +36,7 @@ catch (e) {
   console.log("got PEG error:", e);
   process.exit();
 }
+*/
 
 function create_node() {
   return {
@@ -51,62 +54,11 @@ function create_node() {
 
 
 function _default_emit(ctx, v) {
-  console.log(v.type, v.path, v.ele);
-}
-
-function __default_emit(ctx, v) {
-  console.log(v.type, v.path, v.level, v.ele);
-
-  var attach_list = {
-    "/nesting":"nesting",
-    "/crown":"crown",
-    "/horn":"horn",
-    "/arm":"arm",
-    "/leg":"leg",
-    "/tail":"tail"
-  }
-
-  var ele = v.ele;
-  var path = v.path;
-  var data = ctx.data;
-
-  var cur_data = ctx.data;
-  for (var ii=0; ii<v.path.length; ii++) {
-
-    if (v.path[ii] == "base") {
-      if (!("base" in cur_data)) {
-        cur_data["base"] = [ create_node() ];
-        cur_data = cur_data.base[0];
-      }
-    }
-    else if (v.path[ii] in attach_list) {
-      var attach_id = attach_list[v.path[ii]];
-      if (!(attach_id in cur_data)) {
-        cur_data[attach_id] = [ create_node ];
-        cur_data = cur_data[attach_id][0];
-        continue;
-      }
-
-
-    }
-
-  }
-
-
-  var parent_data = ctx.parent_data;
-  if (v.type == "ele") {
-    parent_data.push(v.ele);
-    return;
-  }
-
-  return;
-
-
+  console.log("<>", v.type, v.path, v.ele);
 }
 
 function convert_ast(ctx, data, emit) {
   emit = ((typeof emit === "undefined") ? _default_emit : emit);
-  typeof e
   var attach_list = {"nesting":1, "horn":1, "crown":1, "arm":1, "leg":1, "tail":1};
 
 
@@ -116,33 +68,13 @@ function convert_ast(ctx, data, emit) {
     ctx.cur_node[ctx.cur_attach].push(data.e);
   }
 
-  /*
-  else if (data.t == "nesting") {
-
-    var prv_attach = ctx.cur_attach;
-    var new_node = create_node();
-    var prv_node = ctx.cur_node;
-    ctx.cur_node["nesting"].push( new_node );
-    ctx.cur_node = new_node;
-    ctx.cur_attach = "base";
-
-    ctx.level.push("nesting" + ctx.sub_num);
-    ctx.sub_num++;
-    convert_ast(ctx, data.e);
-    ctx.level.pop();
-
-    ctx.cur_node = prv_node;
-    ctx.cur_attach = prv_attach;
-  }
-  */
-
   else if (data.t in attach_list) {
 
     ctx.cur_attach = data.t;
 
     ctx.level.pop();
     ctx.level.push(data.t);
-    convert_ast(ctx, data.e);
+    convert_ast(ctx, data.e, emit);
     ctx.level.pop();
   }
 
@@ -154,10 +86,11 @@ function convert_ast(ctx, data, emit) {
     ctx.cur_node[ctx.cur_attach].push( new_node );
     ctx.cur_node = new_node;
     ctx.cur_attach = "base";
+    new_node.type = "sub";
 
     ctx.level.push("sub_" + ctx.sub_num);
     ctx.sub_num++;
-    convert_ast(ctx, data.e);
+    convert_ast(ctx, data.e, emit);
     ctx.level.pop();
 
     ctx.cur_node = prv_node;
@@ -165,7 +98,7 @@ function convert_ast(ctx, data, emit) {
   }
 
   else if (data.t == "ring_expr") {
-    convert_ast(ctx, data.e);
+    convert_ast(ctx, data.e, emit);
   }
 
   else if (data.t == "ring") {
@@ -176,10 +109,11 @@ function convert_ast(ctx, data, emit) {
     ctx.cur_node[ctx.cur_attach].push( new_node );
     ctx.cur_node = new_node;
     ctx.cur_attach = "base";
+    new_node.type = "ring";
 
     ctx.level.push("ring_" + ctx.ring_num);
     ctx.ring_num++;
-    convert_ast(ctx, data.l);
+    convert_ast(ctx, data.l, emit);
     ctx.level.pop();
 
     ctx.cur_node = prv_node;
@@ -193,13 +127,14 @@ function convert_ast(ctx, data, emit) {
     ctx.cur_node[ctx.cur_attach].push( new_node );
     ctx.cur_node = new_node;
     ctx.cur_attach = "base";
+    new_node.type = "ring_ele";
 
-    convert_ast(ctx, data.e);
+    convert_ast(ctx, data.e, emit);
 
     ctx.cur_node = prv_node;
     ctx.cur_attach = prv_attach;
 
-    convert_ast(ctx, data.l);
+    convert_ast(ctx, data.l, emit);
   }
   else if (data.t == "ring_end") {
     var prv_attach = ctx.cur_attach;
@@ -208,36 +143,37 @@ function convert_ast(ctx, data, emit) {
     ctx.cur_node[ctx.cur_attach].push( new_node );
     ctx.cur_node = new_node;
     ctx.cur_attach = "base";
+    new_node.type = "ring_ele";
 
-    convert_ast(ctx, data.e);
+    convert_ast(ctx, data.e, emit);
 
     ctx.cur_node = prv_node;
     ctx.cur_attach = prv_attach;
   }
 
   else if (data.t == "rnd_expr") {
-    convert_ast(ctx, data.e);
+    convert_ast(ctx, data.e, emit);
   }
   else if (data.t == "rnd") {
     ctx.level.push("rnd_" + ctx.rnd_num);
     ctx.rnd_num++;
-    convert_ast(ctx, data.l);
+    convert_ast(ctx, data.l, emit);
     ctx.level.pop();
 
 
   }
   else if (data.t == "rnd_list") {
-    convert_ast(ctx, data.e);
-    convert_ast(ctx, data.l);
+    convert_ast(ctx, data.e, emit);
+    convert_ast(ctx, data.l, emit);
   }
   else if (data.t == "rnd_end") {
-    convert_ast(ctx, data.e);
+    convert_ast(ctx, data.e, emit);
   }
 
 
   if ("a" in data) {
     for (var ii=0; ii<data.a.length; ii++) {
-      convert_ast(ctx, data.a[ii]);
+      convert_ast(ctx, data.a[ii], emit);
     }
 
   }
@@ -246,13 +182,14 @@ function convert_ast(ctx, data, emit) {
 }
 
 function cleanup(data) {
-  var attach_list = {"base":1, "nesting":1, "horn":1, "crown":1, "arm":1, "leg":1, "tail":1};
+  var attach_list = {"type":1,"base":1, "nesting":1, "horn":1, "crown":1, "arm":1, "leg":1, "tail":1};
   var res = {};
 
   if (typeof data === "string") { return data; }
   for (var key in attach_list) {
     if (data[key].length==0) { continue; }
     if (!(key in res)) { res[key] = []; }
+    if (key == "type") { res[key] = data[key]; continue; }
     for (var ii=0; ii<data[key].length; ii++) {
       res[key].push( cleanup(data[key][ii]) );
     }
@@ -260,9 +197,200 @@ function cleanup(data) {
   return res;
 }
 
+// [ 'base', 0, 'nesting' 1
+//
+function ast_find(ast, id) {
 
-console.log(JSON.stringify(res, undefined, 2));
+  var cur_ast = ast;
+  var cur_id = id;
+  while (cur_id.length > 0) {
+    var link_id = cur_id[0];
+    var link_idx = cur_id[1];
 
+    if (!(link_id in cur_ast)) { return ""; }
+
+  }
+
+}
+
+function _flatten_r(data, a, lvl) {
+
+  console.log(lvl, "flatten_r:", JSON.stringify(data), JSON.stringify(a));
+
+  if (typeof data === "string") { a.push(data); return; }
+
+  if ("base" in data) {
+    for (var ii=0; ii<data.base.length; ii++) {
+
+      console.log(lvl, "base...", ii, JSON.stringify(data.base[ii]), JSON.stringify(a));
+
+      flatten_r(data.base[ii], a, lvl+1);
+    }
+    data.base = a;
+  }
+
+  var tdata = {};
+  for (var key in data) {
+    if (key == "base") { continue; }
+
+    console.log(lvl, "...key", key);
+
+    var sub_a = [];
+    for (var ii=0; ii<data[key].length; ii++) {
+      flatten_r(data[key][ii], sub_a, lvl+1);
+    }
+
+    console.log(lvl, "got for key", key, ":", JSON.stringify(sub_a));
+
+    tdata[key] = sub_a;
+
+  }
+
+  for (var key in tdata) {
+    if (key === "base") { continue; }
+    data[key] = tdata[key];
+    console.log(lvl, "data[", key, "]", JSON.stringify(data[key]));
+  }
+
+  console.log(lvl, "data", JSON.stringify(data));
+
+}
+
+/*
+function flatten_r(data, a, lvl) {
+  var key_count = 0;
+  for (var key in data) { key_count++; }
+  if ((key_count==1) && ("base" in data)) {
+    var _a = [];
+    for (var ii=0; ii<data.base.length; ii++) {
+      _a.push( flatten_r(data.base[ii]) );
+    }
+    return _a;
+  }
+  else {
+    for (var key in data) {
+
+    }
+  }
+}
+*/
+
+function is_simple(data) {
+  //if (typeof data === "string") { return true; }
+  if (typeof data === "string") { return false; }
+  if (!("base" in data)) { return false; }
+  var key_count = 0;
+  for (var key in data) {
+    key_count++;
+  }
+  if (key_count==1) { return true; }
+  return false;
+}
+
+function flatten_r(data, a, lvl) {
+
+  console.log(lvl, "flatten_r:", JSON.stringify(data), JSON.stringify(a));
+
+  if (typeof data === "string") { return data; return; }
+
+  var tdata = {};
+  if ("base" in data) {
+
+    if (is_simple(data)) {
+
+      console.log(lvl, "is_simple", JSON.stringify(data));
+
+      var _res = [];
+      for (var ii=0; ii<data.base.length; ii++) {
+        if (is_simple(data.base[ii])) {
+          for (jj=0; jj<data.base[ii].base.length; jj++) {
+            _res.push(data.base[ii].base[jj]);
+          }
+        }
+        else {
+          _res.push(data.base[ii]);
+        }
+      }
+
+      console.log(lvl, "res:", JSON.stringify(_res));
+      tdata["base"] = _res;
+    }
+    else {
+
+      var _a = [];
+      for (var ii=0; ii<data.base.length; ii++) {
+
+        console.log(lvl, "base...", ii, JSON.stringify(data.base[ii]), JSON.stringify(a));
+
+        _a.push(flatten_r(data.base[ii], a, lvl+1));
+      }
+      tdata["base"] = _a;
+      //data.base = _a;
+    }
+  }
+
+  for (var key in data) {
+    if (key == "base") { continue; }
+
+    console.log(lvl, "...key", key);
+
+    var sub_a = [];
+    for (var ii=0; ii<data[key].length; ii++) {
+      sub_a.push(flatten_r(data[key][ii], a, lvl+1));
+    }
+
+    console.log(lvl, "got for key", key, ":", JSON.stringify(sub_a));
+
+    tdata[key] = sub_a;
+
+  }
+
+  return tdata;
+
+
+}
+
+function flatten(data) {
+
+  var new_data = {};
+
+  var a = [];
+  var x = flatten_r(data, a, 0);
+  var x = flatten_r(x, a, 0);
+  var x = flatten_r(x, a, 0);
+
+  console.log("GOT FLATTEN:\n", JSON.stringify(x, undefined, 2));
+  //console.log(JSON.stringify(a,undefined,2));
+  return;
+
+  console.log(">>>", JSON.stringify(data));
+
+  if (typeof data === "string") { return; }
+  for (var key in data) {
+
+    console.log(key);
+
+    if (typeof data[key] === "string") { continue; }
+    for (var ii=0; ii<data[key].length; ii++) {
+      var a = [];
+
+      console.log("???", key, a);
+      flatten_r(data[key], a);
+
+      new_data[key] = a;
+
+      console.log("??>",  JSON.stringify(a) );
+
+      //console.log(key, a);
+    }
+  }
+
+  //for (var key in data) { flatten(data[key]); }
+}
+
+//console.log(JSON.stringify(res, undefined, 2));
+
+/*
 var ctx = { "data":{},"level": [],  "ring_num":0, "rnd_num":0, "sub_num":0};
 ctx["orig_data"] = res;
 ctx.data = create_node();
@@ -272,13 +400,12 @@ convert_ast(ctx, res);
 
 
 
-console.log(JSON.stringify(ctx.data, undefined, 2));
+//console.log(JSON.stringify(ctx.data, undefined, 2));
 
-console.log("===================fin=====================");
+//console.log("===================fin=====================");
 var fin_data = cleanup(ctx.data);
-console.log(JSON.stringify(fin_data, undefined, 2));
-
-process.exit();
+//console.log(JSON.stringify(fin_data, undefined, 2));
+*/
 
 
 // *********************************************
@@ -985,6 +1112,20 @@ function mystic_symbolic_random(ctx, base, primary_color, secondary_color, bg_co
 // -----
 // -----
 
+function parse_invert_name(sym) {
+  var invert_flag = false;
+  var symbol_name = sym;
+  if (sym.length == 0) {
+    return {"invert":false, "name":""}
+  }
+  if (sym[0] == '-') {
+    invert_flag = true;
+    symbol_name = sym.slice(1);
+  }
+
+  return { "invert": invert_flag, "name":symbol_name};
+}
+
 function mystic_symbolic_sched(ctx, sched, primary_color, secondary_color, bg_color) {
   if (typeof ctx === "undefined") { return ""; }
   primary_color = ((typeof primary_color === "undefined") ? "#ffffff" : primary_color);
@@ -996,7 +1137,15 @@ function mystic_symbolic_sched(ctx, sched, primary_color, secondary_color, bg_co
   if (typeof sched === "string") {
     sched = { "base": sched };
   }
-  var base = ctx.symbol[sched.base];
+
+  var symbol_info = parse_invert_name(sched.base);
+  var invert_flag = symbol_info.invert;
+  var symbol_name = symbol_info.name;
+
+  if (!(symbol_name in ctx.symbol)) {
+    return {"error":"could not find symbol" + actual_symbol};
+  }
+  var base = ctx.symbol[symbol_name];
 
   var _include_background_rect = true;
   var scale = ctx.scale;
@@ -1060,6 +1209,283 @@ function mystic_symbolic_sched(ctx, sched, primary_color, secondary_color, bg_co
         sub_name = sched_mod_data[m_aidx].base;
       }
 
+      var sub_symbol_info = parse_invert_name(sub_name);
+      var sub_invert_flag = sub_symbol_info.invert;
+      var sub_symbol_name = sub_symbol_info.name;
+
+      if (!(sub_symbol_name in ctx.symbol)) {
+        return {"error":"could not find symbol" + sub_symbol_name};
+      }
+
+      var sub_sched = sched.attach[attach_id][m_aidx];
+
+      //var sub = Object.assign({}, ctx.symbol[sub_name]);
+      var sub = Object.assign({}, ctx.symbol[sub_symbol_name]);
+
+      var _invert = ( ((aidx%2)==0) ? false : true );
+      var f = (_invert ? -1.0 : 1.0);
+      if (sub_invert_flag) {
+        _invert = (_invert ? false : true);
+        f *= -1.0;
+      }
+
+      var base_attach_point = [ base.specs[attach_id][aidx].point.x, base.specs[attach_id][aidx].point.y ];
+      var base_attach_deg = _deg( base.specs[attach_id][aidx].normal.x, base.specs[attach_id][aidx].normal.y );
+
+      var sub_anchor_point = [ sub.specs.anchor[0].point.x, sub.specs.anchor[0].point.y ];
+      var sub_anchor_deg = _deg( sub.specs.anchor[0].normal.x, f*sub.specs.anchor[0].normal.y );
+
+      var deg = base_attach_deg - sub_anchor_deg;
+      if (_invert) { deg *= -1; }
+
+      var t_str_s = "<g transform=\"";
+      t_str_s += " translate(" + base_attach_point[0].toString() + " " + base_attach_point[1].toString() + ")";
+      t_str_s += " scale(" + scale.toString() + " " + (f*scale).toString() + ")";
+      t_str_s += " rotate(" + (deg).toString() + ")";
+      t_str_s += " translate(" + (-sub_anchor_point[0]).toString() + " " + (-sub_anchor_point[1]).toString() + ")";
+      t_str_s += "\">";
+
+      var t_str_e = "</g>";
+
+      ret_str += jsonsvg2svg_defs(sub.defs, primary_color, secondary_color);
+      reuse_svg = mystic_symbolic_sched(ctx, sub_sched, primary_color, secondary_color);
+
+      ret_str += t_str_s;
+      ret_str += reuse_svg;
+      ret_str += t_str_e;
+
+    }
+
+  }
+
+  ret_str += jsonsvg2svg_child(base.layers, primary_color, secondary_color);
+
+  // nesting logic
+  //
+  if (("attach" in sched) && ("nesting" in sched.attach) && ("nesting" in base.specs)) {
+
+    for (var nest_idx=0; nest_idx<base.specs.nesting.length; nest_idx++) {
+
+      var sched_nest_n = sched.attach.nesting.length;
+
+      var sub_sched = {};
+      if (typeof sched.attach.nesting[nest_idx % sched_nest_n] === "string") {
+        sub_sched = {"base":sched.attach.nesting[nest_idx % sched_nest_n]};
+      }
+      else {
+        sub_sched = sched.attach.nesting[nest_idx % sched_nest_n];
+      }
+      var sub_name = sub_sched.base;
+
+      var sub_symbol_info = parse_invert_name(sub_name);
+      var sub_invert_flag = sub_symbol_info.invert;
+      var sub_symbol_name = sub_symbol_info.name;
+
+      if (!(sub_symbol_name in ctx.symbol)) {
+        return {"error":"could not find symbol" + sub_symbol_name};
+      }
+
+      var sub = Object.assign({}, ctx.symbol[sub_symbol_name]);
+
+      if (use_bottom_nest_anchor_point) {
+
+        var sub_anchor_point = [ sub.specs.anchor[0].point.x, sub.specs.anchor[0].point.y ];
+        var sub_anchor_deg = _deg( sub.specs.anchor[0].normal.x, sub.specs.anchor[0].normal.y );
+
+        var nest_anchor_deg = _deg( 0, -1 );
+
+        var nest_bbox = base.specs.nesting[nest_idx];
+        var base_attach = [ nest_bbox.x.min + ((nest_bbox.x.max - nest_bbox.x.min) / 2.0),
+                            (nest_bbox.y.max) ];
+
+        var nest_dx = Math.abs(nest_bbox.x.max - nest_bbox.x.min);
+        var nest_dy = Math.abs(nest_bbox.y.max - nest_bbox.y.min);
+        var min_dim = ( (nest_dx < nest_dy) ? nest_dx : nest_dy );
+
+        var nest_scale = min_dim / ctx.svg_width;
+
+        // nest areas are always axis aligned, pointing up
+        //
+        var deg = nest_anchor_deg - sub_anchor_deg;
+
+        var t_str_s = "<g transform=\"";
+        t_str_s += " translate(" + base_attach[0].toString() + " " + base_attach[1].toString() + ")";
+        t_str_s += " scale(" + (nest_scale).toString() + " " + (nest_scale).toString() + ")";
+        t_str_s += " rotate(" + (deg).toString() + ")";
+        t_str_s += " translate(" + (-sub_anchor_point[0]).toString() + " " + (-sub_anchor_point[1]).toString() + ")";
+        t_str_s += "\">";
+
+        var t_str_e = "</g>";
+
+        ret_str += jsonsvg2svg_defs(sub.defs, secondary_color, primary_color );
+        ret_str += t_str_s;
+        ret_str += mystic_symbolic_sched(ctx, sub_sched, secondary_color, primary_color);
+        ret_str += t_str_e;
+      }
+      else {
+
+        var f = (sub_invert_flag ? -1.0 : 1.0);
+
+        var sub_anchor_point = [ sub.specs.anchor[0].point.x, sub.specs.anchor[0].point.y ];
+        var sub_anchor_deg = _deg( sub.specs.anchor[0].normal.x, sub.specs.anchor[0].normal.y );
+
+        var nest_anchor_deg = _deg( 0, -1*f );
+
+        var nest_bbox = base.specs.nesting[nest_idx];
+        var nest_center = [ nest_bbox.x.min + ((nest_bbox.x.max - nest_bbox.x.min) / 2.0),
+                            nest_bbox.y.min + ((nest_bbox.y.max - nest_bbox.y.min) / 2.0) ];
+
+        var nest_ul = [ nest_bbox.x.min , nest_bbox.y.min ];
+
+        var nest_dx = Math.abs(nest_bbox.x.max - nest_bbox.x.min);
+        var nest_dy = Math.abs(nest_bbox.y.max - nest_bbox.y.min);
+        var min_dim = ( (nest_dx < nest_dy) ? nest_dx : nest_dy );
+
+        var nest_scale = min_dim / ctx.svg_width;
+
+        var nest_deg = 0.0;
+        if (sub_invert_flag) {
+          nest_deg = 180;
+          f = -1.0;
+        }
+
+        var t_str_s = "<g transform=\"";
+        t_str_s += " translate(" + nest_ul[0].toString() + " " + nest_ul[1].toString() + ")";
+        t_str_s += " scale(" + (nest_scale).toString() + " " + (nest_scale).toString() + ")";
+        t_str_s += " translate(" + (720/2).toString() + " " + (720/2).toString() + ")";
+        t_str_s += " rotate(" + (nest_deg).toString() + ")";
+        t_str_s += " scale(1 " +  (f).toString() + ")";
+        t_str_s += " translate(" + (-720/2).toString() + " " + (-720/2).toString() + ")";
+        t_str_s += "\">";
+
+        var t_str_e = "</g>";
+
+        ret_str += jsonsvg2svg_defs(sub.defs, secondary_color, primary_color );
+        ret_str += t_str_s;
+        ret_str += mystic_symbolic_sched(ctx, sub_sched, secondary_color, primary_color);
+        ret_str += t_str_e;
+      }
+
+    }
+  }
+
+  if (top_level) {
+    ret_str += "</g>\n";
+    ret_str += base.svg_footer;
+  }
+
+  ctx.cur_depth-=1;
+  return ret_str;
+}
+
+// -----
+// -----
+// -----
+// -----
+
+function get_base_string(sched, idx) {
+  if (typeof sched === "string") {
+    return sched;
+  }
+  if (!("base" in sched)) {
+    return {"error":"no 'base' in sched:" + JSON.stringify(sched)};
+  }
+  return get_base_string(sched.base[idx%sched.base.length], idx);
+}
+
+function mystic_symbolic_sched2(ctx, sched, idx, primary_color, secondary_color, bg_color) {
+  if (typeof ctx === "undefined") { return ""; }
+  primary_color = ((typeof primary_color === "undefined") ? "#ffffff" : primary_color);
+  secondary_color = ((typeof secondary_color === "undefined") ? "#000000" : secondary_color);
+  bg_color = ((typeof bg_color === "undefined") ? "#777777" : bg_color);
+
+  var use_bottom_nest_anchor_point = false;
+
+  var symbol_name = sched;
+  if (typeof symbol_name !== "string") {
+    //sched = { "base": sched };
+
+    if (!("base" in sched)) {
+      return {"error":"could not find 'base' in sched:" + JSON.stringify(sched)};
+    }
+
+    symbol_name = get_base_string(sched.base[idx%sched.base.length], idx);
+    if ((typeof symbol_name !== "string") && ("error" in symbol_name)) {
+      return symbol_name;
+    }
+
+  }
+  else {
+    sched = { "base": sched };
+  }
+  //var base = ctx.symbol[sched.base];
+
+  var _include_background_rect = true;
+  var scale = ctx.scale;
+  var top_level = false;
+
+  if (ctx.cur_depth == 0) { top_level = true; }
+  ctx.cur_depth++;
+
+  var ret_str = "";
+
+  if (top_level) {
+
+    ret_str += base.svg_header;
+
+    ret_str += "<g transform=\"translate(360 360) scale(0.5 0.5) translate(-360 -360)\">\n";
+
+    if (_include_background_rect) {
+      var w = ctx.svg_width;
+      var h = ctx.svg_height;
+      _bg = bg_color;
+      ret_str += "<rect x=\"-" + w.toString() + "\" y=\"-" + h.toString() + "\" ";
+      ret_str += "width=\"" + (3*w).toString() + "\" height=\"" + (3*h).toString() + "\" fill=\"" + _bg + "\" data-is-background=\"true\">\n</rect>\n";
+    }
+    ret_str += jsonsvg2svg_defs(base.defs, primary_color, secondary_color);
+  }
+
+  var base_specs = base.specs;
+  var base_meta = base.meta;
+  var base_bbox = base.bbox;
+
+  var attach_kind = ["nesting", "crown", "horn", "arm", "leg", "tail"];
+
+  var attach_list = [];
+
+  for (var ii=0; ii<attach_kind.length; ii++) {
+    if (attach_kind[ii] in sched) {
+      attach_list.push(attach_kind[ii]);
+    }
+  }
+
+  for (var attach_list_idx=0; attach_list_idx < attach_list.length; attach_list_idx++) {
+
+    // if attach id is in our schedule...
+    // find the sub component name
+    //
+    var attach_id = attach_list[attach_list_idx];
+    var sched_mod_data = sched[attach_id];
+
+    // make sure we have it in our compnent and
+    // skip the nesting, as that will be handled below
+    //
+    if (!(attach_id in base.specs)) { continue; }
+    if (attach_id === "nesting") { continue; }
+
+    var reuse_svg = "";
+    for (var aidx=0; aidx < base.specs[attach_id].length; aidx++) {
+
+      var sub_name = "";
+      var m_aidx = aidx % sched_mod_data.length
+      if (typeof sched_mod_data[m_aidx] === "string") {
+        sub_name = sched_mod_data[m_aidx];
+      }
+      else {
+        //sub_name = sched_mod_data[m_aidx].base;
+        sub_name = get_base_string(sched_mod_data[aidx%sched_mod_data.length], aidx);
+      }
+
       var sub_sched = sched.attach[attach_id][m_aidx];
 
       var sub = Object.assign({}, ctx.symbol[sub_name]);
@@ -1087,7 +1513,7 @@ function mystic_symbolic_sched(ctx, sched, primary_color, secondary_color, bg_co
       var t_str_e = "</g>";
 
       ret_str += jsonsvg2svg_defs(sub.defs, primary_color, secondary_color);
-      reuse_svg = mystic_symbolic_sched(ctx, sub_sched, primary_color, secondary_color);
+      reuse_svg = mystic_symbolic_sched2(ctx, sub_sched, primary_color, secondary_color);
 
       ret_str += t_str_s;
       ret_str += reuse_svg;
@@ -1149,7 +1575,7 @@ function mystic_symbolic_sched(ctx, sched, primary_color, secondary_color, bg_co
 
         ret_str += jsonsvg2svg_defs(sub.defs, secondary_color, primary_color );
         ret_str += t_str_s;
-        ret_str += mystic_symbolic_sched(ctx, sub_sched, secondary_color, primary_color);
+        ret_str += mystic_symbolic_sched2(ctx, sub_sched, secondary_color, primary_color);
         ret_str += t_str_e;
       }
       else {
@@ -1181,7 +1607,7 @@ function mystic_symbolic_sched(ctx, sched, primary_color, secondary_color, bg_co
 
         ret_str += jsonsvg2svg_defs(sub.defs, secondary_color, primary_color );
         ret_str += t_str_s;
-        ret_str += mystic_symbolic_sched(ctx, sub_sched, secondary_color, primary_color);
+        ret_str += mystic_symbolic_sched2(ctx, sub_sched, secondary_color, primary_color);
         ret_str += t_str_e;
       }
 
@@ -1524,13 +1950,14 @@ function mystic_symbolic_dsl2sched(_s, data) {
                (s.charCodeAt(cur_idx) <= "Z".charCodeAt(0))) ||
               (("0".charCodeAt(0) <= s.charCodeAt(cur_idx)) &&
                (s.charCodeAt(cur_idx) <= "9".charCodeAt(0))) ||
-              (s.charCodeAt(cur_idx) == "_".charCodeAt(0)) ) {
+              (s.charCodeAt(cur_idx) == "_".charCodeAt(0) ||
+              (s.charCodeAt(cur_idx) == "-".charCodeAt(0))) ) {
       cur_tok += s[cur_idx];
       cur_val_type = "string";
       cur_idx++;
     }
     else {
-      return {"error" : "invalide character (" + s[cur_idx] + ") at " + cur_idx.toString() + " (" + s +")" };
+      return {"error" : "invalid character (" + s[cur_idx] + ") at " + cur_idx.toString() + " (" + s +")" };
     }
 
   }
@@ -1642,14 +2069,47 @@ else if ((typeof arg_str === "undefined") || (arg_str.length == 0)) {
   console.log( mystic_symbolic_random(g_data));
 }
 else {
+
+  /*
+  var raw_sched = {};
+  try {
+    raw_sched = parser.parse(arg_str);
+  }
+  catch (e) {
+    console.log("got PEG error:", e);
+    process.exit();
+  }
+
+  console.log("raw_sched:\n------------------------------\n", JSON.stringify(raw_sched, undefined, 2), "\n-----------------------------\n");
+
+  var ctx = { "data":{},"level": [],  "ring_num":0, "rnd_num":0, "sub_num":0};
+  ctx["orig_data"] = raw_sched;
+  ctx.data = create_node();
+  ctx["cur_node"]  = ctx.data;
+  ctx["cur_attach"] = "base";
+  convert_ast(ctx, raw_sched, function() {} );
+
+  var c_sched = cleanup(ctx.data);
+
+  console.log("cleaned sched:\n", JSON.stringify(c_sched, undefined, 2), "\n====================\n");
+  */
+
+  /*
+  var sched  = flatten(c_sched);
+  console.log( JSON.stringify(sched, undefined, 2) );
+  */
+
+
+
   var sched  = mystic_symbolic_dsl2sched( arg_str, g_data );
+  //console.log(sched);
 
   //console.log(JSON.stringify(sched, undefined, 2));
   //process.exit();
 
-  var sentence = sched2sentence(sched);
   console.log( mystic_symbolic_sched(g_data, sched , primary_color, secondary_color, bg_color) );
-  console.log("<!--", sentence, " -->");
+  //var sentence = sched2sentence(sched);
+  //console.log("<!--", sentence, " -->");
 }
 
 console.log("<!-- primary(", prim_hue, prim_sat, prim_val,"), secondary(", seco_hue, seco_sat, seco_val, ") bg(", bg_hue, bg_sat, bg_val, ") -->");
