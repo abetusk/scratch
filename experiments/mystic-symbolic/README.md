@@ -75,7 +75,7 @@ For example, here is a creature, without Bob or his pipe:
 
 | | |
 |---|---|
-| `{*,-bob,-pipe} @ {*,-bob,-pipe} ^ ({*,-bob,-pipe} @ {*,-bob,-pipe}) ! ({*,-bob,-pipe}@{*,-bob,-pipe}) ~ {*,-bob,-pipe} | {*,-bob,-pipe} . {*,-bob,-pipe} ` | ![example4](img/example4.svg) |
+| ` {*,-bob,-pipe} @ {*,-bob,-pipe} ^ ({*,-bob,-pipe} @ {*,-bob,-pipe}) ! ({*,-bob,-pipe}@{*,-bob,-pipe}) ~ {*,-bob,-pipe} \| {*,-bob,-pipe} . {*,-bob,-pipe} ` | ![example4](img/example4.svg) |
 
 If a symbol doesn't have the attach points, the specified symbol will be ignored.
 
