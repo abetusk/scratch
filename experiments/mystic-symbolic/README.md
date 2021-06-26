@@ -1,16 +1,4 @@
-Notes on SVG
----
-
-```
-       crown
- horn          horn
-    arm     arm
-      nesting 
-    leg     leg
-        tail
-
-       anchor
-```
+``
 
 `sibyl.js`
 ---
@@ -178,10 +166,18 @@ Maybe the king/queen also make sure to have a crown either for it's nesting or c
 and the suite for it's crown placement/nesting.
 
 
+Notes on SVG
+---
 
+```
+       crown
+ horn          horn
+    arm     arm
+      nesting 
+    leg     leg
+        tail
 
-
-
-
+       anchor
+`
 
 
