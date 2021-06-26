@@ -50,6 +50,7 @@ var sibyl_opt = {
   "background_color2" : "",
   "use_background_image":false,
   "background_image":"",
+  "background_scale_set": false,
   "background_scale": 1,
   "tile_background" : false,
   "tile_background_dx" : 0,
@@ -109,6 +110,7 @@ while ((opt =  parser.getopt()) !== undefined) {
 
     case 'T':
       sibyl_opt.background_scale = parseFloat(opt.optarg);
+      sibyl_opt.background_scale_set = true;
       break;
 
     case 'D':
@@ -145,6 +147,10 @@ while ((opt =  parser.getopt()) !== undefined) {
       process.exit(-1);
       break;
   }
+}
+
+if (sibyl_opt.tile_background && (!sibyl_opt.background_scale_set)) {
+  sibyl_opt.background_scale = 0.5;
 }
 
 var _rcolor = rand_color();
@@ -184,6 +190,9 @@ var arg_str = "random";
 if ( (process.argv.length - parser.optind()) > 1 ) {
   fn = process.argv[parser.optind()];
   arg_str = process.argv[parser.optind()+1];
+}
+else if ( (process.argv.length - parser.optind()) > 0 ) {
+  arg_str = process.argv[parser.optind()];
 }
 
 if (fn.length == 0) {
