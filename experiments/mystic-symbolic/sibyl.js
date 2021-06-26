@@ -32,6 +32,7 @@ function show_help(fp) {
   fp.write("  [-c color]                  set background2 color (ex. '#888888') (default random)\n");
   fp.write("  [-B background-image]       set background image ('*' for random)\n");
   fp.write("  [-T background-scale]       set background scale factor (default " + sibyl_opt.background_scale.toString() + ")\n");
+  fp.write("  [-D tiledx,tiledy]          shift tile background by tiledx,tiledy (ex. '-10,3') (default '0,0')\n");
   fp.write("  [-t]                        tile background\n");
   fp.write("  [-h]                        show help (this screen)\n");
   fp.write("  [-v]                        show version\n");
@@ -50,7 +51,9 @@ var sibyl_opt = {
   "use_background_image":false,
   "background_image":"",
   "background_scale": 1,
-  "tile_background" : false
+  "tile_background" : false,
+  "tile_background_dx" : 0,
+  "tile_background_dy" : 0
 };
 
 var long_opt = [
@@ -63,7 +66,8 @@ var long_opt = [
   "S", ":(scale)",
   "B", ":(background-image)",
   "T", ":(background-scale)",
-  "t", "(background-tile)"
+  "t", "(background-tile)",
+  "D", ":(background-tile-dxy)"
 ];
 
 parser = new getopt.BasicParser("h" + long_opt.join(""), process.argv);
@@ -105,6 +109,15 @@ while ((opt =  parser.getopt()) !== undefined) {
 
     case 'T':
       sibyl_opt.background_scale = parseFloat(opt.optarg);
+      break;
+
+    case 'D':
+      var tok = opt.optarg.split(",");
+
+      sibyl_opt.tile_background_dx = parseFloat(tok[0]);
+      if (tok.length > 1) {
+        sibyl_opt.tile_background_dy = parseFloat(tok[1]);
+      }
       break;
 
     case 't':
@@ -2455,16 +2468,58 @@ var repri=
 
 if (arg_str == "random") {
 
+  var bg_svg = "";
   if (sibyl_opt.use_background_image) {
 
-    bg_ctx.create_svg_header = false;
-    bg_ctx.create_background_rect = true;
     g_data.create_svg_header = false;
     g_data.create_background_rect = false;
+    bg_ctx.create_svg_header = false;
 
-    var bg_sched  = mystic_symbolic_dsl2sched( sibyl_opt.background_image, bg_ctx );
-    //var bg_svg = mystic_symbolic_sched(bg_ctx, bg_sched , sibyl_opt.background_color2, sibyl_opt.background_color, bg_color);
-    var bg_svg = mystic_symbolic_sched(bg_ctx, bg_sched , bg_color, bg_color2, bg_color);
+    if (sibyl_opt.tile_background) {
+
+      bg_ctx.create_background_rect = false;
+
+      var bg_sched  = mystic_symbolic_dsl2sched( sibyl_opt.background_image, bg_ctx );
+      var bg_svg_single = mystic_symbolic_sched(bg_ctx, bg_sched , bg_color, bg_color2, bg_color);
+
+      var _n = Math.floor(2.0 / sibyl_opt.background_scale);
+
+      var _w2 = bg_ctx.svg_width/2.0;
+      var _h2 = bg_ctx.svg_height/2.0;
+
+      var _bg_scale = sibyl_opt.background_scale;
+
+      var dx = _bg_scale*bg_ctx.svg_width;
+      var dy = _bg_scale*bg_ctx.svg_height;
+
+      var offset_x = sibyl_opt.tile_background_dx;
+      var offset_y = sibyl_opt.tile_background_dy;
+
+      for (var x_idx=0; x_idx <= _n; x_idx++) {
+        for (var y_idx=0; y_idx <= _n; y_idx++) {
+
+          var _x = Math.floor( x_idx - (_n/2) )*dx + offset_x;
+          var _y = Math.floor( y_idx - (_n/2) )*dy + offset_y;
+
+          if ((y_idx%2)==1) { _x += dx/2; }
+
+          bg_svg += "<g transform=\"";
+          bg_svg += " translate(" + (-_x).toString() + " " + (-_y).toString() + ")";
+          bg_svg += "\">";
+
+          bg_svg += bg_svg_single;
+
+          bg_svg += "</g>";
+
+        }
+      }
+
+    }
+    else {
+      var bg_sched  = mystic_symbolic_dsl2sched( sibyl_opt.background_image, bg_ctx );
+      bg_svg = mystic_symbolic_sched(bg_ctx, bg_sched , bg_color, bg_color2, bg_color);
+    }
+
   }
 
   var creature_svg = mystic_symbolic_random(g_data, undefined, primary_color, secondary_color, bg_color);
@@ -2480,35 +2535,6 @@ if (arg_str == "random") {
     console.log(svg_footer);
   }
 
-
-}
-
-else if ((typeof arg_str === "undefined") || (arg_str.length == 0)) {
-
-  if (sibyl_opt.use_background_image) {
-
-    bg_ctx.create_svg_header = false;
-    bg_ctx.create_background_rect = true;
-    g_data.create_svg_header = false;
-    g_data.create_background_rect = false;
-
-    var bg_sched  = mystic_symbolic_dsl2sched( sibyl_opt.background_image, bg_ctx );
-    //var bg_svg = mystic_symbolic_sched(bg_ctx, bg_sched , sibyl_opt.background_color, sibyl_opt.background_color2, bg_color);
-    var bg_svg = mystic_symbolic_sched(bg_ctx, bg_sched , bg_color, bg_color2, bg_color);
-  }
-
-  var creature_svg = mystic_symbolic_random(g_data);
-
-  if (sibyl_opt.use_background_image) {
-    console.log(svg_header);
-    console.log(bg_svg);
-  }
-
-  console.log( creature_svg );
-
-  if (sibyl_opt.use_background_image) {
-    console.log(svg_footer);
-  }
 
 }
 
@@ -2567,11 +2593,14 @@ else {
       var dx = _bg_scale*bg_ctx.svg_width;
       var dy = _bg_scale*bg_ctx.svg_height;
 
+      var offset_x = sibyl_opt.tile_background_dx;
+      var offset_y = sibyl_opt.tile_background_dy;
+
       for (var x_idx=0; x_idx <= _n; x_idx++) {
         for (var y_idx=0; y_idx <= _n; y_idx++) {
 
-          var _x = Math.floor( x_idx - (_n/2) )*dx;
-          var _y = Math.floor( y_idx - (_n/2) )*dy;
+          var _x = Math.floor( x_idx - (_n/2) )*dx + offset_x;
+          var _y = Math.floor( y_idx - (_n/2) )*dy + offset_y;
 
           if ((y_idx%2)==1) { _x += dx/2; }
 
