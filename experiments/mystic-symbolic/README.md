@@ -2,18 +2,28 @@
 ---
 
 ```
-$ node sibyl.js -h
-version: 0.1.0
+$ ./sibyl -h
+version: 0.1.1
 
 usage:
 
-    sibyl [-h] [-v] <svgjson> <command>
+    sibyl [-h] [-v] [options] <svgjson> <command>
 
   <svgjson>                   svgjson file
   <command>                   random|<dsl>
+  [-n nest-depth]             max nesting depth (default 2)
+  [-a attach-depth]           max attach depth (default 1)
+  [-S scale]                  rescale factor (default 0.5)
+  [-p color]                  set primary color (ex. '#000000') (default random)
+  [-s color]                  set secondary color (ex '#ffffff') (default random)
+  [-b color]                  set background color (ex. '#777777') (default random)
+  [-c color]                  set background2 color (ex. '#888888') (default random)
+  [-B background-image]       set background image ('*' for random)
+  [-T background-scale]       set background scale factor (default 1)
+  [-D tiledx,tiledy]          shift tile background by tiledx,tiledy (ex. '-10,3') (default '0,0')
+  [-t]                        tile background
   [-h]                        show help (this screen)
   [-v]                        show version
-
 ```
 
 #### Random Creature

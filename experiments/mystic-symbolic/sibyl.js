@@ -7,7 +7,7 @@ var color = require("./cam02.js");
 var getopt = require("posix-getopt");
 var parser, opt;
 
-var _VERSION = "0.1.0";
+var _VERSION = "0.1.1";
 
 function show_version(fp) {
   fp.write("version: " + _VERSION + "\n");
@@ -19,7 +19,7 @@ function show_help(fp) {
   fp.write("\n");
   fp.write("usage:\n");
   fp.write("\n");
-  fp.write("    sibyl [-h] [-v] <svgjson> <command>\n");
+  fp.write("    sibyl [-h] [-v] [options] <svgjson> <command>\n");
   fp.write("\n");
   fp.write("  <svgjson>                   svgjson file\n");
   fp.write("  <command>                   random|<dsl>\n");
