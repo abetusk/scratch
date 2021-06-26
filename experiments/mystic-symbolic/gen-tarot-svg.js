@@ -24,46 +24,139 @@ var placeholder_svg = '<path fill="#ffffff" fill-rule="evenodd" stroke="none"' +
 'C 358.578 137.019 357.430 138.167 357.430 139.589 ' +
 'C 357.430 141.012 358.578 142.159 360.000 142.159 Z"/>';
 
-var svgjson_data = {
-  "name": "NAMEID",
-  "bbox": {
-    "x": { "min": 357.43, "max": 362.57 },
-    "y": { "min": 137.019, "max": 142.159 }
-  },
-  "layers": [ {  
-    "tagName": "g",
-    "props": { "id": "NAMEID" },
-    "children": [ {  
+function create_template() {
+  var _data = {
+    "name": "NAMEID",
+    "bbox": {
+      "x": { "min": 357.43, "max": 362.57 },
+      "y": { "min": 137.019, "max": 142.159 }
+    },
+    "layers": [ {  
       "tagName": "g",
       "props": { "id": "NAMEID" },
       "children": [ {  
-        "tagName": "path",
-        "props": {
-          "fill": "#ffffff",
-          "fillRule": "evenodd",
-          "stroke": "none",
-          "d": "M 360.000 142.159 C 361.422 142.159 362.570 141.012 362.570 139.589 C 362.570 138.167 361.422 137.019 360.000 137.019 C 358.578 137.019 357.430 138.167 357.430 139.589 C 357.430 141.012 358.578 142.159 360.000 142.159 Z"
-        },
-        "children": []
-      }]
-    } ]
-  } ],
-  "specs": {
-    "leg": [
-      { 
-        "point": { "x": 360, "y": 25, "t": 0 },
-        "normal": { "x": 0, "y": -1 }
-      }
-    ],
-    "nesting": [
-      { 
-        "x": { "min": 50, "max": 150 },
-        "y": { "min": 50, "max": 150 }
-      }
-    ]
-  }
+        "tagName": "g",
+        "props": { "id": "NAMEID" },
+        "children": [ {  
+          "tagName": "path",
+          "props": {
+            "fill": "#ffffff",
+            "fillRule": "evenodd",
+            "stroke": "none",
+            "d": "M 360.000 142.159 C 361.422 142.159 362.570 141.012 362.570 139.589 C 362.570 138.167 361.422 137.019 360.000 137.019 C 358.578 137.019 357.430 138.167 357.430 139.589 C 357.430 141.012 358.578 142.159 360.000 142.159 Z"
+          },
+          "children": []
+        }]
+      } ]
+    } ],
+    "specs": {
+      "crown": [
+        { 
+          "point": { "x": 360, "y": 25, "t": 0 },
+          "normal": { "x": 0, "y": -1 }
+        }
+      ],
+      "nesting": [
+        { 
+          "x": { "min": 50, "max": 150 },
+          "y": { "min": 50, "max": 150 }
+        }
+      ]
+    }
+  };
+  return _data;
+}
+
+
+var _DEFAULT_WIDTH = 720, _DEFAULT_HEIGHT = 720;
+
+var _w      = _DEFAULT_WIDTH,   _h      = _DEFAULT_HEIGHT,
+    _mid_w  = _DEFAULT_WIDTH/2, _mid_h  = _DEFAULT_HEIGHT/2;
+
+var _w2 = _w/2.0, _h2 = _h/2.0,
+    _w3 = _w/3.0, _h3 = _h/3.0,
+    _w4 = _w/4.0, _h4 = _h/4.0,
+    _w8 = _w/8.0, _h8 = _h/8.0;
+
+var minor_arcana_pnts = {
+  "ace" : [ [ { "x": _mid_w, "y": _mid_h }] ],
+  "2" : [ [ {"x":_mid_w-_w4, "y":_mid_h-_h4}, {"x":_mid_w+_w4, "y":_mid_h-_h4} ],
+          [ {"x":_mid_w-_w4, "y":_mid_h+_h4}, {"x":_mid_w+_w4, "y":_mid_h+_h4} ],
+          [ {"x":_mid_w-_w4, "y":_mid_h-_h4}, {"x":_mid_w+_w4, "y":_mid_h+_h4} ],
+          [ {"x":_mid_w-_w4, "y":_mid_h+_h4}, {"x":_mid_w+_w4, "y":_mid_h-_h4} ] ],
+  "3" : [ [ {"x":_mid_w-_w4, "y":_mid_h-_h4}, {"x":_mid_w+_w4, "y":_mid_h-_h4}, {"x":_mid_w,"y":_mid_h+_h4} ],
+          [ {"x":_mid_w-_w4, "y":_mid_h+_h4}, {"x":_mid_w+_w4, "y":_mid_h-_h4}, {"x":_mid_w,"y":_mid_h-_h4} ] ],
+  "4" : [ [ { "x": _mid_w, "y": _mid_h }] ],
+  "5" : [ [ { "x": _mid_w, "y": _mid_h }] ],
+  "6" : [ [ { "x": _mid_w, "y": _mid_h }] ],
+  "7" : [ [ { "x": _mid_w, "y": _mid_h }] ],
+  "8" : [ [ { "x": _mid_w, "y": _mid_h }] ],
+  "9" : [ [ { "x": _mid_w, "y": _mid_h }] ],
+  "10" : [ [ { "x": _mid_w, "y": _mid_h }] ],
+
+  "page"    : [ [ { "x": _mid_w, "y": _mid_h }] ],
+  "knight"  : [ [ { "x": _mid_w, "y": _mid_h }] ],
+  "queen"   : [ [ { "x": _mid_w, "y": _mid_h }] ],
+  "king"    : [ [ { "x": _mid_w, "y": _mid_h }] ]
 };
 
+function create_tarot_json(data, id, pnts, nesting) {
+  if (typeof pnts === "undefined") { pnts = []; }
+  if (typeof nesting === "undefined") {
+    nesting = { 
+      "x": { "min": 20, "max": 700 },
+      "y": { "min": 20, "max": 700 }
+    };
+  }
+
+  if (typeof data === "undefined") {
+    data = create_template();
+  }
+
+  //var data = Object.assign({}, data_template);
+  data.name = id;
+  for (var ii=0; ii<data.layers.length; ii++) {
+    data.layers[ii].props.id = id;
+    for (var jj=0; jj<data.layers[ii].children.length; jj++) {
+      data.layers[ii].children[jj].props.id = id;
+    }
+  }
+
+  if (!("specs" in data)) {
+    data["specs"] = {};
+  }
+
+  data.specs["crown"] = [];
+  for (var ii=0; ii<pnts.length; ii++) {
+    data.specs.crown.push( { "point": { "x": pnts[ii].x, "y":pnts[ii].y }, "normal":{"x":0.0, "y":-1} });
+  }
+
+  data.specs["nesting"] = [];
+  data.specs.nesting.push( {
+    "x":{"min":nesting.x.min, "max":nesting.x.max},
+    "y":{"min":nesting.y.min, "max":nesting.y.max}
+  });
+
+  return data;
+}
+
+var minor_arcana_list = ["ace", "2", "3", "4", "5", "6", "7",  "8", "9", "10", "page", "knight", "queen", "king"];
+
+var tarot_minor_json = [];
+
+
+var suite = "wands";
+for (var ii=0; ii<minor_arcana_list.length; ii++) {
+  var card_type = minor_arcana_list[ii];
+  for (var jj=0; jj<minor_arcana_pnts[card_type].length; jj++) {
+    var card_id = suite + "_" + card_type + "_" + jj;
+    var _dat = create_template();
+    create_tarot_json(_dat, card_id, minor_arcana_pnts[card_type][jj]);
+    tarot_minor_json.push(_dat);
+  }
+}
+
+console.log(JSON.stringify(tarot_minor_json, undefined, 2));
 
 function create_tarot_test(data_template, id) {
   var data = Object.assign({}, data_template);
@@ -164,5 +257,5 @@ function svg_tarot() {
 
 }
 
-svg_tarot();
+//svg_tarot();
 
