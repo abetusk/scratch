@@ -48,7 +48,7 @@ var sibyl_opt = {
   "background_color2" : "",
   "use_background_image":false,
   "background_image":"",
-  "background_scale": 0.85
+  "background_scale": 1
 };
 
 var long_opt = [
@@ -129,6 +129,7 @@ var _rcolor = rand_color();
 var primary_color   = _rcolor.primary.hex;
 var secondary_color = _rcolor.secondary.hex;
 var bg_color        = _rcolor.background.hex;
+var bg_color2       = _rcolor.background2.hex;
 
 var svg_header = [
   '<?xml version="1.0" encoding="utf-8"?>',
@@ -148,6 +149,10 @@ if (sibyl_opt.secondary_color.match(/^#[0-9a-fA-F]{6}/)) {
 }
 if (sibyl_opt.background_color.match(/^#[0-9a-fA-F]{6}/)) {
   bg_color = sibyl_opt.background_color;
+}
+
+if (sibyl_opt.background_color2.match(/^#[0-9a-fA-F]{6}/)) {
+  bg_color2 = sibyl_opt.background_color;
 }
 
 
@@ -2443,7 +2448,8 @@ if (arg_str == "random") {
     g_data.create_background_rect = false;
 
     var bg_sched  = mystic_symbolic_dsl2sched( sibyl_opt.background_image, bg_ctx );
-    var bg_svg = mystic_symbolic_sched(bg_ctx, bg_sched , sibyl_opt.background_color2, sibyl_opt.background_color, bg_color);
+    //var bg_svg = mystic_symbolic_sched(bg_ctx, bg_sched , sibyl_opt.background_color2, sibyl_opt.background_color, bg_color);
+    var bg_svg = mystic_symbolic_sched(bg_ctx, bg_sched , bg_color, bg_color2, bg_color);
   }
 
   var creature_svg = mystic_symbolic_random(g_data, undefined, primary_color, secondary_color, bg_color);
@@ -2472,7 +2478,8 @@ else if ((typeof arg_str === "undefined") || (arg_str.length == 0)) {
     g_data.create_background_rect = false;
 
     var bg_sched  = mystic_symbolic_dsl2sched( sibyl_opt.background_image, bg_ctx );
-    var bg_svg = mystic_symbolic_sched(bg_ctx, bg_sched , sibyl_opt.background_color, sibyl_opt.background_color2, bg_color);
+    //var bg_svg = mystic_symbolic_sched(bg_ctx, bg_sched , sibyl_opt.background_color, sibyl_opt.background_color2, bg_color);
+    var bg_svg = mystic_symbolic_sched(bg_ctx, bg_sched , bg_color, bg_color2, bg_color);
   }
 
   var creature_svg = mystic_symbolic_random(g_data);
@@ -2529,7 +2536,8 @@ else {
     g_data.create_background_rect = false;
 
     var bg_sched  = mystic_symbolic_dsl2sched( sibyl_opt.background_image, bg_ctx );
-    var bg_svg = mystic_symbolic_sched(bg_ctx, bg_sched , sibyl_opt.background_color, sibyl_opt.background_color2, bg_color);
+    //var bg_svg = mystic_symbolic_sched(bg_ctx, bg_sched , sibyl_opt.background_color, sibyl_opt.background_color2, bg_color);
+    var bg_svg = mystic_symbolic_sched(bg_ctx, bg_sched , bg_color, bg_color2, bg_color);
   }
 
 
@@ -2551,5 +2559,5 @@ else {
   //console.log("<!--", sentence, " -->");
 }
 
-console.log("<!-- ", primary_color, secondary_color, bg_color, "-->");
+console.log("<!-- ", primary_color, secondary_color, bg_color, bg_color2, "-->");
 
