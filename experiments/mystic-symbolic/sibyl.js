@@ -31,7 +31,7 @@ function show_help(fp) {
   fp.write("  [-b color]                  set background color (ex. '#777777') (default random)\n");
   fp.write("  [-c color]                  set background2 color (ex. '#888888') (default random)\n");
   fp.write("  [-B background-image]       set background image ('*' for random)\n");
-  fp.write("  [-T background-scale]       set background scale factor (default " + sibyl_opt.background_scale.toString() + ")\n");
+  fp.write("  [-T background-scale]       set background scale factor (default " + sibyl_opt.background_scale_x.toString() + ")\n");
   fp.write("  [-D tiledx,tiledy]          shift tile background by tiledx,tiledy (ex. '-10,3') (default '0,0')\n");
   fp.write("  [-t]                        tile background\n");
   fp.write("  [-h]                        show help (this screen)\n");
@@ -51,10 +51,12 @@ var sibyl_opt = {
   "use_background_image":false,
   "background_image":"",
   "background_scale_set": false,
-  "background_scale": 1,
+  "background_scale_x": 0.5,
+  "background_scale_y": 0.5,
   "tile_background" : false,
   "tile_background_dx" : 0,
-  "tile_background_dy" : 0
+  "tile_background_dy" : 0,
+  "additional_svgjson" : []
 };
 
 var long_opt = [
@@ -68,7 +70,8 @@ var long_opt = [
   "B", ":(background-image)",
   "T", ":(background-scale)",
   "t", "(background-tile)",
-  "D", ":(background-tile-dxy)"
+  "D", ":(background-tile-dxy)",
+  "J", ":(svgjson)"
 ];
 
 parser = new getopt.BasicParser("h" + long_opt.join(""), process.argv);
@@ -109,7 +112,15 @@ while ((opt =  parser.getopt()) !== undefined) {
       break;
 
     case 'T':
-      sibyl_opt.background_scale = parseFloat(opt.optarg);
+      var tok = opt.optarg.split(",");
+      if (tok.length == 1) {
+        sibyl_opt.background_scale_x = parseFloat(tok[0]);
+        sibyl_opt.background_scale_y = parseFloat(tok[0]);
+      }
+      else {
+        sibyl_opt.background_scale_x = parseFloat(tok[0]);
+        sibyl_opt.background_scale_y = parseFloat(tok[1]);
+      }
       sibyl_opt.background_scale_set = true;
       break;
 
@@ -140,6 +151,10 @@ while ((opt =  parser.getopt()) !== undefined) {
       sibyl_opt.max_attach_depth = parseInt(opt.optarg);
       break;
 
+    case 'J':
+      sibyl_opt.additional_svgjson.push(opt.optarg);
+      break;
+
     //---
 
     default:
@@ -150,7 +165,8 @@ while ((opt =  parser.getopt()) !== undefined) {
 }
 
 if (sibyl_opt.tile_background && (!sibyl_opt.background_scale_set)) {
-  sibyl_opt.background_scale = 0.5;
+  sibyl_opt.background_scale_x = 0.5;
+  sibyl_opt.background_scale_y = 0.5;
 }
 
 var _rcolor = rand_color();
@@ -2434,7 +2450,7 @@ bg_ctx["create_background_rect"] = false;
 bg_ctx["cur_depth"] = 0;
 bg_ctx["max_depth"] = 1;
 bg_ctx["max_nest_depth"] = 0;
-bg_ctx["scale"] = sibyl_opt.background_scale;
+bg_ctx["scale"] = sibyl_opt.background_scale_x;
 bg_ctx["complexity"] = 1;
 
 bg_ctx["svg_width"] = 720.0;
@@ -2491,15 +2507,16 @@ if (arg_str == "random") {
       var bg_sched  = mystic_symbolic_dsl2sched( sibyl_opt.background_image, bg_ctx );
       var bg_svg_single = mystic_symbolic_sched(bg_ctx, bg_sched , bg_color, bg_color2, bg_color);
 
-      var _n = Math.floor(2.0 / sibyl_opt.background_scale);
+      var _n = Math.floor(2.0 / sibyl_opt.background_scale_x);
 
       var _w2 = bg_ctx.svg_width/2.0;
       var _h2 = bg_ctx.svg_height/2.0;
 
-      var _bg_scale = sibyl_opt.background_scale;
+      var _bg_scale_x = sibyl_opt.background_scale_x;
+      var _bg_scale_y = sibyl_opt.background_scale_y;
 
-      var dx = _bg_scale*bg_ctx.svg_width;
-      var dy = _bg_scale*bg_ctx.svg_height;
+      var dx = _bg_scale_x*bg_ctx.svg_width;
+      var dy = _bg_scale_y*bg_ctx.svg_height;
 
       var offset_x = sibyl_opt.tile_background_dx;
       var offset_y = sibyl_opt.tile_background_dy;
@@ -2592,15 +2609,16 @@ else {
       var bg_sched  = mystic_symbolic_dsl2sched( sibyl_opt.background_image, bg_ctx );
       var bg_svg_single = mystic_symbolic_sched(bg_ctx, bg_sched , bg_color, bg_color2, bg_color);
 
-      var _n = Math.floor(2.0 / sibyl_opt.background_scale);
+      var _n = Math.floor(2.0 / sibyl_opt.background_scale_x);
 
       var _w2 = bg_ctx.svg_width/2.0;
       var _h2 = bg_ctx.svg_height/2.0;
 
-      var _bg_scale = sibyl_opt.background_scale;
+      var _bg_scale_x = sibyl_opt.background_scale_x;
+      var _bg_scale_y = sibyl_opt.background_scale_y;
 
-      var dx = _bg_scale*bg_ctx.svg_width;
-      var dy = _bg_scale*bg_ctx.svg_height;
+      var dx = _bg_scale_x*bg_ctx.svg_width;
+      var dy = _bg_scale_y*bg_ctx.svg_height;
 
       var offset_x = sibyl_opt.tile_background_dx;
       var offset_y = sibyl_opt.tile_background_dy;
