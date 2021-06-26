@@ -1,5 +1,3 @@
-``
-
 `sibyl.js`
 ---
 
@@ -178,6 +176,6 @@ Notes on SVG
         tail
 
        anchor
-`
+```
 
 
