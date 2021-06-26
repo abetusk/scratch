@@ -26,12 +26,13 @@ function show_help(fp) {
   fp.write("  [-n nest-depth]             max nesting depth (default " + sibyl_opt.max_nest_depth.toString() + ")\n");
   fp.write("  [-a attach-depth]           max attach depth (default " + sibyl_opt.max_attach_depth.toString() + ")\n");
   fp.write("  [-S scale]                  rescale factor (default " + sibyl_opt.scale.toString() + ")\n");
-  fp.write("  [-B background-image]       set background image ('*' for random)\n");
-  fp.write("  [-T background-scale]       set background scale factor (default " + sibyl_opt.background_scale.toString() + ")\n");
   fp.write("  [-p color]                  set primary color (ex. '#000000') (default random)\n");
   fp.write("  [-s color]                  set secondary color (ex '#ffffff') (default random)\n");
   fp.write("  [-b color]                  set background color (ex. '#777777') (default random)\n");
   fp.write("  [-c color]                  set background2 color (ex. '#888888') (default random)\n");
+  fp.write("  [-B background-image]       set background image ('*' for random)\n");
+  fp.write("  [-T background-scale]       set background scale factor (default " + sibyl_opt.background_scale.toString() + ")\n");
+  fp.write("  [-t]                        tile background\n");
   fp.write("  [-h]                        show help (this screen)\n");
   fp.write("  [-v]                        show version\n");
   fp.write("\n");
@@ -48,7 +49,8 @@ var sibyl_opt = {
   "background_color2" : "",
   "use_background_image":false,
   "background_image":"",
-  "background_scale": 1
+  "background_scale": 1,
+  "tile_background" : false
 };
 
 var long_opt = [
@@ -60,7 +62,8 @@ var long_opt = [
   "n", ":(nest-depth)",
   "S", ":(scale)",
   "B", ":(background-image)",
-  "T", ":(background-scale)"
+  "T", ":(background-scale)",
+  "t", "(background-tile)"
 ];
 
 parser = new getopt.BasicParser("h" + long_opt.join(""), process.argv);
@@ -103,6 +106,12 @@ while ((opt =  parser.getopt()) !== undefined) {
     case 'T':
       sibyl_opt.background_scale = parseFloat(opt.optarg);
       break;
+
+    case 't':
+      sibyl_opt.tile_background = true;
+      break;
+
+    //---
 
     case 'S':
       sibyl_opt.scale = parseFloat(opt.optarg);
@@ -1049,8 +1058,9 @@ function mystic_symbolic_random(ctx, base, primary_color, secondary_color, bg_co
       ret_str += base.svg_header;
     }
 
-    //ret_str += "<g transform=\"translate(360 360) scale(0.5 0.5) translate(-360 -360)\">\n";
-    ret_str += "<g transform=\"translate(360 360) scale(" + scale.toString() + " " + scale.toString() + ") translate(-360 -360)\">\n";
+    ret_str += "<g transform=\"translate(" + (ctx.svg_width/2).toString() + " " + (ctx.svg_height/2).toString() + ") " +
+      " scale(" + scale.toString() + " " + scale.toString() + ") " +
+      " translate(" + (-ctx.svg_width/2).toString() + " " + (-ctx.svg_height/2).toString() + ")\">\n";
 
     if (_include_background_rect) {
       var w = ctx.svg_width;
@@ -2533,16 +2543,56 @@ else {
   console.log( JSON.stringify(sched, undefined, 2) );
   */
 
+  var bg_svg = "";
   if (sibyl_opt.use_background_image) {
 
-    bg_ctx.create_svg_header = false;
-    bg_ctx.create_background_rect = true;
     g_data.create_svg_header = false;
     g_data.create_background_rect = false;
+    bg_ctx.create_svg_header = false;
 
-    var bg_sched  = mystic_symbolic_dsl2sched( sibyl_opt.background_image, bg_ctx );
-    //var bg_svg = mystic_symbolic_sched(bg_ctx, bg_sched , sibyl_opt.background_color, sibyl_opt.background_color2, bg_color);
-    var bg_svg = mystic_symbolic_sched(bg_ctx, bg_sched , bg_color, bg_color2, bg_color);
+    if (sibyl_opt.tile_background) {
+
+      bg_ctx.create_background_rect = false;
+
+      var bg_sched  = mystic_symbolic_dsl2sched( sibyl_opt.background_image, bg_ctx );
+      var bg_svg_single = mystic_symbolic_sched(bg_ctx, bg_sched , bg_color, bg_color2, bg_color);
+
+      var _n = Math.floor(2.0 / sibyl_opt.background_scale);
+
+      var _w2 = bg_ctx.svg_width/2.0;
+      var _h2 = bg_ctx.svg_height/2.0;
+
+      var _bg_scale = sibyl_opt.background_scale;
+
+      var dx = _bg_scale*bg_ctx.svg_width;
+      var dy = _bg_scale*bg_ctx.svg_height;
+
+      for (var x_idx=0; x_idx <= _n; x_idx++) {
+        for (var y_idx=0; y_idx <= _n; y_idx++) {
+
+          var _x = Math.floor( x_idx - (_n/2) )*dx;
+          var _y = Math.floor( y_idx - (_n/2) )*dy;
+
+          if ((y_idx%2)==1) { _x += dx/2; }
+
+          bg_svg += "<g transform=\"";
+          bg_svg += " translate(" + (-_x).toString() + " " + (-_y).toString() + ")";
+          bg_svg += "\">";
+
+          bg_svg += bg_svg_single;
+
+          bg_svg += "</g>";
+
+        }
+      }
+
+    }
+    else {
+      bg_ctx.create_background_rect = true;
+
+      var bg_sched  = mystic_symbolic_dsl2sched( sibyl_opt.background_image, bg_ctx );
+      bg_svg = mystic_symbolic_sched(bg_ctx, bg_sched , bg_color, bg_color2, bg_color);
+    }
   }
 
 
