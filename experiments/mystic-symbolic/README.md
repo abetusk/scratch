@@ -12,6 +12,36 @@ Notes on SVG
        anchor
 ```
 
+`sibyl.js`
+---
+
+```
+$ node sibyl.js -h
+version: 0.1.0
+
+usage:
+
+    sibyl [-h] [-v] <svgjson> <command>
+
+  <svgjson>                   svgjson file
+  <command>                   svgjson file
+  [-h]                        show help (this screen)
+  [-v]                        show version
+
+```
+
+#### Random Creature
+
+```
+node sibyl.js ./_svg-vocabulary-pretty-printed.json random > out.svg
+```
+
+#### Creature With DSL
+
+
+```
+node sibyl.js ./_svg-vocabulary-pretty-printed.json 'scales @ [infinity,key] ^ pentacle ! (moons_triple@mushroom_cloud) ~ (ring@ snake_eye) | death . star_7pt ' > out.svg
+```
 
 
 Description Language

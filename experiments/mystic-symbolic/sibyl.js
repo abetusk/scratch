@@ -54,7 +54,7 @@ var arg_str = "random";
 
 if ( (process.argv.length - parser.optind()) > 1 ) {
   fn = process.argv[parser.optind()];
-  arg_str = proecss.argv[parser.optind()+1];
+  arg_str = process.argv[parser.optind()+1];
 }
 
 
