@@ -40,7 +40,7 @@ function create_template() {
         "children": [ {  
           "tagName": "path",
           "props": {
-            "fill": "#ffffff",
+            "fill": "none",
             "fillRule": "evenodd",
             "stroke": "none",
             "d": "M 360.000 142.159 C 361.422 142.159 362.570 141.012 362.570 139.589 C 362.570 138.167 361.422 137.019 360.000 137.019 C 358.578 137.019 357.430 138.167 357.430 139.589 C 357.430 141.012 358.578 142.159 360.000 142.159 Z"
@@ -51,16 +51,12 @@ function create_template() {
     } ],
     "specs": {
       "crown": [
-        { 
-          "point": { "x": 360, "y": 25, "t": 0 },
-          "normal": { "x": 0, "y": -1 }
-        }
+        //{ "point": { "x": 360, "y": 25, "t": 0 },
+        //  "normal": { "x": 0, "y": -1 } }
       ],
       "nesting": [
-        { 
-          "x": { "min": 50, "max": 150 },
-          "y": { "min": 50, "max": 150 }
-        }
+        //{ "x": { "min": 50, "max": 150 },
+        //  "y": { "min": 50, "max": 150 } }
       ]
     }
   };
@@ -84,8 +80,8 @@ var minor_arcana_pnts = {
           [ {"x":_mid_w-_w4, "y":_mid_h+_h4}, {"x":_mid_w+_w4, "y":_mid_h+_h4} ],
           [ {"x":_mid_w-_w4, "y":_mid_h-_h4}, {"x":_mid_w+_w4, "y":_mid_h+_h4} ],
           [ {"x":_mid_w-_w4, "y":_mid_h+_h4}, {"x":_mid_w+_w4, "y":_mid_h-_h4} ] ],
-  "3" : [ [ {"x":_mid_w-_w4, "y":_mid_h-_h4}, {"x":_mid_w+_w4, "y":_mid_h-_h4}, {"x":_mid_w,"y":_mid_h+_h4} ],
-          [ {"x":_mid_w-_w4, "y":_mid_h+_h4}, {"x":_mid_w+_w4, "y":_mid_h-_h4}, {"x":_mid_w,"y":_mid_h-_h4} ] ],
+  "3" : [ [ {"x":_mid_w-_w4, "y":_mid_h-_h3}, {"x":_mid_w+_w4, "y":_mid_h-_h3}, {"x":_mid_w,"y":_mid_h-0*_h8} ],
+          [ {"x":_mid_w-_w4, "y":_mid_h+_h3}, {"x":_mid_w+_w4, "y":_mid_h+_h3}, {"x":_mid_w,"y":_mid_h+_h3} ] ],
   "4" : [ [ { "x": _mid_w, "y": _mid_h }] ],
   "5" : [ [ { "x": _mid_w, "y": _mid_h }] ],
   "6" : [ [ { "x": _mid_w, "y": _mid_h }] ],

@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+//
 // License CC0
 //
 
@@ -7,11 +8,10 @@ var color = require("./cam02.js");
 var getopt = require("posix-getopt");
 var parser, opt;
 
-var _VERSION = "0.1.1";
+var _VERSION = "0.1.2";
 
 function show_version(fp) {
   fp.write("version: " + _VERSION + "\n");
-
 }
 
 function show_help(fp) {
@@ -54,8 +54,8 @@ var sibyl_opt = {
   "background_scale_x": 0.5,
   "background_scale_y": 0.5,
   "tile_background" : false,
-  "tile_background_dx" : 0,
-  "tile_background_dy" : 0,
+  "background_dx" : 0,
+  "background_dy" : 0,
   "additional_svgjson" : []
 };
 
@@ -127,9 +127,9 @@ while ((opt =  parser.getopt()) !== undefined) {
     case 'D':
       var tok = opt.optarg.split(",");
 
-      sibyl_opt.tile_background_dx = parseFloat(tok[0]);
+      sibyl_opt.background_dx = parseFloat(tok[0]);
       if (tok.length > 1) {
-        sibyl_opt.tile_background_dy = parseFloat(tok[1]);
+        sibyl_opt.background_dy = parseFloat(tok[1]);
       }
       break;
 
@@ -196,7 +196,7 @@ if (sibyl_opt.background_color.match(/^#[0-9a-fA-F]{6}/)) {
 }
 
 if (sibyl_opt.background_color2.match(/^#[0-9a-fA-F]{6}/)) {
-  bg_color2 = sibyl_opt.background_color;
+  bg_color2 = sibyl_opt.background_color2;
 }
 
 
@@ -222,6 +222,15 @@ var raw_json = fs.readFileSync(fn);
 var adata = JSON.parse(raw_json);
 var bg_data = JSON.parse(raw_json);
 
+for (var ii=0; ii<sibyl_opt.additional_svgjson.length; ii++) {
+  var _raw_bytes = fs.readFileSync(sibyl_opt.additional_svgjson[ii]);
+  var _dat0 = JSON.parse(_raw_bytes);
+  var _dat1 = JSON.parse(_raw_bytes);
+  for (var jj=0; jj<_dat0.length; jj++) {
+    adata.push(_dat0[jj]);
+    bg_data.push(_dat1[jj]);
+  }
+}
 
 // https://pegjs.org/online
 // https://github.com/pegjs/pegjs
@@ -1250,7 +1259,6 @@ function mystic_symbolic_random(ctx, base, primary_color, secondary_color, bg_co
       }
       else {
 
-
         var sub_anchor_point = [ sub.specs.anchor[0].point.x, sub.specs.anchor[0].point.y ];
         var sub_anchor_deg = _deg( sub.specs.anchor[0].normal.x, sub.specs.anchor[0].normal.y );
 
@@ -1338,7 +1346,7 @@ function mystic_symbolic_sched(ctx, sched, primary_color, secondary_color, bg_co
   var symbol_name = symbol_info.name;
 
   if (!(symbol_name in ctx.symbol)) {
-    return {"error":"could not find symbol" + actual_symbol};
+    return {"error":"could not find symbol " + symbol_name};
   }
   var base = ctx.symbol[symbol_name];
 
@@ -2518,8 +2526,8 @@ if (arg_str == "random") {
       var dx = _bg_scale_x*bg_ctx.svg_width;
       var dy = _bg_scale_y*bg_ctx.svg_height;
 
-      var offset_x = sibyl_opt.tile_background_dx;
-      var offset_y = sibyl_opt.tile_background_dy;
+      var offset_x = sibyl_opt.background_dx;
+      var offset_y = sibyl_opt.background_dy;
 
       for (var x_idx=0; x_idx <= _n; x_idx++) {
         for (var y_idx=0; y_idx <= _n; y_idx++) {
@@ -2543,7 +2551,18 @@ if (arg_str == "random") {
     }
     else {
       var bg_sched  = mystic_symbolic_dsl2sched( sibyl_opt.background_image, bg_ctx );
-      bg_svg = mystic_symbolic_sched(bg_ctx, bg_sched , bg_color, bg_color2, bg_color);
+
+      var _x = sibyl_opt.background_dx;
+      var _y = sibyl_opt.background_dy;
+
+      bg_svg += "<g transform=\"";
+      bg_svg += " translate(" + (-_x).toString() + " " + (-_y).toString() + ")";
+      bg_svg += "\">";
+
+      bg_svg += mystic_symbolic_sched(bg_ctx, bg_sched , bg_color, bg_color2, bg_color);
+
+      bg_svg += "</g>";
+
     }
 
   }
@@ -2620,8 +2639,8 @@ else {
       var dx = _bg_scale_x*bg_ctx.svg_width;
       var dy = _bg_scale_y*bg_ctx.svg_height;
 
-      var offset_x = sibyl_opt.tile_background_dx;
-      var offset_y = sibyl_opt.tile_background_dy;
+      var offset_x = sibyl_opt.background_dx;
+      var offset_y = sibyl_opt.background_dy;
 
       for (var x_idx=0; x_idx <= _n; x_idx++) {
         for (var y_idx=0; y_idx <= _n; y_idx++) {
@@ -2646,8 +2665,17 @@ else {
     else {
       bg_ctx.create_background_rect = true;
 
+      var _x = sibyl_opt.background_dx;
+      var _y = sibyl_opt.background_dy;
+
+      bg_svg += "<g transform=\"";
+      bg_svg += " translate(" + (-_x).toString() + " " + (-_y).toString() + ")";
+      bg_svg += "\">";
+
       var bg_sched  = mystic_symbolic_dsl2sched( sibyl_opt.background_image, bg_ctx );
-      bg_svg = mystic_symbolic_sched(bg_ctx, bg_sched , bg_color, bg_color2, bg_color);
+      bg_svg += mystic_symbolic_sched(bg_ctx, bg_sched , bg_color, bg_color2, bg_color);
+
+      bg_svg += "</g>";
     }
   }
 
