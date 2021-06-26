@@ -68,31 +68,6 @@ var gram_str= fs.readFileSync(gram_fn).toString();
 
 var parser = pegjs.generate(gram_str);
 
-//var res = parser.parse(" crescent_interlock @ stairs_smaller ! goat_hind ^ wing_angel | bone_vertical ");
-//var res = parser.parse(" crescent_interlock @ stairs_smaller ! goat_hind ^ (wing_angel@cup) | bone_vertical ");
-//var res = parser.parse(" crescent_interlock @ (stairs_smaller@goat) ! goat_hind ^ [wing_angel,cup,sword] | ([bone_vertical,bone]) ");
-//var res = parser.parse(" crescent_interlock @ ([foo,bar]@(stairs_smaller^cc)) ! goat_hind ^ [wing_angel,cup,sword] | ([bone_vertical,bone]) ");
-//var res = parser.parse(" crescent_interlock @ ({*,-bob}@(stairs_smaller^cc)) ~ woman ! goat_hind ^ [wing_angel,cup,sword] | ([bone_vertical,bone]) ");
-//var res = parser.parse(" [crescent_interlock,[bob,stairs_smaller,cc]] ");
-
-/*
-
-try {
-//var res = parser.parse(" cup@[crescent_interlock,[bob,stairs_smaller,cc],[clock,arm]] ");
-//var res = parser.parse(" cup@sword^crescent_interlock!bob~pipe|stairs_smaller.cc");
-var res = parser.parse(" cup@([sword,crescent_interlock,[bob@pipe,stairs_smaller,cc],[clock,arm]]) ");
-//var res = parser.parse(" cup@([bob@pipe,stairs_smaller,clock])");
-//var res = parser.parse(" cup@[bob@pipe,stairs_smaller,clock]");
-//var res = parser.parse(" cup@([bob,stairs_smaller,clock]@pipe)");
-//var res = parser.parse(" arm@(bob@clock)");
-//var res = parser.parse(" (arm@bob)@clock");
-}
-catch (e) {
-  console.log("got PEG error:", e);
-  process.exit();
-}
-*/
-
 function create_node() {
   return {
     "type":"basic",
@@ -871,9 +846,6 @@ function _preprocess_svgjson(adata, primary_color, secondary_color) {
       }
     }
 
-    //var _l = jsonsvg2svg(data);
-    //var _svg = _l.join("\n");
-
     var _svg_inner = [];
     _svg_inner = jsonsvg2svg_child(data.layers, primary_color, secondary_color);
 
@@ -953,8 +925,6 @@ function mystic_symbolic_random(ctx, base, primary_color, secondary_color, bg_co
   bg_color = ((typeof bg_color === "undefined") ? "#777777" : bg_color);
 
   var use_bottom_nest_anchor_point = false;
-
-  //bg_color = ((typeof bg_color === "undefined") ? "#000000" : bg_color);
 
   var _include_background_rect = true;
 
@@ -2316,18 +2286,18 @@ var tarot = {
             "?", "death", "?", "devil", "tower", "starburst", "moon", "sun",
             // judgement
             "?", "globe" ],
-              // wands
+            // wands
   "minor" : [ "?", "pentacle", "cup", "sword" ]
 };
 
 if (arg_str == "random") {
   console.log( mystic_symbolic_random(g_data, undefined, primary_color, secondary_color, bg_color) );
-  //console.log( mystic_symbolic_random(g_data));
 }
+
 else if ((typeof arg_str === "undefined") || (arg_str.length == 0)) {
-  //console.log( mystic_symbolic_random(g_data, undefined, primary_color, secondary_color, bg_color) );
-  console.log( mystic_symbolic_random(g_data));
+  console.log( mystic_symbolic_random(g_data) );
 }
+
 else {
 
   /*
@@ -2362,16 +2332,10 @@ else {
 
 
   var sched  = mystic_symbolic_dsl2sched( arg_str, g_data );
-  //console.log(sched);
-
-  //console.log(JSON.stringify(sched, undefined, 2));
-  //process.exit();
-
   console.log( mystic_symbolic_sched(g_data, sched , primary_color, secondary_color, bg_color) );
   //var sentence = sched2sentence(sched);
   //console.log("<!--", sentence, " -->");
 }
 
-//console.log("<!-- primary(", prim_hue, prim_sat, prim_val,"), secondary(", seco_hue, seco_sat, seco_val, ") bg(", bg_hue, bg_sat, bg_val, ") -->");
 console.log("<!-- ", primary_color, secondary_color, bg_color, "-->");
 
