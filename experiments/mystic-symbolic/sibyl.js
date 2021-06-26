@@ -3,6 +3,60 @@
 
 var fs = require("fs");
 var color = require("./cam02.js");
+var getopt = require("posix-getopt");
+var parser, opt;
+
+_VERSION = "0.1.0";
+
+function show_version(fp) {
+  fp.write("version: " + _VERSION + "\n");
+
+}
+
+function show_help(fp) {
+  show_version(fp)
+  fp.write("\n");
+  fp.write("usage:\n");
+  fp.write("\n");
+  fp.write("    sibyl [-h] [-v] <svgjson> <command>\n");
+  fp.write("\n");
+  fp.write("  <svgjson>                   svgjson file\n");
+  fp.write("  <command>                   svgjson file\n");
+  fp.write("  [-h]                        show help (this screen)\n");
+  fp.write("  [-v]                        show version\n");
+  fp.write("\n");
+  fp.write("\n");
+}
+
+parser = new getopt.BasicParser("h", process.argv);
+while ((opt =  parser.getopt()) !== undefined) {
+  switch(opt.option) {
+
+    case 'h':
+      show_help(process.stdout);
+      process.exit(0);
+      break;
+
+    case 'v':
+      show_version(process.stdout);
+      process.exit(0);
+      break;
+
+    default:
+      show_help(process.stderr);
+      process.exit(-1);
+      break;
+  }
+}
+
+var fn = "./_svg-vocabulary-pretty-printed.json";
+var arg_str = "random";
+
+if ( (process.argv.length - parser.optind()) > 1 ) {
+  fn = process.argv[parser.optind()];
+  arg_str = proecss.argv[parser.optind()+1];
+}
+
 
 // https://pegjs.org/online
 // https://github.com/pegjs/pegjs
@@ -394,25 +448,6 @@ function flatten(data) {
   //for (var key in data) { flatten(data[key]); }
 }
 
-//console.log(JSON.stringify(res, undefined, 2));
-
-/*
-var ctx = { "data":{},"level": [],  "ring_num":0, "rnd_num":0, "sub_num":0};
-ctx["orig_data"] = res;
-ctx.data = create_node();
-ctx["cur_node"]  = ctx.data;
-ctx["cur_attach"] = "base";
-convert_ast(ctx, res);
-
-
-
-//console.log(JSON.stringify(ctx.data, undefined, 2));
-
-//console.log("===================fin=====================");
-var fin_data = cleanup(ctx.data);
-//console.log(JSON.stringify(fin_data, undefined, 2));
-*/
-
 
 // *********************************************
 // *********************************************
@@ -581,18 +616,18 @@ function _deg(x,y) { return Math.atan2(y,x)*180.0/Math.PI; }
 // ------------------
 
 
+/*
 var arg_str = "";
 var fn = "";
 if (process.argv.length >= 3) {
   fn = process.argv[2];
-
-  if (process.argv.length >= 4) {
-    arg_str = process.argv[3];
-  }
+  if (process.argv.length >= 4) { arg_str = process.argv[3]; }
 }
+*/
 
 if (fn.length == 0) {
   console.log("provide json");
+  show_help(process.stderr);
   process.exit(1);
 }
 
