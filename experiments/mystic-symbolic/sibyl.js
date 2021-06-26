@@ -1019,10 +1019,11 @@ function _preprocess_svgjson(adata, primary_color, secondary_color) {
 //
 function mystic_symbolic_random(ctx, base, primary_color, secondary_color, bg_color) {
   if (typeof ctx === "undefined") { return ""; }
-  base = ( (typeof base === "undefined") ? ctx.data[ _irnd(ctx.data.length) ] : base ) ;
   primary_color = ((typeof primary_color === "undefined") ? "#ffffff" : primary_color);
   secondary_color = ((typeof secondary_color === "undefined") ? "#000000" : secondary_color);
   bg_color = ((typeof bg_color === "undefined") ? "#777777" : bg_color);
+
+  base = ( (typeof base === "undefined") ? ctx.data[ _irnd(ctx.data.length) ] : base ) ;
 
   var use_bottom_nest_anchor_point = false;
 
@@ -1870,7 +1871,7 @@ function rand_color() {
   //ok
   var prim_fac = 1.0;
   var seco_fac = (3.0/2.0);
-  var bg_fac = (1.0/4.0);
+  var bg_fac = (2.0/4.0);
 
   /*
   prim_fac = (7.0/5.0);
@@ -1960,7 +1961,11 @@ function rand_color() {
   seco_rgb = HSVtoRGB(seco_hue, seco_sat, seco_val);
   bg_rgb = HSVtoRGB(bg_hue, bg_sat, bg_val);
 
-  var bg_sat2 = _clamp(bg_sat - 0.25, 0.0, 1.0);
+  //var bg_sat2 = _clamp(bg_sat - 0.25, 0.0, 1.0);
+  //var bg_val2 = _clamp(bg_val - 0.1, 0.0, 1.0);
+  //var bg_rgb2 = HSVtoRGB(bg_hue, bg_sat2, bg_val2);
+
+  var bg_sat2 = _clamp(bg_sat + 0.25, 0.0, 1.0);
   var bg_val2 = _clamp(bg_val - 0.1, 0.0, 1.0);
   var bg_rgb2 = HSVtoRGB(bg_hue, bg_sat2, bg_val2);
 
