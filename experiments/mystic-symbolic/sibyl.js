@@ -21,7 +21,7 @@ function show_help(fp) {
   fp.write("    sibyl [-h] [-v] <svgjson> <command>\n");
   fp.write("\n");
   fp.write("  <svgjson>                   svgjson file\n");
-  fp.write("  <command>                   svgjson file\n");
+  fp.write("  <command>                   random|<dsl>\n");
   fp.write("  [-h]                        show help (this screen)\n");
   fp.write("  [-v]                        show version\n");
   fp.write("\n");

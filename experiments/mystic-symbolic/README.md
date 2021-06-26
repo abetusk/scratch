@@ -10,7 +10,7 @@ usage:
     sibyl [-h] [-v] <svgjson> <command>
 
   <svgjson>                   svgjson file
-  <command>                   svgjson file
+  <command>                   random|<dsl>
   [-h]                        show help (this screen)
   [-v]                        show version
 
