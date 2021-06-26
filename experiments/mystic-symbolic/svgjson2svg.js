@@ -1664,7 +1664,7 @@ function rand_color() {
   var seco_val = _rnd(0.25, 0.6);
   if (seco_hue > 1.0) { seco_hue - 1.0; }
 
-  var bg_hue = prim_hue - 0.35;
+  var bg_hue = prim_hue - 0.33;
   var bg_sat = (Math.random()*.5);
   var bg_val = (Math.random()*0.5)+0.5;
   if (bg_hue < 0.0) { bg_hue += 1.0; }
@@ -1710,28 +1710,55 @@ function rand_color() {
   bg_brightness = _xyz.y;
   //bg_brightness = _xyz.x;
 
+  //ok
+  var prim_fac = 1.0;
   var seco_fac = (3.0/2.0);
   var bg_fac = (1.0/4.0);
+
+
+  //var root_brightness = seco_brightness;
+  var root_brightness = prim_brightness;
+
+  //prim_fac = 3.0/5.0;
+  //seco_fac = 1.0;
+  //bg_fac = (4.0/5.0);
 
   for (var _sat = 0.0; _sat <= 1.0; _sat += del_sat) {
     for (var _val = 0.0; _val <= 1.0; _val += del_val) {
 
+      var _tc_prim = HSVtoRGB( prim_hue, _sat, _val );
+      var _d_cur = Math.abs(_brightness(_tc_prim.r, _tc_prim.g, _tc_prim.b) - (prim_fac*root_brightness));
+      var _d_prv = Math.abs(root_brightness - (prim_fac*prim_brightness));
+
+      _xyz = color.rgb2xyz(_tc_prim.r, _tc_prim.g, _tc_prim.b);
+      _d_cur = Math.abs(_xyz.y - (prim_fac*root_brightness));
+      _d_prv = Math.abs(_xyz.y - (prim_fac*root_brightness));
+
+      if ( _d_cur < _d_prv ) {
+
+        _rgb = HSVtoRGB( prim_hue, _sat, _val );
+        _xyz = color.rgb2xyz(_rgb.r, _rgb.g, _rgb.b);
+
+        prim_brightness = _brightness(_tc_prim.r, _tc_prim.g, _tc_prim.b);
+        prim_sat = _sat;
+        prim_val = _val;
+
+        prim_rgb = HSVtoRGB( prim_hue, prim_sat, prim_val );
+
+      }
+
       var _tc_seco = HSVtoRGB( seco_hue, _sat, _val );
-      var _d_cur = Math.abs(_brightness(_tc_seco.r, _tc_seco.g, _tc_seco.b) - (seco_fac*prim_brightness));
-      var _d_prv = Math.abs(seco_brightness - (seco_fac*prim_brightness));
+      var _d_cur = Math.abs(_brightness(_tc_seco.r, _tc_seco.g, _tc_seco.b) - (seco_fac*root_brightness));
+      var _d_prv = Math.abs(seco_brightness - (seco_fac*root_brightness));
 
       _xyz = color.rgb2xyz(_tc_seco.r, _tc_seco.g, _tc_seco.b);
-      _d_cur = Math.abs(_xyz.y - (seco_fac*prim_brightness));
-      //_d_cur = Math.abs(_xyz.x - (seco_fac*prim_brightness));
-      //_xyz = color.rgb2xyz(seco_rgb.r, seco_rgb.g, seco_rgb.b);
-      _d_prv = Math.abs(_xyz.y - (seco_fac*prim_brightness));
-      //_d_prv = Math.abs(_xyz.x - (seco_fac*prim_brightness));
+      _d_cur = Math.abs(_xyz.y - (seco_fac*root_brightness));
+      _d_prv = Math.abs(_xyz.y - (seco_fac*root_brightness));
 
       if ( _d_cur < _d_prv ) {
 
         _rgb = HSVtoRGB( seco_hue, _sat, _val );
         _xyz = color.rgb2xyz(_rgb.r, _rgb.g, _rgb.b);
-        //console.log("choosing seco. was:", seco_brightness, "now:", _brightness(_tc_seco.r, _tc_seco.g, _tc_seco.b), "(s:", _sat, "v:", _val, ")", "(xyz:", _xyz, ")");
 
         seco_brightness = _brightness(_tc_seco.r, _tc_seco.g, _tc_seco.b);
         seco_sat = _sat;
@@ -1742,21 +1769,18 @@ function rand_color() {
       }
 
       var _tc_bg = HSVtoRGB( bg_hue, _sat, _val );
-      _d_cur = Math.abs(_brightness(_tc_bg.r, _tc_bg.g, _tc_bg.b) - (bg_fac*prim_brightness));
-      _d_prv = Math.abs(bg_brightness - (bg_fac*prim_brightness));
+      _d_cur = Math.abs(_brightness(_tc_bg.r, _tc_bg.g, _tc_bg.b) - (bg_fac*root_brightness));
+      _d_prv = Math.abs(bg_brightness - (bg_fac*root_brightness));
 
       _xyz = color.rgb2xyz(_tc_bg.r, _tc_bg.g, _tc_bg.b);
-      _d_cur = Math.abs(_xyz.y - (bg_fac*prim_brightness));
-      //_d_cur = Math.abs(_xyz.x - (bg_fac*prim_brightness));
+      _d_cur = Math.abs(_xyz.y - (bg_fac*root_brightness));
       _xyz = color.rgb2xyz(bg_rgb.r, bg_rgb.g, bg_rgb.b);
-      _d_prv = Math.abs(_xyz.y - (bg_fac*prim_brightness));
-      //_d_prv = Math.abs(_xyz.x - (bg_fac*prim_brightness));
+      _d_prv = Math.abs(_xyz.y - (bg_fac*root_brightness));
 
       if ( _d_cur < _d_prv ) {
 
         _rgb = HSVtoRGB( bg_hue, _sat, _val );
         _xyz = color.rgb2xyz(_rgb.r, _rgb.g, _rgb.b);
-        //console.log("choosing bg. was:", bg_brightness, "now:", _brightness(_tc_bg.r, _tc_bg.g, _tc_bg.b), "(s:", _sat, "v:", _val, ")", "(xyz:", _xyz, ")");
 
         bg_brightness = _brightness(_tc_bg.r, _tc_bg.g, _tc_bg.b);
         bg_sat = _sat;
@@ -1770,13 +1794,6 @@ function rand_color() {
 
   seco_rgb = HSVtoRGB(seco_hue, seco_sat, seco_val);
   bg_rgb = HSVtoRGB(bg_hue, bg_sat, bg_val);
-
-  /*
-  console.log("after:");
-  console.log("  prim:", "h:", prim_hue, "s:", prim_sat, "v:", prim_val, "rgb:", prim_rgb, "bright:", prim_brightness);
-  console.log("  seco:", "h:", seco_hue, "s:", seco_sat, "v:", seco_val, "rgb:", seco_rgb, "bright:", seco_brightness);
-  console.log("  bg:", "h:", bg_hue, "s:", bg_sat, "v:", bg_val, "rgb:", bg_rgb, "bright:", bg_brightness);
-  */
 
   res.primary.hex = _rgb2hex(prim_rgb.r, prim_rgb.g, prim_rgb.b);
   res.secondary.hex = _rgb2hex(seco_rgb.r, seco_rgb.g, seco_rgb.b);
