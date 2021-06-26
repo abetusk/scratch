@@ -1720,6 +1720,12 @@ function rand_color() {
   var seco_fac = (3.0/2.0);
   var bg_fac = (1.0/4.0);
 
+  /*
+  prim_fac = (7.0/5.0);
+  seco_fac = (4.0/4.0);
+  bg_fac = (2.0/5.0);
+  */
+
 
   //var root_brightness = seco_brightness;
   var root_brightness = prim_brightness;
@@ -1735,9 +1741,10 @@ function rand_color() {
       var _d_cur = Math.abs(_brightness(_tc_prim.r, _tc_prim.g, _tc_prim.b) - (prim_fac*root_brightness));
       var _d_prv = Math.abs(root_brightness - (prim_fac*prim_brightness));
 
-      _xyz = color.rgb2xyz(_tc_prim.r, _tc_prim.g, _tc_prim.b);
-      _d_cur = Math.abs(_xyz.y - (prim_fac*root_brightness));
-      _d_prv = Math.abs(_xyz.y - (prim_fac*root_brightness));
+      //_xyz = color.rgb2xyz(_tc_prim.r, _tc_prim.g, _tc_prim.b);
+      //_d_cur = Math.abs(_xyz.y - (prim_fac*root_brightness));
+      //_xyz = color.rgb2xyz(prim_rgb.r, prim_rgb.g, prim_rgb.b);
+      //_d_prv = Math.abs(_xyz.y - (prim_fac*root_brightness));
 
       if ( _d_cur < _d_prv ) {
 
@@ -1753,12 +1760,13 @@ function rand_color() {
       }
 
       var _tc_seco = HSVtoRGB( seco_hue, _sat, _val );
-      var _d_cur = Math.abs(_brightness(_tc_seco.r, _tc_seco.g, _tc_seco.b) - (seco_fac*root_brightness));
-      var _d_prv = Math.abs(seco_brightness - (seco_fac*root_brightness));
+      _d_cur = Math.abs(_brightness(_tc_seco.r, _tc_seco.g, _tc_seco.b) - (seco_fac*root_brightness));
+      _d_prv = Math.abs(seco_brightness - (seco_fac*root_brightness));
 
-      _xyz = color.rgb2xyz(_tc_seco.r, _tc_seco.g, _tc_seco.b);
-      _d_cur = Math.abs(_xyz.y - (seco_fac*root_brightness));
-      _d_prv = Math.abs(_xyz.y - (seco_fac*root_brightness));
+      //_xyz = color.rgb2xyz(_tc_seco.r, _tc_seco.g, _tc_seco.b);
+      //_d_cur = Math.abs(_xyz.y - (seco_fac*root_brightness));
+      //_xyz = color.rgb2xyz(seco_rgb.r, seco_rgb.g, seco_rgb.b);
+      //_d_prv = Math.abs(_xyz.y - (seco_fac*root_brightness));
 
       if ( _d_cur < _d_prv ) {
 
@@ -1777,10 +1785,10 @@ function rand_color() {
       _d_cur = Math.abs(_brightness(_tc_bg.r, _tc_bg.g, _tc_bg.b) - (bg_fac*root_brightness));
       _d_prv = Math.abs(bg_brightness - (bg_fac*root_brightness));
 
-      _xyz = color.rgb2xyz(_tc_bg.r, _tc_bg.g, _tc_bg.b);
-      _d_cur = Math.abs(_xyz.y - (bg_fac*root_brightness));
-      _xyz = color.rgb2xyz(bg_rgb.r, bg_rgb.g, bg_rgb.b);
-      _d_prv = Math.abs(_xyz.y - (bg_fac*root_brightness));
+      //_xyz = color.rgb2xyz(_tc_bg.r, _tc_bg.g, _tc_bg.b);
+      //_d_cur = Math.abs(_xyz.y - (bg_fac*root_brightness));
+      //_xyz = color.rgb2xyz(bg_rgb.r, bg_rgb.g, bg_rgb.b);
+      //_d_prv = Math.abs(_xyz.y - (bg_fac*root_brightness));
 
       if ( _d_cur < _d_prv ) {
 
@@ -1846,31 +1854,6 @@ function rand_color_hsv() {
 }
 
 
-/*
-var prim_hue = Math.random();
-var prim_sat = _rnd(0.45, 0.60);
-var prim_val = _rnd(0.75, 1.0);
-
-var seco_hue = prim_hue + 0.35;
-var seco_sat = 1.0 - prim_sat;
-var seco_val = _rnd(0.25, 0.6);
-if (seco_hue > 1.0) { seco_hue -= 1.0; }
-
-var bg_hue = prim_hue - 0.35;
-var bg_sat = (Math.random()*.5);
-var bg_val = (Math.random()*0.5)+0.5;
-
-if (bg_hue < 0.0) { bg_hue += 1.0; }
-
-var prim_rgb = HSVtoRGB(prim_hue, prim_sat, prim_val);
-var seco_rgb = HSVtoRGB(seco_hue, seco_sat, seco_val);
-var bg_rgb = HSVtoRGB(bg_hue, bg_sat, bg_val);
-
-var primary_color = _rgb2hex(prim_rgb.r, prim_rgb.g, prim_rgb.b);
-var secondary_color = _rgb2hex(seco_rgb.r, seco_rgb.g, seco_rgb.b);
-var bg_color = _rgb2hex(bg_rgb.r, bg_rgb.g, bg_rgb.b);
-*/
-
 var _rcolor = rand_color();
 var primary_color   = _rcolor.primary.hex;
 var secondary_color = _rcolor.secondary.hex;
@@ -1900,18 +1883,6 @@ var sched = {
   }
 };
 
-var ts = "globe(eye_up).crown(circle).arm(cube_die).leg(cloud).tail(rabbit)";
-
-//var ts = "globe @ eye_up ^ circle ~ cube_die | cloud . rabbit"
-var ts = "globe @ (eye_up @ angel ) ^ circle ~ cube_die | cloud . rabbit"
-//var ts = "globe @ eye_up ^ [circle,circle_spiral] ~ cube_die | cloud . rabbit"
-//var ts = "globe @ eye_up ^ [circle,circle_spiral,:] ~ cube_die | cloud . rabbit"
-
-ts = "globe @ ( eye_up @ angel ) ";
-
-
-//ts = "globe @ { 
-
 
 var repri=
 "           " +
@@ -1919,8 +1890,6 @@ var repri=
 " ~(@)~ []  " +
 "   .       " +
 "  | |      " ;
-
-var __repri = " ~`!@#$%^&*()_+-={}[]|\\;:<>,.?/";
 
 
 
