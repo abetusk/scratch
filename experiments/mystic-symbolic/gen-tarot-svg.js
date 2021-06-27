@@ -58,6 +58,16 @@ function create_template() {
         //{ "x": { "min": 50, "max": 150 },
         //  "y": { "min": 50, "max": 150 } }
       ]
+    },
+    "meta" : {
+      //"always_be_nested" : false,
+      //"always_nest" : false,
+      //"attach_to" : [ "tail", "leg", "arm", "horn", "crown" ],
+      //"background" : true,
+      //"invert_nested" : false,
+      //"never_be_nested" : false,
+      //"rotate_clockwise" : false,
+      "exclude": true
     }
   };
   return _data;
@@ -109,7 +119,6 @@ function create_tarot_json(data, id, pnts, nesting) {
     data = create_template();
   }
 
-  //var data = Object.assign({}, data_template);
   data.name = id;
   for (var ii=0; ii<data.layers.length; ii++) {
     data.layers[ii].props.id = id;
@@ -118,15 +127,30 @@ function create_tarot_json(data, id, pnts, nesting) {
     }
   }
 
-  if (!("specs" in data)) {
-    data["specs"] = {};
-  }
+  // Set the meta flag to exclude from
+  // random choice
+  //
+  if (!("meta" in data)) { data["meta"] = { "exclude":true }; }
 
+  if (!("specs" in data)) { data["specs"] = {}; }
+
+  // Create anchor just in case.
+  // We don't intend to use it but
+  // at least it will prevent things from breaking
+  // if it gets accessed.
+  //
+  data.specs["anchor"] = [ { "point":{"x": 360,"y":700}, "normal":{"x":0,"y":-1}  } ];
+
+  // The crown is where we expect to put the minor
+  // arcana suite
+  //
   data.specs["crown"] = [];
   for (var ii=0; ii<pnts.length; ii++) {
     data.specs.crown.push( { "point": { "x": pnts[ii].x, "y":pnts[ii].y }, "normal":{"x":0.0, "y":-1} });
   }
 
+  // Create huge nesting box
+  //
   data.specs["nesting"] = [];
   data.specs.nesting.push( {
     "x":{"min":nesting.x.min, "max":nesting.x.max},

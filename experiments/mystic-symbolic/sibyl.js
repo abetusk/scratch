@@ -26,6 +26,7 @@ function show_help(fp) {
   fp.write("  [-n nest-depth]             max nesting depth (default " + sibyl_opt.max_nest_depth.toString() + ")\n");
   fp.write("  [-a attach-depth]           max attach depth (default " + sibyl_opt.max_attach_depth.toString() + ")\n");
   fp.write("  [-S scale]                  rescale factor (default " + sibyl_opt.scale.toString() + ")\n");
+  fp.write("  [-C complexity]             complexity factor (how many attach points for a random creature) (default " + sibyl_opt.complexity.toString() + ")\n");
   fp.write("  [-p color]                  set primary color (ex. '#000000') (default random)\n");
   fp.write("  [-s color]                  set secondary color (ex '#ffffff') (default random)\n");
   fp.write("  [-b color]                  set background color (ex. '#777777') (default random)\n");
@@ -45,6 +46,7 @@ var sibyl_opt = {
   "max_attach_depth" : 1,
   "max_nest_depth" : 2,
   "scale" : 0.5,
+  "complexity" : 4,
   "primary_color" : "",
   "secondary_color" : "",
   "background_color" : "",
@@ -69,6 +71,7 @@ var long_opt = [
   "a", ":(attach-depth)",
   "n", ":(nest-depth)",
   "S", ":(scale)",
+  "C", ":(complexity)",
   "B", ":(background-image)",
   "T", ":(background-scale)",
   "t", "(background-tile)",
@@ -146,6 +149,10 @@ while ((opt =  parser.getopt()) !== undefined) {
       sibyl_opt.scale = parseFloat(opt.optarg);
       break;
 
+    case 'C':
+      sibyl_opt.complexity = parseInt(opt.optarg);
+      break;
+
     case 'n':
       sibyl_opt.max_nest_depth = parseInt(opt.optarg);
       break;
@@ -176,12 +183,16 @@ if (sibyl_opt.tile_background && (!sibyl_opt.background_scale_set)) {
   sibyl_opt.background_scale_y = 0.5;
 }
 
+// Create random color by default
+//
 var _rcolor = rand_color();
 var primary_color   = _rcolor.primary.hex;
 var secondary_color = _rcolor.secondary.hex;
 var bg_color        = _rcolor.background.hex;
 var bg_color2       = _rcolor.background2.hex;
 
+// SVG header and footer for eventual SVG output
+//
 var svg_header = [
   '<?xml version="1.0" encoding="utf-8"?>',
   '<!-- Generator: Moho 13.5 build 20210422 -->',
@@ -191,7 +202,8 @@ var svg_header = [
 
 var svg_footer = "</svg>";
 
-
+// Override defaults with user specified values
+//
 if (sibyl_opt.primary_color.match(/^#[0-9a-fA-F]{6}/)) {
   primary_color = sibyl_opt.primary_color;
 }
@@ -207,6 +219,11 @@ if (sibyl_opt.background_color2.match(/^#[0-9a-fA-F]{6}/)) {
 }
 
 
+// fn is the JSON ("svgjson") that holds information about
+// the vocabulary.
+//
+// arg_str is the command/dsl string to parse
+//
 var fn = "./_svg-vocabulary-pretty-printed.json";
 var arg_str = "random";
 
@@ -224,11 +241,22 @@ if (fn.length == 0) {
   process.exit(1);
 }
 
+// Read the vocabulary JSON and
+// make a copy for each of the background and
+// main creature.
+// I got nervous about shallow vs. deep copy so
+// this is why thre are two copies.
+//
 var raw_json = fs.readFileSync(fn);
 
 var adata = JSON.parse(raw_json);
 var bg_data = JSON.parse(raw_json);
 
+// Read additional JSON SVG files.
+// The additional JSON files are for ease of use, rather
+// than having to regenerate the core SVG JSON file.
+// Multiple files can be specified.
+//
 for (var ii=0; ii<sibyl_opt.additional_svgjson.length; ii++) {
   var _raw_bytes = fs.readFileSync(sibyl_opt.additional_svgjson[ii]);
   var _dat0 = JSON.parse(_raw_bytes);
@@ -239,11 +267,31 @@ for (var ii=0; ii<sibyl_opt.additional_svgjson.length; ii++) {
   }
 }
 
+// ----------------
+// ----------------
+// ----------------
+// Helper functions
+// ----------------
+// ----------------
+// ----------------
+
+function _clamp(val, _m, _M) {
+  if (val < _m) { return _m; }
+  if (val > _M) { return _M; }
+  return val;
+}
+
+
+
 // https://pegjs.org/online
 // https://github.com/pegjs/pegjs
 //
 var pegjs = require("pegjs");
 
+// experiments with the custom language...
+// kind of a disaster but left here in case
+// I want to pick it up in the future.
+//
 var gram_fn = "./mystisymbodsl.pegjs";
 var gram_str= fs.readFileSync(gram_fn).toString();
 
@@ -261,12 +309,6 @@ function create_node() {
     "tail":[]
   };
 
-}
-
-function _clamp(val, _m, _M) {
-  if (val < _m) { return _m; }
-  if (val > _M) { return _M; }
-  return val;
 }
 
 function _default_emit(ctx, v) {
@@ -413,8 +455,6 @@ function cleanup(data) {
   return res;
 }
 
-// [ 'base', 0, 'nesting' 1
-//
 function ast_find(ast, id) {
 
   var cur_ast = ast;
@@ -771,6 +811,10 @@ function _deg(x,y) { return Math.atan2(y,x)*180.0/Math.PI; }
 // ------------------
 // ------------------
 
+// return array of SVG lines for the SVG definition
+// (for linear and radial gradients).
+//
+/*
 function jsonsvg2svg_def(x) {
   var _type = x.type;
 
@@ -810,7 +854,12 @@ function jsonsvg2svg_def(x) {
 
   return lines;
 }
+*/
 
+// return the SVG "def" as a string.
+// The defs are used for the linear and radial gradients
+// that are used in the fill for the path.
+//
 function jsonsvg2svg_defs(defs, primary_color, secondary_color) {
   if (typeof defs === "undefined") { return ""; }
 
@@ -848,7 +897,6 @@ function jsonsvg2svg_defs(defs, primary_color, secondary_color) {
                 c = secondary_color;
               }
 
-              //_stop_line += " style=\"stop-color:" + x.stops[ii][_key] + ";stop-opacity:1.0;\"";
               _stop_line += " style=\"stop-color:" + c + ";stop-opacity:1.0;\"";
 
               continue;
@@ -867,6 +915,7 @@ function jsonsvg2svg_defs(defs, primary_color, secondary_color) {
   return lines.join("\n");
 }
 
+/*
 function jsonsvg2svg(_x) {
   var headers = [
     '<?xml version="1.0" encoding="utf-8"?>',
@@ -908,7 +957,12 @@ function jsonsvg2svg(_x) {
 
   return lines;
 }
+*/
 
+// recursively go through and process the JSON SVG.
+// Child nodes ar estored in a `children` array.
+// Returns an array of SVG lines.
+//
 function jsonsvg2svg_child(x, primary_color, secondary_color, disable_gradient) {
   disable_gradient = ((typeof disable_gradient === "undefined") ? false : disable_gradient);
   custom_prop = ((typeof custom_prop === "undefined") ? {} : custom_prop);
@@ -983,6 +1037,19 @@ function jsonsvg2svg_child(x, primary_color, secondary_color, disable_gradient) 
   return lines;
 }
 
+// Preprocess the vocabulary JSON file.
+// The JSON file is stored as a simple array of objects.
+// This function creates a lookup table for each symbol to
+// easily access the data as well as creates SVG strings
+// of the hader, footer and content of the symbol for ease
+// of use.
+//
+// Returns structure.
+//
+// Note that `adata` is used in the returned structure, so
+// mutating the returned structure could have an effect on the `adata`
+// object and vice versa.
+//
 function _preprocess_svgjson(adata, primary_color, secondary_color, disable_gradient) {
   disable_gradient = ((typeof disable_gradient === "undefined") ? false : disable_gradient);
 
@@ -2502,7 +2569,7 @@ g_data["cur_depth"] = 0;
 g_data["max_depth"] = sibyl_opt.max_attach_depth;
 g_data["max_nest_depth"] = sibyl_opt.max_nest_depth;
 g_data["scale"] = sibyl_opt.scale;
-g_data["complexity"] = 4;
+g_data["complexity"] = sibyl_opt.complexity;
 
 g_data["svg_width"] = 720.0;
 g_data["svg_height"] = 720.0;
