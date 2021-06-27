@@ -1481,6 +1481,9 @@ function mystic_symbolic_random(ctx, base, primary_color, secondary_color, bg_co
 // -----
 
 function parse_invert_name(sym) {
+
+  if (typeof sym === "undefined") { return ""; }
+
   var invert_flag = false;
   var symbol_name = sym;
   if (sym.length == 0) {
@@ -1586,7 +1589,7 @@ function mystic_symbolic_sched(ctx, sched, primary_color, secondary_color, bg_co
       var sub_symbol_name = sub_symbol_info.name;
 
       if (!(sub_symbol_name in ctx.symbol)) {
-        return {"error":"could not find symbol" + sub_symbol_name};
+        return {"error":"could not find symbol " + sub_symbol_name};
       }
 
       var sub_sched = sched.attach[attach_id][m_aidx];
@@ -1671,7 +1674,7 @@ function mystic_symbolic_sched(ctx, sched, primary_color, secondary_color, bg_co
       var sub_symbol_name = sub_symbol_info.name;
 
       if (!(sub_symbol_name in ctx.symbol)) {
-        return {"error":"could not find symbol" + sub_symbol_name};
+        return {"error":"could not find symbol " + sub_symbol_name};
       }
 
       var sub = Object.assign({}, ctx.symbol[sub_symbol_name]);
@@ -2229,6 +2232,14 @@ function rand_color() {
     }
   }
 
+  // forcing...
+  //var bg_hue = prim_hue - 0.33;
+  bg_sat = (Math.random()*.15);
+  //bg_val = (Math.random()*0.5)+0.5;
+  bg_val = _rnd(0.75,1.0);
+
+
+
   seco_rgb = HSVtoRGB(seco_hue, seco_sat, seco_val);
   bg_rgb = HSVtoRGB(bg_hue, bg_sat, bg_val);
 
@@ -2236,7 +2247,8 @@ function rand_color() {
   //var bg_val2 = _clamp(bg_val - 0.1, 0.0, 1.0);
   //var bg_rgb2 = HSVtoRGB(bg_hue, bg_sat2, bg_val2);
 
-  var bg_sat2 = _clamp(bg_sat + 0.25, 0.0, 1.0);
+  //var bg_sat2 = _clamp(bg_sat + 0.25, 0.0, 1.0);
+  var bg_sat2 = _clamp(bg_sat + 0.05, 0.0, 1.0);
   var bg_val2 = _clamp(bg_val - 0.1, 0.0, 1.0);
   var bg_rgb2 = HSVtoRGB(bg_hue, bg_sat2, bg_val2);
 
@@ -2349,10 +2361,14 @@ function mystic_symbolic_dsl2sched_rnd(_s, data) {
       }
     }
     else if (rlist[ii][0] == '-') {
-      neg_lookup[rlist[ii].slice(1)] = ii;
+      var _name = rlist[ii].slice(1);
+      if (!(_name in data.symbol)) { return {"error": "could not find " + _name }; }
+      neg_lookup[_name] = ii;
     }
     else {
-      pos_lookup[rlist[ii]] = ii;
+      var _name = rlist[ii];
+      if (!(_name in data.symbol)) { return {"error": "could not find " + _name }; }
+      pos_lookup[_name] = ii;
     }
   }
 

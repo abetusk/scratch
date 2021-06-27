@@ -67,6 +67,9 @@ function create_template() {
       //"invert_nested" : false,
       //"never_be_nested" : false,
       //"rotate_clockwise" : false,
+      "attach_to":[],
+      "never_be_nested": true,
+      "background": true,
       "exclude": true
     }
   };
@@ -130,7 +133,9 @@ function create_tarot_json(data, id, pnts, nesting) {
   // Set the meta flag to exclude from
   // random choice
   //
-  if (!("meta" in data)) { data["meta"] = { "exclude":true }; }
+  if (!("meta" in data)) {
+    data["meta"] = { "exclude":true, "attach_to":[], "never_be_nested":true };
+  }
 
   if (!("specs" in data)) { data["specs"] = {}; }
 
