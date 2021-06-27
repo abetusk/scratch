@@ -17,7 +17,7 @@ var color = require("./cam02.js");
 var getopt = require("posix-getopt");
 var parser, opt;
 
-var _VERSION = "0.1.2";
+var _VERSION = "0.1.3";
 
 function show_version(fp) {
   fp.write("version: " + _VERSION + "\n");

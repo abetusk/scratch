@@ -3,7 +3,7 @@
 
 ```
 $ ./sibyl -h
-version: 0.1.1
+version: 0.1.3
 
 usage:
 
@@ -14,14 +14,17 @@ usage:
   [-n nest-depth]             max nesting depth (default 2)
   [-a attach-depth]           max attach depth (default 1)
   [-S scale]                  rescale factor (default 0.5)
+  [-C complexity]             complexity factor (how many attach points for a random creature) (default 4)
   [-p color]                  set primary color (ex. '#000000') (default random)
   [-s color]                  set secondary color (ex '#ffffff') (default random)
   [-b color]                  set background color (ex. '#777777') (default random)
   [-c color]                  set background2 color (ex. '#888888') (default random)
   [-B background-image]       set background image ('*' for random)
-  [-T background-scale]       set background scale factor (default 1)
+  [-T background-scale]       set background scale factor (default 0.5)
   [-D tiledx,tiledy]          shift tile background by tiledx,tiledy (ex. '-10,3') (default '0,0')
+  [-g]                        disable gradient
   [-t]                        tile background
+  [-Q]                        bonkers mode (override attach restrictions)
   [-h]                        show help (this screen)
   [-v]                        show version
 ```
