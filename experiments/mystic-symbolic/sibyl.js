@@ -1503,8 +1503,6 @@ function mystic_symbolic_sched(ctx, sched, primary_color, secondary_color, bg_co
   secondary_color = ((typeof secondary_color === "undefined") ? "#000000" : secondary_color);
   bg_color = ((typeof bg_color === "undefined") ? "#777777" : bg_color);
 
-  var use_bottom_nest_anchor_point = false;
-
   if (typeof sched === "string") {
     sched = { "base": sched };
   }
@@ -1633,6 +1631,7 @@ function mystic_symbolic_sched(ctx, sched, primary_color, secondary_color, bg_co
 
   }
 
+  /*
   if (invert_flag) {
     var w = ctx.svg_width;
     var h = ctx.svg_height;
@@ -1644,12 +1643,18 @@ function mystic_symbolic_sched(ctx, sched, primary_color, secondary_color, bg_co
     ret_str += " translate(" + (-w/2).toString() + " " + (-h/2).toString() + ")";
     ret_str += "\">";
   }
+  */
 
+  // inversion should be handled at a higher level but I'm leaving the comment cruft
+  // in case I can remmember why I put it here in the first place
+  //
   ret_str += jsonsvg2svg_child(base.layers, primary_color, secondary_color, !ctx.use_gradient);
 
+  /*
   if (invert_flag) {
     ret_str += "</g>";
   }
+  */
 
 
   // nesting logic
@@ -1669,6 +1674,7 @@ function mystic_symbolic_sched(ctx, sched, primary_color, secondary_color, bg_co
       }
       var sub_name = sub_sched.base;
 
+
       var sub_symbol_info = parse_invert_name(sub_name);
       var sub_invert_flag = sub_symbol_info.invert;
       var sub_symbol_name = sub_symbol_info.name;
@@ -1679,87 +1685,42 @@ function mystic_symbolic_sched(ctx, sched, primary_color, secondary_color, bg_co
 
       var sub = Object.assign({}, ctx.symbol[sub_symbol_name]);
 
-      if (use_bottom_nest_anchor_point) {
+      var nest_f = (sub_invert_flag ? -1.0 : 1.0);
 
-        var sub_anchor_point = [ sub.specs.anchor[0].point.x, sub.specs.anchor[0].point.y ];
-        var sub_anchor_deg = _deg( sub.specs.anchor[0].normal.x, sub.specs.anchor[0].normal.y );
+      var nest_bbox = base.specs.nesting[nest_idx];
+      var nest_center = [ nest_bbox.x.min + ((nest_bbox.x.max - nest_bbox.x.min) / 2.0),
+                          nest_bbox.y.min + ((nest_bbox.y.max - nest_bbox.y.min) / 2.0) ];
 
-        var nest_anchor_deg = _deg( 0, -1 );
 
-        var nest_bbox = base.specs.nesting[nest_idx];
-        var base_attach = [ nest_bbox.x.min + ((nest_bbox.x.max - nest_bbox.x.min) / 2.0),
-                            (nest_bbox.y.max) ];
+      var nest_dx = Math.abs(nest_bbox.x.max - nest_bbox.x.min);
+      var nest_dy = Math.abs(nest_bbox.y.max - nest_bbox.y.min);
+      var min_dim = ( (nest_dx < nest_dy) ? nest_dx : nest_dy );
 
-        var nest_dx = Math.abs(nest_bbox.x.max - nest_bbox.x.min);
-        var nest_dy = Math.abs(nest_bbox.y.max - nest_bbox.y.min);
-        var min_dim = ( (nest_dx < nest_dy) ? nest_dx : nest_dy );
+      var nest_ul = [ nest_center[0] - min_dim/2, nest_center[1] - min_dim/2 ];
 
-        var nest_scale = min_dim / ctx.svg_width;
+      var nest_scale = min_dim / ctx.svg_width;
 
-        // nest areas are always axis aligned, pointing up
-        //
-        var deg = nest_anchor_deg - sub_anchor_deg;
-
-        var t_str_s = "<g transform=\"";
-        t_str_s += " translate(" + base_attach[0].toString() + " " + base_attach[1].toString() + ")";
-        t_str_s += " scale(" + (nest_scale).toString() + " " + (nest_scale).toString() + ")";
-        t_str_s += " rotate(" + (deg).toString() + ")";
-        t_str_s += " translate(" + (-sub_anchor_point[0]).toString() + " " + (-sub_anchor_point[1]).toString() + ")";
-        t_str_s += "\">";
-
-        var t_str_e = "</g>";
-
-        ret_str += jsonsvg2svg_defs(sub.defs, secondary_color, primary_color);
-        ret_str += t_str_s;
-        ret_str += mystic_symbolic_sched(ctx, sub_sched, secondary_color, primary_color);
-        ret_str += t_str_e;
+      var nest_deg = 0.0;
+      if (sub_invert_flag) {
+        nest_deg = 180;
+        nest_f = -1.0;
       }
-      else {
 
-        var f = (sub_invert_flag ? -1.0 : 1.0);
+      var t_str_s = "<g transform=\"";
+      t_str_s += " translate(" + nest_ul[0].toString() + " " + nest_ul[1].toString() + ")";
+      t_str_s += " scale(" + (nest_scale).toString() + " " + (nest_scale).toString() + ")";
+      t_str_s += " translate(" + (720/2).toString() + " " + (720/2).toString() + ")";
+      t_str_s += " rotate(" + (nest_deg).toString() + ")";
+      t_str_s += " scale(1 " +  (nest_f).toString() + ")";
+      t_str_s += " translate(" + (-720/2).toString() + " " + (-720/2).toString() + ")";
+      t_str_s += "\">";
 
-        var sub_anchor_point = [ sub.specs.anchor[0].point.x, sub.specs.anchor[0].point.y ];
-        var sub_anchor_deg = _deg( sub.specs.anchor[0].normal.x, sub.specs.anchor[0].normal.y );
+      var t_str_e = "</g>";
 
-        var nest_anchor_deg = _deg( 0, -1*f );
-
-        var nest_bbox = base.specs.nesting[nest_idx];
-        var nest_center = [ nest_bbox.x.min + ((nest_bbox.x.max - nest_bbox.x.min) / 2.0),
-                            nest_bbox.y.min + ((nest_bbox.y.max - nest_bbox.y.min) / 2.0) ];
-
-
-        //var nest_ul = [ nest_bbox.x.min , nest_bbox.y.min ];
-
-        var nest_dx = Math.abs(nest_bbox.x.max - nest_bbox.x.min);
-        var nest_dy = Math.abs(nest_bbox.y.max - nest_bbox.y.min);
-        var min_dim = ( (nest_dx < nest_dy) ? nest_dx : nest_dy );
-
-        var nest_ul = [ nest_center[0] - min_dim/2, nest_center[1] - min_dim/2 ];
-
-        var nest_scale = min_dim / ctx.svg_width;
-
-        var nest_deg = 0.0;
-        if (sub_invert_flag) {
-          nest_deg = 180;
-          f = -1.0;
-        }
-
-        var t_str_s = "<g transform=\"";
-        t_str_s += " translate(" + nest_ul[0].toString() + " " + nest_ul[1].toString() + ")";
-        t_str_s += " scale(" + (nest_scale).toString() + " " + (nest_scale).toString() + ")";
-        t_str_s += " translate(" + (720/2).toString() + " " + (720/2).toString() + ")";
-        t_str_s += " rotate(" + (nest_deg).toString() + ")";
-        t_str_s += " scale(1 " +  (f).toString() + ")";
-        t_str_s += " translate(" + (-720/2).toString() + " " + (-720/2).toString() + ")";
-        t_str_s += "\">";
-
-        var t_str_e = "</g>";
-
-        ret_str += jsonsvg2svg_defs(sub.defs, secondary_color, primary_color);
-        ret_str += t_str_s;
-        ret_str += mystic_symbolic_sched(ctx, sub_sched, secondary_color, primary_color);
-        ret_str += t_str_e;
-      }
+      ret_str += jsonsvg2svg_defs(sub.defs, secondary_color, primary_color);
+      ret_str += t_str_s;
+      ret_str += mystic_symbolic_sched(ctx, sub_sched, secondary_color, primary_color);
+      ret_str += t_str_e;
 
     }
   }
