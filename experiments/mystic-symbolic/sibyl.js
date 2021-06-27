@@ -1,7 +1,16 @@
 #!/usr/bin/env node
-//
-// License CC0
-//
+
+/*
+ *
+ * To the extent possible under law, the person who associated CC0 with
+ * this source code has waived all copyright and related or neighboring rights
+ * to this source code.
+ *
+ * You should have received a copy of the CC0 legalcode along with this
+ * work.  If not, see <http://creativecommons.org/publicdomain/zero/1.0/>.
+ *
+ */
+
 
 var fs = require("fs");
 var color = require("./cam02.js");
