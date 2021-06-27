@@ -144,6 +144,16 @@ Major Arcana:
 | 15 devil     | 16 `castle_tower`   | 17 starburst     | 18 moon    | 19 sun        |
 | 20 judgement (`angel`) | 21 globe |             |            |               |
 
+[Wikipedia](https://en.wikipedia.org/wiki/Minor_Arcana) has the following table for the minor arcana:
+
+| Primary suit  | Element | Class | Faculty |
+|---|---|---|---|
+| Wands, batons, clubs, staves  | Fire | Artisans  | Creativity and will |
+| Pentacles, coins, disks, rings  | Earth | Merchants  | Material body or possessions |
+| Cups, chalices, goblets, vessels  | Water | Clergy | Emotions and love |
+| Swords, blades  | Air | Nobility and military | Reason  |
+
+
 
 The minor arcana have the page, knight, queen and king.
 There's a knight, but maybe the horse is more appropriate.
