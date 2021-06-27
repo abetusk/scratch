@@ -33,6 +33,7 @@ function show_help(fp) {
   fp.write("  [-B background-image]       set background image ('*' for random)\n");
   fp.write("  [-T background-scale]       set background scale factor (default " + sibyl_opt.background_scale_x.toString() + ")\n");
   fp.write("  [-D tiledx,tiledy]          shift tile background by tiledx,tiledy (ex. '-10,3') (default '0,0')\n");
+  fp.write("  [-g]                        disable gradient\n");
   fp.write("  [-t]                        tile background\n");
   fp.write("  [-h]                        show help (this screen)\n");
   fp.write("  [-v]                        show version\n");
@@ -56,6 +57,7 @@ var sibyl_opt = {
   "tile_background" : false,
   "background_dx" : 0,
   "background_dy" : 0,
+  "use_gradient" : true,
   "additional_svgjson" : []
 };
 
@@ -70,6 +72,7 @@ var long_opt = [
   "B", ":(background-image)",
   "T", ":(background-scale)",
   "t", "(background-tile)",
+  "g", "(disable-gradient)",
   "D", ":(background-tile-dxy)",
   "J", ":(svgjson)"
 ];
@@ -149,6 +152,10 @@ while ((opt =  parser.getopt()) !== undefined) {
 
     case 'a':
       sibyl_opt.max_attach_depth = parseInt(opt.optarg);
+      break;
+
+    case 'g':
+      sibyl_opt.use_gradient = false;
       break;
 
     case 'J':
@@ -902,7 +909,8 @@ function jsonsvg2svg(_x) {
   return lines;
 }
 
-function jsonsvg2svg_child(x, primary_color, secondary_color) {
+function jsonsvg2svg_child(x, primary_color, secondary_color, disable_gradient) {
+  disable_gradient = ((typeof disable_gradient === "undefined") ? false : disable_gradient);
   custom_prop = ((typeof custom_prop === "undefined") ? {} : custom_prop);
   var lines = [];
 
@@ -937,6 +945,9 @@ function jsonsvg2svg_child(x, primary_color, secondary_color) {
           else if ((typeof secondary_color !== "undefined") && (_val == "#000000")) {
             _val = secondary_color;
           }
+          else if ((typeof primary_color !== "undefined") && disable_gradient && (_val.match(/^url/))) {
+            _val = primary_color;
+          }
         }
 
         var real_prop_key = prop_key;
@@ -955,7 +966,7 @@ function jsonsvg2svg_child(x, primary_color, secondary_color) {
     if ((tag !== "path") && (tag.length>0)) { _line += ">\n"; }
 
     if ("children" in _json) {
-      var _d = jsonsvg2svg_child(_json.children, primary_color, secondary_color);
+      var _d = jsonsvg2svg_child(_json.children, primary_color, secondary_color, disable_gradient);
       _line += _d.join("\n");
     }
 
@@ -972,7 +983,9 @@ function jsonsvg2svg_child(x, primary_color, secondary_color) {
   return lines;
 }
 
-function _preprocess_svgjson(adata, primary_color, secondary_color) {
+function _preprocess_svgjson(adata, primary_color, secondary_color, disable_gradient) {
+  disable_gradient = ((typeof disable_gradient === "undefined") ? false : disable_gradient);
+
   var xdata = {};
 
   for (var idx=0; idx<adata.length; idx++) {
@@ -1003,7 +1016,7 @@ function _preprocess_svgjson(adata, primary_color, secondary_color) {
     }
 
     var _svg_inner = [];
-    _svg_inner = jsonsvg2svg_child(data.layers, primary_color, secondary_color);
+    _svg_inner = jsonsvg2svg_child(data.layers, primary_color, secondary_color, disable_gradient);
 
     adata[idx]["svg_header"] = ['<?xml version="1.0" encoding="utf-8"?>',
       '<!-- Generator: Moho 13.5 build 20210422 -->',
@@ -1116,6 +1129,7 @@ function mystic_symbolic_random(ctx, base, primary_color, secondary_color, bg_co
       ret_str += "<rect x=\"-" + w.toString() + "\" y=\"-" + h.toString() + "\" ";
       ret_str += "width=\"" + (3*w).toString() + "\" height=\"" + (3*h).toString() + "\" fill=\"" + _bg + "\" data-is-background=\"true\">\n</rect>\n";
     }
+
     ret_str += jsonsvg2svg_defs(base.defs, primary_color, secondary_color);
   }
 
@@ -1168,17 +1182,13 @@ function mystic_symbolic_random(ctx, base, primary_color, secondary_color, bg_co
 
         if (aidx == 0) {
           ret_str += jsonsvg2svg_defs(sub.defs, primary_color, secondary_color);
-          //reuse_svg = jsonsvg2svg_child(sub.layers, primary_color, secondary_color);
           reuse_svg = mystic_symbolic_random(ctx, sub, primary_color, secondary_color);
         }
 
-        //ret_str += jsonsvg2svg_defs(sub.defs);
         ret_str += t_str_s;
 
         // render svg from svgjson data
         //
-        //ret_str += jsonsvg2svg_child(sub.layers);
-        //ret_str += mystic_symbolic_random(ctx, sub);
         ret_str += reuse_svg;
 
         ret_str += t_str_e;
@@ -1201,7 +1211,7 @@ function mystic_symbolic_random(ctx, base, primary_color, secondary_color, bg_co
     ret_str += "\">";
   }
 
-  ret_str += jsonsvg2svg_child(base.layers, primary_color, secondary_color);
+  ret_str += jsonsvg2svg_child(base.layers, primary_color, secondary_color, !ctx.use_gradient);
 
   if (invert_flag) {
     ret_str += "</g>";
@@ -1250,7 +1260,7 @@ function mystic_symbolic_random(ctx, base, primary_color, secondary_color, bg_co
         var t_str_e = "</g>";
 
 
-        ret_str += jsonsvg2svg_defs(sub.defs, secondary_color, primary_color );
+        ret_str += jsonsvg2svg_defs(sub.defs, secondary_color, primary_color);
 
         ret_str += t_str_s;
         ret_str += mystic_symbolic_random(ctx, sub, secondary_color, primary_color);
@@ -1285,18 +1295,14 @@ function mystic_symbolic_random(ctx, base, primary_color, secondary_color, bg_co
 
         var t_str_e = "</g>";
 
-        ret_str += jsonsvg2svg_defs(sub.defs, secondary_color, primary_color );
+        ret_str += jsonsvg2svg_defs(sub.defs, secondary_color, primary_color);
         ret_str += t_str_s;
         ret_str += mystic_symbolic_random(ctx, sub, secondary_color, primary_color);
         ret_str += t_str_e;
       }
 
-
-
     }
   }
-
-
 
   if (top_level) {
     ret_str += "</g>\n";
@@ -1375,6 +1381,7 @@ function mystic_symbolic_sched(ctx, sched, primary_color, secondary_color, bg_co
       ret_str += "<rect x=\"-" + w.toString() + "\" y=\"-" + h.toString() + "\" ";
       ret_str += "width=\"" + (3*w).toString() + "\" height=\"" + (3*h).toString() + "\" fill=\"" + _bg + "\" data-is-background=\"true\">\n</rect>\n";
     }
+
     ret_str += jsonsvg2svg_defs(base.defs, primary_color, secondary_color);
   }
 
@@ -1476,7 +1483,7 @@ function mystic_symbolic_sched(ctx, sched, primary_color, secondary_color, bg_co
     ret_str += "\">";
   }
 
-  ret_str += jsonsvg2svg_child(base.layers, primary_color, secondary_color);
+  ret_str += jsonsvg2svg_child(base.layers, primary_color, secondary_color, !ctx.use_gradient);
 
   if (invert_flag) {
     ret_str += "</g>";
@@ -1540,7 +1547,7 @@ function mystic_symbolic_sched(ctx, sched, primary_color, secondary_color, bg_co
 
         var t_str_e = "</g>";
 
-        ret_str += jsonsvg2svg_defs(sub.defs, secondary_color, primary_color );
+        ret_str += jsonsvg2svg_defs(sub.defs, secondary_color, primary_color);
         ret_str += t_str_s;
         ret_str += mystic_symbolic_sched(ctx, sub_sched, secondary_color, primary_color);
         ret_str += t_str_e;
@@ -1586,7 +1593,7 @@ function mystic_symbolic_sched(ctx, sched, primary_color, secondary_color, bg_co
 
         var t_str_e = "</g>";
 
-        ret_str += jsonsvg2svg_defs(sub.defs, secondary_color, primary_color );
+        ret_str += jsonsvg2svg_defs(sub.defs, secondary_color, primary_color);
         ret_str += t_str_s;
         ret_str += mystic_symbolic_sched(ctx, sub_sched, secondary_color, primary_color);
         ret_str += t_str_e;
@@ -1673,6 +1680,7 @@ function mystic_symbolic_sched2(ctx, sched, idx, primary_color, secondary_color,
       ret_str += "<rect x=\"-" + w.toString() + "\" y=\"-" + h.toString() + "\" ";
       ret_str += "width=\"" + (3*w).toString() + "\" height=\"" + (3*h).toString() + "\" fill=\"" + _bg + "\" data-is-background=\"true\">\n</rect>\n";
     }
+
     ret_str += jsonsvg2svg_defs(base.defs, primary_color, secondary_color);
   }
 
@@ -1754,7 +1762,7 @@ function mystic_symbolic_sched2(ctx, sched, idx, primary_color, secondary_color,
 
   }
 
-  ret_str += jsonsvg2svg_child(base.layers, primary_color, secondary_color);
+  ret_str += jsonsvg2svg_child(base.layers, primary_color, secondary_color, !ctx.use_gradient);
 
   // nesting logic
   //
@@ -1804,7 +1812,7 @@ function mystic_symbolic_sched2(ctx, sched, idx, primary_color, secondary_color,
 
         var t_str_e = "</g>";
 
-        ret_str += jsonsvg2svg_defs(sub.defs, secondary_color, primary_color );
+        ret_str += jsonsvg2svg_defs(sub.defs, secondary_color, primary_color);
         ret_str += t_str_s;
         ret_str += mystic_symbolic_sched2(ctx, sub_sched, secondary_color, primary_color);
         ret_str += t_str_e;
@@ -1836,7 +1844,7 @@ function mystic_symbolic_sched2(ctx, sched, idx, primary_color, secondary_color,
 
         var t_str_e = "</g>";
 
-        ret_str += jsonsvg2svg_defs(sub.defs, secondary_color, primary_color );
+        ret_str += jsonsvg2svg_defs(sub.defs, secondary_color, primary_color);
         ret_str += t_str_s;
         ret_str += mystic_symbolic_sched2(ctx, sub_sched, secondary_color, primary_color);
         ret_str += t_str_e;
@@ -1854,11 +1862,59 @@ function mystic_symbolic_sched2(ctx, sched, idx, primary_color, secondary_color,
   return ret_str;
 }
 
+// https://www.w3.org/TR/WCAG20-TECHS/G17.html
+//
+function luminance(sr,sg,sb) {
+
+  var r = ((sr < 0.03928) ? (sr/12.92) : Math.pow(((sr + 0.055)/1.055),2.4));
+  var g = ((sg < 0.03928) ? (sg/12.92) : Math.pow(((sg + 0.055)/1.055),2.4));
+  var b = ((sb < 0.03928) ? (sb/12.92) : Math.pow(((sb + 0.055)/1.055),2.4));
+
+  return (0.2126*r) + (0.7152*g) + (0.0722*b);
+}
+
+// experiment
+//
+function _rand_color() {
+  var res = {
+    "primary" : { "hex":"#000000" },
+    "secondary" : {"hex":"#ffffff" },
+    "background": { "hex":"#777777" },
+    "background2": { "hex":"#555555" }
+  };
+
+  var palette = [ [], [], [], [] ];
+
+  var n = 5;
+  var base_hue = Math.random();
+
+  for (var p=0; p<palette.length; p++) {
+    for (var i=1; i<(n+2); i++) {
+      var _val = i/(n+2);
+      var _sat = _rnd(0.35, 0.70);
+
+      palette[p].push( HSVtoRGB(_hue, _sat, _val) );
+    }
+  }
+
+
+  var prim_hue = Math.random();
+  var prim_sat = _rnd(0.35, 0.70);
+  var prim_val = _rnd(0.75, 1.0);
+
+
+  var seco_hue = prim_hue + 0.35;
+  var seco_sat = 1.0 - prim_sat;
+  var seco_val = _rnd(0.25, 0.6);
+  if (seco_hue > 1.0) { seco_hue - 1.0; }
+
+
+}
+
 // pick a random hue and sat/val from a restricted range
 // convert to xyz, force luminances the same
 // convert back to rgb
 //
-
 function rand_color() {
   var res = {
     "primary" : { "hex":"#000000" },
@@ -2463,9 +2519,10 @@ bg_ctx["complexity"] = 1;
 
 bg_ctx["svg_width"] = 720.0;
 bg_ctx["svg_height"] = 720.0;
+bg_ctx["use_gradient"] = sibyl_opt.use_gradient;
 
 
-var g_data = _preprocess_svgjson(adata, primary_color, secondary_color, bg_color);
+var g_data = _preprocess_svgjson(adata, primary_color, secondary_color);
 g_data["create_svg_header"] = true;
 g_data["create_background_rect"] = true;
 g_data["cur_depth"] = 0;
@@ -2476,6 +2533,7 @@ g_data["complexity"] = 4;
 
 g_data["svg_width"] = 720.0;
 g_data["svg_height"] = 720.0;
+g_data["use_gradient"] = sibyl_opt.use_gradient;
 
 var base_symbol = g_data.symbol["eye_up"];
 
@@ -2678,7 +2736,6 @@ else {
       bg_svg += "</g>";
     }
   }
-
 
   var sched  = mystic_symbolic_dsl2sched( arg_str, g_data );
   var creature_svg = mystic_symbolic_sched(g_data, sched , primary_color, secondary_color, bg_color);
