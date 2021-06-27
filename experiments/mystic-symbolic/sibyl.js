@@ -1104,6 +1104,19 @@ function _preprocess_svgjson(adata, primary_color, secondary_color, disable_grad
   return xdata;
 }
 
+function random_creature(data, attach_type) {
+
+  if (attach_type == "base") {
+  }
+
+  var sub_idx = _irnd(data.length);
+  var sub_name = data[sub_idx].name;
+  return sub_name;
+
+
+}
+
+
 //            crown
 //      horn          horn
 //         arm     arm
@@ -1159,7 +1172,11 @@ function mystic_symbolic_random(ctx, base, primary_color, secondary_color, bg_co
   secondary_color = ((typeof secondary_color === "undefined") ? "#000000" : secondary_color);
   bg_color = ((typeof bg_color === "undefined") ? "#777777" : bg_color);
 
-  base = ( (typeof base === "undefined") ? ctx.data[ _irnd(ctx.data.length) ] : base ) ;
+  //base = ( (typeof base === "undefined") ? ctx.data[ _irnd(ctx.data.length) ] : base ) ;
+  if (typeof base === "undefined") {
+    var base_name = random_creature(ctx.data, "base");
+    base = ctx.symbol[base_name];
+  }
 
   var _include_background_rect = ctx.create_background_rect;
 
@@ -1226,8 +1243,10 @@ function mystic_symbolic_random(ctx, base, primary_color, secondary_color, bg_co
 
       // Random choice of symbol
       //
-      var sub_idx = _irnd(ctx.data.length);
-      var sub_name = ctx.data[sub_idx].name;
+      //var sub_idx = _irnd(ctx.data.length);
+      //var sub_name = ctx.data[sub_idx].name;
+
+      var sub_name = random_creature(ctx.data, attach_id);
 
       // We reuse the svg to give the symmetry, inverting as needed.
       //
@@ -1303,12 +1322,15 @@ function mystic_symbolic_random(ctx, base, primary_color, secondary_color, bg_co
 
     // Random choice of nesting symbol
     //
-    var sub_idx = _irnd(ctx.data.length);
-    var sub_name = ctx.data[sub_idx].name;
+    //var sub_idx = _irnd(ctx.data.length);
+    //var sub_name = ctx.data[sub_idx].name;
+
+    var sub_name = random_creature(ctx.data, "nesting");
 
     for (var nest_idx=0; nest_idx<base.specs.nesting.length; nest_idx++) {
 
-      var sub = Object.assign({}, ctx.data[sub_idx]);
+      //var sub = Object.assign({}, ctx.data[sub_idx]);
+      var sub = Object.assign({}, ctx.symbol[sub_name]);
 
       var sub_anchor_point = [ sub.specs.anchor[0].point.x, sub.specs.anchor[0].point.y ];
       var sub_anchor_deg = _deg( sub.specs.anchor[0].normal.x, sub.specs.anchor[0].normal.y );

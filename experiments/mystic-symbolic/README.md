@@ -219,7 +219,7 @@ Notes on TOML
 |---|---|---|
 | `always_be_nested` | `bool` | Don't allow to be attached, only nested (including base object) |
 | `always_nest` | `bool` | Always put a sub symbol inside of the nesting area |
-| `attach_to` | `array` |  Only allow symbol to be attached to one in the list |
+| `attach_to` | `array` |  Only allow symbol to be attached to one in the list. If no `attach_to` specified, it defaults to `["tail","leg","arm","horn","crown"]`. `attach_to =[]` specifies that it shouldn't ever be attached (as per e.g. `angel`) |
 | `background` | `bool` | Allow symbol to be a background image |
 | `invert_nested` | `bool` | Invert every other time it's nested within a symbol |
 | `never_be_nested` | `bool` | Never put symbol inside of a nesting |
