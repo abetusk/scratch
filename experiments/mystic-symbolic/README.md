@@ -105,6 +105,20 @@ For example, here is a creature, without Bob or his pipe:
 
 If a symbol doesn't have the attach points, the specified symbol will be ignored.
 
+#### Improvements
+
+One way to extend the language to allow for components to be attached that respect the
+TOML flags is to create `rnd` "keywords".
+This is essentially an extension of the `*` keyword that will expand to sets
+that have been filtered to specific subsets of symbols.
+
+One possibility is to do something like `:crown`, `:horn`, `:arm`, `:leg`, `:tail`, `:nest`
+(or even `:^,:!,:~:|,:.,:@`) that will expand to only symbols allowed to attach to
+the respective attach point.
+For example, a symbol with the `never_be_nested` wouldn't appear in the `:nest` list.
+
+This might not get all the features of the random creature generation but could get
+enough to be functional.
 
 Notes on Tarot
 ---
@@ -188,4 +202,21 @@ Notes on SVG
        anchor
 ```
 
+Notes on TOML
+---
+
+| Field | Type | Description |
+|---|---|---|
+| `always_be_nested` | `bool` | Don't allow to be attached, only nested (including base object) |
+| `always_nest` | `bool` | Always put a sub symbol inside of the nesting area |
+| `attach_to` | `array` |  Only allow symbol to be attached to one in the list |
+| `background` | `bool` | Allow symbol to be a background image |
+| `invert_nested` | `bool` | Invert every other time it's nested within a symbol |
+| `never_be_nested` | `bool` | Never put symbol inside of a nesting |
+| `rotate_clockwise` | `bool` | ? |
+
+For `always_nest`, it's unclear if the symbol is restricted if it goes too far down the recursion
+so that it would be impossible to nest an object therein.
+That is, it's unclear whether the random choice should look ahead to see if a symbol
+should not be chosen should it violate the `always_nest` option if it's too far down the recursion.
 
