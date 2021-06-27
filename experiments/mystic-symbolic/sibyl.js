@@ -36,6 +36,7 @@ function show_help(fp) {
   fp.write("  [-D tiledx,tiledy]          shift tile background by tiledx,tiledy (ex. '-10,3') (default '0,0')\n");
   fp.write("  [-g]                        disable gradient\n");
   fp.write("  [-t]                        tile background\n");
+  fp.write("  [-Q]                        bonkers mode (override attach restrictions)\n");
   fp.write("  [-h]                        show help (this screen)\n");
   fp.write("  [-v]                        show version\n");
   fp.write("\n");
@@ -60,6 +61,7 @@ var sibyl_opt = {
   "background_dx" : 0,
   "background_dy" : 0,
   "use_gradient" : true,
+  "bonkers" : false,
   "additional_svgjson" : []
 };
 
@@ -77,6 +79,7 @@ var long_opt = [
   "t", "(background-tile)",
   "g", "(disable-gradient)",
   "D", ":(background-tile-dxy)",
+  "Q", "(bonkers-mode)",
   "J", ":(svgjson)"
 ];
 
@@ -167,6 +170,10 @@ while ((opt =  parser.getopt()) !== undefined) {
 
     case 'J':
       sibyl_opt.additional_svgjson.push(opt.optarg);
+      break;
+
+    case 'Q':
+      sibyl_opt.bonkers = true;
       break;
 
     //---
@@ -1101,19 +1108,100 @@ function _preprocess_svgjson(adata, primary_color, secondary_color, disable_grad
     xdata.symbol[ adata[ii].name ] = adata[ii];
   }
 
+
+  // for restricted choices
+  //
+  var attach_list = ["base", "nesting", "crown", "horn", "arm", "leg", "tail", "background"];
+  xdata["choice"] = {};
+  for (var ii=0; ii<attach_list.length; ii++) {
+    xdata.choice[attach_list[ii]] = [];
+  }
+
+  for (var ii=0; ii<adata.length; ii++) {
+    var _d = adata[ii];
+    var allowed = { "base": true, "nesting": true, "crown": true, "horn": true, "arm": true, "leg": true, "tail": true, "background":false };
+
+    var _ato = {"crown":false, "horn":false, "arm":false, "leg":false, "tail":false};
+
+    // if meta doesn't even exist, just allow everything
+    // (excpet background, by default)
+    //
+    if (!("meta" in _d)) {
+      for (var jj=0; jj<attach_list.length; jj++) {
+        if (allowed[attach_list[jj]]) {
+          xdata.choice[attach_list[jj]].push(_d.name);
+        }
+      }
+      continue;
+    }
+
+    // It must always be nested, so disable
+    // all other attach points, even 'base'
+    // while still allowing nesting.
+    //
+    if (("always_be_nested" in _d.meta) &&
+        (_d.meta.always_be_nested)) {
+      allowed.base = false;
+      for (var _a in _ato) { allowed[_a] = false; }
+      allowed.nesting = true;
+    }
+
+    if (("never_be_nested" in _d.meta) &&
+        (_d.meta.never_be_nested)) {
+      allowed.nesting = false;
+    }
+
+    // `attach_to` is opt in, so _ato is by
+    // default false, only setting to true
+    // if it appears in teh list.
+    //
+    if ("attach_to" in _d.meta) {
+      for (jj=0; jj<_d.meta.attach_to.length; jj++) {
+        _ato[ _d.meta.attach_to[jj] ] = true;
+      }
+
+      for (var _a in _ato) {
+        allowed[_a] = _ato[_a];
+      }
+    }
+
+    if (("background" in _d.meta) &&
+        (_d.meta.background)) {
+      allowed["background"] = true;
+    }
+
+    // now we can add the creature name
+    // to the relevant lists
+    //
+    for (var _a in allowed) {
+      if (allowed[_a]) {
+        xdata.choice[_a].push( _d.name );
+      }
+    }
+
+  }
+
   return xdata;
 }
 
-function random_creature(data, attach_type) {
+function random_creature(ctx, attach_type) {
+  var idx = 0, sub_name = "";
+  var data = ctx.data;
 
-  if (attach_type == "base") {
+  if (("bonkers" in ctx) && (ctx.bonkers)) {
+    idx = _irnd(data.length);
+    sub_name = data[idx].name;
+    return sub_name;
   }
 
-  var sub_idx = _irnd(data.length);
-  var sub_name = data[sub_idx].name;
+  if (("choice" in ctx) && (attach_type in ctx.choice)) {
+    idx = _irnd( ctx.choice[attach_type].length );
+    return ctx.choice[attach_type][idx];
+  }
+
+  idx = _irnd(data.length);
+  sub_name = data[idx].name;
   return sub_name;
-
-
 }
 
 
@@ -1174,7 +1262,7 @@ function mystic_symbolic_random(ctx, base, primary_color, secondary_color, bg_co
 
   //base = ( (typeof base === "undefined") ? ctx.data[ _irnd(ctx.data.length) ] : base ) ;
   if (typeof base === "undefined") {
-    var base_name = random_creature(ctx.data, "base");
+    var base_name = random_creature(ctx, "base");
     base = ctx.symbol[base_name];
   }
 
@@ -1246,7 +1334,7 @@ function mystic_symbolic_random(ctx, base, primary_color, secondary_color, bg_co
       //var sub_idx = _irnd(ctx.data.length);
       //var sub_name = ctx.data[sub_idx].name;
 
-      var sub_name = random_creature(ctx.data, attach_id);
+      var sub_name = random_creature(ctx, attach_id);
 
       // We reuse the svg to give the symmetry, inverting as needed.
       //
@@ -1325,7 +1413,7 @@ function mystic_symbolic_random(ctx, base, primary_color, secondary_color, bg_co
     //var sub_idx = _irnd(ctx.data.length);
     //var sub_name = ctx.data[sub_idx].name;
 
-    var sub_name = random_creature(ctx.data, "nesting");
+    var sub_name = random_creature(ctx, "nesting");
 
     for (var nest_idx=0; nest_idx<base.specs.nesting.length; nest_idx++) {
 
@@ -2583,6 +2671,8 @@ bg_ctx["svg_width"] = 720.0;
 bg_ctx["svg_height"] = 720.0;
 bg_ctx["use_gradient"] = sibyl_opt.use_gradient;
 
+bg_ctx["bonkers"] = sibyl_opt.bonkers;
+
 
 var g_data = _preprocess_svgjson(adata, primary_color, secondary_color);
 g_data["create_svg_header"] = true;
@@ -2596,6 +2686,8 @@ g_data["complexity"] = sibyl_opt.complexity;
 g_data["svg_width"] = 720.0;
 g_data["svg_height"] = 720.0;
 g_data["use_gradient"] = sibyl_opt.use_gradient;
+
+g_data["bonkers"] = sibyl_opt.bonkers;
 
 var base_symbol = g_data.symbol["eye_up"];
 
