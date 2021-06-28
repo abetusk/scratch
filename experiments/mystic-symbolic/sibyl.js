@@ -297,6 +297,11 @@ function _clamp(val, _m, _M) {
   return val;
 }
 
+function _mod1(val) {
+  if (val < 0.0) { val += 1.0; }
+  if (val > 1.0) { val -= 1.0; }
+  return val;
+}
 
 
 // https://pegjs.org/online
@@ -2054,11 +2059,70 @@ function _rand_color() {
 
 }
 
+// fiddling by hand and seeing what works and what doesn't.
+// ...
+//
+function rand_color() {
+  var res = {
+    "primary" : { "hex":"#000000", "hsv":[0,0,0] },
+    "secondary" : {"hex":"#ffffff", "hsv":[0,0,0] },
+    "background": { "hex":"#777777", "hsv":[0,0,0] },
+    "background2": { "hex":"#555555", "hsv":[0,0,0] },
+
+  };
+
+  var prim_hue = Math.random();
+  var prim_sat = _rnd(0.4, 0.6);
+  var prim_val = _rnd(0.65, 0.95);
+
+  res.primary.hsv = [ prim_hue, prim_sat, prim_val ];
+
+  var _del_hue = 0.2;
+  var seco_hue = _mod1( prim_hue + _crnd([-1,1])*_rnd(_del_hue/2, 1.0) );
+  var seco_sat = _clamp( prim_sat + _crnd([-1,1])*_rnd(0.2, 0.3), 0.3, 0.6 );
+  var seco_val = _clamp( prim_val - _rnd(0.2,0.5), 0.2, 0.9 );
+  if (prim_val > 0.7) { seco_val = _rnd(0.1,0.325); }
+
+  res.secondary.hsv = [ seco_hue, seco_sat, seco_val ];
+
+
+  var bg_hue = Math.random();
+  var bg_sat = _rnd(0.05, 0.2);
+  var bg_val = _rnd(0.5, 1.0);
+
+  res.background.hsv = [ bg_hue, bg_sat, bg_val ];
+
+  var bg2_hue = Math.random();
+  var bg2_sat = _rnd(0.05, 0.2);
+  var bg2_val = _rnd(0.5, 1.0);
+
+  res.background2.hsv = [ bg2_hue, bg2_sat, bg2_val ];
+
+  var prim_rgb = HSVtoRGB(prim_hue,  prim_sat, prim_val);
+  var seco_rgb = HSVtoRGB(seco_hue,  seco_sat, seco_val);
+  var bg_rgb = HSVtoRGB(bg_hue,  bg_sat, bg_val);
+  var bg2_rgb = HSVtoRGB(bg2_hue,  bg2_sat, bg2_val);
+
+
+  res.primary.hex = _rgb2hex(prim_rgb.r, prim_rgb.g, prim_rgb.b);
+  res.secondary.hex = _rgb2hex(seco_rgb.r, seco_rgb.g, seco_rgb.b);
+  res.background.hex = _rgb2hex(bg_rgb.r, bg_rgb.g, bg_rgb.b);
+  res.background2.hex = _rgb2hex(bg2_rgb.r, bg2_rgb.g, bg2_rgb.b);
+
+  res.primary.hex = _rgb2hex(prim_rgb.r, prim_rgb.g, prim_rgb.b);
+  res.secondary.hex = _rgb2hex(seco_rgb.r, seco_rgb.g, seco_rgb.b);
+  res.background.hex = _rgb2hex(bg_rgb.r, bg_rgb.g, bg_rgb.b);
+  res.background2.hex = _rgb2hex(bg2_rgb.r, bg2_rgb.g, bg2_rgb.b);
+
+  return res;
+}
+
+
 // pick a random hue and sat/val from a restricted range
 // convert to xyz, force luminances the same
 // convert back to rgb
 //
-function rand_color() {
+function rand_color_cur() {
   var res = {
     "primary" : { "hex":"#000000" },
     "secondary" : {"hex":"#ffffff" },
@@ -2917,5 +2981,10 @@ else {
   //console.log("<!--", sentence, " -->");
 }
 
-console.log("<!-- ", primary_color, secondary_color, bg_color, bg_color2, "-->");
+console.log("<!-- ", primary_color, secondary_color, bg_color, bg_color2,"-->");
+console.log("<!-- ", "\n  prim_hue = ", _rcolor.primary.hsv[0], ";\n  prim_sat =", _rcolor.primary.hsv[1], ";\n  prim_val =", _rcolor.primary.hsv[2], ";\n -->");
+console.log("<!-- ", "\n  seco_hue = ", _rcolor.secondary.hsv[0], ";\n  seco_sat =", _rcolor.secondary.hsv[1], ";\n  seco_val =", _rcolor.secondary.hsv[2], ";\n -->");
+console.log("<!--", "bg:", _rcolor.background.hsv.join(","), "-->");
+console.log("<!--", "bg2:", _rcolor.background2.hsv.join(","), "-->");
+
 
