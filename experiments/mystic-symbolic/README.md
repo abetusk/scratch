@@ -108,6 +108,14 @@ For example, here is a creature, without Bob or his pipe:
 
 If a symbol doesn't have the attach points, the specified symbol will be ignored.
 
+Gallery
+---
+
+| | | | |
+|---|---|---|---|
+| `./sibyl -t -T 0.25,0.185 -B '{*} @ {*} '` | ![with tiled background](img/gallery0.svg) | `./sibyl -T 0.9 -B '{*} @ {*} '`  | ![with enlarged background](img/gallery1.svg) |
+| ` ./sibyl -T 0.9 -B '{*} @ {*} '` | ![...](img/gallery2.svg) | `./sibyl -T 0.5,0.35 -t -B '{*} @ {*} '` | ![gallery 3](img/gallery3.svg) |
+
 #### Improvements
 
 One way to extend the language to allow for components to be attached that respect the
