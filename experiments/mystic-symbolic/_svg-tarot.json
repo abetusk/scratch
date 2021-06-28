@@ -1,0 +1,1702 @@
+[
+  {
+    "name": "wands_ace_0",
+    "bbox": {
+      "x": {
+        "min": 357.43,
+        "max": 362.57
+      },
+      "y": {
+        "min": 137.019,
+        "max": 142.159
+      }
+    },
+    "layers": [
+      {
+        "tagName": "g",
+        "props": {
+          "id": "wands_ace_0"
+        },
+        "children": [
+          {
+            "tagName": "g",
+            "props": {
+              "id": "wands_ace_0"
+            },
+            "children": [
+              {
+                "tagName": "path",
+                "props": {
+                  "fill": "none",
+                  "fillRule": "evenodd",
+                  "stroke": "none",
+                  "d": "M 360.000 142.159 C 361.422 142.159 362.570 141.012 362.570 139.589 C 362.570 138.167 361.422 137.019 360.000 137.019 C 358.578 137.019 357.430 138.167 357.430 139.589 C 357.430 141.012 358.578 142.159 360.000 142.159 Z"
+                },
+                "children": []
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "specs": {
+      "crown": [
+        {
+          "point": {
+            "x": 360,
+            "y": 360
+          },
+          "normal": {
+            "x": 0,
+            "y": -1
+          }
+        }
+      ],
+      "nesting": [
+        {
+          "x": {
+            "min": 20,
+            "max": 700
+          },
+          "y": {
+            "min": 20,
+            "max": 700
+          }
+        }
+      ],
+      "anchor": [
+        {
+          "point": {
+            "x": 360,
+            "y": 700
+          },
+          "normal": {
+            "x": 0,
+            "y": -1
+          }
+        }
+      ]
+    },
+    "meta": {
+      "attach_to": [],
+      "never_be_nested": true,
+      "background": true,
+      "exclude": true
+    }
+  },
+  {
+    "name": "wands_2_0",
+    "bbox": {
+      "x": {
+        "min": 357.43,
+        "max": 362.57
+      },
+      "y": {
+        "min": 137.019,
+        "max": 142.159
+      }
+    },
+    "layers": [
+      {
+        "tagName": "g",
+        "props": {
+          "id": "wands_2_0"
+        },
+        "children": [
+          {
+            "tagName": "g",
+            "props": {
+              "id": "wands_2_0"
+            },
+            "children": [
+              {
+                "tagName": "path",
+                "props": {
+                  "fill": "none",
+                  "fillRule": "evenodd",
+                  "stroke": "none",
+                  "d": "M 360.000 142.159 C 361.422 142.159 362.570 141.012 362.570 139.589 C 362.570 138.167 361.422 137.019 360.000 137.019 C 358.578 137.019 357.430 138.167 357.430 139.589 C 357.430 141.012 358.578 142.159 360.000 142.159 Z"
+                },
+                "children": []
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "specs": {
+      "crown": [
+        {
+          "point": {
+            "x": 180,
+            "y": 180
+          },
+          "normal": {
+            "x": 0,
+            "y": -1
+          }
+        },
+        {
+          "point": {
+            "x": 540,
+            "y": 180
+          },
+          "normal": {
+            "x": 0,
+            "y": -1
+          }
+        }
+      ],
+      "nesting": [
+        {
+          "x": {
+            "min": 20,
+            "max": 700
+          },
+          "y": {
+            "min": 20,
+            "max": 700
+          }
+        }
+      ],
+      "anchor": [
+        {
+          "point": {
+            "x": 360,
+            "y": 700
+          },
+          "normal": {
+            "x": 0,
+            "y": -1
+          }
+        }
+      ]
+    },
+    "meta": {
+      "attach_to": [],
+      "never_be_nested": true,
+      "background": true,
+      "exclude": true
+    }
+  },
+  {
+    "name": "wands_2_1",
+    "bbox": {
+      "x": {
+        "min": 357.43,
+        "max": 362.57
+      },
+      "y": {
+        "min": 137.019,
+        "max": 142.159
+      }
+    },
+    "layers": [
+      {
+        "tagName": "g",
+        "props": {
+          "id": "wands_2_1"
+        },
+        "children": [
+          {
+            "tagName": "g",
+            "props": {
+              "id": "wands_2_1"
+            },
+            "children": [
+              {
+                "tagName": "path",
+                "props": {
+                  "fill": "none",
+                  "fillRule": "evenodd",
+                  "stroke": "none",
+                  "d": "M 360.000 142.159 C 361.422 142.159 362.570 141.012 362.570 139.589 C 362.570 138.167 361.422 137.019 360.000 137.019 C 358.578 137.019 357.430 138.167 357.430 139.589 C 357.430 141.012 358.578 142.159 360.000 142.159 Z"
+                },
+                "children": []
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "specs": {
+      "crown": [
+        {
+          "point": {
+            "x": 180,
+            "y": 540
+          },
+          "normal": {
+            "x": 0,
+            "y": -1
+          }
+        },
+        {
+          "point": {
+            "x": 540,
+            "y": 540
+          },
+          "normal": {
+            "x": 0,
+            "y": -1
+          }
+        }
+      ],
+      "nesting": [
+        {
+          "x": {
+            "min": 20,
+            "max": 700
+          },
+          "y": {
+            "min": 20,
+            "max": 700
+          }
+        }
+      ],
+      "anchor": [
+        {
+          "point": {
+            "x": 360,
+            "y": 700
+          },
+          "normal": {
+            "x": 0,
+            "y": -1
+          }
+        }
+      ]
+    },
+    "meta": {
+      "attach_to": [],
+      "never_be_nested": true,
+      "background": true,
+      "exclude": true
+    }
+  },
+  {
+    "name": "wands_2_2",
+    "bbox": {
+      "x": {
+        "min": 357.43,
+        "max": 362.57
+      },
+      "y": {
+        "min": 137.019,
+        "max": 142.159
+      }
+    },
+    "layers": [
+      {
+        "tagName": "g",
+        "props": {
+          "id": "wands_2_2"
+        },
+        "children": [
+          {
+            "tagName": "g",
+            "props": {
+              "id": "wands_2_2"
+            },
+            "children": [
+              {
+                "tagName": "path",
+                "props": {
+                  "fill": "none",
+                  "fillRule": "evenodd",
+                  "stroke": "none",
+                  "d": "M 360.000 142.159 C 361.422 142.159 362.570 141.012 362.570 139.589 C 362.570 138.167 361.422 137.019 360.000 137.019 C 358.578 137.019 357.430 138.167 357.430 139.589 C 357.430 141.012 358.578 142.159 360.000 142.159 Z"
+                },
+                "children": []
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "specs": {
+      "crown": [
+        {
+          "point": {
+            "x": 180,
+            "y": 180
+          },
+          "normal": {
+            "x": 0,
+            "y": -1
+          }
+        },
+        {
+          "point": {
+            "x": 540,
+            "y": 540
+          },
+          "normal": {
+            "x": 0,
+            "y": -1
+          }
+        }
+      ],
+      "nesting": [
+        {
+          "x": {
+            "min": 20,
+            "max": 700
+          },
+          "y": {
+            "min": 20,
+            "max": 700
+          }
+        }
+      ],
+      "anchor": [
+        {
+          "point": {
+            "x": 360,
+            "y": 700
+          },
+          "normal": {
+            "x": 0,
+            "y": -1
+          }
+        }
+      ]
+    },
+    "meta": {
+      "attach_to": [],
+      "never_be_nested": true,
+      "background": true,
+      "exclude": true
+    }
+  },
+  {
+    "name": "wands_2_3",
+    "bbox": {
+      "x": {
+        "min": 357.43,
+        "max": 362.57
+      },
+      "y": {
+        "min": 137.019,
+        "max": 142.159
+      }
+    },
+    "layers": [
+      {
+        "tagName": "g",
+        "props": {
+          "id": "wands_2_3"
+        },
+        "children": [
+          {
+            "tagName": "g",
+            "props": {
+              "id": "wands_2_3"
+            },
+            "children": [
+              {
+                "tagName": "path",
+                "props": {
+                  "fill": "none",
+                  "fillRule": "evenodd",
+                  "stroke": "none",
+                  "d": "M 360.000 142.159 C 361.422 142.159 362.570 141.012 362.570 139.589 C 362.570 138.167 361.422 137.019 360.000 137.019 C 358.578 137.019 357.430 138.167 357.430 139.589 C 357.430 141.012 358.578 142.159 360.000 142.159 Z"
+                },
+                "children": []
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "specs": {
+      "crown": [
+        {
+          "point": {
+            "x": 180,
+            "y": 540
+          },
+          "normal": {
+            "x": 0,
+            "y": -1
+          }
+        },
+        {
+          "point": {
+            "x": 540,
+            "y": 180
+          },
+          "normal": {
+            "x": 0,
+            "y": -1
+          }
+        }
+      ],
+      "nesting": [
+        {
+          "x": {
+            "min": 20,
+            "max": 700
+          },
+          "y": {
+            "min": 20,
+            "max": 700
+          }
+        }
+      ],
+      "anchor": [
+        {
+          "point": {
+            "x": 360,
+            "y": 700
+          },
+          "normal": {
+            "x": 0,
+            "y": -1
+          }
+        }
+      ]
+    },
+    "meta": {
+      "attach_to": [],
+      "never_be_nested": true,
+      "background": true,
+      "exclude": true
+    }
+  },
+  {
+    "name": "wands_3_0",
+    "bbox": {
+      "x": {
+        "min": 357.43,
+        "max": 362.57
+      },
+      "y": {
+        "min": 137.019,
+        "max": 142.159
+      }
+    },
+    "layers": [
+      {
+        "tagName": "g",
+        "props": {
+          "id": "wands_3_0"
+        },
+        "children": [
+          {
+            "tagName": "g",
+            "props": {
+              "id": "wands_3_0"
+            },
+            "children": [
+              {
+                "tagName": "path",
+                "props": {
+                  "fill": "none",
+                  "fillRule": "evenodd",
+                  "stroke": "none",
+                  "d": "M 360.000 142.159 C 361.422 142.159 362.570 141.012 362.570 139.589 C 362.570 138.167 361.422 137.019 360.000 137.019 C 358.578 137.019 357.430 138.167 357.430 139.589 C 357.430 141.012 358.578 142.159 360.000 142.159 Z"
+                },
+                "children": []
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "specs": {
+      "crown": [
+        {
+          "point": {
+            "x": 180,
+            "y": 120
+          },
+          "normal": {
+            "x": 0,
+            "y": -1
+          }
+        },
+        {
+          "point": {
+            "x": 540,
+            "y": 120
+          },
+          "normal": {
+            "x": 0,
+            "y": -1
+          }
+        },
+        {
+          "point": {
+            "x": 360,
+            "y": 360
+          },
+          "normal": {
+            "x": 0,
+            "y": -1
+          }
+        }
+      ],
+      "nesting": [
+        {
+          "x": {
+            "min": 20,
+            "max": 700
+          },
+          "y": {
+            "min": 20,
+            "max": 700
+          }
+        }
+      ],
+      "anchor": [
+        {
+          "point": {
+            "x": 360,
+            "y": 700
+          },
+          "normal": {
+            "x": 0,
+            "y": -1
+          }
+        }
+      ]
+    },
+    "meta": {
+      "attach_to": [],
+      "never_be_nested": true,
+      "background": true,
+      "exclude": true
+    }
+  },
+  {
+    "name": "wands_3_1",
+    "bbox": {
+      "x": {
+        "min": 357.43,
+        "max": 362.57
+      },
+      "y": {
+        "min": 137.019,
+        "max": 142.159
+      }
+    },
+    "layers": [
+      {
+        "tagName": "g",
+        "props": {
+          "id": "wands_3_1"
+        },
+        "children": [
+          {
+            "tagName": "g",
+            "props": {
+              "id": "wands_3_1"
+            },
+            "children": [
+              {
+                "tagName": "path",
+                "props": {
+                  "fill": "none",
+                  "fillRule": "evenodd",
+                  "stroke": "none",
+                  "d": "M 360.000 142.159 C 361.422 142.159 362.570 141.012 362.570 139.589 C 362.570 138.167 361.422 137.019 360.000 137.019 C 358.578 137.019 357.430 138.167 357.430 139.589 C 357.430 141.012 358.578 142.159 360.000 142.159 Z"
+                },
+                "children": []
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "specs": {
+      "crown": [
+        {
+          "point": {
+            "x": 180,
+            "y": 600
+          },
+          "normal": {
+            "x": 0,
+            "y": -1
+          }
+        },
+        {
+          "point": {
+            "x": 540,
+            "y": 600
+          },
+          "normal": {
+            "x": 0,
+            "y": -1
+          }
+        },
+        {
+          "point": {
+            "x": 360,
+            "y": 600
+          },
+          "normal": {
+            "x": 0,
+            "y": -1
+          }
+        }
+      ],
+      "nesting": [
+        {
+          "x": {
+            "min": 20,
+            "max": 700
+          },
+          "y": {
+            "min": 20,
+            "max": 700
+          }
+        }
+      ],
+      "anchor": [
+        {
+          "point": {
+            "x": 360,
+            "y": 700
+          },
+          "normal": {
+            "x": 0,
+            "y": -1
+          }
+        }
+      ]
+    },
+    "meta": {
+      "attach_to": [],
+      "never_be_nested": true,
+      "background": true,
+      "exclude": true
+    }
+  },
+  {
+    "name": "wands_4_0",
+    "bbox": {
+      "x": {
+        "min": 357.43,
+        "max": 362.57
+      },
+      "y": {
+        "min": 137.019,
+        "max": 142.159
+      }
+    },
+    "layers": [
+      {
+        "tagName": "g",
+        "props": {
+          "id": "wands_4_0"
+        },
+        "children": [
+          {
+            "tagName": "g",
+            "props": {
+              "id": "wands_4_0"
+            },
+            "children": [
+              {
+                "tagName": "path",
+                "props": {
+                  "fill": "none",
+                  "fillRule": "evenodd",
+                  "stroke": "none",
+                  "d": "M 360.000 142.159 C 361.422 142.159 362.570 141.012 362.570 139.589 C 362.570 138.167 361.422 137.019 360.000 137.019 C 358.578 137.019 357.430 138.167 357.430 139.589 C 357.430 141.012 358.578 142.159 360.000 142.159 Z"
+                },
+                "children": []
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "specs": {
+      "crown": [
+        {
+          "point": {
+            "x": 360,
+            "y": 360
+          },
+          "normal": {
+            "x": 0,
+            "y": -1
+          }
+        }
+      ],
+      "nesting": [
+        {
+          "x": {
+            "min": 20,
+            "max": 700
+          },
+          "y": {
+            "min": 20,
+            "max": 700
+          }
+        }
+      ],
+      "anchor": [
+        {
+          "point": {
+            "x": 360,
+            "y": 700
+          },
+          "normal": {
+            "x": 0,
+            "y": -1
+          }
+        }
+      ]
+    },
+    "meta": {
+      "attach_to": [],
+      "never_be_nested": true,
+      "background": true,
+      "exclude": true
+    }
+  },
+  {
+    "name": "wands_5_0",
+    "bbox": {
+      "x": {
+        "min": 357.43,
+        "max": 362.57
+      },
+      "y": {
+        "min": 137.019,
+        "max": 142.159
+      }
+    },
+    "layers": [
+      {
+        "tagName": "g",
+        "props": {
+          "id": "wands_5_0"
+        },
+        "children": [
+          {
+            "tagName": "g",
+            "props": {
+              "id": "wands_5_0"
+            },
+            "children": [
+              {
+                "tagName": "path",
+                "props": {
+                  "fill": "none",
+                  "fillRule": "evenodd",
+                  "stroke": "none",
+                  "d": "M 360.000 142.159 C 361.422 142.159 362.570 141.012 362.570 139.589 C 362.570 138.167 361.422 137.019 360.000 137.019 C 358.578 137.019 357.430 138.167 357.430 139.589 C 357.430 141.012 358.578 142.159 360.000 142.159 Z"
+                },
+                "children": []
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "specs": {
+      "crown": [
+        {
+          "point": {
+            "x": 360,
+            "y": 360
+          },
+          "normal": {
+            "x": 0,
+            "y": -1
+          }
+        }
+      ],
+      "nesting": [
+        {
+          "x": {
+            "min": 20,
+            "max": 700
+          },
+          "y": {
+            "min": 20,
+            "max": 700
+          }
+        }
+      ],
+      "anchor": [
+        {
+          "point": {
+            "x": 360,
+            "y": 700
+          },
+          "normal": {
+            "x": 0,
+            "y": -1
+          }
+        }
+      ]
+    },
+    "meta": {
+      "attach_to": [],
+      "never_be_nested": true,
+      "background": true,
+      "exclude": true
+    }
+  },
+  {
+    "name": "wands_6_0",
+    "bbox": {
+      "x": {
+        "min": 357.43,
+        "max": 362.57
+      },
+      "y": {
+        "min": 137.019,
+        "max": 142.159
+      }
+    },
+    "layers": [
+      {
+        "tagName": "g",
+        "props": {
+          "id": "wands_6_0"
+        },
+        "children": [
+          {
+            "tagName": "g",
+            "props": {
+              "id": "wands_6_0"
+            },
+            "children": [
+              {
+                "tagName": "path",
+                "props": {
+                  "fill": "none",
+                  "fillRule": "evenodd",
+                  "stroke": "none",
+                  "d": "M 360.000 142.159 C 361.422 142.159 362.570 141.012 362.570 139.589 C 362.570 138.167 361.422 137.019 360.000 137.019 C 358.578 137.019 357.430 138.167 357.430 139.589 C 357.430 141.012 358.578 142.159 360.000 142.159 Z"
+                },
+                "children": []
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "specs": {
+      "crown": [
+        {
+          "point": {
+            "x": 360,
+            "y": 360
+          },
+          "normal": {
+            "x": 0,
+            "y": -1
+          }
+        }
+      ],
+      "nesting": [
+        {
+          "x": {
+            "min": 20,
+            "max": 700
+          },
+          "y": {
+            "min": 20,
+            "max": 700
+          }
+        }
+      ],
+      "anchor": [
+        {
+          "point": {
+            "x": 360,
+            "y": 700
+          },
+          "normal": {
+            "x": 0,
+            "y": -1
+          }
+        }
+      ]
+    },
+    "meta": {
+      "attach_to": [],
+      "never_be_nested": true,
+      "background": true,
+      "exclude": true
+    }
+  },
+  {
+    "name": "wands_7_0",
+    "bbox": {
+      "x": {
+        "min": 357.43,
+        "max": 362.57
+      },
+      "y": {
+        "min": 137.019,
+        "max": 142.159
+      }
+    },
+    "layers": [
+      {
+        "tagName": "g",
+        "props": {
+          "id": "wands_7_0"
+        },
+        "children": [
+          {
+            "tagName": "g",
+            "props": {
+              "id": "wands_7_0"
+            },
+            "children": [
+              {
+                "tagName": "path",
+                "props": {
+                  "fill": "none",
+                  "fillRule": "evenodd",
+                  "stroke": "none",
+                  "d": "M 360.000 142.159 C 361.422 142.159 362.570 141.012 362.570 139.589 C 362.570 138.167 361.422 137.019 360.000 137.019 C 358.578 137.019 357.430 138.167 357.430 139.589 C 357.430 141.012 358.578 142.159 360.000 142.159 Z"
+                },
+                "children": []
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "specs": {
+      "crown": [
+        {
+          "point": {
+            "x": 360,
+            "y": 360
+          },
+          "normal": {
+            "x": 0,
+            "y": -1
+          }
+        }
+      ],
+      "nesting": [
+        {
+          "x": {
+            "min": 20,
+            "max": 700
+          },
+          "y": {
+            "min": 20,
+            "max": 700
+          }
+        }
+      ],
+      "anchor": [
+        {
+          "point": {
+            "x": 360,
+            "y": 700
+          },
+          "normal": {
+            "x": 0,
+            "y": -1
+          }
+        }
+      ]
+    },
+    "meta": {
+      "attach_to": [],
+      "never_be_nested": true,
+      "background": true,
+      "exclude": true
+    }
+  },
+  {
+    "name": "wands_8_0",
+    "bbox": {
+      "x": {
+        "min": 357.43,
+        "max": 362.57
+      },
+      "y": {
+        "min": 137.019,
+        "max": 142.159
+      }
+    },
+    "layers": [
+      {
+        "tagName": "g",
+        "props": {
+          "id": "wands_8_0"
+        },
+        "children": [
+          {
+            "tagName": "g",
+            "props": {
+              "id": "wands_8_0"
+            },
+            "children": [
+              {
+                "tagName": "path",
+                "props": {
+                  "fill": "none",
+                  "fillRule": "evenodd",
+                  "stroke": "none",
+                  "d": "M 360.000 142.159 C 361.422 142.159 362.570 141.012 362.570 139.589 C 362.570 138.167 361.422 137.019 360.000 137.019 C 358.578 137.019 357.430 138.167 357.430 139.589 C 357.430 141.012 358.578 142.159 360.000 142.159 Z"
+                },
+                "children": []
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "specs": {
+      "crown": [
+        {
+          "point": {
+            "x": 360,
+            "y": 360
+          },
+          "normal": {
+            "x": 0,
+            "y": -1
+          }
+        }
+      ],
+      "nesting": [
+        {
+          "x": {
+            "min": 20,
+            "max": 700
+          },
+          "y": {
+            "min": 20,
+            "max": 700
+          }
+        }
+      ],
+      "anchor": [
+        {
+          "point": {
+            "x": 360,
+            "y": 700
+          },
+          "normal": {
+            "x": 0,
+            "y": -1
+          }
+        }
+      ]
+    },
+    "meta": {
+      "attach_to": [],
+      "never_be_nested": true,
+      "background": true,
+      "exclude": true
+    }
+  },
+  {
+    "name": "wands_9_0",
+    "bbox": {
+      "x": {
+        "min": 357.43,
+        "max": 362.57
+      },
+      "y": {
+        "min": 137.019,
+        "max": 142.159
+      }
+    },
+    "layers": [
+      {
+        "tagName": "g",
+        "props": {
+          "id": "wands_9_0"
+        },
+        "children": [
+          {
+            "tagName": "g",
+            "props": {
+              "id": "wands_9_0"
+            },
+            "children": [
+              {
+                "tagName": "path",
+                "props": {
+                  "fill": "none",
+                  "fillRule": "evenodd",
+                  "stroke": "none",
+                  "d": "M 360.000 142.159 C 361.422 142.159 362.570 141.012 362.570 139.589 C 362.570 138.167 361.422 137.019 360.000 137.019 C 358.578 137.019 357.430 138.167 357.430 139.589 C 357.430 141.012 358.578 142.159 360.000 142.159 Z"
+                },
+                "children": []
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "specs": {
+      "crown": [
+        {
+          "point": {
+            "x": 360,
+            "y": 360
+          },
+          "normal": {
+            "x": 0,
+            "y": -1
+          }
+        }
+      ],
+      "nesting": [
+        {
+          "x": {
+            "min": 20,
+            "max": 700
+          },
+          "y": {
+            "min": 20,
+            "max": 700
+          }
+        }
+      ],
+      "anchor": [
+        {
+          "point": {
+            "x": 360,
+            "y": 700
+          },
+          "normal": {
+            "x": 0,
+            "y": -1
+          }
+        }
+      ]
+    },
+    "meta": {
+      "attach_to": [],
+      "never_be_nested": true,
+      "background": true,
+      "exclude": true
+    }
+  },
+  {
+    "name": "wands_10_0",
+    "bbox": {
+      "x": {
+        "min": 357.43,
+        "max": 362.57
+      },
+      "y": {
+        "min": 137.019,
+        "max": 142.159
+      }
+    },
+    "layers": [
+      {
+        "tagName": "g",
+        "props": {
+          "id": "wands_10_0"
+        },
+        "children": [
+          {
+            "tagName": "g",
+            "props": {
+              "id": "wands_10_0"
+            },
+            "children": [
+              {
+                "tagName": "path",
+                "props": {
+                  "fill": "none",
+                  "fillRule": "evenodd",
+                  "stroke": "none",
+                  "d": "M 360.000 142.159 C 361.422 142.159 362.570 141.012 362.570 139.589 C 362.570 138.167 361.422 137.019 360.000 137.019 C 358.578 137.019 357.430 138.167 357.430 139.589 C 357.430 141.012 358.578 142.159 360.000 142.159 Z"
+                },
+                "children": []
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "specs": {
+      "crown": [
+        {
+          "point": {
+            "x": -120,
+            "y": 1116
+          },
+          "normal": {
+            "x": 0,
+            "y": -1
+          }
+        },
+        {
+          "point": {
+            "x": -120,
+            "y": 828
+          },
+          "normal": {
+            "x": 0,
+            "y": -1
+          }
+        },
+        {
+          "point": {
+            "x": -120,
+            "y": 540
+          },
+          "normal": {
+            "x": 0,
+            "y": -1
+          }
+        },
+        {
+          "point": {
+            "x": -120,
+            "y": 252
+          },
+          "normal": {
+            "x": 0,
+            "y": -1
+          }
+        },
+        {
+          "point": {
+            "x": -120,
+            "y": -36
+          },
+          "normal": {
+            "x": 0,
+            "y": -1
+          }
+        },
+        {
+          "point": {
+            "x": 840,
+            "y": 1116
+          },
+          "normal": {
+            "x": 0,
+            "y": -1
+          }
+        },
+        {
+          "point": {
+            "x": 840,
+            "y": 828
+          },
+          "normal": {
+            "x": 0,
+            "y": -1
+          }
+        },
+        {
+          "point": {
+            "x": 840,
+            "y": 540
+          },
+          "normal": {
+            "x": 0,
+            "y": -1
+          }
+        },
+        {
+          "point": {
+            "x": 840,
+            "y": 252
+          },
+          "normal": {
+            "x": 0,
+            "y": -1
+          }
+        },
+        {
+          "point": {
+            "x": 840,
+            "y": -36
+          },
+          "normal": {
+            "x": 0,
+            "y": -1
+          }
+        }
+      ],
+      "nesting": [
+        {
+          "x": {
+            "min": 20,
+            "max": 700
+          },
+          "y": {
+            "min": 20,
+            "max": 700
+          }
+        }
+      ],
+      "anchor": [
+        {
+          "point": {
+            "x": 360,
+            "y": 700
+          },
+          "normal": {
+            "x": 0,
+            "y": -1
+          }
+        }
+      ]
+    },
+    "meta": {
+      "attach_to": [],
+      "never_be_nested": true,
+      "background": true,
+      "exclude": true
+    }
+  },
+  {
+    "name": "wands_page_0",
+    "bbox": {
+      "x": {
+        "min": 357.43,
+        "max": 362.57
+      },
+      "y": {
+        "min": 137.019,
+        "max": 142.159
+      }
+    },
+    "layers": [
+      {
+        "tagName": "g",
+        "props": {
+          "id": "wands_page_0"
+        },
+        "children": [
+          {
+            "tagName": "g",
+            "props": {
+              "id": "wands_page_0"
+            },
+            "children": [
+              {
+                "tagName": "path",
+                "props": {
+                  "fill": "none",
+                  "fillRule": "evenodd",
+                  "stroke": "none",
+                  "d": "M 360.000 142.159 C 361.422 142.159 362.570 141.012 362.570 139.589 C 362.570 138.167 361.422 137.019 360.000 137.019 C 358.578 137.019 357.430 138.167 357.430 139.589 C 357.430 141.012 358.578 142.159 360.000 142.159 Z"
+                },
+                "children": []
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "specs": {
+      "crown": [
+        {
+          "point": {
+            "x": 360,
+            "y": 360
+          },
+          "normal": {
+            "x": 0,
+            "y": -1
+          }
+        }
+      ],
+      "nesting": [
+        {
+          "x": {
+            "min": 20,
+            "max": 700
+          },
+          "y": {
+            "min": 20,
+            "max": 700
+          }
+        }
+      ],
+      "anchor": [
+        {
+          "point": {
+            "x": 360,
+            "y": 700
+          },
+          "normal": {
+            "x": 0,
+            "y": -1
+          }
+        }
+      ]
+    },
+    "meta": {
+      "attach_to": [],
+      "never_be_nested": true,
+      "background": true,
+      "exclude": true
+    }
+  },
+  {
+    "name": "wands_knight_0",
+    "bbox": {
+      "x": {
+        "min": 357.43,
+        "max": 362.57
+      },
+      "y": {
+        "min": 137.019,
+        "max": 142.159
+      }
+    },
+    "layers": [
+      {
+        "tagName": "g",
+        "props": {
+          "id": "wands_knight_0"
+        },
+        "children": [
+          {
+            "tagName": "g",
+            "props": {
+              "id": "wands_knight_0"
+            },
+            "children": [
+              {
+                "tagName": "path",
+                "props": {
+                  "fill": "none",
+                  "fillRule": "evenodd",
+                  "stroke": "none",
+                  "d": "M 360.000 142.159 C 361.422 142.159 362.570 141.012 362.570 139.589 C 362.570 138.167 361.422 137.019 360.000 137.019 C 358.578 137.019 357.430 138.167 357.430 139.589 C 357.430 141.012 358.578 142.159 360.000 142.159 Z"
+                },
+                "children": []
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "specs": {
+      "crown": [
+        {
+          "point": {
+            "x": 360,
+            "y": 360
+          },
+          "normal": {
+            "x": 0,
+            "y": -1
+          }
+        }
+      ],
+      "nesting": [
+        {
+          "x": {
+            "min": 20,
+            "max": 700
+          },
+          "y": {
+            "min": 20,
+            "max": 700
+          }
+        }
+      ],
+      "anchor": [
+        {
+          "point": {
+            "x": 360,
+            "y": 700
+          },
+          "normal": {
+            "x": 0,
+            "y": -1
+          }
+        }
+      ]
+    },
+    "meta": {
+      "attach_to": [],
+      "never_be_nested": true,
+      "background": true,
+      "exclude": true
+    }
+  },
+  {
+    "name": "wands_queen_0",
+    "bbox": {
+      "x": {
+        "min": 357.43,
+        "max": 362.57
+      },
+      "y": {
+        "min": 137.019,
+        "max": 142.159
+      }
+    },
+    "layers": [
+      {
+        "tagName": "g",
+        "props": {
+          "id": "wands_queen_0"
+        },
+        "children": [
+          {
+            "tagName": "g",
+            "props": {
+              "id": "wands_queen_0"
+            },
+            "children": [
+              {
+                "tagName": "path",
+                "props": {
+                  "fill": "none",
+                  "fillRule": "evenodd",
+                  "stroke": "none",
+                  "d": "M 360.000 142.159 C 361.422 142.159 362.570 141.012 362.570 139.589 C 362.570 138.167 361.422 137.019 360.000 137.019 C 358.578 137.019 357.430 138.167 357.430 139.589 C 357.430 141.012 358.578 142.159 360.000 142.159 Z"
+                },
+                "children": []
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "specs": {
+      "crown": [
+        {
+          "point": {
+            "x": 360,
+            "y": 360
+          },
+          "normal": {
+            "x": 0,
+            "y": -1
+          }
+        }
+      ],
+      "nesting": [
+        {
+          "x": {
+            "min": 20,
+            "max": 700
+          },
+          "y": {
+            "min": 20,
+            "max": 700
+          }
+        }
+      ],
+      "anchor": [
+        {
+          "point": {
+            "x": 360,
+            "y": 700
+          },
+          "normal": {
+            "x": 0,
+            "y": -1
+          }
+        }
+      ]
+    },
+    "meta": {
+      "attach_to": [],
+      "never_be_nested": true,
+      "background": true,
+      "exclude": true
+    }
+  },
+  {
+    "name": "wands_king_0",
+    "bbox": {
+      "x": {
+        "min": 357.43,
+        "max": 362.57
+      },
+      "y": {
+        "min": 137.019,
+        "max": 142.159
+      }
+    },
+    "layers": [
+      {
+        "tagName": "g",
+        "props": {
+          "id": "wands_king_0"
+        },
+        "children": [
+          {
+            "tagName": "g",
+            "props": {
+              "id": "wands_king_0"
+            },
+            "children": [
+              {
+                "tagName": "path",
+                "props": {
+                  "fill": "none",
+                  "fillRule": "evenodd",
+                  "stroke": "none",
+                  "d": "M 360.000 142.159 C 361.422 142.159 362.570 141.012 362.570 139.589 C 362.570 138.167 361.422 137.019 360.000 137.019 C 358.578 137.019 357.430 138.167 357.430 139.589 C 357.430 141.012 358.578 142.159 360.000 142.159 Z"
+                },
+                "children": []
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "specs": {
+      "crown": [
+        {
+          "point": {
+            "x": 360,
+            "y": 360
+          },
+          "normal": {
+            "x": 0,
+            "y": -1
+          }
+        }
+      ],
+      "nesting": [
+        {
+          "x": {
+            "min": 20,
+            "max": 700
+          },
+          "y": {
+            "min": 20,
+            "max": 700
+          }
+        }
+      ],
+      "anchor": [
+        {
+          "point": {
+            "x": 360,
+            "y": 700
+          },
+          "normal": {
+            "x": 0,
+            "y": -1
+          }
+        }
+      ]
+    },
+    "meta": {
+      "attach_to": [],
+      "never_be_nested": true,
+      "background": true,
+      "exclude": true
+    }
+  }
+]
