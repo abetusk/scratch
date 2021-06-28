@@ -115,7 +115,7 @@ Gallery
 |---|---|---|---|
 | `./sibyl -t -T 0.25,0.185 -B '{*} @ {*} '` | ![with tiled background](img/gallery0.svg) | `./sibyl -T 0.9 -B '{*} @ {*} '`  | ![with enlarged background](img/gallery1.svg) |
 | ` ./sibyl -T 0.9 -B '{*} @ {*} '` | ![...](img/gallery2.svg) | `./sibyl -T 0.5,0.35 -t -B '{*} @ {*} '` | ![gallery 3](img/gallery3.svg) |
-| `./sibyl -D 0,130 -T 0.59  -B 'hands_giving @ globe . crown '` | ![background shift](img/gallery4.svg) | `./sibyl -t -T 0.125,0.076  -B '{*} @ {*}'` | ![gallery](img/gallery4.svg)  |
+| `./sibyl -D 0,130 -T 0.59  -B 'hands_giving @ globe . crown '` | ![background shift](img/gallery4.svg) | `./sibyl -t -T 0.125,0.076  -B '{*} @ {*}'` | ![gallery](img/gallery5.svg)  |
 
 #### Improvements
 
