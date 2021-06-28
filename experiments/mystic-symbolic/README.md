@@ -32,14 +32,14 @@ usage:
 #### Random Creature
 
 ```
-node sibyl.js ./_svg-vocabulary-pretty-printed.json random > out.svg
+./sibyl > out.svg
 ```
 
 #### Creature With DSL
 
 
 ```
-node sibyl.js ./_svg-vocabulary-pretty-printed.json 'scales @ [infinity,key] ^ pentacle ! (moons_triple@mushroom_cloud) ~ (ring@ snake_eye) | death . star_7pt ' > out.svg
+./sibyl 'skull @ [infinity,key] ^ pentacle ! (moons_triple@mushroom_cloud) ~ (ring@ snake_eye) | death . star_7pt' > out.svg
 ```
 
 
@@ -70,7 +70,7 @@ Here is a simple character to highlight the syntax:
 For example, Here is a simple creature with most the features listed above:
 
 ```
-scales @ [infinity,key] ^ pentacle ! (moons_triple@mushroom_cloud) ~ (ring@ snake_eye) | death . star_7pt
+skull @ [infinity,key] ^ pentacle ! (moons_triple@mushroom_cloud) ~ (ring@ snake_eye) | death . star_7pt
 ```
 
 That produces
