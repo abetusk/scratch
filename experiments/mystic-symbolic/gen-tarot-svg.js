@@ -85,6 +85,7 @@ var _w      = _DEFAULT_WIDTH,   _h      = _DEFAULT_HEIGHT,
 var _w2 = _w/2.0, _h2 = _h/2.0,
     _w3 = _w/3.0, _h3 = _h/3.0,
     _w4 = _w/4.0, _h4 = _h/4.0,
+    _w5 = _w/5.0, _h5 = _h/5.0,
     _w8 = _w/8.0, _h8 = _h/8.0;
 
 var minor_arcana_pnts = {
@@ -101,7 +102,22 @@ var minor_arcana_pnts = {
   "7" : [ [ { "x": _mid_w, "y": _mid_h }] ],
   "8" : [ [ { "x": _mid_w, "y": _mid_h }] ],
   "9" : [ [ { "x": _mid_w, "y": _mid_h }] ],
-  "10" : [ [ { "x": _mid_w, "y": _mid_h }] ],
+  "10" : [
+    [
+      { "x": _mid_w - 2*_w3, "y": 2*_h - 2.25*_h5 },
+      { "x": _mid_w - 2*_w3, "y": 2*_h - 4.25*_h5  },
+      { "x": _mid_w - 2*_w3, "y": 2*_h - 6.25*_h5  },
+      { "x": _mid_w - 2*_w3, "y": 2*_h - 8.25*_h5  },
+      { "x": _mid_w - 2*_w3, "y": 2*_h - 10.25*_h5  },
+
+      { "x": _mid_w + 2*_w3, "y": 2*_h - 2.25*_h5 },
+      { "x": _mid_w + 2*_w3, "y": 2*_h - 4.25*_h5  },
+      { "x": _mid_w + 2*_w3, "y": 2*_h - 6.25*_h5  },
+      { "x": _mid_w + 2*_w3, "y": 2*_h - 8.25*_h5  },
+      { "x": _mid_w + 2*_w3, "y": 2*_h - 10.25*_h5  }
+
+    ]
+  ],
 
   "page"    : [ [ { "x": _mid_w, "y": _mid_h }] ],
   "knight"  : [ [ { "x": _mid_w, "y": _mid_h }] ],

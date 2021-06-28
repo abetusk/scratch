@@ -1309,8 +1309,8 @@ function mystic_symbolic_random(ctx, base, primary_color, secondary_color, bg_co
       ret_str += "width=\"" + (3*w).toString() + "\" height=\"" + (3*h).toString() + "\" fill=\"" + _bg + "\" data-is-background=\"true\">\n</rect>\n";
     }
 
-    ret_str += jsonsvg2svg_defs(base.defs, primary_color, secondary_color);
   }
+  ret_str += jsonsvg2svg_defs(base.defs, primary_color, secondary_color);
 
   var base_specs = base.specs;
   var base_meta = base.meta;
@@ -1506,22 +1506,27 @@ function mystic_symbolic_sched(ctx, sched, primary_color, secondary_color, bg_co
   if (typeof sched === "string") {
     sched = { "base": sched };
   }
-
-  var symbol_info = parse_invert_name(sched.base);
-  var invert_flag = symbol_info.invert;
-  var symbol_name = symbol_info.name;
-
-  if (!(symbol_name in ctx.symbol)) {
-    return {"error":"could not find symbol " + symbol_name};
-  }
-  var base = ctx.symbol[symbol_name];
-
   var _include_background_rect = ctx.create_background_rect;
   var scale = ctx.scale;
   var top_level = false;
 
   if (ctx.cur_depth == 0) { top_level = true; }
   ctx.cur_depth++;
+
+  var symbol_info = parse_invert_name(sched.base);
+  var invert_flag = symbol_info.invert;
+  var symbol_name = symbol_info.name;
+
+  if (symbol_name == ":rnd") {
+    var _rnd_creat = ctx.symbol[random_creature(ctx, "base")];
+    //var _r = jsonsvg2svg_defs(_rnd_creat.defs, secondary_color, primary_color);
+    var _r = "";
+    _r += mystic_symbolic_random(ctx, undefined, primary_color, secondary_color, bg_color);
+    return _r;
+  }
+
+  var base = ctx.symbol[symbol_name];
+  if (!(symbol_name in ctx.symbol)) { return {"error":"could not find symbol " + symbol_name + " (0)"}; }
 
   var ret_str = "";
 
@@ -1586,8 +1591,16 @@ function mystic_symbolic_sched(ctx, sched, primary_color, secondary_color, bg_co
       var sub_invert_flag = sub_symbol_info.invert;
       var sub_symbol_name = sub_symbol_info.name;
 
+      if (symbol_name == ":rnd") {
+        var _rnd_creat = ctx.symbol[random_creature(ctx, attach_id)];
+        //ret_str += jsonsvg2svg_defs(_rnd_creat.defs, secondary_color, primary_color);
+        ret_str += mystic_symbolic_random(ctx, _rnd_creat, primary_color, secondary_color, bg_color);
+        continue;
+      }
+
+
       if (!(sub_symbol_name in ctx.symbol)) {
-        return {"error":"could not find symbol " + sub_symbol_name};
+        return {"error":"could not find symbol " + sub_symbol_name + "(1)"};
       }
 
       var sub_sched = sched.attach[attach_id][m_aidx];
@@ -1679,8 +1692,15 @@ function mystic_symbolic_sched(ctx, sched, primary_color, secondary_color, bg_co
       var sub_invert_flag = sub_symbol_info.invert;
       var sub_symbol_name = sub_symbol_info.name;
 
+      if (sub_symbol_name == ":rnd") {
+        var _rnd_creat = ctx.symbol[random_creature(ctx, "nesting")];
+        //ret_str += jsonsvg2svg_defs(_rnd_creat.defs, secondary_color, primary_color);
+        ret_str += mystic_symbolic_random(ctx, _rnd_creat, primary_color, secondary_color, bg_color);
+        continue;
+      }
+
       if (!(sub_symbol_name in ctx.symbol)) {
-        return {"error":"could not find symbol " + sub_symbol_name};
+        return {"error":"could not find symbol " + sub_symbol_name + "(2)"};
       }
 
       var sub = Object.assign({}, ctx.symbol[sub_symbol_name]);
@@ -2363,7 +2383,7 @@ function mystic_symbolic_dsl2sched(_s, data) {
     "~" : "arm",
     "|" : "leg",
     "." : "tail",
-    ":" : "#list#null",
+    //":" : "#list#null",
     "," : "#list#sep",
     "[" : "#list#beg",
     "]" : "#list#end",
@@ -2374,7 +2394,7 @@ function mystic_symbolic_dsl2sched(_s, data) {
   };
 
   var tok_kw_skip = {
-    ":" : "#list#null",
+    //":" : "#list#null",
     "," : "#list#sep",
     "[" : "#list#beg",
     "{" : "#rnd#beg",
@@ -2524,8 +2544,9 @@ function mystic_symbolic_dsl2sched(_s, data) {
                (s.charCodeAt(cur_idx) <= "Z".charCodeAt(0))) ||
               (("0".charCodeAt(0) <= s.charCodeAt(cur_idx)) &&
                (s.charCodeAt(cur_idx) <= "9".charCodeAt(0))) ||
-              (s.charCodeAt(cur_idx) == "_".charCodeAt(0) ||
-              (s.charCodeAt(cur_idx) == "-".charCodeAt(0))) ) {
+              (s.charCodeAt(cur_idx) == ":".charCodeAt(0)) ||
+              (s.charCodeAt(cur_idx) == "_".charCodeAt(0)) ||
+              (s.charCodeAt(cur_idx) == "-".charCodeAt(0)) ) {
       cur_tok += s[cur_idx];
       cur_val_type = "string";
       cur_idx++;
@@ -2878,6 +2899,7 @@ else {
   }
 
   var sched  = mystic_symbolic_dsl2sched( arg_str, g_data );
+
   var creature_svg = mystic_symbolic_sched(g_data, sched , primary_color, secondary_color, bg_color);
 
   if (sibyl_opt.use_background_image) {
