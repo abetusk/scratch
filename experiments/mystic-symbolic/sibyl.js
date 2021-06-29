@@ -2121,8 +2121,34 @@ function rand_color__() {
   return res;
 }
 
-// fiddling by hand and seeing what works and what doesn't.
-// ...
+// Here is the basic philosophy:
+//
+// The primary color is a random hue, moderate saturation
+// (0.4 to 0.6) and moderate to high value.
+// Too high of a saturation and it gets into "eye-bleed"
+// territory. The higher value gives it a lighter feel
+// and makes it stand out more.
+//
+// The secnodary color is darker, choosing it's value
+// between (0.1 and 0.325). Anything higher and
+// it's often hard to differentiate from teh primary
+// color.
+//
+// The secondary color is essentially the stroke color,
+// so the hue and saturation are chosen to provide some
+// small variation but otherwise it's basically just
+// chosen to be much darker.
+//
+// The background is chosen to be light and highly 
+// desaturated, so as not to take away attention from
+// the foreground.
+// The complementary
+// color's value being chosen in a restricted range of (0.5,1)
+// and chosen to 'repel' from the first background color.
+// This makes the background lighter. A darker background
+// could be an option for the future.
+// The similar high values mean that the background has
+// a kind of 'imprint' feel.
 //
 function rand_color() {
   var res = {
@@ -2170,10 +2196,13 @@ function rand_color() {
   // to be too dark, lest it take atention away from
   // the foreground.
   //
+
+  var bg_dark_opt = false;
+
   var bg_hue = Math.random();
   var bg_sat = _rnd(0.05, 0.2);
   var bg_val = _rnd(0.5, 1.0);
-  //var bg_val = _rnd(0.25, 1.0);
+  if (bg_dark_opt) { bg_val = _rnd(0.05, 0.5); }
 
   res.background.hsv = [ bg_hue, bg_sat, bg_val ];
 
@@ -2182,6 +2211,9 @@ function rand_color() {
   //var bg2_val = _rnd(0.5, 1.0);
   //var bg2_val = _mod1(bg_val + _crnd([-1,1])*_rnd(0.1, 0.25));
   var bg2_val = 0.5 + (_mod1(bg_val + _crnd([-1,1])*_rnd(0.1, 0.25))/2.0);
+  if (bg_dark_opt) {
+    bg2_val = (_mod1(2*bg_val + _crnd([-1,1])*_rnd(0.1, 0.25))/2.0);
+  }
 
   res.background2.hsv = [ bg2_hue, bg2_sat, bg2_val ];
 
