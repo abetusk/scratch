@@ -1141,14 +1141,11 @@ function _preprocess_svgjson(adata, primary_color, secondary_color, disable_grad
     xdata.data.push( adata[ii] );
   }
 
-  //xdata["data"] = adata;
-
   xdata["symbol"] = {};
   for (var ii=0; ii<adata.length; ii++) {
     if (adata[ii].name in exclude_h) { continue; }
     xdata.symbol[ adata[ii].name ] = adata[ii];
   }
-
 
   // for restricted choices
   //
@@ -1515,20 +1512,30 @@ function mystic_symbolic_random(ctx, base, primary_color, secondary_color, bg_co
 // -----
 
 function parse_invert_name(sym) {
+  var res = { "invert":false, "name": null, "primary":null, "secondary":null };
 
-  if (typeof sym === "undefined") { return ""; }
+  if (typeof sym === "undefined") { return res; }
 
-  var invert_flag = false;
-  var symbol_name = sym;
+  res.invert = false;
+  res.name = sym;
   if (sym.length == 0) {
-    return {"invert":false, "name":""}
+    return res;
   }
   if (sym[0] == '-') {
-    invert_flag = true;
-    symbol_name = sym.slice(1);
+    res.invert = true;
+    res.name = sym.slice(1);
   }
 
-  return { "invert": invert_flag, "name":symbol_name};
+  if (res.name.match(/#/)) {
+    var tok = res.name.split("#");
+    res.name = tok[0];
+    res.primary = "#" + tok[1];
+    if (tok.length > 2) {
+      res.secondary = "#" + tok[2];
+    }
+  }
+
+  return res;
 }
 
 function mystic_symbolic_sched(ctx, sched, primary_color, secondary_color, bg_color) {
@@ -1551,11 +1558,15 @@ function mystic_symbolic_sched(ctx, sched, primary_color, secondary_color, bg_co
   var invert_flag = symbol_info.invert;
   var symbol_name = symbol_info.name;
 
+  var _base_pcol = ( symbol_info.primary ? symbol_info.primary : primary_color ),
+      _base_scol = ( symbol_info.secondary ? symbol_info.secondary : secondary_color );
+
   if (symbol_name == ":rnd") {
     var _rnd_creat = ctx.symbol[random_creature(ctx, "base")];
     //var _r = jsonsvg2svg_defs(_rnd_creat.defs, secondary_color, primary_color);
     var _r = "";
-    _r += mystic_symbolic_random(ctx, undefined, primary_color, secondary_color, bg_color);
+    //_r += mystic_symbolic_random(ctx, undefined, primary_color, secondary_color, bg_color);
+    _r += mystic_symbolic_random(ctx, undefined, _base_pcol, _base_scol, bg_color);
     return _r;
   }
 
@@ -1581,7 +1592,8 @@ function mystic_symbolic_sched(ctx, sched, primary_color, secondary_color, bg_co
       ret_str += "width=\"" + (3*w).toString() + "\" height=\"" + (3*h).toString() + "\" fill=\"" + _bg + "\" data-is-background=\"true\">\n</rect>\n";
     }
 
-    ret_str += jsonsvg2svg_defs(base.defs, primary_color, secondary_color);
+    //ret_str += jsonsvg2svg_defs(base.defs, primary_color, secondary_color);
+    ret_str += jsonsvg2svg_defs(base.defs, _base_pcol, _base_scol);
   }
 
   var base_specs = base.specs;
@@ -1625,16 +1637,21 @@ function mystic_symbolic_sched(ctx, sched, primary_color, secondary_color, bg_co
       var sub_invert_flag = sub_symbol_info.invert;
       var sub_symbol_name = sub_symbol_info.name;
 
+      var _sub_pcol = ( sub_symbol_info.primary ? sub_symbol_info.primary : primary_color );
+      var _sub_scol = ( sub_symbol_info.secondary ? sub_symbol_info.secondary : secondary_color );
+
+
       if (symbol_name == ":rnd") {
         var _rnd_creat = ctx.symbol[random_creature(ctx, attach_id)];
         //ret_str += jsonsvg2svg_defs(_rnd_creat.defs, secondary_color, primary_color);
-        ret_str += mystic_symbolic_random(ctx, _rnd_creat, primary_color, secondary_color, bg_color);
+        //ret_str += mystic_symbolic_random(ctx, _rnd_creat, primary_color, secondary_color, bg_color);
+        ret_str += mystic_symbolic_random(ctx, _rnd_creat, _sub_pcol, _sub_scol, bg_color);
         continue;
       }
 
 
       if (!(sub_symbol_name in ctx.symbol)) {
-        return {"error":"could not find symbol " + sub_symbol_name + "(1)"};
+        return {"error":"could not find symbol " + sub_symbol_name + " (1)"};
       }
 
       var sub_sched = sched.attach[attach_id][m_aidx];
@@ -1667,8 +1684,10 @@ function mystic_symbolic_sched(ctx, sched, primary_color, secondary_color, bg_co
 
       var t_str_e = "</g>";
 
-      ret_str += jsonsvg2svg_defs(sub.defs, primary_color, secondary_color);
-      reuse_svg = mystic_symbolic_sched(ctx, sub_sched, primary_color, secondary_color);
+      //ret_str += jsonsvg2svg_defs(sub.defs, primary_color, secondary_color);
+      ret_str += jsonsvg2svg_defs(sub.defs, _sub_pcol, _sub_scol);
+      //reuse_svg = mystic_symbolic_sched(ctx, sub_sched, primary_color, secondary_color);
+      reuse_svg = mystic_symbolic_sched(ctx, sub_sched, _sub_pcol, _sub_scol);
 
       ret_str += t_str_s;
       ret_str += reuse_svg;
@@ -1695,7 +1714,8 @@ function mystic_symbolic_sched(ctx, sched, primary_color, secondary_color, bg_co
   // inversion should be handled at a higher level but I'm leaving the comment cruft
   // in case I can remmember why I put it here in the first place
   //
-  ret_str += jsonsvg2svg_child(base.layers, primary_color, secondary_color, !ctx.use_gradient);
+  //ret_str += jsonsvg2svg_child(base.layers, primary_color, secondary_color, !ctx.use_gradient);
+  ret_str += jsonsvg2svg_child(base.layers, _base_pcol, _base_scol, !ctx.use_gradient);
 
   /*
   if (invert_flag) {
@@ -1726,15 +1746,19 @@ function mystic_symbolic_sched(ctx, sched, primary_color, secondary_color, bg_co
       var sub_invert_flag = sub_symbol_info.invert;
       var sub_symbol_name = sub_symbol_info.name;
 
+      var _sub_pcol = ( sub_symbol_info.primary ? sub_symbol_info.primary : primary_color );
+      var _sub_scol = ( sub_symbol_info.secondary ? sub_symbol_info.secondary : secondary_color );
+
       if (sub_symbol_name == ":rnd") {
         var _rnd_creat = ctx.symbol[random_creature(ctx, "nesting")];
         //ret_str += jsonsvg2svg_defs(_rnd_creat.defs, secondary_color, primary_color);
-        ret_str += mystic_symbolic_random(ctx, _rnd_creat, primary_color, secondary_color, bg_color);
+        //ret_str += mystic_symbolic_random(ctx, _rnd_creat, primary_color, secondary_color, bg_color);
+        ret_str += mystic_symbolic_random(ctx, _rnd_creat, _sub_pcol, _sub_scol, bg_color);
         continue;
       }
 
       if (!(sub_symbol_name in ctx.symbol)) {
-        return {"error":"could not find symbol " + sub_symbol_name + "(2)"};
+        return {"error":"could not find symbol " + sub_symbol_name + " (2)"};
       }
 
       var sub = Object.assign({}, ctx.symbol[sub_symbol_name]);
@@ -1771,9 +1795,11 @@ function mystic_symbolic_sched(ctx, sched, primary_color, secondary_color, bg_co
 
       var t_str_e = "</g>";
 
-      ret_str += jsonsvg2svg_defs(sub.defs, secondary_color, primary_color);
+      //ret_str += jsonsvg2svg_defs(sub.defs, secondary_color, primary_color);
+      ret_str += jsonsvg2svg_defs(sub.defs, _sub_scol, _sub_pcol);
       ret_str += t_str_s;
-      ret_str += mystic_symbolic_sched(ctx, sub_sched, secondary_color, primary_color);
+      //ret_str += mystic_symbolic_sched(ctx, sub_sched, secondary_color, primary_color);
+      ret_str += mystic_symbolic_sched(ctx, sub_sched, _sub_scol, _sub_pcol);
       ret_str += t_str_e;
 
     }
@@ -2198,6 +2224,7 @@ function rand_color() {
   //
 
   var bg_dark_opt = false;
+  if (_rnd() < 0.5) { bg_dark_opt = true; }
 
   var bg_hue = Math.random();
   var bg_sat = _rnd(0.05, 0.2);
@@ -2726,6 +2753,7 @@ function mystic_symbolic_dsl2sched(_s, data) {
                (s.charCodeAt(cur_idx) <= "Z".charCodeAt(0))) ||
               (("0".charCodeAt(0) <= s.charCodeAt(cur_idx)) &&
                (s.charCodeAt(cur_idx) <= "9".charCodeAt(0))) ||
+              (s.charCodeAt(cur_idx) == "#".charCodeAt(0)) ||
               (s.charCodeAt(cur_idx) == ":".charCodeAt(0)) ||
               (s.charCodeAt(cur_idx) == "_".charCodeAt(0)) ||
               (s.charCodeAt(cur_idx) == "-".charCodeAt(0)) ) {
@@ -2849,7 +2877,7 @@ var tarot = {
 
 var bg_ctx = _preprocess_svgjson(bg_data, bg_color, bg_color, !sibyl_opt.use_gradient, sibyl_opt.exclude);
 bg_ctx["create_svg_header"] = false;
-bg_ctx["create_background_rect"] = false;
+bg_ctx["create_background_rect"] = true;
 bg_ctx["cur_depth"] = 0;
 bg_ctx["max_depth"] = 1;
 bg_ctx["max_nest_depth"] = 0;
@@ -2910,6 +2938,7 @@ if (arg_str == "random") {
     fg_ctx.create_svg_header = false;
     fg_ctx.create_background_rect = false;
     bg_ctx.create_svg_header = false;
+    bg_ctx.create_background_rect = true;
 
     if (sibyl_opt.tile_background) {
 
