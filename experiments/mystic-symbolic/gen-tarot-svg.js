@@ -125,11 +125,13 @@ var minor_arcana_pnts = {
   "king"    : [ [ { "x": _mid_w, "y": _mid_h }] ]
 };
 
+
+
 function create_tarot_json(data, id, pnts, nesting) {
   if (typeof pnts === "undefined") { pnts = []; }
   if (typeof nesting === "undefined") {
     nesting = { 
-      "x": { "min": 20, "max": 700 },
+      "x": { "min": 150, "max": 570},
       "y": { "min": 20, "max": 700 }
     };
   }

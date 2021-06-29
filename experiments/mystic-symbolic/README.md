@@ -209,6 +209,32 @@ Where the king and queen are drawn from the same list but chosen to be different
 Maybe the king/queen also make sure to have a crown either for it's nesting or crown placement
 and the suite for it's crown placement/nesting.
 
+---
+
+The tarot generation is going to be pretty complex.
+
+All minor arcana will have to exclude the major arcana.
+All major arcana will have to exclude all other major arcana symbols, except
+the one in question, and suites of the minor arcana.
+All minor arcana will have to exclude the other suites of the minor arcana
+as well as exclude the suite symbol on all other levels and backgrounds, except
+for the level/attachment point used to display the suite.
+
+The minor arcana should have the suite be a different color from the background and
+the foreground creature.
+For cards in a given suite, the color scheme should be the same.
+
+We might want to hard code background `hsv_val` depending.
+
+
+---
+
+The conclusion might be `sibyl` is good for experimentation and random stuff but
+trying to shove all the intricacies and exceptions when creating a tarot deck,
+say, might be beyond scope.
+
+Instead of trying to shove all the random colors for different layers/symbols/whatever,
+maybe it's better to just explicitly give them in the DSL or some JSON description.
 
 Notes on SVG
 ---
@@ -242,3 +268,27 @@ so that it would be impossible to nest an object therein.
 That is, it's unclear whether the random choice should look ahead to see if a symbol
 should not be chosen should it violate the `always_nest` option if it's too far down the recursion.
 
+TODO
+---
+
+* allow for stroke width changes (command line option)
+* allow for "color ring" to give different symbols at different depths different colors
+* figure out what a good method is to exclude certain items
+* record the realization and put it in a structure, providing it as a comment in the
+  resulting SVG
+* provide a seedable rng ([*](https://github.com/davidbau/seedrandom))
+
+It might be better to just provide some other tool to create a custom schedule
+and then feed that into `sibyl` for the for complex scene generation.
+
+Credits
+---
+
+Artwork in the `_svg-vocabulary-pretty-printed.json` is copyright Nina Paley, licensed under a [CC-BY-4.0](https://creativecommons.org/licenses/by/4.0/) license.
+
+License
+---
+
+Unless otherwise stated, all code and data is licensed under a CC0 license.
+
+![cc0](img/cc0_88x31.png)

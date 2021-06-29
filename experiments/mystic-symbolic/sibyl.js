@@ -14,8 +14,10 @@
 
 var fs = require("fs");
 var color = require("./cam02.js");
+var randomcolor  = require("randomcolor");
 var getopt = require("posix-getopt");
 var parser, opt;
+
 
 var _VERSION = "0.1.3";
 
@@ -43,6 +45,8 @@ function show_help(fp) {
   fp.write("  [-B background-image]       set background image ('*' for random)\n");
   fp.write("  [-T background-scale]       set background scale factor (default " + sibyl_opt.background_scale_x.toString() + ")\n");
   fp.write("  [-D tiledx,tiledy]          shift tile background by tiledx,tiledy (ex. '-10,3') (default '0,0')\n");
+  fp.write("  [-E symbol]                 exclude items from random generation (e.g. 'bob,pipe')\n");
+  fp.write("  [-L color]                  color ring (e.g. '#77777,#afafaf,#fe3f3f,#1f1f7f') (unimmplemented)\n");
   fp.write("  [-g]                        disable gradient\n");
   fp.write("  [-t]                        tile background\n");
   fp.write("  [-Q]                        bonkers mode (override attach restrictions)\n");
@@ -71,6 +75,8 @@ var sibyl_opt = {
   "background_dy" : 0,
   "use_gradient" : true,
   "bonkers" : false,
+  "exclude" : [],
+  "color_ring" : [],
   "additional_svgjson" : []
 };
 
@@ -89,6 +95,8 @@ var long_opt = [
   "g", "(disable-gradient)",
   "D", ":(background-tile-dxy)",
   "Q", "(bonkers-mode)",
+  "E", ":(exclude)",
+  "L", ":(color-ring)",
   "J", ":(svgjson)"
 ];
 
@@ -120,6 +128,10 @@ while ((opt =  parser.getopt()) !== undefined) {
 
     case 'c':
       sibyl_opt.background_color2 = opt.optarg;
+      break;
+
+    case 'L':
+      sibyl_opt.optarg.color_ring.push(opt.optarg);
       break;
 
     //---
@@ -183,6 +195,10 @@ while ((opt =  parser.getopt()) !== undefined) {
 
     case 'Q':
       sibyl_opt.bonkers = true;
+      break;
+
+    case 'E':
+      sibyl_opt.exclude.push(opt.optarg);
       break;
 
     //---
@@ -1071,8 +1087,12 @@ function jsonsvg2svg_child(x, primary_color, secondary_color, disable_gradient) 
 // mutating the returned structure could have an effect on the `adata`
 // object and vice versa.
 //
-function _preprocess_svgjson(adata, primary_color, secondary_color, disable_gradient) {
+function _preprocess_svgjson(adata, primary_color, secondary_color, disable_gradient, exclude) {
   disable_gradient = ((typeof disable_gradient === "undefined") ? false : disable_gradient);
+  exclude = ((typeof exclude === "undefined") ? [] : exclude);
+
+  exclude_h = {};
+  for (var ii=0; ii<exclude.length; ii++) { exclude_h[exclude[ii]] = true; }
 
   var xdata = {};
 
@@ -1115,10 +1135,17 @@ function _preprocess_svgjson(adata, primary_color, secondary_color, disable_grad
 
   }
 
-  xdata["data"] = adata;
+  xdata["data"] = [];
+  for (var ii=0; ii<adata.length; ii++) {
+    if (adata[ii].name in exclude_h) { continue; }
+    xdata.data.push( adata[ii] );
+  }
+
+  //xdata["data"] = adata;
 
   xdata["symbol"] = {};
   for (var ii=0; ii<adata.length; ii++) {
+    if (adata[ii].name in exclude_h) { continue; }
     xdata.symbol[ adata[ii].name ] = adata[ii];
   }
 
@@ -1143,6 +1170,7 @@ function _preprocess_svgjson(adata, primary_color, secondary_color, disable_grad
     if (!("meta" in _d)) {
       for (var jj=0; jj<attach_list.length; jj++) {
         if (allowed[attach_list[jj]]) {
+          if (_d.name in exclude_h) { continue; }
           xdata.choice[attach_list[jj]].push(_d.name);
         }
       }
@@ -1189,6 +1217,7 @@ function _preprocess_svgjson(adata, primary_color, secondary_color, disable_grad
     //
     for (var _a in allowed) {
       if (allowed[_a]) {
+        if (_d.name in exclude_h) { continue; }
         xdata.choice[_a].push( _d.name );
       }
     }
@@ -2059,6 +2088,39 @@ function _rand_color() {
 
 }
 
+function rand_color__() {
+  var res = {
+    "primary" : { "hex":"#000000", "hsv":[0,0,0] },
+    "secondary" : {"hex":"#ffffff", "hsv":[0,0,0] },
+    "background": { "hex":"#777777", "hsv":[0,0,0] },
+    "background2": { "hex":"#555555", "hsv":[0,0,0] },
+
+  };
+
+  var light = randomcolor({ "count":2, "luminosity":'light' });
+  var dark = randomcolor({ "count":2, "luminosity":'dark' });
+
+  if (_rnd() < 0.25) {
+    res.primary.hex = light[0];
+    res.secondary.hex = dark[0];
+  }
+  else {
+    res.primary.hex = dark[0];
+    res.secondary.hex = light[0];
+  }
+
+  if (_rnd() < 0.25) {
+    res.background.hex = light[1];
+    res.background.hex = dark[1];
+  }
+  else {
+    res.background.hex = dark[1];
+    res.background.hex = light[1];
+  }
+
+  return res;
+}
+
 // fiddling by hand and seeing what works and what doesn't.
 // ...
 //
@@ -2073,28 +2135,53 @@ function rand_color() {
 
   var prim_hue = Math.random();
   var prim_sat = _rnd(0.4, 0.6);
-  var prim_val = _rnd(0.65, 0.95);
+  var prim_val = _rnd(0.675, 0.95);
 
   res.primary.hsv = [ prim_hue, prim_sat, prim_val ];
 
+  // after experimentation, the conclusion I've come to is that
+  // there should only really be "one" color, the primary.
+  // The secondary really just needs to be dark, simulating a stroke.
+  // When the value of the primary is too low and the value of the
+  // secondary is too high, they clash too much.
+  // Even a value of 0.7 for the primary and a value of 0.4 for
+  // the secondary, the picture becomse hard to differentiate.
+  // Better to just set the value to be something way low for
+  // the secondary.
+  // Choosing a random hue gives it a little variation but
+  // otherwise is probably not that important.
+  //
   var _del_hue = 0.2;
   var seco_hue = _mod1( prim_hue + _crnd([-1,1])*_rnd(_del_hue/2, 1.0) );
   var seco_sat = _clamp( prim_sat + _crnd([-1,1])*_rnd(0.2, 0.3), 0.3, 0.6 );
-  var seco_val = _clamp( prim_val - _rnd(0.2,0.5), 0.2, 0.9 );
-  if (prim_val > 0.7) { seco_val = _rnd(0.1,0.325); }
+  seco_val = _rnd(0.1,0.325);
 
   res.secondary.hsv = [ seco_hue, seco_sat, seco_val ];
 
 
+  // I kind of like backgrounds that are lighter, but it's hard
+  // to say.
+  // It might be better to have this as a user option.
+  // 
+  // I think having the bg2_val be 'repelled' in value
+  // from the bg_val works out pretty well, as it gives
+  // a good contrast.
+  // We also don't want the background contrast/stroke
+  // to be too dark, lest it take atention away from
+  // the foreground.
+  //
   var bg_hue = Math.random();
   var bg_sat = _rnd(0.05, 0.2);
   var bg_val = _rnd(0.5, 1.0);
+  //var bg_val = _rnd(0.25, 1.0);
 
   res.background.hsv = [ bg_hue, bg_sat, bg_val ];
 
   var bg2_hue = Math.random();
   var bg2_sat = _rnd(0.05, 0.2);
-  var bg2_val = _rnd(0.5, 1.0);
+  //var bg2_val = _rnd(0.5, 1.0);
+  //var bg2_val = _mod1(bg_val + _crnd([-1,1])*_rnd(0.1, 0.25));
+  var bg2_val = 0.5 + (_mod1(bg_val + _crnd([-1,1])*_rnd(0.1, 0.25))/2.0);
 
   res.background2.hsv = [ bg2_hue, bg2_sat, bg2_val ];
 
@@ -2102,7 +2189,6 @@ function rand_color() {
   var seco_rgb = HSVtoRGB(seco_hue,  seco_sat, seco_val);
   var bg_rgb = HSVtoRGB(bg_hue,  bg_sat, bg_val);
   var bg2_rgb = HSVtoRGB(bg2_hue,  bg2_sat, bg2_val);
-
 
   res.primary.hex = _rgb2hex(prim_rgb.r, prim_rgb.g, prim_rgb.b);
   res.secondary.hex = _rgb2hex(seco_rgb.r, seco_rgb.g, seco_rgb.b);
@@ -2122,7 +2208,7 @@ function rand_color() {
 // convert to xyz, force luminances the same
 // convert back to rgb
 //
-function rand_color_cur() {
+function rand_color_x() {
   var res = {
     "primary" : { "hex":"#000000" },
     "secondary" : {"hex":"#ffffff" },
@@ -2729,7 +2815,7 @@ var tarot = {
 //---------------------------
 
 
-var bg_ctx = _preprocess_svgjson(bg_data, bg_color, bg_color);
+var bg_ctx = _preprocess_svgjson(bg_data, bg_color, bg_color, !sibyl_opt.use_gradient, sibyl_opt.exclude);
 bg_ctx["create_svg_header"] = false;
 bg_ctx["create_background_rect"] = false;
 bg_ctx["cur_depth"] = 0;
@@ -2743,24 +2829,26 @@ bg_ctx["svg_height"] = 720.0;
 bg_ctx["use_gradient"] = sibyl_opt.use_gradient;
 
 bg_ctx["bonkers"] = sibyl_opt.bonkers;
+bg_ctx["realized"] = {};
 
+var fg_ctx = _preprocess_svgjson(adata, primary_color, secondary_color, !sibyl_opt.use_gradient, sibyl_opt.exclude);
+fg_ctx["create_svg_header"] = true;
+fg_ctx["create_background_rect"] = true;
+fg_ctx["cur_depth"] = 0;
+fg_ctx["max_depth"] = sibyl_opt.max_attach_depth;
+fg_ctx["max_nest_depth"] = sibyl_opt.max_nest_depth;
+fg_ctx["scale"] = sibyl_opt.scale;
+fg_ctx["complexity"] = sibyl_opt.complexity;
 
-var g_data = _preprocess_svgjson(adata, primary_color, secondary_color);
-g_data["create_svg_header"] = true;
-g_data["create_background_rect"] = true;
-g_data["cur_depth"] = 0;
-g_data["max_depth"] = sibyl_opt.max_attach_depth;
-g_data["max_nest_depth"] = sibyl_opt.max_nest_depth;
-g_data["scale"] = sibyl_opt.scale;
-g_data["complexity"] = sibyl_opt.complexity;
+fg_ctx["svg_width"] = 720.0;
+fg_ctx["svg_height"] = 720.0;
+fg_ctx["use_gradient"] = sibyl_opt.use_gradient;
 
-g_data["svg_width"] = 720.0;
-g_data["svg_height"] = 720.0;
-g_data["use_gradient"] = sibyl_opt.use_gradient;
+fg_ctx["bonkers"] = sibyl_opt.bonkers;
 
-g_data["bonkers"] = sibyl_opt.bonkers;
+fg_ctx["realized"] = {};
 
-var base_symbol = g_data.symbol["eye_up"];
+var base_symbol = fg_ctx.symbol["eye_up"];
 
 var sched = {
   "base" : "globe",
@@ -2787,8 +2875,8 @@ if (arg_str == "random") {
   var bg_svg = "";
   if (sibyl_opt.use_background_image) {
 
-    g_data.create_svg_header = false;
-    g_data.create_background_rect = false;
+    fg_ctx.create_svg_header = false;
+    fg_ctx.create_background_rect = false;
     bg_ctx.create_svg_header = false;
 
     if (sibyl_opt.tile_background) {
@@ -2850,7 +2938,7 @@ if (arg_str == "random") {
 
   }
 
-  var creature_svg = mystic_symbolic_random(g_data, undefined, primary_color, secondary_color, bg_color);
+  var creature_svg = mystic_symbolic_random(fg_ctx, undefined, primary_color, secondary_color, bg_color);
 
   if (sibyl_opt.use_background_image) {
     console.log(svg_header);
@@ -2881,7 +2969,7 @@ else {
   console.log("raw_sched:\n------------------------------\n", JSON.stringify(raw_sched, undefined, 2), "\n-----------------------------\n");
 
   var ctx = { "data":{},"level": [],  "ring_num":0, "rnd_num":0, "sub_num":0};
-  ctx["orig_data"] = raw_sched;
+  ctx["orifg_ctx"] = raw_sched;
   ctx.data = create_node();
   ctx["cur_node"]  = ctx.data;
   ctx["cur_attach"] = "base";
@@ -2900,8 +2988,8 @@ else {
   var bg_svg = "";
   if (sibyl_opt.use_background_image) {
 
-    g_data.create_svg_header = false;
-    g_data.create_background_rect = false;
+    fg_ctx.create_svg_header = false;
+    fg_ctx.create_background_rect = false;
     bg_ctx.create_svg_header = false;
 
     if (sibyl_opt.tile_background) {
@@ -2962,9 +3050,9 @@ else {
     }
   }
 
-  var sched  = mystic_symbolic_dsl2sched( arg_str, g_data );
+  var sched  = mystic_symbolic_dsl2sched( arg_str, fg_ctx );
 
-  var creature_svg = mystic_symbolic_sched(g_data, sched , primary_color, secondary_color, bg_color);
+  var creature_svg = mystic_symbolic_sched(fg_ctx, sched , primary_color, secondary_color, bg_color);
 
   if (sibyl_opt.use_background_image) {
     console.log(svg_header);
