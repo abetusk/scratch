@@ -15664,7 +15664,7 @@
                 "tagName": "path",
                 "props": {
                   "id": "S4_2",
-                  "fill": "#ffffff",
+                  "fill": "url(#5E81175E-F71D-4939-95D1-EBD2959F77EA_2)",
                   "fillRule": "evenodd",
                   "stroke": "#000000",
                   "strokeWidth": "2",
@@ -15678,7 +15678,7 @@
                 "tagName": "path",
                 "props": {
                   "id": "S3",
-                  "fill": "#ffffff",
+                  "fill": "url(#5E81175E-F71D-4939-95D1-EBD2959F77EA_3)",
                   "fillRule": "evenodd",
                   "stroke": "#000000",
                   "strokeWidth": "2",
@@ -15704,7 +15704,7 @@
                 "tagName": "path",
                 "props": {
                   "id": "S4",
-                  "fill": "#ffffff",
+                  "fill": "url(#5E81175E-F71D-4939-95D1-EBD2959F77EA_4)",
                   "fillRule": "evenodd",
                   "stroke": "#000000",
                   "strokeWidth": "2",
@@ -15820,6 +15820,59 @@
         }
       ]
     },
+    "defs": [
+      {
+        "type": "radialGradient",
+        "id": "5E81175E-F71D-4939-95D1-EBD2959F77EA_2",
+        "cx": "50.26%",
+        "cy": "189.95%",
+        "r": "271.04%",
+        "stops": [
+          {
+            "offset": "0.00%",
+            "color": "#000000"
+          },
+          {
+            "offset": "50.00%",
+            "color": "#ffffff"
+          }
+        ]
+      },
+      {
+        "type": "radialGradient",
+        "id": "5E81175E-F71D-4939-95D1-EBD2959F77EA_3",
+        "cx": "50.51%",
+        "cy": "186.82%",
+        "r": "255.43%",
+        "stops": [
+          {
+            "offset": "0.00%",
+            "color": "#000000"
+          },
+          {
+            "offset": "50.00%",
+            "color": "#ffffff"
+          }
+        ]
+      },
+      {
+        "type": "radialGradient",
+        "id": "5E81175E-F71D-4939-95D1-EBD2959F77EA_4",
+        "cx": "50.75%",
+        "cy": "194.24%",
+        "r": "279.59%",
+        "stops": [
+          {
+            "offset": "0.00%",
+            "color": "#000000"
+          },
+          {
+            "offset": "50.00%",
+            "color": "#ffffff"
+          }
+        ]
+      }
+    ],
     "meta": {
       "invert_nested": true,
       "rotate_clockwise": true,
