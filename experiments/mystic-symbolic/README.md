@@ -3,7 +3,7 @@
 
 ```
 $ ./sibyl -h
-version: 0.1.3
+version: 0.1.4
 
 usage:
 
@@ -22,6 +22,8 @@ usage:
   [-B background-image]       set background image ('*' for random)
   [-T background-scale]       set background scale factor (default 0.5)
   [-D tiledx,tiledy]          shift tile background by tiledx,tiledy (ex. '-10,3') (default '0,0')
+  [-E symbol]                 exclude items from random generation (e.g. 'bob,pipe')
+  [-L color]                  color ring (e.g. '#77777,#afafaf,#fe3f3f,#1f1f7f') (unimmplemented)
   [-g]                        disable gradient
   [-t]                        tile background
   [-Q]                        bonkers mode (override attach restrictions)

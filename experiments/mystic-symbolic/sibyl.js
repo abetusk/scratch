@@ -19,7 +19,7 @@ var getopt = require("posix-getopt");
 var parser, opt;
 
 
-var _VERSION = "0.1.3";
+var _VERSION = "0.1.4";
 
 function show_version(fp) {
   fp.write("version: " + _VERSION + "\n");
