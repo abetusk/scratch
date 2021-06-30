@@ -37,6 +37,7 @@ function show_help(fp) {
   fp.write("  [-n nest-depth]             max nesting depth (default " + sibyl_opt.max_nest_depth.toString() + ")\n");
   fp.write("  [-a attach-depth]           max attach depth (default " + sibyl_opt.max_attach_depth.toString() + ")\n");
   fp.write("  [-S scale]                  rescale factor (default " + sibyl_opt.scale.toString() + ")\n");
+  fp.write("  [-G globalscale]            global scale (default " + sibyl_opt.global_scale.toString() + ")\n");
   fp.write("  [-C complexity]             complexity factor (how many attach points for a random creature) (default " + sibyl_opt.complexity.toString() + ")\n");
   fp.write("  [-p color]                  set primary color (ex. '#000000') (default random)\n");
   fp.write("  [-s color]                  set secondary color (ex '#ffffff') (default random)\n");
@@ -60,6 +61,7 @@ var sibyl_opt = {
   "max_attach_depth" : 1,
   "max_nest_depth" : 2,
   "scale" : 0.5,
+  "global_scale" : 1.0,
   "complexity" : 4,
   "primary_color" : "",
   "secondary_color" : "",
@@ -88,6 +90,7 @@ var long_opt = [
   "a", ":(attach-depth)",
   "n", ":(nest-depth)",
   "S", ":(scale)",
+  "G", ":(global-scale)",
   "C", ":(complexity)",
   "B", ":(background-image)",
   "T", ":(background-scale)",
@@ -171,6 +174,10 @@ while ((opt =  parser.getopt()) !== undefined) {
 
     case 'S':
       sibyl_opt.scale = parseFloat(opt.optarg);
+      break;
+
+    case 'G':
+      sibyl_opt.global_scale = parseFloat(opt.optarg);
       break;
 
     case 'C':
@@ -1334,8 +1341,13 @@ function mystic_symbolic_random(ctx, base, primary_color, secondary_color, bg_co
       ret_str += base.svg_header;
     }
 
+    var _scale = scale;
+    if ("global_scale" in ctx) {
+      _scale *= ctx.global_scale;
+    }
+
     ret_str += "<g transform=\"translate(" + (ctx.svg_width/2).toString() + " " + (ctx.svg_height/2).toString() + ") " +
-      " scale(" + scale.toString() + " " + scale.toString() + ") " +
+      " scale(" + _scale.toString() + " " + _scale.toString() + ") " +
       " translate(" + (-ctx.svg_width/2).toString() + " " + (-ctx.svg_height/2).toString() + ")\">\n";
 
     if (_include_background_rect) {
@@ -1590,8 +1602,12 @@ function mystic_symbolic_sched(ctx, sched, primary_color, secondary_color, bg_co
       ret_str += base.svg_header;
     }
 
-    //ret_str += "<g transform=\"translate(360 360) scale(0.5 0.5) translate(-360 -360)\">\n";
-    ret_str += "<g transform=\"translate(360 360) scale(" + scale.toString() + " " + scale.toString() + ") translate(-360 -360)\">\n";
+    var _scale = scale;
+    if ("global_scale" in ctx) {
+      _scale *= ctx.global_scale;
+    }
+
+    ret_str += "<g transform=\"translate(360 360) scale(" + _scale.toString() + " " + _scale.toString() + ") translate(-360 -360)\">\n";
 
     if (_include_background_rect) {
       var w = ctx.svg_width;
@@ -2920,6 +2936,7 @@ fg_ctx["cur_depth"] = 0;
 fg_ctx["max_depth"] = sibyl_opt.max_attach_depth;
 fg_ctx["max_nest_depth"] = sibyl_opt.max_nest_depth;
 fg_ctx["scale"] = sibyl_opt.scale;
+fg_ctx["global_scale"] = sibyl_opt.global_scale;
 fg_ctx["complexity"] = sibyl_opt.complexity;
 
 fg_ctx["svg_width"] = 720.0;
@@ -2983,6 +3000,12 @@ if (arg_str == "random") {
       var offset_x = sibyl_opt.background_dx;
       var offset_y = sibyl_opt.background_dy;
 
+      var w = bg_ctx.svg_width;
+      var h = bg_ctx.svg_height;
+      _bg = bg_color;
+      bg_svg += "<rect x=\"-" + w.toString() + "\" y=\"-" + h.toString() + "\" ";
+      bg_svg += "width=\"" + (3*w).toString() + "\" height=\"" + (3*h).toString() + "\" fill=\"" + _bg + "\" data-is-background=\"true\">\n</rect>\n";
+
       for (var x_idx=0; x_idx <= _n; x_idx++) {
         for (var y_idx=0; y_idx <= _n; y_idx++) {
 
@@ -3034,7 +3057,6 @@ if (arg_str == "random") {
     console.log(svg_footer);
   }
 
-
 }
 
 else {
@@ -3078,6 +3100,7 @@ else {
     if (sibyl_opt.tile_background) {
 
       bg_ctx.create_background_rect = false;
+      //bg_ctx.create_background_rect = true;
 
       var bg_sched  = mystic_symbolic_dsl2sched( sibyl_opt.background_image, bg_ctx );
       var bg_svg_single = mystic_symbolic_sched(bg_ctx, bg_sched , bg_color, bg_color2, bg_color);
@@ -3095,6 +3118,13 @@ else {
 
       var offset_x = sibyl_opt.background_dx;
       var offset_y = sibyl_opt.background_dy;
+
+      var w = bg_ctx.svg_width;
+      var h = bg_ctx.svg_height;
+      _bg = bg_color;
+      bg_svg += "<rect x=\"-" + w.toString() + "\" y=\"-" + h.toString() + "\" ";
+      bg_svg += "width=\"" + (3*w).toString() + "\" height=\"" + (3*h).toString() + "\" fill=\"" + _bg + "\" data-is-background=\"true\">\n</rect>\n";
+
 
       for (var x_idx=0; x_idx <= _n; x_idx++) {
         for (var y_idx=0; y_idx <= _n; y_idx++) {
