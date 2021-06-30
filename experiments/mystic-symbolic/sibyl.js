@@ -1135,6 +1135,12 @@ function _preprocess_svgjson(adata, primary_color, secondary_color, disable_grad
 
   }
 
+  xdata["svg_header"] = ['<?xml version="1.0" encoding="utf-8"?>',
+    '<!-- Generator: Moho 13.5 build 20210422 -->',
+    '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">',
+    '<svg version="1.1" id="Frame_0" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="720px" height="720px">'].join("\n");
+  xdata["svg_footer"] = "</svg>";
+
   xdata["data"] = [];
   for (var ii=0; ii<adata.length; ii++) {
     if (adata[ii].name in exclude_h) { continue; }
@@ -1551,9 +1557,6 @@ function mystic_symbolic_sched(ctx, sched, primary_color, secondary_color, bg_co
   var scale = ctx.scale;
   var top_level = false;
 
-  if (ctx.cur_depth == 0) { top_level = true; }
-  ctx.cur_depth++;
-
   var symbol_info = parse_invert_name(sched.base);
   var invert_flag = symbol_info.invert;
   var symbol_name = symbol_info.name;
@@ -1561,14 +1564,20 @@ function mystic_symbolic_sched(ctx, sched, primary_color, secondary_color, bg_co
   var _base_pcol = ( symbol_info.primary ? symbol_info.primary : primary_color ),
       _base_scol = ( symbol_info.secondary ? symbol_info.secondary : secondary_color );
 
+  // if it's a `:rnd` keyworkd,, short circuit and go directly into the
+  // `mystic_symbolic_random` function.
+  //
   if (symbol_name == ":rnd") {
     var _rnd_creat = ctx.symbol[random_creature(ctx, "base")];
-    //var _r = jsonsvg2svg_defs(_rnd_creat.defs, secondary_color, primary_color);
     var _r = "";
-    //_r += mystic_symbolic_random(ctx, undefined, primary_color, secondary_color, bg_color);
     _r += mystic_symbolic_random(ctx, undefined, _base_pcol, _base_scol, bg_color);
     return _r;
   }
+
+  //--
+
+  if (ctx.cur_depth == 0) { top_level = true; }
+  ctx.cur_depth++;
 
   var base = ctx.symbol[symbol_name];
   if (!(symbol_name in ctx.symbol)) { return {"error":"could not find symbol " + symbol_name + " (0)"}; }
@@ -1640,13 +1649,15 @@ function mystic_symbolic_sched(ctx, sched, primary_color, secondary_color, bg_co
       var _sub_pcol = ( sub_symbol_info.primary ? sub_symbol_info.primary : primary_color );
       var _sub_scol = ( sub_symbol_info.secondary ? sub_symbol_info.secondary : secondary_color );
 
+      var do_random_recur = false;
 
-      if (symbol_name == ":rnd") {
+
+      if (sub_symbol_name == ":rnd") {
         var _rnd_creat = ctx.symbol[random_creature(ctx, attach_id)];
-        //ret_str += jsonsvg2svg_defs(_rnd_creat.defs, secondary_color, primary_color);
-        //ret_str += mystic_symbolic_random(ctx, _rnd_creat, primary_color, secondary_color, bg_color);
-        ret_str += mystic_symbolic_random(ctx, _rnd_creat, _sub_pcol, _sub_scol, bg_color);
-        continue;
+        sub_symbol_name = _rnd_creat.name;
+        do_random_recur = true;
+        //ret_str += mystic_symbolic_random(ctx, _rnd_creat, _sub_pcol, _sub_scol, bg_color);
+        //continue;
       }
 
 
@@ -1656,7 +1667,6 @@ function mystic_symbolic_sched(ctx, sched, primary_color, secondary_color, bg_co
 
       var sub_sched = sched.attach[attach_id][m_aidx];
 
-      //var sub = Object.assign({}, ctx.symbol[sub_name]);
       var sub = Object.assign({}, ctx.symbol[sub_symbol_name]);
 
       var _invert = ( ((aidx%2)==0) ? false : true );
@@ -1684,10 +1694,14 @@ function mystic_symbolic_sched(ctx, sched, primary_color, secondary_color, bg_co
 
       var t_str_e = "</g>";
 
-      //ret_str += jsonsvg2svg_defs(sub.defs, primary_color, secondary_color);
       ret_str += jsonsvg2svg_defs(sub.defs, _sub_pcol, _sub_scol);
-      //reuse_svg = mystic_symbolic_sched(ctx, sub_sched, primary_color, secondary_color);
-      reuse_svg = mystic_symbolic_sched(ctx, sub_sched, _sub_pcol, _sub_scol);
+      
+      if (do_random_recur) {
+        reuse_svg = mystic_symbolic_random(ctx, ctx.symbol[sub_symbol_name], _sub_pcol, _sub_scol);
+      }
+      else {
+        reuse_svg = mystic_symbolic_sched(ctx, sub_sched, _sub_pcol, _sub_scol);
+      }
 
       ret_str += t_str_s;
       ret_str += reuse_svg;
@@ -1749,12 +1763,14 @@ function mystic_symbolic_sched(ctx, sched, primary_color, secondary_color, bg_co
       var _sub_pcol = ( sub_symbol_info.primary ? sub_symbol_info.primary : primary_color );
       var _sub_scol = ( sub_symbol_info.secondary ? sub_symbol_info.secondary : secondary_color );
 
+      var do_random_recur = false;
+
       if (sub_symbol_name == ":rnd") {
         var _rnd_creat = ctx.symbol[random_creature(ctx, "nesting")];
-        //ret_str += jsonsvg2svg_defs(_rnd_creat.defs, secondary_color, primary_color);
-        //ret_str += mystic_symbolic_random(ctx, _rnd_creat, primary_color, secondary_color, bg_color);
-        ret_str += mystic_symbolic_random(ctx, _rnd_creat, _sub_pcol, _sub_scol, bg_color);
-        continue;
+        sub_symbol_name = _rnd_creat.name;
+        do_random_recur = true;
+        //ret_str += mystic_symbolic_random(ctx, _rnd_creat, _sub_pcol, _sub_scol, bg_color);
+        //continue;
       }
 
       if (!(sub_symbol_name in ctx.symbol)) {
@@ -1799,7 +1815,13 @@ function mystic_symbolic_sched(ctx, sched, primary_color, secondary_color, bg_co
       ret_str += jsonsvg2svg_defs(sub.defs, _sub_scol, _sub_pcol);
       ret_str += t_str_s;
       //ret_str += mystic_symbolic_sched(ctx, sub_sched, secondary_color, primary_color);
-      ret_str += mystic_symbolic_sched(ctx, sub_sched, _sub_scol, _sub_pcol);
+
+      if (do_random_recur) {
+        ret_str += mystic_symbolic_random(ctx, ctx.symbol[sub_symbol_name], _sub_pcol, _sub_scol, bg_color);
+      }
+      else {
+        ret_str += mystic_symbolic_sched(ctx, sub_sched, _sub_scol, _sub_pcol);
+      }
       ret_str += t_str_e;
 
     }

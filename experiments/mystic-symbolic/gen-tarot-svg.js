@@ -105,16 +105,44 @@ var minor_arcana_pnts = {
   "10" : [
     [
       { "x": _mid_w - 2*_w3, "y": 2*_h - 2.25*_h5 },
-      { "x": _mid_w - 2*_w3, "y": 2*_h - 4.25*_h5  },
-      { "x": _mid_w - 2*_w3, "y": 2*_h - 6.25*_h5  },
-      { "x": _mid_w - 2*_w3, "y": 2*_h - 8.25*_h5  },
-      { "x": _mid_w - 2*_w3, "y": 2*_h - 10.25*_h5  },
+      { "x": _mid_w - 2*_w3, "y": 2*_h - 4.25*_h5 },
+      { "x": _mid_w - 2*_w3, "y": 2*_h - 6.25*_h5 },
+      { "x": _mid_w - 2*_w3, "y": 2*_h - 8.25*_h5 },
+      { "x": _mid_w - 2*_w3, "y": 2*_h - 10.25*_h5},
 
       { "x": _mid_w + 2*_w3, "y": 2*_h - 2.25*_h5 },
-      { "x": _mid_w + 2*_w3, "y": 2*_h - 4.25*_h5  },
-      { "x": _mid_w + 2*_w3, "y": 2*_h - 6.25*_h5  },
-      { "x": _mid_w + 2*_w3, "y": 2*_h - 8.25*_h5  },
-      { "x": _mid_w + 2*_w3, "y": 2*_h - 10.25*_h5  }
+      { "x": _mid_w + 2*_w3, "y": 2*_h - 4.25*_h5 },
+      { "x": _mid_w + 2*_w3, "y": 2*_h - 6.25*_h5 },
+      { "x": _mid_w + 2*_w3, "y": 2*_h - 8.25*_h5 },
+      { "x": _mid_w + 2*_w3, "y": 2*_h - 10.25*_h5}
+    ],
+
+    [
+      { "x": _mid_w - _w2, "y": 2*_h - 2.25*_h5 },
+      { "x": _mid_w - _w2, "y": 2*_h - 4.25*_h5 },
+      { "x": _mid_w - _w2, "y": 2*_h - 6.25*_h5 },
+      { "x": _mid_w - _w2, "y": 2*_h - 8.25*_h5 },
+      { "x": _mid_w - _w2, "y": 2*_h - 10.25*_h5},
+
+      { "x": _mid_w + _w2, "y": 2*_h - 2.25*_h5 },
+      { "x": _mid_w + _w2, "y": 2*_h - 4.25*_h5 },
+      { "x": _mid_w + _w2, "y": 2*_h - 6.25*_h5 },
+      { "x": _mid_w + _w2, "y": 2*_h - 8.25*_h5 },
+      { "x": _mid_w + _w2, "y": 2*_h - 10.25*_h5}
+    ],
+
+    [
+      { "x": _mid_w - _w3, "y": 2*_h - 2.25*_h5 },
+      { "x": _mid_w - _w3, "y": 2*_h - 4.25*_h5 },
+      { "x": _mid_w - _w3, "y": 2*_h - 6.25*_h5 },
+      { "x": _mid_w - _w3, "y": 2*_h - 8.25*_h5 },
+      { "x": _mid_w - _w3, "y": 2*_h - 10.25*_h5},
+
+      { "x": _mid_w + _w3, "y": 2*_h - 2.25*_h5 },
+      { "x": _mid_w + _w3, "y": 2*_h - 4.25*_h5 },
+      { "x": _mid_w + _w3, "y": 2*_h - 6.25*_h5 },
+      { "x": _mid_w + _w3, "y": 2*_h - 8.25*_h5 },
+      { "x": _mid_w + _w3, "y": 2*_h - 10.25*_h5}
 
     ]
   ],
@@ -131,7 +159,8 @@ function create_tarot_json(data, id, pnts, nesting) {
   if (typeof pnts === "undefined") { pnts = []; }
   if (typeof nesting === "undefined") {
     nesting = { 
-      "x": { "min": 150, "max": 570},
+      //"x": { "min": 150, "max": 570},
+      "x": { "min": 100, "max": 620},
       "y": { "min": 20, "max": 700 }
     };
   }
@@ -188,11 +217,11 @@ var minor_arcana_list = ["ace", "2", "3", "4", "5", "6", "7",  "8", "9", "10", "
 var tarot_minor_json = [];
 
 
-var suite = "wands";
+var pfx = "minor_arcana";
 for (var ii=0; ii<minor_arcana_list.length; ii++) {
   var card_type = minor_arcana_list[ii];
   for (var jj=0; jj<minor_arcana_pnts[card_type].length; jj++) {
-    var card_id = suite + "_" + card_type + "_" + jj;
+    var card_id = pfx + "_" + card_type + "_" + jj;
     var _dat = create_template();
     create_tarot_json(_dat, card_id, minor_arcana_pnts[card_type][jj]);
     tarot_minor_json.push(_dat);
