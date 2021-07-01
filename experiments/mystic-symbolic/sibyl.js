@@ -43,10 +43,12 @@ function show_help(fp) {
   fp.write("  [-s color]                  set secondary color (ex '#ffffff') (default random)\n");
   fp.write("  [-b color]                  set background color (ex. '#777777') (default random)\n");
   fp.write("  [-c color]                  set background2 color (ex. '#888888') (default random)\n");
+  fp.write("  [-l linewidth]              set linewidth (default 4)\n");
   fp.write("  [-B background-image]       set background image ('*' for random)\n");
   fp.write("  [-T background-scale]       set background scale factor (default " + sibyl_opt.background_scale_x.toString() + ")\n");
   fp.write("  [-D tiledx,tiledy]          shift tile background by tiledx,tiledy (ex. '-10,3') (default '0,0')\n");
   fp.write("  [-E symbol]                 exclude items from random generation (e.g. 'bob,pipe')\n");
+  fp.write("  [-e exclude-file]           file with excluded symbols\n");
   fp.write("  [-L color]                  color ring (e.g. '#77777,#afafaf,#fe3f3f,#1f1f7f') (unimmplemented)\n");
   fp.write("  [-g]                        disable gradient\n");
   fp.write("  [-t]                        tile background\n");
@@ -78,6 +80,8 @@ var sibyl_opt = {
   "use_gradient" : true,
   "bonkers" : false,
   "exclude" : [],
+  "exclude_fn" : [],
+  "line_width" : 4,
   "color_ring" : [],
   "additional_svgjson" : []
 };
@@ -99,7 +103,9 @@ var long_opt = [
   "D", ":(background-tile-dxy)",
   "Q", "(bonkers-mode)",
   "E", ":(exclude)",
+  "e", ":(exclude-file)",
   "L", ":(color-ring)",
+  "l", ":(line-width)",
   "J", ":(svgjson)"
 ];
 
@@ -131,6 +137,10 @@ while ((opt =  parser.getopt()) !== undefined) {
 
     case 'c':
       sibyl_opt.background_color2 = opt.optarg;
+      break;
+
+    case 'l':
+      sibyl_opt.line_width = opt.optarg;
       break;
 
     case 'L':
@@ -208,6 +218,10 @@ while ((opt =  parser.getopt()) !== undefined) {
       sibyl_opt.exclude.push(opt.optarg);
       break;
 
+    case 'e':
+      sibyl_opt.exclude_fn.push(opt.optarg);
+      break;
+
     //---
 
     default:
@@ -278,6 +292,16 @@ if (fn.length == 0) {
   console.log("provide json");
   show_help(process.stderr);
   process.exit(1);
+}
+
+for (var ii=0; ii<sibyl_opt.exclude_fn.length; ii++) {
+  var _exclude_dat = fs.readFileSync(sibyl_opt.exclude_fn[ii]).toString('utf-8');
+  var lines = _exclude_dat.split("\n");
+  for (var jj=0; jj<lines.length; jj++) {
+    if (lines[jj].length == 0) { continue; }
+    if (lines[jj][0] == '#') { continue; }
+    sibyl_opt.exclude.push(lines[jj]);
+  }
 }
 
 // Read the vocabulary JSON and
@@ -1007,7 +1031,7 @@ function jsonsvg2svg(_x) {
 // Child nodes ar estored in a `children` array.
 // Returns an array of SVG lines.
 //
-function jsonsvg2svg_child(x, primary_color, secondary_color, disable_gradient) {
+function jsonsvg2svg_child(x, primary_color, secondary_color, disable_gradient, custom_prop) {
   disable_gradient = ((typeof disable_gradient === "undefined") ? false : disable_gradient);
   custom_prop = ((typeof custom_prop === "undefined") ? {} : custom_prop);
   var lines = [];
@@ -1053,8 +1077,9 @@ function jsonsvg2svg_child(x, primary_color, secondary_color, disable_gradient) 
           real_prop_key = remap[prop_key];
         }
 
-        // experiment
-        if (real_prop_key == "stroke-width") { _val = 4; }
+        if (real_prop_key in custom_prop) {
+          _val = custom_prop[real_prop_key];
+        }
 
         _line += " " + real_prop_key + "=\"" + _val + "\"";
 
@@ -1064,7 +1089,7 @@ function jsonsvg2svg_child(x, primary_color, secondary_color, disable_gradient) 
     if ((tag !== "path") && (tag.length>0)) { _line += ">\n"; }
 
     if ("children" in _json) {
-      var _d = jsonsvg2svg_child(_json.children, primary_color, secondary_color, disable_gradient);
+      var _d = jsonsvg2svg_child(_json.children, primary_color, secondary_color, disable_gradient, custom_prop);
       _line += _d.join("\n");
     }
 
@@ -1313,11 +1338,15 @@ function mystic_symbolic_random(ctx, base, primary_color, secondary_color, bg_co
   secondary_color = ((typeof secondary_color === "undefined") ? "#000000" : secondary_color);
   bg_color = ((typeof bg_color === "undefined") ? "#777777" : bg_color);
 
+  var realized = {};
+
   //base = ( (typeof base === "undefined") ? ctx.data[ _irnd(ctx.data.length) ] : base ) ;
   if (typeof base === "undefined") {
     var base_name = random_creature(ctx, "base");
     base = ctx.symbol[base_name];
   }
+
+  realized["base"] = base.name;
 
   var _include_background_rect = ctx.create_background_rect;
 
@@ -1394,6 +1423,12 @@ function mystic_symbolic_random(ctx, base, primary_color, secondary_color, bg_co
 
       var sub_name = random_creature(ctx, attach_id);
 
+      if (!(attach_id in realized)) {
+        realized[attach_id] = [];
+      }
+
+
+
       // We reuse the svg to give the symmetry, inverting as needed.
       //
       var reuse_svg = "";
@@ -1427,6 +1462,8 @@ function mystic_symbolic_random(ctx, base, primary_color, secondary_color, bg_co
           reuse_svg = mystic_symbolic_random(ctx, sub, primary_color, secondary_color);
         }
 
+        realized[attach_id].push( ctx.realized_child );
+
         ret_str += t_str_s;
 
         // render svg from svgjson data
@@ -1455,7 +1492,7 @@ function mystic_symbolic_random(ctx, base, primary_color, secondary_color, bg_co
     ret_str += "\">";
   }
 
-  ret_str += jsonsvg2svg_child(base.layers, primary_color, secondary_color, !ctx.use_gradient);
+  ret_str += jsonsvg2svg_child(base.layers, primary_color, secondary_color, !ctx.use_gradient, ctx.custom_prop);
 
   if (invert_flag) {
     ret_str += "</g>";
@@ -1509,6 +1546,11 @@ function mystic_symbolic_random(ctx, base, primary_color, secondary_color, bg_co
       ret_str += mystic_symbolic_random(ctx, sub, secondary_color, primary_color);
       ret_str += t_str_e;
 
+      if (!("nesting" in realized)) {
+        realized["nesting"] = [];
+      }
+      realized["nesting"].push( ctx.realized_child );
+
     }
   }
 
@@ -1519,6 +1561,8 @@ function mystic_symbolic_random(ctx, base, primary_color, secondary_color, bg_co
       ret_str += base.svg_footer;
     }
   }
+
+  ctx["realized_child"] = realized;
 
   ctx.cur_depth-=1;
   return ret_str;
@@ -1745,7 +1789,7 @@ function mystic_symbolic_sched(ctx, sched, primary_color, secondary_color, bg_co
   // in case I can remmember why I put it here in the first place
   //
   //ret_str += jsonsvg2svg_child(base.layers, primary_color, secondary_color, !ctx.use_gradient);
-  ret_str += jsonsvg2svg_child(base.layers, _base_pcol, _base_scol, !ctx.use_gradient);
+  ret_str += jsonsvg2svg_child(base.layers, _base_pcol, _base_scol, !ctx.use_gradient, ctx.custom_prop);
 
   /*
   if (invert_flag) {
@@ -2003,7 +2047,7 @@ function mystic_symbolic_sched2(ctx, sched, idx, primary_color, secondary_color,
 
   }
 
-  ret_str += jsonsvg2svg_child(base.layers, primary_color, secondary_color, !ctx.use_gradient);
+  ret_str += jsonsvg2svg_child(base.layers, primary_color, secondary_color, !ctx.use_gradient, ctx.custom_prop);
 
   // nesting logic
   //
@@ -2903,6 +2947,35 @@ var tarot = {
   "minor" : [ "?", "pentacle", "cup", "sword" ]
 };
 
+function repr_realized(realized, lvl) {
+  lvl = ((typeof lvl === "undefined") ? 0 : lvl);
+  var _ret = "";
+  var limbs = {"crown":'^', "horn":'!', "arm":'~', "leg":'|', "tail":'.', "nesting":'@'};
+
+  var is_sub = false;
+  for (var limb in limbs) {
+    if ((lvl>0) && (limb in realized)) {
+      is_sub = true;
+    }
+  }
+
+  if ("base" in realized) {
+    if (is_sub) { _ret += "("; };
+    _ret += realized.base;
+    for (var limb in limbs) {
+      if (limb in realized) {
+        //for (var idx=0; idx<realized[limb].length; idx++) {
+        _ret += limbs[limb];
+        _ret += repr_realized(realized[limb][0], lvl+1);
+        //}
+      }
+    }
+    if (is_sub) { _ret += ")"; };
+  }
+
+  return _ret;
+}
+
 //---------------------------
 //                   _       
 //   _ __ ___   __ _(_)_ __  
@@ -2928,6 +3001,9 @@ bg_ctx["use_gradient"] = sibyl_opt.use_gradient;
 
 bg_ctx["bonkers"] = sibyl_opt.bonkers;
 bg_ctx["realized"] = {};
+bg_ctx["line_width"] = sibyl_opt.line_width;
+
+bg_ctx["custom_prop"] = { "stroke-width" : bg_ctx["line_width"] };
 
 var fg_ctx = _preprocess_svgjson(adata, primary_color, secondary_color, !sibyl_opt.use_gradient, sibyl_opt.exclude);
 fg_ctx["create_svg_header"] = true;
@@ -2946,6 +3022,9 @@ fg_ctx["use_gradient"] = sibyl_opt.use_gradient;
 fg_ctx["bonkers"] = sibyl_opt.bonkers;
 
 fg_ctx["realized"] = {};
+fg_ctx["line_width"] = sibyl_opt.line_width;
+
+fg_ctx["custom_prop"] = { "stroke-width" : fg_ctx["line_width"] };
 
 var base_symbol = fg_ctx.symbol["eye_up"];
 
@@ -3057,6 +3136,11 @@ if (arg_str == "random") {
     console.log(svg_footer);
   }
 
+  console.log("<!--");
+  //console.log(JSON.stringify(fg_ctx.realized_child, undefined, 2));
+  console.log(repr_realized(fg_ctx.realized_child));
+  console.log("-->");
+
 }
 
 else {
@@ -3105,7 +3189,7 @@ else {
       var bg_sched  = mystic_symbolic_dsl2sched( sibyl_opt.background_image, bg_ctx );
       var bg_svg_single = mystic_symbolic_sched(bg_ctx, bg_sched , bg_color, bg_color2, bg_color);
 
-      var _n = Math.floor(2.0 / sibyl_opt.background_scale_x);
+      var _n = Math.floor(4.0 / sibyl_opt.background_scale_x);
 
       var _w2 = bg_ctx.svg_width/2.0;
       var _h2 = bg_ctx.svg_height/2.0;

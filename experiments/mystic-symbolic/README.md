@@ -273,15 +273,7 @@ should not be chosen should it violate the `always_nest` option if it's too far 
 TODO
 ---
 
-* allow for stroke width changes (command line option)
-* allow for "color ring" to give different symbols at different depths different colors
-* figure out what a good method is to exclude certain items
-* record the realization and put it in a structure, providing it as a comment in the
-  resulting SVG
 * provide a seedable rng ([*](https://github.com/davidbau/seedrandom))
-
-It might be better to just provide some other tool to create a custom schedule
-and then feed that into `sibyl` for the for complex scene generation.
 
 Credits
 ---

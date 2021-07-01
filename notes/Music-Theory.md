@@ -189,8 +189,8 @@ Though subjective, most people find combinations of notes acoustically pleasing 
 the ratio of frequencies has small integral numerator and denominator when their ratio is reduced.
 This observation is the basis of most named chords ("major", "minor", etc.) and diatonic scales or "modes" ("Ionian", "Dorian", etc.).
 
-For example, most people will not find the following combination of notes unpleasant: `[ 440, 523, 659 ]` (or `(A4, C4, E4)`), whereas
-most people will find the following set of notes to be unpleasant or incongruous: `[440, 466, 493]`.
+For example, most people will not find the following combination of notes unpleasant when played at the same time: `[ 440, 523, 659 ]` (or `(A4, C4, E4)`), whereas
+most people will find the following set of notes to be unpleasant or incongruous when played at the same time: `[440, 466, 493]`.
 
 By a certain measure, the 12 note scale produces a rich set of combinations of notes that have a small reduced fraction
 representation and enough variety ([10](#10)).
@@ -201,7 +201,7 @@ The 12 note scale is most probably a cultural artifact but, under the right set 
 the 12 note equal-tempered scale can be considered a reasonable scale choice.
 
 To illustrate this point further, consider taking the ratio of frequencies of two note pairs, $r$,
-and taking the smallest integral $p,q$ such that $ | \frac{p}{q} - r | \epsilon $, for some given $\epsilon$.
+and taking the smallest integral $p,q$ such that $ | \frac{p}{q} - r | < \epsilon $, for some given $\epsilon$.
 Here is a table of the ratio of the larger frequency to the smaller one for $ \epsilon = 0.06$:
 
 | Note ratio | Fractional Approximation |
@@ -371,6 +371,12 @@ The quality of a musical instrument's sound is often called it's "timbre".
 Though the definition of timbre is hard to pin down, for the purposes of this text, it will be
 roughly understood to be the Fourier coefficients as they evolve through time.
 
+For example, though a violin and a clarinet can both play an `A4` note (440Hz), to most people
+these instruments playing the same note will sound different.
+Most of the 'signal' of the sound that the instrument produces is centered on the 440Hz
+fundamental frequency where all the other frequencies as they evolve through time give each
+instrument their characteristic sound or "timbre".
+
 The scope of instrument design can quickly balloon to be out of scope of this text.
 We will restrict ourselves to percussive and synthesizer instruments.
 
@@ -523,3 +529,58 @@ References
 * [9](https://github.com/abetusk/papers/blob/release/Music/rhythm-msuci_Patel_Daniel.pdf)
 * [10](https://github.com/abetusk/papers/blob/release/Music/measures-consonances_honingh.pdf)
 * [11](https://www.youtube.com/watch?v=aEjcK5JFEFE)
+
+TODO
+---
+
+* add sample song that illustrates each of the hierarchy points layered in ('happy birthday'?) (introduction)
+* picture of cochlea (human auditory system section)
+* add "log scale" description to perceived human hearing graph (human auditory system section)
+* add frequency slider that goes from 0 to 44khz in linear and logarithmic to highlight difference  (human auditory system section)
+* add picture of elephants stampeding, mosquitoes buzzing and birds singing (human auditory system section)
+* add graphic depiction of beat synchronization and melody pitch shifting (human auditory system section, language)
+* add graphic of power law vs. gaussian vs exponential (human auditory system section, rhythm)
+* add note on sums of random variables of power law vs. gaussian (human auditory system section, rhythm)
+* add overview graphic of scales (human auditory system section, scale)
+* add chromatic scale with frequencies (and maybe colors?) (human auditory system section, scale)
+* find reference to monks and c-major vs. a-major note notation and add note about why we use c-major now (human auditory system section, scale)
+* add graphic overview of chords (human auditory system section, scale)
+* add chord play sample for (a4,c4,e4) and the incongruous note (human auditory system section, chords)
+* add code note on showing "optimality" of the 12 note scale (human auditory system section, chords)
+* add playable two note chord for each of the ratios presented (human auditory system section, chords)
+* add visual demo of peaks/troughs of reduced fraction notes to highlight why it might be pleasing (human auditory system section, chords)
+* add overview graphic of diatonic scale (human auditory system section, diatonic scales)
+* add specific example (c-major, a-minor) to highlight scale/mode equivalence (human auditory system section, diatonic scales)
+* add note about locrian 'mood' (human auditory system section, diatonic scales)
+* add graphics for each of the four basic wave types (instrument synthesis)
+* add a better graphic for ADSR and highlight that adr are usually time whereas s is proportion (instrument synthesis, adsr)
+* add adsr graphic for envelope effect on amplitude (instrument synthesis, adsr)
+* add simple synth with adsr envelope and 2-3 oscs to play with, along with some presets (instrument synthesis, adsr)
+* add simple synth with detune parameter (instrument synthesis, detune)
+* add simple synth with lfo parameter (instrument synthesis, lfo)
+* add animation graphic of adsr for filter (instrument synthesis, filter)
+* add graphic of each of the basic types of filter, in freq. space, for the different filters (instrument synthesis, filter)
+* talk about resonance for the cutoff filter (lowpass?) (instrument synthesis, filter)
+* talk about the names of each of the filters (instrument synthesis, filter)
+* add simple synth with adsr for filter (instrument synthesis, filter)
+* add section about common effects (reverb, chorus, bitcrush, etc.) (instrument synthesis, effects)
+* construct learning synth with n oscs, adsr amp, adsr filter, some simple effects and gen tune, presets (instrument synthesis, basic synth)
+* talk about the 'polishing' effects, such as lfos to various knobs/filters, detuning, etc. (instrument synthesis, production effects)
+* song parts (drums, base, lead, arp., misc.) (composition)
+  - talk about layering and different layering techniques (voices, composition lfos, variation in melody/base/chord prog, misc. voices)
+* drum patterns (composition)
+* generative random drum creation code (composition)
+* chord progression techniques and chord progression choices as it relates to different sections (composition)
+* generative chord progression code (composition)
+* melody creation (composition)
+* make sure to mention tempo variation as opposed to standard common markov model creation (composition)
+* generative melody creation code (composition)
+* composition effects (composition)
+  - talk about fiddling with effects for richer sounds (some overlap with instrument synthesis but slower in time so more appropriate to composition) (composition)
+* add 'acid banger like' section (generative drum + melody + composition effects) (composition)
+* add basic pop song structure section (composition)
+* add generative pop song creator (composition)
+* talk about short comings of above ideas (rap, rnb, some pop songs, etc.) (discussion)
+
+
+

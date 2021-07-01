@@ -82,13 +82,131 @@ var _DEFAULT_WIDTH = 720, _DEFAULT_HEIGHT = 720;
 var _w      = _DEFAULT_WIDTH,   _h      = _DEFAULT_HEIGHT,
     _mid_w  = _DEFAULT_WIDTH/2, _mid_h  = _DEFAULT_HEIGHT/2;
 
-var _w2 = _w/2.0, _h2 = _h/2.0,
-    _w3 = _w/3.0, _h3 = _h/3.0,
-    _w4 = _w/4.0, _h4 = _h/4.0,
-    _w5 = _w/5.0, _h5 = _h/5.0,
-    _w8 = _w/8.0, _h8 = _h/8.0;
+var  _w2  = _w/2.0,   _h2 = _h/2.0,
+     _w3  = _w/3.0,   _h3 = _h/3.0,
+     _w4  = _w/4.0,   _h4 = _h/4.0,
+     _w5  = _w/5.0,   _h5 = _h/5.0,
+     _w8  = _w/8.0,   _h8 = _h/8.0,
+     _w9  = _w/9.0,   _h9 = _h/9.0,
+    _w10  = _w/10.0, _h10 = _h/10.0;
+
+// 140
+//
+var _sz = Math.floor(_DEFAULT_HEIGHT/5/10) * 10;
+var _sz2 = _sz/2;
+
+var card_height = _h;
+var card_width = (3/5)*card_height;
+var card_margin = (0.25/5)*card_height;
+
+var _dy = (_DEFAULT_HEIGHT - 2*card_margin)/5;
+var _dy2 = _dy/2.0;
+
+//var _cx_m1 = _mid_w - (card_width/2) + card_margin + _sz2;
+var _cx_m1 = _mid_w - (card_width/2) + card_margin + _dy2;
+var _cx_0  = _mid_w;
+//var _cx_p1 = _mid_w + (card_width/2) - card_margin - _sz2;
+var _cx_p1 = _mid_w + (card_width/2) - card_margin - _dy2;
+
+var z = card_margin + _sz2/2.0;
+
+var _cy_0_5 = _mid_h - (card_height/2) + card_margin + 0*_dy + z;
+var _cy_1_5 = _mid_h - (card_height/2) + card_margin + 1*_dy + z;
+var _cy_2_5 = _mid_h - (card_height/2) + card_margin + 2*_dy + z;
+var _cy_3_5 = _mid_h - (card_height/2) + card_margin + 3*_dy + z;
+var _cy_4_5 = _mid_h - (card_height/2) + card_margin + 4*_dy + z;
 
 var minor_arcana_pnts = {
+
+  "ace" : [ [
+    { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+      "y" : { "min": _cy_0_5 - _sz2, "max": _cy_0_5 + _sz2 } } ] ],
+
+  "2" : [ [
+    { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+      "y" : { "min": _cy_0_5 - _sz2, "max": _cy_0_5 + _sz2 } } ] ],
+
+  "3" : [ [
+    { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+      "y" : { "min": _cy_0_5 - _sz2, "max": _cy_0_5 + _sz2 } } ] ],
+
+  "4" : [ [
+    { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+      "y" : { "min": _cy_0_5 - _sz2, "max": _cy_0_5 + _sz2 } } ] ],
+
+  "5" : [ [
+    { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+      "y" : { "min": _cy_0_5 - _sz2, "max": _cy_0_5 + _sz2 } } ] ],
+
+  "6" : [ [
+    { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+      "y" : { "min": _cy_0_5 - _sz2, "max": _cy_0_5 + _sz2 } } ] ],
+
+  "7" : [ [
+    { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+      "y" : { "min": _cy_0_5 - _sz2, "max": _cy_0_5 + _sz2 } } ] ],
+
+  "8" : [ [
+    { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+      "y" : { "min": _cy_0_5 - _sz2, "max": _cy_0_5 + _sz2 } } ] ],
+
+  "9" : [ [
+    { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+      "y" : { "min": _cy_0_5 - _sz2, "max": _cy_0_5 + _sz2 } } ] ],
+
+  "10" : [
+    [
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2, "max": _cy_0_5 + _sz2 } },
+
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_1_5 - _sz2, "max": _cy_1_5 + _sz2 } },
+
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_2_5 - _sz2, "max": _cy_2_5 + _sz2 } },
+
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_3_5 - _sz2, "max": _cy_3_5 + _sz2 } },
+
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2, "max": _cy_4_5 + _sz2 } },
+
+
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2, "max": _cy_0_5 + _sz2 } },
+
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_1_5 - _sz2, "max": _cy_1_5 + _sz2 } },
+
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_2_5 - _sz2, "max": _cy_2_5 + _sz2 } },
+
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_3_5 - _sz2, "max": _cy_3_5 + _sz2 } },
+
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2, "max": _cy_4_5 + _sz2 } } ]
+  ],
+
+  "page" : [ [
+    { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+      "y" : { "min": _cy_0_5 - _sz2, "max": _cy_0_5 + _sz2 } } ] ],
+
+  "knight" : [ [
+    { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+      "y" : { "min": _cy_0_5 - _sz2, "max": _cy_0_5 + _sz2 } } ] ],
+
+  "queen" : [ [
+    { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+      "y" : { "min": _cy_0_5 - _sz2, "max": _cy_0_5 + _sz2 } } ] ],
+
+  "king" : [ [
+    { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+      "y" : { "min": _cy_0_5 - _sz2, "max": _cy_0_5 + _sz2 } } ] ]
+};
+
+
+var _minor_arcana_pnts = {
   "ace" : [ [ { "x": _mid_w, "y": _mid_h }] ],
   "2" : [ [ {"x":_mid_w-_w4, "y":_mid_h-_h4}, {"x":_mid_w+_w4, "y":_mid_h-_h4} ],
           [ {"x":_mid_w-_w4, "y":_mid_h+_h4}, {"x":_mid_w+_w4, "y":_mid_h+_h4} ],
@@ -155,20 +273,15 @@ var minor_arcana_pnts = {
 
 
 
-function create_tarot_json(data, id, pnts, nesting) {
+function create_tarot_json(data, id, pnts) {
   if (typeof pnts === "undefined") { pnts = []; }
-  if (typeof nesting === "undefined") {
-    nesting = { 
-      //"x": { "min": 150, "max": 570},
-      "x": { "min": 100, "max": 620},
-      "y": { "min": 20, "max": 700 }
-    };
-  }
 
   if (typeof data === "undefined") {
     data = create_template();
   }
 
+  // fill in template data with id name of symbol
+  //
   data.name = id;
   for (var ii=0; ii<data.layers.length; ii++) {
     data.layers[ii].props.id = id;
@@ -191,23 +304,45 @@ function create_tarot_json(data, id, pnts, nesting) {
   // at least it will prevent things from breaking
   // if it gets accessed.
   //
-  data.specs["anchor"] = [ { "point":{"x": 360,"y":700}, "normal":{"x":0,"y":-1}  } ];
+  data.specs["anchor"] = [ { "point":{"x": 360,"y":720}, "normal":{"x":0,"y":-1}  } ];
 
   // The crown is where we expect to put the minor
   // arcana suite
   //
-  data.specs["crown"] = [];
-  for (var ii=0; ii<pnts.length; ii++) {
-    data.specs.crown.push( { "point": { "x": pnts[ii].x, "y":pnts[ii].y }, "normal":{"x":0.0, "y":-1} });
-  }
+  data.specs["crown"] = [ ];
+  data.specs.crown.push( { "point": { "x": 720/2, "y":(720 - 720/5) }, "normal":{"x":0.0, "y":-1} });
+
+  //for (var ii=0; ii<pnts.length; ii++) {
+  //  data.specs.crown.push( { "point": { "x": pnts[ii].x, "y":pnts[ii].y }, "normal":{"x":0.0, "y":-1} });
+  //}
 
   // Create huge nesting box
   //
   data.specs["nesting"] = [];
-  data.specs.nesting.push( {
-    "x":{"min":nesting.x.min, "max":nesting.x.max},
-    "y":{"min":nesting.y.min, "max":nesting.y.max}
+  for (var ii=0; ii<pnts.length; ii++) {
+    data.specs.nesting.push( {
+      "x":{"min":pnts[ii].x.min, "max":pnts[ii].x.max},
+      "y":{"min":pnts[ii].y.min, "max":pnts[ii].y.max}
+    });
+  }
+
+  var _mx = 720/2,
+      _my = 720/2;
+  var _w = 0.75*(720*3/5)/2;
+  var _h = 720;
+  var _dw = 3*_w/5;
+  data.specs["nesting"].push({
+    "x":{"min": _mx - _dw, "max": _mx + _dw },
+    "y":{"min": _my - _dw, "max": _my + _dw }
   });
+
+  /*
+  _my = 2*720/3;
+  data.specs["nesting"].push({
+    "x":{"min": _mx - _dw, "max": _mx + _dw },
+    "y":{"min": _my - _dw, "max": _my + _dw }
+  });
+  */
 
   return data;
 }
