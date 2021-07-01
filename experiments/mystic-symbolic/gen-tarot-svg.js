@@ -116,6 +116,13 @@ var _cy_2_5 = _mid_h - (card_height/2) + card_margin + 2*_dy + z;
 var _cy_3_5 = _mid_h - (card_height/2) + card_margin + 3*_dy + z;
 var _cy_4_5 = _mid_h - (card_height/2) + card_margin + 4*_dy + z;
 
+var _Q = 30;
+var _q0 = _Q*Math.sin((0/720)*2.0*Math.PI);
+var _q1 = _Q*Math.sin((180/720)*2.0*Math.PI);
+var _q2 = _Q*Math.sin((360/720)*2.0*Math.PI);
+var _q3 = _Q*Math.sin((540/720)*2.0*Math.PI);
+var _q4 = _Q*Math.sin((720/720)*2.0*Math.PI);
+
 var minor_arcana_pnts = {
 
   "ace" : [ [
@@ -185,7 +192,63 @@ var minor_arcana_pnts = {
         "y" : { "min": _cy_3_5 - _sz2, "max": _cy_3_5 + _sz2 } },
 
       { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
-        "y" : { "min": _cy_4_5 - _sz2, "max": _cy_4_5 + _sz2 } } ]
+        "y" : { "min": _cy_4_5 - _sz2, "max": _cy_4_5 + _sz2 } } 
+    ],
+
+    [
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2 + _dy2, "max": _cy_0_5 + _sz2 + _dy2 } },
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_1_5 - _sz2 + _dy2, "max": _cy_1_5 + _sz2 + _dy2} },
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_2_5 - _sz2 + _dy2, "max": _cy_2_5 + _sz2 + _dy2} },
+
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2 + _dy2, "max": _cy_0_5 + _sz2 + _dy2} },
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_1_5 - _sz2 + _dy2, "max": _cy_1_5 + _sz2 + _dy2} },
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_2_5 - _sz2 + _dy2, "max": _cy_2_5 + _sz2 + _dy2} },
+
+
+      { "x" : { "min": _cx_0 - _sz2, "max": _cx_0 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2, "max": _cy_0_5 + _sz2 } },
+
+      { "x" : { "min": _cx_0 - _sz2, "max": _cx_0 + _sz2 },
+        "y" : { "min": _cy_1_5 - _sz2, "max": _cy_1_5 + _sz2 } },
+
+      { "x" : { "min": _cx_0 - _sz2, "max": _cx_0 + _sz2 },
+        "y" : { "min": _cy_3_5 - _sz2, "max": _cy_3_5 + _sz2 } },
+
+      { "x" : { "min": _cx_0 - _sz2, "max": _cx_0 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2, "max": _cy_4_5 + _sz2 } }
+
+    ],
+
+    [
+      { "x" : { "min": _cx_m1 - _sz2 + _q0, "max": _cx_m1 + _sz2 + _q0 },
+        "y" : { "min": _cy_0_5 - _sz2, "max": _cy_0_5 + _sz2 } },
+      { "x" : { "min": _cx_m1 - _sz2 + _q1, "max": _cx_m1 + _sz2 + _q1},
+        "y" : { "min": _cy_1_5 - _sz2, "max": _cy_1_5 + _sz2 } },
+      { "x" : { "min": _cx_m1 - _sz2 + _q2, "max": _cx_m1 + _sz2 + _q2},
+        "y" : { "min": _cy_2_5 - _sz2, "max": _cy_2_5 + _sz2 } },
+      { "x" : { "min": _cx_m1 - _sz2 + _q3, "max": _cx_m1 + _sz2 + _q3},
+        "y" : { "min": _cy_3_5 - _sz2, "max": _cy_3_5 + _sz2 } },
+      { "x" : { "min": _cx_m1 - _sz2 + _q4, "max": _cx_m1 + _sz2 + _q4},
+        "y" : { "min": _cy_4_5 - _sz2, "max": _cy_4_5 + _sz2 } },
+
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2, "max": _cy_0_5 + _sz2 } },
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_1_5 - _sz2, "max": _cy_1_5 + _sz2 } },
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_2_5 - _sz2, "max": _cy_2_5 + _sz2 } },
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_3_5 - _sz2, "max": _cy_3_5 + _sz2 } },
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2, "max": _cy_4_5 + _sz2 } } 
+    ]
+
   ],
 
   "page" : [ [
@@ -328,6 +391,8 @@ function create_tarot_json(data, id, pnts) {
 
   var _mx = 720/2,
       _my = 720/2;
+      //_my = 720/3;
+      //_my = 4*720/13;
   var _w = 0.75*(720*3/5)/2;
   var _h = 720;
   var _dw = 3*_w/5;
@@ -337,7 +402,7 @@ function create_tarot_json(data, id, pnts) {
   });
 
   /*
-  _my = 2*720/3;
+  _my = 5*720/7;
   data.specs["nesting"].push({
     "x":{"min": _mx - _dw, "max": _mx + _dw },
     "y":{"min": _my - _dw, "max": _my + _dw }

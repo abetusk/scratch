@@ -49,6 +49,9 @@ function show_help(fp) {
   fp.write("  [-D tiledx,tiledy]          shift tile background by tiledx,tiledy (ex. '-10,3') (default '0,0')\n");
   fp.write("  [-E symbol]                 exclude items from random generation (e.g. 'bob,pipe')\n");
   fp.write("  [-e exclude-file]           file with excluded symbols\n");
+  fp.write("  [-J svgjson]                add svgjson file to symbols (can be specified multiple times)\n");
+  fp.write("  [-j outjson]                output schedule JSON\n");
+  fp.write("  [-R injson]                 input schedule JSON\n");
   fp.write("  [-L color]                  color ring (e.g. '#77777,#afafaf,#fe3f3f,#1f1f7f') (unimmplemented)\n");
   fp.write("  [-g]                        disable gradient\n");
   fp.write("  [-t]                        tile background\n");
@@ -83,6 +86,12 @@ var sibyl_opt = {
   "exclude_fn" : [],
   "line_width" : 4,
   "color_ring" : [],
+  "output_sched" : false,
+
+  "sched_in_fn" : "",
+  "custom_sched" : {},
+  "use_custom_sched": false,
+
   "additional_svgjson" : []
 };
 
@@ -106,6 +115,8 @@ var long_opt = [
   "e", ":(exclude-file)",
   "L", ":(color-ring)",
   "l", ":(line-width)",
+  "R", ":(sched-in)",
+  "j", "(output-sched)",
   "J", ":(svgjson)"
 ];
 
@@ -224,6 +235,16 @@ while ((opt =  parser.getopt()) !== undefined) {
 
     //---
 
+    case 'R':
+      sibyl_opt.sched_in_fn = opt.optarg;
+      break;
+
+    case 'j':
+      sibyl_opt.output_sched = true;
+      break;
+
+    //---
+
     default:
       show_help(process.stderr);
       process.exit(-1);
@@ -329,6 +350,16 @@ for (var ii=0; ii<sibyl_opt.additional_svgjson.length; ii++) {
     bg_data.push(_dat1[jj]);
   }
 }
+
+if (sibyl_opt.sched_in_fn.length > 0) {
+  sibyl_opt.custom_sched = {};
+  sibyl_opt.use_custom_sched = true;
+  var _raw_bytes = fs.readFileSync(sibyl_opt.sched_in_fn);
+  sibyl_opt.custom_sched = JSON.parse(_raw_bytes);
+
+  arg_str = "custom";
+}
+
 
 // ----------------
 // ----------------
@@ -1423,11 +1454,12 @@ function mystic_symbolic_random(ctx, base, primary_color, secondary_color, bg_co
 
       var sub_name = random_creature(ctx, attach_id);
 
-      if (!(attach_id in realized)) {
-        realized[attach_id] = [];
+      if (!("attach" in realized)) {
+        realized["attach"] = {};
       }
-
-
+      if (!(attach_id in realized.attach)) {
+        realized.attach[attach_id] = [];
+      }
 
       // We reuse the svg to give the symmetry, inverting as needed.
       //
@@ -1462,7 +1494,7 @@ function mystic_symbolic_random(ctx, base, primary_color, secondary_color, bg_co
           reuse_svg = mystic_symbolic_random(ctx, sub, primary_color, secondary_color);
         }
 
-        realized[attach_id].push( ctx.realized_child );
+        realized.attach[attach_id].push( ctx.realized_child );
 
         ret_str += t_str_s;
 
@@ -1546,10 +1578,14 @@ function mystic_symbolic_random(ctx, base, primary_color, secondary_color, bg_co
       ret_str += mystic_symbolic_random(ctx, sub, secondary_color, primary_color);
       ret_str += t_str_e;
 
-      if (!("nesting" in realized)) {
-        realized["nesting"] = [];
+      if (!("attach" in realized)) {
+        realized["attach"] = {};
       }
-      realized["nesting"].push( ctx.realized_child );
+
+      if (!("nesting" in realized)) {
+        realized.attach["nesting"] = [];
+      }
+      realized.attach["nesting"].push( ctx.realized_child );
 
     }
   }
@@ -2953,21 +2989,23 @@ function repr_realized(realized, lvl) {
   var limbs = {"crown":'^', "horn":'!', "arm":'~', "leg":'|', "tail":'.', "nesting":'@'};
 
   var is_sub = false;
-  for (var limb in limbs) {
-    if ((lvl>0) && (limb in realized)) {
-      is_sub = true;
+  if ("attach" in realized) {
+    for (var limb in limbs) {
+      if ((lvl>0) && (limb in realized.attach)) {
+        is_sub = true;
+      }
     }
   }
 
   if ("base" in realized) {
     if (is_sub) { _ret += "("; };
     _ret += realized.base;
-    for (var limb in limbs) {
-      if (limb in realized) {
-        //for (var idx=0; idx<realized[limb].length; idx++) {
-        _ret += limbs[limb];
-        _ret += repr_realized(realized[limb][0], lvl+1);
-        //}
+    if ("attach" in realized) {
+      for (var limb in limbs) {
+        if (limb in realized.attach) {
+          _ret += limbs[limb];
+          _ret += repr_realized(realized.attach[limb][0], lvl+1);
+        }
       }
     }
     if (is_sub) { _ret += ")"; };
@@ -3125,21 +3163,28 @@ if (arg_str == "random") {
 
   var creature_svg = mystic_symbolic_random(fg_ctx, undefined, primary_color, secondary_color, bg_color);
 
-  if (sibyl_opt.use_background_image) {
-    console.log(svg_header);
-    console.log(bg_svg);
+  if (sibyl_opt.output_sched) {
+    console.log(JSON.stringify(fg_ctx.realized_child, undefined, 2));
   }
 
-  console.log( creature_svg );
+  else {
 
-  if (sibyl_opt.use_background_image) {
-    console.log(svg_footer);
+    if (sibyl_opt.use_background_image) {
+      console.log(svg_header);
+      console.log(bg_svg);
+    }
+
+    console.log( creature_svg );
+
+    if (sibyl_opt.use_background_image) {
+      console.log(svg_footer);
+    }
+
+    console.log("<!--");
+    //console.log(JSON.stringify(fg_ctx.realized_child, undefined, 2));
+    console.log(repr_realized(fg_ctx.realized_child));
+    console.log("-->");
   }
-
-  console.log("<!--");
-  //console.log(JSON.stringify(fg_ctx.realized_child, undefined, 2));
-  console.log(repr_realized(fg_ctx.realized_child));
-  console.log("-->");
 
 }
 
@@ -3247,29 +3292,40 @@ else {
     }
   }
 
-  var sched  = mystic_symbolic_dsl2sched( arg_str, fg_ctx );
+  var sched = {};
 
-  var creature_svg = mystic_symbolic_sched(fg_ctx, sched , primary_color, secondary_color, bg_color);
-
-  if (sibyl_opt.use_background_image) {
-    console.log(svg_header);
-    console.log(bg_svg);
+  if (sibyl_opt.use_custom_sched) {
+    sched = sibyl_opt.custom_sched;
+  }
+  else {
+    sched  = mystic_symbolic_dsl2sched( arg_str, fg_ctx );
   }
 
-  console.log( creature_svg );
-
-  if (sibyl_opt.use_background_image) {
-    console.log(svg_footer);
+  if (sibyl_opt.output_sched) {
+    console.log(JSON.stringify(sched, undefined, 2));
   }
 
-  //var sentence = sched2sentence(sched);
-  //console.log("<!--", sentence, " -->");
+  else {
+
+    var creature_svg = mystic_symbolic_sched(fg_ctx, sched , primary_color, secondary_color, bg_color);
+    if (sibyl_opt.use_background_image) {
+      console.log(svg_header);
+      console.log(bg_svg);
+    }
+    console.log( creature_svg );
+    if (sibyl_opt.use_background_image) {
+      console.log(svg_footer);
+    }
+  }
+
 }
 
-console.log("<!-- ", primary_color, secondary_color, bg_color, bg_color2,"-->");
-console.log("<!-- ", "\n  prim_hue = ", _rcolor.primary.hsv[0], ";\n  prim_sat =", _rcolor.primary.hsv[1], ";\n  prim_val =", _rcolor.primary.hsv[2], ";\n -->");
-console.log("<!-- ", "\n  seco_hue = ", _rcolor.secondary.hsv[0], ";\n  seco_sat =", _rcolor.secondary.hsv[1], ";\n  seco_val =", _rcolor.secondary.hsv[2], ";\n -->");
-console.log("<!--", "bg:", _rcolor.background.hsv.join(","), "-->");
-console.log("<!--", "bg2:", _rcolor.background2.hsv.join(","), "-->");
+if (!sibyl_opt.output_sched) {
+  console.log("<!-- ", primary_color, secondary_color, bg_color, bg_color2,"-->");
+  console.log("<!-- ", "\n  prim_hue = ", _rcolor.primary.hsv[0], ";\n  prim_sat =", _rcolor.primary.hsv[1], ";\n  prim_val =", _rcolor.primary.hsv[2], ";\n -->");
+  console.log("<!-- ", "\n  seco_hue = ", _rcolor.secondary.hsv[0], ";\n  seco_sat =", _rcolor.secondary.hsv[1], ";\n  seco_val =", _rcolor.secondary.hsv[2], ";\n -->");
+  console.log("<!--", "bg:", _rcolor.background.hsv.join(","), "-->");
+  console.log("<!--", "bg2:", _rcolor.background2.hsv.join(","), "-->");
+}
 
 
