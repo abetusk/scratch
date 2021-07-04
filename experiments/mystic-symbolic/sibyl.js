@@ -1610,7 +1610,7 @@ function mystic_symbolic_random(ctx, base, primary_color, secondary_color, bg_co
 // -----
 
 function parse_invert_name(sym) {
-  var res = { "invert":false, "name": null, "primary":null, "secondary":null };
+  var res = { "invert":false, "name": null, "primary":null, "secondary":null, "deg_angle":0 };
 
   if (typeof sym === "undefined") { return res; }
 
@@ -1622,6 +1622,14 @@ function parse_invert_name(sym) {
   if (sym[0] == '-') {
     res.invert = true;
     res.name = sym.slice(1);
+  }
+
+  if (res.name.match(/\//)) {
+    var tok = res.name.split(/\//);
+    if (tok.length > 1) {
+      res.deg_angle = parseFloat(tok[1]);
+      res.name = tok[0];
+    }
   }
 
   if (res.name.match(/#/)) {
@@ -1654,15 +1662,24 @@ function mystic_symbolic_sched(ctx, sched, primary_color, secondary_color, bg_co
   var symbol_name = symbol_info.name;
 
   var _base_pcol = ( symbol_info.primary ? symbol_info.primary : primary_color ),
-      _base_scol = ( symbol_info.secondary ? symbol_info.secondary : secondary_color );
+      _base_scol = ( symbol_info.secondary ? symbol_info.secondary : secondary_color ),
+      _base_ang = ( symbol_info.deg_angle ? symbol_info.deg_angle : 0.0);
 
   // if it's a `:rnd` keyworkd,, short circuit and go directly into the
   // `mystic_symbolic_random` function.
   //
   if (symbol_name == ":rnd") {
+    var _dx = ctx.svg_width/2,
+        _dy = ctx.svg_height/2;
+    var _w = ctx.svg_width, _h = ctx.svg_height;
     var _rnd_creat = ctx.symbol[random_creature(ctx, "base")];
     var _r = "";
+
+    //_r += "<g transform=\"translate(" + _dx.toString() + " " + _dy.toString() + ") ";
+    //_r += " rotate(" + _base_ang.toString() +  ") ";
+    //_r += " translate(" + (-_dx).toString() + " " + (-_dy).toString() + ")\">\n";
     _r += mystic_symbolic_random(ctx, undefined, _base_pcol, _base_scol, bg_color);
+    //_r += "</g>";
     return _r;
   }
 
@@ -1687,7 +1704,13 @@ function mystic_symbolic_sched(ctx, sched, primary_color, secondary_color, bg_co
       _scale *= ctx.global_scale;
     }
 
-    ret_str += "<g transform=\"translate(360 360) scale(" + _scale.toString() + " " + _scale.toString() + ") translate(-360 -360)\">\n";
+    //ret_str += "<g transform=\"translate(" + _dx.toString() + " " + _dy.toString() + ") ";
+    //ret_str += " rotate(" + _base_ang.toString() +  ") ";
+    //ret_str += " translate(" + (-_dx).toString() + " " + (-_dy).toString() + ")\">\n";
+    ret_str += "<g transform=\"translate(360 360) ";
+    ret_str += " scale(" + _scale.toString() + " " + _scale.toString() + ") ";
+    ret_str += " rotate(" + _base_ang + ") ";
+    ret_str += " translate(-360 -360)\">\n";
 
     if (_include_background_rect) {
       var w = ctx.svg_width;
@@ -1744,6 +1767,7 @@ function mystic_symbolic_sched(ctx, sched, primary_color, secondary_color, bg_co
 
       var _sub_pcol = ( sub_symbol_info.primary ? sub_symbol_info.primary : primary_color );
       var _sub_scol = ( sub_symbol_info.secondary ? sub_symbol_info.secondary : secondary_color );
+      var _sub_deg_ang = ( sub_symbol_info.deg_angle ? sub_symbol_info.deg_angle : 0.0 );
 
       var do_random_recur = false;
 
@@ -1778,7 +1802,7 @@ function mystic_symbolic_sched(ctx, sched, primary_color, secondary_color, bg_co
       var sub_anchor_point = [ sub.specs.anchor[0].point.x, sub.specs.anchor[0].point.y ];
       var sub_anchor_deg = _deg( sub.specs.anchor[0].normal.x, f*sub.specs.anchor[0].normal.y );
 
-      var deg = base_attach_deg - sub_anchor_deg;
+      var deg = base_attach_deg - sub_anchor_deg + _sub_deg_ang;
       if (_invert) { deg *= -1; }
 
       var t_str_s = "<g transform=\"";
@@ -1858,6 +1882,7 @@ function mystic_symbolic_sched(ctx, sched, primary_color, secondary_color, bg_co
 
       var _sub_pcol = ( sub_symbol_info.primary ? sub_symbol_info.primary : primary_color );
       var _sub_scol = ( sub_symbol_info.secondary ? sub_symbol_info.secondary : secondary_color );
+      var _sub_deg_ang = ( sub_symbol_info.deg_angle ? sub_symbol_info.deg_angle : 0.0 );
 
       var do_random_recur = false;
 
@@ -1895,6 +1920,8 @@ function mystic_symbolic_sched(ctx, sched, primary_color, secondary_color, bg_co
         nest_deg = 180;
         nest_f = -1.0;
       }
+
+      nest_deg += _sub_deg_ang;
 
       var t_str_s = "<g transform=\"";
       t_str_s += " translate(" + nest_ul[0].toString() + " " + nest_ul[1].toString() + ")";
@@ -2872,6 +2899,7 @@ function mystic_symbolic_dsl2sched(_s, data) {
               (("0".charCodeAt(0) <= s.charCodeAt(cur_idx)) &&
                (s.charCodeAt(cur_idx) <= "9".charCodeAt(0))) ||
               (s.charCodeAt(cur_idx) == "#".charCodeAt(0)) ||
+              (s.charCodeAt(cur_idx) == "/".charCodeAt(0)) ||
               (s.charCodeAt(cur_idx) == ":".charCodeAt(0)) ||
               (s.charCodeAt(cur_idx) == "_".charCodeAt(0)) ||
               (s.charCodeAt(cur_idx) == "-".charCodeAt(0)) ) {
