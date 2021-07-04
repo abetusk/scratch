@@ -2,8 +2,7 @@
 ---
 
 ```
-$ ./sibyl -h
-version: 0.1.4
+version: 0.1.5
 
 usage:
 
@@ -14,15 +13,21 @@ usage:
   [-n nest-depth]             max nesting depth (default 2)
   [-a attach-depth]           max attach depth (default 1)
   [-S scale]                  rescale factor (default 0.5)
+  [-G globalscale]            global scale (default 1)
   [-C complexity]             complexity factor (how many attach points for a random creature) (default 4)
   [-p color]                  set primary color (ex. '#000000') (default random)
   [-s color]                  set secondary color (ex '#ffffff') (default random)
   [-b color]                  set background color (ex. '#777777') (default random)
   [-c color]                  set background2 color (ex. '#888888') (default random)
+  [-l linewidth]              set linewidth (default 4)
   [-B background-image]       set background image ('*' for random)
   [-T background-scale]       set background scale factor (default 0.5)
   [-D tiledx,tiledy]          shift tile background by tiledx,tiledy (ex. '-10,3') (default '0,0')
   [-E symbol]                 exclude items from random generation (e.g. 'bob,pipe')
+  [-e exclude-file]           file with excluded symbols
+  [-J svgjson]                add svgjson file to symbols (can be specified multiple times)
+  [-j outjson]                output schedule JSON
+  [-R injson]                 input schedule JSON
   [-L color]                  color ring (e.g. '#77777,#afafaf,#fe3f3f,#1f1f7f') (unimmplemented)
   [-g]                        disable gradient
   [-t]                        tile background
@@ -119,20 +124,81 @@ Gallery
 | ` ./sibyl -T 0.9 -B '{*} @ {*} '` | ![...](img/gallery2.svg) | `./sibyl -T 0.5,0.35 -t -B '{*} @ {*} '` | ![gallery 3](img/gallery3.svg) |
 | `./sibyl -D 0,130 -T 0.59  -B 'hands_giving @ globe . crown '` | ![background shift](img/gallery4.svg) | `./sibyl -t -T 0.125,0.076  -B '{*} @ {*}'` | ![gallery](img/gallery5.svg)  |
 
-#### Improvements
+Other Features
+---
 
-One way to extend the language to allow for components to be attached that respect the
-TOML flags is to create `rnd` "keywords".
-This is essentially an extension of the `*` keyword that will expand to sets
-that have been filtered to specific subsets of symbols.
+`sibyl` has many options that aren't clearly apparent.
 
-One possibility is to do something like `:crown`, `:horn`, `:arm`, `:leg`, `:tail`, `:nest`
-(or even `:^,:!,:~:|,:.,:@`) that will expand to only symbols allowed to attach to
-the respective attach point.
-For example, a symbol with the `never_be_nested` wouldn't appear in the `:nest` list.
+The DSL can be used to specify an image with a reserved token `:rnd` to call the random creature function.
 
-This might not get all the features of the random creature generation but could get
-enough to be functional.
+Alternatively, a JSON syntax can be used that is of the form:
+
+```
+{
+  "base": "box",
+  "attach": {
+    "arm": [ { "base": "fire_swirl" }, { "base": "fire_swirl" } ],
+    "leg": [ { "base": "snake_eye" }, { "base": "snake_eye" } ],
+    "crown": [
+      {
+        "base": "eyeball",
+        "attach": {
+          "nesting": [ { "base": "hand_point_2" } ]
+        }
+      }
+    ],
+    "nesting": [ { "base": "clouds" } ]
+  }
+}
+
+```
+
+Each name can have an optional negation at the beginning (`-`) to reverse the horizontal orientation in
+addition to a hash (`#`) that specifies the foreground and background colors and a forward slash (`/`)
+that specifies a rotation in degrees.
+
+For example, here are all valid names:
+
+```
+goat
+-goat
+goat#fefefe
+goat#fefefe#3f3f3f
+-goat#fefefe/45
+goat/35
+```
+
+The `-e` option can be used to specify a file to exclude certain symbols, with each symbol name
+being on it's own line.
+Blank lines and lines that begin with a hash (`#`) are ignored.
+
+The `-j` option can be used to generate the JSON syntax for a creature.
+For example, here is a random creature:
+
+```
+$ sibyl -j
+{
+  "base": "capricorn_tail",
+  "attach": {
+    "crown": [
+      {
+        "base": "crown",
+        "attach": {
+          "nesting": [ { "base": "dog" } ]
+        }
+      }
+    ]
+  }
+}
+```
+
+The `-J` option can be used to input additional symbol svgjson files.
+This is done to avoid having to constantly edit some base svgjson vocabulary file,
+so new vocabulary svgjson symbols can be added easily.
+
+
+---
+
 
 Notes on Tarot
 ---
@@ -152,11 +218,11 @@ Major Arcana:
 
 | | | | | |
 |---|---|---|---|---|
-| 0 fool       | 1 magician | 2 priestess | 3 empress  | 4 emperor     |
-| 5 hierophant | 6 lovers (`[woman_stand,man_stand]`)  | 7 chariot   | 8 strength | 9 hermit      |
-| 10 wheel     | 11 justice (`scales`) | 12 hanged  (`coffin`?)  | 13 death (`skull`,`skeleton`?)  | 14 temperance  (`waterworks`) |
-| 15 devil     | 16 `castle_tower`   | 17 starburst     | 18 moon    | 19 sun        |
-| 20 judgement (`angel`) | 21 globe |             |            |               |
+| 0 `fool`       | 1 `magician` | 2 `priestess` | 3 `empress`  | 4 `emperor`     |
+| 5 `hierophant` | 6 lovers (`[woman_stand,man_stand]`)  | 7 `chariot`   | 8 `strength` | 9 `hermit`      |
+| 10 `wheel_of_fortune`     | 11 justice (`scales`) | 12 hanged  (`coffin`?)  | 13 `death` (`skull`,`skeleton`?)  | 14 temperance  (`waterworks`) |
+| 15 `devil`     | 16 `castle_tower`   | 17 `starburst`     | 18 `moon`    | 19 `sun`        |
+| 20 judgement (`angel`) | 21 `globe` |             |            |               |
 
 [Wikipedia](https://en.wikipedia.org/wiki/Minor_Arcana) has the following table for the minor arcana:
 

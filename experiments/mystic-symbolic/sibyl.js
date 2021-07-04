@@ -19,7 +19,7 @@ var getopt = require("posix-getopt");
 var parser, opt;
 
 
-var _VERSION = "0.1.4";
+var _VERSION = "0.1.5";
 
 function show_version(fp) {
   fp.write("version: " + _VERSION + "\n");
@@ -1396,6 +1396,7 @@ function mystic_symbolic_random(ctx, base, primary_color, secondary_color, bg_co
   var ret_str = "";
 
   if (top_level) {
+
 
     if (ctx.create_svg_header) {
       ret_str += base.svg_header;
