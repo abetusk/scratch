@@ -138,37 +138,632 @@ var minor_arcana_pnts = {
     { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
       "y" : { "min": _cy_0_5 - _sz2, "max": _cy_0_5 + _sz2 } } ] ],
 
-  "2" : [ [
-    { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
-      "y" : { "min": _cy_0_5 - _sz2, "max": _cy_0_5 + _sz2 } } ] ],
+  "2" : [
+    [
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2, "max": _cy_0_5 + _sz2 } },
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2, "max": _cy_0_5 + _sz2 } }
+    ],
+    [
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2, "max": _cy_4_5 + _sz2 } },
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2, "max": _cy_4_5 + _sz2 } }
+    ],
+    [
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2, "max": _cy_0_5 + _sz2 } },
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2, "max": _cy_4_5 + _sz2 } }
+    ],
+    [
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2, "max": _cy_4_5 + _sz2 } },
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2, "max": _cy_0_5 + _sz2 } }
+    ]
 
-  "3" : [ [
-    { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
-      "y" : { "min": _cy_0_5 - _sz2, "max": _cy_0_5 + _sz2 } } ] ],
+  ],
 
-  "4" : [ [
-    { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
-      "y" : { "min": _cy_0_5 - _sz2, "max": _cy_0_5 + _sz2 } } ] ],
+  "3" : [
+    [
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2, "max": _cy_0_5 + _sz2 } },
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2, "max": _cy_0_5 + _sz2 } },
+      { "x" : { "min": _cx_0 - _sz2, "max": _cx_0 + _sz2 },
+        "y" : { "min": _cy_1_5 - _sz2 - _dy2, "max": _cy_1_5 + _sz2 - _dy2 } }
+    ],
 
-  "5" : [ [
-    { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
-      "y" : { "min": _cy_0_5 - _sz2, "max": _cy_0_5 + _sz2 } } ] ],
+    [
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_1_5 - _sz2 - _dy2, "max": _cy_1_5 + _sz2 - _dy2} },
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_1_5 - _sz2 - _dy2, "max": _cy_1_5 + _sz2 - _dy2 } },
+      { "x" : { "min": _cx_0 - _sz2, "max": _cx_0 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2, "max": _cy_0_5 + _sz2} }
+    ],
 
-  "6" : [ [
-    { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
-      "y" : { "min": _cy_0_5 - _sz2, "max": _cy_0_5 + _sz2 } } ] ],
+    [
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2, "max": _cy_4_5 + _sz2 } },
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2, "max": _cy_4_5 + _sz2 } },
+      { "x" : { "min": _cx_0 - _sz2, "max": _cx_0 + _sz2 },
+        "y" : { "min": _cy_3_5 - _sz2 + _dy2, "max": _cy_3_5 + _sz2 + _dy2 } }
+    ],
 
-  "7" : [ [
-    { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
-      "y" : { "min": _cy_0_5 - _sz2, "max": _cy_0_5 + _sz2 } } ] ],
+    [
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_3_5 - _sz2 + _dy2, "max": _cy_3_5 + _sz2 + _dy2} },
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_3_5 - _sz2 + _dy2, "max": _cy_3_5 + _sz2 + _dy2} },
+      { "x" : { "min": _cx_0 - _sz2, "max": _cx_0 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2 , "max": _cy_4_5 + _sz2 } }
+    ],
 
-  "8" : [ [
-    { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
-      "y" : { "min": _cy_0_5 - _sz2, "max": _cy_0_5 + _sz2 } } ] ],
+    [
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2, "max": _cy_0_5 + _sz2 } },
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_2_5 - _sz2, "max": _cy_2_5 + _sz2 } },
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2, "max": _cy_4_5 + _sz2} }
+    ],
+    [
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2, "max": _cy_0_5 + _sz2 } },
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_2_5 - _sz2, "max": _cy_2_5 + _sz2 } },
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2, "max": _cy_4_5 + _sz2} }
+    ]
 
-  "9" : [ [
-    { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
-      "y" : { "min": _cy_0_5 - _sz2, "max": _cy_0_5 + _sz2 } } ] ],
+  ],
+
+  "4" : [
+    [
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2 , "max": _cy_0_5 + _sz2 } },
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2 , "max": _cy_0_5 + _sz2 } },
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2, "max": _cy_4_5 + _sz2} },
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2, "max": _cy_4_5 + _sz2} }
+    ],
+
+    [
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_1_5 - _sz2 - _dy2, "max": _cy_1_5 + _sz2 - _dy2} },
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_1_5 - _sz2 - _dy2, "max": _cy_1_5 + _sz2 - _dy2 } },
+      { "x" : { "min": _cx_0 - _sz2, "max": _cx_0 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2, "max": _cy_0_5 + _sz2} },
+      { "x" : { "min": _cx_0 - _sz2, "max": _cx_0 + _sz2 },
+        "y" : { "min": _cy_1_5 - _sz2, "max": _cy_1_5 + _sz2} }
+    ],
+
+    [
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_3_5 - _sz2 + _dy2, "max": _cy_3_5 + _sz2 + _dy2} },
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_3_5 - _sz2 + _dy2, "max": _cy_3_5 + _sz2 + _dy2} },
+      { "x" : { "min": _cx_0 - _sz2, "max": _cx_0 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2 , "max": _cy_4_5 + _sz2 } },
+      { "x" : { "min": _cx_0 - _sz2, "max": _cx_0 + _sz2 },
+        "y" : { "min": _cy_3_5 - _sz2 , "max": _cy_3_5 + _sz2 } }
+    ],
+
+    [
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2 + _dy2, "max": _cy_0_5 + _sz2 + _dy2 } },
+      { "x" : { "min": _cx_0 - _sz2, "max": _cx_0 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2 , "max": _cy_0_5 + _sz2 } },
+
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2 - _dy2, "max": _cy_4_5 + _sz2 - _dy2 } },
+      { "x" : { "min": _cx_0 - _sz2, "max": _cx_0 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2, "max": _cy_4_5 + _sz2 } }
+    ],
+
+    [
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2 + _dy2, "max": _cy_0_5 + _sz2 + _dy2 } },
+      { "x" : { "min": _cx_0 - _sz2, "max": _cx_0 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2 , "max": _cy_0_5 + _sz2 } },
+
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2 - _dy2, "max": _cy_4_5 + _sz2 - _dy2 } },
+      { "x" : { "min": _cx_0 - _sz2, "max": _cx_0 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2, "max": _cy_4_5 + _sz2 } }
+    ]
+
+  ],
+
+  "5" : [
+
+    [
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2 + _dy2, "max": _cy_0_5 + _sz2 + _dy2 } },
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_1_5 - _sz2 + _dy2, "max": _cy_1_5 + _sz2 + _dy2} },
+
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2 + _dy2, "max": _cy_0_5 + _sz2 + _dy2 } },
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_1_5 - _sz2 + _dy2, "max": _cy_1_5 + _sz2 + _dy2} },
+
+      { "x" : { "min": _cx_0 - _sz2, "max": _cx_0 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2, "max": _cy_0_5 + _sz2 } }
+    ],
+
+    [
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2, "max": _cy_0_5 + _sz2 } },
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_1_5 - _sz2 , "max": _cy_1_5 + _sz2 } },
+
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2 , "max": _cy_0_5 + _sz2 } },
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_1_5 - _sz2 , "max": _cy_1_5 + _sz2 } },
+
+      { "x" : { "min": _cx_0 - _sz2, "max": _cx_0 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2 + _dy2, "max": _cy_0_5 + _sz2 + _dy2 } }
+    ],
+
+    [
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_2_5 - _sz2 + _dy2, "max": _cy_2_5 + _sz2 + _dy2 } },
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_3_5 - _sz2 + _dy2, "max": _cy_3_5 + _sz2 + _dy2} },
+
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_2_5 - _sz2 + _dy2, "max": _cy_2_5 + _sz2 + _dy2 } },
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_3_5 - _sz2 + _dy2, "max": _cy_3_5 + _sz2 + _dy2} },
+
+      { "x" : { "min": _cx_0 - _sz2, "max": _cx_0 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2, "max": _cy_4_5 + _sz2 } }
+    ],
+
+    [
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_3_5 - _sz2, "max": _cy_3_5 + _sz2 } },
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2 , "max": _cy_4_5 + _sz2 } },
+
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_3_5 - _sz2 , "max": _cy_3_5 + _sz2 } },
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2 , "max": _cy_4_5 + _sz2 } },
+
+      { "x" : { "min": _cx_0 - _sz2, "max": _cx_0 + _sz2 },
+        "y" : { "min": _cy_3_5 - _sz2 + _dy2, "max": _cy_3_5 + _sz2 + _dy2 } }
+    ],
+
+    [
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2, "max": _cy_0_5 + _sz2 } },
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2 , "max": _cy_4_5 + _sz2 } },
+
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2 , "max": _cy_0_5 + _sz2 } },
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2 , "max": _cy_4_5 + _sz2 } },
+
+      { "x" : { "min": _cx_0 - _sz2, "max": _cx_0 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2 + _dy2, "max": _cy_0_5 + _sz2 + _dy2 } }
+    ],
+
+    [
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2 + _dy2, "max": _cy_0_5 + _sz2 + _dy2 } },
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2 , "max": _cy_4_5 + _sz2 } },
+
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2 + _dy2, "max": _cy_0_5 + _sz2 + _dy2} },
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2 , "max": _cy_4_5 + _sz2 } },
+
+      { "x" : { "min": _cx_0 - _sz2, "max": _cx_0 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2 , "max": _cy_0_5 + _sz2 } }
+    ],
+
+    [
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2, "max": _cy_0_5 + _sz2 } },
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2 , "max": _cy_4_5 + _sz2 } },
+
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2 , "max": _cy_0_5 + _sz2 } },
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2 , "max": _cy_4_5 + _sz2 } },
+
+      { "x" : { "min": _cx_0 - _sz2, "max": _cx_0 + _sz2 },
+        "y" : { "min": _cy_3_5 - _sz2 + _dy2, "max": _cy_3_5 + _sz2 + _dy2 } }
+    ],
+
+    [
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_3_5 - _sz2 + _dy2, "max": _cy_3_5 + _sz2 + _dy2 } },
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2 , "max": _cy_0_5 + _sz2 } },
+
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_3_5 - _sz2 + _dy2, "max": _cy_3_5 + _sz2 + _dy2} },
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2 , "max": _cy_0_5 + _sz2 } },
+
+      { "x" : { "min": _cx_0 - _sz2, "max": _cx_0 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2 , "max": _cy_4_5 + _sz2 } }
+    ]
+
+
+  ],
+
+  "6" : [
+
+    [
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2 , "max": _cy_0_5 + _sz2 } },
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_2_5 - _sz2 , "max": _cy_2_5 + _sz2 } },
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2 , "max": _cy_4_5 + _sz2 } },
+
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2 , "max": _cy_0_5 + _sz2 } },
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_2_5 - _sz2 , "max": _cy_2_5 + _sz2 } },
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2 , "max": _cy_4_5 + _sz2 } }
+    ],
+
+    [
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_3_5 - _sz2 + _dy2, "max": _cy_3_5 + _sz2 + _dy2 } },
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2 + _dy2, "max": _cy_0_5 + _sz2 + _dy2 } },
+
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_3_5 - _sz2 + _dy2, "max": _cy_3_5 + _sz2 + _dy2} },
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2 + _dy2, "max": _cy_0_5 + _sz2 + _dy2} },
+
+      { "x" : { "min": _cx_0 - _sz2, "max": _cx_0 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2 , "max": _cy_0_5 + _sz2 } },
+      { "x" : { "min": _cx_0 - _sz2, "max": _cx_0 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2 , "max": _cy_4_5 + _sz2 } }
+    ],
+
+    [
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2 , "max": _cy_4_5 + _sz2 } },
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2 , "max": _cy_0_5 + _sz2 } },
+
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2 , "max": _cy_4_5 + _sz2 } },
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2 , "max": _cy_0_5 + _sz2 } },
+
+      { "x" : { "min": _cx_0 - _sz2, "max": _cx_0 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2 + _dy2 , "max": _cy_0_5 + _sz2 + _dy2 } },
+      { "x" : { "min": _cx_0 - _sz2, "max": _cx_0 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2 - _dy2, "max": _cy_4_5 + _sz2 - _dy2} }
+    ],
+
+    [
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_1_5 - _sz2 - _dy2, "max": _cy_1_5 + _sz2 - _dy2} },
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_1_5 - _sz2 - _dy2, "max": _cy_1_5 + _sz2 - _dy2 } },
+      { "x" : { "min": _cx_0 - _sz2, "max": _cx_0 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2, "max": _cy_0_5 + _sz2} },
+      { "x" : { "min": _cx_0 - _sz2, "max": _cx_0 + _sz2 },
+        "y" : { "min": _cy_1_5 - _sz2, "max": _cy_1_5 + _sz2} },
+
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2, "max": _cy_4_5 + _sz2} },
+
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2, "max": _cy_4_5 + _sz2} }
+    ],
+
+    [
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2 - _dy2, "max": _cy_4_5 + _sz2 - _dy2} },
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2 - _dy2, "max": _cy_4_5 + _sz2 - _dy2 } },
+      { "x" : { "min": _cx_0 - _sz2, "max": _cx_0 + _sz2 },
+        "y" : { "min": _cy_3_5 - _sz2, "max": _cy_3_5 + _sz2} },
+      { "x" : { "min": _cx_0 - _sz2, "max": _cx_0 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2, "max": _cy_4_5 + _sz2} },
+
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2, "max": _cy_0_5 + _sz2} },
+
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2, "max": _cy_0_5 + _sz2} }
+    ]
+
+
+  ],
+
+
+  "7" : [
+    [
+
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_1_5 - _sz2, "max": _cy_1_5 + _sz2 } },
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_2_5 - _sz2, "max": _cy_2_5 + _sz2 } },
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_3_5 - _sz2, "max": _cy_3_5 + _sz2 } },
+
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_1_5 - _sz2, "max": _cy_1_5 + _sz2 } },
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_2_5 - _sz2, "max": _cy_2_5 + _sz2 } },
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_3_5 - _sz2, "max": _cy_3_5 + _sz2 } },
+
+      { "x" : { "min": _cx_0 - _sz2, "max": _cx_0 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2, "max": _cy_0_5 + _sz2 } }
+    ],
+
+    [
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_1_5 - _sz2, "max": _cy_1_5 + _sz2 } },
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_2_5 - _sz2, "max": _cy_2_5 + _sz2 } },
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_3_5 - _sz2, "max": _cy_3_5 + _sz2 } },
+
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_1_5 - _sz2, "max": _cy_1_5 + _sz2 } },
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_2_5 - _sz2, "max": _cy_2_5 + _sz2 } },
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_3_5 - _sz2, "max": _cy_3_5 + _sz2 } },
+
+      { "x" : { "min": _cx_0 - _sz2, "max": _cx_0 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2, "max": _cy_4_5 + _sz2 } }
+    ],
+
+    [
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2 + _dy2, "max": _cy_0_5 + _sz2 + _dy2} },
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2 + _dy2, "max": _cy_0_5 + _sz2 + _dy2} },
+      { "x" : { "min": _cx_0 - _sz2, "max": _cx_0 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2, "max": _cy_0_5 + _sz2 } },
+      { "x" : { "min": _cx_0 - _sz2, "max": _cx_0 + _sz2 },
+        "y" : { "min": _cy_1_5 - _sz2, "max": _cy_1_5 + _sz2 } },
+
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2 - _dy2, "max": _cy_4_5 + _sz2 - _dy2} },
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2 - _dy2, "max": _cy_4_5 + _sz2 - _dy2} },
+      { "x" : { "min": _cx_0 - _sz2, "max": _cx_0 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2, "max": _cy_4_5 + _sz2 } }
+    ],
+
+    [
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2 - _dy2, "max": _cy_4_5 + _sz2 - _dy2} },
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2 - _dy2, "max": _cy_4_5 + _sz2 - _dy2} },
+      { "x" : { "min": _cx_0 - _sz2, "max": _cx_0 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2, "max": _cy_4_5 + _sz2 } },
+      { "x" : { "min": _cx_0 - _sz2, "max": _cx_0 + _sz2 },
+        "y" : { "min": _cy_3_5 - _sz2, "max": _cy_3_5 + _sz2 } },
+
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2 + _dy2, "max": _cy_0_5 + _sz2 + _dy2} },
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2 + _dy2, "max": _cy_0_5 + _sz2 + _dy2} },
+      { "x" : { "min": _cx_0 - _sz2, "max": _cx_0 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2, "max": _cy_0_5 + _sz2 } }
+
+    ]
+
+
+  ],
+
+  "8" : [
+    [
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2, "max": _cy_0_5 + _sz2 } },
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_1_5 - _sz2, "max": _cy_1_5 + _sz2 } },
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_3_5 - _sz2, "max": _cy_3_5 + _sz2 } },
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2, "max": _cy_4_5 + _sz2 } },
+
+
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2, "max": _cy_0_5 + _sz2 } },
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_1_5 - _sz2, "max": _cy_1_5 + _sz2 } },
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_3_5 - _sz2, "max": _cy_3_5 + _sz2 } },
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2, "max": _cy_4_5 + _sz2 } } 
+    ],
+
+    [
+
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2 + _dy2, "max": _cy_0_5 + _sz2 + _dy2} },
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2 + _dy2, "max": _cy_0_5 + _sz2 + _dy2} },
+      { "x" : { "min": _cx_0 - _sz2, "max": _cx_0 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2, "max": _cy_0_5 + _sz2 } },
+      { "x" : { "min": _cx_0 - _sz2, "max": _cx_0 + _sz2 },
+        "y" : { "min": _cy_1_5 - _sz2, "max": _cy_1_5 + _sz2 } },
+
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2 - _dy2, "max": _cy_4_5 + _sz2 - _dy2} },
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2 - _dy2, "max": _cy_4_5 + _sz2 - _dy2} },
+      { "x" : { "min": _cx_0 - _sz2, "max": _cx_0 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2, "max": _cy_4_5 + _sz2 } },
+      { "x" : { "min": _cx_0 - _sz2, "max": _cx_0 + _sz2 },
+        "y" : { "min": _cy_3_5 - _sz2, "max": _cy_3_5 + _sz2 } }
+
+    ],
+
+    [
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2 + _dy2, "max": _cy_0_5 + _sz2 + _dy2} },
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2 + _dy2, "max": _cy_0_5 + _sz2 + _dy2} },
+      { "x" : { "min": _cx_0 - _sz2, "max": _cx_0 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2, "max": _cy_0_5 + _sz2 } },
+      { "x" : { "min": _cx_0 - _sz2, "max": _cx_0 + _sz2 },
+        "y" : { "min": _cy_1_5 - _sz2, "max": _cy_1_5 + _sz2 } },
+
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_3_5 - _sz2, "max": _cy_3_5 + _sz2 } },
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2, "max": _cy_4_5 + _sz2 } },
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_3_5 - _sz2, "max": _cy_3_5 + _sz2 } },
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2, "max": _cy_4_5 + _sz2 } } 
+    ],
+    [
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2, "max": _cy_0_5 + _sz2 } },
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_1_5 - _sz2, "max": _cy_1_5 + _sz2 } },
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2, "max": _cy_0_5 + _sz2 } },
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_1_5 - _sz2, "max": _cy_1_5 + _sz2 } },
+
+
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2 - _dy2, "max": _cy_4_5 + _sz2 - _dy2} },
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2 - _dy2, "max": _cy_4_5 + _sz2 - _dy2} },
+      { "x" : { "min": _cx_0 - _sz2, "max": _cx_0 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2, "max": _cy_4_5 + _sz2 } },
+      { "x" : { "min": _cx_0 - _sz2, "max": _cx_0 + _sz2 },
+        "y" : { "min": _cy_3_5 - _sz2, "max": _cy_3_5 + _sz2 } }
+    ],
+
+  ],
+
+
+  "9" : [
+
+    [
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2, "max": _cy_0_5 + _sz2 } },
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_1_5 - _sz2, "max": _cy_1_5 + _sz2 } },
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_3_5 - _sz2, "max": _cy_3_5 + _sz2 } },
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2, "max": _cy_4_5 + _sz2 } },
+
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2, "max": _cy_0_5 + _sz2 } },
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_1_5 - _sz2, "max": _cy_1_5 + _sz2 } },
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_3_5 - _sz2, "max": _cy_3_5 + _sz2 } },
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2, "max": _cy_4_5 + _sz2 } },
+
+      { "x" : { "min": _cx_0 - _sz2, "max": _cx_0 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2 + _dy2, "max": _cy_0_5 + _sz2 + _dy2} } 
+    ],
+
+    [
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2, "max": _cy_0_5 + _sz2 } },
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_1_5 - _sz2, "max": _cy_1_5 + _sz2 } },
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_3_5 - _sz2, "max": _cy_3_5 + _sz2 } },
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2, "max": _cy_4_5 + _sz2 } },
+
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2, "max": _cy_0_5 + _sz2 } },
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_1_5 - _sz2, "max": _cy_1_5 + _sz2 } },
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_3_5 - _sz2, "max": _cy_3_5 + _sz2 } },
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2, "max": _cy_4_5 + _sz2 } },
+
+      { "x" : { "min": _cx_0 - _sz2, "max": _cx_0 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2 - _dy2, "max": _cy_4_5 + _sz2 - _dy2} } 
+    ],
+
+    //--
+
+    [
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2, "max": _cy_0_5 + _sz2 } },
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_1_5 - _sz2, "max": _cy_1_5 + _sz2 } },
+
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2, "max": _cy_0_5 + _sz2 } },
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_1_5 - _sz2, "max": _cy_1_5 + _sz2 } },
+
+      { "x" : { "min": _cx_0 - _sz2, "max": _cx_0 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2 + _dy2, "max": _cy_0_5 + _sz2 + _dy2} } ,
+
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2 - _dy2, "max": _cy_4_5 + _sz2 - _dy2} },
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2 - _dy2, "max": _cy_4_5 + _sz2 - _dy2} },
+      { "x" : { "min": _cx_0 - _sz2, "max": _cx_0 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2, "max": _cy_4_5 + _sz2 } },
+      { "x" : { "min": _cx_0 - _sz2, "max": _cx_0 + _sz2 },
+        "y" : { "min": _cy_3_5 - _sz2, "max": _cy_3_5 + _sz2 } }
+
+    ],
+
+    [
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2 + _dy2, "max": _cy_0_5 + _sz2 + _dy2} },
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2 + _dy2, "max": _cy_0_5 + _sz2 + _dy2} },
+      { "x" : { "min": _cx_0 - _sz2, "max": _cx_0 + _sz2 },
+        "y" : { "min": _cy_0_5 - _sz2, "max": _cy_0_5 + _sz2 } },
+      { "x" : { "min": _cx_0 - _sz2, "max": _cx_0 + _sz2 },
+        "y" : { "min": _cy_1_5 - _sz2, "max": _cy_1_5 + _sz2 } },
+
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_3_5 - _sz2, "max": _cy_3_5 + _sz2 } },
+      { "x" : { "min": _cx_m1 - _sz2, "max": _cx_m1 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2, "max": _cy_4_5 + _sz2 } },
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_3_5 - _sz2, "max": _cy_3_5 + _sz2 } },
+      { "x" : { "min": _cx_p1 - _sz2, "max": _cx_p1 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2, "max": _cy_4_5 + _sz2 } },
+
+      { "x" : { "min": _cx_0 - _sz2, "max": _cx_0 + _sz2 },
+        "y" : { "min": _cy_4_5 - _sz2 - _dy2, "max": _cy_4_5 + _sz2 - _dy2} } 
+    ]
+
+  ],
+
 
   "10" : [
     [
