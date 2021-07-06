@@ -104,7 +104,7 @@ The reason for this is most likely evolutionary, as nature evolved to perceive b
 the stampeding of elephants (~20Hz) to the buzzing of a mosquitoes (~400Hz) to recognizing
 bird song (~8kHz).
 A logarithmic scale prioritizes fidelity of the exponent in favor of the 'low order bits' for
-the same amount of "hardware" ([x](#Note 1])).
+the same amount of "hardware" ([x](#Note-1])).
 
 ### Language
 
@@ -113,7 +113,7 @@ melody pitch shifting ([1](#1)).
 That is, humans are the only animals that can recognize a beat and recognize a melody that's
 also been doubled in frequency, or shifted up an octave.
 It is the author's opinion that these differences most likely stem from humans being the only
-animal on earth ([x](#Note 2)) that also have complex language.
+animal on earth ([x](#Note-2)) that also have complex language.
 
 Though the reasons for why we perceive music the way we do is open for debate, there is good
 evidence for some basic facts of why people find certain tones, combinations of tones and beat tempos
@@ -127,8 +127,8 @@ This includes rhythm and tempo, matching features of the tempo of speech and wor
 Power laws ([2](#2)) are ubiquitous in nature, including showing up in musical rhythm spectra ([3](#3)) as
 well as word frequency and word length ([4](#4)). 
 Though beyond the scope of this document, power laws show up because of their 'stability' property ([5](#5))
-and are the convergent distribution for sums of identically distributed random variables ([x](#Note 3)).
-There are many methods of generating power law distributions, some of which quite simple ([6](#6)) ([x](#Note 4)).
+and are the convergent distribution for sums of identically distributed random variables ([x](#Note-3)).
+There are many methods of generating power law distributions, some of which quite simple ([6](#6)) ([x](#Note-4)).
 
 
 One insight from the perception of rhythm is that recognizing a melody's tempo is considered by some to be the
@@ -526,7 +526,7 @@ References
 * [6](https://github.com/abetusk/papers/blob/release/Probability/1089229510-mitzemacher.pdf)
 * [7](https://github.com/abetusk/papers/blob/release/ComplexityCriticality/scale-free-networks-are-rare_broido-clauset.pdf)
 * [8](https://github.com/abetusk/papers/blob/release/Music/patel2003.pdf)
-* [9](https://github.com/abetusk/papers/blob/release/Music/rhythm-msuci_Patel_Daniel.pdf)
+* [9](https://github.com/abetusk/papers/blob/release/Music/rhythm-music_Patel_Daniel.pdf)
 * [10](https://github.com/abetusk/papers/blob/release/Music/measures-consonances_honingh.pdf)
 * [11](https://www.youtube.com/watch?v=aEjcK5JFEFE)
 
