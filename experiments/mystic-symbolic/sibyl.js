@@ -12,14 +12,25 @@
  */
 
 
+function rseed() {
+  var seed = "";
+  var x = "abcdefghijklmnopqrstuvwxyzABDCEFGHIJKLMNOPQRSTUVWXYZ01234567890 ";
+  var n = x.length;
+  for (var ii=0; ii<32; ii++) {
+    seed += x[ Math.floor(Math.random()*n) ];
+  }
+  return seed;
+}
+
+var alea = require("./alea.js");
 var fs = require("fs");
-var color = require("./cam02.js");
-var randomcolor  = require("randomcolor");
 var getopt = require("posix-getopt");
 var parser, opt;
 
+var seed = rseed();
+var g_rng = new alea(seed);
 
-var _VERSION = "0.1.5";
+var _VERSION = "0.1.6";
 
 function show_version(fp) {
   fp.write("version: " + _VERSION + "\n");
@@ -53,6 +64,7 @@ function show_help(fp) {
   fp.write("  [-j outjson]                output schedule JSON\n");
   fp.write("  [-R injson]                 input schedule JSON\n");
   fp.write("  [-L color]                  color ring (e.g. '#77777,#afafaf,#fe3f3f,#1f1f7f') (unimmplemented)\n");
+  fp.write("  [-Z seed]                   prng seed (deafult '" + seed + "')");
   fp.write("  [-g]                        disable gradient\n");
   fp.write("  [-t]                        tile background\n");
   fp.write("  [-Q]                        bonkers mode (override attach restrictions)\n");
@@ -87,6 +99,7 @@ var sibyl_opt = {
   "line_width" : 4,
   "color_ring" : [],
   "output_sched" : false,
+  "seed" : seed,
 
   "sched_in_fn" : "",
   "custom_sched" : {},
@@ -117,6 +130,7 @@ var long_opt = [
   "l", ":(line-width)",
   "R", ":(sched-in)",
   "j", "(output-sched)",
+  "Z", ":(seed)",
   "J", ":(svgjson)"
 ];
 
@@ -231,6 +245,11 @@ while ((opt =  parser.getopt()) !== undefined) {
 
     case 'e':
       sibyl_opt.exclude_fn.push(opt.optarg);
+      break;
+
+    case 'Z':
+      sibyl_opt.seed = opt.optarg;
+      g_rng = new alea(sibyl_opt.seed);
       break;
 
     //---
@@ -852,7 +871,8 @@ function HSLtoHSV(h, s, l) {
 //
 function _irnd(n) {
   if (typeof n === "undefined") { n=2; }
-  return Math.floor(Math.random()*n);
+  //return Math.floor(Math.random()*n);
+  return Math.floor(g_rng.double()*n);
 }
 
 // _rnd()     : 0...1
@@ -862,10 +882,12 @@ function _irnd(n) {
 function _rnd(a,b) {
   a = ((typeof a === "undefined") ? 1.0 : a);
   if (typeof b === "undefined") {
-    return Math.random()*a;
+    //return Math.random()*a;
+    return g_rng.double()*a;
   }
 
-  return (Math.random()*(b-a) + a);
+  //return (Math.random()*(b-a) + a);
+  return (g_rng.double()*(b-a) + a);
 }
 
 // Choose random element from array
@@ -909,51 +931,6 @@ function _deg(x,y) { return Math.atan2(y,x)*180.0/Math.PI; }
 // ------------------
 // ------------------
 // ------------------
-
-// return array of SVG lines for the SVG definition
-// (for linear and radial gradients).
-//
-/*
-function jsonsvg2svg_def(x) {
-  var _type = x.type;
-
-  var lines = [];
-  if ((_type == "linearGradient") || (_type == "radialGradient")) {
-
-    var _line = "<" + _type + " ";
-
-    for (var _key in x) {
-      if ((_key === "stops") ||
-          (_key === "type")) {
-        continue;
-      }
-      _line += " " + _key + "=\"" + x[_key] + "\"";
-    }
-
-    _line += ">";
-    lines.push( _line );
-
-    if ("stops" in x) {
-      for (var ii=0; ii<x.stops.length; ii++) {
-        var _stop_line = "<stop ";
-        for (var _key in x.stops[ii]) {
-          if (_key === "color" ) {
-            _stop_line += " style=\"stop-color:" + x.stops[ii][_key] + ";stop-opacity:1.0;\"";
-            continue;
-          }
-          _stop_line += " " + _key + "=\"" + x.stops[ii][_key] + "\"";
-        }
-        _stop_line += "/>";
-        lines.push( _stop_line );
-      }
-    }
-
-    lines.push("</" + _type + ">")
-  }
-
-  return lines;
-}
-*/
 
 // return the SVG "def" as a string.
 // The defs are used for the linear and radial gradients
@@ -2235,7 +2212,8 @@ function _rand_color() {
   var palette = [ [], [], [], [] ];
 
   var n = 5;
-  var base_hue = Math.random();
+  //var base_hue = Math.random();
+  var base_hue = g_rng.double();
 
   for (var p=0; p<palette.length; p++) {
     for (var i=1; i<(n+2); i++) {
@@ -2247,7 +2225,8 @@ function _rand_color() {
   }
 
 
-  var prim_hue = Math.random();
+  //var prim_hue = Math.random();
+  var prim_hue = g_rng.double();
   var prim_sat = _rnd(0.35, 0.70);
   var prim_val = _rnd(0.75, 1.0);
 
@@ -2258,39 +2237,6 @@ function _rand_color() {
   if (seco_hue > 1.0) { seco_hue - 1.0; }
 
 
-}
-
-function rand_color__() {
-  var res = {
-    "primary" : { "hex":"#000000", "hsv":[0,0,0] },
-    "secondary" : {"hex":"#ffffff", "hsv":[0,0,0] },
-    "background": { "hex":"#777777", "hsv":[0,0,0] },
-    "background2": { "hex":"#555555", "hsv":[0,0,0] },
-
-  };
-
-  var light = randomcolor({ "count":2, "luminosity":'light' });
-  var dark = randomcolor({ "count":2, "luminosity":'dark' });
-
-  if (_rnd() < 0.25) {
-    res.primary.hex = light[0];
-    res.secondary.hex = dark[0];
-  }
-  else {
-    res.primary.hex = dark[0];
-    res.secondary.hex = light[0];
-  }
-
-  if (_rnd() < 0.25) {
-    res.background.hex = light[1];
-    res.background.hex = dark[1];
-  }
-  else {
-    res.background.hex = dark[1];
-    res.background.hex = light[1];
-  }
-
-  return res;
 }
 
 // Here is the basic philosophy:
@@ -2331,7 +2277,8 @@ function rand_color() {
 
   };
 
-  var prim_hue = Math.random();
+  //var prim_hue = Math.random();
+  var prim_hue = g_rng.double();
   var prim_sat = _rnd(0.4, 0.6);
   var prim_val = _rnd(0.675, 0.95);
 
@@ -2372,14 +2319,16 @@ function rand_color() {
   var bg_dark_opt = false;
   if (_rnd() < 0.5) { bg_dark_opt = true; }
 
-  var bg_hue = Math.random();
+  //var bg_hue = Math.random();
+  var bg_hue = g_rng.double();
   var bg_sat = _rnd(0.05, 0.2);
   var bg_val = _rnd(0.5, 1.0);
   if (bg_dark_opt) { bg_val = _rnd(0.05, 0.5); }
 
   res.background.hsv = [ bg_hue, bg_sat, bg_val ];
 
-  var bg2_hue = Math.random();
+  //var bg2_hue = Math.random();
+  var bg2_hue = g_rng.double();
   var bg2_sat = _rnd(0.05, 0.2);
   //var bg2_val = _rnd(0.5, 1.0);
   //var bg2_val = _mod1(bg_val + _crnd([-1,1])*_rnd(0.1, 0.25));
@@ -2409,194 +2358,6 @@ function rand_color() {
 }
 
 
-// pick a random hue and sat/val from a restricted range
-// convert to xyz, force luminances the same
-// convert back to rgb
-//
-function rand_color_x() {
-  var res = {
-    "primary" : { "hex":"#000000" },
-    "secondary" : {"hex":"#ffffff" },
-    "background": { "hex":"#777777" },
-    "background2": { "hex":"#555555" }
-  };
-
-
-  var prim_hue = Math.random();
-  //var prim_sat = _rnd(0.45, 0.60);
-  var prim_sat = _rnd(0.25, 0.50);
-  var prim_val = _rnd(0.75, 1.0);
-
-  var seco_hue = prim_hue + 0.35;
-  var seco_sat = 1.0 - prim_sat;
-  var seco_val = _rnd(0.25, 0.6);
-  if (seco_hue > 1.0) { seco_hue - 1.0; }
-
-  var bg_hue = prim_hue - 0.33;
-  var bg_sat = (Math.random()*.5);
-  var bg_val = (Math.random()*0.5)+0.5;
-  if (bg_hue < 0.0) { bg_hue += 1.0; }
-
-
-  var prim_rgb = HSVtoRGB(prim_hue, prim_sat, prim_val);
-  var seco_rgb = HSVtoRGB(seco_hue, seco_sat, seco_val);
-  var bg_rgb = HSVtoRGB(bg_hue, bg_sat, bg_val);
-
-  var del_sat = 0.125;
-  var del_val = 0.125;
-
-  var prim_brightness = _brightness(prim_rgb.r, prim_rgb.g, prim_rgb.b);
-  var seco_brightness = _brightness(seco_rgb.r, seco_rgb.g, seco_rgb.b);
-  var bg_brightness = _brightness(bg_rgb.r, bg_rgb.g, bg_rgb.b);
-
-  //var seco_fac = (3.0/5.0);
-  //var bg_fac = (2.0/5.0);
-
-  var prim_xyz = color.rgb2xyz(prim_rgb.r, prim_rgb.g, prim_rgb.b);
-  var seco_xyz = color.rgb2xyz(seco_rgb.r, seco_rgb.g, seco_rgb.b);
-  var bg_xyz = color.rgb2xyz(bg_rgb.r, bg_rgb.g, bg_rgb.b);
-
-  /*
-  console.log("before:");
-  console.log("  prim:", "h:", prim_hue, "s:", prim_sat, "v:", prim_val, "rgb:", prim_rgb, "xyz:", prim_xyz, "bright:", prim_brightness);
-  console.log("  seco:", "h:", seco_hue, "s:", seco_sat, "v:", seco_val, "rgb:", seco_rgb, "xyz:", seco_xyz, "bright:", seco_brightness);
-  console.log("  bg:", "h:", bg_hue, "s:", bg_sat, "v:", bg_val, "rgb:", bg_rgb, "xyz:", bg_xyz, "bright:", bg_brightness);
-  */
-
-  //testing
-  var _rgb = {}, _xyz= {};
-
-  _xyz = color.rgb2xyz(prim_rgb.r, prim_rgb.g, prim_rgb.b);
-  prim_brightness = _xyz.y;
-  //prim_brightness = _xyz.x;
-
-  _xyz = color.rgb2xyz(seco_rgb.r, seco_rgb.g, seco_rgb.b);
-  seco_brightness = _xyz.y;
-  //seco_brightness = _xyz.x;
-
-  _xyz = color.rgb2xyz(bg_rgb.r, bg_rgb.g, bg_rgb.b);
-  bg_brightness = _xyz.y;
-  //bg_brightness = _xyz.x;
-
-  //ok
-  var prim_fac = 1.0;
-  var seco_fac = (3.0/2.0);
-  var bg_fac = (2.0/4.0);
-
-  /*
-  prim_fac = (7.0/5.0);
-  seco_fac = (4.0/4.0);
-  bg_fac = (2.0/5.0);
-  */
-
-
-  //var root_brightness = seco_brightness;
-  var root_brightness = prim_brightness;
-
-  //prim_fac = 3.0/5.0;
-  //seco_fac = 1.0;
-  //bg_fac = (4.0/5.0);
-
-  for (var _sat = 0.0; _sat <= 1.0; _sat += del_sat) {
-    for (var _val = 0.0; _val <= 1.0; _val += del_val) {
-
-      var _tc_prim = HSVtoRGB( prim_hue, _sat, _val );
-      var _d_cur = Math.abs(_brightness(_tc_prim.r, _tc_prim.g, _tc_prim.b) - (prim_fac*root_brightness));
-      var _d_prv = Math.abs(root_brightness - (prim_fac*prim_brightness));
-
-      //_xyz = color.rgb2xyz(_tc_prim.r, _tc_prim.g, _tc_prim.b);
-      //_d_cur = Math.abs(_xyz.y - (prim_fac*root_brightness));
-      //_xyz = color.rgb2xyz(prim_rgb.r, prim_rgb.g, prim_rgb.b);
-      //_d_prv = Math.abs(_xyz.y - (prim_fac*root_brightness));
-
-      if ( _d_cur < _d_prv ) {
-
-        _rgb = HSVtoRGB( prim_hue, _sat, _val );
-        _xyz = color.rgb2xyz(_rgb.r, _rgb.g, _rgb.b);
-
-        prim_brightness = _brightness(_tc_prim.r, _tc_prim.g, _tc_prim.b);
-        prim_sat = _sat;
-        prim_val = _val;
-
-        prim_rgb = HSVtoRGB( prim_hue, prim_sat, prim_val );
-
-      }
-
-      var _tc_seco = HSVtoRGB( seco_hue, _sat, _val );
-      _d_cur = Math.abs(_brightness(_tc_seco.r, _tc_seco.g, _tc_seco.b) - (seco_fac*root_brightness));
-      _d_prv = Math.abs(seco_brightness - (seco_fac*root_brightness));
-
-      //_xyz = color.rgb2xyz(_tc_seco.r, _tc_seco.g, _tc_seco.b);
-      //_d_cur = Math.abs(_xyz.y - (seco_fac*root_brightness));
-      //_xyz = color.rgb2xyz(seco_rgb.r, seco_rgb.g, seco_rgb.b);
-      //_d_prv = Math.abs(_xyz.y - (seco_fac*root_brightness));
-
-      if ( _d_cur < _d_prv ) {
-
-        _rgb = HSVtoRGB( seco_hue, _sat, _val );
-        _xyz = color.rgb2xyz(_rgb.r, _rgb.g, _rgb.b);
-
-        seco_brightness = _brightness(_tc_seco.r, _tc_seco.g, _tc_seco.b);
-        seco_sat = _sat;
-        seco_val = _val;
-
-        seco_rgb = HSVtoRGB( seco_hue, seco_sat, seco_val );
-
-      }
-
-      var _tc_bg = HSVtoRGB( bg_hue, _sat, _val );
-      _d_cur = Math.abs(_brightness(_tc_bg.r, _tc_bg.g, _tc_bg.b) - (bg_fac*root_brightness));
-      _d_prv = Math.abs(bg_brightness - (bg_fac*root_brightness));
-
-      //_xyz = color.rgb2xyz(_tc_bg.r, _tc_bg.g, _tc_bg.b);
-      //_d_cur = Math.abs(_xyz.y - (bg_fac*root_brightness));
-      //_xyz = color.rgb2xyz(bg_rgb.r, bg_rgb.g, bg_rgb.b);
-      //_d_prv = Math.abs(_xyz.y - (bg_fac*root_brightness));
-
-      if ( _d_cur < _d_prv ) {
-
-        _rgb = HSVtoRGB( bg_hue, _sat, _val );
-        _xyz = color.rgb2xyz(_rgb.r, _rgb.g, _rgb.b);
-
-        bg_brightness = _brightness(_tc_bg.r, _tc_bg.g, _tc_bg.b);
-        bg_sat = _sat;
-        bg_val = _val;
-
-        bg_rgb = HSVtoRGB( bg_hue, bg_sat, bg_val );
-      }
-
-    }
-  }
-
-  // forcing...
-  //var bg_hue = prim_hue - 0.33;
-  bg_sat = (Math.random()*.15);
-  //bg_val = (Math.random()*0.5)+0.5;
-  bg_val = _rnd(0.75,1.0);
-
-
-
-  seco_rgb = HSVtoRGB(seco_hue, seco_sat, seco_val);
-  bg_rgb = HSVtoRGB(bg_hue, bg_sat, bg_val);
-
-  //var bg_sat2 = _clamp(bg_sat - 0.25, 0.0, 1.0);
-  //var bg_val2 = _clamp(bg_val - 0.1, 0.0, 1.0);
-  //var bg_rgb2 = HSVtoRGB(bg_hue, bg_sat2, bg_val2);
-
-  //var bg_sat2 = _clamp(bg_sat + 0.25, 0.0, 1.0);
-  var bg_sat2 = _clamp(bg_sat + 0.05, 0.0, 1.0);
-  var bg_val2 = _clamp(bg_val - 0.1, 0.0, 1.0);
-  var bg_rgb2 = HSVtoRGB(bg_hue, bg_sat2, bg_val2);
-
-
-  res.primary.hex = _rgb2hex(prim_rgb.r, prim_rgb.g, prim_rgb.b);
-  res.secondary.hex = _rgb2hex(seco_rgb.r, seco_rgb.g, seco_rgb.b);
-  res.background.hex = _rgb2hex(bg_rgb.r, bg_rgb.g, bg_rgb.b);
-  res.background2.hex = _rgb2hex(bg_rgb2.r, bg_rgb2.g, bg_rgb2.b);
-
-  return res;
-}
-
 // pick random hsv in a restricted range
 //
 function rand_color_hsv() {
@@ -2607,7 +2368,8 @@ function rand_color_hsv() {
   };
 
 
-  var prim_hue = Math.random();
+  //var prim_hue = Math.random();
+  var prim_hue = g_rng.double();
   var prim_sat = _rnd(0.45, 0.60);
   var prim_val = _rnd(0.75, 1.0);
 
@@ -2617,8 +2379,11 @@ function rand_color_hsv() {
   if (seco_hue > 1.0) { seco_hue -= 1.0; }
 
   var bg_hue = prim_hue - 0.35;
-  var bg_sat = (Math.random()*.5);
-  var bg_val = (Math.random()*0.5)+0.5;
+  //var bg_sat = (Math.random()*.5);
+  //var bg_val = (Math.random()*0.5)+0.5;
+
+  var bg_sat = (g_rng.double()*.5);
+  var bg_val = (g_rng.double()*0.5)+0.5;
 
   if (bg_hue < 0.0) { bg_hue += 1.0; }
 
@@ -2634,9 +2399,6 @@ function rand_color_hsv() {
 
   return res;
 }
-
-
-
 
 
 function mystic_symbolic_dsl2sched_ring(_s, data) {
