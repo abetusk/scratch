@@ -19,6 +19,8 @@ function rseed() {
 var SEED = rseed();
 var N_COLOR = 2;
 
+//function seed(_s) { SEED = _s; }
+
 function show_version(fp) {
   fp.write("version: " + _VERSION + "\n");
 }
@@ -69,6 +71,10 @@ while ((opt =  parser.getopt()) !== undefined) {
 
 if ( (process.argv.length - parser.optind()) > 0 ) {
   N_COLOR = process.argv[parser.optind()];
+}
+
+function reseed(_s) {
+  g_rng = new alea(_s);
 }
 
 var g_rng = new alea(SEED);
@@ -399,5 +405,14 @@ function rand_color() {
   return res;
 }
 
-var _r = rand_color_n(N_COLOR);
-console.log(JSON.stringify(_r, undefined, 2));
+
+if (require.main === module) {
+  var _r = rand_color_n(N_COLOR);
+  console.log(JSON.stringify(_r, undefined, 2));
+}
+else {
+  exports.rand_color_n = rand_color_n;
+  exports.HSVtoRGB = HSVtoRGB;
+  exports.RGBtoHSV = RGBtoHSV;
+  exports.reseed = reseed;
+}

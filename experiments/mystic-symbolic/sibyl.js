@@ -22,6 +22,22 @@ function rseed() {
   return seed;
 }
 
+function rstr(m) {
+  m = ((typeof m === "undefined") ? 32 : m);
+  var seed = "";
+  var x = "abcdefghijklmnopqrstuvwxyzABDCEFGHIJKLMNOPQRSTUVWXYZ01234567890";
+  var n = x.length;
+  for (var ii=0; ii<m; ii++) {
+    seed += x[ Math.floor(Math.random()*n) ];
+  }
+  return seed;
+}
+
+
+function reseed(_s) {
+  g_rng = new alea(_s);
+}
+
 var alea = require("./alea.js");
 var fs = require("fs");
 var getopt = require("posix-getopt");
@@ -30,7 +46,7 @@ var parser, opt;
 var seed = rseed();
 var g_rng = new alea(seed);
 
-var _VERSION = "0.1.6";
+var _VERSION = "0.1.7";
 
 function show_version(fp) {
   fp.write("version: " + _VERSION + "\n");
@@ -404,16 +420,26 @@ function _mod1(val) {
 // https://pegjs.org/online
 // https://github.com/pegjs/pegjs
 //
-var pegjs = require("pegjs");
 
-// experiments with the custom language...
-// kind of a disaster but left here in case
-// I want to pick it up in the future.
+// keep for future reference but disable
+// so we don't fail if it doesn't find
+// the PEG file.
 //
-var gram_fn = "./mystisymbodsl.pegjs";
-var gram_str= fs.readFileSync(gram_fn).toString();
+var USE_PEGJS = false;
+var pegjs, gram_fn, gram_str, parser;
+if (USE_PEGJS) {
+  pegjs = require("pegjs");
 
-var parser = pegjs.generate(gram_str);
+  // experiments with the custom language...
+  // kind of a disaster but left here in case
+  // I want to pick it up in the future.
+  //
+  gram_fn = "./mystisymbodsl.pegjs";
+  gram_str= fs.readFileSync(gram_fn).toString();
+
+  parser = pegjs.generate(gram_str);
+
+}
 
 function create_node() {
   return {
@@ -2400,6 +2426,63 @@ function rand_color_hsv() {
   return res;
 }
 
+function rand_color_n(n) {
+  var res = [ ];
+
+  for (var ii=0; ii<n; ii++) {
+    res.push([ { "hex":"#000000", "hsv":[0,0,0] }, { "hex":"#000000", "hsv":[0,0,0] } ]);
+  }
+
+  //var base_hue = Math.random();
+  var base_hue = g_rng.double();
+  var cur_hue = base_hue;
+
+  var dir = _crnd([1,-1]);
+
+  var _s = (1/(n*n));
+
+  for (var ii=0; ii<res.length; ii++) {
+
+    var prim_hue = cur_hue;
+    var prim_sat = _rnd(0.4, 0.6);
+    var prim_val = _rnd(0.675, 0.95);
+
+    res[ii][0].hsv = [ prim_hue, prim_sat, prim_val ];
+
+    // after experimentation, the conclusion I've come to is that
+    // there should only really be "one" color, the primary.
+    // The secondary really just needs to be dark, simulating a stroke.
+    // When the value of the primary is too low and the value of the
+    // secondary is too high, they clash too much.
+    // Even a value of 0.7 for the primary and a value of 0.4 for
+    // the secondary, the picture becomse hard to differentiate.
+    // Better to just set the value to be something way low for
+    // the secondary.
+    // Choosing a random hue gives it a little variation but
+    // otherwise is probably not that important.
+    //
+    var _del_hue = 0.2;
+    var seco_hue = _mod1( prim_hue + _crnd([-1,1])*_rnd(_del_hue/2, 1.0 - _del_hue/2) );
+    var seco_sat = _clamp( prim_sat + _crnd([-1,1])*_rnd(0.2, 0.3), 0.3, 0.6 );
+    seco_val = _rnd(0.1,0.325);
+
+    res[ii][1].hsv = [ seco_hue, seco_sat, seco_val ];
+
+    var prim_rgb = HSVtoRGB(prim_hue,  prim_sat, prim_val);
+    var seco_rgb = HSVtoRGB(seco_hue,  seco_sat, seco_val);
+
+    res[ii][0].hex = _rgb2hex(prim_rgb.r, prim_rgb.g, prim_rgb.b);
+    res[ii][1].hex = _rgb2hex(seco_rgb.r, seco_rgb.g, seco_rgb.b);
+
+    cur_hue += dir*_rnd( (1/n) - _s, (1/n) + _s );
+    cur_hue = _mod1(cur_hue);
+
+  }
+
+
+  return res;
+}
+
 
 function mystic_symbolic_dsl2sched_ring(_s, data) {
   if (typeof _s === "undefined") { return {}; }
@@ -2814,6 +2897,98 @@ function repr_realized(realized, lvl) {
 //                           
 //---------------------------
 
+function create_ctx(_fn) {
+  var _ctx = {};
+  _ctx["create_svg_header"] = true;
+  _ctx["create_background_rect"] = true;
+  _ctx["cur_depth"] = 0;
+  _ctx["max_depth"] = 2; 
+  _ctx["max_nest_depth"] = 3;
+  _ctx["scale"] = 0.5;
+  _ctx["global_scale"] = 1.0;
+  _ctx["complexity"] = 4;
+
+  _ctx["svg_width"] = 720.0;
+  _ctx["svg_height"] = 720.0;
+  _ctx["use_gradient"] = true;
+
+  _ctx["bonkers"] = false;
+
+  _ctx["realized"] = {};
+  _ctx["line_width"] = 4;
+
+  _ctx["custom_prop"] = { "stroke-width" : _ctx["line_width"] };
+
+  return _ctx;
+}
+
+// Remap the gradient IDs to another unique name.
+// The gradient color information is encoded in the style of the gradeitn XML
+// object. The same object but with different colors gets trampeled by the
+// most recent (or first, or whatever) gradient block.
+// Though imperfect, as a way to at least differentiate the foreground object
+// from the background object, we can remap the gradient IDs to some other
+// unique name.
+//
+// A better method is to generate the gradients on the fly with their corresponding
+// unique IDs so that every instance of using them will be independent of each other.
+// But that's a problem for my future self.
+//
+//
+
+
+function _remap_fill_id_collect(_dat, id_remap) {
+  if (typeof _dat === "undefined") { return; }
+  if (!_dat) { return; }
+  if (typeof _dat === "string") { return; }
+
+  for (var key in _dat) {
+    if (key === "fill") {
+      if (_dat[key].slice(0,5) === "url(#") {
+        var old_id = _dat[key].slice(5,-1);
+        if (!(old_id in id_remap)) {
+          id_remap[old_id] = rstr(32);
+        }
+      }
+    }
+
+    _remap_fill_id_collect(_dat[key], id_remap);
+  }
+
+}
+
+function _remap_fill_id_overwrite(_dat, id_remap) {
+  if (typeof _dat === "undefined") { return; }
+  if (!_dat) { return; }
+  if (typeof _dat === "string") { return; }
+
+  for (var key in _dat) {
+    if (key === "id") {
+      var old_id = _dat[key];
+      if (old_id in id_remap) {
+        _dat[key] = id_remap[old_id];
+      }
+    }
+    else if ((key === "fill")  &&
+             (_dat[key].slice(0,5) === "url(#")) {
+      var old_id = _dat[key].slice(5,-1);
+      _dat[key] = "url(#" + id_remap[old_id] + ")";
+    }
+
+    _remap_fill_id_overwrite(_dat[key], id_remap);
+
+  }
+
+}
+
+function remap_fill_id(_dat) {
+  var id_remap = {};
+  _remap_fill_id_collect(_dat, id_remap);
+  _remap_fill_id_overwrite(_dat, id_remap);
+}
+
+remap_fill_id(adata);
+remap_fill_id(bg_data);
 
 var bg_ctx = _preprocess_svgjson(bg_data, bg_color, bg_color, !sibyl_opt.use_gradient, sibyl_opt.exclude);
 bg_ctx["create_svg_header"] = false;
@@ -2876,6 +3051,36 @@ var repri=
 "   .       " +
 "  | |      " ;
 
+
+if (require.main !== module) {
+  // called as a library
+  //
+
+  module.exports = {
+    "fg_ctx": fg_ctx,
+    "bg_ctx": bg_ctx,
+    "mystic_symbolic_dsl2sched" : mystic_symbolic_dsl2sched,
+    "mystic_symbolic_sched" : mystic_symbolic_sched,
+    "mystic_symbolic_random" : mystic_symbolic_random,
+    "mystic_symbolic_sched" : mystic_symbolic_sched,
+    "opt" : sibyl_opt,
+    "preprocess_svgjson": _preprocess_svgjson,
+    "jsonsvg2svg_child": jsonsvg2svg_child,
+    "jsonsvg2svg_defs" : jsonsvg2svg_defs,
+    "repr_realized" : repr_realized,
+    "sched2sentence" : sched2sentence,
+    "create_ctx" : create_ctx,
+    "rand_color_n" : rand_color_n,
+    "RGBtoHSV" : RGBtoHSV,
+    "HSVtoHSL" : HSVtoHSL,
+    "HSLtoHSV" : HSLtoHSV,
+    "HSVtoRGB" : HSVtoRGB,
+    "rgb2hex": _rgb2hex,
+    "reseed" : reseed
+  };
+
+}
+else {
 
 if (arg_str == "random") {
 
@@ -3119,4 +3324,4 @@ if (!sibyl_opt.output_sched) {
   console.log("<!--", "bg2:", _rcolor.background2.hsv.join(","), "-->");
 }
 
-
+}
