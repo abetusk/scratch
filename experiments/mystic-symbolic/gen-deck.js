@@ -25,9 +25,9 @@ var seed = rseed();
 var rng = new alea(seed);
 
 var minor_arcana = ["ace", "2", "3", "4",
-                    "5", "6", "7", "8", "9",
+                    "5", "6", "7", "8", "9", "10",
                     "page", "knight", "queen", "king"];
-var minor_arcana_suit = ["pentacle", "wand", "sword", "cup"];
+var minor_arcana_suit = ["pentacle", "key", "sword", "cup"];
 var major_arcana = [ "fool" ];
 
 for (var suit_idx=0; suit_idx < minor_arcana_suit.length; suit_idx++) {

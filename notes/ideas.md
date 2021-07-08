@@ -12,9 +12,14 @@
 * Death by despair / death of despair
 * Blitter heart
 
+
 ---
 
 * Can someone close the Overton window ([src](https://twitter.com/inconvergent/status/1316768298797858816))
 * necrotokyo
 * OK Doomer
 * Oubliette
+
+---
+
+* crying alligator cutting onions

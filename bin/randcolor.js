@@ -1,0 +1,403 @@
+#!/usr/bin/env node
+
+var _VERSION = "0.1.1";
+
+var getopt = require("./lib/getopt");
+var alea = require("./lib/alea.js");
+var parser, opt;
+
+function rseed() {
+  var seed = "";
+  var x = "abcdefghijklmnopqrstuvwxyzABDCEFGHIJKLMNOPQRSTUVWXYZ01234567890 ";
+  var n = x.length;
+  for (var ii=0; ii<32; ii++) {
+    seed += x[ Math.floor(Math.random()*n) ];
+  }
+  return seed;
+}
+
+var SEED = rseed();
+var N_COLOR = 2;
+
+function show_version(fp) {
+  fp.write("version: " + _VERSION + "\n");
+}
+
+function show_help(fp) {
+  show_version(fp)
+  fp.write("\n");
+  fp.write("usage:\n");
+  fp.write("\n");
+  fp.write("    randcolor [-h] [-v] [-Z seed] [n]\n");
+  fp.write("\n");
+  fp.write("  [n] 			produce n color pairs (default " + N_COLOR.toString() + ")\n");
+  fp.write("  [-Z seed] use seedversion\n");
+  fp.write("  [-h]      help (this screen)\n");
+  fp.write("  [-v]      show version\n");
+  fp.write("\n");
+  fp.write("\n");
+}
+
+var long_opt = [
+  "h", "(help)",
+  "v", "(version)",
+	"Z", ":(seed)"
+];
+
+
+parser = new getopt.BasicParser("h" + long_opt.join(""), process.argv);
+while ((opt =  parser.getopt()) !== undefined) {
+  switch(opt.option) {
+    case 'h':
+      show_help(process.stdout);
+      process.exit(0);
+      break;
+    case 'v':
+      show_version(process.stdout);
+      process.exit(0);
+      break;
+    case 'Z':
+      SEED = opt.optarg;
+      break;
+
+    default:
+      show_help(process.stderr);
+      process.exit(-1);
+      break;
+  }
+}
+
+if ( (process.argv.length - parser.optind()) > 0 ) {
+  N_COLOR = process.argv[parser.optind()];
+}
+
+var g_rng = new alea(SEED);
+
+//  https://stackoverflow.com/a/17243070
+// From user Paul S. (https://stackoverflow.com/users/1615483/paul-s)
+//
+/* accepts parameters
+ * h  Object = {h:x, s:y, v:z}
+ * OR 
+ * h, s, v
+ * 0 <= h,s,v, <=1
+*/
+function HSVtoRGB(h, s, v) {
+  var r, g, b, i, f, p, q, t;
+  if (arguments.length === 1) { s = h.s, v = h.v, h = h.h; }
+  i = Math.floor(h * 6);
+  f = h * 6 - i;
+  p = v * (1 - s);
+  q = v * (1 - f * s);
+  t = v * (1 - (1 - f) * s);
+  switch (i % 6) {
+    case 0: r = v, g = t, b = p; break;
+    case 1: r = q, g = v, b = p; break;
+    case 2: r = p, g = v, b = t; break;
+    case 3: r = p, g = q, b = v; break;
+    case 4: r = t, g = p, b = v; break;
+    case 5: r = v, g = p, b = q; break;
+  }
+  return {
+    r: Math.round(r * 255),
+    g: Math.round(g * 255),
+    b: Math.round(b * 255)
+  };
+}
+/* accepts parameters
+ * r  Object = {r:x, g:y, b:z}
+ * OR 
+ * r, g, b
+ *
+ * 0 <= r,g,b <= 255
+*/
+function RGBtoHSV(r, g, b) {
+  if (arguments.length === 1) { g = r.g, b = r.b, r = r.r; }
+  var max = Math.max(r, g, b), min = Math.min(r, g, b),
+    d = max - min,
+    h,
+    s = (max === 0 ? 0 : d / max),
+    v = max / 255;
+
+  switch (max) {
+    case min: h = 0; break;
+    case r: h = (g - b) + d * (g < b ? 6: 0); h /= 6 * d; break;
+    case g: h = (b - r) + d * 2; h /= 6 * d; break;
+    case b: h = (r - g) + d * 4; h /= 6 * d; break;
+  }
+
+  return { h: h, s: s, v: v };
+}
+
+function HSVtoHSL(h, s, v) {
+  if (arguments.length === 1) { s = h.s, v = h.v, h = h.h; }
+  var _h = h,
+    _s = s * v, _l = (2 - s) * v;
+  _s /= (_l <= 1) ? _l : 2 - _l;
+  _l /= 2;
+  return { h: _h, s: _s, l: _l };
+}
+
+function HSLtoHSV(h, s, l) {
+  if (arguments.length === 1) { s = h.s, l = h.l, h = h.h; }
+  var _h = h, _s, _v; l *= 2;
+  s *= (l <= 1) ? l : 2 - l;
+  _v = (l + s) / 2;
+  _s = (2 * s) / (l + s);
+  return { h: _h, s: _s, v: _v };
+}
+
+// https://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb
+// https://stackoverflow.com/users/96100/tim-down
+//
+function _tohex(c) {
+  var hex = c.toString(16);
+  return hex.length == 1 ? "0" + hex : hex;
+}
+
+function _rgb2hex(r, g, b) {
+  return "#" + _tohex(r) + _tohex(g) + _tohex(b);
+}
+
+// https://stackoverflow.com/a/596243 CC-BY-SA
+// https://stackoverflow.com/users/61574/anonymous
+//
+function _brightness(r, g, b) {
+  return ((r/255.0)*0.299) + (0.587*(g/255.0)) + (0.114*(b/255.0));
+}
+
+
+
+// Integer random number in range of n
+//
+function _irnd(n) {
+  if (typeof n === "undefined") { n=2; }
+  //return Math.floor(Math.random()*n);
+  return Math.floor(g_rng.double()*n);
+}
+
+
+
+// _rnd()     : 0...1
+// _rnd(a)    : 0...a
+// -rnd(a,b)  : a...b
+//
+function _rnd(a,b) {
+  a = ((typeof a === "undefined") ? 1.0 : a);
+  if (typeof b === "undefined") {
+    //return Math.random()*a;
+    return g_rng.double()*a;
+  }
+
+  //return (Math.random()*(b-a) + a);
+  return (g_rng.double()*(b-a) + a);
+}
+
+// Choose random element from array
+//
+function _crnd(a) {
+  if (typeof a === "undefined") { return undefined; }
+  var idx = _irnd(a.length);
+
+  var copy = undefined;
+  if (typeof a[idx] === "object") {
+    _copy = Object.assign({}, a[idx]);
+  }
+  else {
+    _copy = a[idx];
+  }
+
+  //return a[idx];
+  return _copy;
+}
+
+function _clamp(val, _m, _M) {
+  if (val < _m) { return _m; }
+  if (val > _M) { return _M; }
+  return val;
+}
+
+function _mod1(val) {
+  if (val < 0.0) { val += 1.0; }
+  if (val > 1.0) { val -= 1.0; }
+  return val;
+}
+
+function rand_color_n(n) {
+  var res = [ ];
+
+  for (var ii=0; ii<n; ii++) {
+    res.push([ { "hex":"#000000", "hsv":[0,0,0] }, { "hex":"#000000", "hsv":[0,0,0] } ]);
+  }
+
+  //var base_hue = Math.random();
+  var base_hue = g_rng.double();
+  var cur_hue = base_hue;
+
+  var dir = _crnd([1,-1]);
+
+  var _s = (1/(n*n));
+
+  for (var ii=0; ii<res.length; ii++) {
+
+    var prim_hue = cur_hue;
+    var prim_sat = _rnd(0.4, 0.6);
+    var prim_val = _rnd(0.675, 0.95);
+
+    res[ii][0].hsv = [ prim_hue, prim_sat, prim_val ];
+
+    // after experimentation, the conclusion I've come to is that
+    // there should only really be "one" color, the primary.
+    // The secondary really just needs to be dark, simulating a stroke.
+    // When the value of the primary is too low and the value of the
+    // secondary is too high, they clash too much.
+    // Even a value of 0.7 for the primary and a value of 0.4 for
+    // the secondary, the picture becomse hard to differentiate.
+    // Better to just set the value to be something way low for
+    // the secondary.
+    // Choosing a random hue gives it a little variation but
+    // otherwise is probably not that important.
+    //
+    var _del_hue = 0.2;
+    var seco_hue = _mod1( prim_hue + _crnd([-1,1])*_rnd(_del_hue/2, 1.0 - _del_hue/2) );
+    var seco_sat = _clamp( prim_sat + _crnd([-1,1])*_rnd(0.2, 0.3), 0.3, 0.6 );
+    seco_val = _rnd(0.1,0.325);
+
+    res[ii][1].hsv = [ seco_hue, seco_sat, seco_val ];
+
+    var prim_rgb = HSVtoRGB(prim_hue,  prim_sat, prim_val);
+    var seco_rgb = HSVtoRGB(seco_hue,  seco_sat, seco_val);
+
+    res[ii][0].hex = _rgb2hex(prim_rgb.r, prim_rgb.g, prim_rgb.b);
+    res[ii][1].hex = _rgb2hex(seco_rgb.r, seco_rgb.g, seco_rgb.b);
+
+    cur_hue += dir*_rnd( (1/n) - _s, (1/n) + _s );
+    cur_hue = _mod1(cur_hue);
+
+  }
+
+
+  return res;
+}
+
+
+// Here is the basic philosophy:
+//
+// The primary color is a random hue, moderate saturation
+// (0.4 to 0.6) and moderate to high value.
+// Too high of a saturation and it gets into "eye-bleed"
+// territory. The higher value gives it a lighter feel
+// and makes it stand out more.
+//
+// The secnodary color is darker, choosing it's value
+// between (0.1 and 0.325). Anything higher and
+// it's often hard to differentiate from teh primary
+// color.
+//
+// The secondary color is essentially the stroke color,
+// so the hue and saturation are chosen to provide some
+// small variation but otherwise it's basically just
+// chosen to be much darker.
+//
+// The background is chosen to be light and highly 
+// desaturated, so as not to take away attention from
+// the foreground.
+// The complementary
+// color's value being chosen in a restricted range of (0.5,1)
+// and chosen to 'repel' from the first background color.
+// This makes the background lighter. A darker background
+// could be an option for the future.
+// The similar high values mean that the background has
+// a kind of 'imprint' feel.
+//
+function rand_color() {
+  var res = {
+    "primary" : { "hex":"#000000", "hsv":[0,0,0] },
+    "secondary" : {"hex":"#ffffff", "hsv":[0,0,0] },
+    "background": { "hex":"#777777", "hsv":[0,0,0] },
+    "background2": { "hex":"#555555", "hsv":[0,0,0] },
+
+  };
+
+  //var prim_hue = Math.random();
+  var prim_hue = g_rng.double();
+  var prim_sat = _rnd(0.4, 0.6);
+  var prim_val = _rnd(0.675, 0.95);
+
+  res.primary.hsv = [ prim_hue, prim_sat, prim_val ];
+
+  // after experimentation, the conclusion I've come to is that
+  // there should only really be "one" color, the primary.
+  // The secondary really just needs to be dark, simulating a stroke.
+  // When the value of the primary is too low and the value of the
+  // secondary is too high, they clash too much.
+  // Even a value of 0.7 for the primary and a value of 0.4 for
+  // the secondary, the picture becomse hard to differentiate.
+  // Better to just set the value to be something way low for
+  // the secondary.
+  // Choosing a random hue gives it a little variation but
+  // otherwise is probably not that important.
+  //
+  var _del_hue = 0.2;
+  var seco_hue = _mod1( prim_hue + _crnd([-1,1])*_rnd(_del_hue/2, 1.0 - _del_hue/2) );
+  var seco_sat = _clamp( prim_sat + _crnd([-1,1])*_rnd(0.2, 0.3), 0.3, 0.6 );
+  seco_val = _rnd(0.1,0.325);
+
+  res.secondary.hsv = [ seco_hue, seco_sat, seco_val ];
+
+
+  // I kind of like backgrounds that are lighter, but it's hard
+  // to say.
+  // It might be better to have this as a user option.
+  // 
+  // I think having the bg2_val be 'repelled' in value
+  // from the bg_val works out pretty well, as it gives
+  // a good contrast.
+  // We also don't want the background contrast/stroke
+  // to be too dark, lest it take atention away from
+  // the foreground.
+  //
+
+  var bg_dark_opt = false;
+  if (_rnd() < 0.5) { bg_dark_opt = true; }
+
+  //var bg_hue = Math.random();
+  var bg_hue = g_rng.double();
+  var bg_sat = _rnd(0.05, 0.2);
+  var bg_val = _rnd(0.5, 1.0);
+  if (bg_dark_opt) { bg_val = _rnd(0.05, 0.5); }
+
+  res.background.hsv = [ bg_hue, bg_sat, bg_val ];
+
+  //var bg2_hue = Math.random();
+  var bg2_hue = g_rng.double();
+  var bg2_sat = _rnd(0.05, 0.2);
+  //var bg2_val = _rnd(0.5, 1.0);
+  //var bg2_val = _mod1(bg_val + _crnd([-1,1])*_rnd(0.1, 0.25));
+  var bg2_val = 0.5 + (_mod1(bg_val + _crnd([-1,1])*_rnd(0.1, 0.25))/2.0);
+  if (bg_dark_opt) {
+    bg2_val = (_mod1(2*bg_val + _crnd([-1,1])*_rnd(0.1, 0.25))/2.0);
+  }
+
+  res.background2.hsv = [ bg2_hue, bg2_sat, bg2_val ];
+
+  var prim_rgb = HSVtoRGB(prim_hue,  prim_sat, prim_val);
+  var seco_rgb = HSVtoRGB(seco_hue,  seco_sat, seco_val);
+  var bg_rgb = HSVtoRGB(bg_hue,  bg_sat, bg_val);
+  var bg2_rgb = HSVtoRGB(bg2_hue,  bg2_sat, bg2_val);
+
+  res.primary.hex = _rgb2hex(prim_rgb.r, prim_rgb.g, prim_rgb.b);
+  res.secondary.hex = _rgb2hex(seco_rgb.r, seco_rgb.g, seco_rgb.b);
+  res.background.hex = _rgb2hex(bg_rgb.r, bg_rgb.g, bg_rgb.b);
+  res.background2.hex = _rgb2hex(bg2_rgb.r, bg2_rgb.g, bg2_rgb.b);
+
+  res.primary.hex = _rgb2hex(prim_rgb.r, prim_rgb.g, prim_rgb.b);
+  res.secondary.hex = _rgb2hex(seco_rgb.r, seco_rgb.g, seco_rgb.b);
+  res.background.hex = _rgb2hex(bg_rgb.r, bg_rgb.g, bg_rgb.b);
+  res.background2.hex = _rgb2hex(bg2_rgb.r, bg2_rgb.g, bg2_rgb.b);
+
+  return res;
+}
+
+var _r = rand_color_n(N_COLOR);
+console.log(JSON.stringify(_r, undefined, 2));
