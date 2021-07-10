@@ -2931,11 +2931,10 @@ function create_ctx(_fn) {
 // unique name.
 //
 // A better method is to generate the gradients on the fly with their corresponding
-// unique IDs so that every instance of using them will be independent of each other.
-// But that's a problem for my future self.
+// unique IDs so that every instance of using them will be independent of each other
+// but that's a problem for my future self.
 //
 //
-
 
 function _remap_fill_id_collect(_dat, id_remap) {
   if (typeof _dat === "undefined") { return; }
@@ -2951,7 +2950,6 @@ function _remap_fill_id_collect(_dat, id_remap) {
         }
       }
     }
-
     _remap_fill_id_collect(_dat[key], id_remap);
   }
 
@@ -2989,6 +2987,8 @@ function remap_fill_id(_dat) {
 
 remap_fill_id(adata);
 remap_fill_id(bg_data);
+
+//----
 
 var bg_ctx = _preprocess_svgjson(bg_data, bg_color, bg_color, !sibyl_opt.use_gradient, sibyl_opt.exclude);
 bg_ctx["create_svg_header"] = false;
@@ -3057,6 +3057,8 @@ if (require.main !== module) {
   //
 
   module.exports = {
+    "mystic_symbolic" : adata,
+    "bg_symbol" : bg_data,
     "fg_ctx": fg_ctx,
     "bg_ctx": bg_ctx,
     "mystic_symbolic_dsl2sched" : mystic_symbolic_dsl2sched,

@@ -1,4 +1,6 @@
-var alea = require("./alea.js");
+
+var sibyl = require("./sibyl");
+//var alea = require("./alea.js");
 
 function rseed() {
   var seed = "";
@@ -22,7 +24,14 @@ function rstr(_rng, n) {
 }
 
 var seed = rseed();
-var rng = new alea(seed);
+
+sibyl.reseed(seed);
+
+var c = sibyl.rand_color_n(10);
+console.log(c);
+process.exit();
+
+//var rng = new alea(seed);
 
 var minor_arcana = ["ace", "2", "3", "4",
                     "5", "6", "7", "8", "9", "10",
