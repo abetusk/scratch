@@ -1,4 +1,5 @@
 
+var cp = require("child_process");
 var fs = require("fs");
 var sibyl = require("./sibyl");
 //var alea = require("./alea.js");
@@ -178,6 +179,21 @@ for (var suit_idx=0; suit_idx < minor_arcana_suit.length; suit_idx++) {
     var card_name = suit + "_" + minor_arcana[card_idx];
     var card_fn = "deck/" + card_name + ".svg";
 
+    var cmd = "./sibyl -a data/major-arcana.list -e data/exclude-" + suit + " -l 10 " +
+      " -Z " + _seed + " -t -C 5 -a 2 -n 2 -G 2.0 " + 
+      " -p '" + colors[suit][1][1].hex + "' -s '" + colors[suit][1][0].hex + "' " +
+      " -t -T 0.2,0.175 -D 240,0 -b '" + colors[suit][2][0].hex + "' -c '" + colors[suit][2][1].hex + "' -B  '" + bgnd + "' " + 
+      " -J ./_svg-tarot.json " + 
+      "  -R " + creat_fn + " > " + card_fn + " ; " + 
+      " sed -i 's;</rect>;</rect> <g transform=\" translate(-144 0)\">;' " + card_fn + " ; " +
+      " sed -i 's;width=\"720px\";width=\"432px\";' " + card_fn  + " ; " +
+      " sed -i 's;</svg>;</g> </svg>;' " + card_fn ;
+
+    cp.execSync(cmd);
+
+    cp.execSync("rm " + creat_fn);
+
+    /*
     console.log("./sibyl -a data/major-arcana.list -e data/exclude-" + suit + " -l 10 \\");
     console.log(" -Z " + _seed + " -t -C 5 -a 2 -n 2 -G 2.0 \\");
     console.log(" -p '" + colors[suit][1][1].hex + "' -s '" + colors[suit][1][0].hex + "' \\");
@@ -188,6 +204,7 @@ for (var suit_idx=0; suit_idx < minor_arcana_suit.length; suit_idx++) {
     console.log("sed -i 's;</rect>;</rect> <g transform=\" translate(-144 0)\">;' " + card_fn );
     console.log("sed -i 's;width=\"720px\";width=\"432px\";' " + card_fn );
     console.log("sed -i 's;</svg>;</g> </svg>;' " + card_fn );
+    */
 
   }
 }
