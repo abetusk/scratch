@@ -80,7 +80,7 @@ function show_help(fp) {
   fp.write("  [-j outjson]                output schedule JSON\n");
   fp.write("  [-R injson]                 input schedule JSON\n");
   fp.write("  [-L color]                  color ring (e.g. '#77777,#afafaf,#fe3f3f,#1f1f7f') (unimmplemented)\n");
-  fp.write("  [-Z seed]                   prng seed (deafult '" + seed + "')");
+  fp.write("  [-Z seed]                   prng seed (deafult '" + seed + "')\n");
   fp.write("  [-g]                        disable gradient\n");
   fp.write("  [-t]                        tile background\n");
   fp.write("  [-Q]                        bonkers mode (override attach restrictions)\n");
@@ -2294,17 +2294,18 @@ function _rand_color() {
 // The similar high values mean that the background has
 // a kind of 'imprint' feel.
 //
-function rand_color() {
+function rand_color(base_hue) {
+  base_hue = ((typeof base_hue === "undefined") ? g_rng.double() : base_hue);
   var res = {
     "primary" : { "hex":"#000000", "hsv":[0,0,0] },
     "secondary" : {"hex":"#ffffff", "hsv":[0,0,0] },
     "background": { "hex":"#777777", "hsv":[0,0,0] },
-    "background2": { "hex":"#555555", "hsv":[0,0,0] },
-
+    "background2": { "hex":"#555555", "hsv":[0,0,0] }
   };
 
   //var prim_hue = Math.random();
-  var prim_hue = g_rng.double();
+  //var prim_hue = g_rng.double();
+  var prim_hue = base_hue;
   var prim_sat = _rnd(0.4, 0.6);
   var prim_val = _rnd(0.675, 0.95);
 
@@ -3071,6 +3072,7 @@ if (require.main !== module) {
     "repr_realized" : repr_realized,
     "sched2sentence" : sched2sentence,
     "create_ctx" : create_ctx,
+    "rand_color" : rand_color,
     "rand_color_n" : rand_color_n,
     "RGBtoHSV" : RGBtoHSV,
     "HSVtoHSL" : HSVtoHSL,
@@ -3132,6 +3134,8 @@ if (arg_str == "random") {
           bg_svg += "<g transform=\"";
           bg_svg += " translate(" + (-_x).toString() + " " + (-_y).toString() + ")";
           bg_svg += "\">";
+
+          //console.log("????", JSON.stringify(bg_svg_single, undefined, 2));
 
           bg_svg += bg_svg_single;
 
@@ -3264,6 +3268,8 @@ else {
           bg_svg += "<g transform=\"";
           bg_svg += " translate(" + (-_x).toString() + " " + (-_y).toString() + ")";
           bg_svg += "\">";
+
+          //console.log("????", JSON.stringify(bg_svg_single, undefined, 2));
 
           bg_svg += bg_svg_single;
 
