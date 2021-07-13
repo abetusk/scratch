@@ -3064,7 +3064,6 @@ if (require.main !== module) {
     "mystic_symbolic_dsl2sched" : mystic_symbolic_dsl2sched,
     "mystic_symbolic_sched" : mystic_symbolic_sched,
     "mystic_symbolic_random" : mystic_symbolic_random,
-    "mystic_symbolic_sched" : mystic_symbolic_sched,
     "opt" : sibyl_opt,
     "preprocess_svgjson": _preprocess_svgjson,
     "jsonsvg2svg_child": jsonsvg2svg_child,
@@ -3078,6 +3077,7 @@ if (require.main !== module) {
     "HSLtoHSV" : HSLtoHSV,
     "HSVtoRGB" : HSVtoRGB,
     "rgb2hex": _rgb2hex,
+    "rng" : g_rng,
     "reseed" : reseed
   };
 
