@@ -4,6 +4,17 @@ var fs = require("fs");
 var sibyl = require("./sibyl");
 //var alea = require("./alea.js");
 
+//var txt_ele = ' <rect x="36" y="608" width="360" height="46" fill="#efefef" > ' + 
+var txt_ele = ' <rect x="41" y="608" width="351" height="46" fill="#efefef" > ' + 
+'</rect>' + 
+'<text x="0" y="0" id="_text">' + 
+'<tspan' + 
+'  id="_tspan"' + 
+'  x="216"' + 
+'  y="644"' + 
+'  style="fill:rgb(50,50,50);font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:33px;font-family:\'Caviar Dreams\';-inkscape-font-specification:\'Caviar Dreams, Bold\';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;stroke-width:0.26458332px">::TEXT::</tspan>' + 
+'</text> ';
+
 function rseed() {
   var seed = "";
   var x = "abcdefghijklmnopqrstuvwxyzABDCEFGHIJKLMNOPQRSTUVWXYZ01234567890";
@@ -72,24 +83,6 @@ for (var ii=0; ii<4; ii++) {
   _cx.push( [ { "hex": r.background.hex }, {"hex":r.background2.hex} ] );
 }
 
-/*
-var colors = {
-  "pentacle": [ c0[0], c1[0], c2[0] ],
-  "key":      [ c0[1], c1[1], c2[1] ],
-  "sword":    [ c0[2], c1[2], c2[2] ],
-  "cup":      [ c0[3], c1[3], c2[3] ]
-};
-*/
-
-/*
-var colors = {
-  "pentacle": [ c0[0], c0[1], _cx[0] ],
-  "key":      [ c1[0], c1[1], _cx[1] ],
-  "sword":    [ c2[0], c2[1], _cx[2] ],
-  "cup":      [ c3[0], c3[1], _cx[3] ]
-};
-*/
-
 var colors = {
   "pentacle": [ cf[0], cf[4], _cx[0] ],
   "key":      [ cf[1], cf[5], _cx[1] ],
@@ -97,30 +90,35 @@ var colors = {
   "cup":      [ cf[3], cf[7], _cx[3] ]
 };
 
-/*
-var colors = {
-  "pentacle": [ c0[0], c1[0], _cx[0] ],
-  "key":      [ c0[1], c1[1], _cx[1] ],
-  "sword":    [ c0[2], c1[2], _cx[2] ],
-  "cup":      [ c0[3], c1[3], _cx[3] ]
-};
-*/
+var ace_choice = [
+  "window", "door", "wings_pair", "ring", "lotus",
+  "hands_giving", "hands_pair", "hand_side", "hand_open_3_4",
+  "hand_claddagh", "flower_8petal", "cloud", "circle",
+  "scroll_double", "table", "chair", "box", "book_open", "arms_strong"
+];
 
-/*
-var colors = {
-  "pentacle": [ c0[0], _cx[0], _cx[1] ],
-  "key":      [ c0[1], _cx[2], _cx[3] ],
-  "sword":    [ c0[2], _cx[4], _cx[5] ],
-  "cup":      [ c0[3], _cx[6], _cx[7] ]
-};
-*/
+// page, knight, queen, king
+//
+var royalty_crown_choice = [
+  "crown", "crown_5pt", "crown_5pt2", "crown_hierophant", "crown_ornate"
+];
+var royalty_sceptor_choice = [
+  "ankh_emperor", "cross_hierophant" 
+]
+var royalty_choice = [
+  "bird", "bitey_half", "capricorn_tail", "cat", "cow_head",
+  "dog", "dragon", "eagle_head", "eagle_shield", "egg",
+  "fish", "goat", "goat_head", "head_beast", "horse",
+  "lamb_head", "lizard", "oroboros", "pear", "rabbit",
+  "pomegranite", "skeleton", "virus"
+];
 
 for (var suit_idx=0; suit_idx < minor_arcana_suit.length; suit_idx++) {
   for (var card_idx=0; card_idx < minor_arcana.length; card_idx++) {
     console.log("## ", minor_arcana_suit[suit_idx], minor_arcana[card_idx], rstr(rng, 32));
 
     var suit = minor_arcana_suit[suit_idx];
-
+    var color_suit = colors[suit][0][0].hex + colors[suit][0][1].hex;
     var suit_ent = minor_arcana_suit[suit_idx]  + colors[suit][0][0].hex + colors[suit][0][1].hex;
     var _s = [];
 
@@ -152,23 +150,98 @@ for (var suit_idx=0; suit_idx < minor_arcana_suit.length; suit_idx++) {
     sibyl.mystic_symbolic_random( sibyl.fg_ctx );
 
     var json_card = {
-      "base":"minor_arcana_" + minor_arcana[card_idx] + "_0",
-      "attach" : {
-        "nesting" : [
-        ]
-      }
+      "base": "goat",
+      "attach" : { "nesting" : [ ] }
     };
 
-    for (var ii=0; ii<=card_idx; ii++) {
-      json_card.attach.nesting.push( { "base" : suit_ent } );
+    var gscale = 2.0;
+
+    // number cards that aren't ace or page to king
+    //
+    if ((card_idx > 0) && (card_idx < 10)) {
+
+      json_card = {
+        "base":"minor_arcana_" + minor_arcana[card_idx] + "_0",
+        "attach" : { "nesting" : [ ] }
+      };
+
+      for (var ii=0; ii<=card_idx; ii++) {
+        json_card.attach.nesting.push( { "base" : suit_ent } );
+      }
+      json_card.attach.nesting.push( sibyl.fg_ctx.realized_child );
+
+      var creat = ":rnd" + colors[suit][1][0].hex + colors[suit][1][1].hex;
+      var bgnd = bg0 + colors[suit][2][0].hex + colors[suit][2][1].hex ;
+      if (bg1.length > 0) {
+        bgnd += "@" + bg1 + colors[suit][2][1].hex + colors[suit][2][0].hex;
+      }
+
+
     }
-    json_card.attach.nesting.push( sibyl.fg_ctx.realized_child );
+
+    // ace
+    //
+    else if (card_idx==0) {
+
+      var ace_base = sibyl.crnd(ace_choice);
+      json_card = {
+        "base": ace_base + color_suit,
+        "attach" : { "nesting" : [ { "base": suit_ent }  ] }
+      };
+
+      gscale = 1.0;
+
+    }
+
+    // page
+    else if (card_idx==10) {
+
+      var royalty_base = sibyl.crnd(royalty_choice);
+      json_card = {
+        "base": royalty_base + color_suit,
+        "attach" : { "nesting" : [ { "base": suit_ent }  ] }
+      };
+      gscale = 1.0;
+
+    }
+
+    // knight
+    else if (card_idx==11) {
+
+      var royalty_base = sibyl.crnd(royalty_choice);
+      json_card = {
+        "base": royalty_base + color_suit,
+        "attach" : { "nesting" : [ { "base": suit_ent }  ] }
+      };
+      gscale = 1.0;
 
 
-    var creat = ":rnd" + colors[suit][1][0].hex + colors[suit][1][1].hex;
-    var bgnd = bg0 + colors[suit][2][0].hex + colors[suit][2][1].hex ;
-    if (bg1.length > 0) {
-      bgnd += "@" + bg1 + colors[suit][2][1].hex + colors[suit][2][0].hex;
+    }
+
+    // queen
+    else if (card_idx==12) {
+
+      var royalty_base = sibyl.crnd(royalty_choice);
+      json_card = {
+        "base": royalty_base + color_suit,
+        "attach" : { "nesting" : [ { "base": suit_ent }  ] }
+      };
+      gscale = 1.0;
+
+
+    }
+
+    // king
+    else if (card_idx==13) {
+
+      var royalty_base = sibyl.crnd(royalty_choice);
+      json_card = {
+        "base": royalty_base + color_suit,
+        "attach" : { "nesting" : [ { "base": suit_ent }  ] }
+      };
+      gscale = 1.0;
+
+
     }
 
     var _seed = rstr(rng, 32);
@@ -180,7 +253,8 @@ for (var suit_idx=0; suit_idx < minor_arcana_suit.length; suit_idx++) {
     var card_fn = "deck/" + card_name + ".svg";
 
     var cmd = "./sibyl -a data/major-arcana.list -e data/exclude-" + suit + " -l 10 " +
-      " -Z " + _seed + " -t -C 5 -a 2 -n 2 -G 2.0 " + 
+      //" -Z " + _seed + " -t -C 5 -a 2 -n 2 -G 2.0 " + 
+      " -Z " + _seed + " -t -C 5 -a 2 -n 2 -G " +  gscale.toString() +
       " -p '" + colors[suit][1][1].hex + "' -s '" + colors[suit][1][0].hex + "' " +
       " -t -T 0.2,0.175 -D 240,0 -b '" + colors[suit][2][0].hex + "' -c '" + colors[suit][2][1].hex + "' -B  '" + bgnd + "' " + 
       " -J ./_svg-tarot.json " + 
@@ -190,23 +264,10 @@ for (var suit_idx=0; suit_idx < minor_arcana_suit.length; suit_idx++) {
       " sed -i 's;</svg>;</g> </svg>;' " + card_fn ;
 
     cp.execSync(cmd);
-
     cp.execSync("rm " + creat_fn);
 
-    /*
-    console.log("./sibyl -a data/major-arcana.list -e data/exclude-" + suit + " -l 10 \\");
-    console.log(" -Z " + _seed + " -t -C 5 -a 2 -n 2 -G 2.0 \\");
-    console.log(" -p '" + colors[suit][1][1].hex + "' -s '" + colors[suit][1][0].hex + "' \\");
-    console.log(" -t -T 0.2,0.175 -D 240,0 -b '" + colors[suit][2][0].hex + "' -c '" + colors[suit][2][1].hex + "' -B  '" + bgnd + "' \\");
-    console.log(" -J ./_svg-tarot.json \\");
-    console.log("  -R " + creat_fn + " > " + card_fn);
-    //console.log("  ' minor_arcana_" + minor_arcana[card_idx] + "_0 @ [ " + _s.join(",") + " , " + creat + "] '  > " + card_fn );
-    console.log("sed -i 's;</rect>;</rect> <g transform=\" translate(-144 0)\">;' " + card_fn );
-    console.log("sed -i 's;width=\"720px\";width=\"432px\";' " + card_fn );
-    console.log("sed -i 's;</svg>;</g> </svg>;' " + card_fn );
-    */
-
   }
+
 }
 
 //for (var midx=0; midx<major_arcana.length; midx++) {
