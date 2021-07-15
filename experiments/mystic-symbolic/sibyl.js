@@ -3080,6 +3080,10 @@ if (require.main !== module) {
     "HSVtoRGB" : HSVtoRGB,
     "rgb2hex": _rgb2hex,
     "rng" : g_rng,
+    "irnd":_irnd,
+    "rnd":_rnd,
+    "crnd":_crnd,
+    "choose":_choose,
     "reseed" : reseed
   };
 
