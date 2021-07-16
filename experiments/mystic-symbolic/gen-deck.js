@@ -1,7 +1,10 @@
 
+var __skip = true;
+
 var cp = require("child_process");
 var fs = require("fs");
 var sibyl = require("./sibyl");
+var sibyl_x = require("./sibyl");
 //var alea = require("./alea.js");
 
 //var txt_ele = ' <rect x="36" y="608" width="360" height="46" fill="#efefef" > ' + 
@@ -46,15 +49,37 @@ sibyl.reseed(seed);
 
 var rng = sibyl.rng;
 
-var minor_arcana = ["ace", "2", "3", "4",
-                    "5", "6", "7", "8", "9", "10",
-                    "page", "knight", "queen", "king"];
+var minor_arcana = [
+  "ace", "2", "3", "4",
+  "5", "6", "7", "8", "9", "10",
+  "page", "knight", "queen", "king"
+];
 var minor_arcana_suit = ["pentacle", "key", "sword", "cup"];
 var major_arcana = [
-  "fool",
-  "angel", "chariot", "death", "devil", "emperor",
-  "empress", "hermit", "hierophant", "magician", "wheel_of_fortune",
-  "priestess", "#scales", "strength", "waterworks", "trumpet" ];
+  { "name": "fool",       "symbol":"fool" ,       "exclude":true, "scale": 0.75},
+  { "name": "magician",   "symbol":"magician",    "exclude":true, "scale": 0.75},
+  { "name": "priestess",  "symbol":"priestess",   "exclude":true, "scale": 0.75},
+  { "name":"empress",     "symbol":"empress",     "exclude":true, "scale": 0.75},
+  { "name":"emperor",     "symbol":"emperor" ,    "exclude":true, "scale": 0.75},
+  { "name":"hierophant",  "symbol":"hierophant",  "exclude":true, "scale": 0.75},
+  { "name":"the lovers",  "symbol":"" ,           "exclude":false, "scale":0.75},
+  { "name":"chariot",     "symbol":"chariot",     "exclude":true, "scale": 0.75},
+  { "name":"strength",    "symbol":"strength",    "exclude":true, "scale": 0.75},
+  { "name":"hermit",      "symbol":"hermit",      "exclude":true, "scale": 0.75},
+  { "name":"wheel of fortune", "symbol":"wheel_of_fortune",  "exclude":true, "scale": 0.75},
+  { "name":"justice",     "symbol":"scales" ,    "exclude":false, "scale":0.75},
+  { "name":"the hanged",  "symbol":"coffin",      "exclude":true, "scale": 0.75},
+  { "name":"death",       "symbol":"death",       "exclude":true, "scale": 0.75},
+  { "name":"temperance",  "symbol":"waterworks",  "exclude":true, "scale": 0.75},
+  { "name":"devil",       "symbol":"devil",       "exclude":true, "scale": 0.75},
+  { "name":"the tower",   "symbol":"castle_tower","exclude":true, "scale": 0.75},
+  { "name":"the star",    "symbol":"starburst",   "exclude":true, "scale": 0.75},
+  { "name":"moon",        "symbol":"moon",        "exclude":true, "scale": 0.75},
+  { "name":"sun",         "symbol":"sun",         "exclude":true, "scale": 0.75},
+  { "name":"judgement",   "symbol":"angel",       "exclude":true, "scale": 0.75},
+  { "name":"the world",   "symbol":"globe",       "exlcude":false, "scale":0.75}
+];
+
 var exclude_all = [];
 
 for (var ii=0; ii<minor_arcana_suit.length; ii++) {
@@ -62,13 +87,13 @@ for (var ii=0; ii<minor_arcana_suit.length; ii++) {
 }
 
 for (var ii=0; ii<major_arcana.length; ii++) {
-  exclude_all.push(major_arcana[ii]);
+  if (major_arcana[ii].exclude) {
+    exclude_all.push(major_arcana[ii].symbol);
+  }
 }
 exclude_all.push("knight");
-exclude_all.push("castle_tower");
 exclude_all.push("bob");
 exclude_all.push("rainbow_half");
-
 
 var c0 = sibyl.rand_color_n(2);
 var c1 = sibyl.rand_color_n(2);
@@ -113,6 +138,7 @@ var royalty_choice = [
   "pomegranite", "skeleton", "virus"
 ];
 
+if (!__skip) {
 for (var suit_idx=0; suit_idx < minor_arcana_suit.length; suit_idx++) {
   for (var card_idx=0; card_idx < minor_arcana.length; card_idx++) {
     console.log("## ", minor_arcana_suit[suit_idx], minor_arcana[card_idx], rstr(rng, 32));
@@ -269,7 +295,85 @@ for (var suit_idx=0; suit_idx < minor_arcana_suit.length; suit_idx++) {
   }
 
 }
+}
 
-//for (var midx=0; midx<major_arcana.length; midx++) {
-//  console.log(major_arcana[midx], rstr(rng, 32));
-//}
+for (var ma_idx=0; ma_idx<major_arcana.length; ma_idx++) {
+
+
+  var _c0 = sibyl.rand_color_n(2);
+  var _c1 = sibyl.rand_color_n(2);
+
+  var cf = sibyl.rand_color_n(8);
+  var _cx = [];
+  for (var ii=0; ii<4; ii++) {
+    var r = sibyl.rand_color();
+    _cx.push( [ { "hex": r.background.hex }, {"hex":r.background2.hex} ] );
+  }
+
+  var colors = [ cf[0], cf[4], _cx[0] ];
+
+  var _orig = sibyl.preprocess_svgjson(sibyl.mystic_symbolic, undefined, undefined, false, {});
+
+  var _t = sibyl.preprocess_svgjson(sibyl.bg_symbol, undefined, undefined, false, exclude_all);
+  sibyl.bg_ctx.choice = _t.choice;
+  sibyl.bg_ctx.symbol = _t.symbol;
+  sibyl.bg_ctx.data = _t.data;
+
+  sibyl.bg_ctx.max_depth = 0;
+  sibyl.bg_ctx.max_nest_depth = 1;
+  sibyl.bg_ctx.complexity = 1;
+  sibyl.mystic_symbolic_random( sibyl.bg_ctx );
+  var bg0 = sibyl.bg_ctx.realized_child.base;
+  var bg1 = "";
+  if ("attach" in sibyl.bg_ctx.realized_child) {
+    bg1 = sibyl.bg_ctx.realized_child.attach.nesting[0].base;
+  }
+  var bgnd = bg0 + colors[2][0].hex + colors[2][1].hex ;
+  if (bg1.length > 0) {
+    bgnd += "@" + bg1 + colors[2][1].hex + colors[2][0].hex;
+  }
+
+
+  var base_creature = _orig.symbol[ major_arcana[ma_idx].symbol ];
+  var _t = sibyl.preprocess_svgjson(sibyl.mystic_symbolic, undefined, undefined, false, exclude_all);
+  sibyl.fg_ctx.choice = _t.choice;
+  sibyl.fg_ctx.symbol = _t.symbol;
+  sibyl.fg_ctx.data = _t.data;
+  sibyl.mystic_symbolic_random( sibyl.fg_ctx, base_creature );
+
+  //console.log(">>>", base_creature);
+
+  var json_card = sibyl.fg_ctx.realized_child;
+
+  var _seed = rstr(rng, 32);
+
+  var creat_fn = "/tmp/sibyl/" + _seed;
+  fs.writeFileSync(creat_fn, JSON.stringify(json_card, undefined, 2), {"flag":"w+"});
+
+  console.log("#processing ", major_arcana[ma_idx].name, creat_fn);
+
+  //WIP 
+  var card_name = "ma_" + major_arcana[ma_idx].name.replace(/ /g, '_');
+  var card_ofn = "deck/" + card_name + ".svg";
+
+  var gscale = major_arcana[ma_idx].scale;
+
+
+  var cmd = "./sibyl -l 6 -S 0.425 " +
+    //" -Z " + _seed + " -t -C 5 -a 2 -n 2 -G 2.0 " + 
+    " -Z " + _seed + " -t -C 5 -a 2 -n 2 -G " +  gscale.toString() +
+    " -p '" + colors[1][1].hex + "' -s '" + colors[1][0].hex + "' " +
+    " -t -T 0.2,0.175 -D 240,0 -b '" + colors[2][0].hex + "' -c '" + colors[2][1].hex + "' -B  '" + bgnd + "' " + 
+    " -J ./_svg-tarot.json " + 
+    "  -R " + creat_fn + " > " + card_ofn + " ; " + 
+    " sed -i 's;</rect>;</rect> <g transform=\" translate(-144 0)\">;' " + card_ofn + " ; " +
+    " sed -i 's;width=\"720px\";width=\"432px\";' " + card_ofn  + " ; " +
+    " sed -i 's;</svg>;</g> </svg>;' " + card_ofn ;
+
+  cp.execSync(cmd);
+  //cp.execSync("rm " + creat_fn);
+
+
+}
+
+
