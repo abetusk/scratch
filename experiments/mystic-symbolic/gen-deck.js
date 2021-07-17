@@ -1,5 +1,5 @@
 
-var __skip = true;
+var __skip = false;
 
 var cp = require("child_process");
 var fs = require("fs");
@@ -8,7 +8,7 @@ var sibyl_x = require("./sibyl");
 //var alea = require("./alea.js");
 
 //var txt_ele = ' <rect x="36" y="608" width="360" height="46" fill="#efefef" > ' + 
-var txt_ele = ' <rect x="41" y="608" width="351" height="46" fill="#efefef" > ' + 
+var txt_ele = ' <rect rx="23" x="41" y="608" width="351" height="46" fill="#efefef" > ' + 
 '</rect>' + 
 '<text x="0" y="0" id="_text">' + 
 '<tspan' + 
@@ -41,6 +41,9 @@ function rstr(_rng, n) {
 
 var seed = rseed();
 
+//DEBUG
+seed = 'I8Q3zUmOvpewzwTCADsaSefpaYzD4yj4';
+
 console.log("## seed: " + seed);
 
 sibyl.reseed(seed);
@@ -56,28 +59,28 @@ var minor_arcana = [
 ];
 var minor_arcana_suit = ["pentacle", "key", "sword", "cup"];
 var major_arcana = [
-  { "name": "fool",       "symbol":"fool" ,       "exclude":true, "scale": 0.75},
-  { "name": "magician",   "symbol":"magician",    "exclude":true, "scale": 0.75},
-  { "name": "priestess",  "symbol":"priestess",   "exclude":true, "scale": 0.75},
-  { "name":"empress",     "symbol":"empress",     "exclude":true, "scale": 0.75},
-  { "name":"emperor",     "symbol":"emperor" ,    "exclude":true, "scale": 0.75},
-  { "name":"hierophant",  "symbol":"hierophant",  "exclude":true, "scale": 0.75},
-  { "name":"the lovers",  "symbol":"" ,           "exclude":false, "scale":0.75},
-  { "name":"chariot",     "symbol":"chariot",     "exclude":true, "scale": 0.75},
-  { "name":"strength",    "symbol":"strength",    "exclude":true, "scale": 0.75},
-  { "name":"hermit",      "symbol":"hermit",      "exclude":true, "scale": 0.75},
-  { "name":"wheel of fortune", "symbol":"wheel_of_fortune",  "exclude":true, "scale": 0.75},
-  { "name":"justice",     "symbol":"scales" ,    "exclude":false, "scale":0.75},
-  { "name":"the hanged",  "symbol":"coffin",      "exclude":true, "scale": 0.75},
-  { "name":"death",       "symbol":"death",       "exclude":true, "scale": 0.75},
-  { "name":"temperance",  "symbol":"waterworks",  "exclude":true, "scale": 0.75},
-  { "name":"devil",       "symbol":"devil",       "exclude":true, "scale": 0.75},
-  { "name":"the tower",   "symbol":"castle_tower","exclude":true, "scale": 0.75},
-  { "name":"the star",    "symbol":"starburst",   "exclude":true, "scale": 0.75},
-  { "name":"moon",        "symbol":"moon",        "exclude":true, "scale": 0.75},
-  { "name":"sun",         "symbol":"sun",         "exclude":true, "scale": 0.75},
-  { "name":"judgement",   "symbol":"angel",       "exclude":true, "scale": 0.75},
-  { "name":"the world",   "symbol":"globe",       "exlcude":false, "scale":0.75}
+  { "name": "THE FOOL",       "symbol":"fool" ,       "exclude":true, "scale": 0.75},
+  { "name": "THE MAGICIAN",   "symbol":"magician",    "exclude":true, "scale": 0.75},
+  { "name": "THE PRIESTESS",  "symbol":"priestess",   "exclude":true, "scale": 0.75},
+  { "name":"THE EMPRESS",     "symbol":"empress",     "exclude":true, "scale": 0.75},
+  { "name":"THE EMPEROR",     "symbol":"emperor" ,    "exclude":true, "scale": 0.75},
+  { "name":"THE HIEROPHANT",  "symbol":"hierophant",  "exclude":true, "scale": 0.75},
+  { "name":"THE LOVERS",  "symbol":"" ,           "exclude":false, "scale":0.75},
+  { "name":"THE CHARIOT",     "symbol":"chariot",     "exclude":true, "scale": 0.75},
+  { "name":"STRENGTH",    "symbol":"strength",    "exclude":true, "scale": 0.75},
+  { "name":"THE HERMIT",      "symbol":"hermit",      "exclude":true, "scale": 0.75},
+  { "name":"WHEEL of FORTUNE", "symbol":"wheel_of_fortune",  "exclude":true, "scale": 0.75},
+  { "name":"JUSTICE",     "symbol":"scales" ,    "exclude":false, "scale":0.75},
+  { "name":"THE HANGED",  "symbol":"coffin",      "exclude":true, "scale": 0.75},
+  { "name":"DEATH",       "symbol":"death",       "exclude":true, "scale": 0.75},
+  { "name":"TEMPERANCE",  "symbol":"waterworks",  "exclude":true, "scale": 0.75},
+  { "name":"THE DEVIL",       "symbol":"devil",       "exclude":true, "scale": 0.75},
+  { "name":"THE TOWER",   "symbol":"castle_tower","exclude":true, "scale": 0.75},
+  { "name":"THE STAR",    "symbol":"starburst",   "exclude":true, "scale": 0.75},
+  { "name":"THE MOON",        "symbol":"moon",        "exclude":true, "scale": 0.75},
+  { "name":"THE SUN",         "symbol":"sun",         "exclude":true, "scale": 0.75},
+  { "name":"JUDGEMENT",   "symbol":"angel",       "exclude":true, "scale": 0.75},
+  { "name":"THE WORLD",   "symbol":"globe",       "exlcude":false, "scale":0.75}
 ];
 
 var exclude_all = [];
@@ -131,17 +134,23 @@ var royalty_sceptor_choice = [
   "ankh_emperor", "cross_hierophant" 
 ]
 var royalty_choice = [
-  "bird", "bitey_half", "capricorn_tail", "cat", "cow_head",
-  "dog", "dragon", "eagle_head", "eagle_shield", "egg",
-  "fish", "goat", "goat_head", "head_beast", "horse",
-  "lamb_head", "lizard", "oroboros", "pear", "rabbit",
-  "pomegranite", "skeleton", "virus"
+  "bird", "bitey_half", "cat", "cow_head",
+  "dog", "eagle_shield", "egg",
+  "fish", "goat", "goat_head", "horse",
+  "lamb_head", "oroboros", "pear",
+  "skeleton", "virus"
 ];
 
 if (!__skip) {
 for (var suit_idx=0; suit_idx < minor_arcana_suit.length; suit_idx++) {
   for (var card_idx=0; card_idx < minor_arcana.length; card_idx++) {
-    console.log("## ", minor_arcana_suit[suit_idx], minor_arcana[card_idx], rstr(rng, 32));
+
+    var has_footer_text = false;
+    var text_descr = "...";
+
+
+    var _seed = rstr(rng,32);
+    console.log("## ", minor_arcana_suit[suit_idx], minor_arcana[card_idx], _seed);
 
     var suit = minor_arcana_suit[suit_idx];
     var color_suit = colors[suit][0][0].hex + colors[suit][0][1].hex;
@@ -168,6 +177,14 @@ for (var suit_idx=0; suit_idx < minor_arcana_suit.length; suit_idx++) {
     if ("attach" in sibyl.bg_ctx.realized_child) {
       bg1 = sibyl.bg_ctx.realized_child.attach.nesting[0].base;
     }
+
+    var bgnd = bg0 + colors[suit][2][0].hex + colors[suit][2][1].hex ;
+    if (bg1.length > 0) {
+      bgnd += "@" + bg1 + colors[suit][2][1].hex + colors[suit][2][0].hex;
+    }
+
+
+    //console.log("# choosing bgnd:", bgnd);
 
     _t = sibyl.preprocess_svgjson(sibyl.mystic_symbolic, undefined, undefined, false, exclude_all);
     sibyl.fg_ctx.choice = _t.choice;
@@ -196,12 +213,6 @@ for (var suit_idx=0; suit_idx < minor_arcana_suit.length; suit_idx++) {
       }
       json_card.attach.nesting.push( sibyl.fg_ctx.realized_child );
 
-      var creat = ":rnd" + colors[suit][1][0].hex + colors[suit][1][1].hex;
-      var bgnd = bg0 + colors[suit][2][0].hex + colors[suit][2][1].hex ;
-      if (bg1.length > 0) {
-        bgnd += "@" + bg1 + colors[suit][2][1].hex + colors[suit][2][0].hex;
-      }
-
 
     }
 
@@ -209,10 +220,13 @@ for (var suit_idx=0; suit_idx < minor_arcana_suit.length; suit_idx++) {
     //
     else if (card_idx==0) {
 
+      has_footer_text = true;
+      text_descr = "ACE of " + suit.toUpperCase();
+
       var ace_base = sibyl.crnd(ace_choice);
       json_card = {
-        "base": ace_base + color_suit,
-        "attach" : { "nesting" : [ { "base": suit_ent }  ] }
+        "base": ace_base ,
+        "attach" : { "nesting" : [ { "base": suit_ent + color_suit }  ] }
       };
 
       gscale = 1.0;
@@ -222,10 +236,15 @@ for (var suit_idx=0; suit_idx < minor_arcana_suit.length; suit_idx++) {
     // page
     else if (card_idx==10) {
 
+      has_footer_text = true;
+      text_descr = "PAGE of " + suit.toUpperCase();
+
+      var xc = colors[suit][1][1].hex + colors[suit][1][0].hex;
+
       var royalty_base = sibyl.crnd(royalty_choice);
       json_card = {
-        "base": royalty_base + color_suit,
-        "attach" : { "nesting" : [ { "base": suit_ent }  ] }
+        "base": royalty_base + xc,
+        "attach" : { "nesting" : [ { "base": suit_ent + color_suit }  ] }
       };
       gscale = 1.0;
 
@@ -234,49 +253,60 @@ for (var suit_idx=0; suit_idx < minor_arcana_suit.length; suit_idx++) {
     // knight
     else if (card_idx==11) {
 
+      has_footer_text = true;
+      text_descr = "KNIGHT of " + suit.toUpperCase();
+
+      var xc = colors[suit][1][1].hex + colors[suit][1][0].hex;
+
       var royalty_base = sibyl.crnd(royalty_choice);
       json_card = {
-        "base": royalty_base + color_suit,
-        "attach" : { "nesting" : [ { "base": suit_ent }  ] }
+        "base": royalty_base + xc,
+        "attach" : { "nesting" : [ { "base": suit_ent + color_suit }  ] }
       };
       gscale = 1.0;
-
 
     }
 
     // queen
     else if (card_idx==12) {
 
+      has_footer_text = true;
+      text_descr = "QUEEN of " + suit.toUpperCase();
+
       var royalty_base = sibyl.crnd(royalty_choice);
       json_card = {
-        "base": royalty_base + color_suit,
-        "attach" : { "nesting" : [ { "base": suit_ent }  ] }
+        "base": royalty_base + xc,
+        "attach" : { "nesting" : [ { "base": suit_ent + color_suit }  ] }
       };
       gscale = 1.0;
-
 
     }
 
     // king
     else if (card_idx==13) {
 
+      has_footer_text = true;
+      text_descr = "KING of " + suit.toUpperCase();
+
+      var xc = colors[suit][1][1].hex + colors[suit][1][0].hex;
+
       var royalty_base = sibyl.crnd(royalty_choice);
       json_card = {
-        "base": royalty_base + color_suit,
-        "attach" : { "nesting" : [ { "base": suit_ent }  ] }
+        "base": royalty_base + xc,
+        "attach" : { "nesting" : [ { "base": suit_ent + color_suit }  ] }
       };
       gscale = 1.0;
 
 
     }
 
-    var _seed = rstr(rng, 32);
+    //var _seed = rstr(rng, 32);
 
     var creat_fn = "/tmp/sibyl/" + _seed;
     fs.writeFileSync(creat_fn, JSON.stringify(json_card, undefined, 2), {"flag":"w+"});
 
     var card_name = suit + "_" + minor_arcana[card_idx];
-    var card_fn = "deck/" + card_name + ".svg";
+    var card_ofn = "deck/" + card_name + ".svg";
 
     var cmd = "./sibyl -a data/major-arcana.list -e data/exclude-" + suit + " -l 10 " +
       //" -Z " + _seed + " -t -C 5 -a 2 -n 2 -G 2.0 " + 
@@ -284,13 +314,29 @@ for (var suit_idx=0; suit_idx < minor_arcana_suit.length; suit_idx++) {
       " -p '" + colors[suit][1][1].hex + "' -s '" + colors[suit][1][0].hex + "' " +
       " -t -T 0.2,0.175 -D 240,0 -b '" + colors[suit][2][0].hex + "' -c '" + colors[suit][2][1].hex + "' -B  '" + bgnd + "' " + 
       " -J ./_svg-tarot.json " + 
-      "  -R " + creat_fn + " > " + card_fn + " ; " + 
-      " sed -i 's;</rect>;</rect> <g transform=\" translate(-144 0)\">;' " + card_fn + " ; " +
-      " sed -i 's;width=\"720px\";width=\"432px\";' " + card_fn  + " ; " +
-      " sed -i 's;</svg>;</g> </svg>;' " + card_fn ;
+      "  -R " + creat_fn + " > " + card_ofn + " ; " + 
+      " sed -i 's;</rect>;</rect> <g transform=\" translate(-144 0)\">;' " + card_ofn + " ; " +
+      " sed -i 's;width=\"720px\";width=\"432px\";' " + card_ofn  + " ; " +
+      " sed -i 's;</svg>;</g> </svg>;' " + card_ofn ;
 
     cp.execSync(cmd);
+
+    if (has_footer_text) {
+      var cmd = "sed -i 's;</svg>;;' " + card_ofn;
+      cp.execSync(cmd);
+
+      var footer_fn = "/tmp/sibyl/" + _seed + ".svgfooter";
+      var txt_footer = txt_ele.replace(/::TEXT::/, text_descr) + " </svg>";
+      fs.writeFileSync(footer_fn, txt_footer, {"flag":"w+"});
+
+      cmd = "cat " + footer_fn + " >> " + card_ofn;
+      cp.execSync(cmd);
+
+      cp.execSync("rm " + footer_fn);
+    }
+
     cp.execSync("rm " + creat_fn);
+
 
   }
 
@@ -368,11 +414,21 @@ for (var ma_idx=0; ma_idx<major_arcana.length; ma_idx++) {
     "  -R " + creat_fn + " > " + card_ofn + " ; " + 
     " sed -i 's;</rect>;</rect> <g transform=\" translate(-144 0)\">;' " + card_ofn + " ; " +
     " sed -i 's;width=\"720px\";width=\"432px\";' " + card_ofn  + " ; " +
-    " sed -i 's;</svg>;</g> </svg>;' " + card_ofn ;
+    " sed -i 's;</svg>;</g> </svg>;' " + card_ofn + ";" +
+    " sed -i 's;</svg>;;' " + card_ofn;
+
 
   cp.execSync(cmd);
-  //cp.execSync("rm " + creat_fn);
 
+  var footer_fn = "/tmp/sibyl/" + _seed + ".svgfooter";
+  var txt_footer = txt_ele.replace(/::TEXT::/, major_arcana[ma_idx].name)  + " </svg>";
+  fs.writeFileSync(footer_fn, txt_footer, {"flag":"w+"});
+
+  cmd = "cat " + footer_fn + " >> " + card_ofn;
+  cp.execSync(cmd);
+
+  cp.execSync("rm " + creat_fn);
+  cp.execSync("rm " + footer_fn);
 
 }
 
