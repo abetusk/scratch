@@ -1016,24 +1016,6 @@ function create_tarot_json(data, id, pnts) {
   return data;
 }
 
-var minor_arcana_list = ["ace", "2", "3", "4", "5", "6", "7",  "8", "9", "10", "page", "knight", "queen", "king"];
-
-var tarot_minor_json = [];
-
-
-var pfx = "minor_arcana";
-for (var ii=0; ii<minor_arcana_list.length; ii++) {
-  var card_type = minor_arcana_list[ii];
-  for (var jj=0; jj<minor_arcana_pnts[card_type].length; jj++) {
-    var card_id = pfx + "_" + card_type + "_" + jj;
-    var _dat = create_template();
-    create_tarot_json(_dat, card_id, minor_arcana_pnts[card_type][jj]);
-    tarot_minor_json.push(_dat);
-  }
-}
-
-console.log(JSON.stringify(tarot_minor_json, undefined, 2));
-
 function create_tarot_test(data_template, id) {
   var data = Object.assign({}, data_template);
   data.name = id;
@@ -1134,4 +1116,23 @@ function svg_tarot() {
 }
 
 //svg_tarot();
+
+var minor_arcana_list = ["ace", "2", "3", "4", "5", "6", "7",  "8", "9", "10", "page", "knight", "queen", "king"];
+
+var tarot_minor_json = [];
+
+
+var pfx = "minor_arcana";
+for (var ii=0; ii<minor_arcana_list.length; ii++) {
+  var card_type = minor_arcana_list[ii];
+  for (var jj=0; jj<minor_arcana_pnts[card_type].length; jj++) {
+    var card_id = pfx + "_" + card_type + "_" + jj;
+    var _dat = create_template();
+    create_tarot_json(_dat, card_id, minor_arcana_pnts[card_type][jj]);
+    tarot_minor_json.push(_dat);
+  }
+}
+
+console.log(JSON.stringify(tarot_minor_json, undefined, 2));
+
 

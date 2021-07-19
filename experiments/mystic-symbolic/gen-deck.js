@@ -16,9 +16,22 @@ var cp = require("child_process");
 var fs = require("fs");
 var sibyl = require("./sibyl");
 var sibyl_x = require("./sibyl");
-//var alea = require("./alea.js");
 
-//var txt_ele = ' <rect x="36" y="608" width="360" height="46" fill="#efefef" > ' + 
+var tarot_card_str  = fs.readFileSync( "./_svg-tarot.json" ).toString('utf-8');
+var tarot_card_json = JSON.parse(tarot_card_str);
+
+var minor_arcana_template = {};
+
+for (var ii=0; ii<tarot_card_json.length; ii++) {
+  var name = tarot_card_json[ii].name;
+  var tok = name.split("_");
+
+  if (!(tok[2] in minor_arcana_template)) {
+    minor_arcana_template[tok[2]] = [];
+  }
+
+  minor_arcana_template[tok[2]].push( tarot_card_json[ii] );
+}
 
 var LINE_WIDTH = 8;
 
@@ -26,7 +39,7 @@ var txt_ele_numeral = '<text x="0" y="0" id="_text_numeral">' +
 '<tspan' + 
 '  id="_tspan_numeral"' + 
 '  x="216"' + 
-'  y="44"' + 
+'  y="64"' + 
 '  style="fill:rgb(50,50,50);font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:33px;font-family:\'Caviar Dreams\';-inkscape-font-specification:\'Caviar Dreams, Bold\';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;stroke-width:0.26458332px"><!--::TEXT::--></tspan>' + 
 '</text> ';
 
@@ -126,7 +139,8 @@ var major_arcana = [
   { "name":"THE HANGED MAN",  "symbol":"sycophant",   "exclude":true,   "scale": 0.9},
   { "name":"DEATH",           "symbol":"death",       "exclude":true,   "scale": 0.9},
   { "name":"TEMPERANCE",      "symbol":"waterworks",  "exclude":true,   "scale": 0.75},
-  { "name":"THE DEVIL",       "symbol":"devil",       "exclude":true,   "scale": 0.75},
+  //{ "name":"THE DEVIL",       "symbol":"devil",       "exclude":true,   "scale": 0.75},
+  { "name":"THE DEVIL",       "symbol":"goat_head",       "exclude":true,   "scale": 0.75},
   { "name":"THE TOWER",       "symbol":"castle_tower","exclude":true,   "scale": 0.9},
   { "name":"THE STAR",        "symbol":"starburst",   "exclude":true,   "scale": 0.75},
   { "name":"THE MOON",        "symbol":"moon",        "exclude":true,   "scale": 0.75},
@@ -194,6 +208,8 @@ var royalty_choice = [
   "skeleton", "virus"
 ];
 
+var pfx_idx = 22;
+
 if (!__skip) {
 for (var suit_idx=0; suit_idx < minor_arcana_suit.length; suit_idx++) {
   for (var card_idx=0; card_idx < minor_arcana.length; card_idx++) {
@@ -238,9 +254,6 @@ for (var suit_idx=0; suit_idx < minor_arcana_suit.length; suit_idx++) {
       bgnd += "@" + bg1 + colors[suit][2][1].hex + colors[suit][2][0].hex;
     }
 
-
-    //console.log("# choosing bgnd:", bgnd);
-
     _t = sibyl.preprocess_svgjson(sibyl.mystic_symbolic, undefined, undefined, false, exclude_all);
     sibyl.fg_ctx.choice = _t.choice;
     sibyl.fg_ctx.symbol = _t.symbol;
@@ -261,8 +274,9 @@ for (var suit_idx=0; suit_idx < minor_arcana_suit.length; suit_idx++) {
       has_numeral_text = true;
       text_numeral_desc = NUMERAL_TXT[card_idx+1];
 
+      var card_template = sibyl.crnd(minor_arcana_template[card_idx+1]);
       json_card = {
-        "base":"minor_arcana_" + minor_arcana[card_idx] + "_0",
+        "base": card_template.name,
         "attach" : { "nesting" : [ ] }
       };
 
@@ -355,16 +369,13 @@ for (var suit_idx=0; suit_idx < minor_arcana_suit.length; suit_idx++) {
       };
       gscale = 1.0;
 
-
     }
-
-    //var _seed = rstr(rng, 32);
 
     var creat_fn = "/tmp/sibyl/" + _seed;
     fs.writeFileSync(creat_fn, JSON.stringify(json_card, undefined, 2), {"flag":"w+"});
 
     var card_name = suit + "_" + minor_arcana[card_idx];
-    var card_ofn = "deck/" + card_name + ".svg";
+    var card_ofn = "deck/" + pfx_idx.toString() + "-" + card_name + ".svg";
 
     var cmd = "./sibyl -a data/major-arcana.list -e data/exclude-" + suit + " -l " + LINE_WIDTH.toString() +
       //" -Z " + _seed + " -t -C 5 -a 2 -n 2 -G 2.0 " + 
@@ -416,6 +427,8 @@ for (var suit_idx=0; suit_idx < minor_arcana_suit.length; suit_idx++) {
     //console.log("# SAVING", creat_fn);
     cp.execSync("rm " + creat_fn);
 
+
+    pfx_idx++;
 
   }
 
@@ -479,10 +492,9 @@ for (var ma_idx=0; ma_idx<major_arcana.length; ma_idx++) {
 
   //WIP 
   var card_name = "ma_" + major_arcana[ma_idx].name.replace(/ /g, '_');
-  var card_ofn = "deck/" + card_name + ".svg";
+  var card_ofn = "deck/" + ma_idx.toString() + "-" + card_name + ".svg";
 
   var gscale = major_arcana[ma_idx].scale;
-
 
   var cmd = "./sibyl -l 6 -S 0.425 " +
     //" -Z " + _seed + " -t -C 5 -a 2 -n 2 -G 2.0 " + 
