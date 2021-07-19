@@ -68893,7 +68893,8 @@
         "leg",
         "arm",
         "horn"
-      ]
+      ],
+      "creature_frequency_multiplier": 40
     }
   },
   {
@@ -69646,7 +69647,8 @@
         "leg",
         "arm",
         "horn"
-      ]
+      ],
+      "creature_frequency_multiplier": 50
     }
   },
   {
@@ -69856,7 +69858,8 @@
         "leg",
         "arm",
         "horn"
-      ]
+      ],
+      "creature_frequency_multiplier": 50
     }
   },
   {
@@ -71082,7 +71085,8 @@
         "leg",
         "arm",
         "horn"
-      ]
+      ],
+      "creature_frequency_multiplier": 40
     }
   },
   {

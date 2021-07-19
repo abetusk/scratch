@@ -339,7 +339,20 @@ should not be chosen should it violate the `always_nest` option if it's too far 
 TODO
 ---
 
-* provide a seedable rng ([*](https://github.com/davidbau/seedrandom))
+* provide custom line width for different cards (line width too large on page/knight/queen/king in minor arcana)
+* put roman numerals at top of major arcana and non-named minor arcana cards
+  - position roman numerals
+  - resize roman numerals
+* change 2 to be more balanced (?)
+* change 3 to be more balanced
+* change 5 to be more balanced
+* change 7 to be more balanced
+* implement lovers
+* shift left (and provide shift param for cards) and upscale trumpet/judgement
+* figure out what to do about swords (barely noticeable from background, too thin)
+* figure out how to rotate 'skinny' minor suits (e.g. swords)
+* make sure creature does not have a single wing as it's base element
+* use goat head for devil instead of ghost/death thing
 
 Credits
 ---
