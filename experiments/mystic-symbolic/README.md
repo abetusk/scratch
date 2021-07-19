@@ -339,12 +339,9 @@ should not be chosen should it violate the `always_nest` option if it's too far 
 TODO
 ---
 
-* implement lovers
-* shift left (and provide shift param for cards) and upscale trumpet/judgement
 * figure out what to do about swords (barely noticeable from background, too thin)
 * figure out how to rotate 'skinny' minor suits (e.g. swords)
 * make sure creature does not have a single wing as it's base element
-* use goat head for devil instead of ghost/death thing
 
 Credits
 ---

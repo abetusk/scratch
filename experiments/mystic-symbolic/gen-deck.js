@@ -10,7 +10,7 @@
  *
  */
 
-var __skip = false;
+var __skip_minor = false;
 
 var cp = require("child_process");
 var fs = require("fs");
@@ -19,6 +19,9 @@ var sibyl_x = require("./sibyl");
 
 var tarot_card_str  = fs.readFileSync( "./_svg-tarot.json" ).toString('utf-8');
 var tarot_card_json = JSON.parse(tarot_card_str);
+
+var lovers_card_str = fs.readFileSync( "./_svg-lovers.json" ).toString('utf-8');
+var lovers_card_json = JSON.parse(lovers_card_str);
 
 var minor_arcana_template = {};
 
@@ -32,6 +35,10 @@ for (var ii=0; ii<tarot_card_json.length; ii++) {
 
   minor_arcana_template[tok[2]].push( tarot_card_json[ii] );
 }
+
+// !!!
+sibyl.mystic_symbolic.push( lovers_card_json[0] );
+
 
 var LINE_WIDTH = 8;
 
@@ -109,6 +116,7 @@ var seed = rseed();
 //DEBUG
 //seed = 'Vh4jFlS5WQJzQwlvYmwwEAhwYWAnI3oY';
 //seed = 'IwE7C9dsT3EOgDinelKmpwimCfxnZXNZ';
+//seed = 'Sm6u1GN4ibp2rxoM8gwP5fB7ScxV8LYX';
 
 console.log("## seed: " + seed);
 
@@ -125,29 +133,29 @@ var minor_arcana = [
 ];
 var minor_arcana_suit = ["pentacle", "key", "sword", "cup"];
 var major_arcana = [
-  { "name": "THE FOOL",       "symbol":"fool" ,       "exclude":true,   "scale": 0.95},
+  { "name": "THE FOOL",       "symbol":"fool" ,       "exclude":true,   "scale": 0.95, "d":[0,-40]},
   { "name": "THE MAGICIAN",   "symbol":"magician",    "exclude":true,   "scale": 0.95},
   { "name": "THE PRIESTESS",  "symbol":"priestess",   "exclude":true,   "scale": 0.85},
   { "name":"THE EMPRESS",     "symbol":"empress",     "exclude":true,   "scale": 0.95},
   { "name":"THE EMPEROR",     "symbol":"emperor" ,    "exclude":true,   "scale": 0.85},
   { "name":"THE HIEROPHANT",  "symbol":"hierophant",  "exclude":true,   "scale": 0.85},
-  { "name":"THE LOVERS",      "symbol":"" ,           "exclude":false,  "scale": 0.75},
+  { "name":"THE LOVERS",      "symbol":"lovers_nestbox" ,           "exclude":false,  "scale": 0.9},
   { "name":"THE CHARIOT",     "symbol":"chariot",     "exclude":true,   "scale": 0.75},
   { "name":"STRENGTH",        "symbol":"strength",    "exclude":true,   "scale": 0.9},
   { "name":"THE HERMIT",      "symbol":"hermit",      "exclude":true,   "scale": 0.9},
-  { "name":"WHEEL of FORTUNE","symbol":"wheel_of_fortune",  "exclude":true, "scale": 0.75},
-  { "name":"JUSTICE",         "symbol":"scales" ,     "exclude":false,  "scale":0.85},
+  { "name":"WHEEL of FORTUNE","symbol":"wheel_of_fortune",  "exclude":true, "scale": 0.75, "d":[0,-20]},
+  { "name":"JUSTICE",         "symbol":"scales" ,     "exclude":false,  "scale":0.85, "d":[0,-40]},
   { "name":"THE HANGED MAN",  "symbol":"sycophant",   "exclude":true,   "scale": 0.9},
-  { "name":"DEATH",           "symbol":"death",       "exclude":true,   "scale": 0.9},
-  { "name":"TEMPERANCE",      "symbol":"waterworks",  "exclude":true,   "scale": 0.75},
+  { "name":"DEATH",           "symbol":"death",       "exclude":true,   "scale": 0.9, "d":[0,-20]},
+  { "name":"TEMPERANCE",      "symbol":"waterworks",  "exclude":true,   "scale": 0.75, "d":[0,-40]},
   //{ "name":"THE DEVIL",       "symbol":"devil",       "exclude":true,   "scale": 0.75},
-  { "name":"THE DEVIL",       "symbol":"goat_head",       "exclude":true,   "scale": 0.95},
-  { "name":"THE TOWER",       "symbol":"castle_tower","exclude":true,   "scale": 0.9},
+  { "name":"THE DEVIL",       "symbol":"goat_head",       "exclude":true,   "scale": 0.95, "d":[0,-40]},
+  { "name":"THE TOWER",       "symbol":"castle_tower","exclude":true,   "scale": 0.9, "d":[0,-20]},
   { "name":"THE STAR",        "symbol":"starburst",   "exclude":true,   "scale": 0.75},
   { "name":"THE MOON",        "symbol":"moon",        "exclude":true,   "scale": 0.75},
   { "name":"THE SUN",         "symbol":"sun",         "exclude":true,   "scale": 0.75},
   { "name":"JUDGEMENT",       "symbol":"trumpet",     "exclude":true,   "scale": 0.9, "d" : [-50, -50] },
-  { "name":"THE WORLD",       "symbol":"globe",       "exlcude":false,  "scale": 0.75}
+  { "name":"THE WORLD",       "symbol":"globe",       "exlcude":false,  "scale": 0.75, "d":[0,-40]}
 ];
 
 var exclude_all = [];
@@ -165,6 +173,7 @@ exclude_all.push("knight");
 exclude_all.push("bob");
 exclude_all.push("rainbow_half");
 exclude_all.push("angel");
+exclude_all.push("lovers_nestbox");
 
 var c0 = sibyl.rand_color_n(2);
 var c1 = sibyl.rand_color_n(2);
@@ -214,7 +223,7 @@ var royalty_choice = [
 
 var pfx_idx = 22;
 
-if (!__skip) {
+if (!__skip_minor) {
 for (var suit_idx=0; suit_idx < minor_arcana_suit.length; suit_idx++) {
   for (var card_idx=0; card_idx < minor_arcana.length; card_idx++) {
 
@@ -430,8 +439,6 @@ for (var suit_idx=0; suit_idx < minor_arcana_suit.length; suit_idx++) {
 
     //DEBUG
     //console.log("# SAVING", creat_fn);
-
-
     cp.execSync("rm " + creat_fn);
 
 
@@ -478,17 +485,27 @@ for (var ma_idx=0; ma_idx<major_arcana.length; ma_idx++) {
     bgnd += "@" + bg1 + colors[2][1].hex + colors[2][0].hex;
   }
 
-
   var base_creature = _orig.symbol[ major_arcana[ma_idx].symbol ];
   var _t = sibyl.preprocess_svgjson(sibyl.mystic_symbolic, undefined, undefined, false, exclude_all);
+
   sibyl.fg_ctx.choice = _t.choice;
   sibyl.fg_ctx.symbol = _t.symbol;
   sibyl.fg_ctx.data = _t.data;
   sibyl.mystic_symbolic_random( sibyl.fg_ctx, base_creature );
 
-  //console.log(">>>", base_creature);
-
   var json_card = sibyl.fg_ctx.realized_child;
+
+  // lovers is a card built up of other base objects,
+  // so we need to do some special processing.
+  //
+  if (major_arcana[ma_idx].symbol == "lovers_nestbox") {
+    var x = json_card.attach.nesting[0];
+    json_card.attach.nesting = [
+      { "base": "woman_stand" },
+      { "base": "man_stand" },
+      { "base": x.base }
+    ];
+  }
 
   var _seed = rstr(rng, 32);
 
@@ -497,9 +514,11 @@ for (var ma_idx=0; ma_idx<major_arcana.length; ma_idx++) {
 
   console.log("#processing ", major_arcana[ma_idx].name, creat_fn);
 
-  //WIP 
-  var card_name = "ma_" + major_arcana[ma_idx].name.replace(/ /g, '_');
-  var card_ofn = "deck/" + ma_idx.toString() + "-" + card_name + ".svg";
+  var pfx = ma_idx.toString();
+  if (pfx.length < 2) { pfx = "0" + pfx; }
+  var card_name = major_arcana[ma_idx].name.replace(/ /g, '_');
+  //var card_ofn = "deck/" + ma_idx.toString() + "-" + card_name + ".svg";
+  var card_ofn = "deck/" + pfx + "-" + card_name + ".svg";
 
   var gscale = major_arcana[ma_idx].scale;
 
@@ -509,14 +528,17 @@ for (var ma_idx=0; ma_idx<major_arcana.length; ma_idx++) {
     _ty += major_arcana[ma_idx].d[1];
   }
 
+  var extra = "";
+  if (major_arcana[ma_idx].symbol == "lovers_nestbox") {
+    extra = " -J ./_svg-lovers.json ";
+  }
+
   var cmd = "./sibyl -l 6 -S 0.425 " +
-    //" -Z " + _seed + " -t -C 5 -a 2 -n 2 -G 2.0 " + 
     " -Z " + _seed + " -t -C 5 -a 2 -n 2 -G " +  gscale.toString() +
     " -p '" + colors[1][1].hex + "' -s '" + colors[1][0].hex + "' " +
     " -t -T 0.2,0.175 -D 240,0 -b '" + colors[2][0].hex + "' -c '" + colors[2][1].hex + "' -B  '" + bgnd + "' " + 
-    " -J ./_svg-tarot.json " + 
+    " -J ./_svg-tarot.json " +  extra +
     "  -R " + creat_fn + " > " + card_ofn + " ; " + 
-    //" sed -i 's;</rect>;</rect> <g transform=\" translate(-144 0)\">;' " + card_ofn + " ; " +
     " sed -i 's;</rect>;</rect> <g transform=\" translate(" + _tx.toString() + " " + _ty.toString() + ")\">;' " + card_ofn + " ; " +
     " sed -i 's;width=\"720px\";width=\"432px\";' " + card_ofn  + " ; " +
     " sed -i 's;</svg>;</g> </svg>;' " + card_ofn + ";" +
