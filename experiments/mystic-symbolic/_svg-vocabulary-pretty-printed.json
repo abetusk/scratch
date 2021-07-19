@@ -42258,8 +42258,7 @@
       "never_be_nested": true,
       "attach_to": [
         "leg",
-        "arm",
-        "horn"
+        "arm"
       ]
     }
   },
@@ -58696,7 +58695,9 @@
       ]
     },
     "meta": {
-      "attach_to": []
+      "attach_to": [],
+      "never_be_nested": true,
+      "rotate_clockwise": true
     }
   },
   {
@@ -68894,7 +68895,7 @@
         "arm",
         "horn"
       ],
-      "creature_frequency_multiplier": 40
+      "creature_frequency_multiplier": 5
     }
   },
   {
@@ -69648,7 +69649,7 @@
         "arm",
         "horn"
       ],
-      "creature_frequency_multiplier": 50
+      "creature_frequency_multiplier": 10
     }
   },
   {
@@ -69859,7 +69860,7 @@
         "arm",
         "horn"
       ],
-      "creature_frequency_multiplier": 50
+      "creature_frequency_multiplier": 10
     }
   },
   {
@@ -71086,7 +71087,7 @@
         "arm",
         "horn"
       ],
-      "creature_frequency_multiplier": 40
+      "creature_frequency_multiplier": 5
     }
   },
   {
@@ -72725,7 +72726,8 @@
       "attach_to": [
         "horn",
         "crown"
-      ]
+      ],
+      "creature_frequency_multiplier": 7
     }
   },
   {

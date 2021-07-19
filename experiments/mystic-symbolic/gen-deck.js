@@ -107,7 +107,8 @@ var seed = rseed();
 
 
 //DEBUG
-seed = 'Vh4jFlS5WQJzQwlvYmwwEAhwYWAnI3oY';
+//seed = 'Vh4jFlS5WQJzQwlvYmwwEAhwYWAnI3oY';
+//seed = 'IwE7C9dsT3EOgDinelKmpwimCfxnZXNZ';
 
 console.log("## seed: " + seed);
 
@@ -128,7 +129,7 @@ var major_arcana = [
   { "name": "THE MAGICIAN",   "symbol":"magician",    "exclude":true,   "scale": 0.95},
   { "name": "THE PRIESTESS",  "symbol":"priestess",   "exclude":true,   "scale": 0.85},
   { "name":"THE EMPRESS",     "symbol":"empress",     "exclude":true,   "scale": 0.95},
-  { "name":"THE EMPEROR",     "symbol":"emperor" ,    "exclude":true,   "scale": 0.75},
+  { "name":"THE EMPEROR",     "symbol":"emperor" ,    "exclude":true,   "scale": 0.85},
   { "name":"THE HIEROPHANT",  "symbol":"hierophant",  "exclude":true,   "scale": 0.85},
   { "name":"THE LOVERS",      "symbol":"" ,           "exclude":false,  "scale": 0.75},
   { "name":"THE CHARIOT",     "symbol":"chariot",     "exclude":true,   "scale": 0.75},
@@ -140,12 +141,12 @@ var major_arcana = [
   { "name":"DEATH",           "symbol":"death",       "exclude":true,   "scale": 0.9},
   { "name":"TEMPERANCE",      "symbol":"waterworks",  "exclude":true,   "scale": 0.75},
   //{ "name":"THE DEVIL",       "symbol":"devil",       "exclude":true,   "scale": 0.75},
-  { "name":"THE DEVIL",       "symbol":"goat_head",       "exclude":true,   "scale": 0.75},
+  { "name":"THE DEVIL",       "symbol":"goat_head",       "exclude":true,   "scale": 0.95},
   { "name":"THE TOWER",       "symbol":"castle_tower","exclude":true,   "scale": 0.9},
   { "name":"THE STAR",        "symbol":"starburst",   "exclude":true,   "scale": 0.75},
   { "name":"THE MOON",        "symbol":"moon",        "exclude":true,   "scale": 0.75},
   { "name":"THE SUN",         "symbol":"sun",         "exclude":true,   "scale": 0.75},
-  { "name":"JUDGEMENT",       "symbol":"trumpet",     "exclude":true,   "scale": 0.75, "d" : [-50, 50] },
+  { "name":"JUDGEMENT",       "symbol":"trumpet",     "exclude":true,   "scale": 0.9, "d" : [-50, -50] },
   { "name":"THE WORLD",       "symbol":"globe",       "exlcude":false,  "scale": 0.75}
 ];
 
@@ -200,10 +201,13 @@ var royalty_crown_choice = [
 var royalty_sceptor_choice = [
   "ankh_emperor", "cross_hierophant" 
 ]
+
 var royalty_choice = [
   "bird", "bitey_half", "cat", "cow_head",
   "dog", "eagle_shield", "egg",
-  "fish", "goat", "goat_head", "horse",
+  "fish", "goat",
+  //"goat_head",
+  "horse",
   "lamb_head", "oroboros", "pear",
   "skeleton", "virus"
 ];
@@ -424,7 +428,10 @@ for (var suit_idx=0; suit_idx < minor_arcana_suit.length; suit_idx++) {
       cp.execSync("rm " + footer_fn);
     }
 
+    //DEBUG
     //console.log("# SAVING", creat_fn);
+
+
     cp.execSync("rm " + creat_fn);
 
 
@@ -496,6 +503,12 @@ for (var ma_idx=0; ma_idx<major_arcana.length; ma_idx++) {
 
   var gscale = major_arcana[ma_idx].scale;
 
+  var _tx = -144, _ty = 0;
+  if ("d" in major_arcana[ma_idx]) {
+    _tx += major_arcana[ma_idx].d[0];
+    _ty += major_arcana[ma_idx].d[1];
+  }
+
   var cmd = "./sibyl -l 6 -S 0.425 " +
     //" -Z " + _seed + " -t -C 5 -a 2 -n 2 -G 2.0 " + 
     " -Z " + _seed + " -t -C 5 -a 2 -n 2 -G " +  gscale.toString() +
@@ -503,7 +516,8 @@ for (var ma_idx=0; ma_idx<major_arcana.length; ma_idx++) {
     " -t -T 0.2,0.175 -D 240,0 -b '" + colors[2][0].hex + "' -c '" + colors[2][1].hex + "' -B  '" + bgnd + "' " + 
     " -J ./_svg-tarot.json " + 
     "  -R " + creat_fn + " > " + card_ofn + " ; " + 
-    " sed -i 's;</rect>;</rect> <g transform=\" translate(-144 0)\">;' " + card_ofn + " ; " +
+    //" sed -i 's;</rect>;</rect> <g transform=\" translate(-144 0)\">;' " + card_ofn + " ; " +
+    " sed -i 's;</rect>;</rect> <g transform=\" translate(" + _tx.toString() + " " + _ty.toString() + ")\">;' " + card_ofn + " ; " +
     " sed -i 's;width=\"720px\";width=\"432px\";' " + card_ofn  + " ; " +
     " sed -i 's;</svg>;</g> </svg>;' " + card_ofn + ";" +
     " sed -i 's;</svg>;;' " + card_ofn;

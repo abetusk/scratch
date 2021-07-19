@@ -14,7 +14,7 @@
 
 function rseed() {
   var seed = "";
-  var x = "abcdefghijklmnopqrstuvwxyzABDCEFGHIJKLMNOPQRSTUVWXYZ01234567890 ";
+  var x = "abcdefghijklmnopqrstuvwxyzABDCEFGHIJKLMNOPQRSTUVWXYZ01234567890";
   var n = x.length;
   for (var ii=0; ii<32; ii++) {
     seed += x[ Math.floor(Math.random()*n) ];
@@ -46,7 +46,7 @@ var parser, opt;
 var seed = rseed();
 var g_rng = new alea(seed);
 
-var _VERSION = "0.1.7";
+var _VERSION = "0.1.8";
 
 function show_version(fp) {
   fp.write("version: " + _VERSION + "\n");
@@ -80,7 +80,7 @@ function show_help(fp) {
   fp.write("  [-j outjson]                output schedule JSON\n");
   fp.write("  [-R injson]                 input schedule JSON\n");
   fp.write("  [-L color]                  color ring (e.g. '#77777,#afafaf,#fe3f3f,#1f1f7f') (unimmplemented)\n");
-  fp.write("  [-Z seed]                   prng seed (deafult '" + seed + "')\n");
+  fp.write("  [-Z seed]                   prng seed (deafult random)\n");
   fp.write("  [-g]                        disable gradient\n");
   fp.write("  [-t]                        tile background\n");
   fp.write("  [-Q]                        bonkers mode (override attach restrictions)\n");
