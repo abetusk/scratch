@@ -15,7 +15,7 @@ var __skip_minor = false;
 var cp = require("child_process");
 var fs = require("fs");
 var sibyl = require("./sibyl");
-var sibyl_x = require("./sibyl");
+//var sibyl_x = require("./sibyl");
 
 var tarot_card_str  = fs.readFileSync( "./_svg-tarot.json" ).toString('utf-8');
 var tarot_card_json = JSON.parse(tarot_card_str);
@@ -129,12 +129,12 @@ function remove_from_array(orig, filt) {
 
 var seed = rseed();
 
-
 //DEBUG
 //seed = 'Vh4jFlS5WQJzQwlvYmwwEAhwYWAnI3oY';
 //seed = 'IwE7C9dsT3EOgDinelKmpwimCfxnZXNZ';
 //seed = 'Sm6u1GN4ibp2rxoM8gwP5fB7ScxV8LYX';
 //seed = 'owO34cPdIaWwSngxzYoNw09Uf2gH7XFO';
+//seed = 'yYSBSbXjumUB0Kcp3wQwralwC1Mx60lH';
 
 console.log("## seed: " + seed);
 
@@ -176,7 +176,33 @@ var major_arcana = [
   { "name":"THE WORLD",       "symbol":"globe",       "exlcude":false,  "scale": 0.75, "d":[0,-40]}
 ];
 
+var back_creature_choice = [
+  "branch",
+  "branch_curly",
+  "bubbles",
+  "cloud",
+  "clouds",
+  "eye",
+  "eye_eyelashes",
+  "eye_starburst",
+  "eye_up",
+  "eye_up_starburst",
+  "eye_up_starburst_2",
+  "eye_vertical",
+  "eyeball",
+  "flower_jacobean_smaller",
+  "hourglass",
+  "infinity",
+  "lotus",
+  "pills",
+  "rain",
+  "tree_rooted",
+  "wave",
+  "teardrop"
+];
+
 var exclude_all = [];
+var exclude_all_and_wing = [];
 
 for (var ii=0; ii<minor_arcana_suit.length; ii++) {
   exclude_all.push(minor_arcana_suit[ii]);
@@ -192,6 +218,21 @@ exclude_all.push("bob");
 exclude_all.push("rainbow_half");
 exclude_all.push("angel");
 exclude_all.push("lovers_nestbox");
+
+// single wings look bad when they're the base
+// creature, so exclude them for the minor
+// arcana base creature choice.
+//
+for (var ii=0; ii<exclude_all.length; ii++) {
+  exclude_all_and_wing.push(exclude_all[ii]);
+}
+exclude_all_and_wing.push("wing");
+exclude_all_and_wing.push("wing_angel");
+exclude_all_and_wing.push("wing_angel2");
+exclude_all_and_wing.push("wing_bat");
+exclude_all_and_wing.push("wing_butterfly");
+exclude_all_and_wing.push("wing_eagle");
+exclude_all_and_wing.push("wing_egypt");
 
 
 var c0 = sibyl.rand_color_n(2);
@@ -252,8 +293,11 @@ for (var suit_idx=0; suit_idx < minor_arcana_suit.length; suit_idx++) {
     var has_numeral_text = false;
     var text_numeral_desc;
 
-    var _seed = rstr(rng,32);
-    console.log("## ", minor_arcana_suit[suit_idx], minor_arcana[card_idx], _seed);
+    //var _seed = rstr(rng,32);
+    var _seed = rseed();
+
+    //console.log("## ", minor_arcana_suit[suit_idx], minor_arcana[card_idx], _seed);
+    console.log("## ", minor_arcana_suit[suit_idx], minor_arcana[card_idx]);
 
     var suit = minor_arcana_suit[suit_idx];
     var color_suit = colors[suit][0][0].hex + colors[suit][0][1].hex;
@@ -303,11 +347,21 @@ for (var suit_idx=0; suit_idx < minor_arcana_suit.length; suit_idx++) {
     //
     if ((card_idx > 0) && (card_idx < 10)) {
 
+      // exclude single wing from base creature
+      //
+      _t = sibyl.preprocess_svgjson(sibyl.mystic_symbolic, undefined, undefined, false, exclude_all_and_wing);
+      sibyl.fg_ctx.choice = _t.choice;
+      sibyl.fg_ctx.symbol = _t.symbol;
+      sibyl.fg_ctx.data = _t.data;
+      var base_creature_name = sibyl.random_creature( sibyl.fg_ctx, "base" );
+      var base_creature = sibyl.fg_ctx.symbol[base_creature_name];
+
       _t = sibyl.preprocess_svgjson(sibyl.mystic_symbolic, undefined, undefined, false, exclude_all);
       sibyl.fg_ctx.choice = _t.choice;
       sibyl.fg_ctx.symbol = _t.symbol;
       sibyl.fg_ctx.data = _t.data;
-      sibyl.mystic_symbolic_random( sibyl.fg_ctx );
+      //sibyl.mystic_symbolic_random( sibyl.fg_ctx );
+      sibyl.mystic_symbolic_random( sibyl.fg_ctx, base_creature );
 
       has_numeral_text = true;
       text_numeral_desc = NUMERAL_TXT[card_idx+1];
@@ -350,7 +404,7 @@ for (var suit_idx=0; suit_idx < minor_arcana_suit.length; suit_idx++) {
     else if (card_idx==10) {
 
       _tx += 20;
-      _ty -= 60;
+      _ty -= 50;
 
       has_footer_text = true;
       text_descr = "PAGE of " + suit.toUpperCase() + "S";
@@ -374,13 +428,12 @@ for (var suit_idx=0; suit_idx < minor_arcana_suit.length; suit_idx++) {
       //  "base": royalty_base + xc,
       //  "attach" : { "nesting" : [ { "base": suit_ent + color_suit }  ] }
       //};
-      gscale = 0.55;
+      gscale = 0.75;
 
     }
 
     // knight
     else if (card_idx==11) {
-
 
       _tx += 60;
       _ty -= 10;
@@ -446,7 +499,7 @@ for (var suit_idx=0; suit_idx < minor_arcana_suit.length; suit_idx++) {
     // king
     else if (card_idx==13) {
 
-      _ty -= 90;
+      _ty -= 70;
 
       has_footer_text = true;
       text_descr = "KING of " + suit.toUpperCase() + "S";
@@ -493,7 +546,8 @@ for (var suit_idx=0; suit_idx < minor_arcana_suit.length; suit_idx++) {
 
     var cmd = "./sibyl -a data/major-arcana.list -e data/exclude-" + suit + " -l " + LINE_WIDTH.toString() +
       //" -Z " + _seed + " -t -C 5 -a 2 -n 2 -G 2.0 " + 
-      " -Z " + _seed + " -t -C 5 -a 2 -n 2 -G " +  gscale.toString() +
+      //" -Z " + _seed + " -t -C 5 -a 2 -n 2 -G " +  gscale.toString() +
+      " -t -C 5 -a 2 -n 2 -G " +  gscale.toString() +
       //" -p '" + colors[suit][1][0].hex + "' -s '" + colors[suit][1][1].hex + "' " +
       " -p '" + _col_creat_p + "' -s '" + _col_creat_s + "' " +
       " -t -T 0.2,0.175 -D 240,0 -b '" + colors[suit][2][0].hex + "' -c '" + colors[suit][2][1].hex + "' -B  '" + bgnd + "' " + 
@@ -612,12 +666,24 @@ for (var ma_idx=0; ma_idx<major_arcana.length; ma_idx++) {
     ];
   }
 
-  var _seed = rstr(rng, 32);
+  // justic needs it's own processing as the default is to repeate the
+  // nested scale symbols.
+  // Here we just use the background context as that has the necessary
+  // state setup to get a simple creature.
+  //
+  else if (major_arcana[ma_idx].symbol == "scales") {
+    sibyl.mystic_symbolic_random( sibyl.bg_ctx );
+    json_card.attach["nesting"].push( sibyl.bg_ctx.realized_child );
+  }
+
+  //var _seed = rstr(rng, 32);
+  var _seed = rseed();
 
   var creat_fn = "/tmp/sibyl/" + _seed;
   fs.writeFileSync(creat_fn, JSON.stringify(json_card, undefined, 2), {"flag":"w+"});
 
-  console.log("#processing ", major_arcana[ma_idx].name, creat_fn);
+  //console.log("#processing ", major_arcana[ma_idx].name, creat_fn);
+  console.log("#processing ", major_arcana[ma_idx].name);
 
   var pfx = ma_idx.toString();
   if (pfx.length < 2) { pfx = "0" + pfx; }
@@ -639,8 +705,7 @@ for (var ma_idx=0; ma_idx<major_arcana.length; ma_idx++) {
   }
 
   var cmd = "./sibyl -l " +  LINE_WIDTH.toString() + " -S 0.425 " +
-    " -Z " + _seed + " -t -C 5 -a 2 -n 2 -G " +  gscale.toString() +
-    //" -p '" + colors[1][1].hex + "' -s '" + colors[1][0].hex + "' " +
+    " -t -C 5 -a 2 -n 2 -G " +  gscale.toString() +
     " -p '" + colors[1][0].hex + "' -s '" + colors[1][1].hex + "' " +
     " -t -T 0.2,0.175 -D 240,0 -b '" + colors[2][0].hex + "' -c '" + colors[2][1].hex + "' -B  '" + bgnd + "' " + 
     " -J ./_svg-tarot.json " +  extra +
@@ -684,5 +749,24 @@ for (var ma_idx=0; ma_idx<major_arcana.length; ma_idx++) {
   cp.execSync("rm " + footer_fn);
 
 }
+
+//--
+console.log("## creating back");
+
+var back_color = sibyl.rand_color();
+var bca = [ { "hex": back_color.background.hex, "hsv": back_color.background.hsv }, {"hex":back_color.background2.hex, "hsv":back_color.background2.hsv} ];
+
+var _tx = -144, _ty = 0;
+
+var card_ofn = "deck/78-back.svg";
+var back_symbol_name = sibyl.crnd(back_creature_choice);
+var cmd = "./sibyl -l " +  LINE_WIDTH.toString() +
+  " -t -T 0.2,0.175 -D 240,0 -b '" + bca[0].hex + "' -c '" + bca[1].hex + "' -B  '" + back_symbol_name + "' " + 
+  " '' > " + card_ofn + " ; " + 
+  " sed -i 's;</rect>;</rect> <g transform=\" translate(" + _tx.toString() + " " + _ty.toString() + ")\">;' " + card_ofn + " ; " +
+  " sed -i 's;width=\"720px\";width=\"432px\";' " + card_ofn  + " ; " +
+  " sed -i 's;</svg>;</g> </svg>;' " + card_ofn;
+
+cp.execSync(cmd);
 
 

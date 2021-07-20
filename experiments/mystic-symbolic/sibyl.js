@@ -3083,6 +3083,8 @@ if (require.main !== module) {
     "jsonsvg2svg_defs" : jsonsvg2svg_defs,
     "repr_realized" : repr_realized,
     "sched2sentence" : sched2sentence,
+    "random_creature" : random_creature,
+
     "create_ctx" : create_ctx,
     "rand_color" : rand_color,
     "rand_color_n" : rand_color_n,

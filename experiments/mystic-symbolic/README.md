@@ -339,9 +339,11 @@ should not be chosen should it violate the `always_nest` option if it's too far 
 TODO
 ---
 
-* still some issues with the gradient not rendering right (face invert looks bad)
 * figure out how to rotate 'skinny' minor suits (e.g. swords)
-* make sure creature does not have a single wing as it's base element
+* remove 'wavy' minor arcana template
+* create back card graphic
+* create description card
+* create qr code card (?)
 
 Credits
 ---
