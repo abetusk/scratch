@@ -340,7 +340,10 @@ TODO
 ---
 
 * figure out how to rotate 'skinny' minor suits (e.g. swords)
+  - consider pointing swords completely down
+* cups under king/queen should be pointing up
 * remove 'wavy' minor arcana template
+* filter out minor arcana cards that bump into the numerals
 * create description card
 * create qr code card (?)
 
