@@ -1723,8 +1723,8 @@ function mystic_symbolic_sched(ctx, sched, primary_color, secondary_color, bg_co
       ret_str += "width=\"" + (3*w).toString() + "\" height=\"" + (3*h).toString() + "\" fill=\"" + _bg + "\" data-is-background=\"true\">\n</rect>\n";
     }
 
-    //ret_str += jsonsvg2svg_defs(base.defs, primary_color, secondary_color);
-    ret_str += jsonsvg2svg_defs(base.defs, _base_pcol, _base_scol);
+    //DEBUG
+    //ret_str += jsonsvg2svg_defs(base.defs, _base_pcol, _base_scol);
   }
 
   var base_specs = base.specs;
@@ -1817,7 +1817,8 @@ function mystic_symbolic_sched(ctx, sched, primary_color, secondary_color, bg_co
 
       var t_str_e = "</g>";
 
-      ret_str += jsonsvg2svg_defs(sub.defs, _sub_pcol, _sub_scol);
+      //DEBUG
+      //ret_str += jsonsvg2svg_defs(sub.defs, _sub_pcol, _sub_scol);
       
       if (do_random_recur) {
         reuse_svg = mystic_symbolic_random(ctx, ctx.symbol[sub_symbol_name], _sub_pcol, _sub_scol);
@@ -1852,6 +1853,10 @@ function mystic_symbolic_sched(ctx, sched, primary_color, secondary_color, bg_co
   // in case I can remmember why I put it here in the first place
   //
   //ret_str += jsonsvg2svg_child(base.layers, primary_color, secondary_color, !ctx.use_gradient);
+
+  //DEBUG
+  ret_str += jsonsvg2svg_defs(base.defs, _base_pcol, _base_scol);
+
   ret_str += jsonsvg2svg_child(base.layers, _base_pcol, _base_scol, !ctx.use_gradient, ctx.custom_prop);
 
   /*
@@ -1939,8 +1944,12 @@ function mystic_symbolic_sched(ctx, sched, primary_color, secondary_color, bg_co
 
       // oof...
       //ret_str += jsonsvg2svg_defs(sub.defs, secondary_color, primary_color);
+
+
+      //DEBUG ORIG
       //ret_str += jsonsvg2svg_defs(sub.defs, _sub_scol, _sub_pcol);
-      ret_str += jsonsvg2svg_defs(sub.defs, _sub_pcol, _sub_scol);
+
+      //ret_str += jsonsvg2svg_defs(sub.defs, _sub_pcol, _sub_scol);
 
       ret_str += t_str_s;
       //ret_str += mystic_symbolic_sched(ctx, sub_sched, secondary_color, primary_color);

@@ -134,7 +134,7 @@ var seed = rseed();
 //seed = 'Vh4jFlS5WQJzQwlvYmwwEAhwYWAnI3oY';
 //seed = 'IwE7C9dsT3EOgDinelKmpwimCfxnZXNZ';
 //seed = 'Sm6u1GN4ibp2rxoM8gwP5fB7ScxV8LYX';
-seed = 'owO34cPdIaWwSngxzYoNw09Uf2gH7XFO';
+//seed = 'owO34cPdIaWwSngxzYoNw09Uf2gH7XFO';
 
 console.log("## seed: " + seed);
 
@@ -297,6 +297,8 @@ for (var suit_idx=0; suit_idx < minor_arcana_suit.length; suit_idx++) {
 
     var gscale = 2.0;
 
+    var invert_color_creature = false;
+
     // number cards that aren't ace or page to king
     //
     if ((card_idx > 0) && (card_idx < 10)) {
@@ -320,6 +322,8 @@ for (var suit_idx=0; suit_idx < minor_arcana_suit.length; suit_idx++) {
         json_card.attach.nesting.push( { "base" : suit_ent } );
       }
       json_card.attach.nesting.push( sibyl.fg_ctx.realized_child );
+
+      invert_color_creature = true;
 
 
     }
@@ -363,7 +367,7 @@ for (var suit_idx=0; suit_idx < minor_arcana_suit.length; suit_idx++) {
       json_card = sibyl.fg_ctx.realized_child;
 
       //json_card.attach["nesting"] = [ {"base": suit_ent + color_suit } ];
-      json_card.attach["leg"] = [ {"base": suit_ent } ];
+      json_card.attach["crown"] = [ {"base": suit_ent } ];
 
       //var royalty_base = sibyl.crnd(royalty_choice);
       //json_card = {
@@ -477,10 +481,21 @@ for (var suit_idx=0; suit_idx < minor_arcana_suit.length; suit_idx++) {
     var card_name = suit + "_" + minor_arcana[card_idx];
     var card_ofn = "deck/" + pfx_idx.toString() + "-" + card_name + ".svg";
 
+    var _col_creat_p = colors[suit][1][0].hex;
+    var _col_creat_s = colors[suit][1][1].hex;
+
+    if (invert_color_creature) {
+      _col_creat_p = colors[suit][1][1].hex;
+      _col_creat_s = colors[suit][1][0].hex;
+
+
+    }
+
     var cmd = "./sibyl -a data/major-arcana.list -e data/exclude-" + suit + " -l " + LINE_WIDTH.toString() +
       //" -Z " + _seed + " -t -C 5 -a 2 -n 2 -G 2.0 " + 
       " -Z " + _seed + " -t -C 5 -a 2 -n 2 -G " +  gscale.toString() +
-      " -p '" + colors[suit][1][0].hex + "' -s '" + colors[suit][1][1].hex + "' " +
+      //" -p '" + colors[suit][1][0].hex + "' -s '" + colors[suit][1][1].hex + "' " +
+      " -p '" + _col_creat_p + "' -s '" + _col_creat_s + "' " +
       " -t -T 0.2,0.175 -D 240,0 -b '" + colors[suit][2][0].hex + "' -c '" + colors[suit][2][1].hex + "' -B  '" + bgnd + "' " + 
       " -J ./_svg-tarot.json " + 
       "  -R " + creat_fn + " > " + card_ofn + " ; " + 
@@ -588,11 +603,12 @@ for (var ma_idx=0; ma_idx<major_arcana.length; ma_idx++) {
   // so we need to do some special processing.
   //
   if (major_arcana[ma_idx].symbol == "lovers_nestbox") {
+    var _c = colors[1][0].hex + colors[1][1].hex;
     var x = json_card.attach.nesting[0];
     json_card.attach.nesting = [
-      { "base": "woman_stand" },
-      { "base": "man_stand" },
-      { "base": x.base }
+      { "base": "woman_stand" + _c },
+      { "base": "man_stand" + _c },
+      { "base": x.base + _c  }
     ];
   }
 
@@ -624,7 +640,8 @@ for (var ma_idx=0; ma_idx<major_arcana.length; ma_idx++) {
 
   var cmd = "./sibyl -l " +  LINE_WIDTH.toString() + " -S 0.425 " +
     " -Z " + _seed + " -t -C 5 -a 2 -n 2 -G " +  gscale.toString() +
-    " -p '" + colors[1][1].hex + "' -s '" + colors[1][0].hex + "' " +
+    //" -p '" + colors[1][1].hex + "' -s '" + colors[1][0].hex + "' " +
+    " -p '" + colors[1][0].hex + "' -s '" + colors[1][1].hex + "' " +
     " -t -T 0.2,0.175 -D 240,0 -b '" + colors[2][0].hex + "' -c '" + colors[2][1].hex + "' -B  '" + bgnd + "' " + 
     " -J ./_svg-tarot.json " +  extra +
     "  -R " + creat_fn + " > " + card_ofn + " ; " + 
