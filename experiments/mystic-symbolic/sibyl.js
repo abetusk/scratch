@@ -1400,7 +1400,6 @@ function mystic_symbolic_random(ctx, base, primary_color, secondary_color, bg_co
 
   if (top_level) {
 
-
     if (ctx.create_svg_header) {
       ret_str += base.svg_header;
     }

@@ -40,7 +40,7 @@ for (var ii=0; ii<tarot_card_json.length; ii++) {
 sibyl.mystic_symbolic.push( lovers_card_json[0] );
 
 
-var LINE_WIDTH = 8;
+var LINE_WIDTH = 6;
 
 var txt_ele_numeral = '<text x="0" y="0" id="_text_numeral">' + 
 '<tspan' + 
@@ -110,6 +110,23 @@ function rstr(_rng, n) {
   return _s;
 }
 
+function remove_from_array(orig, filt) {
+  var r = [];
+  for (var ii=0; ii<orig.length; ii++) {
+    var found = false;
+    for (var jj=0; jj<filt.length; jj++) {
+      if (filt[jj] == orig[ii]) {
+        found = true;
+        break;
+      }
+    }
+
+    if (!found) { r.push( orig[ii] ); }
+  }
+  return r;
+}
+
+
 var seed = rseed();
 
 
@@ -174,6 +191,7 @@ exclude_all.push("bob");
 exclude_all.push("rainbow_half");
 exclude_all.push("angel");
 exclude_all.push("lovers_nestbox");
+
 
 var c0 = sibyl.rand_color_n(2);
 var c1 = sibyl.rand_color_n(2);
@@ -245,6 +263,8 @@ for (var suit_idx=0; suit_idx < minor_arcana_suit.length; suit_idx++) {
       _s.push(suit_ent);
     }
 
+    var _tx = -144, _ty = 0;
+
     // generate background creature
     //
     var _t = sibyl.preprocess_svgjson(sibyl.bg_symbol, undefined, undefined, false, exclude_all);
@@ -267,12 +287,6 @@ for (var suit_idx=0; suit_idx < minor_arcana_suit.length; suit_idx++) {
       bgnd += "@" + bg1 + colors[suit][2][1].hex + colors[suit][2][0].hex;
     }
 
-    _t = sibyl.preprocess_svgjson(sibyl.mystic_symbolic, undefined, undefined, false, exclude_all);
-    sibyl.fg_ctx.choice = _t.choice;
-    sibyl.fg_ctx.symbol = _t.symbol;
-    sibyl.fg_ctx.data = _t.data;
-    sibyl.mystic_symbolic_random( sibyl.fg_ctx );
-
     var json_card = {
       "base": "goat",
       "attach" : { "nesting" : [ ] }
@@ -284,6 +298,12 @@ for (var suit_idx=0; suit_idx < minor_arcana_suit.length; suit_idx++) {
     //
     if ((card_idx > 0) && (card_idx < 10)) {
 
+      _t = sibyl.preprocess_svgjson(sibyl.mystic_symbolic, undefined, undefined, false, exclude_all);
+      sibyl.fg_ctx.choice = _t.choice;
+      sibyl.fg_ctx.symbol = _t.symbol;
+      sibyl.fg_ctx.data = _t.data;
+      sibyl.mystic_symbolic_random( sibyl.fg_ctx );
+
       has_numeral_text = true;
       text_numeral_desc = NUMERAL_TXT[card_idx+1];
 
@@ -294,7 +314,7 @@ for (var suit_idx=0; suit_idx < minor_arcana_suit.length; suit_idx++) {
       };
 
       for (var ii=0; ii<=card_idx; ii++) {
-        json_card.attach.nesting.push( { "base" : suit_ent } );
+        json_card.attach.nesting.push( { "base" : suit_ent + color_suit } );
       }
       json_card.attach.nesting.push( sibyl.fg_ctx.realized_child );
 
@@ -321,66 +341,129 @@ for (var suit_idx=0; suit_idx < minor_arcana_suit.length; suit_idx++) {
     // page
     else if (card_idx==10) {
 
+      _tx += 20;
+      _ty -= 60;
+
       has_footer_text = true;
       text_descr = "PAGE of " + suit.toUpperCase() + "S";
 
       var xc = colors[suit][1][1].hex + colors[suit][1][0].hex;
 
-      var royalty_base = sibyl.crnd(royalty_choice);
-      json_card = {
-        "base": royalty_base + xc,
-        "attach" : { "nesting" : [ { "base": suit_ent + color_suit }  ] }
-      };
-      gscale = 1.0;
+      var base_ele = sibyl.fg_ctx.symbol[ "dog" ];
+      _t = sibyl.preprocess_svgjson(sibyl.mystic_symbolic, undefined, undefined, false, exclude_all);
+      sibyl.fg_ctx.choice = _t.choice;
+      sibyl.fg_ctx.symbol = _t.symbol;
+      sibyl.fg_ctx.data = _t.data;
+      sibyl.mystic_symbolic_random( sibyl.fg_ctx, base_ele );
+
+      json_card = sibyl.fg_ctx.realized_child;
+
+      //json_card.attach["nesting"] = [ {"base": suit_ent + color_suit } ];
+      json_card.attach["leg"] = [ {"base": suit_ent + color_suit } ];
+
+      //var royalty_base = sibyl.crnd(royalty_choice);
+      //json_card = {
+      //  "base": royalty_base + xc,
+      //  "attach" : { "nesting" : [ { "base": suit_ent + color_suit }  ] }
+      //};
+      gscale = 0.55;
 
     }
 
     // knight
     else if (card_idx==11) {
 
+
+      _tx += 60;
+      _ty -= 10;
+
       has_footer_text = true;
       text_descr = "KNIGHT of " + suit.toUpperCase() + "S";
 
       var xc = colors[suit][1][1].hex + colors[suit][1][0].hex;
 
-      var royalty_base = sibyl.crnd(royalty_choice);
-      json_card = {
-        "base": royalty_base + xc,
-        "attach" : { "nesting" : [ { "base": suit_ent + color_suit }  ] }
-      };
-      gscale = 1.0;
+      var base_ele = sibyl.fg_ctx.symbol[ "horse" ];
+      _t = sibyl.preprocess_svgjson(sibyl.mystic_symbolic, undefined, undefined, false, exclude_all);
+      sibyl.fg_ctx.choice = _t.choice;
+      sibyl.fg_ctx.symbol = _t.symbol;
+      sibyl.fg_ctx.data = _t.data;
+      sibyl.mystic_symbolic_random( sibyl.fg_ctx, base_ele );
+
+      json_card = sibyl.fg_ctx.realized_child;
+
+      //json_card.attach["nesting"] = [ {"base": suit_ent + color_suit } ];
+      json_card.attach["crown"] = [ {"base": suit_ent + color_suit } ];
+
+      //var royalty_base = sibyl.crnd(royalty_choice);
+      //json_card = {
+      //  "base": royalty_base + xc,
+      //  "attach" : { "nesting" : [ { "base": suit_ent + color_suit }  ] }
+      //};
+      gscale = 0.75;
 
     }
 
     // queen
     else if (card_idx==12) {
 
+      _ty -= 70;
+
       has_footer_text = true;
       text_descr = "QUEEN of " + suit.toUpperCase() + "S";
 
-      var royalty_base = sibyl.crnd(royalty_choice);
-      json_card = {
-        "base": royalty_base + xc,
-        "attach" : { "nesting" : [ { "base": suit_ent + color_suit }  ] }
-      };
-      gscale = 1.0;
+      //var exclude_suit = remove_from_array(exclude_all, [ suit ]);
+
+      _t = sibyl.preprocess_svgjson(sibyl.mystic_symbolic, undefined, undefined, false, exclude_all);
+      sibyl.fg_ctx.choice = _t.choice;
+      sibyl.fg_ctx.symbol = _t.symbol;
+      sibyl.fg_ctx.data = _t.data;
+
+      var base_ele = sibyl.fg_ctx.symbol[ "crown_5pt" ];
+      sibyl.mystic_symbolic_random( sibyl.fg_ctx, base_ele );
+
+      json_card = sibyl.fg_ctx.realized_child;
+
+      json_card.attach["tail"] = [ {"base": suit + color_suit } ];
+
+      //var xc = colors[suit][1][1].hex + colors[suit][1][0].hex;
+      //var royalty_base = sibyl.crnd(royalty_choice);
+      //json_card = {
+      //  "base": royalty_base + xc,
+      //  "attach" : { "nesting" : [ { "base": suit_ent + color_suit }  ] }
+      //};
+      gscale = 0.7;
 
     }
 
     // king
     else if (card_idx==13) {
 
+      _ty -= 90;
+
       has_footer_text = true;
       text_descr = "KING of " + suit.toUpperCase() + "S";
 
-      var xc = colors[suit][1][1].hex + colors[suit][1][0].hex;
 
-      var royalty_base = sibyl.crnd(royalty_choice);
-      json_card = {
-        "base": royalty_base + xc,
-        "attach" : { "nesting" : [ { "base": suit_ent + color_suit }  ] }
-      };
-      gscale = 1.0;
+      //var exclude_suit = remove_from_array(exclude_all, [ suit ]);
+
+      _t = sibyl.preprocess_svgjson(sibyl.mystic_symbolic, undefined, undefined, false, exclude_all);
+      sibyl.fg_ctx.choice = _t.choice;
+      sibyl.fg_ctx.symbol = _t.symbol;
+      sibyl.fg_ctx.data = _t.data;
+
+      var base_ele = sibyl.fg_ctx.symbol[ "crown_ornate" ];
+      sibyl.mystic_symbolic_random( sibyl.fg_ctx, base_ele );
+
+      json_card = sibyl.fg_ctx.realized_child;
+
+      json_card.attach["tail"] = [ {"base": suit + color_suit } ];
+
+      //var xc = colors[suit][1][1].hex + colors[suit][1][0].hex;
+      //json_card = {
+      //  "base": royalty_base + xc,
+      //  "attach" : { "nesting" : [ { "base": suit_ent + color_suit }  ] }
+      //};
+      gscale = 0.7;
 
     }
 
@@ -397,7 +480,8 @@ for (var suit_idx=0; suit_idx < minor_arcana_suit.length; suit_idx++) {
       " -t -T 0.2,0.175 -D 240,0 -b '" + colors[suit][2][0].hex + "' -c '" + colors[suit][2][1].hex + "' -B  '" + bgnd + "' " + 
       " -J ./_svg-tarot.json " + 
       "  -R " + creat_fn + " > " + card_ofn + " ; " + 
-      " sed -i 's;</rect>;</rect> <g transform=\" translate(-144 0)\">;' " + card_ofn + " ; " +
+      " sed -i 's;</rect>;</rect> <g transform=\" translate(" + _tx.toString() + " " + _ty.toString() + ")\">;' " + card_ofn + " ; " +
+      //" sed -i 's;</rect>;</rect> <g transform=\" translate(-144 0)\">;' " + card_ofn + " ; " +
       " sed -i 's;width=\"720px\";width=\"432px\";' " + card_ofn  + " ; " +
       " sed -i 's;</svg>;</g> </svg>;' " + card_ofn ;
 
@@ -533,7 +617,7 @@ for (var ma_idx=0; ma_idx<major_arcana.length; ma_idx++) {
     extra = " -J ./_svg-lovers.json ";
   }
 
-  var cmd = "./sibyl -l 6 -S 0.425 " +
+  var cmd = "./sibyl -l " +  LINE_WIDTH.toString() + " -S 0.425 " +
     " -Z " + _seed + " -t -C 5 -a 2 -n 2 -G " +  gscale.toString() +
     " -p '" + colors[1][1].hex + "' -s '" + colors[1][0].hex + "' " +
     " -t -T 0.2,0.175 -D 240,0 -b '" + colors[2][0].hex + "' -c '" + colors[2][1].hex + "' -B  '" + bgnd + "' " + 
