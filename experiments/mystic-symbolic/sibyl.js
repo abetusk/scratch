@@ -1937,15 +1937,19 @@ function mystic_symbolic_sched(ctx, sched, primary_color, secondary_color, bg_co
 
       var t_str_e = "</g>";
 
+      // oof...
       //ret_str += jsonsvg2svg_defs(sub.defs, secondary_color, primary_color);
-      ret_str += jsonsvg2svg_defs(sub.defs, _sub_scol, _sub_pcol);
+      //ret_str += jsonsvg2svg_defs(sub.defs, _sub_scol, _sub_pcol);
+      ret_str += jsonsvg2svg_defs(sub.defs, _sub_pcol, _sub_scol);
+
       ret_str += t_str_s;
       //ret_str += mystic_symbolic_sched(ctx, sub_sched, secondary_color, primary_color);
 
       if (do_random_recur) {
-        ret_str += mystic_symbolic_random(ctx, ctx.symbol[sub_symbol_name], _sub_pcol, _sub_scol, bg_color);
+        ret_str += mystic_symbolic_random(ctx, ctx.symbol[sub_symbol_name], _sub_scol, _sub_pcol, bg_color);
       }
       else {
+        //ret_str += mystic_symbolic_sched(ctx, sub_sched, _sub_scol, _sub_pcol);
         ret_str += mystic_symbolic_sched(ctx, sub_sched, _sub_scol, _sub_pcol);
       }
       ret_str += t_str_e;

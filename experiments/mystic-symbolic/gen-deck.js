@@ -134,6 +134,7 @@ var seed = rseed();
 //seed = 'Vh4jFlS5WQJzQwlvYmwwEAhwYWAnI3oY';
 //seed = 'IwE7C9dsT3EOgDinelKmpwimCfxnZXNZ';
 //seed = 'Sm6u1GN4ibp2rxoM8gwP5fB7ScxV8LYX';
+seed = 'owO34cPdIaWwSngxzYoNw09Uf2gH7XFO';
 
 console.log("## seed: " + seed);
 
@@ -256,7 +257,9 @@ for (var suit_idx=0; suit_idx < minor_arcana_suit.length; suit_idx++) {
 
     var suit = minor_arcana_suit[suit_idx];
     var color_suit = colors[suit][0][0].hex + colors[suit][0][1].hex;
+    //var color_suit = colors[suit][0][1].hex + colors[suit][0][0].hex;
     var suit_ent = minor_arcana_suit[suit_idx]  + colors[suit][0][0].hex + colors[suit][0][1].hex;
+    var suit_ent_r = minor_arcana_suit[suit_idx]  + colors[suit][0][1].hex + colors[suit][0][0].hex;
     var _s = [];
 
     for (var ii=0; ii<(card_idx+1); ii++) {
@@ -314,7 +317,7 @@ for (var suit_idx=0; suit_idx < minor_arcana_suit.length; suit_idx++) {
       };
 
       for (var ii=0; ii<=card_idx; ii++) {
-        json_card.attach.nesting.push( { "base" : suit_ent + color_suit } );
+        json_card.attach.nesting.push( { "base" : suit_ent } );
       }
       json_card.attach.nesting.push( sibyl.fg_ctx.realized_child );
 
@@ -331,7 +334,8 @@ for (var suit_idx=0; suit_idx < minor_arcana_suit.length; suit_idx++) {
       var ace_base = sibyl.crnd(ace_choice);
       json_card = {
         "base": ace_base ,
-        "attach" : { "nesting" : [ { "base": suit_ent + color_suit }  ] }
+        //"attach" : { "nesting" : [ { "base": suit_ent + color_suit }  ] }
+        "attach" : { "nesting" : [ { "base": suit_ent }  ] }
       };
 
       gscale = 1.0;
@@ -359,7 +363,7 @@ for (var suit_idx=0; suit_idx < minor_arcana_suit.length; suit_idx++) {
       json_card = sibyl.fg_ctx.realized_child;
 
       //json_card.attach["nesting"] = [ {"base": suit_ent + color_suit } ];
-      json_card.attach["leg"] = [ {"base": suit_ent + color_suit } ];
+      json_card.attach["leg"] = [ {"base": suit_ent } ];
 
       //var royalty_base = sibyl.crnd(royalty_choice);
       //json_card = {
@@ -476,7 +480,7 @@ for (var suit_idx=0; suit_idx < minor_arcana_suit.length; suit_idx++) {
     var cmd = "./sibyl -a data/major-arcana.list -e data/exclude-" + suit + " -l " + LINE_WIDTH.toString() +
       //" -Z " + _seed + " -t -C 5 -a 2 -n 2 -G 2.0 " + 
       " -Z " + _seed + " -t -C 5 -a 2 -n 2 -G " +  gscale.toString() +
-      " -p '" + colors[suit][1][1].hex + "' -s '" + colors[suit][1][0].hex + "' " +
+      " -p '" + colors[suit][1][0].hex + "' -s '" + colors[suit][1][1].hex + "' " +
       " -t -T 0.2,0.175 -D 240,0 -b '" + colors[suit][2][0].hex + "' -c '" + colors[suit][2][1].hex + "' -B  '" + bgnd + "' " + 
       " -J ./_svg-tarot.json " + 
       "  -R " + creat_fn + " > " + card_ofn + " ; " + 
@@ -523,6 +527,7 @@ for (var suit_idx=0; suit_idx < minor_arcana_suit.length; suit_idx++) {
 
     //DEBUG
     //console.log("# SAVING", creat_fn);
+
     cp.execSync("rm " + creat_fn);
 
 
