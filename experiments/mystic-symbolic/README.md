@@ -341,7 +341,6 @@ TODO
 
 * figure out how to rotate 'skinny' minor suits (e.g. swords)
 * remove 'wavy' minor arcana template
-* create back card graphic
 * create description card
 * create qr code card (?)
 
