@@ -15680,7 +15680,8 @@
         "arm",
         "horn",
         "crown"
-      ]
+      ],
+      "never_flip_attachments": true
     }
   },
   {
@@ -40633,7 +40634,8 @@
         "arm",
         "horn",
         "crown"
-      ]
+      ],
+      "never_flip_attachments": true
     }
   },
   {
@@ -58104,7 +58106,8 @@
         "arm",
         "horn",
         "crown"
-      ]
+      ],
+      "creature_frequency_multiplier": 3
     }
   },
   {
@@ -65316,7 +65319,8 @@
         "arm",
         "horn",
         "crown"
-      ]
+      ],
+      "never_flip_attachments": true
     }
   },
   {

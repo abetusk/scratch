@@ -336,6 +336,27 @@ so that it would be impossible to nest an object therein.
 That is, it's unclear whether the random choice should look ahead to see if a symbol
 should not be chosen should it violate the `always_nest` option if it's too far down the recursion.
 
+Notes on Tarot Reading
+---
+
+The "Celtic Cross Spread" ([wiki](https://en.wikibooks.org/wiki/Tarot_Card_Reading)) is a common one used.
+
+The pattern is as follows:
+
+```
+
+     2
+              9
+ 4  0/1  5    8
+              7
+     3        6
+
+```
+
+Where `1` is placed over `0` and `1` is positioned horizontally.
+
+
+
 TODO
 ---
 
