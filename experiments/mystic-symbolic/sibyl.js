@@ -46,7 +46,7 @@ var parser, opt;
 var seed = rseed();
 var g_rng = new alea(seed);
 
-var _VERSION = "0.1.8";
+var _VERSION = "0.1.9";
 
 function show_version(fp) {
   fp.write("version: " + _VERSION + "\n");
@@ -117,6 +117,8 @@ var sibyl_opt = {
   "output_sched" : false,
   "seed" : seed,
 
+  "use_mask": false,
+
   "sched_in_fn" : "",
   "custom_sched" : {},
   "use_custom_sched": false,
@@ -147,7 +149,8 @@ var long_opt = [
   "R", ":(sched-in)",
   "j", "(output-sched)",
   "Z", ":(seed)",
-  "J", ":(svgjson)"
+  "J", ":(svgjson)",
+  "M", "(mask)"
 ];
 
 parser = new getopt.BasicParser("h" + long_opt.join(""), process.argv);
@@ -189,6 +192,10 @@ while ((opt =  parser.getopt()) !== undefined) {
       break;
 
     //---
+
+    case 'M':
+      sibyl_opt.use_mask = true;
+      break;
 
     case 'B':
       sibyl_opt.use_background_image = true;
@@ -1660,6 +1667,8 @@ function mystic_symbolic_sched(ctx, sched, primary_color, secondary_color, bg_co
   var scale = ctx.scale;
   var top_level = false;
 
+  var use_creature_id = true;
+
   var symbol_info = parse_invert_name(sched.base);
   var invert_flag = symbol_info.invert;
   var symbol_name = symbol_info.name;
@@ -1710,10 +1719,27 @@ function mystic_symbolic_sched(ctx, sched, primary_color, secondary_color, bg_co
     //ret_str += "<g transform=\"translate(" + _dx.toString() + " " + _dy.toString() + ") ";
     //ret_str += " rotate(" + _base_ang.toString() +  ") ";
     //ret_str += " translate(" + (-_dx).toString() + " " + (-_dy).toString() + ")\">\n";
-    ret_str += "<g transform=\"translate(360 360) ";
-    ret_str += " scale(" + _scale.toString() + " " + _scale.toString() + ") ";
-    ret_str += " rotate(" + _base_ang + ") ";
-    ret_str += " translate(-360 -360)\">\n";
+
+    if (use_creature_id) {
+      ret_str += "<g id='" + ctx.svg_id + "'>\n";
+      ret_str += "<g transform=\"translate(360 360) scale(" + _scale.toString() + " " + _scale.toString() + ") ";
+      ret_str += " rotate(" + _base_ang + ") ";
+      ret_str += " translate(-360 -360)\">\n";
+      /*
+      ret_str += "<g transform=\"translate(360 360) scale(" + _scale.toString() + " " + _scale.toString() + ") \">";
+      ret_str += "<g id='" + ctx.svg_id + "'>\n";
+      ret_str += "<g transform=\"";
+      ret_str += " rotate(" + _base_ang + ") ";
+      ret_str += " translate(-360 -360)\">\n";
+      */
+    }
+
+    else {
+      ret_str += "<g transform=\"translate(360 360) ";
+      ret_str += " scale(" + _scale.toString() + " " + _scale.toString() + ") ";
+      ret_str += " rotate(" + _base_ang + ") ";
+      ret_str += " translate(-360 -360)\">\n";
+    }
 
     if (_include_background_rect) {
       var w = ctx.svg_width;
@@ -1967,7 +1993,15 @@ function mystic_symbolic_sched(ctx, sched, primary_color, secondary_color, bg_co
   }
 
   if (top_level) {
-    ret_str += "</g>\n";
+
+    if (use_creature_id) {
+      //ret_str += "</g>\n";
+      //ret_str += "\n</g></g></g> <!-- creature id end -->\n";
+      ret_str += "\n</g></g> <!-- creature id end -->\n";
+    }
+    else {
+      ret_str += "</g>\n";
+    }
 
     if (ctx.create_svg_header) {
       ret_str += base.svg_footer;
@@ -2361,16 +2395,12 @@ function rand_color(base_hue) {
   //var bg_hue = Math.random();
   var bg_hue = g_rng.double();
   var bg_sat = _rnd(0.05, 0.2);
-  var bg_val = _rnd(0.5, 1.0);
-  if (bg_dark_opt) { bg_val = _rnd(0.05, 0.5); }
+  var bg_val = ( bg_dark_opt ? _rnd(0.05, 0.5) : _rnd(0.5, 0.95) );
 
   res.background.hsv = [ bg_hue, bg_sat, bg_val ];
 
-  //var bg2_hue = Math.random();
   var bg2_hue = g_rng.double();
   var bg2_sat = _rnd(0.05, 0.2);
-  //var bg2_val = _rnd(0.5, 1.0);
-  //var bg2_val = _mod1(bg_val + _crnd([-1,1])*_rnd(0.1, 0.25));
   var bg2_val = 0.5 + (_mod1(bg_val + _crnd([-1,1])*_rnd(0.1, 0.25))/2.0);
   if (bg_dark_opt) {
     bg2_val = (_mod1(2*bg_val + _crnd([-1,1])*_rnd(0.1, 0.25))/2.0);
@@ -3239,6 +3269,8 @@ else {
   console.log( JSON.stringify(sched, undefined, 2) );
   */
 
+  var svg_extra_header = "";
+
   var bg_svg = "";
   if (sibyl_opt.use_background_image) {
 
@@ -3250,6 +3282,8 @@ else {
 
       bg_ctx.create_background_rect = false;
       //bg_ctx.create_background_rect = true;
+
+      bg_ctx.svg_id = "__background_creature";
 
       var bg_sched  = mystic_symbolic_dsl2sched( sibyl_opt.background_image, bg_ctx );
       var bg_svg_single = mystic_symbolic_sched(bg_ctx, bg_sched , bg_color, bg_color2, bg_color);
@@ -3271,9 +3305,11 @@ else {
       var w = bg_ctx.svg_width;
       var h = bg_ctx.svg_height;
       _bg = bg_color;
-      bg_svg += "<rect x=\"-" + w.toString() + "\" y=\"-" + h.toString() + "\" ";
-      bg_svg += "width=\"" + (3*w).toString() + "\" height=\"" + (3*h).toString() + "\" fill=\"" + _bg + "\" data-is-background=\"true\">\n</rect>\n";
+      //bg_svg += "<rect x=\"-" + w.toString() + "\" y=\"-" + h.toString() + "\" ";
+      //bg_svg += "width=\"" + (3*w).toString() + "\" height=\"" + (3*h).toString() + "\" fill=\"" + _bg + "\" data-is-background=\"true\">\n</rect>\n";
 
+      svg_extra_header += "<rect x=\"-" + w.toString() + "\" y=\"-" + h.toString() + "\" ";
+      svg_extra_header += "width=\"" + (3*w).toString() + "\" height=\"" + (3*h).toString() + "\" fill=\"" + _bg + "\" data-is-background=\"true\">\n</rect>\n";
 
       for (var x_idx=0; x_idx <= _n; x_idx++) {
         for (var y_idx=0; y_idx <= _n; y_idx++) {
@@ -3299,6 +3335,7 @@ else {
     }
     else {
       bg_ctx.create_background_rect = true;
+      bg_ctx.svg_id = "__background_creature";
 
       var _x = sibyl_opt.background_dx;
       var _y = sibyl_opt.background_dy;
@@ -3329,12 +3366,55 @@ else {
 
   else {
 
+    fg_ctx.svg_id = "creature";
+
     var creature_svg = mystic_symbolic_sched(fg_ctx, sched , primary_color, secondary_color, bg_color);
+
     if (sibyl_opt.use_background_image) {
       console.log(svg_header);
+
+      if (sibyl_opt.use_mask) {
+        var svg_mask_start = '<defs>\n' +
+          '<mask id="mask0" x="0" y="0" width="432" height="720" >\n' +
+          '<rect rx="23" x="0" y="0" width="432" height="720" style="stroke:none; fill: #ffffff"/>\n' +
+          '</mask>\n' +
+          '</defs>\n' +
+          '<g style="mask: url(#mask0);">\n' +
+          //'<rect x="-720" y="-720" width="2160" height="2160" fill="#896f70" data-is-background="true">\n' +
+          //'</rect>\n' ;
+          "";
+        console.log(svg_mask_start);
+      }
+
+      console.log(svg_extra_header);
+
+      console.log("\n<!-- xxx -->\n");
+      console.log("\n<!-- BG_START -->\n");
+      //console.log("<g id='background_pattern'>");
+
+      //console.log("\n<g transform=''>\n");
+      console.log("<g id='background_creature'>");
+      //console.log("<g transform=''>\n");
       console.log(bg_svg);
+      //console.log("</g>\n");
+      console.log("</g> <!-- bg_creat container -->\n");
+      //console.log("</g>\n\n\n");
+
+      //console.log("</g>");
+      console.log("\n<!-- BG_END -->\n");
     }
+
+    console.log("\n<!-- CREATURE_START -->\n");
+
     console.log( creature_svg );
+
+    console.log("\n<!-- CREATURE_END -->\n");
+
+    if (sibyl_opt.use_mask) {
+      var svg_mask_end = '</g>\n';
+      console.log(svg_mask_end);
+    }
+
     if (sibyl_opt.use_background_image) {
       console.log(svg_footer);
     }

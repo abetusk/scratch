@@ -24977,7 +24977,8 @@
         "arm",
         "horn",
         "crown"
-      ]
+      ],
+      "creature_frequency_multiplier": 6
     }
   },
   {
@@ -25466,7 +25467,8 @@
         "arm",
         "horn",
         "crown"
-      ]
+      ],
+      "creature_frequency_multiplier": 4
     }
   },
   {
@@ -25769,7 +25771,17 @@
           }
         ]
       }
-    ]
+    ],
+    "meta": {
+      "attach_to": [
+        "tail",
+        "leg",
+        "arm",
+        "horn",
+        "crown"
+      ],
+      "creature_frequency_multiplier": 4
+    }
   },
   {
     "name": "eye_up_starburst",
@@ -26055,6 +26067,16 @@
           }
         }
       ]
+    },
+    "meta": {
+      "attach_to": [
+        "tail",
+        "leg",
+        "arm",
+        "horn",
+        "crown"
+      ],
+      "creature_frequency_multiplier": 4
     }
   },
   {
@@ -26522,7 +26544,8 @@
         "arm",
         "horn",
         "crown"
-      ]
+      ],
+      "creature_frequency_multiplier": 4
     }
   },
   {
@@ -26756,7 +26779,17 @@
           }
         ]
       }
-    ]
+    ],
+    "meta": {
+      "attach_to": [
+        "tail",
+        "leg",
+        "arm",
+        "horn",
+        "crown"
+      ],
+      "creature_frequency_multiplier": 5
+    }
   },
   {
     "name": "eyelash",
@@ -42120,6 +42153,7 @@
     ],
     "meta": {
       "invert_nested": true,
+      "never_be_nested": true,
       "attach_to": [
         "leg",
         "arm",

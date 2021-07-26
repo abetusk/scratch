@@ -544,7 +544,7 @@ for (var suit_idx=0; suit_idx < minor_arcana_suit.length; suit_idx++) {
 
     }
 
-    var cmd = "./sibyl -a data/major-arcana.list -e data/exclude-" + suit + " -l " + LINE_WIDTH.toString() +
+    var cmd = "./sibyl -M -a data/major-arcana.list -e data/exclude-" + suit + " -l " + LINE_WIDTH.toString() +
       //" -Z " + _seed + " -t -C 5 -a 2 -n 2 -G 2.0 " + 
       //" -Z " + _seed + " -t -C 5 -a 2 -n 2 -G " +  gscale.toString() +
       " -t -C 5 -a 2 -n 2 -G " +  gscale.toString() +
@@ -704,7 +704,7 @@ for (var ma_idx=0; ma_idx<major_arcana.length; ma_idx++) {
     extra = " -J ./_svg-lovers.json ";
   }
 
-  var cmd = "./sibyl -l " +  LINE_WIDTH.toString() + " -S 0.425 " +
+  var cmd = "./sibyl -M -l " +  LINE_WIDTH.toString() + " -S 0.425 " +
     " -t -C 5 -a 2 -n 2 -G " +  gscale.toString() +
     " -p '" + colors[1][0].hex + "' -s '" + colors[1][1].hex + "' " +
     " -t -T 0.2,0.175 -D 240,0 -b '" + colors[2][0].hex + "' -c '" + colors[2][1].hex + "' -B  '" + bgnd + "' " + 
