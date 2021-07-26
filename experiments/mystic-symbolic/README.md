@@ -355,6 +355,17 @@ The pattern is as follows:
 
 Where `1` is placed over `0` and `1` is positioned horizontally.
 
+* `0` - The heart of the issue or influence affecting the matter of inquiry,
+* `1` - The obstacle that stands in the way,
+* `2` - Either the goal or the best potential result in the current situation,
+* `3` - The foundation of the issue which has passed into reality,
+* `4` - The past or influence that is departing,
+* `5` - The future or influence that is approaching,
+* `6` - You, either as you are, could be or are presenting yourself to be,
+* `7` - Your house or environment,
+* `8` - Your hopes and fears,
+* `9` - The ultimate result or cumulation about the influences from the other cards in the divination
+
 
 
 TODO

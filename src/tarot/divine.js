@@ -30,7 +30,7 @@ var tarot = JSON.parse(dat);
 //console.log(tarot.tarot_interpretations);
 
 var _narrative = [
-  "The heart of the issue or influecne affecting the matter of inquery",
+  "The heart of the issue or influence affecting the matter of inquiry",
   "The obstacle that stands in the way",
   "Either the goal or the best potential result in the current situation",
   "The foundation of the issue which has passed into reality",
@@ -38,10 +38,10 @@ var _narrative = [
   "The past or influence that is departing",
 
   "The future or influence that is approaching",
-  "You, either as you are, could be or are preseneting yourself to be",
+  "You, either as you are, could be or are presenting yourself to be",
   "Your house or environment",
   "Your hopes and fears",
-  "The ultimate result or cumulation about the influsences from the other cards in the divintation"
+  "The ultimate result or cumulation about the influences from the other cards in the divination"
 ];
 
 /*
