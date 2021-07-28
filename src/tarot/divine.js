@@ -158,6 +158,7 @@ function tarot_reading_celtic_cross(tarot_data) {
 
 var ans = tarot_reading_celtic_cross(tarot);
 
+console.log(ans);
 
 console.log("----");
 console.log("Envision your question that you would like answered or to get insight into...");
