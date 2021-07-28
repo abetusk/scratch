@@ -339,10 +339,12 @@ $(document).ready(function() {
   $("#ui_card0").mouseenter( function(e) {
     caption_update("ui_card0", g_tarot.reading[0].sentence, "caption_0", [200,-150]);
     $("#caption_0").fadeIn();
+    $("#ui_card1").fadeTo(400, 0.15);
   });
 
   $("#ui_card0").mouseleave( function(e) {
     $("#caption_0").fadeOut();
+    $("#ui_card1").fadeTo(400, 1.0);
   });
 
   //--
@@ -350,6 +352,7 @@ $(document).ready(function() {
   $("#ui_card1").mouseenter( function(e) {
     caption_update("ui_card1", g_tarot.reading[1].sentence, "caption_1", [-180,250]);
     $("#caption_1").fadeIn();
+
   });
 
   $("#ui_card1").mouseleave( function(e) {
