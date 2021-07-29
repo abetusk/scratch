@@ -3311,6 +3311,9 @@ else {
       svg_extra_header += "<rect x=\"-" + w.toString() + "\" y=\"-" + h.toString() + "\" ";
       svg_extra_header += "width=\"" + (3*w).toString() + "\" height=\"" + (3*h).toString() + "\" fill=\"" + _bg + "\" data-is-background=\"true\">\n</rect>\n";
 
+      bg_svg_single = '<g id="__bg_single">\n' + bg_svg_single + '\n</g>';
+      var first_bg = true;
+
       for (var x_idx=0; x_idx <= _n; x_idx++) {
         for (var y_idx=0; y_idx <= _n; y_idx++) {
 
@@ -3325,7 +3328,14 @@ else {
 
           //console.log("????", JSON.stringify(bg_svg_single, undefined, 2));
 
-          bg_svg += bg_svg_single;
+          if (first_bg) {
+            bg_svg += bg_svg_single;
+            first_bg = false;
+          }
+          else {
+            bg_svg += '<use xlink:href="#__bg_single"/>\n';
+          }
+
 
           bg_svg += "</g>";
 
@@ -3402,13 +3412,13 @@ else {
 
       //console.log("</g>");
       console.log("\n<!-- BG_END -->\n");
+
+      console.log("\n<!-- CREATURE_START -->\n");
     }
 
-    console.log("\n<!-- CREATURE_START -->\n");
 
     console.log( creature_svg );
 
-    console.log("\n<!-- CREATURE_END -->\n");
 
     if (sibyl_opt.use_mask) {
       var svg_mask_end = '</g>\n';
@@ -3416,6 +3426,8 @@ else {
     }
 
     if (sibyl_opt.use_background_image) {
+      console.log("\n<!-- CREATURE_END -->\n");
+
       console.log(svg_footer);
     }
   }
