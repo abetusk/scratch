@@ -760,7 +760,7 @@ var _tx = -144, _ty = 0;
 
 var card_ofn = "deck/78-back.svg";
 var back_symbol_name = sibyl.crnd(back_creature_choice);
-var cmd = "./sibyl -l " +  LINE_WIDTH.toString() +
+var cmd = "./sibyl -M -l " +  LINE_WIDTH.toString() +
   " -t -T 0.2,0.175 -D 240,0 -b '" + bca[0].hex + "' -c '" + bca[1].hex + "' -B  '" + back_symbol_name + "' " + 
   " '' > " + card_ofn + " ; " + 
   " sed -i 's;</rect>;</rect> <g transform=\" translate(" + _tx.toString() + " " + _ty.toString() + ")\">;' " + card_ofn + " ; " +
