@@ -375,16 +375,21 @@ function _bbox(ele) {
            [ bbox.right + window.pageXOffset, bbox.top + window.pageYOffset ] ];
 }
 
+// update the caption (reading).
+// ui_id is the card id and cap_name is the caption element id.
+//
+// dxy can be given to do other positioning.
+//
 function caption_update(ui_id, txt, cap_name, dxy) {
   dxy = ((typeof dxy === "undefined") ? [-220, 120] : dxy);
-  var svg_txt = '<svg viewBox="0 0 100px 100px" xmlns="http://www.w3.org/2000/svg">\n' +
-      '  <line x1="0" y1="80px" x2="100px" y2="20px" stroke="black" stroke-width="2px" />\n' +
-      '</svg>\n';
+  //var _m = (g_ui.mobile_view?"_m":"");
 
   var caption = document.getElementById(cap_name)
 
   var captxt = document.getElementById(cap_name + "_text");
   captxt.innerHTML = txt;
+
+  console.log(">>>", ui_id );
 
   var ele = document.getElementById(ui_id);
   var domrect = ele.getBoundingClientRect();
@@ -392,76 +397,100 @@ function caption_update(ui_id, txt, cap_name, dxy) {
   var b = _bbox(ele);
 
   caption.style.position = "absolute";
-  caption.style.left = (b[0][0] + dxy[0]).toString() + "px";
-  caption.style.top = (b[1][1] + dxy[1]).toString() + "px";
+  if (g_ui.mobile_view) {
+    caption.style.left = (b[1][0] + 10).toString() + "px";
+    caption.style.top = (b[1][1] + 10).toString() + "px";
+  }
+  else {
+    caption.style.left = (b[0][0] + dxy[0]).toString() + "px";
+    caption.style.top = (b[1][1] + dxy[1]).toString() + "px";
+  }
+
 }
 
 $(document).ready(function() {
   //caption_show("ui_card6", "foo");
 
+  // card1 is under card0 so when card0 is hovered over,
+  // make card1 semi translucent to see the full card0
+  //
+  // All other cards have mouse enter/leave events
+  // captured to popup the reading or ignore it
+  // if the reading button has been toggled.
+  //
   $("#ui_card0").mouseenter( function(e) {
-    caption_update("ui_card0", g_tarot.reading[0].sentence, "caption_0", [200,-150]);
-    $("#caption_0").fadeIn();
-    $("#ui_card1").fadeTo(400, 0.15);
+    var _m = (g_ui.mobile_view ? "_m" : "");
+    caption_update("ui_card0", g_tarot.reading[0].sentence, "caption_0" + _m, [200,-150]);
+    $("#caption_0" + _m).fadeIn();
+    $("#ui_card1" + _m).fadeTo(400, 0.15);
   });
 
   $("#ui_card0").mouseleave( function(e) {
+    var _m = (g_ui.mobile_view ? "_m" : "");
     if (g_ui.button_state.ui_button_reading.state == "off") {
-      $("#caption_0").fadeOut();
+      $("#caption_0" + _m).fadeOut();
     }
-    $("#ui_card1").fadeTo(400, 1.0);
+    $("#ui_card1" + _m).fadeTo(400, 1.0);
   });
 
   //--
 
   $("#ui_card1").mouseenter( function(e) {
-    caption_update("ui_card1", g_tarot.reading[1].sentence, "caption_1", [-180,250]);
-    $("#caption_1").fadeIn();
+    var _m = (g_ui.mobile_view ? "_m" : "");
+    caption_update("ui_card1", g_tarot.reading[1].sentence, "caption_1" + _m, [-180,250]);
+    $("#caption_1" + _m).fadeIn();
 
   });
 
   $("#ui_card1").mouseleave( function(e) {
+    var _m = (g_ui.mobile_view ? "_m" : "");
     if (g_ui.button_state.ui_button_reading.state == "off") {
-      $("#caption_1").fadeOut();
+      $("#caption_1" + _m).fadeOut();
     }
   });
 
   //--
 
   $("#ui_card2").mouseenter( function(e) {
-    caption_update("ui_card2", g_tarot.reading[2].sentence, "caption_2", [0,-180]);
-    $("#caption_2").fadeIn();
+    var _m = (g_ui.mobile_view ? "_m" : "");
+    caption_update("ui_card2", g_tarot.reading[2].sentence, "caption_2" + _m, [0,-180]);
+    $("#caption_2" + _m).fadeIn();
   });
 
   $("#ui_card2").mouseleave( function(e) {
+    var _m = (g_ui.mobile_view ? "_m" : "");
     if (g_ui.button_state.ui_button_reading.state == "off") {
-      $("#caption_2").fadeOut();
+      $("#caption_2" + _m).fadeOut();
     }
   });
 
   //--
 
   $("#ui_card3").mouseenter( function(e) {
-    caption_update("ui_card3", g_tarot.reading[3].sentence, "caption_3", [0,330]);
-    $("#caption_3").fadeIn();
+    var _m = (g_ui.mobile_view ? "_m" : "");
+    caption_update("ui_card3", g_tarot.reading[3].sentence, "caption_3" + _m, [0,330]);
+    $("#caption_3" + _m).fadeIn();
   });
 
   $("#ui_card3").mouseleave( function(e) {
+    var _m = (g_ui.mobile_view ? "_m" : "");
     if (g_ui.button_state.ui_button_reading.state == "off") {
-      $("#caption_3").fadeOut();
+      $("#caption_3" + _m).fadeOut();
     }
   });
 
   //--
 
   $("#ui_card4").mouseenter( function(e) {
-    caption_update("ui_card4", g_tarot.reading[4].sentence, "caption_4", [0,-180]);
-    $("#caption_4").fadeIn();
+    var _m = (g_ui.mobile_view ? "_m" : "");
+    caption_update("ui_card4", g_tarot.reading[4].sentence, "caption_4" + _m, [0,-180]);
+    $("#caption_4" + _m).fadeIn();
   });
 
   $("#ui_card4").mouseleave( function(e) {
+    var _m = (g_ui.mobile_view ? "_m" : "");
     if (g_ui.button_state.ui_button_reading.state == "off") {
-      $("#caption_4").fadeOut();
+      $("#caption_4" + _m).fadeOut();
     }
   });
 
@@ -469,73 +498,86 @@ $(document).ready(function() {
 
 
   $("#ui_card5").mouseenter( function(e) {
-    caption_update("ui_card5", g_tarot.reading[5].sentence, "caption_5", [0,330]);
-    $("#caption_5").fadeIn();
+    var _m = (g_ui.mobile_view ? "_m" : "");
+    caption_update("ui_card5", g_tarot.reading[5].sentence, "caption_5" + _m, [0,330]);
+    $("#caption_5" + _m).fadeIn();
   });
 
   $("#ui_card5").mouseleave( function(e) {
+    var _m = (g_ui.mobile_view ? "_m" : "");
     if (g_ui.button_state.ui_button_reading.state == "off") {
-      $("#caption_5").fadeOut();
+      $("#caption_5" + _m).fadeOut();
     }
   });
 
   //--
 
   $("#ui_card6").mouseenter( function(e) {
-    caption_update("ui_card6", g_tarot.reading[6].sentence, "caption_6");
-    $("#caption_6").fadeIn();
+    var _m = (g_ui.mobile_view ? "_m" : "");
+    caption_update("ui_card6", g_tarot.reading[6].sentence, "caption_6" + _m);
+    $("#caption_6" + _m).fadeIn();
   });
 
   $("#ui_card6").mouseleave( function(e) {
+    var _m = (g_ui.mobile_view ? "_m" : "");
     if (g_ui.button_state.ui_button_reading.state == "off") {
-      $("#caption_6").fadeOut();
+      $("#caption_6" + _m).fadeOut();
     }
   });
 
   //--
 
   $("#ui_card7").mouseenter( function(e) {
-    caption_update("ui_card7", g_tarot.reading[7].sentence, "caption_7", [-220, 300]);
-    $("#caption_7").fadeIn();
+    var _m = (g_ui.mobile_view ? "_m" : "");
+    caption_update("ui_card7", g_tarot.reading[7].sentence, "caption_7" + _m, [-220, 300]);
+    $("#caption_7" + _m).fadeIn();
   });
 
   $("#ui_card7").mouseleave( function(e) {
+    var _m = (g_ui.mobile_view ? "_m" : "");
     if (g_ui.button_state.ui_button_reading.state == "off") {
-      $("#caption_7").fadeOut();
+      $("#caption_7" + _m).fadeOut();
     }
   });
 
   //--
 
   $("#ui_card8").mouseenter( function(e) {
-    caption_update("ui_card8", g_tarot.reading[8].sentence, "caption_8", [-220,-120]);
-    $("#caption_8").fadeIn();
+    var _m = (g_ui.mobile_view ? "_m" : "");
+    caption_update("ui_card8", g_tarot.reading[8].sentence, "caption_8" + _m, [-220,-120]);
+    $("#caption_8" + _m).fadeIn();
   });
 
   $("#ui_card8").mouseleave( function(e) {
+    var _m = (g_ui.mobile_view ? "_m" : "");
     if (g_ui.button_state.ui_button_reading.state == "off") {
-      $("#caption_8").fadeOut();
+      $("#caption_8" + _m).fadeOut();
     }
   });
 
   //--
 
   $("#ui_card9").mouseenter( function(e) {
-    caption_update("ui_card9", g_tarot.reading[9].sentence, "caption_9", [-220,-20]);
-    $("#caption_9").fadeIn();
+    var _m = (g_ui.mobile_view ? "_m" : "");
+    caption_update("ui_card9", g_tarot.reading[9].sentence, "caption_9" + _m, [-220,-20]);
+    $("#caption_9" + _m).fadeIn();
   });
 
   $("#ui_card9").mouseleave( function(e) {
+    var _m = (g_ui.mobile_view ? "_m" : "");
     if (g_ui.button_state.ui_button_reading.state == "off") {
-      $("#caption_9").fadeOut();
+      $("#caption_9" + _m).fadeOut();
     }
   });
 
   //---
 
+  // initially update captions with default data
+  //
   for (var ii=0; ii<10; ii++) {
+    var _m = (g_ui.mobile_view ? "_m" : "");
     var ui_id = "ui_card" + ii.toString();
-    var cap_id = "caption_" + ii.toString();
+    var cap_id = "caption_" + ii.toString() + _m;
     caption_update(ui_id, g_tarot.reading[ii].sentence, cap_id, g_ui.caption_dxy[ui_id]);
   }
 
@@ -562,6 +604,9 @@ $(document).ready(function() {
   });
 
 
+  // toggle whether all readings are shown at once or
+  // only on hover
+  //
   $("#ui_button_reading").click( function(e) {
 
 
@@ -577,11 +622,12 @@ $(document).ready(function() {
       ele.style.backgroundColor = "#777";
       ele.style.color = "#fff";
 
+      var _m = (g_ui.mobile_view ? "_m" : "");
       for (var ii=0; ii<10; ii++) {
         var ui_id = "ui_card" + ii.toString();
-        var cap_id = "caption_" + ii.toString();
+        var cap_id = "caption_" + ii.toString() + _m;
         caption_update(ui_id, g_tarot.reading[ii].sentence, cap_id, g_ui.caption_dxy[ui_id]);
-        $("#caption_" + ii.toString()).fadeIn();
+        $("#caption_" + ii.toString() + _m).fadeIn();
       }
 
     }
@@ -591,8 +637,9 @@ $(document).ready(function() {
       ele.style.backgroundColor = "transparent";
       ele.style.color = "#333";
 
+      var _m = (g_ui.mobile_view ? "_m" : "");
       for (var ii=0; ii<10; ii++) {
-        $("#caption_" + ii.toString()).fadeOut();
+        $("#caption_" + ii.toString() + _m).fadeOut();
       }
 
     }
@@ -601,6 +648,11 @@ $(document).ready(function() {
 
   //---
 
+  // doing the highlight and focus is easier then 
+  // figuring out how to do it incss.
+  // Enable the appropriate button state in the g_ui
+  // state object.
+  //
   $("#ui_button_deck").mouseenter( function(e) {
     var ele = document.getElementById("ui_button_deck");
     if (g_ui.button_state.ui_button_deck.state == "off") {
@@ -621,6 +673,9 @@ $(document).ready(function() {
     }
   });
 
+  // toggle between the deck view pane or the reading
+  // pane
+  //
   $("#ui_button_deck").click( function(e) {
 
     var _ele_read = document.getElementById("ui_tarot_reading");
@@ -644,9 +699,8 @@ $(document).ready(function() {
 
       for (var ii=0; ii<10; ii++) {
         $("#caption_" + ii.toString()).fadeOut();
+        $("#caption_" + ii.toString() + "_m").fadeOut();
       }
-
-
 
     }
     else {
@@ -665,19 +719,64 @@ $(document).ready(function() {
 
   //---
 
+  // wip
+  //
   $("#ui_button_download").click( function(e) {
     console.log("dl");
   });
 
+  // initially set whether we're in mobile view state
+  //
+  g_ui.mobile_view = ( ($(window).width() < g_ui.mobile_width) ? true : false );
+
   init();
+
 
 });
 
 window.onresize = function() {
+  var prev_mobile_view = g_ui.mobile_view;
   g_ui.mobile_view = ( ($(window).width() < g_ui.mobile_width) ? true : false );
+
+  // if we're in the deck view state, turn off all captions
+  //
+  if (g_ui.button_state.ui_button_deck.state == "on") {
+    for (var ii=0; ii<10; ii++) {
+      $("#caption_" + ii.toString() + "_m").fadeOut();
+      $("#caption_" + ii.toString()).fadeOut();
+    }
+    return;
+  }
+
+  // if we've resized from a mobile view to a desktop view or vice
+  // versa, disable/enable the appropriate mobile captions and
+  // enable/disable the desktop captions
+  //
+  if (prev_mobile_view != g_ui.mobile_view) {
+    g_ui.button_state.ui_button_reading.state = "off";
+    var ele = document.getElementById("ui_button_reading");
+    ele.style.backgroundColor = "transparent";
+    ele.style.color = "#333";
+
+    var _m = (g_ui.mobile_view ? "_m" : "");
+    for (var ii=0; ii<10; ii++) {
+      if (prev_mobile_view) {
+        $("#caption_" + ii.toString() + "_m").fadeOut();
+        $("#caption_" + ii.toString()).fadeIn();
+      }
+      else {
+        $("#caption_" + ii.toString() + "_m").fadeIn();
+        $("#caption_" + ii.toString()).fadeOut();
+      }
+    }
+  }
+
+  // update captions
+  //
   for (var ii=0; ii<10; ii++) {
+    var _m = (g_ui.mobile_view ? "_m" : "");
     var ui_id = "ui_card" + ii.toString();
-    var cap_id = "caption_" + ii.toString();
+    var cap_id = "caption_" + ii.toString() + _m;
     caption_update(ui_id, g_tarot.reading[ii].sentence, cap_id, g_ui.caption_dxy[ui_id]);
   }
 }
