@@ -2,17 +2,68 @@
   box-sizing:border-box;
 }
 
+.tbutton,
+tbutton,
+input[type="tbutton"] {
+  display: inline-block;
+  height: 38px;
+  padding: 0 30px;
+  color: #777;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 38px;
+  letter-spacing: .1rem;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  background-color: transparent;
+  border-radius: 4px;
+  border: 1px solid #bbb;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.tbutton:hover,
+tbutton:hover,
+input[type="tbutton"]:hover,
+.tbutton:focus,
+tbutton:focus,
+input[type="tbutton"]:focus {
+  color: #777;
+  border-color: #888;
+  outline: 0;
+}
+
+tbutton,
+.tbutton {
+  margin-bottom: 1rem;
+}
+
+
 [class ^= "x"]{
   /* background-color: skyblue; */
   display: grid;
   place-items: center;
+
+  width: 191.25px;
+  height: 300px;
 }
 
+.deck_card {
+  width: 191.25px;
+  height: 300px;
+  margin-top:25px;
+  margin-bottom:25px;
+}
+
+/*
 [class ^="e"]{
   background-color: orange;
   display: grid;
   place-items: center;
 }
+*/
 
 .tarot_container{
   display: grid;

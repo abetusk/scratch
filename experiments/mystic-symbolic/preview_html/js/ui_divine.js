@@ -16,10 +16,28 @@
 //
 var g_tarot = {
   "ready": false,
-  "reading" : [ "", "", "", "", "", "", "", "", "", ""]
+  "reading" : [
+   { "sentence":"<b><u>King of Coins</u> <small>(light)</small></b></u><br>Becoming so conservative you resist all change on principle alone"},
+   { "sentence":"..."},
+   { "sentence":"..."},
+   { "sentence":"..."},
+   { "sentence":"..."},
+   { "sentence":"..."},
+   { "sentence":"..."},
+   { "sentence":"..."},
+   { "sentence":"..."},
+   { "sentence":"..."}
+  ]
 };
 
 var g_ui = {
+  "mobile_width":800,
+  "mobile_view" : false,
+  "button_state" : {
+    "ui_button_reading" : { "state": "off" },
+    "ui_button_deck" : { "state": "off" },
+    "ui_button_download": { "state": "off" }
+  },
   "caption_dxy" : {
     "ui_card0" : [200,-150],
     "ui_card1" : [-180,250],
@@ -109,6 +127,46 @@ function _load(url, _cb) {
   return xhr;
 } 
 
+// n undefined or 0 -  capitalize every word except for 'of'
+// n > 0            -  capitalize n non 'of' words
+// n < 0            -  un capitalize |n| non 'of' words
+//
+// return string
+//
+function _capitalize(txt,n) {
+  n = ((typeof n === "undefined") ? 0 : n);
+  var uc = true;
+
+  if (n<0) {
+    uc = false;
+    n = -n;
+  }
+
+  var tok = txt.split(" ");
+  var n_cap = 0;
+
+  for (var ii=0; ii<tok.length; ii++) {
+    if ((n!=0) && (n_cap >= n)) { break; }
+
+    if (tok[ii].toLowerCase() != "of") {
+      if (uc) {
+        tok[ii] = tok[ii][0].toUpperCase() + tok[ii].slice(1);
+      }
+      else {
+        tok[ii] = tok[ii][0].toLowerCase() + tok[ii].slice(1);
+      }
+      n_cap++;
+    }
+    else {
+      tok[ii] = tok[ii][0].toLowerCase() + tok[ii].slice(1);
+    }
+
+  }
+
+  return tok.join(" ");
+
+}
+
 // Do a 'celtic cross' tarot reading.
 // randomely permute the order, take the first 10 cards
 // for the interpretations
@@ -121,7 +179,8 @@ function tarot_reading_celtic_cross(tarot_data) {
   var card_spread = [ 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j' ];
   var n_card = card_spread.length;
 
-  var light_phrases = [ "consider", "aim for", "try", "explore", "look into" ];
+  //var light_phrases = [ "consider", "aim for", "try", "explore", "look into" ];
+  var light_phrases = [ "consider", "aim for", "try", "explore", "look into", "contemplate", "deliberate on", "ruminate over", "reflect on" ];
   var shadow_phrases = [ "be wary of", "avoid", "steer clear of", "forgo", "refain from", "resist", "stop", "be suspicious of" ];
 
   // sentence narratives
@@ -201,6 +260,10 @@ function tarot_reading_celtic_cross(tarot_data) {
     var phrase = ((light_shadow == "light") ? _crnd(light_phrases) : _crnd(shadow_phrases) );
     var sentence = d[p].name + "(" + light_shadow + "): " + narrative[ii] + ", " + phrase + " ... " + meaning;
 
+    var html_sentence = "<b><u>" + _capitalize(d[p].name) + "</u></b> <small>(" + light_shadow + ")</small><br>";
+    html_sentence += _capitalize(narrative[ii],1) + ", " + _capitalize(phrase,-1) + " " + _capitalize(meaning,-1);
+
+
     var val = {
       "index": p,
       "modifier":light_shadow,
@@ -210,7 +273,8 @@ function tarot_reading_celtic_cross(tarot_data) {
       "fortune_telling" : fortune,
       "keywords": d[p].keywords,
       "meaning" : meaning,
-      "sentence": sentence
+      "_sentence": sentence,
+      "sentence": html_sentence
     };
 
 
@@ -303,7 +367,6 @@ function finit() {
 function init() {
   _load("data/tarot_interpretations.json", _tarot_json_cb);
   setTimeout(finit, 1000);
-
 }
 
 function _bbox(ele) {
@@ -343,7 +406,9 @@ $(document).ready(function() {
   });
 
   $("#ui_card0").mouseleave( function(e) {
-    $("#caption_0").fadeOut();
+    if (g_ui.button_state.ui_button_reading.state == "off") {
+      $("#caption_0").fadeOut();
+    }
     $("#ui_card1").fadeTo(400, 1.0);
   });
 
@@ -356,7 +421,9 @@ $(document).ready(function() {
   });
 
   $("#ui_card1").mouseleave( function(e) {
-    $("#caption_1").fadeOut();
+    if (g_ui.button_state.ui_button_reading.state == "off") {
+      $("#caption_1").fadeOut();
+    }
   });
 
   //--
@@ -367,7 +434,9 @@ $(document).ready(function() {
   });
 
   $("#ui_card2").mouseleave( function(e) {
-    $("#caption_2").fadeOut();
+    if (g_ui.button_state.ui_button_reading.state == "off") {
+      $("#caption_2").fadeOut();
+    }
   });
 
   //--
@@ -378,7 +447,9 @@ $(document).ready(function() {
   });
 
   $("#ui_card3").mouseleave( function(e) {
-    $("#caption_3").fadeOut();
+    if (g_ui.button_state.ui_button_reading.state == "off") {
+      $("#caption_3").fadeOut();
+    }
   });
 
   //--
@@ -389,7 +460,9 @@ $(document).ready(function() {
   });
 
   $("#ui_card4").mouseleave( function(e) {
-    $("#caption_4").fadeOut();
+    if (g_ui.button_state.ui_button_reading.state == "off") {
+      $("#caption_4").fadeOut();
+    }
   });
 
   //--
@@ -401,7 +474,9 @@ $(document).ready(function() {
   });
 
   $("#ui_card5").mouseleave( function(e) {
-    $("#caption_5").fadeOut();
+    if (g_ui.button_state.ui_button_reading.state == "off") {
+      $("#caption_5").fadeOut();
+    }
   });
 
   //--
@@ -412,7 +487,9 @@ $(document).ready(function() {
   });
 
   $("#ui_card6").mouseleave( function(e) {
-    $("#caption_6").fadeOut();
+    if (g_ui.button_state.ui_button_reading.state == "off") {
+      $("#caption_6").fadeOut();
+    }
   });
 
   //--
@@ -423,7 +500,9 @@ $(document).ready(function() {
   });
 
   $("#ui_card7").mouseleave( function(e) {
-    $("#caption_7").fadeOut();
+    if (g_ui.button_state.ui_button_reading.state == "off") {
+      $("#caption_7").fadeOut();
+    }
   });
 
   //--
@@ -434,7 +513,9 @@ $(document).ready(function() {
   });
 
   $("#ui_card8").mouseleave( function(e) {
-    $("#caption_8").fadeOut();
+    if (g_ui.button_state.ui_button_reading.state == "off") {
+      $("#caption_8").fadeOut();
+    }
   });
 
   //--
@@ -445,10 +526,158 @@ $(document).ready(function() {
   });
 
   $("#ui_card9").mouseleave( function(e) {
-    $("#caption_9").fadeOut();
+    if (g_ui.button_state.ui_button_reading.state == "off") {
+      $("#caption_9").fadeOut();
+    }
+  });
+
+  //---
+
+  for (var ii=0; ii<10; ii++) {
+    var ui_id = "ui_card" + ii.toString();
+    var cap_id = "caption_" + ii.toString();
+    caption_update(ui_id, g_tarot.reading[ii].sentence, cap_id, g_ui.caption_dxy[ui_id]);
+  }
+
+  //--
+
+  $("#ui_button_reading").mouseenter( function(e) {
+    var ele = document.getElementById("ui_button_reading");
+    if (g_ui.button_state.ui_button_reading.state == "off") {
+      ele.style.color = "#333";
+    }
+    else {
+      ele.style.color = "#fff";
+    }
+  });
+
+  $("#ui_button_reading").mouseleave( function(e) {
+    var ele = document.getElementById("ui_button_reading");
+    if (g_ui.button_state.ui_button_reading.state == "off") {
+      ele.style.color = "#777";
+    }
+    else {
+      ele.style.color = "#fff";
+    }
+  });
+
+
+  $("#ui_button_reading").click( function(e) {
+
+
+    // disable if all cards are being viewed
+    //
+    if (g_ui.button_state.ui_button_deck.state == "on") {
+      return;
+    }
+
+    if (g_ui.button_state.ui_button_reading.state == "off") {
+      g_ui.button_state.ui_button_reading.state = "on";
+      var ele = document.getElementById("ui_button_reading");
+      ele.style.backgroundColor = "#777";
+      ele.style.color = "#fff";
+
+      for (var ii=0; ii<10; ii++) {
+        var ui_id = "ui_card" + ii.toString();
+        var cap_id = "caption_" + ii.toString();
+        caption_update(ui_id, g_tarot.reading[ii].sentence, cap_id, g_ui.caption_dxy[ui_id]);
+        $("#caption_" + ii.toString()).fadeIn();
+      }
+
+    }
+    else {
+      g_ui.button_state.ui_button_reading.state = "off";
+      var ele = document.getElementById("ui_button_reading");
+      ele.style.backgroundColor = "transparent";
+      ele.style.color = "#333";
+
+      for (var ii=0; ii<10; ii++) {
+        $("#caption_" + ii.toString()).fadeOut();
+      }
+
+    }
+
+  });
+
+  //---
+
+  $("#ui_button_deck").mouseenter( function(e) {
+    var ele = document.getElementById("ui_button_deck");
+    if (g_ui.button_state.ui_button_deck.state == "off") {
+      ele.style.color = "#333";
+    }
+    else {
+      ele.style.color = "#fff";
+    }
+  });
+
+  $("#ui_button_deck").mouseleave( function(e) {
+    var ele = document.getElementById("ui_button_deck");
+    if (g_ui.button_state.ui_button_deck.state == "off") {
+      ele.style.color = "#777";
+    }
+    else {
+      ele.style.color = "#fff";
+    }
+  });
+
+  $("#ui_button_deck").click( function(e) {
+
+    var _ele_read = document.getElementById("ui_tarot_reading");
+    var _ele_deck = document.getElementById("ui_tarot_deck");
+
+    if (g_ui.button_state.ui_button_deck.state == "off") {
+      g_ui.button_state.ui_button_deck.state = "on";
+      var ele = document.getElementById("ui_button_deck");
+      ele.style.backgroundColor = "#777";
+      ele.style.color = "#fff";
+
+      _ele_read.style.display = "none";
+      _ele_deck.style.display = "block";
+
+      // disable reading...
+      //
+      g_ui.button_state.ui_button_reading.state = "off";
+      var ele = document.getElementById("ui_button_reading");
+      ele.style.backgroundColor = "transparent";
+      ele.style.color = "#333";
+
+      for (var ii=0; ii<10; ii++) {
+        $("#caption_" + ii.toString()).fadeOut();
+      }
+
+
+
+    }
+    else {
+      g_ui.button_state.ui_button_deck.state = "off";
+      var ele = document.getElementById("ui_button_deck");
+      ele.style.backgroundColor = "transparent";
+      ele.style.color = "#777";
+
+      _ele_read.style.display = "grid";
+      _ele_deck.style.display = "none";
+
+    }
+
+    console.log("deck");
+  });
+
+  //---
+
+  $("#ui_button_download").click( function(e) {
+    console.log("dl");
   });
 
   init();
 
 });
 
+window.onresize = function() {
+  g_ui.mobile_view = ( ($(window).width() < g_ui.mobile_width) ? true : false );
+  for (var ii=0; ii<10; ii++) {
+    var ui_id = "ui_card" + ii.toString();
+    var cap_id = "caption_" + ii.toString();
+    caption_update(ui_id, g_tarot.reading[ii].sentence, cap_id, g_ui.caption_dxy[ui_id]);
+  }
+}

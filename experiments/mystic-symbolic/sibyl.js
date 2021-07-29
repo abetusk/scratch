@@ -908,6 +908,18 @@ function _irnd(n) {
   return Math.floor(g_rng.double()*n);
 }
 
+function _srnd(m) {
+  m = ((typeof m === "undefined") ? 32 : m);
+  var _s = "";
+  var x = "abcdefghijklmnopqrstuvwxyzABDCEFGHIJKLMNOPQRSTUVWXYZ01234567890";
+  var n = x.length;
+  for (var ii=0; ii<m; ii++) {
+    _s += x[ _irnd(n) ];
+  }
+  return _s;
+
+}
+
 // _rnd()     : 0...1
 // _rnd(a)    : 0...a
 // -rnd(a,b)  : a...b
@@ -3311,8 +3323,9 @@ else {
       svg_extra_header += "<rect x=\"-" + w.toString() + "\" y=\"-" + h.toString() + "\" ";
       svg_extra_header += "width=\"" + (3*w).toString() + "\" height=\"" + (3*h).toString() + "\" fill=\"" + _bg + "\" data-is-background=\"true\">\n</rect>\n";
 
-      bg_svg_single = '<g id="__bg_single">\n' + bg_svg_single + '\n</g>';
       var first_bg = true;
+      var bg_id = "__bg_single_" + _srnd();
+      bg_svg_single = '<g id="' + bg_id + '">\n' + bg_svg_single + '\n</g>';
 
       for (var x_idx=0; x_idx <= _n; x_idx++) {
         for (var y_idx=0; y_idx <= _n; y_idx++) {
@@ -3333,7 +3346,7 @@ else {
             first_bg = false;
           }
           else {
-            bg_svg += '<use xlink:href="#__bg_single"/>\n';
+            bg_svg += '<use xlink:href="#' + bg_id + '"/>\n';
           }
 
 
