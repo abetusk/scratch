@@ -40,6 +40,14 @@ tbutton,
   margin-bottom: 1rem;
 }
 
+/* rounded corners for canvas contained therein */
+.canvas_container {
+  border-radius: 15px;
+  overflow: hidden;
+  width: 191.25px;
+  height:300px;
+}
+
 
 [class ^= "x"]{
   /* background-color: skyblue; */

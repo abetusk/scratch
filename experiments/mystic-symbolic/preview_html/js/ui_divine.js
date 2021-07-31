@@ -38,6 +38,18 @@ var g_ui = {
     "ui_button_deck" : { "state": "off" },
     "ui_button_download": { "state": "off" }
   },
+  "card_state" : [
+    { "ready": false },
+    { "ready": false },
+    { "ready": false },
+    { "ready": false },
+    { "ready": false },
+    { "ready": false },
+    { "ready": false },
+    { "ready": false },
+    { "ready": false },
+    { "ready": false }
+  ],
   "caption_dxy" : {
     "ui_card0" : [200,-150],
     "ui_card1" : [-180,250],
@@ -126,6 +138,51 @@ function _load(url, _cb) {
   xhr.send();
   return xhr;
 } 
+
+// SVG simple motion animations.
+// depends on gsap.
+//
+
+function motion_xy_r(uid, dx, dy, dt, pt) {
+  dx = ((typeof dx === "undefined") ? (2*144) : dx);
+  dy = ((typeof dy === "undefined") ? (2*126) : dy);
+  dt = ((typeof dt === "undefined") ? (10) : dt);
+  pt = ((typeof pt === "undefined") ? (5) : pt);
+  gsap.to(uid, {x:dx, ease:"power1.inOut", duration: dt, repeat:-1, yoyo:true });
+  gsap.to(uid, {y:dy, ease:"power1.inOut", duration: dt, repeat:-1, yoyo:true, delay: pt});
+}
+
+function motion_xy(uid, dx, dy, dt) {
+  dx = ((typeof dx === "undefined") ? (2*144) : dx);
+  dy = ((typeof dy === "undefined") ? (2*126) : dy);
+  dt = ((typeof dt === "undefined") ? (10) : dt);
+  gsap.to(uid, {x:dx,y:dy, ease:"linear", duration: dt, repeat:-1, yoyo:false });
+}
+
+function motion_rotate(uid, dt) {
+  dt = ((typeof dt === "undefined") ? (5) : dt);
+  //gsap.to(uid, {rotate:360, ease:"linear", duration:dt, repeat:-1, yoyo:false });
+  gsap.to(uid, {rotate:360, ease:"linear", duration:dt, repeat:-1, yoyo:false, transformOrigin:"50% 50%" });
+}
+
+function motion_float(uid, dy, dt) {
+  dy = ((typeof dy === "undefined") ? (50) : dy);
+  dt = ((typeof dt === "undefined") ? (2.5) : dt);
+  gsap.to(uid, {y: dy, ease:"power1.inOut", duration: dt, repeat:-1, yoyo:true });
+}
+
+function motion_leftright(uid, dx, dt) {
+  dx = ((typeof dx === "undefined") ? (50) : dx);
+  dt = ((typeof dt === "undefined") ? (2.5) : dt);
+  gsap.to(uid, {x: dx, ease:"power1.inOut", duration: dt, repeat:-1, yoyo:true });
+}
+
+function motion_pulsate(uid, ds, dt) {
+  ds = ((typeof ds === "undefined") ? (1.25) : ds);
+  dt = ((typeof dt === "undefined") ? (2) : dt);
+  gsap.to(uid, {scale: ds, ease:"power1.inOut", duration: dt, repeat:-1, yoyo:true, transformOrigin:"50% 50%" });
+}
+
 
 // n undefined or 0 -  capitalize every word except for 'of'
 // n > 0            -  capitalize n non 'of' words
@@ -293,28 +350,23 @@ function finit() {
     return;
   }
 
+  // hacky way to let the tarot cards load before turning on the reading
+  //
+  setTimeout( function() { document.getElementById("ui_button_reading").click() }, 1000 );
+
   var reading = tarot_reading_celtic_cross(g_tarot.data);
   g_tarot["reading"] = reading;
 
-  console.log(reading);
-
+  // load each of the SVG tarot cards
+  //
   for (var ii=0; ii<reading.length; ii++) {
-    console.log(">>", reading[ii].name, card_mapping[ reading[ii].index ] );
-
-    var _modifier = reading[ii].modifier;
-
+    //var _modifier = reading[ii].modifier;
     var ui_id = "ui_card" + ii.toString();
     _load("example_deck_svg/" + card_mapping[reading[ii].index],
         (function(_x,_tarot_data,_idx) {
           return function(d) {
             if (d.type == "loadend") {
               if (d.target.readyState == 4) {
-
-                /*
-                $(document).ready(function() {
-                  Tipped.create("#" + _x,  _tarot_data.sentence);
-                });
-                */
 
                 var par_ele = document.getElementById(_x);
                 par_ele.innerHTML = "";
@@ -343,7 +395,7 @@ function finit() {
                   //else { ele.style.transform = "rotate(180deg)"; }
                 }
 
-                console.log(">>> caption_update", _x, _tarot_data.sentence, "caption_" + _idx, g_ui.caption_dxy[_x]);
+                //console.log(">>> caption_update", _x, _tarot_data.sentence, "caption_" + _idx, g_ui.caption_dxy[_x]);
                 caption_update(_x, _tarot_data.sentence, "caption_" + _idx, g_ui.caption_dxy[_x]);
 
                 var _txt = document.createElement("p");
@@ -353,6 +405,20 @@ function finit() {
                 par_ele.appendChild(ele);
                 //par_ele.appendChild(_txt);
 
+                var bg_id = svg_txt.match(/ id=['"]background_creature_[^'"]*['"]/)[0].split(/['"]/)[1];
+                var fg_id = svg_txt.match(/ id=['"]creature_[^'"]*['"]/)[0].split(/['"]/)[1];
+
+                g_ui.card_state[_idx].ready = true;
+                g_ui.card_state[_idx]["bg_id"] = bg_id;
+                g_ui.card_state[_idx]["fg_id"] = fg_id;
+
+                // oof, very very slow
+                // also problems with floating minor arcana suit
+                //
+                if (_idx==0) {
+                  motion_xy_r("#" + bg_id);
+                  motion_float("#" + fg_id);
+                }
 
               }
             }
@@ -730,6 +796,7 @@ $(document).ready(function() {
   g_ui.mobile_view = ( ($(window).width() < g_ui.mobile_width) ? true : false );
 
   init();
+
 
 
 });

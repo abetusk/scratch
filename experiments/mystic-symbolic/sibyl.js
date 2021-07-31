@@ -43,8 +43,8 @@ var fs = require("fs");
 var getopt = require("posix-getopt");
 var parser, opt;
 
-var seed = rseed();
-var g_rng = new alea(seed);
+var SEED = rseed();
+var g_rng = new alea(SEED);
 
 var _VERSION = "0.1.9";
 
@@ -115,7 +115,7 @@ var sibyl_opt = {
   "line_width" : 4,
   "color_ring" : [],
   "output_sched" : false,
-  "seed" : seed,
+  "seed" : SEED,
 
   "use_mask": false,
 
@@ -271,6 +271,7 @@ while ((opt =  parser.getopt()) !== undefined) {
       break;
 
     case 'Z':
+      SEED = opt.optarg;
       sibyl_opt.seed = opt.optarg;
       g_rng = new alea(sibyl_opt.seed);
       break;
@@ -2413,6 +2414,12 @@ function rand_color(base_hue) {
 
   var bg2_hue = g_rng.double();
   var bg2_sat = _rnd(0.05, 0.2);
+
+  // this needs fixing
+  // there should be a 'dead zone' around the bg_val above (of 0.05 in each direction,
+  // say) where you can pick another value outside of that dead zone but restricted to
+  // some other window.
+  //
   var bg2_val = 0.5 + (_mod1(bg_val + _crnd([-1,1])*_rnd(0.1, 0.25))/2.0);
   if (bg_dark_opt) {
     bg2_val = (_mod1(2*bg_val + _crnd([-1,1])*_rnd(0.1, 0.25))/2.0);
@@ -2425,10 +2432,12 @@ function rand_color(base_hue) {
   var bg_rgb = HSVtoRGB(bg_hue,  bg_sat, bg_val);
   var bg2_rgb = HSVtoRGB(bg2_hue,  bg2_sat, bg2_val);
 
+  /*
   res.primary.hex = _rgb2hex(prim_rgb.r, prim_rgb.g, prim_rgb.b);
   res.secondary.hex = _rgb2hex(seco_rgb.r, seco_rgb.g, seco_rgb.b);
   res.background.hex = _rgb2hex(bg_rgb.r, bg_rgb.g, bg_rgb.b);
   res.background2.hex = _rgb2hex(bg2_rgb.r, bg2_rgb.g, bg2_rgb.b);
+  */
 
   res.primary.hex = _rgb2hex(prim_rgb.r, prim_rgb.g, prim_rgb.b);
   res.secondary.hex = _rgb2hex(seco_rgb.r, seco_rgb.g, seco_rgb.b);
@@ -3295,7 +3304,7 @@ else {
       bg_ctx.create_background_rect = false;
       //bg_ctx.create_background_rect = true;
 
-      bg_ctx.svg_id = "__background_creature";
+      bg_ctx.svg_id = "__background_creature_" + SEED;
 
       var bg_sched  = mystic_symbolic_dsl2sched( sibyl_opt.background_image, bg_ctx );
       var bg_svg_single = mystic_symbolic_sched(bg_ctx, bg_sched , bg_color, bg_color2, bg_color);
@@ -3358,7 +3367,7 @@ else {
     }
     else {
       bg_ctx.create_background_rect = true;
-      bg_ctx.svg_id = "__background_creature";
+      bg_ctx.svg_id = "__background_creature_" + SEED;
 
       var _x = sibyl_opt.background_dx;
       var _y = sibyl_opt.background_dy;
@@ -3389,7 +3398,7 @@ else {
 
   else {
 
-    fg_ctx.svg_id = "creature";
+    fg_ctx.svg_id = "creature_" + SEED;
 
     var creature_svg = mystic_symbolic_sched(fg_ctx, sched , primary_color, secondary_color, bg_color);
 
@@ -3411,12 +3420,11 @@ else {
 
       console.log(svg_extra_header);
 
-      console.log("\n<!-- xxx -->\n");
       console.log("\n<!-- BG_START -->\n");
       //console.log("<g id='background_pattern'>");
 
       //console.log("\n<g transform=''>\n");
-      console.log("<g id='background_creature'>");
+      console.log("<g id='background_creature_" + SEED + "'>");
       //console.log("<g transform=''>\n");
       console.log(bg_svg);
       //console.log("</g>\n");
@@ -3448,6 +3456,7 @@ else {
 }
 
 if (!sibyl_opt.output_sched) {
+  console.log("<!-- SEED:" + SEED, "-->");
   console.log("<!-- ", primary_color, secondary_color, bg_color, bg_color2,"-->");
   console.log("<!-- ", "\n  prim_hue = ", _rcolor.primary.hsv[0], ";\n  prim_sat =", _rcolor.primary.hsv[1], ";\n  prim_val =", _rcolor.primary.hsv[2], ";\n -->");
   console.log("<!-- ", "\n  seco_hue = ", _rcolor.secondary.hsv[0], ";\n  seco_sat =", _rcolor.secondary.hsv[1], ";\n  seco_val =", _rcolor.secondary.hsv[2], ";\n -->");

@@ -371,6 +371,8 @@ Where `1` is placed over `0` and `1` is positioned horizontally.
 TODO
 ---
 
+For deck generation:
+
 * figure out how to rotate 'skinny' minor suits (e.g. swords)
   - consider pointing swords completely down
 * cups under king/queen should be pointing up
@@ -378,6 +380,54 @@ TODO
 * filter out minor arcana cards that bump into the numerals
 * create description card
 * create qr code card (?)
+* fix background color value issues
+
+---
+
+* package `sibyl.js` so that it can be used as a library
+  - make sure it can generate the creature and background, potentially separately if necessary
+  - make sure we can manipulate the resulting SVG for formatting purposes
+  - figure out a way to separate the minor arcana suits from the creature as a layer on it's own
+* add `pixi.js` and replace the `ui_card` in the `divine.html` with canvases
+* investigate/implement converting SVG (from `sibyl.js`) to PNG in browser
+  - needs 3-4 layers
+    + background
+    + foreground creature
+    + text/numeral
+    + optional suit
+  - convert each layer to PNG
+  - animate each with pixi on each respective canvas
+  - create PNG for each card to view in deck
+* add export feature that will package up PNGs and SVGs to download
+* print custom deck
+* write blog post about custom printing
+* add info/about and credits
+
+#### references
+
+* [pixi tutorial](https://github.com/kittykatattack/learningPixi#size-and-scale)
+* [skeleton css](http://getskeleton.com/)
+* [canvg](https://github.com/canvg/canvg)
+
+Some ideas for names:
+
+* `Tarot Overflow`
+* `Generatarot`
+* `Hello Tarot`
+* `Lowbrow Tarot`
+* `Shallow Tarot`
+* `Callow Tarot`
+* `Hollow Tarot`
+* `As Above, So Below Tarot`
+* `Mandelbrot Tarot`
+* `Hallow Tarot`
+* `Low Tarot`
+* `Solo Tarot`
+* `Tomorrow Tarot`
+* `Harrowed Tarot`
+* `Zero Tarot`
+
+
 
 Credits
 ---
