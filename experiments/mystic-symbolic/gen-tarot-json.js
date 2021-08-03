@@ -24,6 +24,33 @@ var placeholder_svg = '<path fill="#ffffff" fill-rule="evenodd" stroke="none"' +
 'C 358.578 137.019 357.430 138.167 357.430 139.589 ' +
 'C 357.430 141.012 358.578 142.159 360.000 142.159 Z"/>';
 
+var _empty = 
+{ "name": "empty",
+	"bbox": { "x": { "min": 357.43, "max": 362.57 }, "y": { "min": 137.019, "max": 142.159 } },
+	"layers": [ { 
+		"tagName": "g",
+		"props": { "id": "minor_arcana_ace_0" },
+		"children": [ { 
+			"tagName": "g",
+			"props": { "id": "minor_arcana_ace_0" },
+			"children": [ { 
+				"tagName": "path",
+				"props": {
+					"fill": "none",
+					"fillRule": "evenodd",
+					"stroke": "none",
+					"d": "M 360.000 142.159 C 361.422 142.159 362.570 141.012 362.570 139.589 C 362.570 138.167 361.422 137.019 360.000 137.019 C 358.578 137.019 357.430 138.167 357.430 139.589 C 357.430 141.012 358.578 142.159 360.000 142.159 Z"
+				},
+				"children": []
+			} ]
+		} ]
+	} ],
+	"specs": { },
+	"meta": { "attach_to": [] }
+};
+
+ 
+
 function create_template() {
   var _data = {
     "name": "NAMEID",
@@ -1119,7 +1146,9 @@ function svg_tarot() {
 
 var minor_arcana_list = ["ace", "2", "3", "4", "5", "6", "7",  "8", "9", "10", "page", "knight", "queen", "king"];
 
-var tarot_minor_json = [];
+// initial 'empty' entry
+//
+var tarot_minor_json = [ _empty ];
 
 
 var pfx = "minor_arcana";

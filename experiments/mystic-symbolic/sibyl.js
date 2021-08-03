@@ -379,10 +379,13 @@ for (var ii=0; ii<sibyl_opt.exclude_fn.length; ii++) {
 // I got nervous about shallow vs. deep copy so
 // this is why thre are two copies.
 //
-var raw_json = fs.readFileSync(fn);
-
-var adata = JSON.parse(raw_json);
-var bg_data = JSON.parse(raw_json);
+//var raw_json = fs.readFileSync(fn);
+//var adata = JSON.parse(raw_json);
+//var bg_data = JSON.parse(raw_json);
+var _vocab0 = require("./mystic_symbolic_vocabulary.js");
+var _vocab1 = require("./mystic_symbolic_vocabulary.js");
+var adata = _vocab0.vocabulary;
+var bg_data = _vocab1.vocabulary;
 
 // Read additional JSON SVG files.
 // The additional JSON files are for ease of use, rather
