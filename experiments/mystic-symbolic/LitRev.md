@@ -19,5 +19,5 @@ Notable Mentions
 | Link |  Description | Copyright  |
 |---|---|---|
 | ["Tarot" search on Dribble](https://dribbble.com/tags/tarot) | Though pretty general (just a search on Dribble) many artists have a minimal style to their tarot concepts | mostly/all proprietary |
-
+| [Tarot collection by emilegraphics](https://thenounproject.com/emilegraphics/collection/tarot/) | noun project tarot major arcana |
 
