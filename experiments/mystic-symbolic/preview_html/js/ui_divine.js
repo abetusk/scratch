@@ -80,7 +80,8 @@ var g_data = {
   },
 
   "minor_arcana" : [ "ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "page", "knight", "queen", "king" ],
-  "minor_arcana_suit" : ["pentacle", "key", "sword", "cup"],
+  //"minor_arcana_suit" : ["pentacle", "key", "sword", "cup"],
+  "minor_arcana_suit" : ["key", "cup", "sword", "pentacle"],
 
   "major_arcana" : [
     { "name": "THE FOOL",       "symbol":"fool" ,       "exclude":true,   "scale": 0.95, "d":[0,-40]},
@@ -190,6 +191,12 @@ function postprocess_g_data() {
       g_data.exclude_all.push(g_data.major_arcana[ii].symbol);
     }
   }
+
+  for (var ii=0; ii<sibyl.tarot_template.length; ii++) {
+    g_data.exclude_all.push(sibyl.tarot_template[ii].name);
+  }
+
+
   g_data.exclude_all.push("knight");
   g_data.exclude_all.push("bob");
   g_data.exclude_all.push("rainbow_half");
@@ -317,18 +324,6 @@ function _tarot_json_cb(x) {
     if (x.target.readyState == 4) {
       g_tarot["data"] = JSON.parse(x.target.response);
       g_tarot.ready = true;
-
-      /*
-      for (var ii=0; ii<10; ii++) {
-        setTimeout( (function(_x,_y) {
-          return function() {
-            //init_pixi_layered_card("ui_canvas_card" + ii.toString(), g_data.tarot_sched[ii]);
-            init_pixi_layered_card(_x,_y);
-          }
-        })("ui_canvas_card" + ii.toString(), g_data.tarot_sched[ii]), 0);
-      }
-      */
-
     }
   }
 }
