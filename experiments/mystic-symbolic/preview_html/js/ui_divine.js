@@ -142,7 +142,21 @@ var g_data = {
   "svg_text" : { },
   "png_text" : {},
 
-  "png_card" : [
+  "png_card" : {
+    "ui_canvas_card0" : { "n":-1, "fg":undefined, "bg":undefined, "text":undefined, "suit":undefined },
+    "ui_canvas_card1" : { "n":-1, "fg":undefined, "bg":undefined, "text":undefined, "suit":undefined },
+    "ui_canvas_card2" : { "n":-1, "fg":undefined, "bg":undefined, "text":undefined, "suit":undefined },
+    "ui_canvas_card3" : { "n":-1, "fg":undefined, "bg":undefined, "text":undefined, "suit":undefined },
+    "ui_canvas_card4" : { "n":-1, "fg":undefined, "bg":undefined, "text":undefined, "suit":undefined },
+    "ui_canvas_card5" : { "n":-1, "fg":undefined, "bg":undefined, "text":undefined, "suit":undefined },
+    "ui_canvas_card6" : { "n":-1, "fg":undefined, "bg":undefined, "text":undefined, "suit":undefined },
+    "ui_canvas_card7" : { "n":-1, "fg":undefined, "bg":undefined, "text":undefined, "suit":undefined },
+    "ui_canvas_card8" : { "n":-1, "fg":undefined, "bg":undefined, "text":undefined, "suit":undefined },
+    "ui_canvas_card9" : { "n":-1, "fg":undefined, "bg":undefined, "text":undefined, "suit":undefined },
+  },
+
+
+  "_png_card" : [
     { "n":-1, "fg":undefined, "bg":undefined, "text":undefined, "suit":undefined },
     { "n":-1, "fg":undefined, "bg":undefined, "text":undefined, "suit":undefined },
     { "n":-1, "fg":undefined, "bg":undefined, "text":undefined, "suit":undefined },
@@ -738,6 +752,14 @@ function init_pixi_layered_card(canvas_id, tarot_data) {
 
   var major_arcana = g_data.major_arcana;
 
+  var name = "";
+  if (tarot_data.family == "major") {
+    name = tarot_data.designation;
+  }
+  else {
+    name = tarot_data.designation.toUpperCase() + " of " + tarot_data.family.toUpperCase() + "S";
+  }
+
   // 317/720*2
   //
   var _scale = 0.88;
@@ -887,12 +909,14 @@ function init_pixi_layered_card(canvas_id, tarot_data) {
   bg_hdr += svg_extra_header;
   bg_svg_str = bg_hdr + bg_svg_str + "</svg>";
 
-  g_data.png_card[0].n = 2 + (has_suit?1:0);
+  g_data.png_card[canvas_id].n = 3 + (has_suit?1:0);
 
+  /*
   g_data.png_card[0].text = undefined;
   if (has_text) {
     g_data.png_card[0].text = g_data.png_text["ACE of KEYS"];
   }
+  */
 
   /*
   var _cid_tok = canvas_id.split("_");
@@ -905,38 +929,49 @@ function init_pixi_layered_card(canvas_id, tarot_data) {
   var _cid_fg = canvas_id + "_fg";
   var _cid_su = canvas_id + "_suit";
   var _cid_bg = canvas_id + "_bg";
+  var _cid_txt = canvas_id + "_text";
   var _cid = canvas_id;
 
   //render_svg_to_png("ui_canvas_card5_fg", creature_svg_str).then( _png => {
   render_svg_to_png(_cid_fg, creature_svg_str).then( _png => {
-    g_data.png_card[0].n--;
-    g_data.png_card[0].fg = _png;
-    if (g_data.png_card[0].n==0) { 
+    g_data.png_card[_cid].n--;
+    g_data.png_card[_cid].fg = _png;
+    if (g_data.png_card[_cid].n==0) { 
       //start_card_canvas("ui_canvas_card5", g_data.png_card[0].bg, g_data.png_card[0].fg, g_data.png_card[0].suit, g_data.png_card[0].text);
 
-      start_card_canvas(_cid, g_data.png_card[0].bg, g_data.png_card[0].fg, g_data.png_card[0].suit, g_data.png_card[0].text);
+      start_card_canvas(_cid, g_data.png_card[_cid].bg, g_data.png_card[_cid].fg, g_data.png_card[_cid].suit, g_data.png_card[_cid].text);
     }
   } );
 
   if (has_suit) {
     //render_svg_to_png("ui_canvas_card5_suit", suite_svg_str).then( _png => {
     render_svg_to_png(_cid_su, suite_svg_str).then( _png => {
-      g_data.png_card[0].n--;
-      g_data.png_card[0].suit = _png;
-      if (g_data.png_card[0].n==0) { 
+      g_data.png_card[_cid].n--;
+      g_data.png_card[_cid].suit = _png;
+      if (g_data.png_card[_cid].n==0) { 
         //start_card_canvas("ui_canvas_card5", g_data.png_card[0].bg, g_data.png_card[0].fg, g_data.png_card[0].suit, g_data.png_card[0].text);
-        start_card_canvas(_cid, g_data.png_card[0].bg, g_data.png_card[0].fg, g_data.png_card[0].suit, g_data.png_card[0].text);
+        start_card_canvas(_cid, g_data.png_card[_cid].bg, g_data.png_card[_cid].fg, g_data.png_card[_cid].suit, g_data.png_card[_cid].text);
       }
     } );
   }
 
   //render_svg_to_png("ui_canvas_card5_bg", bg_svg_str).then( _png => {
   render_svg_to_png(_cid_bg, bg_svg_str).then( _png => {
-    g_data.png_card[0].n--;
-    g_data.png_card[0].bg = _png;
-    if (g_data.png_card[0].n==0) { 
+    g_data.png_card[_cid].n--;
+    g_data.png_card[_cid].bg = _png;
+    if (g_data.png_card[_cid].n==0) { 
       //start_card_canvas("ui_canvas_card5", g_data.png_card[0].bg, g_data.png_card[0].fg, g_data.png_card[0].suit, g_data.png_card[0].text);
-      start_card_canvas(_cid, g_data.png_card[0].bg, g_data.png_card[0].fg, g_data.png_card[0].suit, g_data.png_card[0].text);
+      start_card_canvas(_cid, g_data.png_card[_cid].bg, g_data.png_card[_cid].fg, g_data.png_card[_cid].suit, g_data.png_card[_cid].text);
+    }
+  } );
+
+  var text_svg_str = g_data.svg_text[name];
+  console.log("...", text_svg_str);
+  render_svg_to_png(_cid_txt, text_svg_str).then( _png => {
+    g_data.png_card[_cid].n--;
+    g_data.png_card[_cid].text = _png;
+    if (g_data.png_card[_cid].n==0) { 
+      start_card_canvas(_cid, g_data.png_card[_cid].bg, g_data.png_card[_cid].fg, g_data.png_card[_cid].suit, g_data.png_card[_cid].text);
     }
   } );
 
@@ -1077,7 +1112,7 @@ function realize_tarot_sched(_seed, ctx) {
         "fg": {},
         "bg": {},
         "colors":colors[suit],
-        "family":"suit",
+        "family": suit,
         "designation": minor_arcana[card_idx],
         "family_idx":card_idx,
         "card_idx":card_num
@@ -1304,8 +1339,6 @@ function caption_update(ui_id, txt, cap_name, dxy) {
   var captxt = document.getElementById(cap_name + "_text");
   captxt.innerHTML = txt;
 
-  console.log(">>>", ui_id );
-
   var ele = document.getElementById(ui_id);
   var domrect = ele.getBoundingClientRect();
 
@@ -1323,7 +1356,7 @@ function caption_update(ui_id, txt, cap_name, dxy) {
 
 }
 
-async function init_svg_text() {
+function init_svg_text() {
 
   var svg_header = '<svg version="1.1"' +
     ' id="Frame_0" xmlns="http://www.w3.org/2000/svg"' +
@@ -1402,22 +1435,28 @@ async function init_svg_text() {
     var name = g_data.major_arcana[ma_idx].name;
 
     g_data.svg_text[name] = svg_header;
-    g_data.svg_text[name] += txt_ele_numeral.replace('<!--::TEXT::-->', g_data.numeral[num_idx]);
+    g_data.svg_text[name] += txt_ele_numeral.replace('<!--::TEXT::-->', g_data.numeral[ma_idx]);
     g_data.svg_text[name] += txt_ele_name.replace('<!--::TEXT::-->', name);
     g_data.svg_text[name] += "</svg>";
 
   }
 
-  var canvas_txt = document.getElementById("ui_backbuffer_text_canvas");
-  var gfx_ctx = canvas_txt.getContext('2d');
+  return;
+
+  /*
   var v;
   for (var name in g_data.svg_text) {
+    var canvas_txt = document.getElementById("ui_backbuffer_text_canvas");
+    var gfx_ctx = canvas_txt.getContext('2d');
     v = await canvg.Canvg.fromString(gfx_ctx, g_data.svg_text[name]);
     await v.render();
+    //v = await canvg.Canvg.fromString(gfx_ctx, g_data.svg_text[name]);
+    //await v.render();
     g_data.png_text[name] = canvas_txt.toDataURL();
 
     //console.log( name, g_data.png_text[name] );
   }
+  */
 
   return;
 
