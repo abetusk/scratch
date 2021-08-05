@@ -709,16 +709,6 @@ function init_pixi_layered_card(canvas_id) {
       start_card_canvas("ui_canvas_card5", g_data.png_card[0].bg, g_data.png_card[0].fg, g_data.png_card[0].suit, g_data.png_card[0].text);
     }
   } );
-  //render_svg_to_png(canvas_id, svg_str).then( _png => { g_data.png_card[0].n--; g_data.png_card[0].fg = _png; } );
-
-  return;
-
-  setTimeout(function() {
-    var fg_png = document.getElementById("ui_canvas0").toDataURL();
-    var su_png = document.getElementById("ui_canvas1").toDataURL();
-    var bg_png = document.getElementById("ui_canvas2").toDataURL();
-    init_card_canvas("ui_canvas_x", bg_png, fg_png, su_png, "img/st.png");
-  }, 0);
 
 }
 
@@ -726,6 +716,9 @@ function init_pixi_layered_card(canvas_id) {
 //
 function init() {
   _load("data/tarot_interpretations.json", _tarot_json_cb);
+
+  sibyl.reseed("x");
+  console.log(">>>", sibyl.rand_color());
 
   //DEBUG
   //setTimeout(finit, 1000);
