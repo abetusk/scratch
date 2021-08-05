@@ -6,7 +6,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <script type='text/javascript' src='js/jquery.js'></script>
-  <script type='text/javascript' src='js/gsap.js'></script>
+  <!-- <script type='text/javascript' src='js/gsap.js'></script> -->
+
+  <script type='text/javascript' src='js/browser-sibyl.js'></script>
+  <script type='text/javascript' src='js/pixi.js'></script>
+  <script type='text/javascript' src='js/canvg.js'></script>
+
 
   <link rel='stylesheet' href='css/skeleton.css'>
   <link rel='stylesheet' href='css/custom.css'>
@@ -32,6 +37,13 @@
 </head>
 
   <body>
+
+    <div id='testing'></div>
+
+    <canvas id="ui_backbuffer_text_canvas" style='display:none;' width='190' height='317'></canvas>
+    <canvas id="ui_backbuffer_fg_canvas" style='display:none;' width='190' height='317'></canvas>
+    <canvas id="ui_backbuffer_bg_canvas" style='display:none;' width='300' height='500'></canvas>
+
     <div id='caption_0_m' style='position:absolute; display:none;'> <div id='caption_0_m_text' style='width:150px; margin-left:10px; color:#777;'> </div> </div>
     <div id='caption_1_m' style='position:absolute; display:none;'> <div id='caption_1_m_text' style='width:150px; margin-left:10px; color:#777;'> </div> </div>
     <div id='caption_2_m' style='position:absolute; display:none;'> <div id='caption_2_m_text' style='width:150px; margin-left:10px; color:#777;'> </div> </div>
@@ -202,7 +214,19 @@
         <div id='ui_card2' class='x2'><a href="example_deck_svg/78-back.svg"><img class="u-max-full-width" src="example_deck_svg/78-back.svg"></a> </div>
         <div id='ui_card3' class='x3'><a href="example_deck_svg/78-back.svg"><img class="u-max-full-width" src="example_deck_svg/78-back.svg"></a></div>
         <div id='ui_card4' class='x4'><a href="example_deck_svg/78-back.svg"><img class="u-max-full-width" src="example_deck_svg/78-back.svg"></a></div>
-        <div id='ui_card5' class='x5'><a href="example_deck_svg/78-back.svg"><img class="u-max-full-width" src="example_deck_svg/78-back.svg"></a></div>
+
+
+        <!-- <div id='ui_card5' class='x5'><a href="example_deck_svg/78-back.svg"><img class="u-max-full-width" src="example_deck_svg/78-back.svg"></a></div> -->
+        <div id='ui_card5' class='x5'>
+          <!-- <a href="example_deck_svg/78-back.svg"><img class="u-max-full-width" src="example_deck_svg/78-back.svg"></a> -->
+          <div class='canvas_container'>
+            <canvas id='ui_canvas_card5' width='190' height='317'></canvas>
+          </div>
+          <canvas id='ui_canvas_card5_fg' width='190' height='317' style='display:none;'></canvas>
+          <canvas id='ui_canvas_card5_suit' width='190' height='317' style='display:none;'></canvas>
+          <canvas id='ui_canvas_card5_text' width='190' height='317' style='display:none;'></canvas>
+          <canvas id='ui_canvas_card5_bg' width='500' height='500' style='display:none;'></canvas>
+        </div>
 
         <div id='ui_card6' class='x6'>
           <a href="example_deck_svg/78-back.svg">

@@ -10,6 +10,9 @@
  */
 
 
+var CARD_WIDTH = 317;
+var CARD_HEIGHT = 190;
+
 
 // global data structure to hold tarot interpretations (loaded from
 // `tarot_interpretations.json`)
@@ -64,6 +67,101 @@ var g_ui = {
   }
 };
 
+var g_data = {
+
+  "numeral" : {
+    "0": "0", "1": "I", "2": "II", "3": "III", "4": "IV",
+    "5": "V", "6": "VI", "7": "VII", "8": "VIII", "9": "IX", "10": "X",
+    "11": "XI", "12": "XII", "13": "XIII", "14": "XIV", "15": "XV",
+    "16": "XVI", "17": "XVII", "18": "XVIII", "19": "XIX", "20": "XX",
+    "21": "XXI", "22": "XXII", "23": "XXIII", "24": "XXIV"
+  },
+
+  "minor_arcana" : [ "ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "page", "knight", "queen", "king" ],
+  "minor_arcana_suit" : ["pentacle", "key", "sword", "cup"],
+
+  "major_arcana" : [
+    { "name": "THE FOOL",       "symbol":"fool" ,       "exclude":true,   "scale": 0.95, "d":[0,-40]},
+    { "name": "THE MAGICIAN",   "symbol":"magician",    "exclude":true,   "scale": 0.95},
+    { "name": "THE PRIESTESS",  "symbol":"priestess",   "exclude":true,   "scale": 0.85},
+    { "name":"THE EMPRESS",     "symbol":"empress",     "exclude":true,   "scale": 0.95},
+    { "name":"THE EMPEROR",     "symbol":"emperor" ,    "exclude":true,   "scale": 0.85},
+    { "name":"THE HIEROPHANT",  "symbol":"hierophant",  "exclude":true,   "scale": 0.85},
+    { "name":"THE LOVERS",      "symbol":"lovers_nestbox" ,           "exclude":false,  "scale": 0.9},
+    { "name":"THE CHARIOT",     "symbol":"chariot",     "exclude":true,   "scale": 0.75},
+    { "name":"STRENGTH",        "symbol":"strength",    "exclude":true,   "scale": 0.9},
+    { "name":"THE HERMIT",      "symbol":"hermit",      "exclude":true,   "scale": 0.9},
+    { "name":"WHEEL of FORTUNE","symbol":"wheel_of_fortune",  "exclude":true, "scale": 0.75, "d":[0,-20]},
+    { "name":"JUSTICE",         "symbol":"scales" ,     "exclude":false,  "scale":0.85, "d":[0,-40]},
+    { "name":"THE HANGED MAN",  "symbol":"sycophant",   "exclude":true,   "scale": 0.9},
+    { "name":"DEATH",           "symbol":"death",       "exclude":true,   "scale": 0.9, "d":[0,-20]},
+    { "name":"TEMPERANCE",      "symbol":"waterworks",  "exclude":true,   "scale": 0.75, "d":[0,-40]},
+    //{ "name":"THE DEVIL",       "symbol":"devil",       "exclude":true,   "scale": 0.75},
+    { "name":"THE DEVIL",       "symbol":"goat_head",       "exclude":true,   "scale": 0.95, "d":[0,-40]},
+    { "name":"THE TOWER",       "symbol":"castle_tower","exclude":true,   "scale": 0.9, "d":[0,-20]},
+    { "name":"THE STAR",        "symbol":"starburst",   "exclude":true,   "scale": 0.75},
+    { "name":"THE MOON",        "symbol":"moon",        "exclude":true,   "scale": 0.75},
+    { "name":"THE SUN",         "symbol":"sun",         "exclude":true,   "scale": 0.75},
+    { "name":"JUDGEMENT",       "symbol":"trumpet",     "exclude":true,   "scale": 0.9, "d" : [-50, -50] },
+    { "name":"THE WORLD",       "symbol":"globe",       "exlcude":false,  "scale": 0.75, "d":[0,-40]}
+  ],
+
+	"ace_choice" : [
+		"window", "door", "wings_pair", "ring", "lotus",
+		"hands_giving", "hands_pair", "hand_side", "hand_open_3_4",
+		"hand_claddagh", "flower_8petal", "cloud", "circle",
+		"scroll_double", "table", "chair", "box", "book_open", "arms_strong"
+	],
+
+  "royalty_crown_choice" : [ "crown", "crown_5pt", "crown_5pt2", "crown_hierophant", "crown_ornate" ],
+  "royalty_sceptor_choice" : [ "ankh_emperor", "cross_hierophant" ],
+
+  "royalty_choice" : [
+    "bird", "bitey_half", "cat", "cow_head",
+    "dog", "eagle_shield", "egg",
+    "fish", "goat",
+    //"goat_head",
+    "horse",
+    "lamb_head", "oroboros", "pear",
+    "skeleton", "virus"
+  ],
+
+
+  "back_creature_choice" : [
+    "branch", "branch_curly", "bubbles", "cloud", "clouds", "eye",
+    "eye_eyelashes", "eye_starburst", "eye_up", "eye_up_starburst", "eye_up_starburst_2", "eye_vertical",
+    "eyeball", "flower_jacobean_smaller", "hourglass", "infinity", "lotus", "pills",
+    "rain", "tree_rooted", "wave", "teardrop"
+  ],
+
+  "svg_text" : { },
+  "png_text" : {},
+
+  "png_card" : [
+    { "n":-1, "fg":undefined, "bg":undefined, "text":undefined, "suit":undefined },
+    { "n":-1, "fg":undefined, "bg":undefined, "text":undefined, "suit":undefined },
+    { "n":-1, "fg":undefined, "bg":undefined, "text":undefined, "suit":undefined },
+    { "n":-1, "fg":undefined, "bg":undefined, "text":undefined, "suit":undefined },
+    { "n":-1, "fg":undefined, "bg":undefined, "text":undefined, "suit":undefined },
+    { "n":-1, "fg":undefined, "bg":undefined, "text":undefined, "suit":undefined },
+    { "n":-1, "fg":undefined, "bg":undefined, "text":undefined, "suit":undefined },
+    { "n":-1, "fg":undefined, "bg":undefined, "text":undefined, "suit":undefined },
+    { "n":-1, "fg":undefined, "bg":undefined, "text":undefined, "suit":undefined },
+    { "n":-1, "fg":undefined, "bg":undefined, "text":undefined, "suit":undefined }
+  ],
+
+  "rnd" : []
+
+
+};
+
+for (var ii=0; ii<10; ii++) {
+  g_data.rnd.push( Math.random()*3/4 + 0.25 );
+  g_data.rnd.push( Math.random()/2 + 0.5 );
+  g_data.rnd.push( Math.random()/2 + 0.5 );
+}
+
+
 // index in tarot_interpretations maps to a local SVG file
 //
 var card_mapping = [
@@ -92,6 +190,7 @@ var card_mapping = [
 
   "78-back.svg"
 ];
+
 
 var g_rng = Math.random;
 
@@ -143,6 +242,7 @@ function _load(url, _cb) {
 // depends on gsap.
 //
 
+/*
 function motion_xy_r(uid, dx, dy, dt, pt) {
   dx = ((typeof dx === "undefined") ? (2*144) : dx);
   dy = ((typeof dy === "undefined") ? (2*126) : dy);
@@ -182,6 +282,7 @@ function motion_pulsate(uid, ds, dt) {
   dt = ((typeof dt === "undefined") ? (2) : dt);
   gsap.to(uid, {scale: ds, ease:"power1.inOut", duration: dt, repeat:-1, yoyo:true, transformOrigin:"50% 50%" });
 }
+*/
 
 
 // n undefined or 0 -  capitalize every word except for 'of'
@@ -416,8 +517,8 @@ function finit() {
                 // also problems with floating minor arcana suit
                 //
                 if (_idx==0) {
-                  motion_xy_r("#" + bg_id);
-                  motion_float("#" + fg_id);
+                  //motion_xy_r("#" + bg_id);
+                  //motion_float("#" + fg_id);
                 }
 
               }
@@ -428,11 +529,214 @@ function finit() {
   }
 }
 
+
+// pixi_canvas_id - the text id of the canvas to use
+// _img_bg        - required background image (will move)
+// _img_fg        - required foreground image (will float)
+// _img_suit      - optional suite data (static)
+// _img_text      - optional text data (static)
+//
+function start_card_canvas(pixi_canvas_id, _img_bg, _img_fg, _img_suit, _img_text) {
+  var bg_s = 1440;
+
+  var w = 190, h = 317;
+  const app = new PIXI.Application({ antialias: true, width: w, height: h, view: document.getElementById(pixi_canvas_id)  });
+
+  var _scale = h/720.0;
+
+  for (var ii=0; ii<10; ii++) {
+    g_data.rnd.push( Math.random()*3/4 + 0.25 );
+    g_data.rnd.push( Math.random()/2 + 0.5 );
+    g_data.rnd.push( Math.random()/2 + 0.5 );
+  }
+
+  app.stage.interactive = true;
+
+  var bg = PIXI.Sprite.from(_img_bg);
+
+  bg.anchor.set(0.5);
+
+  bg.x = app.screen.width / 2;
+  bg.y = app.screen.height / 2;
+
+  bg.x = w/2;
+  bg.y = h/4;
+
+  app.stage.addChild(bg);
+
+  var container = new PIXI.Container();
+  container.x = app.screen.width / 2;
+  container.y = app.screen.height / 2;
+
+  var fg = PIXI.Sprite.from(_img_fg);
+  fg.anchor.set(0.5);
+
+  container.addChild(fg);
+
+  if (typeof _img_suit !== "undefined") {
+    var st = PIXI.Sprite.from(_img_suit);
+    st.anchor.set(0.5);
+    container.addChild(st);
+  }
+
+  if (typeof _img_text !== "undefined") {
+    var txt = PIXI.Sprite.from(_img_text);
+    txt.anchor.set(0.5);
+    container.addChild(txt);
+  }
+
+  app.stage.addChild(container);
+
+  g_data["app"] = app;
+  g_data["bg"] = bg;
+  g_data["fg"] = fg;
+  g_data["st"] = st;
+
+  let count = 0;
+  app.ticker.add( (function(_freq0, _freq1, _freq2) {
+    return function() {
+      var f = _freq0, fx = _freq1, fy = _freq2;
+      fg.y = Math.sin(f*count)*10;
+      count += 0.025;
+      bg.x = Math.sin(fx*count/2 + (Math.PI/21.0) )*20;
+      bg.y = 100+Math.sin(fy*count/2 + (Math.PI/21.0) + (Math.PI/4.0) )*20;
+    };
+  })(g_data.rnd[0], g_data.rnd[1], g_data.rnd[2]));
+
+}
+
+async function render_svg_to_png(canvas_id, svg_str) {
+  var canvas = document.getElementById(canvas_id);
+  var gfx_ctx = canvas.getContext('2d');
+  var v = await canvg.Canvg.fromString(gfx_ctx, svg_str);
+  await v.render();
+  var png = canvas.toDataURL();
+  return png;
+}
+
+function init_pixi_layered_card(canvas_id) {
+  var creature_sched = { "base": "minor_arcana_2_0", "attach":{"nesting":[ {"base":"empty" }, {"base":"empty"},{ "base":"goat" }]}};
+  var suite_sched = { "base": "minor_arcana_2_0", "attach":{"nesting":[ {"base":"pentacle" }, {"base":"pentacle"},{ "base":"empty" }]}};
+  var background_sched = { "base": "cloud", "attach":{"nesting":[{"base":"skull"}]}};
+
+  var seed = '123x';
+
+  var fg_ctx = sibyl.fg_ctx;
+  var bg_ctx = sibyl.bg_ctx;
+
+  fg_ctx.global_scale = 0.88;
+
+  fg_ctx.create_background_rect = false;
+  var creature_svg_str  = sibyl.mystic_symbolic_sched(fg_ctx, creature_sched);
+  var suite_svg_str = sibyl.mystic_symbolic_sched(fg_ctx, suite_sched);
+
+  var bg_id = "bg_ok1234";
+  bg_ctx.svg_id = "__background_creature_" + seed;
+  bg_ctx.create_background_rect = false;
+  bg_ctx.create_svg_header = false;
+  bg_ctx.scale = 0.2;
+  bg_ctx.global_scale = 0.5;
+
+  var bg_svg_str_single = '<g id="' + bg_id + '">\n' + sibyl.mystic_symbolic_sched(bg_ctx, background_sched) + '\n</g>';
+
+  var _bg = "#777";
+  var svg_extra_header = "";
+  var w = bg_ctx.svg_width;
+  var h = bg_ctx.svg_height;
+
+  var first_bg = true;
+  svg_extra_header += "<rect x=\"-" + w.toString() +
+    "\" y=\"-" + h.toString() + "\" " +
+    "width=\"" + (3*w).toString() +
+    "\" height=\"" + (3*h).toString() +
+    "\" fill=\"" + _bg +
+    "\" data-is-background=\"true\">\n</rect>\n";
+
+  var _n_x = 8;
+  var _n_y = 11;
+  var dx = 175*bg_ctx.global_scale;
+  var dy = 100*bg_ctx.global_scale;
+  var bg_svg_str;
+  for (var x_idx=0; x_idx<_n_x; x_idx++) {
+    for (var y_idx=0; y_idx<_n_y; y_idx++) {
+      var _x = Math.floor( x_idx - (_n_x/2) )*dx ;
+      var _y = Math.floor( y_idx - (_n_y/2) )*dy ;
+
+      if ((y_idx%2)==1) { _x += dx/2; }
+
+      bg_svg_str += "<g transform=\"";
+      bg_svg_str += " translate(" + (-_x).toString() + " " + (-_y).toString() + ")";
+      bg_svg_str += "\">";
+
+      if (first_bg) {
+        bg_svg_str += bg_svg_str_single;
+        first_bg = false;
+      }
+      else {
+        bg_svg_str += '<use xlink:href="#' + bg_id + '"/>\n';
+      }
+
+      bg_svg_str  += "</g>";
+    }
+  }
+
+  var bg_hdr = '<svg version="1.1" id="bg_frame" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="500px" height="500px">';
+  bg_svg_str = bg_hdr + bg_svg_str + "</svg>";
+
+  g_data.png_card[0].n = 3;
+  g_data.png_card[0].text = g_data.png_text["ACE of KEYS"];
+
+  render_svg_to_png("ui_canvas_card5_fg", creature_svg_str).then( _png => {
+    g_data.png_card[0].n--;
+    g_data.png_card[0].fg = _png;
+    if (g_data.png_card[0].n==0) { 
+      start_card_canvas("ui_canvas_card5", g_data.png_card[0].bg, g_data.png_card[0].fg, g_data.png_card[0].suit, g_data.png_card[0].text);
+    }
+  } );
+
+  render_svg_to_png("ui_canvas_card5_suit", suite_svg_str).then( _png => {
+    g_data.png_card[0].n--;
+    g_data.png_card[0].suit = _png;
+    if (g_data.png_card[0].n==0) { 
+      start_card_canvas("ui_canvas_card5", g_data.png_card[0].bg, g_data.png_card[0].fg, g_data.png_card[0].suit, g_data.png_card[0].text);
+    }
+  } );
+
+  render_svg_to_png("ui_canvas_card5_bg", bg_svg_str).then( _png => {
+    g_data.png_card[0].n--;
+    g_data.png_card[0].bg = _png;
+    if (g_data.png_card[0].n==0) { 
+      start_card_canvas("ui_canvas_card5", g_data.png_card[0].bg, g_data.png_card[0].fg, g_data.png_card[0].suit, g_data.png_card[0].text);
+    }
+  } );
+  //render_svg_to_png(canvas_id, svg_str).then( _png => { g_data.png_card[0].n--; g_data.png_card[0].fg = _png; } );
+
+  return;
+
+  setTimeout(function() {
+    var fg_png = document.getElementById("ui_canvas0").toDataURL();
+    var su_png = document.getElementById("ui_canvas1").toDataURL();
+    var bg_png = document.getElementById("ui_canvas2").toDataURL();
+    init_card_canvas("ui_canvas_x", bg_png, fg_png, su_png, "img/st.png");
+  }, 0);
+
+}
+
 // call on initial page load
 //
 function init() {
   _load("data/tarot_interpretations.json", _tarot_json_cb);
-  setTimeout(finit, 1000);
+
+  //DEBUG
+  //setTimeout(finit, 1000);
+
+  //init_svg_text().then( _png => { console.log(_png); } );
+  init_svg_text();
+
+  return;
+
+  //...
+  init_card_canvas();
 }
 
 function _bbox(ele) {
@@ -473,6 +777,121 @@ function caption_update(ui_id, txt, cap_name, dxy) {
   }
 
 }
+
+async function init_svg_text() {
+
+  var svg_header = '<svg version="1.1"' +
+    ' id="Frame_0" xmlns="http://www.w3.org/2000/svg"' +
+    ' xmlns:xlink="http://www.w3.org/1999/xlink"' +
+    ' width="190px"' +
+    ' height="317px">'
+
+  var txt_ele_numeral = '<text x="0" y="0" id="_text_numeral">' +
+    '<tspan' +
+    '  id="_tspan_numeral"' +
+    //'  x="216"' +
+    '  x="95"' +
+    //'  y="64"' +
+    '  y="28"' +
+    ' text-anchor="middle"' +
+    '  style="fill:rgb(50,50,50);font-style:normal;font-variant:normal;font-weight:bold;' +
+      //'font-stretch:normal;font-size:33px;font-family:\'Caviar Dreams\';' +
+      'font-stretch:normal;font-size:15px;font-family:\'Caviar Dreams\';' +
+      '-inkscape-font-specification:\'Caviar Dreams, Bold\';' +
+      'font-variant-ligatures:normal;font-variant-caps:' +
+      'normal;font-variant-numeric:normal;font-feature-settings:' +
+      'normal;text-align:center;writing-mode:lr-tb;' +
+      'text-anchor:middle;stroke-width:0.26458332px">' +
+    '<!--::TEXT::-->' +
+    '</tspan>' +
+    '</text> ';
+
+  var txt_ele_name =
+    //'<rect rx="23" x="41" y="608" width="351" height="46" fill="#efefef" > ' +
+    '<rect rx="10" x="18" y="267" width="154" height="20" fill="#efefef" > ' +
+    '</rect>' +
+    '<text x="0" y="0" id="_text_name">' +
+    '<tspan' +
+    '  id="_tspan_name"' +
+    ' text-anchor="middle"' +
+    //'  x="216"' +
+    '  x="95"' +
+    //'  y="644"' +
+    '  y="283"' +
+    '  style="fill:rgb(50,50,50);font-style:normal;font-variant:normal;' +
+      //'font-weight:bold;font-stretch:normal;font-size:33px;' +
+      'font-weight:bold;font-stretch:normal;font-size:15px;' +
+      'font-family:\'Caviar Dreams\';-inkscape-font-specification:\'Caviar Dreams, Bold\';'+
+      'font-variant-ligatures:normal;font-variant-caps:normal;' +
+      'font-variant-numeric:normal;font-feature-settings:normal;' +
+      'text-align:center;writing-mode:lr-tb;text-anchor:middle;' +
+      'stroke-width:0.26458332px">' +
+    '<!--::TEXT::-->' +
+    '</tspan>' +
+    '</text> ';
+
+
+
+  for (var suit_idx=0; suit_idx < g_data.minor_arcana_suit.length; suit_idx++) {
+    for (var num_idx=0; num_idx < g_data.minor_arcana.length; num_idx++) {
+
+      var name = g_data.minor_arcana[num_idx].toUpperCase() + " of " + g_data.minor_arcana_suit[suit_idx].toUpperCase() + "S";
+
+      g_data.svg_text[name] = svg_header;
+
+      if ((num_idx>0) && (num_idx<10)) {
+        g_data.svg_text[name] += txt_ele_numeral.replace('<!--::TEXT::-->', g_data.numeral[num_idx+1]);
+      }
+
+      if ((num_idx<1) || (num_idx>=10)) {
+        g_data.svg_text[name] += txt_ele_name.replace('<!--::TEXT::-->', name );
+      }
+
+      g_data.svg_text[name] += "</svg>";
+
+    }
+  }
+
+
+  for (var ma_idx=0; ma_idx<g_data.major_arcana.length; ma_idx++) {
+    var name = g_data.major_arcana[ma_idx].name;
+
+    g_data.svg_text[name] = svg_header;
+    g_data.svg_text[name] += txt_ele_numeral.replace('<!--::TEXT::-->', g_data.numeral[num_idx]);
+    g_data.svg_text[name] += txt_ele_name.replace('<!--::TEXT::-->', name);
+    g_data.svg_text[name] += "</svg>";
+
+  }
+
+  var canvas_txt = document.getElementById("ui_backbuffer_text_canvas");
+  var gfx_ctx = canvas_txt.getContext('2d');
+  var v;
+  for (var name in g_data.svg_text) {
+    v = await canvg.Canvg.fromString(gfx_ctx, g_data.svg_text[name]);
+    await v.render();
+    g_data.png_text[name] = canvas_txt.toDataURL();
+
+    //console.log( name, g_data.png_text[name] );
+  }
+
+  return;
+
+  //test
+  var b = document.getElementById("testing");
+  var img = document.createElement("img");
+  img.src = g_data.png_text["THE FOOL"];;
+  b.appendChild(img);
+
+  /*
+  var t = svg_header;
+  t += txt_ele_name.replace('<!--::TEXT::-->', "middle text");
+  t += "</svg>";
+  v = await canvg.Canvg.fromString(gfx_ctx, t);
+  await v.render();
+  var t_png = canvas_txt.toDataURL();
+  */
+}
+
 
 $(document).ready(function() {
   //caption_show("ui_card6", "foo");

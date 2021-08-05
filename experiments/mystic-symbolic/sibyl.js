@@ -41,6 +41,8 @@ function reseed(_s) {
 var alea = require("./alea.js");
 var fs = require("fs");
 var getopt = require("posix-getopt");
+var lodash = require("lodash");
+
 var parser;
 var opt;
 
@@ -72,6 +74,7 @@ function show_help(fp) {
   fp.write("  [-b color]                  set background color (ex. '#777777') (default random)\n");
   fp.write("  [-c color]                  set background2 color (ex. '#888888') (default random)\n");
   fp.write("  [-l linewidth]              set linewidth (default 4)\n");
+  fp.write("  [-P dx,dy]                  shift front creature by dx,dy (ex. '30,-5') (default '0,0')\n");
   fp.write("  [-B background-image]       set background image ('*' for random)\n");
   fp.write("  [-T background-scale]       set background scale factor (default " + sibyl_opt.background_scale_x.toString() + ")\n");
   fp.write("  [-D tiledx,tiledy]          shift tile background by tiledx,tiledy (ex. '-10,3') (default '0,0')\n");
@@ -82,6 +85,8 @@ function show_help(fp) {
   fp.write("  [-R injson]                 input schedule JSON\n");
   fp.write("  [-L color]                  color ring (e.g. '#77777,#afafaf,#fe3f3f,#1f1f7f') (unimmplemented)\n");
   fp.write("  [-Z seed]                   prng seed (deafult random)\n");
+  fp.write("  [-X svg_x_width]            width out output svg (deafult 720px)\n");
+  fp.write("  [-Y svg_y_height]           height out output svg (deafult 720px)\n");
   fp.write("  [-g]                        disable gradient\n");
   fp.write("  [-t]                        tile background\n");
   fp.write("  [-Q]                        bonkers mode (override attach restrictions)\n");
@@ -99,6 +104,10 @@ var sibyl_opt = {
   "complexity" : 4,
   "primary_color" : "",
   "secondary_color" : "",
+
+  "dx" : 0,
+  "dy" : 0,
+
   "background_color" : "",
   "background_color2" : "",
   "use_background_image":false,
@@ -121,6 +130,9 @@ var sibyl_opt = {
   "cmd" : "random",
 
   "use_mask": false,
+
+  "svg_width" : "720px",
+  "svg_height" : "720px",
 
   "sched_in_fn" : "",
   "custom_sched" : {},
@@ -153,7 +165,10 @@ var long_opt = [
   "j", "(output-sched)",
   "Z", ":(seed)",
   "J", ":(svgjson)",
-  "M", "(mask)"
+  "M", "(mask)",
+  "X", ":(svg-width)",
+  "Y", ":(svg-height)",
+  "P", ":(dxy)"
 ];
 
 parser = new getopt.BasicParser("h" + long_opt.join(""), process.argv);
@@ -192,6 +207,32 @@ while ((opt =  parser.getopt()) !== undefined) {
 
     case 'L':
       sibyl_opt.optarg.color_ring.push(opt.optarg);
+      break;
+
+    case 'X':
+      if (opt.optarg.match(/[a-zA-Z]/)) {
+        sibyl_opt.svg_width  = opt.optarg;
+      }
+      else {
+        sibyl_opt.svg_width  = opt.optarg + "px";
+      }
+      break;
+
+    case 'Y':
+      if (opt.optarg.match(/[a-zA-Z]/)) {
+        sibyl_opt.svg_height = opt.optarg;
+      }
+      else {
+        sibyl_opt.svg_height = opt.optarg + "px";
+      }
+      break;
+
+    case 'P':
+      var tok = opt.optarg.split(",");
+      sibyl_opt.dx = parseFloat(tok[0]);
+      if (tok.length > 1) {
+        sibyl_opt.dy = parseFloat(tok[1]);
+      }
       break;
 
     //---
@@ -321,6 +362,27 @@ var svg_header = [
 ].join("");
 
 var svg_footer = "</svg>";
+
+var svg_xmljson = {
+  "svg" : {
+    "version":"1.1",
+    "id" : "",
+    "xmlns":"http://www.w3.org/2000/svg",
+    "xmlns:xlink":"http://www.w3.org/1999/xlink",
+    "width":"720px",
+    "height":"720px"
+  }
+};
+
+function make_svg_header(data) {
+  var s = "<svg";
+  for (var key in data["svg"]) {
+    s += ' ' + key + '="' + data['svg'][key] + '"';
+  }
+  s += '>';
+  return s;
+}
+
 
 // Override defaults with user specified values
 //
@@ -3141,6 +3203,9 @@ function sibyl_cmd() {
 
   var out_str = "";
 
+  svg_xmljson.svg.width = sibyl_opt.svg_width;
+  svg_xmljson.svg.height = sibyl_opt.svg_height;
+
   //if (arg_str == "random") {
   if (sibyl_opt.cmd == "random") {
 
@@ -3227,9 +3292,11 @@ function sibyl_cmd() {
     else {
 
       if (sibyl_opt.use_background_image) {
-        //console.log(svg_header);
-        //console.log(bg_svg);
-        out_str += svg_header;
+
+        //out_str += svg_header;
+        var _custom_svg_header = make_svg_header(svg_xmljson);
+        out_str += _custom_svg_header;
+
         out_str += bg_svg;
       }
 
@@ -3358,13 +3425,18 @@ function sibyl_cmd() {
 
     else {
 
+      //experimental
+      svg_extra_header += '<g transform=" translate(' + sibyl_opt.dx.toString() + " " + sibyl_opt.dy.toString() + ')">';
+
       fg_ctx.svg_id = "creature_" + SEED;
 
       var creature_svg = mystic_symbolic_sched(fg_ctx, sched , primary_color, secondary_color, bg_color);
 
       if (sibyl_opt.use_background_image) {
         //console.log(svg_header);
-        out_str += svg_header;
+        //out_str += svg_header;
+        var _custom_svg_header = make_svg_header(svg_xmljson);
+        out_str += _custom_svg_header;
 
         if (sibyl_opt.use_mask) {
           var svg_mask_start = '<defs>\n' +
@@ -3422,6 +3494,10 @@ function sibyl_cmd() {
         //console.log("\n<!-- CREATURE_END -->\n");
         //console.log(svg_footer);
         out_str += "\n<!-- CREATURE_END -->\n";
+
+        //container transform (dxy)
+        out_str += "</g>";
+
         out_str += svg_footer;
       }
     }

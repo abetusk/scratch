@@ -135,6 +135,7 @@ var seed = rseed();
 //seed = 'Sm6u1GN4ibp2rxoM8gwP5fB7ScxV8LYX';
 //seed = 'owO34cPdIaWwSngxzYoNw09Uf2gH7XFO';
 //seed = 'yYSBSbXjumUB0Kcp3wQwralwC1Mx60lH';
+seed = '053XEDLaHz8c4YDQIjC8qjAxzPmJtfAi';
 
 console.log("## seed: " + seed);
 
@@ -218,6 +219,7 @@ exclude_all.push("bob");
 exclude_all.push("rainbow_half");
 exclude_all.push("angel");
 exclude_all.push("lovers_nestbox");
+exclude_all.push("empty");
 
 // single wings look bad when they're the base
 // creature, so exclude them for the minor
@@ -233,6 +235,7 @@ exclude_all_and_wing.push("wing_bat");
 exclude_all_and_wing.push("wing_butterfly");
 exclude_all_and_wing.push("wing_eagle");
 exclude_all_and_wing.push("wing_egypt");
+exclude_all_and_wing.push("empty");
 
 
 var c0 = sibyl.rand_color_n(2);
