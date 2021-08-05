@@ -5,11 +5,12 @@
   <link rel="icon" type="image/png" href="images/favicon.ico">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
+  <script type='text/javascript' src='js/pixi.js'></script>
+
   <script type='text/javascript' src='js/jquery.js'></script>
   <!-- <script type='text/javascript' src='js/gsap.js'></script> -->
 
   <script type='text/javascript' src='js/browser-sibyl.js'></script>
-  <script type='text/javascript' src='js/pixi.js'></script>
   <script type='text/javascript' src='js/canvg.js'></script>
 
 
@@ -209,16 +210,71 @@
 
       <div class='tarot_container' id='ui_tarot_reading' style='display:grid;'>
 
-        <div id='ui_card0' class='x0'><a href="example_deck_svg/78-back.svg"><img class="u-max-full-width" src="example_deck_svg/78-back.svg"></a> </div>
-        <div id='ui_card1' class='x1'><a href="example_deck_svg/78-back.svg"><img class="u-max-full-width" src="example_deck_svg/78-back.svg"></a></div>
-        <div id='ui_card2' class='x2'><a href="example_deck_svg/78-back.svg"><img class="u-max-full-width" src="example_deck_svg/78-back.svg"></a> </div>
-        <div id='ui_card3' class='x3'><a href="example_deck_svg/78-back.svg"><img class="u-max-full-width" src="example_deck_svg/78-back.svg"></a></div>
-        <div id='ui_card4' class='x4'><a href="example_deck_svg/78-back.svg"><img class="u-max-full-width" src="example_deck_svg/78-back.svg"></a></div>
+        <div id='ui_card0' class='x0'>
+          <!-- <a href="example_deck_svg/78-back.svg"><img class="u-max-full-width" src="example_deck_svg/78-back.svg"></a>  -->
+
+          <div class='canvas_container'>
+            <canvas id='ui_canvas_card0' width='190' height='317'></canvas>
+          </div>
+          <canvas id='ui_canvas_card0_fg' width='190' height='317' style='display:none;'></canvas>
+          <canvas id='ui_canvas_card0_suit' width='190' height='317' style='display:none;'></canvas>
+          <canvas id='ui_canvas_card0_text' width='190' height='317' style='display:none;'></canvas>
+          <canvas id='ui_canvas_card0_bg' width='500' height='500' style='display:none;'></canvas>
+        </div>
+
+        <div id='ui_card1' class='x1'>
+          <!-- <a href="example_deck_svg/78-back.svg"><img class="u-max-full-width" src="example_deck_svg/78-back.svg"></a> -->
+
+          <div class='canvas_container'>
+            <canvas id='ui_canvas_card1' width='190' height='317'></canvas>
+          </div>
+          <canvas id='ui_canvas_card1_fg' width='190' height='317' style='display:none;'></canvas>
+          <canvas id='ui_canvas_card1_suit' width='190' height='317' style='display:none;'></canvas>
+          <canvas id='ui_canvas_card1_text' width='190' height='317' style='display:none;'></canvas>
+          <canvas id='ui_canvas_card1_bg' width='500' height='500' style='display:none;'></canvas>
+        </div>
+
+        <div id='ui_card2' class='x2'>
+          <!-- <a href="example_deck_svg/78-back.svg"><img class="u-max-full-width" src="example_deck_svg/78-back.svg"></a>  -->
+
+          <div class='canvas_container'>
+            <canvas id='ui_canvas_card2' width='190' height='317'></canvas>
+          </div>
+          <canvas id='ui_canvas_card2_fg' width='190' height='317' style='display:none;'></canvas>
+          <canvas id='ui_canvas_card2_suit' width='190' height='317' style='display:none;'></canvas>
+          <canvas id='ui_canvas_card2_text' width='190' height='317' style='display:none;'></canvas>
+          <canvas id='ui_canvas_card2_bg' width='500' height='500' style='display:none;'></canvas>
+        </div>
+
+        <div id='ui_card3' class='x3'>
+          <!-- <a href="example_deck_svg/78-back.svg"><img class="u-max-full-width" src="example_deck_svg/78-back.svg"></a> -->
+
+          <div class='canvas_container'>
+            <canvas id='ui_canvas_card3' width='190' height='317'></canvas>
+          </div>
+          <canvas id='ui_canvas_card3_fg' width='190' height='317' style='display:none;'></canvas>
+          <canvas id='ui_canvas_card3_suit' width='190' height='317' style='display:none;'></canvas>
+          <canvas id='ui_canvas_card3_text' width='190' height='317' style='display:none;'></canvas>
+          <canvas id='ui_canvas_card3_bg' width='500' height='500' style='display:none;'></canvas>
+        </div>
+
+        <div id='ui_card4' class='x4'>
+          <!-- <a href="example_deck_svg/78-back.svg"><img class="u-max-full-width" src="example_deck_svg/78-back.svg"></a> -->
+
+          <div class='canvas_container'>
+            <canvas id='ui_canvas_card4' width='190' height='317'></canvas>
+          </div>
+          <canvas id='ui_canvas_card4_fg' width='190' height='317' style='display:none;'></canvas>
+          <canvas id='ui_canvas_card4_suit' width='190' height='317' style='display:none;'></canvas>
+          <canvas id='ui_canvas_card4_text' width='190' height='317' style='display:none;'></canvas>
+          <canvas id='ui_canvas_card4_bg' width='500' height='500' style='display:none;'></canvas>
+        </div>
 
 
         <!-- <div id='ui_card5' class='x5'><a href="example_deck_svg/78-back.svg"><img class="u-max-full-width" src="example_deck_svg/78-back.svg"></a></div> -->
         <div id='ui_card5' class='x5'>
           <!-- <a href="example_deck_svg/78-back.svg"><img class="u-max-full-width" src="example_deck_svg/78-back.svg"></a> -->
+
           <div class='canvas_container'>
             <canvas id='ui_canvas_card5' width='190' height='317'></canvas>
           </div>
@@ -229,24 +285,53 @@
         </div>
 
         <div id='ui_card6' class='x6'>
-          <a href="example_deck_svg/78-back.svg">
-            <img class="u-max-full-width" src="example_deck_svg/78-back.svg">
-          </a>
+          <!-- <a href="example_deck_svg/78-back.svg"> <img class="u-max-full-width" src="example_deck_svg/78-back.svg"> </a> -->
+
+          <div class='canvas_container'>
+            <canvas id='ui_canvas_card6' width='190' height='317'></canvas>
+          </div>
+          <canvas id='ui_canvas_card6_fg' width='190' height='317' style='display:none;'></canvas>
+          <canvas id='ui_canvas_card6_suit' width='190' height='317' style='display:none;'></canvas>
+          <canvas id='ui_canvas_card6_text' width='190' height='317' style='display:none;'></canvas>
+          <canvas id='ui_canvas_card6_bg' width='500' height='500' style='display:none;'></canvas>
         </div>
 
-        <div id='ui_card7' class='x7'><a href="example_deck_svg/78-back.svg"><img class="u-max-full-width" src="example_deck_svg/78-back.svg"></a></div>
+        <div id='ui_card7' class='x7'>
+          <!-- <a href="example_deck_svg/78-back.svg"><img class="u-max-full-width" src="example_deck_svg/78-back.svg"></a> -->
+
+          <div class='canvas_container'>
+            <canvas id='ui_canvas_card7' width='190' height='317'></canvas>
+          </div>
+          <canvas id='ui_canvas_card7_fg' width='190' height='317' style='display:none;'></canvas>
+          <canvas id='ui_canvas_card7_suit' width='190' height='317' style='display:none;'></canvas>
+          <canvas id='ui_canvas_card7_text' width='190' height='317' style='display:none;'></canvas>
+          <canvas id='ui_canvas_card7_bg' width='500' height='500' style='display:none;'></canvas>
+
+        </div>
 
         <div id='ui_card8' class='x8'>
-          <a href="example_deck_svg/78-back.svg">
-            <img class="u-max-full-width" src="example_deck_svg/78-back.svg">
-          </a>
+          <!-- <a href="example_deck_svg/78-back.svg"> <img class="u-max-full-width" src="example_deck_svg/78-back.svg"> </a> -->
+
+          <div class='canvas_container'>
+            <canvas id='ui_canvas_card8' width='190' height='317'></canvas>
+          </div>
+          <canvas id='ui_canvas_card8_fg' width='190' height='317' style='display:none;'></canvas>
+          <canvas id='ui_canvas_card8_suit' width='190' height='317' style='display:none;'></canvas>
+          <canvas id='ui_canvas_card8_text' width='190' height='317' style='display:none;'></canvas>
+          <canvas id='ui_canvas_card8_bg' width='500' height='500' style='display:none;'></canvas>
         </div>
 
 
         <div id='ui_card9' class='x9'>
-          <a href="example_deck_svg/78-back.svg">
-            <img class="u-max-full-width" src="example_deck_svg/78-back.svg">
-          </a>
+          <!-- <a href="example_deck_svg/78-back.svg"> <img class="u-max-full-width" src="example_deck_svg/78-back.svg"> </a> -->
+
+          <div class='canvas_container'>
+            <canvas id='ui_canvas_card9' width='190' height='317'></canvas>
+          </div>
+          <canvas id='ui_canvas_card9_fg' width='190' height='317' style='display:none;'></canvas>
+          <canvas id='ui_canvas_card9_suit' width='190' height='317' style='display:none;'></canvas>
+          <canvas id='ui_canvas_card9_text' width='190' height='317' style='display:none;'></canvas>
+          <canvas id='ui_canvas_card9_bg' width='500' height='500' style='display:none;'></canvas>
         </div>
 
       </div>
@@ -255,6 +340,7 @@
 
       <div class='deck_container' id='ui_tarot_deck' style='display:none;'>
 
+        <!--
 <div class='row'>
 
   <div class='three columns'>
@@ -552,6 +638,7 @@
   <div class='three columns'></div>
 
 </div>
+-->
 
       </div>
 
