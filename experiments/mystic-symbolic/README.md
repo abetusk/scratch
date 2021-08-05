@@ -411,18 +411,18 @@ For deck generation:
 
 Some ideas for names:
 
+* `Callow Tarot`
+* `Shallow Tarot`
+* `Hollow Tarot`
+* `Solo Tarot`
+* `Hello Tarot`
 * `Tarot Overflow`
 * `Generatarot`
-* `Hello Tarot`
 * `Lowbrow Tarot`
-* `Shallow Tarot`
-* `Callow Tarot`
-* `Hollow Tarot`
 * `As Above, So Below Tarot`
 * `Mandelbrot Tarot`
 * `Hallow Tarot`
 * `Low Tarot`
-* `Solo Tarot`
 * `Tomorrow Tarot`
 * `Harrowed Tarot`
 * `Zero Tarot`

@@ -22,7 +22,8 @@ var _RESCALE = CARD_HEIGHT / 720.0;
 var g_tarot = {
   "ready": false,
   "reading" : [
-   { "sentence":"<b><u>King of Coins</u> <small>(light)</small></b></u><br>Becoming so conservative you resist all change on principle alone"},
+   //{ "sentence":"<b><u>King of Coins</u> <small>(light)</small></b></u><br>Becoming so conservative you resist all change on principle alone"},
+   { "sentence":"..."},
    { "sentence":"..."},
    { "sentence":"..."},
    { "sentence":"..."},
@@ -516,10 +517,14 @@ function tarot_reading_celtic_cross(tarot_data) {
     idx = Math.floor(Math.random() * __n);
     var meaning = d[p].meanings[light_shadow][idx];
 
-    var phrase = ((light_shadow == "light") ? _crnd(light_phrases) : _crnd(shadow_phrases) );
-    var sentence = d[p].name + "(" + light_shadow + "): " + narrative[ii] + ", " + phrase + " ... " + meaning;
+    var _name = d[p].name.replace(/[wW]ands/, "Keys");
 
-    var html_sentence = "<b><u>" + _capitalize(d[p].name) + "</u></b> <small>(" + light_shadow + ")</small><br>";
+    var phrase = ((light_shadow == "light") ? _crnd(light_phrases) : _crnd(shadow_phrases) );
+    //var sentence = d[p].name + "(" + light_shadow + "): " + narrative[ii] + ", " + phrase + " ... " + meaning;
+    var sentence = _name + "(" + light_shadow + "): " + narrative[ii] + ", " + phrase + " ... " + meaning;
+
+    //var html_sentence = "<b><u>" + _capitalize(d[p].name) + "</u></b> <small>(" + light_shadow + ")</small><br>";
+    var html_sentence = "<b><u>" + _capitalize(_name) + "</u></b> <small>(" + light_shadow + ")</small><br>";
     html_sentence += _capitalize(narrative[ii],1) + ", " + _capitalize(phrase,-1) + " " + _capitalize(meaning,-1);
 
 
@@ -602,7 +607,14 @@ function finit() {
     */
 
     var ui_id = "ui_card" + ii.toString();
+
+    // We don't have a good 'wand' graphic, so we've replaced it with keys.
+    // Update the reading to reflect the change
+    //
+
     caption_update(ui_id, reading[ii].sentence, "caption_" + ii.toString(), g_ui.caption_dxy[ui_id]);
+    //var _reading = reading[ii].sentence.replace(/Wands/, "Keys");
+    //caption_update(ui_id, _reading, "caption_" + ii.toString(), g_ui.caption_dxy[ui_id]);
   }
 }
 
@@ -1813,6 +1825,9 @@ window.onresize = function() {
     var _m = (g_ui.mobile_view ? "_m" : "");
     var ui_id = "ui_card" + ii.toString();
     var cap_id = "caption_" + ii.toString() + _m;
+
     caption_update(ui_id, g_tarot.reading[ii].sentence, cap_id, g_ui.caption_dxy[ui_id]);
+    //var _reading = g_tarot.reading[ii].sentence.replace(/Wands/, "Keys");
+    //caption_update(ui_id, _reading, cap_id, g_ui.caption_dxy[ui_id]);
   }
 }
