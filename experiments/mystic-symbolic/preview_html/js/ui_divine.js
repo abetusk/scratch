@@ -70,6 +70,7 @@ var g_ui = {
 };
 
 var g_data = {
+  "card_queue": 10,
 
   "numeral" : {
     "0": "0", "1": "I", "2": "II", "3": "III", "4": "IV",
@@ -542,6 +543,20 @@ function tarot_reading_celtic_cross(tarot_data) {
   return res;
 }
 
+function display_tarot() {
+  console.log("!!!");
+  //experimenting
+  for (var ii=0; ii<10; ii++)  {
+    var id = "ui_canvas_card" + ii.toString();
+    //var ele = document.getElementById(id);
+    //ele.style.display = "block";
+
+    $("#" + id).fadeTo(400, 1.0);
+
+  }
+
+}
+
 // called after init is done loading the JSON tarot interpretations
 //
 function finit() {
@@ -563,89 +578,31 @@ function finit() {
   //
   for (var ii=0; ii<reading.length; ii++) {
 
-    setTimeout( (function(_x,_y) {
+    setTimeout( (function(_x,_y,_m) {
       return function() {
-        //init_pixi_layered_card("ui_canvas_card" + ii.toString(), g_data.tarot_sched[ii]);
         init_pixi_layered_card(_x,_y);
+        if (_m == "shadow") {
+          setTimeout( function() {
+            var _e = document.getElementById(_x);
+            _e.style.transform = "rotate(180deg)";
+            g_data.card_queue--;
+            if (g_data.card_queue) {
+              setTimeout(display_tarot, 500);
+            }
+          },0);
+        }
       }
-    })("ui_canvas_card" + ii.toString(), g_data.tarot_sched[reading[ii].index]), 0);
+    })("ui_canvas_card" + ii.toString(), g_data.tarot_sched[reading[ii].index], reading[ii].modifier), 0);
 
+    /*
     if (reading[ii].modifer == "shadow") {
       var ele = document.getElementById("ui_canvas_card" + ii.toString());
       ele.style.transform = "rotate(180deg)";
     }
+    */
 
     var ui_id = "ui_card" + ii.toString();
     caption_update(ui_id, reading[ii].sentence, "caption_" + ii.toString(), g_ui.caption_dxy[ui_id]);
-
-    // old svg load
-    /*
-    //var _modifier = reading[ii].modifier;
-    var ui_id = "ui_card" + ii.toString();
-    _load("example_deck_svg/" + card_mapping[reading[ii].index],
-        (function(_x,_tarot_data,_idx) {
-          return function(d) {
-            if (d.type == "loadend") {
-              if (d.target.readyState == 4) {
-
-                var par_ele = document.getElementById(_x);
-                par_ele.innerHTML = "";
-
-                var ele = document.createElement("div");
-
-                var svg_txt = d.target.response;
-                ele.innerHTML = svg_txt;
-                var svg_ele = ele.querySelector('svg');
-                var _w = svg_ele.getAttribute('width');
-                var _h = svg_ele.getAttribute('height');
-                svg_ele.setAttribute("viewBox", "0 0 432 720");
-                svg_ele.setAttribute("preserveAspectRatio", "none");
-                svg_ele.setAttribute("height", "300px");
-                svg_ele.setAttribute("width", "180px");
-
-                var _m = _tarot_data.modifier;
-
-                if (_m == "shadow") {
-                  // ui_card1 is rotated by 90 so the extra 180 flip
-                  // will still keep it horizontal
-                  //
-                  ele.style.transform = "rotate(180deg)";
-
-                  //if (_x == "ui_card1") { ele.style.transform = "rotate(90deg)"; }
-                  //else { ele.style.transform = "rotate(180deg)"; }
-                }
-
-                //console.log(">>> caption_update", _x, _tarot_data.sentence, "caption_" + _idx, g_ui.caption_dxy[_x]);
-                caption_update(_x, _tarot_data.sentence, "caption_" + _idx, g_ui.caption_dxy[_x]);
-
-                var _txt = document.createElement("p");
-                _txt.innerHTML = _tarot_data.sentence;
-
-
-                par_ele.appendChild(ele);
-                //par_ele.appendChild(_txt);
-
-                var bg_id = svg_txt.match(/ id=['"]background_creature_[^'"]*['"]/)[0].split(/['"]/)[1];
-                var fg_id = svg_txt.match(/ id=['"]creature_[^'"]*['"]/)[0].split(/['"]/)[1];
-
-                g_ui.card_state[_idx].ready = true;
-                g_ui.card_state[_idx]["bg_id"] = bg_id;
-                g_ui.card_state[_idx]["fg_id"] = fg_id;
-
-                // oof, very very slow
-                // also problems with floating minor arcana suit
-                //
-                if (_idx==0) {
-                  //motion_xy_r("#" + bg_id);
-                  //motion_float("#" + fg_id);
-                }
-
-              }
-            }
-          }
-        })(ui_id,reading[ii], ii));
-
-        */
   }
 }
 
@@ -658,8 +615,6 @@ function finit() {
 //
 function start_card_canvas(pixi_canvas_id, _img_bg, _img_fg, _img_suit, _img_text) {
   var bg_s = 1440;
-
-  console.log("starting:", pixi_canvas_id, "?");
 
   var w = 190, h = 317;
   const app = new PIXI.Application({ antialias: true, width: w, height: h, view: document.getElementById(pixi_canvas_id)  });
@@ -935,6 +890,8 @@ function init_pixi_layered_card(canvas_id, tarot_data) {
       //start_card_canvas("ui_canvas_card5", g_data.png_card[0].bg, g_data.png_card[0].fg, g_data.png_card[0].suit, g_data.png_card[0].text);
 
       start_card_canvas(_cid, g_data.png_card[_cid].bg, g_data.png_card[_cid].fg, g_data.png_card[_cid].suit, g_data.png_card[_cid].text);
+      //var _e = document.getElementById(_cid);
+      //setTimeout(function() { _e.style.transform = "rotate(180deg)"; }, 0);
     }
   } );
 
@@ -946,6 +903,8 @@ function init_pixi_layered_card(canvas_id, tarot_data) {
       if (g_data.png_card[_cid].n==0) { 
         //start_card_canvas("ui_canvas_card5", g_data.png_card[0].bg, g_data.png_card[0].fg, g_data.png_card[0].suit, g_data.png_card[0].text);
         start_card_canvas(_cid, g_data.png_card[_cid].bg, g_data.png_card[_cid].fg, g_data.png_card[_cid].suit, g_data.png_card[_cid].text);
+        //var _e = document.getElementById(_cid);
+        //setTimeout(function() { _e.style.transform = "rotate(180deg)"; }, 0);
       }
     } );
   }
@@ -957,6 +916,8 @@ function init_pixi_layered_card(canvas_id, tarot_data) {
     if (g_data.png_card[_cid].n==0) { 
       //start_card_canvas("ui_canvas_card5", g_data.png_card[0].bg, g_data.png_card[0].fg, g_data.png_card[0].suit, g_data.png_card[0].text);
       start_card_canvas(_cid, g_data.png_card[_cid].bg, g_data.png_card[_cid].fg, g_data.png_card[_cid].suit, g_data.png_card[_cid].text);
+      //var _e = document.getElementById(_cid);
+      //setTimeout(function() { _e.style.transform = "rotate(180deg)"; }, 0);
     }
   } );
 
@@ -967,6 +928,8 @@ function init_pixi_layered_card(canvas_id, tarot_data) {
     g_data.png_card[_cid].text = _png;
     if (g_data.png_card[_cid].n==0) { 
       start_card_canvas(_cid, g_data.png_card[_cid].bg, g_data.png_card[_cid].fg, g_data.png_card[_cid].suit, g_data.png_card[_cid].text);
+      //var _e = document.getElementById(_cid);
+      //setTimeout(function() { _e.style.transform = "rotate(180deg)"; }, 0);
     }
   } );
 
@@ -1474,6 +1437,14 @@ function init_svg_text() {
 
 $(document).ready(function() {
   //caption_show("ui_card6", "foo");
+
+  //experimenting
+  for (var ii=0; ii<10; ii++)  {
+    var id = "ui_canvas_card" + ii.toString();
+    var ele = document.getElementById(id);
+    ele.style.display = "none";
+  }
+
 
   // card1 is under card0 so when card0 is hovered over,
   // make card1 semi translucent to see the full card0
