@@ -449,6 +449,8 @@ var _vocab1 = require("./mystic_symbolic_vocabulary.js");
 var adata = _vocab0.vocabulary;
 var bg_data = _vocab1.vocabulary;
 
+var TAROT_TEMPLATE = {};
+
 var use_custom_tarot_svgjson = true;
 if (use_custom_tarot_svgjson) {
   var _v0 = require("./tarot_vocabulary.js");
@@ -457,6 +459,8 @@ if (use_custom_tarot_svgjson) {
     adata.push(_v0.vocabulary[ii]);
     bg_data.push(_v1.vocabulary[ii]);
   }
+
+  TAROT_TEMPLATE = _v0.vocabulary;
 }
 
 // Read additional JSON SVG files.
@@ -3503,6 +3507,8 @@ if (require.main !== module) {
     "repr_realized" : repr_realized,
     "sched2sentence" : sched2sentence,
     "random_creature" : random_creature,
+
+    "tarot_template": TAROT_TEMPLATE,
 
     "cmd": sibyl_cmd,
 

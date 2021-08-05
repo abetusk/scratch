@@ -106,12 +106,12 @@ var g_data = {
     { "name":"THE WORLD",       "symbol":"globe",       "exlcude":false,  "scale": 0.75, "d":[0,-40]}
   ],
 
-	"ace_choice" : [
-		"window", "door", "wings_pair", "ring", "lotus",
-		"hands_giving", "hands_pair", "hand_side", "hand_open_3_4",
-		"hand_claddagh", "flower_8petal", "cloud", "circle",
-		"scroll_double", "table", "chair", "box", "book_open", "arms_strong"
-	],
+  "ace_choice" : [
+    "window", "door", "wings_pair", "ring", "lotus",
+    "hands_giving", "hands_pair", "hand_side", "hand_open_3_4",
+    "hand_claddagh", "flower_8petal", "cloud", "circle",
+    "scroll_double", "table", "chair", "box", "book_open", "arms_strong"
+  ],
 
   "royalty_crown_choice" : [ "crown", "crown_5pt", "crown_5pt2", "crown_hierophant", "crown_ornate" ],
   "royalty_sceptor_choice" : [ "ankh_emperor", "cross_hierophant" ],
@@ -134,6 +134,9 @@ var g_data = {
     "rain", "tree_rooted", "wave", "teardrop"
   ],
 
+  "exclude_all" : [ ],
+  "exclude_all_and_wing" : [],
+
   "svg_text" : { },
   "png_text" : {},
 
@@ -155,11 +158,48 @@ var g_data = {
 
 };
 
-for (var ii=0; ii<10; ii++) {
-  g_data.rnd.push( Math.random()*3/4 + 0.25 );
-  g_data.rnd.push( Math.random()/2 + 0.5 );
-  g_data.rnd.push( Math.random()/2 + 0.5 );
+function postprocess_g_data() {
+  for (var ii=0; ii<10; ii++) {
+    g_data.rnd.push( Math.random()*3/4 + 0.25 );
+    g_data.rnd.push( Math.random()/2 + 0.5 );
+    g_data.rnd.push( Math.random()/2 + 0.5 );
+  }
+
+  for (var ii=0; ii<g_data.minor_arcana_suit.length; ii++) {
+    g_data.exclude_all.push(g_data.minor_arcana_suit[ii]);
+  }
+
+  for (var ii=0; ii<g_data.major_arcana.length; ii++) {
+    if (g_data.major_arcana[ii].exclude) {
+      g_data.exclude_all.push(g_data.major_arcana[ii].symbol);
+    }
+  }
+  g_data.exclude_all.push("knight");
+  g_data.exclude_all.push("bob");
+  g_data.exclude_all.push("rainbow_half");
+  g_data.exclude_all.push("angel");
+  g_data.exclude_all.push("lovers_nestbox");
+  g_data.exclude_all.push("empty");
+
+  // single wings look bad when they're the base
+  // creature, so exclude them for the minor
+  // arcana base creature choice.
+  //
+  for (var ii=0; ii<g_data.exclude_all.length; ii++) {
+    g_data.exclude_all_and_wing.push(g_data.exclude_all[ii]);
+  }
+  g_data.exclude_all_and_wing.push("wing");
+  g_data.exclude_all_and_wing.push("wing_angel");
+  g_data.exclude_all_and_wing.push("wing_angel2");
+  g_data.exclude_all_and_wing.push("wing_bat");
+  g_data.exclude_all_and_wing.push("wing_butterfly");
+  g_data.exclude_all_and_wing.push("wing_eagle");
+  g_data.exclude_all_and_wing.push("wing_egypt");
+  g_data.exclude_all_and_wing.push("empty");
+
 }
+
+postprocess_g_data();
 
 
 // index in tarot_interpretations maps to a local SVG file
@@ -193,6 +233,43 @@ var card_mapping = [
 
 
 var g_rng = Math.random;
+
+function rseed() {
+  var seed = "";
+  var x = "abcdefghijklmnopqrstuvwxyzABDCEFGHIJKLMNOPQRSTUVWXYZ01234567890";
+  var n = x.length;
+  for (var ii=0; ii<32; ii++) {
+    seed += x[ Math.floor(Math.random()*n) ];
+  }
+  return seed;
+}
+
+function rstr(_rng, n) {
+  var _s = "";
+
+  for (var ii=0; ii<(n/2); ii++) {
+    var t = Math.floor(_rng()*256).toString(16);
+    t = ((t.length == 1) ? ('0' + t) : t);
+    _s += t;
+  }
+  return _s;
+}
+
+function remove_from_array(orig, filt) {
+  var r = [];
+  for (var ii=0; ii<orig.length; ii++) {
+    var found = false;
+    for (var jj=0; jj<filt.length; jj++) {
+      if (filt[jj] == orig[ii]) {
+        found = true;
+        break;
+      }
+    }
+
+    if (!found) { r.push( orig[ii] ); }
+  }
+  return r;
+}
 
 // Integer random number in range of n
 //
@@ -624,25 +701,43 @@ function init_pixi_layered_card(canvas_id) {
   var fg_ctx = sibyl.fg_ctx;
   var bg_ctx = sibyl.bg_ctx;
 
-  fg_ctx.global_scale = 0.88;
+  var _fg_info = sibyl.preprocess_svgjson( sibyl.mystic_symbolic, "#000", "#fff" );
+  var _bg_info = sibyl.preprocess_svgjson( sibyl.mystic_symbolic, "#000", "#fff" );
 
-  fg_ctx.create_background_rect = false;
+  // we don't want to restrict the vocabulary after we've chosen the schedule
+  //
+  fg_ctx.choice = _fg_info.choice;
+  fg_ctx.symbol = _fg_info.symbol;
+  fg_ctx.data   = _fg_info.data;
+
+  bg_ctx.choice = _bg_info.choice;
+  bg_ctx.symbol = _bg_info.symbol;
+  bg_ctx.data   = _bg_info.data;
+
+  sibyl.fg_ctx.global_scale = 0.88;
+
+  sibyl.fg_ctx.create_background_rect = false;
   var creature_svg_str  = sibyl.mystic_symbolic_sched(fg_ctx, creature_sched);
   var suite_svg_str = sibyl.mystic_symbolic_sched(fg_ctx, suite_sched);
 
+  console.log(">>", creature_svg_str);
+
   var bg_id = "bg_ok1234";
-  bg_ctx.svg_id = "__background_creature_" + seed;
-  bg_ctx.create_background_rect = false;
-  bg_ctx.create_svg_header = false;
-  bg_ctx.scale = 0.2;
-  bg_ctx.global_scale = 0.5;
+  sibyl.bg_ctx.svg_id = "__background_creature_" + seed;
+  sibyl.bg_ctx.create_background_rect = false;
+  sibyl.bg_ctx.create_svg_header = false;
+  sibyl.bg_ctx.scale = 0.2;
+  sibyl.bg_ctx.global_scale = 0.5;
 
   var bg_svg_str_single = '<g id="' + bg_id + '">\n' + sibyl.mystic_symbolic_sched(bg_ctx, background_sched) + '\n</g>';
 
   var _bg = "#777";
   var svg_extra_header = "";
-  var w = bg_ctx.svg_width;
-  var h = bg_ctx.svg_height;
+  //var w = bg_ctx.svg_width;
+  //var h = bg_ctx.svg_height;
+
+  var w = 500;
+  var h = 500;
 
   var first_bg = true;
   svg_extra_header += "<rect x=\"-" + w.toString() +
@@ -654,8 +749,8 @@ function init_pixi_layered_card(canvas_id) {
 
   var _n_x = 8;
   var _n_y = 11;
-  var dx = 175*bg_ctx.global_scale;
-  var dy = 100*bg_ctx.global_scale;
+  var dx = 175*sibyl.bg_ctx.global_scale;
+  var dy = 100*sibyl.bg_ctx.global_scale;
   var bg_svg_str;
   for (var x_idx=0; x_idx<_n_x; x_idx++) {
     for (var y_idx=0; y_idx<_n_y; y_idx++) {
@@ -712,13 +807,319 @@ function init_pixi_layered_card(canvas_id) {
 
 }
 
+function realize_tarot_sched(_seed, ctx) {
+  var tarot_sched = [];
+
+  var card_num = 0;
+
+  sibyl.reseed(_seed);
+
+  var minor_arcana_suit = ctx.minor_arcana_suit;
+  var minor_arcana = ctx.minor_arcana;
+  var major_arcana = ctx.major_arcana;
+  var exclude_all = ctx.exclude_all;
+  var exclude_all_and_wing = ctx.exclude_all_and_wing;
+  var ace_choice = ctx.ace_choice;
+
+  var tarot_card_json = sibyl.tarot_template;
+  var minor_arcana_template = {};
+  for (var ii=0; ii<tarot_card_json.length; ii++) {
+    var name = tarot_card_json[ii].name;
+    var tok = name.split("_");
+
+    if (!(tok[2] in minor_arcana_template)) {
+      minor_arcana_template[tok[2]] = [];
+    }
+
+    minor_arcana_template[tok[2]].push( tarot_card_json[ii] );
+  }
+
+
+  var c0 = sibyl.rand_color_n(2);
+  var c1 = sibyl.rand_color_n(2);
+  var c2 = sibyl.rand_color_n(2);
+  var c3 = sibyl.rand_color_n(2);
+
+  var cf = sibyl.rand_color_n(8);
+  var _cx = [];
+  for (var ii=0; ii<4; ii++) {
+    var r = sibyl.rand_color();
+    _cx.push( [ { "hex": r.background.hex, "hsv": r.background.hsv }, {"hex":r.background2.hex, "hsv":r.background2.hsv} ] );
+  }
+
+  var colors = {
+    "pentacle": [ cf[0], cf[4], _cx[0] ],
+    "key":      [ cf[1], cf[5], _cx[1] ],
+    "sword":    [ cf[2], cf[6], _cx[2] ],
+    "cup":      [ cf[3], cf[7], _cx[3] ]
+  };
+
+
+  // fir create schedules for major arcana
+  //
+  for (var ma_idx=0; ma_idx < ctx.major_arcana.length; ma_idx++) {
+
+    var tarot_data = { "fg": {}, "bg": {}, "colors":{} };
+
+    var _c0 = sibyl.rand_color_n(2);
+    var _c1 = sibyl.rand_color_n(2);
+
+    var cf = sibyl.rand_color_n(8);
+    var _cx = [];
+    for (var ii=0; ii<4; ii++) {
+      var r = sibyl.rand_color();
+      _cx.push( [ { "hex": r.background.hex, "hsv":r.background.hsv }, {"hex":r.background2.hex, "hsv":r.background2.hsv } ] );
+    }
+
+    var ma_colors = [ cf[0], cf[4], _cx[0] ];
+    tarot_data["colors"] = ma_colors;
+
+    var _orig = sibyl.preprocess_svgjson(sibyl.mystic_symbolic, undefined, undefined, false, {});
+
+    var _t = sibyl.preprocess_svgjson(sibyl.bg_symbol, undefined, undefined, false, exclude_all);
+    sibyl.bg_ctx.choice = _t.choice;
+    sibyl.bg_ctx.symbol = _t.symbol;
+    sibyl.bg_ctx.data = _t.data;
+
+    sibyl.bg_ctx.max_depth = 0;
+    sibyl.bg_ctx.max_nest_depth = 1;
+    sibyl.bg_ctx.complexity = 1;
+    sibyl.mystic_symbolic_random( sibyl.bg_ctx );
+    var bg0 = sibyl.bg_ctx.realized_child.base;
+    var bg1 = "";
+    if ("attach" in sibyl.bg_ctx.realized_child) {
+      bg1 = sibyl.bg_ctx.realized_child.attach.nesting[0].base;
+    }
+
+    tarot_data.bg["base"] = bg0 + ma_colors[2][0].hex + ma_colors[2][1].hex ;
+    if (bg1.length > 0) {
+      tarot_data.bg["attach"] = { "nesting": [ { "base" : bg1 + ma_colors[2][1].hex + ma_colors[2][0].hex } ] };
+    }
+
+    var base_creature = _orig.symbol[ major_arcana[ma_idx].symbol ];
+    var _t = sibyl.preprocess_svgjson(sibyl.mystic_symbolic, undefined, undefined, false, exclude_all);
+
+    sibyl.fg_ctx.choice = _t.choice;
+    sibyl.fg_ctx.symbol = _t.symbol;
+    sibyl.fg_ctx.data = _t.data;
+    sibyl.mystic_symbolic_random( sibyl.fg_ctx, base_creature );
+
+    var json_card = sibyl.fg_ctx.realized_child;
+
+    // lovers is a card built up of other base objects,
+    // so we need to do some special processing.
+    //
+    if (major_arcana[ma_idx].symbol == "lovers_nestbox") {
+      var _c = ma_colors[1][0].hex + ma_colors[1][1].hex;
+      var x = json_card.attach.nesting[0];
+      json_card.attach.nesting = [
+        { "base": "woman_stand" + _c },
+        { "base": "man_stand" + _c },
+        { "base": x.base + _c  }
+      ];
+    }
+
+    tarot_data.fg = json_card;
+    tarot_data["num"] = card_num;
+
+    tarot_sched.push( tarot_data );
+    card_num++;
+  }
+
+
+  for (var suit_idx=0; suit_idx < minor_arcana_suit.length; suit_idx++) {
+    for (var card_idx=0; card_idx < minor_arcana.length; card_idx++) {
+
+      var tarot_data = { "fg": {}, "bg": {}, "colors":colors[suit] };
+
+      var _seed = rseed();
+
+      var suit = ctx.minor_arcana_suit[suit_idx];
+      var color_suit = colors[suit][0][0].hex + colors[suit][0][1].hex;
+      var suit_ent = minor_arcana_suit[suit_idx]  + colors[suit][0][0].hex + colors[suit][0][1].hex;
+      var suit_ent_r = minor_arcana_suit[suit_idx]  + colors[suit][0][1].hex + colors[suit][0][0].hex;
+
+
+      // generate background creature
+      //
+      var _t = sibyl.preprocess_svgjson(sibyl.bg_symbol, undefined, undefined, false, exclude_all);
+      sibyl.bg_ctx.choice = _t.choice;
+      sibyl.bg_ctx.symbol = _t.symbol;
+      sibyl.bg_ctx.data = _t.data;
+
+      sibyl.bg_ctx.max_depth = 0;
+      sibyl.bg_ctx.max_nest_depth = 1;
+      sibyl.bg_ctx.complexity = 1;
+      sibyl.mystic_symbolic_random( sibyl.bg_ctx );
+      var bg0 = sibyl.bg_ctx.realized_child.base;
+      var bg1 = "";
+      if ("attach" in sibyl.bg_ctx.realized_child) {
+        bg1 = sibyl.bg_ctx.realized_child.attach.nesting[0].base;
+      }
+
+      tarot_data.bg["base"] = bg0 + colors[suit][2][0].hex + colors[suit][2][1].hex ;
+      if (bg1.length > 0) {
+        tarot_data.bg["attach"] = { "nesting": [ { "base" : bg1 + colors[suit][2][1].hex + colors[suit][2][0].hex } ] };
+      }
+
+
+      var json_card = {
+        "base": "goat",
+        "attach" : { "nesting" : [ ] }
+      };
+
+      var invert_color_creature = false;
+      tarot_data["invert_color_creature"] = false;
+
+      // number cards that aren't ace or page to king
+      //
+      if ((card_idx > 0) && (card_idx < 10)) {
+
+        // exclude single wing from base creature
+        //
+        _t = sibyl.preprocess_svgjson(sibyl.mystic_symbolic, undefined, undefined, false, exclude_all_and_wing);
+        sibyl.fg_ctx.choice = _t.choice;
+        sibyl.fg_ctx.symbol = _t.symbol;
+        sibyl.fg_ctx.data = _t.data;
+        var base_creature_name = sibyl.random_creature( sibyl.fg_ctx, "base" );
+        var base_creature = sibyl.fg_ctx.symbol[base_creature_name];
+
+        _t = sibyl.preprocess_svgjson(sibyl.mystic_symbolic, undefined, undefined, false, exclude_all);
+        sibyl.fg_ctx.choice = _t.choice;
+        sibyl.fg_ctx.symbol = _t.symbol;
+        sibyl.fg_ctx.data = _t.data;
+        //sibyl.mystic_symbolic_random( sibyl.fg_ctx );
+        sibyl.mystic_symbolic_random( sibyl.fg_ctx, base_creature );
+
+        var card_template = sibyl.crnd(minor_arcana_template[card_idx+1]);
+        json_card = {
+          "base": card_template.name,
+          "attach" : { "nesting" : [ ] }
+        };
+
+        for (var ii=0; ii<=card_idx; ii++) {
+          json_card.attach.nesting.push( { "base" : suit_ent } );
+        }
+        json_card.attach.nesting.push( sibyl.fg_ctx.realized_child );
+
+        invert_color_creature = true;
+        tarot_data["invert_color_creature"] = true;
+
+
+      }
+
+      // ace
+      //
+      else if (card_idx==0) {
+
+        var ace_base = sibyl.crnd(ace_choice);
+        json_card = {
+          "base": ace_base ,
+          //"attach" : { "nesting" : [ { "base": suit_ent + color_suit }  ] }
+          "attach" : { "nesting" : [ { "base": suit_ent }  ] }
+        };
+
+      }
+
+      // page
+      else if (card_idx==10) {
+
+        var xc = colors[suit][1][1].hex + colors[suit][1][0].hex;
+
+        var base_ele = sibyl.fg_ctx.symbol[ "dog" ];
+        _t = sibyl.preprocess_svgjson(sibyl.mystic_symbolic, undefined, undefined, false, exclude_all);
+        sibyl.fg_ctx.choice = _t.choice;
+        sibyl.fg_ctx.symbol = _t.symbol;
+        sibyl.fg_ctx.data = _t.data;
+        sibyl.mystic_symbolic_random( sibyl.fg_ctx, base_ele );
+
+        json_card = sibyl.fg_ctx.realized_child;
+        json_card.attach["crown"] = [ {"base": suit_ent } ];
+      }
+
+      // knight
+      //
+      else if (card_idx==11) {
+
+        var base_ele = sibyl.fg_ctx.symbol[ "horse" ];
+        _t = sibyl.preprocess_svgjson(sibyl.mystic_symbolic, undefined, undefined, false, exclude_all);
+        sibyl.fg_ctx.choice = _t.choice;
+        sibyl.fg_ctx.symbol = _t.symbol;
+        sibyl.fg_ctx.data = _t.data;
+        sibyl.mystic_symbolic_random( sibyl.fg_ctx, base_ele );
+
+        json_card = sibyl.fg_ctx.realized_child;
+        json_card.attach["crown"] = [ {"base": suit_ent + color_suit } ];
+      }
+
+      // queen
+      //
+      else if (card_idx==12) {
+
+        _t = sibyl.preprocess_svgjson(sibyl.mystic_symbolic, undefined, undefined, false, exclude_all);
+        sibyl.fg_ctx.choice = _t.choice;
+        sibyl.fg_ctx.symbol = _t.symbol;
+        sibyl.fg_ctx.data = _t.data;
+
+        var base_ele = sibyl.fg_ctx.symbol[ "crown_5pt" ];
+        sibyl.mystic_symbolic_random( sibyl.fg_ctx, base_ele );
+
+        json_card = sibyl.fg_ctx.realized_child;
+
+        json_card.attach["tail"] = [ {"base": suit + color_suit } ];
+      }
+
+      // king
+      //
+      else if (card_idx==13) {
+
+        _t = sibyl.preprocess_svgjson(sibyl.mystic_symbolic, undefined, undefined, false, exclude_all);
+        sibyl.fg_ctx.choice = _t.choice;
+        sibyl.fg_ctx.symbol = _t.symbol;
+        sibyl.fg_ctx.data = _t.data;
+
+        var base_ele = sibyl.fg_ctx.symbol[ "crown_ornate" ];
+        sibyl.mystic_symbolic_random( sibyl.fg_ctx, base_ele );
+
+        json_card = sibyl.fg_ctx.realized_child;
+        json_card.attach["tail"] = [ {"base": suit + color_suit } ];
+      }
+      tarot_data.fg = json_card;
+
+      tarot_sched.push(tarot_data);
+    }
+  }
+
+
+  var back_card_color = sibyl.rand_color();
+  var bca = [
+    [ { "hex": "#000" }, { "hex":"#fff" } ],
+    [ { "hex": "#000" }, { "hex":"#fff" } ],
+    [ { "hex": back_card_color.background.hex, "hsv": back_card_color.background.hsv },
+      { "hex": back_card_color.background2.hex,  "hsv": back_card_color.background2.hsv } ]
+  ];
+  var back_symbol_name = sibyl.crnd(ctx.back_creature_choice);
+
+
+  // last entry is the back of the cards
+  //
+  tarot_sched.push( {
+    "bg" : { "base" : back_symbol_name + bca[0].hex + bca[1].hex },
+    "fg" : { "base" : "empty" },
+    "colors" : bca
+  });
+  
+
+  return tarot_sched;
+
+}
+
 // call on initial page load
 //
 function init() {
   _load("data/tarot_interpretations.json", _tarot_json_cb);
 
-  sibyl.reseed("x");
-  console.log(">>>", sibyl.rand_color());
+  g_data["tarot_sched"] = realize_tarot_sched("x", g_data);
 
   //DEBUG
   //setTimeout(finit, 1000);
