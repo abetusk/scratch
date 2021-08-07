@@ -33,12 +33,10 @@
 // another countdown mutex called `card_queue` that, when 0, calls
 // `display_tarot` to fade in all the 10 cards when theny're ready.
 //
-// 
-//
-//
-//
 
-// T
+// `realize_tarot_sched` is the one that creates the realization of the SVG
+// deck that will be used to display the cards.
+//
 
 var CARD_HEIGHT= 317;
 var CARD_WIDTH = 190;
@@ -370,53 +368,6 @@ function _load(url, _cb) {
   return xhr;
 } 
 
-// SVG simple motion animations.
-// depends on gsap.
-//
-
-/*
-function motion_xy_r(uid, dx, dy, dt, pt) {
-  dx = ((typeof dx === "undefined") ? (2*144) : dx);
-  dy = ((typeof dy === "undefined") ? (2*126) : dy);
-  dt = ((typeof dt === "undefined") ? (10) : dt);
-  pt = ((typeof pt === "undefined") ? (5) : pt);
-  gsap.to(uid, {x:dx, ease:"power1.inOut", duration: dt, repeat:-1, yoyo:true });
-  gsap.to(uid, {y:dy, ease:"power1.inOut", duration: dt, repeat:-1, yoyo:true, delay: pt});
-}
-
-function motion_xy(uid, dx, dy, dt) {
-  dx = ((typeof dx === "undefined") ? (2*144) : dx);
-  dy = ((typeof dy === "undefined") ? (2*126) : dy);
-  dt = ((typeof dt === "undefined") ? (10) : dt);
-  gsap.to(uid, {x:dx,y:dy, ease:"linear", duration: dt, repeat:-1, yoyo:false });
-}
-
-function motion_rotate(uid, dt) {
-  dt = ((typeof dt === "undefined") ? (5) : dt);
-  //gsap.to(uid, {rotate:360, ease:"linear", duration:dt, repeat:-1, yoyo:false });
-  gsap.to(uid, {rotate:360, ease:"linear", duration:dt, repeat:-1, yoyo:false, transformOrigin:"50% 50%" });
-}
-
-function motion_float(uid, dy, dt) {
-  dy = ((typeof dy === "undefined") ? (50) : dy);
-  dt = ((typeof dt === "undefined") ? (2.5) : dt);
-  gsap.to(uid, {y: dy, ease:"power1.inOut", duration: dt, repeat:-1, yoyo:true });
-}
-
-function motion_leftright(uid, dx, dt) {
-  dx = ((typeof dx === "undefined") ? (50) : dx);
-  dt = ((typeof dt === "undefined") ? (2.5) : dt);
-  gsap.to(uid, {x: dx, ease:"power1.inOut", duration: dt, repeat:-1, yoyo:true });
-}
-
-function motion_pulsate(uid, ds, dt) {
-  ds = ((typeof ds === "undefined") ? (1.25) : ds);
-  dt = ((typeof dt === "undefined") ? (2) : dt);
-  gsap.to(uid, {scale: ds, ease:"power1.inOut", duration: dt, repeat:-1, yoyo:true, transformOrigin:"50% 50%" });
-}
-*/
-
-
 // n undefined or 0 -  capitalize every word except for 'of'
 // n > 0            -  capitalize n non 'of' words
 // n < 0            -  un capitalize |n| non 'of' words
@@ -552,10 +503,8 @@ function tarot_reading_celtic_cross(tarot_data) {
     var _name = d[p].name.replace(/[wW]ands/, "Keys");
 
     var phrase = ((light_shadow == "light") ? _crnd(light_phrases) : _crnd(shadow_phrases) );
-    //var sentence = d[p].name + "(" + light_shadow + "): " + narrative[ii] + ", " + phrase + " ... " + meaning;
     var sentence = _name + "(" + light_shadow + "): " + narrative[ii] + ", " + phrase + " ... " + meaning;
 
-    //var html_sentence = "<b><u>" + _capitalize(d[p].name) + "</u></b> <small>(" + light_shadow + ")</small><br>";
     var html_sentence = "<b><u>" + _capitalize(_name) + "</u></b> <small>(" + light_shadow + ")</small><br>";
     html_sentence += _capitalize(narrative[ii],1) + ", " + _capitalize(phrase,-1) + " " + _capitalize(meaning,-1);
 
@@ -633,13 +582,6 @@ function finit() {
       }
     })("ui_canvas_card" + ii.toString(), g_data.tarot_sched[reading[ii].index], reading[ii].modifier), 0);
 
-    /*
-    if (reading[ii].modifer == "shadow") {
-      var ele = document.getElementById("ui_canvas_card" + ii.toString());
-      ele.style.transform = "rotate(180deg)";
-    }
-    */
-
     var ui_id = "ui_card" + ii.toString();
 
     // We don't have a good 'wand' graphic, so we've replaced it with keys.
@@ -647,8 +589,6 @@ function finit() {
     //
 
     caption_update(ui_id, reading[ii].sentence, "caption_" + ii.toString(), g_ui.caption_dxy[ui_id]);
-    //var _reading = reading[ii].sentence.replace(/Wands/, "Keys");
-    //caption_update(ui_id, _reading, "caption_" + ii.toString(), g_ui.caption_dxy[ui_id]);
   }
 }
 
@@ -822,7 +762,9 @@ function init_pixi_layered_card(canvas_id, tarot_data) {
   fg_ctx.symbol = _fg_info.symbol;
   fg_ctx.data   = _fg_info.data;
 
-  //experimental
+  // we need to translate the creature in a containing <g> element,
+  // so don't create the header so we can put it in later.
+  //
   fg_ctx.create_svg_header = false;
 
   bg_ctx.choice = _bg_info.choice;
@@ -834,7 +776,6 @@ function init_pixi_layered_card(canvas_id, tarot_data) {
   sibyl.fg_ctx.create_background_rect = false;
   fg_ctx.svg_id = 'foo';
   fg_ctx.global_scale = _scale;
-
 
   var fg_cp = tarot_data.colors[1][0].hex;
   var fg_cs = tarot_data.colors[1][1].hex;
@@ -850,7 +791,10 @@ function init_pixi_layered_card(canvas_id, tarot_data) {
     "</g>" +
     "</svg>";
 
+  //---
 
+  // background tiled pattern
+  //
 
   var suite_svg_str = "";
   if (has_suit) {
@@ -919,63 +863,35 @@ function init_pixi_layered_card(canvas_id, tarot_data) {
 
   g_data.png_card[canvas_id].n = 3 + (has_suit?1:0);
 
-  /*
-  g_data.png_card[0].text = undefined;
-  if (has_text) {
-    g_data.png_card[0].text = g_data.png_text["ACE of KEYS"];
-  }
-  */
-
-  /*
-  var _cid_tok = canvas_id.split("_");
-  var _cid_fg = _cid_tok[0] + "_canvas_" + _cid_tok[2] + "_fg";
-  var _cid_su = _cid_tok[0] + "_canvas_" + _cid_tok[2] + "_suit";
-  var _cid_bg = _cid_tok[0] + "_canvas_" + _cid_tok[2] + "_bg";
-  var _cid = _cid_tok[0] + "_canvas_" + _cid_tok[2];
-  */
-
   var _cid_fg = canvas_id + "_fg";
   var _cid_su = canvas_id + "_suit";
   var _cid_bg = canvas_id + "_bg";
   var _cid_txt = canvas_id + "_text";
   var _cid = canvas_id;
 
-  //render_svg_to_png("ui_canvas_card5_fg", creature_svg_str).then( _png => {
   render_svg_to_png(_cid_fg, creature_svg_str).then( _png => {
     g_data.png_card[_cid].n--;
     g_data.png_card[_cid].fg = _png;
     if (g_data.png_card[_cid].n==0) { 
-      //start_card_canvas("ui_canvas_card5", g_data.png_card[0].bg, g_data.png_card[0].fg, g_data.png_card[0].suit, g_data.png_card[0].text);
-
       start_card_canvas(_cid, g_data.png_card[_cid].bg, g_data.png_card[_cid].fg, g_data.png_card[_cid].suit, g_data.png_card[_cid].text);
-      //var _e = document.getElementById(_cid);
-      //setTimeout(function() { _e.style.transform = "rotate(180deg)"; }, 0);
     }
   } );
 
   if (has_suit) {
-    //render_svg_to_png("ui_canvas_card5_suit", suite_svg_str).then( _png => {
     render_svg_to_png(_cid_su, suite_svg_str).then( _png => {
       g_data.png_card[_cid].n--;
       g_data.png_card[_cid].suit = _png;
       if (g_data.png_card[_cid].n==0) { 
-        //start_card_canvas("ui_canvas_card5", g_data.png_card[0].bg, g_data.png_card[0].fg, g_data.png_card[0].suit, g_data.png_card[0].text);
         start_card_canvas(_cid, g_data.png_card[_cid].bg, g_data.png_card[_cid].fg, g_data.png_card[_cid].suit, g_data.png_card[_cid].text);
-        //var _e = document.getElementById(_cid);
-        //setTimeout(function() { _e.style.transform = "rotate(180deg)"; }, 0);
       }
     } );
   }
 
-  //render_svg_to_png("ui_canvas_card5_bg", bg_svg_str).then( _png => {
   render_svg_to_png(_cid_bg, bg_svg_str).then( _png => {
     g_data.png_card[_cid].n--;
     g_data.png_card[_cid].bg = _png;
     if (g_data.png_card[_cid].n==0) { 
-      //start_card_canvas("ui_canvas_card5", g_data.png_card[0].bg, g_data.png_card[0].fg, g_data.png_card[0].suit, g_data.png_card[0].text);
       start_card_canvas(_cid, g_data.png_card[_cid].bg, g_data.png_card[_cid].fg, g_data.png_card[_cid].suit, g_data.png_card[_cid].text);
-      //var _e = document.getElementById(_cid);
-      //setTimeout(function() { _e.style.transform = "rotate(180deg)"; }, 0);
     }
   } );
 
@@ -985,8 +901,6 @@ function init_pixi_layered_card(canvas_id, tarot_data) {
     g_data.png_card[_cid].text = _png;
     if (g_data.png_card[_cid].n==0) { 
       start_card_canvas(_cid, g_data.png_card[_cid].bg, g_data.png_card[_cid].fg, g_data.png_card[_cid].suit, g_data.png_card[_cid].text);
-      //var _e = document.getElementById(_cid);
-      //setTimeout(function() { _e.style.transform = "rotate(180deg)"; }, 0);
     }
   } );
 
@@ -1222,6 +1136,7 @@ function realize_tarot_sched(_seed, ctx) {
       }
 
       // page
+      //
       else if (card_idx==10) {
 
         var xc = colors[suit][1][1].hex + colors[suit][1][0].hex;
@@ -1325,13 +1240,7 @@ function init() {
 
   init_svg_text();
 
-  //DEBUG
   setTimeout(finit, 1000);
-
-  return;
-
-  //...
-  init_card_canvas();
 }
 
 function _bbox(ele) {
@@ -1456,46 +1365,14 @@ function init_svg_text() {
 
   }
 
-  return;
-
-  /*
-  var v;
-  for (var name in g_data.svg_text) {
-    var canvas_txt = document.getElementById("ui_backbuffer_text_canvas");
-    var gfx_ctx = canvas_txt.getContext('2d');
-    v = await canvg.Canvg.fromString(gfx_ctx, g_data.svg_text[name]);
-    await v.render();
-    //v = await canvg.Canvg.fromString(gfx_ctx, g_data.svg_text[name]);
-    //await v.render();
-    g_data.png_text[name] = canvas_txt.toDataURL();
-
-    //console.log( name, g_data.png_text[name] );
-  }
-  */
-
-  return;
-
-  //test
-  var b = document.getElementById("testing");
-  var img = document.createElement("img");
-  img.src = g_data.png_text["THE FOOL"];;
-  b.appendChild(img);
-
-  /*
-  var t = svg_header;
-  t += txt_ele_name.replace('<!--::TEXT::-->', "middle text");
-  t += "</svg>";
-  v = await canvg.Canvg.fromString(gfx_ctx, t);
-  await v.render();
-  var t_png = canvas_txt.toDataURL();
-  */
 }
 
 
 $(document).ready(function() {
-  //caption_show("ui_card6", "foo");
 
-  //experimenting
+  // Initially hide the 10 divination cards so we don't
+  // get a jerky update as the canvases start to render
+  //
   for (var ii=0; ii<10; ii++)  {
     var id = "ui_canvas_card" + ii.toString();
     var ele = document.getElementById(id);
@@ -1822,9 +1699,6 @@ $(document).ready(function() {
   g_ui.mobile_view = ( ($(window).width() < g_ui.mobile_width) ? true : false );
 
   init();
-
-
-
 });
 
 window.onresize = function() {
@@ -1872,7 +1746,5 @@ window.onresize = function() {
     var cap_id = "caption_" + ii.toString() + _m;
 
     caption_update(ui_id, g_tarot.reading[ii].sentence, cap_id, g_ui.caption_dxy[ui_id]);
-    //var _reading = g_tarot.reading[ii].sentence.replace(/Wands/, "Keys");
-    //caption_update(ui_id, _reading, cap_id, g_ui.caption_dxy[ui_id]);
   }
 }
