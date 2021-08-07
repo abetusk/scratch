@@ -14,6 +14,32 @@
 // from the deck.
 //
 
+// SVG animations are too slow, especially for the complexity of SVG I'm
+// using, apparently (on firefox). To get smooth animation, each
+// divination (celtic cross reading) card is rendered as 3-4 layers
+// of stacked PNGs, rendered in PIXI.
+// Each PNG is rendered from SVG via `canvg`, than added as a spriate
+// a scene, one for each of the 10 cards.
+//
+// `finit` is what gets called after`init` has finished.
+// Once `finit` is called, the text for the tarot reading is ready so
+// the reading can be done and the cards can be rendered.
+// `finit` calls `init_pix_layered_card` to render the PNGs from the SVGs
+// and then sets up `start_card_canvas`, with a mutex
+// on when all the PNGs have finished rendering so it can start drawing
+// the canvas.
+//
+// From `finit`, when setting up the `init_pixi_layered_card`, there's
+// another countdown mutex called `card_queue` that, when 0, calls
+// `display_tarot` to fade in all the 10 cards when theny're ready.
+//
+// 
+//
+//
+//
+
+// T
+
 var CARD_HEIGHT= 317;
 var CARD_WIDTH = 190;
 
@@ -555,17 +581,10 @@ function tarot_reading_celtic_cross(tarot_data) {
 }
 
 function display_tarot() {
-  console.log("!!!");
-  //experimenting
   for (var ii=0; ii<10; ii++)  {
     var id = "ui_canvas_card" + ii.toString();
-    //var ele = document.getElementById(id);
-    //ele.style.display = "block";
-
     $("#" + id).fadeTo(400, 1.0);
-
   }
-
 }
 
 // called after init is done loading the JSON tarot interpretations
@@ -603,6 +622,12 @@ function finit() {
             if (g_data.card_queue) {
               setTimeout(display_tarot, 500);
             }
+          },0);
+        }
+        else {
+          setTimeout( function() {
+            g_data.card_queue--;
+            if (g_data.card_queue) { setTimeout(display_tarot, 500); }
           },0);
         }
       }

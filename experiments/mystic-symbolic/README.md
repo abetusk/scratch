@@ -415,6 +415,7 @@ Some ideas for names:
 * `Resonator Voyant Tarot`
 * `Teleprescent Metaphatic`
 * `Autophetic Instrumancy`
+* `Precognitive Piezoelectric Prophecy Generator`
 
 
 Credits
