@@ -698,7 +698,8 @@ function init_pixi_layered_card(canvas_id, tarot_data) {
 
   // 317/720*2
   //
-  var _scale = 0.88;
+  //var _scale = 0.88;
+  var _scale = 1.0;
   var dxy = [0,0];
 
   var _r = _RESCALE;
@@ -713,6 +714,9 @@ function init_pixi_layered_card(canvas_id, tarot_data) {
         (tarot_data.designation == "knight") ||
         (tarot_data.designation == "queen") ||
         (tarot_data.designation == "king")) {
+
+      // whoops, I rescaled the minor arcana page/knight/qeen/king/ace already
+      //
       _scale = _suite_scale[tarot_data.designation];
       dxy = _suite_dxy[tarot_data.designation];
       has_text = true;
@@ -738,7 +742,9 @@ function init_pixi_layered_card(canvas_id, tarot_data) {
   else {
     has_text = true;
 
-    _scale = _r*major_arcana[tarot_data.family_idx].scale;
+    // fudge factor to help fit...
+    //
+    _scale = _r*major_arcana[tarot_data.family_idx].scale*0.88;
     if ("d" in major_arcana[tarot_data.family_idx]) {
       dxy = major_arcana[tarot_data.family_idx].d;
       dxy[0] *= _r;
