@@ -9,6 +9,10 @@
  *
  */
 
+// The function `tarot_reading_celtic_cross` is the one that takes in the
+// text data of the tarot reading, produces the tarot reading and "draw"
+// from the deck.
+//
 
 var CARD_HEIGHT= 317;
 var CARD_WIDTH = 190;
@@ -509,7 +513,9 @@ function tarot_reading_celtic_cross(tarot_data) {
 
     var _n = d[p].fortune_telling.length;
     _n = 2;
+
     var idx = Math.floor(Math.random() * _n);
+
     var fortune = d[p].fortune_telling[idx];
 
     var __n = d[p].meanings[light_shadow].length;
@@ -565,6 +571,9 @@ function display_tarot() {
 // called after init is done loading the JSON tarot interpretations
 //
 function finit() {
+
+  // wait til ldata is ready, otehrwise setup another callback in 1s
+  //
   if (!g_tarot.ready) {
     console.log("sleepy");
     setTimeout(finit, 1000);
@@ -693,9 +702,6 @@ function start_card_canvas(pixi_canvas_id, _img_bg, _img_fg, _img_suit, _img_tex
 }
 
 async function render_svg_to_png(canvas_id, svg_str) {
-
-  console.log(">>>", canvas_id, svg_str.length);
-
   var canvas = document.getElementById(canvas_id);
   var gfx_ctx = canvas.getContext('2d');
   var v = await canvg.Canvg.fromString(gfx_ctx, svg_str);
@@ -713,6 +719,9 @@ function init_pixi_layered_card(canvas_id, tarot_data) {
   var has_text = true;
 
   var major_arcana = g_data.major_arcana;
+
+  var _svg_header = '<svg version="1.1" id="Frame_0" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="720px" height="720px">';
+
 
   var name = "";
   if (tarot_data.family == "major") {
@@ -788,6 +797,9 @@ function init_pixi_layered_card(canvas_id, tarot_data) {
   fg_ctx.symbol = _fg_info.symbol;
   fg_ctx.data   = _fg_info.data;
 
+  //experimental
+  fg_ctx.create_svg_header = false;
+
   bg_ctx.choice = _bg_info.choice;
   bg_ctx.symbol = _bg_info.symbol;
   bg_ctx.data   = _bg_info.data;
@@ -807,8 +819,17 @@ function init_pixi_layered_card(canvas_id, tarot_data) {
   }
   var creature_svg_str  = sibyl.mystic_symbolic_sched(fg_ctx, creature_sched, fg_cp, fg_cs);
 
+  creature_svg_str = _svg_header +
+    '<g transform=" translate(' + dxy[0].toString() + " " + dxy[1].toString() + ')">' +
+    creature_svg_str +
+    "</g>" +
+    "</svg>";
+
+
+
   var suite_svg_str = "";
   if (has_suit) {
+    fg_ctx.create_svg_header = true;
     fg_ctx.svg_id = 'bar';
     var suite_svg_str = sibyl.mystic_symbolic_sched(fg_ctx, suite_sched);
   }
@@ -934,7 +955,6 @@ function init_pixi_layered_card(canvas_id, tarot_data) {
   } );
 
   var text_svg_str = g_data.svg_text[name];
-  console.log("...", text_svg_str);
   render_svg_to_png(_cid_txt, text_svg_str).then( _png => {
     g_data.png_card[_cid].n--;
     g_data.png_card[_cid].text = _png;

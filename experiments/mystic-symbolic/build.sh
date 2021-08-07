@@ -4,8 +4,15 @@ cat <( echo 'var vocabulary =' ) \
   <( jq -c . _svg-vocabulary-pretty-printed.json ) \
   <( echo -e ';\nmodule.exports = { "vocabulary":vocabulary };' ) > mystic_symbolic_vocabulary.js
 
+#cat <( echo 'var vocabulary = ' ) \
+#  <( node gen-tarot-json.js ) \
+#  <( echo -e ';\nmodule.exports = { "vocabulary":vocabulary };' ) > tarot_vocabulary.js
+
 cat <( echo 'var vocabulary = ' ) \
-  <( node gen-tarot-json.js ) \
+  <( echo '[' ) \
+  <( node gen-tarot-json.js | jq -c '.[]' | sed 's/$/,/' ) \
+  <( jq  -c '.[0]' _svg-lovers.json ) \
+  <( echo ']' ) \
   <( echo -e ';\nmodule.exports = { "vocabulary":vocabulary };' ) > tarot_vocabulary.js
 
 browserify --standalone sibyl sibyl.js > browser-sibyl.js

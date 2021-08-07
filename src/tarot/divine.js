@@ -5,6 +5,45 @@
 // to this file.
 //
 
+// n undefined or 0 -  capitalize every word except for 'of'
+// n > 0            -  capitalize n non 'of' words
+// n < 0            -  un capitalize |n| non 'of' words
+//
+// return string
+//
+function _capitalize(txt,n) {
+  n = ((typeof n === "undefined") ? 0 : n);
+  var uc = true;
+
+  if (n<0) {
+    uc = false;
+    n = -n;
+  }
+
+  var tok = txt.split(" ");
+  var n_cap = 0;
+
+  for (var ii=0; ii<tok.length; ii++) {
+    if ((n!=0) && (n_cap >= n)) { break; }
+
+    if (tok[ii].toLowerCase() != "of") {
+      if (uc) {
+        tok[ii] = tok[ii][0].toUpperCase() + tok[ii].slice(1);
+      }
+      else {
+        tok[ii] = tok[ii][0].toLowerCase() + tok[ii].slice(1);
+      }
+      n_cap++;
+    }
+    else {
+      tok[ii] = tok[ii][0].toLowerCase() + tok[ii].slice(1);
+    }
+
+  }
+
+  return tok.join(" ");
+}
+
 
 function seedstring() {
   var s = "abcdefghijklmnopqrustvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -203,6 +242,92 @@ if (verbose_reading) {
 }
 else {
   for (var ii=0; ii<ans.length; ii++) {
+
+    var _meaning = _capitalize(ans[ii].meaning, -1);
+
+    if (ii==0) {
+      console.log("the heart of the matter is", _meaning);
+      console.log("your general life at present is", _meaning);
+      console.log("what influences you right now is", _meaning);
+
+      console.log("");
+      console.log("The influence that is affecting you or the matter of inquiry generally is", _meaning);
+      console.log("");
+    }
+    else if (ii==1) {
+      console.log("the problem or challenge right now is", _meaning);
+      console.log("what helps you right now is", _meaning);
+      console.log("what hinders you right now is ", _meaning);
+
+      console.log("");
+      console.log("\nThe nature of the obstacle in front of you is", _meaning);
+      console.log("");
+    }
+    else if (ii==2) {
+      console.log("at the moment, the root cause of the problem is", _meaning);
+      console.log("currently, your subconscious influences are", _meaning);
+
+      console.log("");
+      console.log("The aim or ideal of the matter is", _meaning);
+      console.log("The best that can be acheived under the circumstances are", _meaning);
+      console.log("");
+    }
+    else if (ii==3) {
+      console.log("your recent past is", _meaning);
+      console.log("what brought you here today is", _meaning);
+      console.log("the reason you're here today pertains to", _meaning);
+
+      console.log("");
+      console.log("The foundation or basis of the matter that has already passed into actuality is", _meaning);
+      console.log("");
+    }
+
+    else if (ii==4) {
+      console.log("what will happen if nothing changes is", _meaning);
+      console.log("the best possible outcome is", _meaning);
+      console.log("what you desire as the outcome is", _meaning);
+      console.log("your conscious goals and desires are", _meaning);
+
+      console.log("");
+      console.log("The influence that has just passed or has passed away is", _meaning);
+      console.log("");
+    }
+    else if (ii==5) {
+      console.log("what will happen soon is", _meaning);
+      console.log("whether the situation is on hold or ersovling orwhat the situation has on the future is", _meaning);
+
+      console.log("");
+      console.log("The influence that is coming into action and will operate in the near future is", _meaning);
+      console.log("");
+    }
+
+    else if (ii==6)  {
+      console.log("you subconscious desire is", _meaning);
+      console.log("how you are currently addressing the situation is", _meaning);
+      console.log("your true feelings about the situation are", _meaning);
+
+      console.log("");
+      console.log("Your position or attitude of the circumstances is", _meaning);
+      console.log("");
+    }
+    else if (ii==7) {
+      console.log("other people and their influence, control and desires are", _meaning);
+      console.log("the environment that's outside of your control is", _meaning);
+      console.log("events outside of your control are", _meaning);
+
+      console.log("");
+      console.log("Your environment..", _meaning);
+      console.log("");
+    }
+
+    else if (ii==8) {
+      console.log("what you want or are afraid of is", _meaning);
+      console.log("what is hidden is", _meaning);
+      console.log("your mindset is", _meaning);
+    }
+    else if (ii==9) {
+      console.log("the likely long term outcome is", _meaning);
+    }
 
     if (ans[ii].modifier == "light") {
 
