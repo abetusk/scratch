@@ -126,6 +126,83 @@ var narrative_optimistic = [
   "The possible future"
 ];
 
+var _descriptive_join_words = [
+  "is about",
+  "pertains to",
+  "refers to",
+  "is related to",
+  "is regarding",
+  "relates to"
+];
+
+
+// from https://en.wikisource.org/wiki/The_Pictorial_Key_to_the_Tarot#An_Ancient_Celtic_Method_of_Divination
+// (CC-BY-SA)
+//
+// Turn up the top or FIRST CARD of the pack; cover the Significator with it, and 
+// say: This covers him. This card gives the influence which is affecting the 
+// person or matter of inquiry generally, the atmosphere of it in which the other 
+// currents work.
+// 
+// Turn up the SECOND CARD and lay it across the FIRST, saying: This crosses him. 
+// It shews the nature of the obstacles in the matter. If it is a favourable card, 
+// the opposing forces will not be serious, or it may indicate that something good 
+// in itself will not be productive of good in the particular connexion.
+// 
+// Turn up the THIRD CARD; place it above the Significator, and say: This crowns 
+// him. It represents (a) the Querent's aim or ideal in the matter; (b) the best 
+// that can be achieved under the circumstances, but that which has not yet been 
+// made actual.
+// 
+// Turn up the FOURTH CARD; place it below the Significator, and say: This is 
+// beneath him. It shews the foundation or basis of the matter, that which has 
+// already passed into actuality and which the Significator has made his own.
+// 
+// Turn up the FIFTH CARD; place it on the side of the Significator from which he 
+// is looking, and say: This is behind him. It gives the influence that is just 
+// passed, or is now passing away.
+// 
+// N.B.—If the Significator is a Trump or any small card that cannot be said to 
+// face either way, the Diviner must decide before beginning the operation which 
+// side he will take it as facing.
+// 
+// Turn up the SIXTH CARD; place it on the side that the Significator is facing, 
+// and say: This is before him. It shews the influence that is coming into action 
+// and will operate in the near future.
+// 
+// The cards are now disposed in the form of a cross, the Significator—covered 
+// by the First Card—being in the centre.
+// 
+// The next four cards are turned up in succession and placed one above the other 
+// in a line, on the right hand side of the cross.
+// 
+// The first of these, or the SEVENTH CARD of the operation, signifies 
+// himself—that is, the Significator—whether person or thing-and shews its 
+// position or attitude in the circumstances.
+// 
+// The EIGHTH CARD signifies his house, that is, his environment and the 
+// tendencies at work therein which have an effect on the matter—for instance, 
+// his position in life, the influence of immediate friends, and so forth.
+// 
+// The NINTH CARD gives his hopes or fears in the matter.
+// 
+// The TENTH is what will come, the final result, the culmination which is brought 
+// about by the influences shewn by the other cards that have been turned up in 
+// the divination. 
+
+var narrative_descriptive = [
+  "The influence that is affecting you or the matter of inquiry generally",
+  "The nature of the obstacle in front of you",
+  "The aim or ideal of the matter", // "The best that can be acheived under the circumstances ],
+  "The foundation or basis of the subject that has already happened",
+  "The influence that has just passed or has passed away",
+  "The influence that is coming into action and will operatin in the near future",
+  "The position or attitude in the circumstances",
+  "The environment or situation that have an effect on the matter",
+  "The hopes or fears of the matter",
+  "The culmination which is brought about by the influence shown by the other cards"
+];
+
 function _irand(param0, param1) {
   var _start = 0, _range = 2;
   if (typeof param0 !== "undefined") {
@@ -141,7 +218,8 @@ function _irand(param0, param1) {
   return Math.floor(Math.random()*_range) + _start;
 }
 
-var narrative = narrative_fatalistic;
+//var narrative = narrative_fatalistic;
+var narrative = narrative_descriptive;
 
 function tarot_reading_celtic_cross(tarot_data) {
   var d = tarot_data.tarot_interpretations;
@@ -245,13 +323,14 @@ else {
 
     var _meaning = _capitalize(ans[ii].meaning, -1);
 
+    /*
     if (ii==0) {
       console.log("the heart of the matter is", _meaning);
       console.log("your general life at present is", _meaning);
       console.log("what influences you right now is", _meaning);
 
       console.log("");
-      console.log("The influence that is affecting you or the matter of inquiry generally is", _meaning);
+      console.log("The influence that is affecting you or the matter of inquiry generally is about", _meaning);
       console.log("");
     }
     else if (ii==1) {
@@ -328,6 +407,22 @@ else {
     else if (ii==9) {
       console.log("the likely long term outcome is", _meaning);
     }
+    */
+
+    var _join_words = [
+      "is about",
+      "pertains to",
+      "refers to",
+      "is related to",
+      "is regarding",
+      "relates to"
+    ];
+
+
+    var jw = _join_words[ _irand(_join_words.length) ];
+    console.log(ans[ii].name + " (" + ans[ii].modifier + "):\n" + narrative[ii] + ", " + jw + " ... " + ans[ii].meaning);
+    console.log("---");
+    continue;
 
     if (ans[ii].modifier == "light") {
 

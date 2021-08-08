@@ -85,15 +85,19 @@ var g_ui = {
     { "ready": false }
   ],
   "caption_dxy" : {
-    "ui_card0" : [200,-150],
+    //"ui_card0" : [200,-150],
+    "ui_card0" : [200,-180],
     "ui_card1" : [-180,250],
     "ui_card2" : [0,-180],
     "ui_card3" : [0,330],
     "ui_card4" : [0,-180],
     "ui_card5" : [0,330],
-    "ui_card6" : [-220,120],
-    "ui_card7" : [-220,300],
-    "ui_card8" : [-220,-120],
+    //"ui_card6" : [-220,120],
+    "ui_card6" : [-220,150],
+    //"ui_card7" : [-220,300],
+    "ui_card7" : [-220,320],
+    //"ui_card8" : [-220,-120],
+    "ui_card8" : [-220,-150],
     "ui_card9" : [-220,-20]
   }
 };
@@ -171,6 +175,7 @@ var g_data = {
   "exclude_all_and_wing" : [],
 
   "svg_text" : { },
+  "svg_text_inner" : { },
   "png_text" : {},
 
   "png_card" : {
@@ -469,7 +474,32 @@ function tarot_reading_celtic_cross(tarot_data) {
     "The ultimate result or cumulation about the influences from the other cards in the divination"
   ];
 
-  var narrative = narrative_fatalistic;
+  var narrative_descriptive = [
+    "The influence that is affecting you or the matter of inquiry generally",
+    "The nature of the obstacle in front of you",
+    "The aim or ideal of the matter", // "The best that can be acheived under the circumstances ],
+    "The foundation or basis of the subject that has already happened",
+    "The influence that has just passed or has passed away",
+    "The influence that is coming into action and will operatin in the near future",
+    "The position or attitude you have in the circumstances",
+    "The environment or situation that have an effect on the matter",
+    "The hopes or fears of the matter",
+    "The culmination which is brought about by the influence shown by the other cards"
+  ];
+
+
+  var descriptive_join= [
+    "is about",
+    "pertains to",
+    "refers to",
+    "is related to",
+    "is regarding",
+    "relates to"
+  ];
+
+
+  //var narrative = narrative_fatalistic;
+  var narrative = narrative_descriptive;
 
 
   for (var ii=0; ii<n; ii++) { a_idx.push(ii); }
@@ -502,12 +532,13 @@ function tarot_reading_celtic_cross(tarot_data) {
 
     var _name = d[p].name.replace(/[wW]ands/, "Keys");
 
-    var phrase = ((light_shadow == "light") ? _crnd(light_phrases) : _crnd(shadow_phrases) );
+    //var phrase = ((light_shadow == "light") ? _crnd(light_phrases) : _crnd(shadow_phrases) );
+    var phrase = _crnd(descriptive_join);
+    //var sentence = _name + "(" + light_shadow + "): " + narrative[ii] + ", " + phrase + " ... " + meaning;
     var sentence = _name + "(" + light_shadow + "): " + narrative[ii] + ", " + phrase + " ... " + meaning;
 
-    var html_sentence = "<b><u>" + _capitalize(_name) + "</u></b> <small>(" + light_shadow + ")</small><br>";
+    var html_sentence = "<b><u>[" + (ii+1).toString() + "] " + _capitalize(_name) + "</u></b> <small>(" + light_shadow + ")</small><br>";
     html_sentence += _capitalize(narrative[ii],1) + ", " + _capitalize(phrase,-1) + " " + _capitalize(meaning,-1);
-
 
     var val = {
       "index": p,
@@ -521,7 +552,6 @@ function tarot_reading_celtic_cross(tarot_data) {
       "_sentence": sentence,
       "sentence": html_sentence
     };
-
 
     res.push(val);
   }
@@ -675,9 +705,84 @@ async function render_svg_to_png(canvas_id, svg_str) {
   return png;
 }
 
-function init_pixi_layered_card(canvas_id, tarot_data) {
+function realize_svg_card_back(tarot_data) {
+
+  var bg_ctx = sibyl.bg_ctx;
+  var background_sched = tarot_data.bg;
+
+  //var bg_id = "back_card_ok12345_" + tarot_data.card_idx.toString();
+  //sibyl.bg_ctx.svg_id = "__back_card_" + tarot_data.card_idx.toString();
+  var bg_id = "_back_card_";
+  sibyl.bg_ctx.svg_id = "__back_card_";
+  sibyl.bg_ctx.create_background_rect = false;
+  sibyl.bg_ctx.create_svg_header = false;
+  sibyl.bg_ctx.scale = 0.2;
+  sibyl.bg_ctx.global_scale = 0.5;
+
+  var bg_cp = tarot_data.colors[2][0].hex;
+  var bg_cs = tarot_data.colors[2][1].hex;
+
+  var bg_svg_str_single = '<g id="' + bg_id + '">\n' + sibyl.mystic_symbolic_sched(bg_ctx, background_sched, bg_cp, bg_cs) + '\n</g>';
+
+  var w = 500;
+  var h = 500;
+
+  var first_bg = true;
+
+  var svg_extra_header = "";
+  svg_extra_header += "<rect x=\"-" + w.toString() +
+    "\" y=\"-" + h.toString() + "\" " +
+    "width=\"" + (3*w).toString() +
+    "\" height=\"" + (3*h).toString() +
+    //"\" fill=\"" + _bg +
+    "\" fill=\"" + bg_cp +
+    "\" data-is-background=\"true\">\n</rect>\n" +
+    "<g transform=\"translate( -200 -200 )\">"  ;
+
+  var _n_x = 8;
+  var _n_y = 11;
+  var dx = 175*sibyl.bg_ctx.global_scale;
+  var dy = 100*sibyl.bg_ctx.global_scale;
+  var bg_svg_str = "";
+  for (var x_idx=0; x_idx<_n_x; x_idx++) {
+    for (var y_idx=0; y_idx<_n_y; y_idx++) {
+      var _x = Math.floor( x_idx - (_n_x/2) )*dx ;
+      var _y = Math.floor( y_idx - (_n_y/2) )*dy ;
+
+      if ((y_idx%2)==1) { _x += dx/2; }
+
+      bg_svg_str += "<g transform=\"";
+      bg_svg_str += " translate(" + (-_x).toString() + " " + (-_y).toString() + ")";
+      bg_svg_str += "\">";
+
+      if (first_bg) {
+        bg_svg_str += bg_svg_str_single;
+        first_bg = false;
+      }
+      else {
+        bg_svg_str += '<use xlink:href="#' + bg_id + '"/>\n';
+      }
+
+      bg_svg_str  += "</g>";
+    }
+  }
+
+
+  //var bg_hdr = '<svg version="1.1" id="bg_frame" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="500px" height="500px">';
+  var bg_hdr = '<svg version="1.1" id="bg_frame" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="190px" height="317px">';
+  bg_hdr += svg_extra_header;
+  bg_svg_str = bg_hdr + bg_svg_str + "</g>" + "</svg>";
+
+  return bg_svg_str;
+
+}
+
+//function init_pixi_layered_card(canvas_id, tarot_data) {
+function realize_svg_card(tarot_data) {
   var creature_sched = tarot_data.fg;
   var suite_sched = {};
+
+  var full_svg = "";
 
   var has_suit = false;
   var has_numeral = false;
@@ -686,7 +791,6 @@ function init_pixi_layered_card(canvas_id, tarot_data) {
   var major_arcana = g_data.major_arcana;
 
   var _svg_header = '<svg version="1.1" id="Frame_0" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="720px" height="720px">';
-
 
   var name = "";
   if (tarot_data.family == "major") {
@@ -722,6 +826,7 @@ function init_pixi_layered_card(canvas_id, tarot_data) {
       has_text = true;
     }
     else {
+      _scale = 0.88;
       has_text = false;
 
       var tok = creature_sched.base.split("_");
@@ -791,6 +896,11 @@ function init_pixi_layered_card(canvas_id, tarot_data) {
   }
   var creature_svg_str  = sibyl.mystic_symbolic_sched(fg_ctx, creature_sched, fg_cp, fg_cs);
 
+  var svg_creature_only = 
+    '<g transform=" translate(' + dxy[0].toString() + " " + dxy[1].toString() + ')">' +
+    creature_svg_str +
+    "</g>";
+
   creature_svg_str = _svg_header +
     '<g transform=" translate(' + dxy[0].toString() + " " + dxy[1].toString() + ')">' +
     creature_svg_str +
@@ -809,8 +919,11 @@ function init_pixi_layered_card(canvas_id, tarot_data) {
     var suite_svg_str = sibyl.mystic_symbolic_sched(fg_ctx, suite_sched);
   }
 
-  var bg_id = "bg_ok1234";
-  sibyl.bg_ctx.svg_id = "__background_creature_" + seed;
+  //var bg_id = "bg_ok1234";
+  //sibyl.bg_ctx.svg_id = "__background_creature_" + seed;
+  var bg_id = "_background_" + tarot_data.card_idx.toString();
+  sibyl.bg_ctx.svg_id = "__back_card_" + tarot_data.card_idx.toString();
+
   sibyl.bg_ctx.create_background_rect = false;
   sibyl.bg_ctx.create_svg_header = false;
   sibyl.bg_ctx.scale = 0.2;
@@ -863,9 +976,64 @@ function init_pixi_layered_card(canvas_id, tarot_data) {
     }
   }
 
+  var svg_background_only = bg_svg_str;
+
   var bg_hdr = '<svg version="1.1" id="bg_frame" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="500px" height="500px">';
   bg_hdr += svg_extra_header;
   bg_svg_str = bg_hdr + bg_svg_str + "</svg>";
+
+  var text_svg_str = g_data.svg_text[name];
+  var svg_text_only = g_data.svg_text_inner[name];
+
+  var full_svg = 
+    '<svg version="1.1" id="bg_frame" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="190px" height="317px">' +
+
+    svg_extra_header + 
+    "<g transform=\"translate(-250 -250)\">" + 
+    svg_background_only + 
+    "</g>" +
+
+    "<g transform=\"translate(-270 -180)\">" + 
+    svg_creature_only +
+    "</g>" +
+
+    "<g transform=\"translate(0 0)\">" + 
+    svg_text_only +
+    "</g>" +
+
+    "</svg>";
+
+  return { "fg": creature_svg_str, "bg": bg_svg_str, "suite": suite_svg_str, "text": text_svg_str, "svg_card": full_svg };
+}
+
+function init_pixi_layered_card(canvas_id, tarot_data) {
+
+  var svg_data = realize_svg_card(tarot_data);
+  var creature_svg_str = svg_data.fg;
+  var bg_svg_str = svg_data.bg;
+  var suite_svg_str = svg_data.suite;
+  var text_svg_str = svg_data.text;
+
+  var has_suit = false;
+  var has_numeral = false;
+  var has_text = true;
+
+  if (tarot_data.family != "major") {
+
+    if ((tarot_data.designation == "ace") ||
+        (tarot_data.designation == "page") ||
+        (tarot_data.designation == "knight") ||
+        (tarot_data.designation == "queen") ||
+        (tarot_data.designation == "king")) {
+
+      has_text = true;
+    }
+    else {
+      has_text = false;
+      has_suit = true;
+    }
+
+  }
 
   g_data.png_card[canvas_id].n = 3 + (has_suit?1:0);
 
@@ -901,7 +1069,7 @@ function init_pixi_layered_card(canvas_id, tarot_data) {
     }
   } );
 
-  var text_svg_str = g_data.svg_text[name];
+  //var text_svg_str = g_data.svg_text[name];
   render_svg_to_png(_cid_txt, text_svg_str).then( _png => {
     g_data.png_card[_cid].n--;
     g_data.png_card[_cid].text = _png;
@@ -1227,7 +1395,8 @@ function realize_tarot_sched(_seed, ctx) {
   // last entry is the back of the cards
   //
   tarot_sched.push( {
-    "bg" : { "base" : back_symbol_name + bca[0].hex + bca[1].hex },
+    //"bg" : { "base" : back_symbol_name + bca[0].hex + bca[1].hex },
+    "bg" : { "base" : back_symbol_name + back_card_color.background.hex + back_card_color.background2.hex },
     "fg" : { "base" : "empty" },
     "colors" : bca
   });
@@ -1237,14 +1406,123 @@ function realize_tarot_sched(_seed, ctx) {
 
 }
 
+function populate_deck_image_single(idx) {
+
+
+  console.log(">>", idx);
+
+  console.log("cp0:", Date.now());
+
+  var svg_data = realize_svg_card(g_data.tarot_sched[idx]);
+
+  document.getElementById("ui_deck" + idx.toString()).innerHTML = svg_data.svg_card;
+  return;
+
+  console.log("cp1:", Date.now());
+
+  var c = document.createElement("canvas");
+  c.width = 190;
+  c.height = 317;
+  var gfx_ctx = c.getContext('2d');
+  //gfx_ctx.drawImage( svg_img, 0, 0 );
+
+
+  var svg = new Blob([svg_data.svg_card], {type: "image/svg+xml;charset=utf-8"});
+  var url = URL.createObjectURL(svg);
+
+  var img = new Image();
+  img.onload = function() {
+    gfx_ctx.drawImage(img, 0, 0);
+    var png = canvas.toDataURL("image/png");
+    document.getElementById("ui_deck" + idx.toString()).innerHTML = '<img src="' + png + '"/>';
+    URL.revokeOBjectURL(png);
+  };
+
+  return;
+  //---
+
+  var svg_img = new Image();
+  svg_img.src = 'data:image/svg+xml;base64,' + window.btoa(svg_data.svg_card);
+
+  console.log(svg_img);
+
+  //----
+  var _img = document.getElementById("ui_img_deck" + idx.toString());
+  _img.src = svg_img;
+  //----
+  return;
+
+
+  console.log("cp2:", Date.now());
+
+  var png_img = c.toDataURL('image/png');
+  var _img = document.getElementById("ui_img_deck" + idx.toString());
+  _img.src = png_img;
+
+  console.log("cp3:", Date.now());
+
+  console.log(svg_img, png_img, _img);
+
+  return;
+
+  render_svg_to_png("ui_canvas_deck" + idx.toString(), svg_data.svg_card).then(
+    (function(_ui_id) {
+      return function(_png) {
+        var _img = document.getElementById(_ui_id);
+        //var _img = document.createElement("img");
+        _img.src = _png;
+        //ele.appendChild(_img);
+      };
+    })("ui_img_deck" + idx.toString())
+  );
+
+}
+
+function populate_deck_image() {
+
+  var card_back_svg = realize_svg_card_back(g_data.tarot_sched[78]);
+
+  render_svg_to_png("ui_canvas_deck78", card_back_svg).then(
+    _png => {
+
+      // populate all other cards initially with card backing
+      // including the back card spot.
+      //
+      for (var ii=0; ii<79; ii++) {
+        var ui_id = "ui_deck" + ii.toString();
+        var ele = document.getElementById(ui_id);
+        var _img = document.createElement("img");
+        _img.src = _png;
+        _img.id = "ui_img_deck" + ii.toString();
+        ele.appendChild(_img);
+      }
+    }
+  );
+
+
+  //for (var ii=0; ii<78; ii++) {
+  for (var ii=0; ii<78; ii++) {
+
+    //if (ii==0) { console.log(">>", svg_data.svg_card); }
+
+    setTimeout( (function(_x) { return function() { populate_deck_image_single(_x); }; })(ii), 5000 + 100*ii);
+
+  }
+
+}
+
 // call on initial page load
 //
 function init() {
+  init_svg_text();
+
   _load("data/tarot_interpretations.json", _tarot_json_cb);
 
+  console.log("s>>", Date.now());
   g_data["tarot_sched"] = realize_tarot_sched("x", g_data);
+  console.log("e>>", Date.now());
 
-  init_svg_text();
+  populate_deck_image();
 
   setTimeout(finit, 1000);
 }
@@ -1282,6 +1560,9 @@ function caption_update(ui_id, txt, cap_name, dxy) {
   else {
     caption.style.left = (b[0][0] + dxy[0]).toString() + "px";
     caption.style.top = (b[1][1] + dxy[1]).toString() + "px";
+
+    var _l = (b[0][0] + dxy[0]).toString() + "px";
+    var _t = (b[1][1] + dxy[1]).toString() + "px";
   }
 
 }
@@ -1346,13 +1627,16 @@ function init_svg_text() {
       var name = g_data.minor_arcana[num_idx].toUpperCase() + " of " + g_data.minor_arcana_suit[suit_idx].toUpperCase() + "S";
 
       g_data.svg_text[name] = svg_header;
+      g_data.svg_text_inner[name] = "";
 
       if ((num_idx>0) && (num_idx<10)) {
         g_data.svg_text[name] += txt_ele_numeral.replace('<!--::TEXT::-->', g_data.numeral[num_idx+1]);
+        g_data.svg_text_inner[name] += txt_ele_numeral.replace('<!--::TEXT::-->', g_data.numeral[num_idx+1]);
       }
 
       if ((num_idx<1) || (num_idx>=10)) {
         g_data.svg_text[name] += txt_ele_name.replace('<!--::TEXT::-->', name );
+        g_data.svg_text_inner[name] += txt_ele_name.replace('<!--::TEXT::-->', name );
       }
 
       g_data.svg_text[name] += "</svg>";
@@ -1369,6 +1653,8 @@ function init_svg_text() {
     g_data.svg_text[name] += txt_ele_name.replace('<!--::TEXT::-->', name);
     g_data.svg_text[name] += "</svg>";
 
+    g_data.svg_text_inner[name] = txt_ele_numeral.replace('<!--::TEXT::-->', g_data.numeral[ma_idx]);
+    g_data.svg_text_inner[name] += txt_ele_name.replace('<!--::TEXT::-->', name);
   }
 
 }
@@ -1395,7 +1681,8 @@ $(document).ready(function() {
   //
   $("#ui_card0").mouseenter( function(e) {
     var _m = (g_ui.mobile_view ? "_m" : "");
-    caption_update("ui_card0", g_tarot.reading[0].sentence, "caption_0" + _m, [200,-150]);
+    //caption_update("ui_card0", g_tarot.reading[0].sentence, "caption_0" + _m, [200,-150]);
+    caption_update("ui_card0", g_tarot.reading[0].sentence, "caption_0" + _m, g_ui.caption_dxy["ui_card0"]);
     $("#caption_0" + _m).fadeIn();
     $("#ui_card1" + _m).fadeTo(400, 0.15);
   });
@@ -1412,7 +1699,8 @@ $(document).ready(function() {
 
   $("#ui_card1").mouseenter( function(e) {
     var _m = (g_ui.mobile_view ? "_m" : "");
-    caption_update("ui_card1", g_tarot.reading[1].sentence, "caption_1" + _m, [-180,250]);
+    //caption_update("ui_card1", g_tarot.reading[1].sentence, "caption_1" + _m, [-180,250]);
+    caption_update("ui_card1", g_tarot.reading[1].sentence, "caption_1" + _m, g_ui.caption_dxy["ui_card1"]);
     $("#caption_1" + _m).fadeIn();
 
   });
@@ -1428,7 +1716,8 @@ $(document).ready(function() {
 
   $("#ui_card2").mouseenter( function(e) {
     var _m = (g_ui.mobile_view ? "_m" : "");
-    caption_update("ui_card2", g_tarot.reading[2].sentence, "caption_2" + _m, [0,-180]);
+    //caption_update("ui_card2", g_tarot.reading[2].sentence, "caption_2" + _m, [0,-180]);
+    caption_update("ui_card2", g_tarot.reading[2].sentence, "caption_2" + _m, g_ui.caption_dxy["ui_card2"]);
     $("#caption_2" + _m).fadeIn();
   });
 
@@ -1443,7 +1732,8 @@ $(document).ready(function() {
 
   $("#ui_card3").mouseenter( function(e) {
     var _m = (g_ui.mobile_view ? "_m" : "");
-    caption_update("ui_card3", g_tarot.reading[3].sentence, "caption_3" + _m, [0,330]);
+    //caption_update("ui_card3", g_tarot.reading[3].sentence, "caption_3" + _m, [0,330]);
+    caption_update("ui_card3", g_tarot.reading[3].sentence, "caption_3" + _m, g_ui.caption_dxy["ui_card3"]);
     $("#caption_3" + _m).fadeIn();
   });
 
@@ -1458,7 +1748,8 @@ $(document).ready(function() {
 
   $("#ui_card4").mouseenter( function(e) {
     var _m = (g_ui.mobile_view ? "_m" : "");
-    caption_update("ui_card4", g_tarot.reading[4].sentence, "caption_4" + _m, [0,-180]);
+    //caption_update("ui_card4", g_tarot.reading[4].sentence, "caption_4" + _m, [0,-180]);
+    caption_update("ui_card4", g_tarot.reading[4].sentence, "caption_4" + _m, g_ui.caption_dxy["ui_card4"]);
     $("#caption_4" + _m).fadeIn();
   });
 
@@ -1474,7 +1765,8 @@ $(document).ready(function() {
 
   $("#ui_card5").mouseenter( function(e) {
     var _m = (g_ui.mobile_view ? "_m" : "");
-    caption_update("ui_card5", g_tarot.reading[5].sentence, "caption_5" + _m, [0,330]);
+    //caption_update("ui_card5", g_tarot.reading[5].sentence, "caption_5" + _m, [0,330]);
+    caption_update("ui_card5", g_tarot.reading[5].sentence, "caption_5" + _m, g_ui.caption_dxy["ui_card5"]);
     $("#caption_5" + _m).fadeIn();
   });
 
@@ -1489,7 +1781,8 @@ $(document).ready(function() {
 
   $("#ui_card6").mouseenter( function(e) {
     var _m = (g_ui.mobile_view ? "_m" : "");
-    caption_update("ui_card6", g_tarot.reading[6].sentence, "caption_6" + _m);
+    //caption_update("ui_card6", g_tarot.reading[6].sentence, "caption_6" + _m);
+    caption_update("ui_card6", g_tarot.reading[6].sentence, "caption_6" + _m, g_ui.caption_dxy["ui_card6"]);
     $("#caption_6" + _m).fadeIn();
   });
 
@@ -1504,7 +1797,8 @@ $(document).ready(function() {
 
   $("#ui_card7").mouseenter( function(e) {
     var _m = (g_ui.mobile_view ? "_m" : "");
-    caption_update("ui_card7", g_tarot.reading[7].sentence, "caption_7" + _m, [-220, 300]);
+    //caption_update("ui_card7", g_tarot.reading[7].sentence, "caption_7" + _m, [-220, 300]);
+    caption_update("ui_card7", g_tarot.reading[7].sentence, "caption_7" + _m, g_ui.caption_dxy["ui_card7"]);
     $("#caption_7" + _m).fadeIn();
   });
 
@@ -1519,7 +1813,8 @@ $(document).ready(function() {
 
   $("#ui_card8").mouseenter( function(e) {
     var _m = (g_ui.mobile_view ? "_m" : "");
-    caption_update("ui_card8", g_tarot.reading[8].sentence, "caption_8" + _m, [-220,-120]);
+    //caption_update("ui_card8", g_tarot.reading[8].sentence, "caption_8" + _m, [-220,-120]);
+    caption_update("ui_card8", g_tarot.reading[8].sentence, "caption_8" + _m, g_ui.caption_dxy["ui_card8"]);
     $("#caption_8" + _m).fadeIn();
   });
 
@@ -1534,7 +1829,8 @@ $(document).ready(function() {
 
   $("#ui_card9").mouseenter( function(e) {
     var _m = (g_ui.mobile_view ? "_m" : "");
-    caption_update("ui_card9", g_tarot.reading[9].sentence, "caption_9" + _m, [-220,-20]);
+    //caption_update("ui_card9", g_tarot.reading[9].sentence, "caption_9" + _m, [-220,-20]);
+    caption_update("ui_card9", g_tarot.reading[9].sentence, "caption_9" + _m, g_ui.caption_dxy["ui_card9"]);
     $("#caption_9" + _m).fadeIn();
   });
 
@@ -1670,7 +1966,8 @@ $(document).ready(function() {
       g_ui.button_state.ui_button_reading.state = "off";
       var ele = document.getElementById("ui_button_reading");
       ele.style.backgroundColor = "transparent";
-      ele.style.color = "#333";
+      //ele.style.color = "#333";
+      ele.style.color = "#777";
 
       for (var ii=0; ii<10; ii++) {
         $("#caption_" + ii.toString()).fadeOut();

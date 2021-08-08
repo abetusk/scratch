@@ -340,305 +340,629 @@
 
       <div class='deck_container' id='ui_tarot_deck' style='display:none;'>
 
-        <!--
 <div class='row'>
 
-  <div class='three columns'>
-    <div id='ui_deck0' class='deck_card'><a href='example_deck_png/00-THE_FOOL.png'><img class='u-max-full-width' src='example_deck_png/00-THE_FOOL.png'></a> </div>
+  <div class='three columns' style='height=330px;'>
+    <div class='canvas_container'>
+      <div id='ui_deck0' class='deck_card'>
+        <canvas id='ui_canvas_deck0' width='190' height='317' style='display:none;'></canvas>
+      </div>
+    </div>
   </div>
+
   <div class='three columns'>
-    <div id='ui_deck1' class='deck_card'><a href='example_deck_png/01-THE_MAGICIAN.png'><img class='u-max-full-width' src='example_deck_png/01-THE_MAGICIAN.png'></a> </div>
+    <div class='canvas_container'>
+      <div id='ui_deck1' class='deck_card'>
+        <canvas id='ui_canvas_deck1' width='190' height='317' style='display:none;'></canvas>
+      </div>
+    </div>
   </div>
+
   <div class='three columns'>
-    <div id='ui_deck2' class='deck_card'><a href='example_deck_png/02-THE_PRIESTESS.png'><img class='u-max-full-width' src='example_deck_png/02-THE_PRIESTESS.png'></a> </div>
+    <div class='canvas_container'>
+      <div id='ui_deck2' class='deck_card'>
+        <canvas id='ui_canvas_deck2' width='190' height='317' style='display:none;'></canvas>
+      </div>
+    </div>
   </div>
+
   <div class='three columns'>
-    <div id='ui_deck3' class='deck_card'><a href='example_deck_png/03-THE_EMPRESS.png'><img class='u-max-full-width' src='example_deck_png/03-THE_EMPRESS.png'></a> </div>
+    <div class='canvas_container'>
+      <div id='ui_deck3' class='deck_card'>
+        <canvas id='ui_canvas_deck3' width='190' height='317' style='display:none;'></canvas>
+      </div>
+    </div>
   </div>
 </div>
 
 <div class='row'>
   <div class='three columns'>
-    <div id='ui_deck4' class='deck_card'><a href='example_deck_png/04-THE_EMPEROR.png'><img class='u-max-full-width' src='example_deck_png/04-THE_EMPEROR.png'></a> </div>
+    <div class='canvas_container'>
+      <div id="ui_deck4" class="deck_card">
+        <canvas id="ui_canvas_deck4" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
   </div>
   <div class='three columns'>
-    <div id='ui_deck5' class='deck_card'><a href='example_deck_png/05-THE_HIEROPHANT.png'><img class='u-max-full-width' src='example_deck_png/05-THE_HIEROPHANT.png'></a> </div>
+    <div class='canvas_container'>
+      <div id="ui_deck5" class="deck_card">
+        <canvas id="ui_canvas_deck5" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
   </div>
   <div class='three columns'>
-    <div id='ui_deck6' class='deck_card'><a href='example_deck_png/06-THE_LOVERS.png'><img class='u-max-full-width' src='example_deck_png/06-THE_LOVERS.png'></a> </div>
+    <div class='canvas_container'>
+      <div id="ui_deck6" class="deck_card">
+        <canvas id="ui_canvas_deck6" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
   </div>
   <div class='three columns'>
-    <div id='ui_deck7' class='deck_card'><a href='example_deck_png/07-THE_CHARIOT.png'><img class='u-max-full-width' src='example_deck_png/07-THE_CHARIOT.png'></a> </div>
+    <div class='canvas_container'>
+      <div id="ui_deck7" class="deck_card">
+        <canvas id="ui_canvas_deck7" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class='row'>
+  <div class='three columns'>
+    <div class='canvas_container'>
+      <div id="ui_deck8" class="deck_card">
+        <canvas id="ui_canvas_deck8" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
+  </div>
+  <div class='three columns'>
+    <div class='canvas_container'>
+      <div id="ui_deck9" class="deck_card">
+        <canvas id="ui_canvas_deck9" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
+  </div>
+  <div class='three columns'>
+    <div class='canvas_container'>
+      <div id="ui_deck10" class="deck_card">
+        <canvas id="ui_canvas_deck10" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
+  </div>
+  <div class='three columns'>
+    <div class='canvas_container'>
+      <div id="ui_deck11" class="deck_card">
+        <canvas id="ui_canvas_deck11" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
   </div>
 </div>
 
 <div class='row'>
   <div class='three columns'>
-    <div id='ui_deck8' class='deck_card'><a href='example_deck_png/08-STRENGTH.png'><img class='u-max-full-width' src='example_deck_png/08-STRENGTH.png'></a> </div>
+    <div class='canvas_container'>
+      <div id="ui_deck12" class="deck_card">
+        <canvas id="ui_canvas_deck12" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
   </div>
   <div class='three columns'>
-    <div id='ui_deck9' class='deck_card'><a href='example_deck_png/09-THE_HERMIT.png'><img class='u-max-full-width' src='example_deck_png/09-THE_HERMIT.png'></a> </div>
+    <div class='canvas_container'>
+      <div id="ui_deck13" class="deck_card">
+        <canvas id="ui_canvas_deck13" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
   </div>
   <div class='three columns'>
-    <div id='ui_deck10' class='deck_card'><a href='example_deck_png/10-WHEEL_of_FORTUNE.png'><img class='u-max-full-width' src='example_deck_png/10-WHEEL_of_FORTUNE.png'></a> </div>
+    <div class='canvas_container'>
+      <div id="ui_deck14" class="deck_card">
+        <canvas id="ui_canvas_deck14" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
   </div>
   <div class='three columns'>
-    <div id='ui_deck11' class='deck_card'><a href='example_deck_png/11-JUSTICE.png'><img class='u-max-full-width' src='example_deck_png/11-JUSTICE.png'></a> </div>
-  </div>
-</div>
-
-<div class='row'>
-  <div class='three columns'>
-    <div id='ui_deck12' class='deck_card'><a href='example_deck_png/12-THE_HANGED_MAN.png'><img class='u-max-full-width' src='example_deck_png/12-THE_HANGED_MAN.png'></a> </div>
-  </div>
-  <div class='three columns'>
-    <div id='ui_deck13' class='deck_card'><a href='example_deck_png/13-DEATH.png'><img class='u-max-full-width' src='example_deck_png/13-DEATH.png'></a> </div>
-  </div>
-  <div class='three columns'>
-    <div id='ui_deck14' class='deck_card'><a href='example_deck_png/14-TEMPERANCE.png'><img class='u-max-full-width' src='example_deck_png/14-TEMPERANCE.png'></a> </div>
-  </div>
-  <div class='three columns'>
-    <div id='ui_deck15' class='deck_card'><a href='example_deck_png/15-THE_DEVIL.png'><img class='u-max-full-width' src='example_deck_png/15-THE_DEVIL.png'></a> </div>
-  </div>
-</div>
-
-<div class='row'>
-  <div class='three columns'>
-    <div id='ui_deck16' class='deck_card'><a href='example_deck_png/16-THE_TOWER.png'><img class='u-max-full-width' src='example_deck_png/16-THE_TOWER.png'></a> </div>
-  </div>
-  <div class='three columns'>
-    <div id='ui_deck17' class='deck_card'><a href='example_deck_png/17-THE_STAR.png'><img class='u-max-full-width' src='example_deck_png/17-THE_STAR.png'></a> </div>
-  </div>
-  <div class='three columns'>
-    <div id='ui_deck18' class='deck_card'><a href='example_deck_png/18-THE_MOON.png'><img class='u-max-full-width' src='example_deck_png/18-THE_MOON.png'></a> </div>
-  </div>
-  <div class='three columns'>
-    <div id='ui_deck19' class='deck_card'><a href='example_deck_png/19-THE_SUN.png'><img class='u-max-full-width' src='example_deck_png/19-THE_SUN.png'></a> </div>
+    <div class='canvas_container'>
+      <div id="ui_deck15" class="deck_card">
+        <canvas id="ui_canvas_deck15" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
   </div>
 </div>
 
 <div class='row'>
   <div class='three columns'>
-    <div id='ui_deck20' class='deck_card'><a href='example_deck_png/20-JUDGEMENT.png'><img class='u-max-full-width' src='example_deck_png/20-JUDGEMENT.png'></a> </div>
+    <div class='canvas_container'>
+      <div id="ui_deck16" class="deck_card">
+        <canvas id="ui_canvas_deck16" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
   </div>
   <div class='three columns'>
-    <div id='ui_deck21' class='deck_card'><a href='example_deck_png/21-THE_WORLD.png'><img class='u-max-full-width' src='example_deck_png/21-THE_WORLD.png'></a> </div>
+    <div class='canvas_container'>
+      <div id="ui_deck17" class="deck_card">
+        <canvas id="ui_canvas_deck17" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
   </div>
   <div class='three columns'>
-    <div id='ui_deck22' class='deck_card'><a href='example_deck_png/36-key_ace.png'><img class='u-max-full-width' src='example_deck_png/36-key_ace.png'></a> </div>
+    <div class='canvas_container'>
+      <div id="ui_deck18" class="deck_card">
+        <canvas id="ui_canvas_deck18" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
   </div>
   <div class='three columns'>
-    <div id='ui_deck23' class='deck_card'><a href='example_deck_png/37-key_2.png'><img class='u-max-full-width' src='example_deck_png/37-key_2.png'></a> </div>
+    <div class='canvas_container'>
+      <div id="ui_deck19" class="deck_card">
+        <canvas id="ui_canvas_deck19" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
   </div>
 </div>
 
 <div class='row'>
   <div class='three columns'>
-    <div id='ui_deck24' class='deck_card'><a href='example_deck_png/38-key_3.png'><img class='u-max-full-width' src='example_deck_png/38-key_3.png'></a> </div>
+    <div class='canvas_container'>
+      <div id="ui_deck20" class="deck_card">
+        <canvas id="ui_canvas_deck20" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
   </div>
   <div class='three columns'>
-    <div id='ui_deck25' class='deck_card'><a href='example_deck_png/39-key_4.png'><img class='u-max-full-width' src='example_deck_png/39-key_4.png'></a> </div>
+    <div class='canvas_container'>
+      <div id="ui_deck21" class="deck_card">
+        <canvas id="ui_canvas_deck21" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
   </div>
   <div class='three columns'>
-    <div id='ui_deck26' class='deck_card'><a href='example_deck_png/40-key_5.png'><img class='u-max-full-width' src='example_deck_png/40-key_5.png'></a> </div>
+    <div class='canvas_container'>
+      <div id="ui_deck22" class="deck_card">
+        <canvas id="ui_canvas_deck22" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
   </div>
   <div class='three columns'>
-    <div id='ui_deck27' class='deck_card'><a href='example_deck_png/41-key_6.png'><img class='u-max-full-width' src='example_deck_png/41-key_6.png'></a> </div>
+    <div class='canvas_container'>
+      <div id="ui_deck23" class="deck_card">
+        <canvas id="ui_canvas_deck23" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
   </div>
 </div>
 
 <div class='row'>
   <div class='three columns'>
-    <div id='ui_deck28' class='deck_card'><a href='example_deck_png/42-key_7.png'><img class='u-max-full-width' src='example_deck_png/42-key_7.png'></a> </div>
+    <div class='canvas_container'>
+      <div id="ui_deck24" class="deck_card">
+        <canvas id="ui_canvas_deck24" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
   </div>
   <div class='three columns'>
-    <div id='ui_deck29' class='deck_card'><a href='example_deck_png/43-key_8.png'><img class='u-max-full-width' src='example_deck_png/43-key_8.png'></a> </div>
+    <div class='canvas_container'>
+      <div id="ui_deck25" class="deck_card">
+        <canvas id="ui_canvas_deck25" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
   </div>
   <div class='three columns'>
-    <div id='ui_deck30' class='deck_card'><a href='example_deck_png/44-key_9.png'><img class='u-max-full-width' src='example_deck_png/44-key_9.png'></a> </div>
+    <div class='canvas_container'>
+      <div id="ui_deck26" class="deck_card">
+        <canvas id="ui_canvas_deck26" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
   </div>
   <div class='three columns'>
-    <div id='ui_deck31' class='deck_card'><a href='example_deck_png/45-key_10.png'><img class='u-max-full-width' src='example_deck_png/45-key_10.png'></a> </div>
+    <div class='canvas_container'>
+      <div id="ui_deck27" class="deck_card">
+        <canvas id="ui_canvas_deck27" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
   </div>
 </div>
 
 <div class='row'>
   <div class='three columns'>
-    <div id='ui_deck32' class='deck_card'><a href='example_deck_png/46-key_page.png'><img class='u-max-full-width' src='example_deck_png/46-key_page.png'></a> </div>
+    <div class='canvas_container'>
+      <div id="ui_deck28" class="deck_card">
+        <canvas id="ui_canvas_deck28" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
   </div>
   <div class='three columns'>
-    <div id='ui_deck33' class='deck_card'><a href='example_deck_png/47-key_knight.png'><img class='u-max-full-width' src='example_deck_png/47-key_knight.png'></a> </div>
+    <div class='canvas_container'>
+      <div id="ui_deck29" class="deck_card">
+        <canvas id="ui_canvas_deck29" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
   </div>
   <div class='three columns'>
-    <div id='ui_deck34' class='deck_card'><a href='example_deck_png/48-key_queen.png'><img class='u-max-full-width' src='example_deck_png/48-key_queen.png'></a> </div>
+    <div class='canvas_container'>
+      <div id="ui_deck30" class="deck_card">
+        <canvas id="ui_canvas_deck30" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
   </div>
   <div class='three columns'>
-    <div id='ui_deck35' class='deck_card'><a href='example_deck_png/49-key_king.png'><img class='u-max-full-width' src='example_deck_png/49-key_king.png'></a> </div>
+    <div class='canvas_container'>
+      <div id="ui_deck31" class="deck_card">
+        <canvas id="ui_canvas_deck31" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
   </div>
 </div>
 
 <div class='row'>
   <div class='three columns'>
-    <div id='ui_deck36' class='deck_card'><a href='example_deck_png/64-cup_ace.png'><img class='u-max-full-width' src='example_deck_png/64-cup_ace.png'></a> </div>
+    <div class='canvas_container'>
+      <div id="ui_deck32" class="deck_card">
+        <canvas id="ui_canvas_deck32" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
   </div>
   <div class='three columns'>
-    <div id='ui_deck37' class='deck_card'><a href='example_deck_png/65-cup_2.png'><img class='u-max-full-width' src='example_deck_png/65-cup_2.png'></a> </div>
+    <div class='canvas_container'>
+      <div id="ui_deck33" class="deck_card">
+        <canvas id="ui_canvas_deck33" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
   </div>
   <div class='three columns'>
-    <div id='ui_deck38' class='deck_card'><a href='example_deck_png/66-cup_3.png'><img class='u-max-full-width' src='example_deck_png/66-cup_3.png'></a> </div>
+    <div class='canvas_container'>
+      <div id="ui_deck34" class="deck_card">
+        <canvas id="ui_canvas_deck34" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
   </div>
   <div class='three columns'>
-    <div id='ui_deck39' class='deck_card'><a href='example_deck_png/67-cup_4.png'><img class='u-max-full-width' src='example_deck_png/67-cup_4.png'></a> </div>
+    <div class='canvas_container'>
+      <div id="ui_deck35" class="deck_card">
+        <canvas id="ui_canvas_deck35" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
   </div>
 </div>
 
 <div class='row'>
   <div class='three columns'>
-    <div id='ui_deck40' class='deck_card'><a href='example_deck_png/68-cup_5.png'><img class='u-max-full-width' src='example_deck_png/68-cup_5.png'></a> </div>
+    <div class='canvas_container'>
+      <div id="ui_deck36" class="deck_card">
+        <canvas id="ui_canvas_deck36" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
   </div>
   <div class='three columns'>
-    <div id='ui_deck41' class='deck_card'><a href='example_deck_png/69-cup_6.png'><img class='u-max-full-width' src='example_deck_png/69-cup_6.png'></a> </div>
+    <div class='canvas_container'>
+      <div id="ui_deck37" class="deck_card">
+        <canvas id="ui_canvas_deck37" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
   </div>
   <div class='three columns'>
-    <div id='ui_deck42' class='deck_card'><a href='example_deck_png/70-cup_7.png'><img class='u-max-full-width' src='example_deck_png/70-cup_7.png'></a> </div>
+    <div class='canvas_container'>
+      <div id="ui_deck38" class="deck_card">
+        <canvas id="ui_canvas_deck38" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
   </div>
   <div class='three columns'>
-    <div id='ui_deck43' class='deck_card'><a href='example_deck_png/71-cup_8.png'><img class='u-max-full-width' src='example_deck_png/71-cup_8.png'></a> </div>
+    <div class='canvas_container'>
+      <div id="ui_deck39" class="deck_card">
+        <canvas id="ui_canvas_deck39" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
   </div>
 </div>
 
 <div class='row'>
   <div class='three columns'>
-    <div id='ui_deck44' class='deck_card'><a href='example_deck_png/72-cup_9.png'><img class='u-max-full-width' src='example_deck_png/72-cup_9.png'></a> </div>
+    <div class='canvas_container'>
+      <div id="ui_deck40" class="deck_card">
+        <canvas id="ui_canvas_deck40" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
   </div>
   <div class='three columns'>
-    <div id='ui_deck45' class='deck_card'><a href='example_deck_png/73-cup_10.png'><img class='u-max-full-width' src='example_deck_png/73-cup_10.png'></a> </div>
+    <div class='canvas_container'>
+      <div id="ui_deck41" class="deck_card">
+        <canvas id="ui_canvas_deck41" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
   </div>
   <div class='three columns'>
-    <div id='ui_deck46' class='deck_card'><a href='example_deck_png/74-cup_page.png'><img class='u-max-full-width' src='example_deck_png/74-cup_page.png'></a> </div>
+    <div class='canvas_container'>
+      <div id="ui_deck42" class="deck_card">
+        <canvas id="ui_canvas_deck42" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
   </div>
   <div class='three columns'>
-    <div id='ui_deck47' class='deck_card'><a href='example_deck_png/75-cup_knight.png'><img class='u-max-full-width' src='example_deck_png/75-cup_knight.png'></a> </div>
+    <div class='canvas_container'>
+      <div id="ui_deck43" class="deck_card">
+        <canvas id="ui_canvas_deck43" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
   </div>
 </div>
 
 <div class='row'>
   <div class='three columns'>
-    <div id='ui_deck48' class='deck_card'><a href='example_deck_png/76-cup_queen.png'><img class='u-max-full-width' src='example_deck_png/76-cup_queen.png'></a> </div>
+    <div class='canvas_container'>
+      <div id="ui_deck44" class="deck_card">
+        <canvas id="ui_canvas_deck44" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
   </div>
   <div class='three columns'>
-    <div id='ui_deck49' class='deck_card'><a href='example_deck_png/77-cup_king.png'><img class='u-max-full-width' src='example_deck_png/77-cup_king.png'></a> </div>
+    <div class='canvas_container'>
+      <div id="ui_deck45" class="deck_card">
+        <canvas id="ui_canvas_deck45" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
   </div>
   <div class='three columns'>
-    <div id='ui_deck50' class='deck_card'><a href='example_deck_png/50-sword_ace.png'><img class='u-max-full-width' src='example_deck_png/50-sword_ace.png'></a> </div>
+    <div class='canvas_container'>
+      <div id="ui_deck46" class="deck_card">
+        <canvas id="ui_canvas_deck46" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
   </div>
   <div class='three columns'>
-    <div id='ui_deck51' class='deck_card'><a href='example_deck_png/51-sword_2.png'><img class='u-max-full-width' src='example_deck_png/51-sword_2.png'></a> </div>
+    <div class='canvas_container'>
+      <div id="ui_deck47" class="deck_card">
+        <canvas id="ui_canvas_deck47" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
   </div>
 </div>
 
 <div class='row'>
   <div class='three columns'>
-    <div id='ui_deck52' class='deck_card'><a href='example_deck_png/52-sword_3.png'><img class='u-max-full-width' src='example_deck_png/52-sword_3.png'></a> </div>
+    <div class='canvas_container'>
+      <div id="ui_deck48" class="deck_card">
+        <canvas id="ui_canvas_deck48" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
   </div>
   <div class='three columns'>
-    <div id='ui_deck53' class='deck_card'><a href='example_deck_png/53-sword_4.png'><img class='u-max-full-width' src='example_deck_png/53-sword_4.png'></a> </div>
+    <div class='canvas_container'>
+      <div id="ui_deck49" class="deck_card">
+        <canvas id="ui_canvas_deck49" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
   </div>
   <div class='three columns'>
-    <div id='ui_deck54' class='deck_card'><a href='example_deck_png/54-sword_5.png'><img class='u-max-full-width' src='example_deck_png/54-sword_5.png'></a> </div>
+    <div class='canvas_container'>
+      <div id="ui_deck50" class="deck_card">
+        <canvas id="ui_canvas_deck50" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
   </div>
   <div class='three columns'>
-    <div id='ui_deck55' class='deck_card'><a href='example_deck_png/55-sword_6.png'><img class='u-max-full-width' src='example_deck_png/55-sword_6.png'></a> </div>
+    <div class='canvas_container'>
+      <div id="ui_deck51" class="deck_card">
+        <canvas id="ui_canvas_deck51" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
   </div>
 </div>
 
 <div class='row'>
   <div class='three columns'>
-    <div id='ui_deck56' class='deck_card'><a href='example_deck_png/56-sword_7.png'><img class='u-max-full-width' src='example_deck_png/56-sword_7.png'></a> </div>
+    <div class='canvas_container'>
+      <div id="ui_deck52" class="deck_card">
+        <canvas id="ui_canvas_deck52" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
   </div>
   <div class='three columns'>
-    <div id='ui_deck57' class='deck_card'><a href='example_deck_png/57-sword_8.png'><img class='u-max-full-width' src='example_deck_png/57-sword_8.png'></a> </div>
+    <div class='canvas_container'>
+      <div id="ui_deck53" class="deck_card">
+        <canvas id="ui_canvas_deck53" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
   </div>
   <div class='three columns'>
-    <div id='ui_deck58' class='deck_card'><a href='example_deck_png/58-sword_9.png'><img class='u-max-full-width' src='example_deck_png/58-sword_9.png'></a> </div>
+    <div class='canvas_container'>
+      <div id="ui_deck54" class="deck_card">
+        <canvas id="ui_canvas_deck54" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
   </div>
   <div class='three columns'>
-    <div id='ui_deck59' class='deck_card'><a href='example_deck_png/59-sword_10.png'><img class='u-max-full-width' src='example_deck_png/59-sword_10.png'></a> </div>
+    <div class='canvas_container'>
+      <div id="ui_deck55" class="deck_card">
+        <canvas id="ui_canvas_deck55" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
   </div>
 </div>
 
 <div class='row'>
   <div class='three columns'>
-    <div id='ui_deck60' class='deck_card'><a href='example_deck_png/60-sword_page.png'><img class='u-max-full-width' src='example_deck_png/60-sword_page.png'></a> </div>
+    <div class='canvas_container'>
+      <div id="ui_deck56" class="deck_card">
+        <canvas id="ui_canvas_deck56" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
   </div>
   <div class='three columns'>
-    <div id='ui_deck61' class='deck_card'><a href='example_deck_png/61-sword_knight.png'><img class='u-max-full-width' src='example_deck_png/61-sword_knight.png'></a> </div>
+    <div class='canvas_container'>
+      <div id="ui_deck57" class="deck_card">
+        <canvas id="ui_canvas_deck57" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
   </div>
   <div class='three columns'>
-    <div id='ui_deck62' class='deck_card'><a href='example_deck_png/62-sword_queen.png'><img class='u-max-full-width' src='example_deck_png/62-sword_queen.png'></a> </div>
+    <div class='canvas_container'>
+      <div id="ui_deck58" class="deck_card">
+        <canvas id="ui_canvas_deck58" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
   </div>
   <div class='three columns'>
-    <div id='ui_deck63' class='deck_card'><a href='example_deck_png/63-sword_king.png'><img class='u-max-full-width' src='example_deck_png/63-sword_king.png'></a> </div>
+    <div class='canvas_container'>
+      <div id="ui_deck59" class="deck_card">
+        <canvas id="ui_canvas_deck59" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
   </div>
 </div>
 
 <div class='row'>
   <div class='three columns'>
-    <div id='ui_deck64' class='deck_card'><a href='example_deck_png/22-pentacle_ace.png'><img class='u-max-full-width' src='example_deck_png/22-pentacle_ace.png'></a> </div>
+    <div class='canvas_container'>
+      <div id="ui_deck60" class="deck_card">
+        <canvas id="ui_canvas_deck60" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
   </div>
   <div class='three columns'>
-    <div id='ui_deck65' class='deck_card'><a href='example_deck_png/23-pentacle_2.png'><img class='u-max-full-width' src='example_deck_png/23-pentacle_2.png'></a> </div>
+    <div class='canvas_container'>
+      <div id="ui_deck61" class="deck_card">
+        <canvas id="ui_canvas_deck61" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
   </div>
   <div class='three columns'>
-    <div id='ui_deck66' class='deck_card'><a href='example_deck_png/24-pentacle_3.png'><img class='u-max-full-width' src='example_deck_png/24-pentacle_3.png'></a> </div>
+    <div class='canvas_container'>
+      <div id="ui_deck62" class="deck_card">
+        <canvas id="ui_canvas_deck62" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
   </div>
   <div class='three columns'>
-    <div id='ui_deck67' class='deck_card'><a href='example_deck_png/25-pentacle_4.png'><img class='u-max-full-width' src='example_deck_png/25-pentacle_4.png'></a> </div>
+    <div class='canvas_container'>
+      <div id="ui_deck63" class="deck_card">
+        <canvas id="ui_canvas_deck63" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
   </div>
 </div>
 
 <div class='row'>
   <div class='three columns'>
-    <div id='ui_deck68' class='deck_card'><a href='example_deck_png/26-pentacle_5.png'><img class='u-max-full-width' src='example_deck_png/26-pentacle_5.png'></a> </div>
+    <div class='canvas_container'>
+      <div id="ui_deck64" class="deck_card">
+        <canvas id="ui_canvas_deck64" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
   </div>
   <div class='three columns'>
-    <div id='ui_deck69' class='deck_card'><a href='example_deck_png/27-pentacle_6.png'><img class='u-max-full-width' src='example_deck_png/27-pentacle_6.png'></a> </div>
+    <div class='canvas_container'>
+      <div id="ui_deck65" class="deck_card">
+        <canvas id="ui_canvas_deck65" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
   </div>
   <div class='three columns'>
-    <div id='ui_deck70' class='deck_card'><a href='example_deck_png/28-pentacle_7.png'><img class='u-max-full-width' src='example_deck_png/28-pentacle_7.png'></a> </div>
+    <div class='canvas_container'>
+      <div id="ui_deck66" class="deck_card">
+        <canvas id="ui_canvas_deck66" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
   </div>
   <div class='three columns'>
-    <div id='ui_deck71' class='deck_card'><a href='example_deck_png/29-pentacle_8.png'><img class='u-max-full-width' src='example_deck_png/29-pentacle_8.png'></a> </div>
+    <div class='canvas_container'>
+      <div id="ui_deck67" class="deck_card">
+        <canvas id="ui_canvas_deck67" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
   </div>
 </div>
 
 <div class='row'>
   <div class='three columns'>
-    <div id='ui_deck72' class='deck_card'><a href='example_deck_png/30-pentacle_9.png'><img class='u-max-full-width' src='example_deck_png/30-pentacle_9.png'></a> </div>
+    <div class='canvas_container'>
+      <div id="ui_deck68" class="deck_card">
+        <canvas id="ui_canvas_deck68" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
   </div>
   <div class='three columns'>
-    <div id='ui_deck73' class='deck_card'><a href='example_deck_png/31-pentacle_10.png'><img class='u-max-full-width' src='example_deck_png/31-pentacle_10.png'></a> </div>
+    <div class='canvas_container'>
+      <div id="ui_deck69" class="deck_card">
+        <canvas id="ui_canvas_deck69" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
   </div>
   <div class='three columns'>
-    <div id='ui_deck74' class='deck_card'><a href='example_deck_png/32-pentacle_page.png'><img class='u-max-full-width' src='example_deck_png/32-pentacle_page.png'></a> </div>
+    <div class='canvas_container'>
+      <div id="ui_deck70" class="deck_card">
+        <canvas id="ui_canvas_deck70" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
   </div>
   <div class='three columns'>
-    <div id='ui_deck75' class='deck_card'><a href='example_deck_png/33-pentacle_knight.png'><img class='u-max-full-width' src='example_deck_png/33-pentacle_knight.png'></a> </div>
+    <div class='canvas_container'>
+      <div id="ui_deck71" class="deck_card">
+        <canvas id="ui_canvas_deck71" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
   </div>
 </div>
 
 <div class='row'>
   <div class='three columns'>
-    <div id='ui_deck76' class='deck_card'><a href='example_deck_png/34-pentacle_queen.png'><img class='u-max-full-width' src='example_deck_png/34-pentacle_queen.png'></a> </div>
+    <div class='canvas_container'>
+      <div id="ui_deck72" class="deck_card">
+        <canvas id="ui_canvas_deck72" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
   </div>
   <div class='three columns'>
-    <div id='ui_deck77' class='deck_card'><a href='example_deck_png/35-pentacle_king.png'><img class='u-max-full-width' src='example_deck_png/35-pentacle_king.png'></a> </div>
+    <div class='canvas_container'>
+      <div id="ui_deck73" class="deck_card">
+        <canvas id="ui_canvas_deck73" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
   </div>
+  <div class='three columns'>
+    <div class='canvas_container'>
+      <div id="ui_deck74" class="deck_card">
+        <canvas id="ui_canvas_deck74" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
+  </div>
+  <div class='three columns'>
+    <div class='canvas_container'>
+      <div id="ui_deck75" class="deck_card">
+        <canvas id="ui_canvas_deck75" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class='row'>
+  <div class='three columns'>
+    <div class='canvas_container'>
+      <div id="ui_deck76" class="deck_card">
+        <canvas id="ui_canvas_deck76" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class='three columns'>
+    <div class='canvas_container'>
+      <div id="ui_deck77" class="deck_card">
+        <canvas id="ui_canvas_deck77" width="190" height="317" style="display:none;"></canvas>
+      </div>
+    </div>
+  </div>
+
+
+  <div class='three columns'>
+    <div class='canvas_container'>
+      <div id='ui_deck78' class='deck_card'>
+        <canvas id='ui_canvas_deck78' width='190' height='317' style='display:none;'></canvas>
+      </div>
+    </div>
+  </div>
+
   <div class='three columns'></div>
-  <div class='three columns'></div>
 
 </div>
--->
 
       </div>
 

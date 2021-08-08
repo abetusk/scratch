@@ -46,6 +46,11 @@ tbutton,
   overflow: hidden;
   width: 190px;
   height:317px;
+
+  margin-top:5px;
+  margin-bottom:15px;
+  margin-left:5px;
+  margin-right:5px;
 }
 
 
@@ -58,11 +63,17 @@ tbutton,
   height: 300px;
 }
 
+.x1 {
+  margin-right: 10px;
+}
+
 .deck_card {
   width: 191.25px;
   height: 300px;
+  /*
   margin-top:25px;
   margin-bottom:25px;
+  */
 }
 
 /*
