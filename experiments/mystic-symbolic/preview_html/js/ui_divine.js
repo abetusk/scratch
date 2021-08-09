@@ -2112,6 +2112,22 @@ $(document).ready(function() {
     $("#ui_content").fadeTo("slow", 0.5);
   });
 
+  $("#ui_about").click( function(e) {
+    if (g_ui.modal_info_state == "off") {
+      g_ui.modal_info_state = "on";
+      $("#ui_modal_info").fadeIn();
+    }
+    else {
+      g_ui.modal_info_state = "off";
+      $("#ui_modal_info").fadeOut();
+    }
+  });
+
+  $("#ui_modal_info").click( function(e) {
+    g_ui.modal_info_state = "off";
+    $("#ui_modal_info").fadeOut();
+  });
+
 
   // wip
   //

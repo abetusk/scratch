@@ -392,7 +392,7 @@ For deck generation:
 * web: needs question (or if it's random) under title
 * should probably have a message to say that the deck isn't ready for
   the download button
-* web: add info and credits
+* web: add footer with links
 
 #### references
 

@@ -42,8 +42,67 @@
 
     <!-- initial dialog for question/seed selection/input -->
 
+    <dialog id='ui_modal_info' style='display:none;'>
+      <div style='text-align:center;'>
+        <h3>Resonator Voyant Tarot</h3>
+      </div>
+
+      <p>
+        Resonator Voyant Tarot is an experiment in creating generative tarot cards.
+      </p>
+
+      <p>
+        The person seeking seeking knowledge can type in a question that will then be used
+        as the seed to the random number generator to create a unique deck of tarot cards.
+        A tarot reading is drawn, using the newly created deck, using the "celtic cross" method.
+      </p>
+
+      <p>
+        Though steeped in spirituality, the reasons for doing a tarot reading need not be mystical as
+        it can be a source of creativity and help with imaginative problem solving.
+      </p>
+
+      <p>
+        Each deck is created from a "vocabulary" of images with predefined rules
+        for joining them together. Each card has a template with some fixed
+        elements and other random elements put together.
+      </p>
+
+      <p>
+        For exaple, a major arcana card of "The Fool" would have a fixed
+        element of the fool image with the elements coming out of the base
+        image chosen randomly as well as the background image and color scheme
+        for the card.
+        Another example is a minor arcana card that has the suite graphic (e.g.
+        "swords") positioned in a pattern appropriate for the numbered card
+        with a random "creature" created in the center as well as the background
+        pattern and color scheme.
+      </p>
+
+      <p>
+        Where appropriate, all original <a href='https://github.com/abetusk/resonator_voyant_tarot'>source code</a>
+        is licensed under <a href='https://creativecommons.org/publicdomain/zero/1.0/'>CC0</a>.
+        All third party libraries were chosen to be under a free/libre license, so please
+        check the individual libraries for their respective licenses.
+      </p>
+
+      <p>
+        Text for the tarot reading were taken from a combination of Arthur Edward Waite's <a href='https://en.wikisource.org/wiki/The_Pictorial_Key_to_the_Tarot'>"The Pictoral Key to the Tarot"</a>
+        and Dariusk's <a href='https://github.com/dariusk/corpora/blob/master/data/divination/tarot_interpretations.json'>corpora</a> project, both
+        either in the public domain or under a CC0 license.
+      </p>
+
+      <p>
+        Original artwork by Nina Paley and used with permission under a <a href='https://creativecommons.org/licenses/by/4.0/'>CC-BY</a> license.
+      </p>
+
+    </dialog>
+
     <dialog id="ui_modal">
-      <h3>Resonator Voyant Tarot</h3>
+      <div style='text-align:center;'>
+        <h3>Resonator Voyant Tarot</h3>
+      </div>
+
       <p>
         This is a small experiment in creating a generative tarot deck.
       </p>
@@ -73,8 +132,6 @@
 
     <!-- .........  -->
     <div id='ui_content'>
-
-    <div id='testing'></div>
 
     <canvas id="ui_backbuffer_text_canvas" style='display:none;' width='190' height='317'></canvas>
     <canvas id="ui_backbuffer_fg_canvas" style='display:none;' width='190' height='317'></canvas>
@@ -204,7 +261,11 @@
 
     <div class='container'>
 
-      <h1>Resonator Voyant Tarot</h1>
+      <div class='row'>
+        <div class='one column'> &nbsp; </div>
+        <div class='ten columns' style='text-align:center;'><h1>Resonator Voyant Tarot</h1></div>
+        <div class='one column' style='text-align:right;'> <button id='ui_about'><small>about</small></button> </div>
+      </div>
 
       <!-- for testing modal -->
       <div id='ui_modal_test' style='display:none;'>modal test</div>
