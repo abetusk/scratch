@@ -121,6 +121,7 @@ var g_ui = {
 };
 
 var g_data = {
+  "seed": "x",
   "card_queue": 10,
 
   "numeral" : {
@@ -1553,11 +1554,10 @@ function populate_deck_image() {
 //
 function init() {
   init_svg_text();
-
   _load("data/tarot_interpretations.json", _tarot_json_cb);
 
   console.log("s>>", Date.now());
-  g_data["tarot_sched"] = realize_tarot_sched("x", g_data);
+  g_data["tarot_sched"] = realize_tarot_sched(g_data.seed, g_data);
   console.log("e>>", Date.now());
 
   populate_deck_image();
@@ -2029,17 +2029,99 @@ $(document).ready(function() {
 
   //---
 
+  /*
+  $("#ui_modal").click( function(e) {
+    if (g_ui.modal_state == "off") {
+      g_ui.modal_state = "on";
+      $("#ui_modal").fadeIn();
+      $("#ui_content").fadeTo("slow", 0.5);
+    }
+    else {
+      g_ui.modal_state = "off";
+      $("#ui_modal").fadeOut();
+      $("#ui_content").fadeTo("slow", 1);
+    }
+  });
+  */
+
+  $("#ui_modal_generate").click( function(e) {
+    g_ui.modal_state = "off";
+    $("#ui_modal").fadeOut();
+    $("#ui_content").fadeTo("slow", 1);
+
+    var ele = document.getElementById("ui_modal_text");
+    seed_text = ele.value;
+
+    if (seed_text.length === 0) {
+      console.log("using random");
+      seed_text = rndstr();
+    }
+
+    console.log("seed:", seed_text);
+    g_data.seed = seed_text;
+
+    init();
+  });
+
+  $("#ui_modal_test").click( function(e) {
+    g_ui.modal_state = "on";
+    $("#ui_modal").fadeIn();
+    $("#ui_content").fadeTo("slow", 0.5);
+  });
+
+
   // wip
   //
   $("#ui_button_download").click( function(e) {
     console.log("dl");
   });
 
+  $("#ui_content").click(function(e) {
+    if (g_ui.modal_state == "on") {
+      g_ui.modal_state = "off";
+      $("#ui_modal").fadeOut();
+      $("#ui_content").fadeTo("slow", 1);
+
+      var ele = document.getElementById("ui_modal_text");
+      seed_text = ele.value;
+
+      if (seed_text.length === 0) { seed_text = rndstr(); }
+      g_data.seed = seed_text;
+
+      init();
+    }
+  });
+
+  $(document).keyup(function(e) {
+    if (e.key === "Escape") {
+      if (g_ui.modal_state == "on") {
+        g_ui.modal_state = "off";
+        $("#ui_modal").fadeOut();
+        $("#ui_content").fadeTo("slow", 1);
+
+        var ele = document.getElementById("ui_modal_text");
+        seed_text = ele.value;
+
+        if (seed_text.length === 0) { seed_text = rndstr(); }
+        g_data.seed = seed_text;
+
+        init();
+      }
+    }
+  });
+
   // initially set whether we're in mobile view state
   //
   g_ui.mobile_view = ( ($(window).width() < g_ui.mobile_width) ? true : false );
 
-  init();
+  if (true) {
+    g_ui.modal_state = "on";
+    $("#ui_modal").fadeIn();
+    $("#ui_content").fadeTo("slow", 0.5);
+  }
+
+  //DEBUG
+  //init();
 });
 
 window.onresize = function() {

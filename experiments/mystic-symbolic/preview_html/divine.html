@@ -39,6 +39,39 @@
 
   <body>
 
+    <!-- initial dialog for question/seed selection/input -->
+
+    <dialog id="ui_modal">
+      <h3>Resonator Voyant Tarot</h3>
+      <p>
+        This is a small experiment in creating a generative tarot deck.
+      </p>
+
+      <p>
+        To start the reading and deck generation, think of a question you want answered and type it in.
+      </p>
+
+      <p>
+        The question will be used as a seed to randomly create the deck. Though your question is
+        only local to your browser, it's encouraged to not type anything too sensitive. 
+      </p>
+
+      <p>
+        Leave blank to create a random deck.
+      </p>
+
+      <input type='text' id='ui_modal_text' >
+      
+      <div class='row'>
+        <div class='columns'>
+          <label id='ui_modal_generate' for="toggle">Generate</label>
+        </div>
+      </div>
+    </dialog>
+
+    <!-- .........  -->
+    <div id='ui_content'>
+
     <div id='testing'></div>
 
     <canvas id="ui_backbuffer_text_canvas" style='display:none;' width='190' height='317'></canvas>
@@ -171,9 +204,13 @@
 
       <h1>Resonator Voyant Tarot</h1>
 
+      <!-- for testing modal -->
+      <div id='ui_modal_test' style='display:none;'>modal test</div>
+
       <div class='row'>
         <div class='eight columns'>
           <p> <b>Envision a question that you would like insight or answers to ...</b></p>
+          <p> 
         </div>
 
         <div class='four columns' style='text-align:right;'>
@@ -968,6 +1005,7 @@
 
     </div>
 
+    </div> <!-- ui_content -->
   </body>
 </html>
 
