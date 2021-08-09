@@ -387,9 +387,12 @@ For deck generation:
 * print custom deck
 * write blog post about custom printing
 * add info/about and credits
-* web needs the extra processing step for justice scales
-* web needs slightly bigger text box to fit king/queen pentacles
-* web needs question (or if it's random) under title
+* web: needs the extra processing step for justice scales
+* web: needs slightly bigger text box to fit king/queen pentacles
+* web: needs question (or if it's random) under title
+* should probably have a message to say that the deck isn't ready for
+  the download button
+* web: add info and credits
 
 #### references
 

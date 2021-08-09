@@ -2098,7 +2098,6 @@ $(document).ready(function() {
     // we want the modal to disappear as
     // quickly as possible.
     //
-    //init();
     setTimeout(init, 1000);
 
     $("#ui_loading").fadeIn();
@@ -2140,6 +2139,11 @@ $(document).ready(function() {
 
       //DEBUG
       //init();
+      setTimeout(init, 1000);
+
+      $("#ui_loading").fadeIn();
+      var _lbt = document.getElementById("ui_loading_placeholder");
+      _lbt.style.display = "none";
     }
   });
 
@@ -2161,6 +2165,11 @@ $(document).ready(function() {
 
         //DEBUG
         //init();
+        setTimeout(init, 1000);
+
+        $("#ui_loading").fadeIn();
+        var _lbt = document.getElementById("ui_loading_placeholder");
+        _lbt.style.display = "none";
       }
     }
   });
