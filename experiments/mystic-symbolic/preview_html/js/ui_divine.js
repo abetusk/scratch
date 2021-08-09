@@ -1527,7 +1527,8 @@ function populate_deck_image() {
       // populate all other cards initially with card backing
       // including the back card spot.
       //
-      for (var ii=0; ii<79; ii++) {
+      //for (var ii=0; ii<=78; ii++) {
+      for (var ii=0; ii<78; ii++) {
         var ui_id = "ui_deck" + ii.toString();
         var ele = document.getElementById(ui_id);
         var _img = document.createElement("img");
@@ -1535,6 +1536,10 @@ function populate_deck_image() {
         _img.id = "ui_img_deck" + ii.toString();
         ele.appendChild(_img);
       }
+
+      var _tmp = realize_svg_card_back(g_data.tarot_sched[78]);
+      document.getElementById("ui_deck78").innerHTML = _tmp;
+
     }
   );
 
@@ -1544,7 +1549,7 @@ function populate_deck_image() {
 
     //if (ii==0) { console.log(">>", svg_data.svg_card); }
 
-    setTimeout( (function(_x) { return function() { populate_deck_image_single(_x); }; })(ii), 5000 + 100*ii);
+    setTimeout( (function(_x) { return function() { populate_deck_image_single(_x); }; })(ii), 5000 + 10*ii);
 
   }
 
@@ -1922,6 +1927,31 @@ $(document).ready(function() {
     // disable if all cards are being viewed
     //
     if (g_ui.button_state.ui_button_deck.state == "on") {
+      var _ele_read = document.getElementById("ui_tarot_reading");
+      var _ele_deck = document.getElementById("ui_tarot_deck");
+
+      _ele_read.style.display = "grid";
+      _ele_deck.style.display = "none";
+
+
+      var btn_deck = document.getElementById("ui_button_deck");
+      g_ui.button_state.ui_button_deck.state = "off";
+      btn_deck.style.backgroundColor = "transparent";
+      btn_deck.style.color = "#777";
+
+      g_ui.button_state.ui_button_reading.state = "on";
+      var ele = document.getElementById("ui_button_reading");
+      ele.style.backgroundColor = "#777";
+      ele.style.color = "#fff";
+
+      var _m = (g_ui.mobile_view ? "_m" : "");
+      for (var ii=0; ii<10; ii++) {
+        var ui_id = "ui_card" + ii.toString();
+        var cap_id = "caption_" + ii.toString() + _m;
+        caption_update(ui_id, g_tarot.reading[ii].sentence, cap_id, g_ui.caption_dxy[ui_id]);
+        $("#caption_" + ii.toString() + _m).fadeIn();
+      }
+
       return;
     }
 
@@ -2074,6 +2104,12 @@ $(document).ready(function() {
   //
   $("#ui_button_download").click( function(e) {
     console.log("dl");
+    if (g_data.deck_ready) {
+      downloadDeck();
+    }
+    else {
+      console.log("...deck not ready");
+    }
   });
 
   $("#ui_content").click(function(e) {
@@ -2092,6 +2128,9 @@ $(document).ready(function() {
     }
   });
 
+  //--
+
+
   $(document).keyup(function(e) {
     if (e.key === "Escape") {
       if (g_ui.modal_state == "on") {
@@ -2109,6 +2148,7 @@ $(document).ready(function() {
       }
     }
   });
+
 
   // initially set whether we're in mobile view state
   //
@@ -2171,3 +2211,47 @@ window.onresize = function() {
     caption_update(ui_id, g_tarot.reading[ii].sentence, cap_id, g_ui.caption_dxy[ui_id]);
   }
 }
+
+//---
+//
+
+// https://stackoverflow.com/questions/19327749/javascript-blob-filename-without-link
+// CC-BY-SA user Kim Nyholm (https://stackoverflow.com/users/8450075/kim-nyholm)
+//
+function saveAs(blob, filename) {
+  if (window.navigator.msSaveOrOpenBlob) {
+    window.navigator.msSaveOrOpenBlob(blob, filename);
+  } else {
+    const a = document.createElement('a');
+    document.body.appendChild(a);
+    const url = window.URL.createObjectURL(blob);
+    a.href = url;
+    a.download = filename;
+    a.click();
+    setTimeout(() => {
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    }, 0)
+  }
+}
+
+function downloadDeck() {
+  var zip = new JSZip();
+  zip.file("README", "Resonant Voyant Tarot\n---\n\nseed: " + g_data.seed + "\n");
+  var imgdir = zip.folder("images");
+
+  for (var ii=0; ii<=78; ii++) {
+    var ele = document.getElementById("ui_deck"+ ii.toString());
+    var svg = ele.children[0];
+    imgdir.file("card" + ii.toString() + ".svg", svg.outerHTML);
+  }
+  var ele = document.getElementById("ui_deck78");
+  var svg = ele.children[0];
+  imgdir.file("card78.svg", svg.outerHTML);
+
+  zip.generateAsync({type:"blob"})
+    .then(function(content) {
+      saveAs(content, "tarot.zip");
+    });
+}
+
