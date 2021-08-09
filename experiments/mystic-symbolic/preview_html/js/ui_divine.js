@@ -42,7 +42,7 @@
 // `populate_deck_image` poulates the whole deck with SVG images.
 //
 
-var SIBYL_DIVING_VERSION = "0.1.0";
+var SIBYL_DIVING_VERSION = "0.1.2";
 
 var CARD_HEIGHT= 317;
 var CARD_WIDTH = 190;
@@ -85,6 +85,7 @@ var g_tarot = {
 var g_ui = {
   "mobile_width":800,
   "mobile_view" : false,
+  "modal_info_state": "off",
   "button_state" : {
     "ui_button_reading" : { "state": "off" },
     "ui_button_deck" : { "state": "off" },
@@ -122,7 +123,13 @@ var g_ui = {
 
 var g_data = {
   "seed": "x",
+  "is_seed_random" : true,
   "card_queue": 10,
+
+  "deck_queue_count":78,
+  "deck_ready": false,
+  "deck_download_in_progress" : false,
+
 
   "numeral" : {
     "0": "0", "1": "I", "2": "II", "3": "III", "4": "IV",
@@ -1242,6 +1249,15 @@ function realize_tarot_sched(_seed, ctx) {
       ];
     }
 
+    // justice needs it's own procesing because we don't
+    // want the item on the other side of the scale
+    // to be repeated.
+    //
+    else if (major_arcana[ma_idx].symbol == "scales") {
+      sibyl.mystic_symbolic_random( sibyl.bg_ctx );
+      json_card.attach["nesting"].push( sibyl.bg_ctx.realized_child );
+    }
+
     tarot_data.fg = json_card;
     tarot_data["num"] = card_num;
 
@@ -1547,13 +1563,22 @@ function populate_deck_image() {
     }
   );
 
+  g_data.deck_queue_count = 78;
 
   //for (var ii=0; ii<78; ii++) {
   for (var ii=0; ii<78; ii++) {
 
     //if (ii==0) { console.log(">>", svg_data.svg_card); }
 
-    setTimeout( (function(_x) { return function() { populate_deck_image_single(_x); }; })(ii), 5000 + 10*ii);
+    setTimeout( (function(_x) {
+      return function() {
+        populate_deck_image_single(_x);
+        g_data.deck_queue_count--;
+        if (g_data.deck_queue_count==0) {
+          g_data.deck_ready = true;
+        }
+      };
+    })(ii), 5000 + 10*ii);
 
   }
 
@@ -1562,6 +1587,17 @@ function populate_deck_image() {
 // call on initial page load
 //
 function init() {
+
+  var qd_ele = document.getElementById("ui_display_question");
+  if (g_data.is_seed_random) {
+    qd_ele.innerHTML = "<p>Deck was created with random seed: <b>" + g_data.seed + "</b></p>";
+  }
+  else {
+    qd_ele.innerHTML = "<p>The question you asked:<br><b>" + g_data.seed + "</b></p>";
+  }
+
+  //---
+
   init_svg_text();
   _load("data/tarot_interpretations.json", _tarot_json_cb);
 
@@ -1644,7 +1680,8 @@ function init_svg_text() {
 
   var txt_ele_name =
     //'<rect rx="23" x="41" y="608" width="351" height="46" fill="#efefef" > ' +
-    '<rect rx="10" x="18" y="267" width="154" height="20" fill="#efefef" > ' +
+    //'<rect rx="10" x="18" y="267" width="154" height="20" fill="#efefef" > ' +
+    '<rect rx="10" x="12" y="267" width="166" height="20" fill="#efefef" > ' +
     '</rect>' +
     '<text x="0" y="0" id="_text_name">' +
     '<tspan' +
@@ -2086,9 +2123,12 @@ $(document).ready(function() {
     var ele = document.getElementById("ui_modal_text");
     seed_text = ele.value;
 
+    g_data.is_seed_random = false;
     if (seed_text.length === 0) {
       console.log("using random");
       seed_text = rndstr();
+
+      g_data.is_seed_random = true;
     }
 
     console.log("seed:", seed_text);
@@ -2134,10 +2174,21 @@ $(document).ready(function() {
   $("#ui_button_download").click( function(e) {
     console.log("dl");
     if (g_data.deck_ready) {
-      downloadDeck();
+      if (g_data.deck_download_in_progress) {
+        console.log("deck download queued...");
+        $("#ui_button_download_queued_message").fadeIn();
+        setTimeout( function() { $("#ui_button_download_queued_message").fadeOut() }, 5000 );
+      }
+      else {
+        g_data.deck_download_in_progress = true;
+        $("#ui_download_loading").fadeIn();
+        downloadDeck();
+      }
     }
     else {
-      console.log("...deck not ready");
+      console.log("deck not ready...");
+      $("#ui_button_download_message").fadeIn();
+      setTimeout( function() { $("#ui_button_download_message").fadeOut() }, 5000 );
     }
   });
 
@@ -2150,7 +2201,11 @@ $(document).ready(function() {
       var ele = document.getElementById("ui_modal_text");
       seed_text = ele.value;
 
-      if (seed_text.length === 0) { seed_text = rndstr(); }
+      g_data.is_seed_random = false;
+      if (seed_text.length === 0) {
+        seed_text = rndstr();
+        g_data.is_seed_random = true;
+      }
       g_data.seed = seed_text;
 
       //DEBUG
@@ -2176,7 +2231,11 @@ $(document).ready(function() {
         var ele = document.getElementById("ui_modal_text");
         seed_text = ele.value;
 
-        if (seed_text.length === 0) { seed_text = rndstr(); }
+        g_data.is_seed_random = false;
+        if (seed_text.length === 0) {
+          seed_text = rndstr();
+          g_data.is_seed_random = true;
+        }
         g_data.seed = seed_text;
 
         //DEBUG
@@ -2291,6 +2350,8 @@ function downloadDeck() {
   zip.generateAsync({type:"blob"})
     .then(function(content) {
       saveAs(content, "tarot.zip");
+      g_data.deck_download_in_progress = false;
+      $("#ui_download_loading").fadeOut();
     });
 }
 

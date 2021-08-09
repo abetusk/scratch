@@ -271,7 +271,7 @@
       <div id='ui_modal_test' style='display:none;'>modal test</div>
 
       <div class='row'>
-        <div class='eight columns'>
+        <div class='eight columns' id='ui_display_question'>
           <p> <b>Envision a question that you would like insight or answers to ...</b></p>
           <p> 
         </div>
@@ -294,6 +294,13 @@
       <div class='row' style='height:125px; '>
         <div class='four columns' style='text-align:left;'>
           <tbutton id='ui_button_download'>download deck</tbutton>
+          <div id='ui_download_loading' style='display:none; margin-left:10px; color:#777; '>
+            <div style='text-align:left;'>
+              <small>creating zipfile... </small> <div class='sp-loadbar' style='text-align:right;'> </div>
+            </div>
+          </div>
+          <div id='ui_button_download_message' style='display:none; margin-left:30px; color:#777; '> deck not ready! </div>
+          <div id='ui_button_download_queued_message' style='display:none; margin-left:10px; color:#777; '> deck download already in progress... </div>
         </div>
 
         <div class='four columns' style='text-align:center;'>
