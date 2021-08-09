@@ -21174,7 +21174,8 @@ if (require.main !== module) {
     "rnd":_rnd,
     "crnd":_crnd,
     "choose":_choose,
-    "reseed" : reseed
+    "reseed" : reseed,
+    "remap_fill_id": remap_fill_id
   };
 
 }

@@ -34,14 +34,32 @@
 // `display_tarot` to fade in all the 10 cards when theny're ready.
 //
 
-// `realize_tarot_sched` is the one that creates the realization of the SVG
-// deck that will be used to display the cards.
+// The `realize_tarot_sched` creates the 'schedule' of creatures
+// and backgrounds for each of the cards which is later used to 
+// generate the SVG.
 //
+
+// `populate_deck_image` poulates the whole deck with SVG images.
+//
+
+var SIBYL_DIVING_VERSION = "0.1.0";
 
 var CARD_HEIGHT= 317;
 var CARD_WIDTH = 190;
 
 var _RESCALE = CARD_HEIGHT / 720.0;
+
+function rndstr(m) {
+  m = ((typeof m === "undefined") ? 32 : m);
+  var seed = "";
+  var x = "abcdefghijklmnopqrstuvwxyzABDCEFGHIJKLMNOPQRSTUVWXYZ01234567890";
+  var n = x.length;
+  for (var ii=0; ii<m; ii++) {
+    seed += x[ Math.floor(Math.random()*n) ];
+  }
+  return seed;
+}
+
 
 
 // global data structure to hold tarot interpretations (loaded from
@@ -788,10 +806,14 @@ function realize_svg_card(tarot_data) {
   var has_numeral = false;
   var has_text = true;
 
+  //ugh
+  //
+  sibyl.remap_fill_id( sibyl.mystic_symbolic );
+  sibyl.remap_fill_id( sibyl.bg_symbol );
+
+
   var major_arcana = g_data.major_arcana;
-
   var _svg_header = '<svg version="1.1" id="Frame_0" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="720px" height="720px">';
-
   var name = "";
   if (tarot_data.family == "major") {
     name = tarot_data.designation;
@@ -888,6 +910,8 @@ function realize_svg_card(tarot_data) {
   fg_ctx.svg_id = 'foo';
   fg_ctx.global_scale = _scale;
 
+  fg_ctx.svg_id = rndstr();
+
   var fg_cp = tarot_data.colors[1][0].hex;
   var fg_cs = tarot_data.colors[1][1].hex;
   if (tarot_data.invert_color_creature) {
@@ -913,10 +937,14 @@ function realize_svg_card(tarot_data) {
   //
 
   var suite_svg_str = "";
+  var svg_suite_only = "";
   if (has_suit) {
     fg_ctx.create_svg_header = true;
-    fg_ctx.svg_id = 'bar';
-    var suite_svg_str = sibyl.mystic_symbolic_sched(fg_ctx, suite_sched);
+    fg_ctx.svg_id = rndstr();
+    suite_svg_str = sibyl.mystic_symbolic_sched(fg_ctx, suite_sched);
+
+    fg_ctx.create_svg_header = false;
+    svg_suite_only = sibyl.mystic_symbolic_sched(fg_ctx, suite_sched);
   }
 
   //var bg_id = "bg_ok1234";
@@ -928,6 +956,8 @@ function realize_svg_card(tarot_data) {
   sibyl.bg_ctx.create_svg_header = false;
   sibyl.bg_ctx.scale = 0.2;
   sibyl.bg_ctx.global_scale = 0.5;
+
+  bg_ctx.svg_id = rndstr();
 
   var bg_cp = tarot_data.colors[2][0].hex;
   var bg_cs = tarot_data.colors[2][1].hex;
@@ -989,11 +1019,18 @@ function realize_svg_card(tarot_data) {
     '<svg version="1.1" id="bg_frame" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="190px" height="317px">' +
 
     svg_extra_header + 
-    "<g transform=\"translate(-250 -250)\">" + 
+    "<g transform=\"translate(-250 -250)\">" +
     svg_background_only + 
     "</g>" +
 
-    "<g transform=\"translate(-270 -180)\">" + 
+    // eyeball'd until it looked correct....
+    // better would be to work out scale factors and proper offets
+    //
+    "<g transform=\"translate(-264 -205)\">" +
+    svg_suite_only +
+    "</g>" +
+
+    "<g transform=\"translate(-264 -205)\">" +
     svg_creature_only +
     "</g>" +
 
@@ -1398,7 +1435,8 @@ function realize_tarot_sched(_seed, ctx) {
     //"bg" : { "base" : back_symbol_name + bca[0].hex + bca[1].hex },
     "bg" : { "base" : back_symbol_name + back_card_color.background.hex + back_card_color.background2.hex },
     "fg" : { "base" : "empty" },
-    "colors" : bca
+    "colors" : bca,
+    "card_idx": 78
   });
   
 
