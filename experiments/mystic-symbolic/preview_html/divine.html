@@ -229,15 +229,23 @@
         </div>
       </div>
 
-      <div class='row'>
-        <div class='eight columns' style='text-align:left;'>
+      <div class='row' style='height:125px; '>
+        <div class='four columns' style='text-align:left;'>
           <tbutton id='ui_button_download'>download deck</tbutton>
+        </div>
+
+        <div class='four columns' style='text-align:center;'>
+          <div id='ui_loading' style='display:none;'>
+            <!-- <p style='color:#777;'><small>generating tarot deck... <br> please be patient</small></p> -->
+            <span style='color:#777;'><small>generating tarot deck... <br> please be patient</small></span>
+            <div class='sp sp-loadbar'> </div>
+          </div>
+          <div id='ui_loading_placeholder' style='display:block;'> &nbsp; </div>
         </div>
 
         <div class='four columns' style='text-align:right;'>
           <p>
-            <small>Hover over or click on cards to view the reading.
-            </small>
+            <small>Hover over or click on cards to view the reading.  </small>
           </p>
         </div>
       </div>

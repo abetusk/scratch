@@ -384,10 +384,12 @@ For deck generation:
 
 ---
 
-* add export feature that will package up PNGs and SVGs to download
 * print custom deck
 * write blog post about custom printing
 * add info/about and credits
+* web needs the extra processing step for justice scales
+* web needs slightly bigger text box to fit king/queen pentacles
+* web needs question (or if it's random) under title
 
 #### references
 
@@ -397,6 +399,7 @@ For deck generation:
 
 Some ideas for names:
 
+* `Resonator Voyant Tarot`
 * `Callow Tarot`
 * `Shallow Tarot`
 * `Hollow Tarot`
@@ -412,7 +415,6 @@ Some ideas for names:
 * `Tomorrow Tarot`
 * `Harrowed Tarot`
 * `Zero Tarot`
-* `Resonator Voyant Tarot`
 * `Teleprescent Metaphatic`
 * `Autophetic Instrumancy`
 * `Precognitive Piezoelectric Prophecy Generator`

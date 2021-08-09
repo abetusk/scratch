@@ -238,3 +238,33 @@ dialog {
   background: #fafafa;
   z-index: 99;
 }
+
+/* Spinner LoadBar */
+/* https://codepen.io/bernethe/pen/dorozd */
+
+.sp {
+  width:32px;
+  height:32px;
+  clear: both;
+  margin: 20px auto;
+}
+.sp-loadbar {
+	width: 50px;
+	height: 18px;
+	border: 1px #777 solid;
+	border-radius: 4px;
+	background: linear-gradient(-60deg, transparent 0%, transparent 50%, #777 50%, #777 75%, transparent 75%, transparent);
+	background-size: 20px 30px;
+	background-position: 0px 0px;
+	-webkit-animation: spLoadBar 0.8s infinite linear;
+	animation: spLoadBar 0.8s infinite linear;
+}
+@-webkit-keyframes spLoadBar {
+	from { background-position: 0px 0px; }
+	to { background-position: -20px 0px; }
+}
+@keyframes spLoadBar {
+	from { background-position: 0px 0px; }
+	to { background-position: -20px 0px; }
+}
+

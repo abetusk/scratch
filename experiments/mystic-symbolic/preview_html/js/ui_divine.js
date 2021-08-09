@@ -583,6 +583,10 @@ function display_tarot() {
     var id = "ui_canvas_card" + ii.toString();
     $("#" + id).fadeTo(400, 1.0);
   }
+
+  $("#ui_loading").fadeOut();
+  var _lbt = document.getElementById("ui_loading_placeholder");
+  _lbt.style.display = "block";
 }
 
 // called after init is done loading the JSON tarot interpretations
@@ -617,7 +621,7 @@ function finit() {
             var _e = document.getElementById(_x);
             _e.style.transform = "rotate(180deg)";
             g_data.card_queue--;
-            if (g_data.card_queue) {
+            if (g_data.card_queue==0) {
               setTimeout(display_tarot, 500);
             }
           },0);
@@ -625,7 +629,7 @@ function finit() {
         else {
           setTimeout( function() {
             g_data.card_queue--;
-            if (g_data.card_queue) { setTimeout(display_tarot, 500); }
+            if (g_data.card_queue==0) { setTimeout(display_tarot, 500); }
           },0);
         }
       }
@@ -2090,7 +2094,17 @@ $(document).ready(function() {
     console.log("seed:", seed_text);
     g_data.seed = seed_text;
 
-    init();
+    // `init` will bog down the browser, so
+    // we want the modal to disappear as
+    // quickly as possible.
+    //
+    //init();
+    setTimeout(init, 1000);
+
+    $("#ui_loading").fadeIn();
+    var _lbt = document.getElementById("ui_loading_placeholder");
+    _lbt.style.display = "none";
+
   });
 
   $("#ui_modal_test").click( function(e) {
@@ -2124,7 +2138,8 @@ $(document).ready(function() {
       if (seed_text.length === 0) { seed_text = rndstr(); }
       g_data.seed = seed_text;
 
-      init();
+      //DEBUG
+      //init();
     }
   });
 
@@ -2144,7 +2159,8 @@ $(document).ready(function() {
         if (seed_text.length === 0) { seed_text = rndstr(); }
         g_data.seed = seed_text;
 
-        init();
+        //DEBUG
+        //init();
       }
     }
   });
@@ -2160,8 +2176,6 @@ $(document).ready(function() {
     $("#ui_content").fadeTo("slow", 0.5);
   }
 
-  //DEBUG
-  //init();
 });
 
 window.onresize = function() {
