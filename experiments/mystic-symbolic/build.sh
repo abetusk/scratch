@@ -1,5 +1,6 @@
 #!/bin/bash
 
+echo "generating mystic_symbolic_vocabulary.js"
 cat <( echo 'var vocabulary =' ) \
   <( jq -c . _svg-vocabulary-pretty-printed.json ) \
   <( echo -e ';\nmodule.exports = { "vocabulary":vocabulary };' ) > mystic_symbolic_vocabulary.js
@@ -8,6 +9,7 @@ cat <( echo 'var vocabulary =' ) \
 #  <( node gen-tarot-json.js ) \
 #  <( echo -e ';\nmodule.exports = { "vocabulary":vocabulary };' ) > tarot_vocabulary.js
 
+echo "generating tarot_vocabulary.js"
 cat <( echo 'var vocabulary = ' ) \
   <( echo '[' ) \
   <( node gen-tarot-json.js | jq -c '.[]' | sed 's/$/,/' ) \

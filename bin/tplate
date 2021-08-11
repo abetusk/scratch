@@ -1,0 +1,73 @@
+#!/usr/bin/python3
+# 
+#  To the extent possible under law, the person who associated CC0 with
+#  this source code has waived all copyright and related or neighboring rights
+#  to this source code.
+#  
+#  You should have received a copy of the CC0 legalcode along with this
+#  work.  If not, see <http://creativecommons.org/publicdomain/zero/1.0/>.
+# 
+
+import sys
+
+HTML_TEMPLATE = """<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+
+  <title>TITLE</title>
+
+  <!--  <link rel="icon" type="image/png" href="images/favicon.ico"> -->
+  <!-- <script type='text/javascript' src='js/J.js'></script> -->
+  <!--  <link rel='stylesheet' href='css/CSS.css'> -->
+
+</head>
+
+<body>
+
+</body>
+
+<html>
+"""
+
+C_TEMPLATE = """#include <stdio.h>
+#include <stdlib.h>
+
+int main(int argc, char **argv) {
+}
+"""
+
+CPP_TEMPLATE = """#include <stdio.h>
+#include <stdlib.h>
+
+#include <string>
+#include <vector>
+
+int main(int argc, char **argv) {
+}
+"""
+
+
+def usage(ofp):
+  ofp.write("\nusage:\n\n    tplate <language>\n\n")
+  ofp.write(" <language>    (html|c|c++|cpp)\n")
+  ofp.write("\n")
+
+if len(sys.argv) < 2:
+  usage(sys.stderr);
+  sys.exit(-1)
+
+cmd = sys.argv[1]
+
+if cmd == "help":
+  usage(sys.stdout)
+  sys.exit(0)
+
+elif cmd == "html":
+  print(HTML_TEMPLATE)
+elif cmd == "c":
+  print(C_TEMPLATE)
+elif (cmd == "c++") or (cmd == "cpp"):
+  print(CPP_TEMPLATE)
+
+
