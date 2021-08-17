@@ -31,6 +31,12 @@
     { "question" : "Do you think education should be a fundamental human right?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "politics", "education" ] },
     { "question" : "Do you think higher education (college level) should be a fundamental human right?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "politics", "education" ] },
 
+    { "question" : "Do you think the invention of agriculture improved the average person's quality of life?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "society"  ] },
+    { "question" : "Do you think the industrial revolution improved the average person's quality of life?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "society"  ] },
+    { "question" : "Do you think current technology is improving the average person's quality of life?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "society"  ] },
+
+    { "question" : "Do you think the world is getting more dangerous for the average person?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "society"  ] },
+
     { "question" : "Do you believe in God?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "religion" ] },
     { "question" : "Do you believe in the Devil?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "religion" ] },
     { "question" : "Do you believe in a soul?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "religion" ] },
