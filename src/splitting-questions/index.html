@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+
+  <title>Splitting Questions</title>
+
+  <!--  <link rel="icon" type="image/png" href="images/favicon.ico"> -->
+  <script type='text/javascript' src='js/jquery.js'></script>
+  <link rel='stylesheet' href='css/skeleton.css'>
+  <link rel='stylesheet' href='css/skeleton.css'>
+
+  <script type='text/javascript' src='js/splitting_questions.js'></script>
+
+
+</head>
+
+<body>
+
+
+  <div class='container'>
+
+    <div class='row'>
+      <div class='two columns'> &nbsp;  </div>
+      <div class='eight columns' style='text-align:center;'>
+        <h1>Splitting Questions</h1>
+      </div>
+      <div class='two columns'> &nbsp;  </div>
+    </div>
+
+    <hr>
+
+    <div id='ui_question_section'>
+
+      <div class='row' style='height:150px;'>
+        <div class='two columns'> &nbsp;  </div>
+        <div class='eight columns' style='text-align:center;'>
+          <h5 id='ui_question'>Do you think the world is getting more dangerous for the average person?</h5>
+        </div>
+        <div class='two columns'> &nbsp;  </div>
+      </div>
+
+      <div class='row' style='height:200px;'>
+        <div class='one columns'> &nbsp;  </div>
+        <div class='four columns' style='text-align:center; height:100px;'>
+          <button id='ui_button_yes' style='width:100%; height:100%;'> Yes </button>
+        </div>
+        <div class='two columns'> &nbsp;  </div>
+        <div class='four columns' style='text-align:center; height:100px;'>
+          <button id='ui_button_no' style='width:100%; height:100%;'> No </button>
+        </div>
+        <div class='one columns' > &nbsp; </div>
+      </div>
+
+      <div class='row' style='height:150px;'>
+        <div class='four columns' style='height:75px;'> &nbsp;  </div>
+        <div class='four columns' style='text-align:center; height:75px;'>
+          <button id='ui_button_skip' style='width:100%; height:100%;' > Skip</button>
+        </div>
+        <div class='four columns'> &nbsp;  </div>
+      </div>
+
+      <div class='row'>
+        <div class='two columns' style='vertical-aling:center; margin-top:30px;'>
+          <button id='ui_button_back' > &lt; back </button>
+        </div>
+        <div class='eight columns' style='text-align:center;'>
+          <span id='ui_progress' style='opacity:0.5;'> 5 / 23 </span>
+        </div>
+        <div class='two columns'> &nbsp;  </div>
+      </div>
+
+      <hr>
+
+      <div class='row'>
+        <div class='two columns'> &nbsp;  </div>
+        <div class='eight columns' style='text-align:center;'>
+          <button id='ui_button_exit'>Just show me the results</button>
+        </div>
+        <div class='two columns'> &nbsp;  </div>
+      </div>
+
+    </div>
+
+    <div id='ui_survey_review' style='display:none;'>
+
+      <div class='row' style='height:80px;'>
+        <div class='two columns' > &nbsp; </div>
+        <div class='eight columns' style='text-align:center; height:80px; width:100%;'>
+          <button id='ui_button_submit' style='height:100%; width:100%;'>Submit</button>
+        </div>
+        <div class='two columns'> &nbsp;  </div>
+      </div>
+
+
+      <div id='ui_survey_review_table' >
+
+        <div class='row'>
+          <div class='two columns'> &nbsp;  </div>
+          <div class='six columns' style='text-align:center;'>
+            question?
+          </div>
+          <div class='two columns' style='text-align:center;'>
+            answer
+          </div>
+          <div class='two columns'> &nbsp;  </div>
+        </div>
+
+      </div>
+
+      <div class='row' style='height:80px;'>
+        <div class='two columns' > &nbsp; </div>
+        <div class='eight columns' style='text-align:center; height:80px; width:100%;'>
+          <button id='ui_button_submit1' style='height:100%; width:100%;'>Submit</button>
+        </div>
+        <div class='two columns'> &nbsp;  </div>
+      </div>
+
+      <div class='row' style='height:80px;'>
+        <div class='one columns' > &nbsp; </div>
+        <div class='five columns' id='ui_result_nonce' style='text-align:center;'>
+        </div>
+        <div class='five columns' id='ui_result_proof' style='text-align:center;'>
+        </div>
+        <div class='one columns'> &nbsp;  </div>
+      </div>
+
+
+      <div class='row'>
+        <div class='two columns' style='vertical-aling:center; margin-top:30px;'>
+          <button id='ui_button_back1' > &lt; back </button>
+        </div>
+        <div class='eight columns' style='text-align:center;'> &nbsp; </div>
+        <div class='two columns'> &nbsp;  </div>
+      </div>
+
+    </div>
+
+
+    <div id='ui_survey_result' style='display:none;'>
+    </div>
+
+
+  </div>
+    
+
+</body>
+
+<html>
+
