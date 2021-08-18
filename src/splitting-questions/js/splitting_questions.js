@@ -160,6 +160,23 @@ function prowo(digest) {
 
 //--------
 
+function _submit_success(e) {
+
+  var res = e.target.response;
+  console.log("submit success", res);
+  return;
+
+  //console.log("??", e.response);
+  //console.log("???", e.response.responseText);
+  console.log("????", e.target.response);
+  console.log("????", e.target.response.responseText);
+  console.log("????", e.target.responseText);
+}
+
+function _submit_error(e) {
+  console.log("submit error", e);
+}
+
 function submit() {
   let xdata = { "prowo":{}, "answer":[] };
 
@@ -168,11 +185,16 @@ function submit() {
     xdata.answer.push( { "id":g_data.schedule_id[ii], "a":g_data.answer[ii] } );
   }
 
+  console.log(">>>", xdata);
+
   var xhr = new XMLHttpRequest();
-  var url = "sq_data.php";
+  var url = "sq_data.py";
   xhr.open("POST", url, true);
   xhr.setRequestHeader("Content-type", "application/json");
   xhr.send(JSON.stringify(xdata));
+
+  xhr.addEventListener("load", _submit_success);
+  xhr.addEventListener("error", _submit_error);
 }
 
 //--------
