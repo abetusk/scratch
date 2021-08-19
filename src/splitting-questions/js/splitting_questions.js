@@ -1,3 +1,4 @@
+// License: CC0
 
 var g_data = {
   "state": "init",
@@ -8,16 +9,22 @@ var g_data = {
   "prowo" : {
     "found": false,
     "counter": 0,
-    "difficulty": 4,
+    "difficulty": 5,
     "input"  : "",
     "output" : ""
   },
   "survey" : [
-    { "question" : "Do you consider yourself a Democrat?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "US", "US politics", "politics" ] },
+    { "question" : "Do you think sex work should be decriminalized?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "society", "politics" ] },
+
+    { "question" : "Do you think transsexual people should be referred to by their preferred pronouns (he/she/they/etc.)?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "society", "politics" ] },
+    { "question" : "Do you think transsexual women (people who were born biologically male but then have transitioned to become women) should be, for the most part, excluded from womens only spaces?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "society", "politics" ] },
+    { "question" : "Do you believe 'trigger warnings' are largely unnecessary?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "society", "politics" ] },
+
+    { "question" : "Do you believe people should not give birth to any new children?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "society", "politics" ] },
+    { "question" : "Do you believe we should reduce our population?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "society", "politics" ] },
+
     { "question" : "Do you consider yourself a Replublican?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "US", "US politics", "politics" ] },
     { "question" : "Do you consider yourself an Independant?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "US", "US politics", "politics" ] },
-  ],
-  "_survey": [
 
     { "question" : "Do you believe it's more difficult to be of African descent in the US than it is to be white?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "US", "US politics", "politics" ] },
     { "question" : "Do you believe it's more difficult to be of Asian descent in the US than it is to be white?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "US", "US politics", "politics" ] },
@@ -71,10 +78,10 @@ var g_data = {
     { "question" : "Do you consider yourself a spiritual person?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "religion", "spirituality" ] },
     { "question" : "Do you believe in an afterlife?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "religion", "spirituality" ] },
 
-    { "question" : "Do you believe in \"Eastern\" medicine is superior to \"Western\" medicine?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "religion", "spirituality" ] },
+    { "question" : "Do you believe in \"Alternative\" (\"Holistic\", \"Complementary\", etc.) medicine is superior to scientifically based medicine?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "religion", "spirituality" ] },
     { "question" : "Do you believe vaccines are effective in preventing disease?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "religion", "spirituality" ] },
 
-    { "question" : "Do you believe extra-terrestrial aliens exist?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "science" ] },
+    { "question" : "Do you believe life that did not originate on Earth exists elsewhere in the universe?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "science" ] },
     { "question" : "Do you believe extra-terrestrial aliens have visited earth?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "science" ] },
 
     { "question" : "Do you believe evolution describes a real world process?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "science" ] },
@@ -95,7 +102,7 @@ var g_data = {
 
     { "question" : "Do you believe the earth's temperature is rising due to human activity?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "science", "technology", "ecology" ] },
     { "question" : "Do you believe technology is the most likely way to improve people's standard of living?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "science", "technology", "ecology" ] },
-    { "question" : "Do you believe a reduction in technology, or the reliance on technology, is the most likely way to improve people's standard of living?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "science", "technology", "ecology" ] },
+    { "question" : "Do you believe a reduction in technology, or a reduction in the reliance on technology, is the most likely way to improve people's standard of living?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "science", "technology", "ecology" ] },
 
 
     { "question" : "Do you believe money should exist?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "politics", "economics" ] },
@@ -103,10 +110,10 @@ var g_data = {
     { "question" : "Do you believe people should be allowed to privately own wealth?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "politics", "economics" ] },
     { "question" : "Do you think income should be taxed?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "politics", "economics" ] },
     { "question" : "Do you think owned land should be taxed?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "politics", "economics" ] },
-    { "question" : "Do you believe richer people should have the income they earn past a certain threshold ($100k/year, say) at a higher rate then the income below the threshold? That is, do you believe a progressive tax should exist?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "politics", "economics" ] },
+    { "question" : "Do you believe richer people should have the income they earn past a certain threshold ($100k/year, say) taxed at a higher rate then the income below the threshold? That is, do you believe a progressive tax should exist?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "politics", "economics" ] },
 
     { "question" : "Do you believe the general population should have a say in who governs them?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "politics", "economics" ] },
-    { "question" : "Do you believe governance should be inhereted (for example, like a monarchy)?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "politics", "economics" ] },
+    { "question" : "Do you believe governance positions should be inhereted (for example, like a monarchy)?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "politics", "economics" ] },
 
     { "question" : "Do you eat meat regularly (chicken, turkey, beef, etc.)?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "politics", "diet" ] },
     { "question" : "Do you think technological progress will help solve the problems in the world?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "politics", "technology" ] }
@@ -160,32 +167,205 @@ function prowo(digest) {
 
 //--------
 
-function _submit_success(e) {
+function ci_lower_bound(pos, n, conf) {
+  if (n==0) { return 0; }
 
+  let z = jStat.normal.inv(1.0 - (1.0 - conf)/2.0, 0, 1);
+  let phat = 1.0*pos/n;
+  let r = (phat + ((z*z)/(2.0*n)) - (z*Math.sqrt((phat*(1-phat) + ((z*z)/(4.0*n)))/n))) / (1.0 + (z*z/n));
+  return r;
+}
+
+function _freq_load(dat) {
+  console.log("freq:", dat);
+
+  dat["lookup"] = {};
+  for (var ii=0; ii<dat.survey.length; ii++) {
+    if (typeof dat.survey[ii].sha256sum === "undefined") {
+      console.log("WHOA:", ii, dat.survey[ii]);
+    }
+    dat.lookup[dat.survey[ii].sha256sum] = dat.survey[ii].question;
+  }
+
+  let ele = document.getElementById("ui_survey_result_table");
+  ele.innerHTML = "";
+
+  let table = document.createElement("table");
+  table.classList.add("u-full-width");
+
+  let thead = document.createElement("thead");
+  let tr = document.createElement("tr");
+  let th0 = document.createElement("th");
+  let th1 = document.createElement("th");
+  let th2 = document.createElement("th");
+  let th3 = document.createElement("th");
+
+  th0.innerHTML = "Question";
+  th1.innerHTML = "yes";
+  th2.innerHTML = "no";
+  th3.innerHTML = "skip";
+
+  tr.appendChild(th0);
+  tr.appendChild(th1);
+  tr.appendChild(th2);
+  tr.appendChild(th3);
+
+  thead.appendChild(tr);
+
+  table.appendChild(thead);
+
+  table.appendChild(thead);
+  let tbody = document.createElement("tbody");
+
+  var _a = [];
+  for (var digest in dat.freq) {
+    let _yes = dat.freq[digest].yes;
+    let _no = dat.freq[digest].no;
+    let _y_score = ci_lower_bound(_yes, _yes + _no, 0.95);
+    let _n_score = ci_lower_bound(_no, _yes + _no, 0.95);
+    let _e = {
+      "digest" : digest,
+      "question" : dat.lookup[digest],
+      "yes" : _yes,
+      "no": _no,
+      "skip": dat.freq[digest].skip,
+      "yscore" : _y_score,
+      "nscore" : _n_score,
+      "mscore": ((_y_score  > _n_score) ? _y_score : _n_score)
+
+    };
+    _a.push(_e);
+  }
+
+  _a.sort( function(x,y) { return y.mscore - x.mscore ; } );
+
+  var _count = 0;
+  for (let ii=0; ii<_a.length; ii++) {
+    if (typeof _a[ii].question === "undefined") {
+      continue;
+      console.log("wtf:", ii, _a[ii]);
+    }
+    _count++;
+
+    tr = document.createElement("tr");
+
+    let td0 = document.createElement("td");
+    let td1 = document.createElement("td");
+    let td2 = document.createElement("td");
+    let td3 = document.createElement("td");
+
+    /*
+    let s0 = document.createElement("div");
+    let s1 = document.createElement("div");
+    let s2 = document.createElement("div");
+    let s3 = document.createElement("div");
+
+    s0.innerHTML = _a[ii].question;
+    s1.innerHTML = _a[ii].yes.toString();
+    s2.innerHTML = _a[ii].no.toString();
+    s3.innerHTML = _a[ii].skip.toString();
+
+    s1.id = "ui_survey_review_yes_" + _a[ii].digest;
+    s2.id = "ui_survey_review_no_" + _a[ii].digest;
+    s3.id = "ui_survey_review_skip_" + _a[ii].digest;
+
+    td0.appendChild(s0);
+    td1.appendChild(s1);
+    td2.appendChild(s2);
+    td3.appendChild(s3);
+    */
+
+    td0.innerHTML = _count.toString() + ": " + _a[ii].question;
+    td1.innerHTML = _a[ii].yes.toString();
+    td2.innerHTML = _a[ii].no.toString();
+    td3.innerHTML = _a[ii].skip.toString();
+
+    td1.id = "ui_survey_review_yes_" + _a[ii].digest;
+    td2.id = "ui_survey_review_no_" + _a[ii].digest;
+    td3.id = "ui_survey_review_skip_" + _a[ii].digest;
+
+    tr.appendChild(td0);
+    tr.appendChild(td1);
+    tr.appendChild(td2);
+    tr.appendChild(td3);
+
+    tbody.appendChild(tr);
+
+  }
+
+  table.appendChild(tbody);
+  ele.appendChild(table);
+
+}
+
+function _fetch_freq() {
+  let xhr = new XMLHttpRequest();
+  xhr.open("GET", "data/splitting_questions_freq.json", true);
+  xhr.responseType = 'json';
+  xhr.onload = function() {
+    if (xhr.status === 200) {
+      _freq_load(xhr.response);
+    }
+    else {
+      console.log("error fetching frequency json data");
+    }
+  };
+  xhr.send();
+}
+
+function _show_freq() {
+  $("#ui_question_section").fadeOut();
+  $("#ui_survey_review").fadeOut();
+
+  setTimeout(function() {
+    $("#ui_survey_result").fadeIn();
+  }, 1000);
+
+  // html needs to be updated
+  //
+  setTimeout(function() {
+    for (let ii=0; ii<g_data.answer.length; ii++) {
+      let digest = g_data.schedule_id[ii];
+
+      //console.log(">>>", digest, g_data.answer[ii]);
+
+      if (g_data.answer[ii] == "yes") {
+        $("#ui_survey_review_yes_" + digest).css("background-color", "#eee");
+        $("#ui_survey_review_yes_" + digest).css("border-radius", "30px");
+      }
+      else if (g_data.answer[ii] == "no") {
+        $("#ui_survey_review_no_" + digest).css("background-color", "#eee");
+        $("#ui_survey_review_no_" + digest).css("border-radius", "30px");
+      }
+      else if (g_data.answer[ii] == "skip") {
+        $("#ui_survey_review_skip_" + digest).css("background-color", "#eee");
+        $("#ui_survey_review_skip_" + digest).css("border-radius", "30px");
+      }
+    }
+  }, 0);
+
+
+
+}
+
+//--------
+
+function _submit_success(e) {
   var res = e.target.response;
   console.log("submit success", res);
-  return;
-
-  //console.log("??", e.response);
-  //console.log("???", e.response.responseText);
-  console.log("????", e.target.response);
-  console.log("????", e.target.response.responseText);
-  console.log("????", e.target.responseText);
 }
 
 function _submit_error(e) {
   console.log("submit error", e);
 }
 
-function submit() {
+function _submit() {
   let xdata = { "prowo":{}, "answer":[] };
 
   xdata.prowo = g_data.prowo;
   for (var ii=0; ii<g_data.schedule.length; ii++) {
     xdata.answer.push( { "id":g_data.schedule_id[ii], "a":g_data.answer[ii] } );
   }
-
-  console.log(">>>", xdata);
 
   var xhr = new XMLHttpRequest();
   var url = "sq_data.py";
@@ -195,6 +375,17 @@ function submit() {
 
   xhr.addEventListener("load", _submit_success);
   xhr.addEventListener("error", _submit_error);
+}
+
+function _wait_submit() {
+  if (g_data.prowo.found) {
+    _submit();
+    return;
+  }
+
+  console.log("waiting");
+
+  setTimeout(_wait_submit, 1000);
 }
 
 //--------
@@ -407,6 +598,7 @@ function _hit_back() {
 function init() {
 
   prowo(rstr());
+  _fetch_freq();
 
   g_data.cur_idx = 0;
   g_data.schedule = [];
@@ -462,11 +654,36 @@ function init() {
     }, 500);
   });
 
+  $("#ui_button_submit_early").click( function(e) {
+    _finish();
+    //_submit();
+  });
+
+  $("#ui_button_submit").click( function(e) {
+    _wait_submit();
+    _show_freq();
+  });
+  $("#ui_button_submit1").click( function(e) {
+    _wait_submit();
+    _show_freq();
+  });
+
+  $("#ui_button_exit").click( function(e) {
+    _show_freq();
+  });
+
+
+
   $("#ui_progress").html( "1 / " + g_data.schedule.length.toString() );
   $("#ui_question").html( g_data.schedule[ g_data.cur_idx ].question );
 
 }
 
-$(document).ready(function() {
-  init();
-});
+if (typeof module !== "undefined") {
+  console.log(JSON.stringify( { "survey": g_data.survey }, undefined, 2));
+}
+else {
+  $(document).ready(function() { init(); });
+}
+
+
