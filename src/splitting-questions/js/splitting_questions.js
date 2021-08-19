@@ -122,6 +122,7 @@ var g_data = {
   ]
 };
 
+
 function rstr(n) {
   n = (n ?? 32);
   let _d = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -164,6 +165,32 @@ function prowo(digest) {
   digestMessage(g_data.prowo.input).then(prowo);
 
 }
+
+//--------
+
+// https://stackoverflow.com/questions/19327749/javascript-blob-filename-without-link
+// CC-BY-SA user Kim Nyholm (https://stackoverflow.com/users/8450075/kim-nyholm)
+//
+/*
+function _download_data(blob, filename) {
+
+  if (window.navigator.msSaveOrOpenBlob) {
+    window.navigator.msSaveOrOpenBlob(blob, filename);
+  } else {
+    const a = document.createElement('a');
+    document.body.appendChild(a);
+    const url = window.URL.createObjectURL(blob);
+    a.href = url;
+    a.download = filename;
+    a.click();
+    setTimeout(() => {
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    }, 0)
+  }
+
+}
+*/
 
 //--------
 
@@ -671,6 +698,8 @@ function init() {
   $("#ui_button_exit").click( function(e) {
     _show_freq();
   });
+
+  //$("#ui_button_download").click( function(e) { _download_data(); });
 
 
 
