@@ -7,11 +7,12 @@ import os, sys, string, json
 import random
 import hashlib
 
-JSON_QUESTION = "/var/www/html/splitting_questions/data/questions.json"
-OUTPUT_JSON = "/tmp/splitting_questions_freq.json"
+JSON_QUESTION = "/var/www/splitting_questions/data/questions.json"
+#OUTPUT_JSON = "/tmp/splitting_questions_freq.json"
+OUTPUT_JSON = "/var/www/splitting_questions/data/splitting_questions_freq.json"
 
 PFX = "/home/meow/data/splitting_questions"
-PFX = "/tmp/splitting_questions"
+#PFX = "/tmp/splitting_questions"
 
 question = {}
 survey_db = { }

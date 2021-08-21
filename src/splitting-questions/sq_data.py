@@ -8,7 +8,7 @@ import random
 import hashlib
 
 PFX = "/home/meow/data/splitting_questions"
-PFX = "/tmp/splitting_questions"
+#PFX = "/tmp/splitting_questions"
 
 res = {'type':'success', 'message':''}
 
