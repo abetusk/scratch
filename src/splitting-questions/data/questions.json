@@ -25,7 +25,7 @@
       ]
     },
     {
-      "question": "Do you think transsexual women (people who were born biologically male but then have transitioned to become women) should be, for the most part, excluded from womens only spaces?",
+      "question": "Do you think transsexual women (people who were born biologically male but then have transitioned to become women) should be, for the most part, excluded from women only spaces?",
       "answer_candidate": [
         "yes",
         "no",
@@ -73,7 +73,7 @@
       ]
     },
     {
-      "question": "Do you consider yourself a Replublican?",
+      "question": "Do you consider yourself a Republican?",
       "answer_candidate": [
         "yes",
         "no",
@@ -86,7 +86,7 @@
       ]
     },
     {
-      "question": "Do you consider yourself an Independant?",
+      "question": "Do you consider yourself an Independent?",
       "answer_candidate": [
         "yes",
         "no",
@@ -255,7 +255,7 @@
       ]
     },
     {
-      "question": "Do you think the use of all recreational drugs should be decriminalizzed?",
+      "question": "Do you think the use of all recreational drugs should be decriminalized?",
       "answer_candidate": [
         "yes",
         "no",
@@ -830,7 +830,7 @@
       ]
     },
     {
-      "question": "Do you believe governance positions should be inhereted (for example, like a monarchy)?",
+      "question": "Do you believe governance positions should be inherited (for example, like a monarchy)?",
       "answer_candidate": [
         "yes",
         "no",

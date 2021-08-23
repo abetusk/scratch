@@ -17,14 +17,14 @@ var g_data = {
     { "question" : "Do you think sex work should be decriminalized?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "society", "politics" ] },
 
     { "question" : "Do you think transsexual people should be referred to by their preferred pronouns (he/she/they/etc.)?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "society", "politics" ] },
-    { "question" : "Do you think transsexual women (people who were born biologically male but then have transitioned to become women) should be, for the most part, excluded from womens only spaces?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "society", "politics" ] },
+    { "question" : "Do you think transsexual women (people who were born biologically male but then have transitioned to become women) should be, for the most part, excluded from women only spaces?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "society", "politics" ] },
     { "question" : "Do you believe 'trigger warnings' are largely unnecessary?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "society", "politics" ] },
 
     { "question" : "Do you believe people should not give birth to any new children?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "society", "politics" ] },
     { "question" : "Do you believe we should reduce our population?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "society", "politics" ] },
 
-    { "question" : "Do you consider yourself a Replublican?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "US", "US politics", "politics" ] },
-    { "question" : "Do you consider yourself an Independant?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "US", "US politics", "politics" ] },
+    { "question" : "Do you consider yourself a Republican?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "US", "US politics", "politics" ] },
+    { "question" : "Do you consider yourself an Independent?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "US", "US politics", "politics" ] },
 
     { "question" : "Do you believe it's more difficult to be of African descent in the US than it is to be white?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "US", "US politics", "politics" ] },
     { "question" : "Do you believe it's more difficult to be of Asian descent in the US than it is to be white?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "US", "US politics", "politics" ] },
@@ -43,7 +43,7 @@ var g_data = {
     { "question" : "Do you think the death penalty should exist?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "politics", "crime" ] },
     { "question" : "Do you think Cannabis (Marijuana/Weed) should be legal for medicinal use?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "politics", "crime", "drugs" ] },
     { "question" : "Do you think Cannabis (Marijuana/Weed) should be legal for recreational use?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "politics", "crime", "drugs" ] },
-    { "question" : "Do you think the use of all recreational drugs should be decriminalizzed?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "politics", "crime", "drugs" ] },
+    { "question" : "Do you think the use of all recreational drugs should be decriminalized?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "politics", "crime", "drugs" ] },
     { "question" : "Do you think a drug dealer should get the same or worse punishment as a murder?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "politics", "crime" ] },
 
     { "question" : "Do you consider yourself against legalized abortion?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [  "politics", "abortion" ] },
@@ -113,7 +113,7 @@ var g_data = {
     { "question" : "Do you believe richer people should have the income they earn past a certain threshold ($100k/year, say) taxed at a higher rate then the income below the threshold? That is, do you believe a progressive tax should exist?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "politics", "economics" ] },
 
     { "question" : "Do you believe the general population should have a say in who governs them?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "politics", "economics" ] },
-    { "question" : "Do you believe governance positions should be inhereted (for example, like a monarchy)?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "politics", "economics" ] },
+    { "question" : "Do you believe governance positions should be inherited (for example, like a monarchy)?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "politics", "economics" ] },
 
     { "question" : "Do you eat meat regularly (chicken, turkey, beef, etc.)?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "politics", "diet" ] },
     { "question" : "Do you think technological progress will help solve the problems in the world?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "politics", "technology" ] }
