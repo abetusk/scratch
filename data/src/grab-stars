@@ -1,0 +1,8 @@
+#!/bin/bash
+
+for p in `seq 16` ; do
+  echo $p
+  curl -s 'https://api.github.com/users/abetusk/starred?per_page=100&page='$p | \
+    jq -c '.[] | [ .name, .description, .html_url ]' | \
+    sed 's/^\[ *//' | sed 's/ *\]$//' > abetusk.starred.$p
+done
