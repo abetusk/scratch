@@ -15,6 +15,7 @@ Names
 * Black Smoke Pack Binding
 * Exorcise Magic Smoke, Magic Smoke Summoning, Conjure Magic Smoke
 * Invoke LED Glamour
+* Fogged Void
 
 ---
 
