@@ -10,8 +10,8 @@
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="600"
-   height="600"
-   viewBox="0 0 158.75 158.75"
+   height="300"
+   viewBox="0 0 158.75 79.375002"
    version="1.1"
    id="svg826"
    inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)"
@@ -25,18 +25,18 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.49497475"
-     inkscape:cx="-135.94614"
-     inkscape:cy="649.14224"
+     inkscape:zoom="1.4"
+     inkscape:cx="184.66625"
+     inkscape:cy="62.187024"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
      units="px"
-     inkscape:window-width="1648"
-     inkscape:window-height="1003"
-     inkscape:window-x="272"
-     inkscape:window-y="149"
-     inkscape:window-maximized="0" />
+     inkscape:window-width="1920"
+     inkscape:window-height="1058"
+     inkscape:window-x="1920"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1" />
   <metadata
      id="metadata823">
     <rdf:RDF>
@@ -53,10 +53,10 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(0,-138.24998)">
+     transform="translate(0,-217.62498)">
     <g
        id="g860"
-       transform="matrix(-36.080384,0,0,36.080384,260.16895,-10210.832)">
+       transform="matrix(-18.892268,0,0,18.892268,172.9127,-5204.8445)">
       <path
          style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.0529167;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
          d="M 4.341455,289.14639 4,291 h 2 l -0.7,-3.61208 -0.3,-0.2 -0.3,0.2 -0.3398819,1.65715"
