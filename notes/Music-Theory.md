@@ -130,7 +130,7 @@ pleasing.
 
 ### Rhythm
 
-![Metronome pyramide svg petit droite_s svg](Metronome_pyramide_svg_petit_droite_s.svg)
+![Metronome pyramide svg petit droite_s svg](img/Metronome_pyramide_svg_petit_droite_s.svg)
 
 Rhythm or tempo, in this context, is the placement, timing and length of musical sounds or notes.
 
