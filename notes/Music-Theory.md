@@ -487,7 +487,7 @@ Where 'hardware' here is the amount of cells and other human processing power de
 humans.
 
 ###### Note 2
-Assuming the sum of the I.I.D. R.V.'s converge to a distribution.
+Assuming the sum of the independent, identically distributed (I.I.D.) random variables (R.V.) converge to a distribution.
 
 ###### Note 3
 Though there is debate about whether particular distributions are power law or log-normal (See [7](#7)),
