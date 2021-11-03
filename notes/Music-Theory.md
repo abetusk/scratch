@@ -99,7 +99,7 @@ For most people, the sensitivity of the human ear peaks at around 3,000Hz to
 
 Though sensitivity is variable throughout the 20Hz to 20kHz spectrum,
 a good approximation is to consider human hearing as having logarithmic
-sensitivity  ([x](#Note_0)). 
+sensitivity  ([\*](#Note-0)). 
 This means that, for the most part, humans will perceive a doubling of frequency
 as a single increment in tone.
 
@@ -111,16 +111,16 @@ The reason for this is most likely evolutionary, as nature evolved to perceive b
 the stampeding of elephants (~20Hz) to the buzzing of a mosquitoes (~400Hz) to recognizing
 bird song (~8kHz).
 A logarithmic scale prioritizes fidelity of the exponent in favor of the 'low order bits' for
-the same amount of "hardware" ([x](#Note-1)).
+the same amount of "hardware" ([\*\*](#Note-1)).
 
 ### Language
 
 Humans are the only animal, as far as we know, that can do both beat synchronization and
-melody pitch shifting ([1](#1)).
+melody pitch shifting.
 That is, humans are the only animals that can recognize a beat and recognize a melody that's
 also been doubled in frequency, or shifted up an octave.
 It is the author's opinion that these differences most likely stem from humans being the only
-animal on earth ([x](#Note-2)) that also have complex language.
+animal on earth that also have complex language.
 
 Though the reasons for why we perceive music the way we do is open for debate, there is good
 evidence for some basic facts of why people find certain tones, combinations of tones and beat tempos
@@ -135,7 +135,7 @@ Power laws ([2](#2)) are ubiquitous in nature, including showing up in musical r
 well as word frequency and word length ([4](#4)). 
 Though beyond the scope of this document, power laws show up because of their 'stability' property ([5](#5))
 and are the convergent distribution for sums of identically distributed random variables ([x](#Note-3)).
-There are many methods of generating power law distributions, some of which quite simple ([6](#6)) ([x](#Note-4)).
+There are many methods of generating power law distributions, some of which quite simple ([6](#6)) ([\*\*\*](#Note-3)).
 
 
 One insight from the perception of rhythm is that recognizing a melody's tempo is considered by some to be the
@@ -167,7 +167,7 @@ For example, an octave could be the interval from 440Hz to 880Hz.
 
 For most "western" music, a 12 note scale is used, often called the "chromatic scale".
 Though the choice of frequency for each note within a scale can be intricate, one simple
-choice is to take each note in the chromatic scale as the 12th root of 2 ([x](#Note 5)).
+choice is to take each note in the chromatic scale as the 12th root of 2 ([\*\*\*\*](#Note-4)).
 
 This choice means that by the 12th note, the frequency doubles, feeding into a new octave.
 
@@ -225,7 +225,7 @@ Here is a table of the ratio of the larger frequency to the smaller one for $ \e
 | $2^{ \frac{ 10 }{ 12 }} $ | $ \frac{ 16 }{ 9 }$ |
 | $2^{ \frac{11 }{ 12} } $ | $ \frac{ 17 }{ 9 }$ |
 
-Taking two notes right next to each other in this 12 note scale produces a reduced fraction that is "large" ([x](#Note 6)),
+Taking two notes right next to each other in this 12 note scale produces a reduced fraction that is "large" ([\*\*\*\*\*](#Note-5)),
 whereas taking the third and the seventh produce reduced fractions that are "small".
 
 There's a lot of ways to waive away the complexity.
@@ -487,20 +487,17 @@ Where 'hardware' here is the amount of cells and other human processing power de
 humans.
 
 ###### Note 2
-That we know of.
-
-###### Note 3
 Assuming the sum of the I.I.D. R.V.'s converge to a distribution.
 
-###### Note 4
+###### Note 3
 Though there is debate about whether particular distributions are power law or log-normal (See [7](#7)),
 for the purposes of this discussion (musical tempo), the difference is probably academic as the region of interest
 is too small to effectively determine, or notice, the difference between a 'true' power law or a log-normal distribution.
 
-###### Note 5
+###### Note 4
 Often called "twelve-tone equal temperament" ([wiki](https://en.wikipedia.org/wiki/12_equal_temperament))
 
-###### Note 6
+###### Note 5
 Large in the sense that the numerator and denominator are large in absolute value, relative to the other elements
 in the list, with the further restriction the 12 note scale is take to be "equal-tempered".
 
