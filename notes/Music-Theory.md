@@ -45,7 +45,7 @@ each of which can be combined in different ways and at different tempos.
 To give a cartoon of the hierarchy, a "Musical Hierarchy of Importance",
 reminiscent of Maslow's "Hierarchy of Need" can be drawn:
 
-![Musical Hierarchy of Importance](img/music_theory_hierarchy.svg)
+![Musical Hierarchy of Importance](img/music_theory_hierarchy_s.svg)
 
 Here, the "timbre" is meant to describe the "sound" of a particular
 instrument, an oboe versus a flute, say.

@@ -18,6 +18,7 @@ material_height = 3.13;
 _insert_length  = z_height + 2*material_height + 4;
 
 forefinger_length = 35;
+forefinger_length2 = 55;
 knuckle_length = 30;
 
 knuckle_d = 25;
@@ -51,6 +52,18 @@ module forefinger() {
     translate([0,outer_d/2]) square([material_height, outer_d], center=true);
   }
 }
+
+module forefinger_long() {
+  difference() {
+    square([forefinger_length2, outer_d], center=true);
+    translate([-forefinger_length2/2+5, 0])
+      square([inner_width, material_height], center=true);
+    translate([ forefinger_length2/2-5, 0])
+      square([inner_width, material_height], center=true);
+    translate([18,outer_d/2]) square([material_height, outer_d], center=true);
+  }
+}
+
 
 module forefinger_loop() {
   _h = outer_d + 4;
@@ -104,10 +117,10 @@ module knuckle_loop() {
   }
 }
 
-translate([20,20]) _insert();
-translate([20,40]) _insert();
-translate([0,20]) forefinger();
-translate([0,40]) forefinger();
+translate([23,20]) _insert();
+translate([23,40]) _insert();
+translate([-7,20]) forefinger_long();
+translate([-7,40]) forefinger_long();
 knuckle();
 translate([0,-25]) knuckle_loop();
 
