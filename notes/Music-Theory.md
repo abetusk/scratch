@@ -525,6 +525,7 @@ The following is a list of media and their respective licenses:
 | File | License | Author | Source |
 |---|---|---|---|
 | `Uncoiled_cochlea_with_basilar_membrane.png` | CC-BY | Mike.lifeguard | [src](https://en.wikibooks.org/wiki/File:Uncoiled_cochlea_with_basilar_membrane.png) |
+| `Metronome_pyramide_svg_petit_droite.svg` CC-BY-SA | | Cdang | [src](https://commons.wikimedia.org/wiki/File:Metronome_pyramide_svg_petit_droite.svg) |
 
 
 References
