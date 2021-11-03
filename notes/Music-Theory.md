@@ -82,6 +82,13 @@ The cochlea is an organ in the ear that transforms these waves to electrical
 signals through shaping the wave in the cochlear cavity that vibrate the
 nerve fibers.
 
+The cochlea's cavity is wrapped in a spiral.
+When unfurled, it can more easily understood to be a cavity that accepts
+different resonate frequencies to then convert to electrical signals for
+the brain to interpret.
+
+![Uncoiled cochlea with basilar membrane](img/Uncoiled_cochlea_with_basilar_membrane_s.png)
+
 The sound frequencies perceived by the human ear are not linear.
 The human ear has a range of approximately 20Hz (vibrations per second)
 to 20,000Hz (20kHz), depending on the individual person, age and other factors.
@@ -511,7 +518,14 @@ for (var exponent=0; exponent<12; exponent++) { scale.push( Math.floor(440.0*Mat
 License
 ---
 
-The license of this text, code and any other digital artifact, insofar as its able to, is licensed under a CC0 (Creative Commons 0) license.
+Unless explicitly stated otherwise, the license of this text,
+code and any other digital artifact, insofar as its able to, is licensed under a CC0 (Creative Commons 0) license
+
+The following is a list of media and their respective licenses:
+
+| File | License | Author | Source |
+|---|---|---|---|
+| `Uncoiled_cochlea_with_basilar_membrane.png` | CC-BY | Mike.lifeguard | [src](https://en.wikibooks.org/wiki/File:Uncoiled_cochlea_with_basilar_membrane.png) |
 
 
 References
