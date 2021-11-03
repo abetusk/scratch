@@ -105,7 +105,7 @@ as a single increment in tone.
 
 For example, an increment of a 4,000Hz tone by 100Hz will most likely be close
 to imperceptible, whereas an increase of a 100Hz tone by a 100Hz tone will be
-perceived as having the same increment as increasing a 4,000Hz tone by another 4,000Hz.
+perceived as having the same increment as increasing a 4,000Hz tone to an 8,000Hz tone.
 
 The reason for this is most likely evolutionary, as nature evolved to perceive both
 the stampeding of elephants (~20Hz) to the buzzing of a mosquitoes (~400Hz) to recognizing
@@ -114,6 +114,8 @@ A logarithmic scale prioritizes fidelity of the exponent in favor of the 'low or
 the same amount of "hardware" ([\*\*](#Note-1)).
 
 ### Language
+
+![Tempo, Pitch shift](img/tempo_pitch_s.png)
 
 Humans are the only animal, as far as we know, that can do both beat synchronization and
 melody pitch shifting.
@@ -545,7 +547,7 @@ TODO
 ---
 
 * add sample song that illustrates each of the hierarchy points layered in ('happy birthday'?) (introduction)
-* picture of cochlea (human auditory system section)
+* ~picture of cochlea (human auditory system section)~
 * add "log scale" description to perceived human hearing graph (human auditory system section)
 * add frequency slider that goes from 0 to 44khz in linear and logarithmic to highlight difference  (human auditory system section)
 * add picture of elephants stampeding, mosquitoes buzzing and birds singing (human auditory system section)
