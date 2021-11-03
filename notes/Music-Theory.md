@@ -130,15 +130,12 @@ pleasing.
 
 ### Rhythm
 
+![Metronome pyramide svg petit droite_s svg](Metronome_pyramide_svg_petit_droite_s.svg)
+
+Rhythm or tempo, in this context, is the placement, timing and length of musical sounds or notes.
+
 It has been observed and well accepted that music follows many of the patterns of language.
-This includes rhythm and tempo, matching features of the tempo of speech and word length.
-
-Power laws ([2](#2)) are ubiquitous in nature, including showing up in musical rhythm spectra ([3](#3)) as
-well as word frequency and word length ([4](#4)). 
-Though beyond the scope of this document, power laws show up because of their 'stability' property ([5](#5))
-and are the convergent distribution for sums of identically distributed random variables ([\*\*\*](#Note-2)).
-There are many methods of generating power law distributions, some of which quite simple ([6](#6)) ([\*\*\*\*](#Note-3)).
-
+This includes rhythm and tempo, matching features of the tempo or pacing of speech and word length.
 
 One insight from the perception of rhythm is that recognizing a melody's tempo is considered by some to be the
 most defining musical characteristic ([8](#8)).
@@ -153,6 +150,12 @@ Different note lengths can be added to provide variation to a melody.
 
 Once choice of generating randomness can be a Pareto, Zipf or other power law (like) distribution, though,
 for the melody lengths involved, these might be overkill and a uniform random number might suffice.
+
+Power laws ([2](#2)) are ubiquitous in nature, including showing up in musical rhythm spectra ([3](#3)) as
+well as word frequency and word length ([4](#4)). 
+Though beyond the scope of this document, power laws show up because of their 'stability' property ([5](#5))
+and are the convergent distribution for sums of identically distributed random variables ([\*\*\*](#Note-2)).
+There are many methods of generating power law distributions, some of which quite simple ([6](#6)) ([\*\*\*\*](#Note-3)).
 
 Though the correspondence with language is highlighted to provide context for why certain tempos or tempo patterns
 are pleasing, they can just as easily be ignored for the practical consideration that note or beat tempo
@@ -552,7 +555,7 @@ TODO
 * add "log scale" description to perceived human hearing graph (human auditory system section)
 * add frequency slider that goes from 0 to 44khz in linear and logarithmic to highlight difference  (human auditory system section)
 * add picture of elephants stampeding, mosquitoes buzzing and birds singing (human auditory system section)
-* add graphic depiction of beat synchronization and melody pitch shifting (human auditory system section, language)
+* ~add graphic depiction of beat synchronization and melody pitch shifting (human auditory system section, language)~
 * add graphic of power law vs. gaussian vs exponential (human auditory system section, rhythm)
 * add note on sums of random variables of power law vs. gaussian (human auditory system section, rhythm)
 * add overview graphic of scales (human auditory system section, scale)
