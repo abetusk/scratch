@@ -99,7 +99,7 @@ For most people, the sensitivity of the human ear peaks at around 3,000Hz to
 
 Though sensitivity is variable throughout the 20Hz to 20kHz spectrum,
 a good approximation is to consider human hearing as having logarithmic
-sensitivity  ([x](#Note 0)). 
+sensitivity  ([x](#Note_0)). 
 This means that, for the most part, humans will perceive a doubling of frequency
 as a single increment in tone.
 
@@ -111,7 +111,7 @@ The reason for this is most likely evolutionary, as nature evolved to perceive b
 the stampeding of elephants (~20Hz) to the buzzing of a mosquitoes (~400Hz) to recognizing
 bird song (~8kHz).
 A logarithmic scale prioritizes fidelity of the exponent in favor of the 'low order bits' for
-the same amount of "hardware" ([x](#Note-1])).
+the same amount of "hardware" ([x](#Note-1)).
 
 ### Language
 
