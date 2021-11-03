@@ -134,8 +134,8 @@ This includes rhythm and tempo, matching features of the tempo of speech and wor
 Power laws ([2](#2)) are ubiquitous in nature, including showing up in musical rhythm spectra ([3](#3)) as
 well as word frequency and word length ([4](#4)). 
 Though beyond the scope of this document, power laws show up because of their 'stability' property ([5](#5))
-and are the convergent distribution for sums of identically distributed random variables ([x](#Note-3)).
-There are many methods of generating power law distributions, some of which quite simple ([6](#6)) ([\*\*\*](#Note-3)).
+and are the convergent distribution for sums of identically distributed random variables ([\*\*\*](#Note-2)).
+There are many methods of generating power law distributions, some of which quite simple ([6](#6)) ([\*\*\*\*](#Note-3)).
 
 
 One insight from the perception of rhythm is that recognizing a melody's tempo is considered by some to be the
@@ -167,7 +167,7 @@ For example, an octave could be the interval from 440Hz to 880Hz.
 
 For most "western" music, a 12 note scale is used, often called the "chromatic scale".
 Though the choice of frequency for each note within a scale can be intricate, one simple
-choice is to take each note in the chromatic scale as the 12th root of 2 ([\*\*\*\*](#Note-4)).
+choice is to take each note in the chromatic scale as the 12th root of 2 ([\*\*\*\*\*](#Note-4)).
 
 This choice means that by the 12th note, the frequency doubles, feeding into a new octave.
 
@@ -225,7 +225,7 @@ Here is a table of the ratio of the larger frequency to the smaller one for $ \e
 | $2^{ \frac{ 10 }{ 12 }} $ | $ \frac{ 16 }{ 9 }$ |
 | $2^{ \frac{11 }{ 12} } $ | $ \frac{ 17 }{ 9 }$ |
 
-Taking two notes right next to each other in this 12 note scale produces a reduced fraction that is "large" ([\*\*\*\*\*](#Note-5)),
+Taking two notes right next to each other in this 12 note scale produces a reduced fraction that is "large" ([\*\*\*\*\*\*](#Note-5)),
 whereas taking the third and the seventh produce reduced fractions that are "small".
 
 There's a lot of ways to waive away the complexity.
