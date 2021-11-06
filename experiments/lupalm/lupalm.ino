@@ -44,6 +44,12 @@ void setup() {
 #define POT_MIN 70.0
 #define POT_MAX 120.0
 
+
+//#define POT_MIN 70.0
+//#define POT_MAX 843.0
+
+int g_count = 0;
+
 void loop() {
   float fval ;
   byte bval;
@@ -54,6 +60,11 @@ void loop() {
   
   fval *= 255.0;
 
+  g_count++;
+  if (g_count > 50) {
+    g_count=0;
+    Serial.println(fval);
+  }
 
 
   if (fval < POT_MIN) { fval = POT_MIN; }
@@ -79,6 +90,7 @@ void loop() {
   //delay(sensorValue);
 
   delay(1);
-  //Serial.println(sensorValue);
+
+
   //Serial.println(fval);
 }
