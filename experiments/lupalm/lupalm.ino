@@ -37,17 +37,40 @@ void setup() {
   Serial.begin(9600);
 }
 
+// 58 139
+//#define POT_MIN 58.0
+//#define POT_MAX 139.0
+
+#define POT_MIN 70.0
+#define POT_MAX 120.0
+
 void loop() {
   float fval ;
   byte bval;
   // read the value from the sensor:
   sensorValue = analogRead(sensorPin);
   fval = (float)sensorValue / 1024.0;
+  //fval *= fval;
+  
   fval *= 255.0;
+
+
+
+  if (fval < POT_MIN) { fval = POT_MIN; }
+  else if (fval > POT_MAX) { fval = POT_MAX; }
+  //fval = 255.0*(fval - POT_MIN)/(POT_MAX - POT_MIN);
+  fval = (fval - POT_MIN)/(POT_MAX - POT_MIN);
+  fval = pow(fval, 0.65);
+  fval *= 255.0;
+
+  //Serial.println(fval);
+  
   bval = (byte)fval;
+  
   // turn the ledPin on
   //digitalWrite(ledPin, HIGH);
-  analogWrite(ledPin, 255-bval);
+  analogWrite(ledPin, 255.0 - bval);
+  
   // stop the program for <sensorValue> milliseconds:
   //delay(sensorValue);
   // turn the ledPin off:
@@ -55,6 +78,7 @@ void loop() {
   // stop the program for for <sensorValue> milliseconds:
   //delay(sensorValue);
 
-  delay(50);
-  Serial.println(sensorValue);
+  delay(1);
+  //Serial.println(sensorValue);
+  //Serial.println(fval);
 }
