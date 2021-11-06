@@ -8,10 +8,13 @@ import math
 
 EPS = 0.1
 EFFICIENCY_THRESHOLD = 6
-FAREY_BOUND = 32
+FAREY_BOUND = 24
 
 if len(sys.argv) > 1:
-  EPS = float(sys.argv[1])
+  #EPS = float(sys.argv[1])
+  FAREY_BOUND = int(sys.argv[1])
+  if len(sys.argv) > 2:
+    EFFICIENCY_BOUND = int(sys.argv[2])
 
 print("# EPS:", EPS)
 print("# EFFICIENCY_THRESHOLD:", EFFICIENCY_THRESHOLD)
@@ -66,11 +69,25 @@ def get_semi(div):
     pp = qq/v
 
     _p, _q = farey(1.0/v, FAREY_BOUND)
+    #_p, _q = farey(v - 1.0, FAREY_BOUND)
+
+    tp,  tq  = farey(v, FAREY_BOUND)
+    _note = "( v: " + str(tp) + " / " + str(tq)
+
+    tp,  tq  = farey(1.0/v, FAREY_BOUND)
+    _note += ", 1/v: " + str(tp) + " / " + str(tq) 
+
+    tp,  tq  = farey(v-1.0, FAREY_BOUND)
+    _note += ", v - 1: " + str(tp) + " / " + str(tq) 
+
+    _note += ")"
+
+    info = { "n" : div, "r" : x, "v" : v, "eps" : EPS, "p": _p, "q": _q, "qq" : int(qq), "pp" : int(round(pp)), "note": _note }
 
     #ret.append( { "n" : div, "r" : x, "v" : v, "eps" : 0.06, "p" : int(round(p)), "q" : int(q) } )
     #ret.append( { "n" : div, "r" : x, "v" : v, "eps" : EPS, "p" : int(round(p)), "q" : int(q), "qq" : int(qq), "pp" : int(round(pp)) } )
     #ret.append( { "n" : div, "r" : x, "v" : v, "eps" : EPS, "_p": _p, "_q": q, "p" : int(round(p)), "q" : int(q), "qq" : int(qq), "pp" : int(round(pp)) } )
-    ret.append( { "n" : div, "r" : x, "v" : v, "eps" : EPS, "p": _p, "q": _q, "qq" : int(qq), "pp" : int(round(pp)) } )
+    ret.append( info )
 
   return ret
               
@@ -99,7 +116,7 @@ for p in range(2, 64):
   count = 0
 
   for x in r:
-    print( "# 2^{", x["r"], "/", x["n"], "} :", x["p"], "/", x["q"], "(", x["v"], ",", 1.0/float(x["v"]), ")", "((", x["pp"], "/", x["qq"], ") farey(", x["p"], "/", x["q"], "))")
+    print( "# 2^{", x["r"], "/", x["n"], "} :", x["p"], "/", x["q"], "(", x["v"], ",", 1.0/float(x["v"]), ")", "((", x["pp"], "/", x["qq"], ") farey(", x["p"], "/", x["q"], "))", x["note"])
     #if (x["p"] < x["n"]) and (x["q"] < x["n"]):
     #if (x["p"] < 10) and (x["q"] < 10):
     #if (x["p"] < EFFICIENCY_THRESHOLD) and (x["q"] < EFFICIENCY_THRESHOLD):
