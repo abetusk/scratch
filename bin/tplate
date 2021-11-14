@@ -47,10 +47,27 @@ int main(int argc, char **argv) {
 }
 """
 
+MAKEFILE_TEMPLATE = """IDIR=.
+CC=gcc
+CFLAGS=-I$(IDIR)
+ODIR=bin
+LIBS=-lm
+
+$(ODIR)/%.o: %.c $(DEPS)
+\t$(CC) -c -o $@ $< $(CFLAGS)
+
+main: $(ODIR)/%.o
+\t$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
+
+.PHONY: clean
+clean:
+\trm -f $(ODIR)/*.o *~ $(INCDIR)/*~ 
+"""
+
 
 def usage(ofp):
   ofp.write("\nusage:\n\n    tplate <language>\n\n")
-  ofp.write(" <language>    (html|c|c++|cpp)\n")
+  ofp.write(" <language>    (html|c|c++|cpp|make|makefile)\n")
   ofp.write("\n")
 
 if len(sys.argv) < 2:
@@ -69,5 +86,7 @@ elif cmd == "c":
   print(C_TEMPLATE)
 elif (cmd == "c++") or (cmd == "cpp"):
   print(CPP_TEMPLATE)
+elif (cmd == "makefile") or (cmd == "make"):
+  print(MAKEFILE_TEMPLATE)
 
 

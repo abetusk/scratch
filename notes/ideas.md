@@ -26,3 +26,10 @@
 * crying alligator cutting onions
 * salvation army art show
 
+---
+
+"Where did Stacey go? Has ... has she been raptured?"
+
+([src](https://twitter.com/espiers/status/1457555877163061251))
+
+---
