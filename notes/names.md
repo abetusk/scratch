@@ -16,6 +16,8 @@ Names
 * Exorcise Magic Smoke, Magic Smoke Summoning, Conjure Magic Smoke
 * Invoke LED Glamour
 * Fogged Void
+* Scrying SPI
+* Eye to See
 
 ---
 
