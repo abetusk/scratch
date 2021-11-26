@@ -2,3 +2,9 @@ https://www.instructables.com/How-to-use-a-Flex-Sensor-Arduino-Tutorial/
 https://lastminuteengineers.com/flex-sensor-arduino-tutorial/
 https://learn.sparkfun.com/tutorials/flex-sensor-hookup-guide/all
 https://cdn.sparkfun.com/assets/learn_tutorials/5/1/1/example_circuit_bb.png
+
+
+---
+
+* [AP3012](https://www.diodes.com/assets/Datasheets/AP3012.pdf) (boost converter) ([digikey](https://www.digikey.com/en/products/detail/diodes-incorporated/AP3012KTR-G1/4470846))
+* [ZLLS350TA](https://www.diodes.com/assets/Datasheets/ZLLS350.pdf) (diode) ([digikey](https://www.digikey.com/en/products/detail/diodes-incorporated/ZLLS350TA/991168))
