@@ -1,0 +1,7384 @@
+{
+  "component_lib": {
+    "C": {
+      "art": [
+        {
+          "count": 2, 
+          "line_width": "20", 
+          "convert": "1", 
+          "shape": "path", 
+          "path": [
+            [
+              -80, 
+              -30
+            ], 
+            [
+              80, 
+              -30
+            ]
+          ], 
+          "de_morgan_alternate_shape": "1", 
+          "unit": "0", 
+          "fill": "N"
+        }, 
+        {
+          "count": 2, 
+          "line_width": "20", 
+          "convert": "1", 
+          "shape": "path", 
+          "path": [
+            [
+              -80, 
+              30
+            ], 
+            [
+              80, 
+              30
+            ]
+          ], 
+          "de_morgan_alternate_shape": "1", 
+          "unit": "0", 
+          "fill": "N"
+        }
+      ], 
+      "name": "C", 
+      "reference": "C3", 
+      "text": [
+        {
+          "orientation": "H", 
+          "reference": "C3", 
+          "hjustify": "L", 
+          "number": 0, 
+          "vjustify": "C", 
+          "visible": true, 
+          "bounding_box": [
+            [
+              0, 
+              -133.33333333333334
+            ], 
+            [
+              80, 
+              -66.66666666666666
+            ]
+          ], 
+          "italic": false, 
+          "y": "100", 
+          "x": "0", 
+          "size": "40", 
+          "bold": false
+        }, 
+        {
+          "orientation": "H", 
+          "reference": "C", 
+          "hjustify": "L", 
+          "number": 1, 
+          "vjustify": "C", 
+          "visible": true, 
+          "bounding_box": [
+            [
+              6, 
+              51.666666666666664
+            ], 
+            [
+              46, 
+              118.33333333333334
+            ]
+          ], 
+          "italic": false, 
+          "y": "-85", 
+          "x": "6", 
+          "size": "40", 
+          "bold": false
+        }, 
+        {
+          "text": " \"~\" 38 -150 30 H V C CNN", 
+          "bounding_box": [
+            [
+              0, 
+              0
+            ], 
+            [
+              0, 
+              0
+            ]
+          ], 
+          "number": "2"
+        }, 
+        {
+          "text": " \"~\" 0 0 60 H V C CNN", 
+          "bounding_box": [
+            [
+              0, 
+              0
+            ], 
+            [
+              0, 
+              0
+            ]
+          ], 
+          "number": "3"
+        }
+      ], 
+      "pin": [
+        {
+          "direction": "D", 
+          "name": "~", 
+          "length": "170", 
+          "number": "1", 
+          "visible": true, 
+          "shape": null, 
+          "text_size_number": "40", 
+          "y": "200", 
+          "x": "0", 
+          "electrical_type": "P", 
+          "de_morgan_alternate_shape": "1", 
+          "text_size_name": "40", 
+          "unit": "1"
+        }, 
+        {
+          "direction": "U", 
+          "name": "~", 
+          "length": "170", 
+          "number": "2", 
+          "visible": true, 
+          "shape": null, 
+          "text_size_number": "40", 
+          "y": "-200", 
+          "x": "0", 
+          "electrical_type": "P", 
+          "de_morgan_alternate_shape": "1", 
+          "text_size_name": "40", 
+          "unit": "1"
+        }
+      ], 
+      "bounding_box": [
+        [
+          -80, 
+          -200
+        ], 
+        [
+          80, 
+          200
+        ]
+      ], 
+      "power_flag": "N", 
+      "text_offset": "10", 
+      "draw_pin_name": true, 
+      "units_locked": "F", 
+      "draw_pin_number": false, 
+      "unit_count": 1, 
+      "coarse_bounding_box": [
+        [
+          -80, 
+          -200
+        ], 
+        [
+          80, 
+          200
+        ]
+      ]
+    }, 
+    "NPN": {
+      "art": [
+        {
+          "line_width": "10", 
+          "shape": "circle", 
+          "r": 111, 
+          "y": 0, 
+          "x": 50, 
+          "de_morgan_alternate_shape": "1", 
+          "unit": "0", 
+          "fill": "N"
+        }, 
+        {
+          "count": 2, 
+          "line_width": "0", 
+          "convert": "1", 
+          "shape": "path", 
+          "path": [
+            [
+              0, 
+              0
+            ], 
+            [
+              100, 
+              100
+            ]
+          ], 
+          "de_morgan_alternate_shape": "1", 
+          "unit": "0", 
+          "fill": "N"
+        }, 
+        {
+          "count": 3, 
+          "line_width": "10", 
+          "convert": "1", 
+          "shape": "path", 
+          "path": [
+            [
+              0, 
+              75
+            ], 
+            [
+              0, 
+              -75
+            ], 
+            [
+              0, 
+              -75
+            ]
+          ], 
+          "de_morgan_alternate_shape": "1", 
+          "unit": "0", 
+          "fill": "N"
+        }, 
+        {
+          "count": 3, 
+          "line_width": "0", 
+          "convert": "1", 
+          "shape": "path", 
+          "path": [
+            [
+              50, 
+              -50
+            ], 
+            [
+              0, 
+              0
+            ], 
+            [
+              0, 
+              0
+            ]
+          ], 
+          "de_morgan_alternate_shape": "1", 
+          "unit": "0", 
+          "fill": "N"
+        }, 
+        {
+          "count": 3, 
+          "line_width": "0", 
+          "convert": "1", 
+          "shape": "path", 
+          "path": [
+            [
+              90, 
+              -90
+            ], 
+            [
+              100, 
+              -100
+            ], 
+            [
+              100, 
+              -100
+            ]
+          ], 
+          "de_morgan_alternate_shape": "1", 
+          "unit": "0", 
+          "fill": "N"
+        }, 
+        {
+          "count": 5, 
+          "line_width": "0", 
+          "convert": "1", 
+          "shape": "path", 
+          "path": [
+            [
+              90, 
+              -90
+            ], 
+            [
+              70, 
+              -30
+            ], 
+            [
+              30, 
+              -70
+            ], 
+            [
+              90, 
+              -90
+            ], 
+            [
+              90, 
+              -90
+            ]
+          ], 
+          "de_morgan_alternate_shape": "1", 
+          "unit": "0", 
+          "fill": "F"
+        }
+      ], 
+      "name": "NPN", 
+      "reference": "Q1", 
+      "text": [
+        {
+          "orientation": "H", 
+          "reference": "Q1", 
+          "hjustify": "R", 
+          "number": 0, 
+          "vjustify": "C", 
+          "visible": true, 
+          "bounding_box": [
+            [
+              -100, 
+              108.33333333333333
+            ], 
+            [
+              0, 
+              191.66666666666669
+            ]
+          ], 
+          "italic": false, 
+          "y": "-150", 
+          "x": "0", 
+          "size": "50", 
+          "bold": false
+        }, 
+        {
+          "orientation": "H", 
+          "reference": "NPN", 
+          "hjustify": "R", 
+          "number": 1, 
+          "vjustify": "C", 
+          "visible": true, 
+          "bounding_box": [
+            [
+              -150, 
+              -191.66666666666669
+            ], 
+            [
+              0, 
+              -108.33333333333333
+            ]
+          ], 
+          "italic": false, 
+          "y": "150", 
+          "x": "0", 
+          "size": "50", 
+          "bold": false
+        }, 
+        {
+          "text": " \"~\" 0 0 60 H V C CNN", 
+          "bounding_box": [
+            [
+              0, 
+              0
+            ], 
+            [
+              0, 
+              0
+            ]
+          ], 
+          "number": "2"
+        }, 
+        {
+          "text": " \"~\" 0 0 60 H V C CNN", 
+          "bounding_box": [
+            [
+              0, 
+              0
+            ], 
+            [
+              0, 
+              0
+            ]
+          ], 
+          "number": "3"
+        }
+      ], 
+      "pin": [
+        {
+          "direction": "U", 
+          "name": "E", 
+          "length": "100", 
+          "number": "1", 
+          "visible": true, 
+          "shape": null, 
+          "text_size_number": "40", 
+          "y": "-200", 
+          "x": "100", 
+          "electrical_type": "P", 
+          "de_morgan_alternate_shape": "1", 
+          "text_size_name": "40", 
+          "unit": "1"
+        }, 
+        {
+          "direction": "R", 
+          "name": "B", 
+          "length": "200", 
+          "number": "2", 
+          "visible": true, 
+          "shape": null, 
+          "text_size_number": "40", 
+          "y": "0", 
+          "x": "-200", 
+          "electrical_type": "I", 
+          "de_morgan_alternate_shape": "1", 
+          "text_size_name": "40", 
+          "unit": "1"
+        }, 
+        {
+          "direction": "D", 
+          "name": "C", 
+          "length": "100", 
+          "number": "3", 
+          "visible": true, 
+          "shape": null, 
+          "text_size_number": "40", 
+          "y": "200", 
+          "x": "100", 
+          "electrical_type": "P", 
+          "de_morgan_alternate_shape": "1", 
+          "text_size_name": "40", 
+          "unit": "1"
+        }
+      ], 
+      "bounding_box": [
+        [
+          -200, 
+          -200
+        ], 
+        [
+          161, 
+          200
+        ]
+      ], 
+      "power_flag": "N", 
+      "text_offset": "0", 
+      "draw_pin_name": true, 
+      "units_locked": "F", 
+      "draw_pin_number": true, 
+      "unit_count": 1, 
+      "coarse_bounding_box": [
+        [
+          -200, 
+          -200
+        ], 
+        [
+          161, 
+          200
+        ]
+      ]
+    }, 
+    "LED": {
+      "art": [
+        {
+          "count": 2, 
+          "line_width": "0", 
+          "convert": "1", 
+          "shape": "path", 
+          "path": [
+            [
+              50, 
+              50
+            ], 
+            [
+              50, 
+              -50
+            ]
+          ], 
+          "de_morgan_alternate_shape": "1", 
+          "unit": "0", 
+          "fill": "N"
+        }, 
+        {
+          "count": 3, 
+          "line_width": "0", 
+          "convert": "1", 
+          "shape": "path", 
+          "path": [
+            [
+              -50, 
+              50
+            ], 
+            [
+              50, 
+              0
+            ], 
+            [
+              -50, 
+              -50
+            ]
+          ], 
+          "de_morgan_alternate_shape": "1", 
+          "unit": "0", 
+          "fill": "F"
+        }, 
+        {
+          "count": 3, 
+          "line_width": "0", 
+          "convert": "1", 
+          "shape": "path", 
+          "path": [
+            [
+              65, 
+              -40
+            ], 
+            [
+              110, 
+              -80
+            ], 
+            [
+              105, 
+              -55
+            ]
+          ], 
+          "de_morgan_alternate_shape": "1", 
+          "unit": "0", 
+          "fill": "N"
+        }, 
+        {
+          "count": 3, 
+          "line_width": "0", 
+          "convert": "1", 
+          "shape": "path", 
+          "path": [
+            [
+              80, 
+              -25
+            ], 
+            [
+              125, 
+              -65
+            ], 
+            [
+              120, 
+              -40
+            ]
+          ], 
+          "de_morgan_alternate_shape": "1", 
+          "unit": "0", 
+          "fill": "N"
+        }
+      ], 
+      "name": "LED", 
+      "reference": "D1", 
+      "text": [
+        {
+          "orientation": "H", 
+          "reference": "D1", 
+          "hjustify": "C", 
+          "number": 0, 
+          "vjustify": "C", 
+          "visible": true, 
+          "bounding_box": [
+            [
+              -50, 
+              -141.66666666666669
+            ], 
+            [
+              50, 
+              -58.33333333333333
+            ]
+          ], 
+          "italic": false, 
+          "y": "100", 
+          "x": "0", 
+          "size": "50", 
+          "bold": false
+        }, 
+        {
+          "orientation": "H", 
+          "reference": "LED", 
+          "hjustify": "C", 
+          "number": 1, 
+          "vjustify": "C", 
+          "visible": true, 
+          "bounding_box": [
+            [
+              -75, 
+              58.33333333333333
+            ], 
+            [
+              75, 
+              141.66666666666669
+            ]
+          ], 
+          "italic": false, 
+          "y": "-100", 
+          "x": "0", 
+          "size": "50", 
+          "bold": false
+        }, 
+        {
+          "text": " \"~\" 0 0 60 H V C CNN", 
+          "bounding_box": [
+            [
+              0, 
+              0
+            ], 
+            [
+              0, 
+              0
+            ]
+          ], 
+          "number": "2"
+        }, 
+        {
+          "text": " \"~\" 0 0 60 H V C CNN", 
+          "bounding_box": [
+            [
+              0, 
+              0
+            ], 
+            [
+              0, 
+              0
+            ]
+          ], 
+          "number": "3"
+        }
+      ], 
+      "pin": [
+        {
+          "direction": "R", 
+          "name": "A", 
+          "length": "150", 
+          "number": "1", 
+          "visible": true, 
+          "shape": null, 
+          "text_size_number": "40", 
+          "y": "0", 
+          "x": "-200", 
+          "electrical_type": "P", 
+          "de_morgan_alternate_shape": "1", 
+          "text_size_name": "40", 
+          "unit": "1"
+        }, 
+        {
+          "direction": "L", 
+          "name": "K", 
+          "length": "150", 
+          "number": "2", 
+          "visible": true, 
+          "shape": null, 
+          "text_size_number": "40", 
+          "y": "0", 
+          "x": "200", 
+          "electrical_type": "P", 
+          "de_morgan_alternate_shape": "1", 
+          "text_size_name": "40", 
+          "unit": "1"
+        }
+      ], 
+      "bounding_box": [
+        [
+          -200, 
+          -80
+        ], 
+        [
+          200, 
+          50
+        ]
+      ], 
+      "power_flag": "N", 
+      "text_offset": "40", 
+      "draw_pin_name": false, 
+      "units_locked": "F", 
+      "draw_pin_number": true, 
+      "unit_count": 1, 
+      "coarse_bounding_box": [
+        [
+          -200, 
+          -80
+        ], 
+        [
+          200, 
+          58.33333333333333
+        ]
+      ]
+    }, 
+    "CONN_3": {
+      "art": [
+        {
+          "line_width": "0", 
+          "height": 300, 
+          "width": 200, 
+          "shape": "rectangle", 
+          "y": 150, 
+          "x": -100, 
+          "de_morgan_alternate_shape": "1", 
+          "unit": "0", 
+          "fill": "N"
+        }
+      ], 
+      "name": "CONN_3", 
+      "reference": "K2", 
+      "text": [
+        {
+          "orientation": "V", 
+          "reference": "K2", 
+          "hjustify": "C", 
+          "number": 0, 
+          "vjustify": "C", 
+          "visible": true, 
+          "bounding_box": [
+            [
+              -91.66666666666667, 
+              -50
+            ], 
+            [
+              -8.333333333333329, 
+              50
+            ]
+          ], 
+          "italic": false, 
+          "y": "0", 
+          "x": "-50", 
+          "size": "50", 
+          "bold": false
+        }, 
+        {
+          "orientation": "V", 
+          "reference": "CONN_3", 
+          "hjustify": "C", 
+          "number": 1, 
+          "vjustify": "C", 
+          "visible": true, 
+          "bounding_box": [
+            [
+              16.666666666666664, 
+              -120
+            ], 
+            [
+              83.33333333333334, 
+              120
+            ]
+          ], 
+          "italic": false, 
+          "y": "0", 
+          "x": "50", 
+          "size": "40", 
+          "bold": false
+        }
+      ], 
+      "pin": [
+        {
+          "pin_type": "I", 
+          "direction": "R", 
+          "name": "P1", 
+          "number": "1", 
+          "visible": true, 
+          "shape": " I", 
+          "text_size_number": "60", 
+          "x": "-350", 
+          "y": "100", 
+          "length": "250", 
+          "electrical_type": "P", 
+          "de_morgan_alternate_shape": "1", 
+          "text_size_name": "60", 
+          "unit": "1"
+        }, 
+        {
+          "pin_type": "I", 
+          "direction": "R", 
+          "name": "PM", 
+          "number": "2", 
+          "visible": true, 
+          "shape": " I", 
+          "text_size_number": "60", 
+          "x": "-350", 
+          "y": "0", 
+          "length": "250", 
+          "electrical_type": "P", 
+          "de_morgan_alternate_shape": "1", 
+          "text_size_name": "60", 
+          "unit": "1"
+        }, 
+        {
+          "pin_type": "I", 
+          "direction": "R", 
+          "name": "P3", 
+          "number": "3", 
+          "visible": true, 
+          "shape": " I", 
+          "text_size_number": "60", 
+          "x": "-350", 
+          "y": "-100", 
+          "length": "250", 
+          "electrical_type": "P", 
+          "de_morgan_alternate_shape": "1", 
+          "text_size_name": "60", 
+          "unit": "1"
+        }
+      ], 
+      "bounding_box": [
+        [
+          -350, 
+          -150
+        ], 
+        [
+          100, 
+          150
+        ]
+      ], 
+      "power_flag": "N", 
+      "text_offset": "40", 
+      "draw_pin_name": false, 
+      "units_locked": "F", 
+      "draw_pin_number": true, 
+      "unit_count": 1, 
+      "coarse_bounding_box": [
+        [
+          -350, 
+          -150
+        ], 
+        [
+          100, 
+          150
+        ]
+      ]
+    }, 
+    "CONN_2": {
+      "art": [
+        {
+          "line_width": "0", 
+          "height": 300, 
+          "width": 200, 
+          "shape": "rectangle", 
+          "y": 150, 
+          "x": -100, 
+          "de_morgan_alternate_shape": "1", 
+          "unit": "0", 
+          "fill": "N"
+        }
+      ], 
+      "name": "CONN_2", 
+      "reference": "P2", 
+      "text": [
+        {
+          "orientation": "V", 
+          "reference": "P2", 
+          "hjustify": "C", 
+          "number": 0, 
+          "vjustify": "C", 
+          "visible": true, 
+          "bounding_box": [
+            [
+              -83.33333333333334, 
+              -40
+            ], 
+            [
+              -16.666666666666664, 
+              40
+            ]
+          ], 
+          "italic": false, 
+          "y": "0", 
+          "x": "-50", 
+          "size": "40", 
+          "bold": false
+        }, 
+        {
+          "orientation": "V", 
+          "reference": "CONN_2", 
+          "hjustify": "C", 
+          "number": 1, 
+          "vjustify": "C", 
+          "visible": true, 
+          "bounding_box": [
+            [
+              16.666666666666664, 
+              -120
+            ], 
+            [
+              83.33333333333334, 
+              120
+            ]
+          ], 
+          "italic": false, 
+          "y": "0", 
+          "x": "50", 
+          "size": "40", 
+          "bold": false
+        }
+      ], 
+      "pin": [
+        {
+          "pin_type": "I", 
+          "direction": "R", 
+          "name": "P1", 
+          "number": "1", 
+          "visible": true, 
+          "shape": " I", 
+          "text_size_number": "60", 
+          "x": "-350", 
+          "y": "100", 
+          "length": "250", 
+          "electrical_type": "P", 
+          "de_morgan_alternate_shape": "1", 
+          "text_size_name": "60", 
+          "unit": "1"
+        }, 
+        {
+          "pin_type": "I", 
+          "direction": "R", 
+          "name": "PM", 
+          "number": "2", 
+          "visible": true, 
+          "shape": " I", 
+          "text_size_number": "60", 
+          "x": "-350", 
+          "y": "-100", 
+          "length": "250", 
+          "electrical_type": "P", 
+          "de_morgan_alternate_shape": "1", 
+          "text_size_name": "60", 
+          "unit": "1"
+        }
+      ], 
+      "bounding_box": [
+        [
+          -350, 
+          -150
+        ], 
+        [
+          100, 
+          150
+        ]
+      ], 
+      "power_flag": "N", 
+      "text_offset": "40", 
+      "draw_pin_name": false, 
+      "units_locked": "F", 
+      "draw_pin_number": true, 
+      "unit_count": 1, 
+      "coarse_bounding_box": [
+        [
+          -350, 
+          -150
+        ], 
+        [
+          100, 
+          150
+        ]
+      ]
+    }, 
+    "unknown": {
+      "art": [
+        {
+          "count": 5, 
+          "line_width": 0, 
+          "shape": "path", 
+          "path": [
+            [
+              250, 
+              250
+            ], 
+            [
+              -250, 
+              250
+            ], 
+            [
+              -250, 
+              -250
+            ], 
+            [
+              250, 
+              -250
+            ], 
+            [
+              250, 
+              250
+            ]
+          ], 
+          "de_morgan_alternate_shape": "1", 
+          "unit": "0", 
+          "fill": "N"
+        }
+      ], 
+      "name": "unknown", 
+      "reference": "Z", 
+      "mm": 1, 
+      "timestamp": "52566B9A", 
+      "transform": [
+        [
+          1, 
+          0
+        ], 
+        [
+          0, 
+          -1
+        ]
+      ], 
+      "unknown_text_field": {
+        "orientation": "H", 
+        "reference": "??", 
+        "hjustify": "C", 
+        "text": "??", 
+        "number": 0, 
+        "vjustify": "C", 
+        "transform": [
+          [
+            1, 
+            0
+          ], 
+          [
+            0, 
+            -1
+          ]
+        ], 
+        "visible": true, 
+        "bounding_box": [
+          [
+            -50, 
+            -50
+          ], 
+          [
+            50, 
+            50
+          ]
+        ], 
+        "flags": "0000 C CNN", 
+        "italic": true, 
+        "y": 0, 
+        "x": 0, 
+        "size": "100", 
+        "bold": false
+      }, 
+      "bounding_box": [
+        [
+          -250, 
+          -250
+        ], 
+        [
+          250, 
+          250
+        ]
+      ], 
+      "text": [
+        {
+          "orientation": "H", 
+          "reference": "1PIN", 
+          "hjustify": "C", 
+          "text": "1PIN", 
+          "number": 0, 
+          "vjustify": "C", 
+          "visible": true, 
+          "bounding_box": [
+            [
+              -400, 
+              230
+            ], 
+            [
+              -160, 
+              330
+            ]
+          ], 
+          "flags": "0000 C CNN", 
+          "italic": false, 
+          "y": -280, 
+          "x": -280, 
+          "size": "60", 
+          "bold": false
+        }, 
+        {
+          "orientation": "H", 
+          "reference": "??", 
+          "hjustify": "C", 
+          "text": "P***", 
+          "number": 1, 
+          "vjustify": "C", 
+          "visible": false, 
+          "bounding_box": [
+            [
+              220, 
+              -330
+            ], 
+            [
+              340, 
+              -230
+            ]
+          ], 
+          "flags": "0000 C CNN", 
+          "italic": false, 
+          "y": 280, 
+          "x": 280, 
+          "size": "60", 
+          "bold": false
+        }
+      ], 
+      "nn": 1, 
+      "type": "component", 
+      "coarse_bounding_box": [
+        [
+          -400, 
+          -250
+        ], 
+        [
+          340, 
+          250
+        ]
+      ]
+    }, 
+    "POT": {
+      "art": [
+        {
+          "line_width": "0", 
+          "height": 100, 
+          "width": 300, 
+          "shape": "rectangle", 
+          "y": 50, 
+          "x": -150, 
+          "de_morgan_alternate_shape": "1", 
+          "unit": "0", 
+          "fill": "N"
+        }, 
+        {
+          "count": 3, 
+          "line_width": "0", 
+          "convert": "1", 
+          "shape": "path", 
+          "path": [
+            [
+              0, 
+              50
+            ], 
+            [
+              -20, 
+              70
+            ], 
+            [
+              20, 
+              70
+            ]
+          ], 
+          "de_morgan_alternate_shape": "1", 
+          "unit": "0", 
+          "fill": "F"
+        }
+      ], 
+      "name": "POT", 
+      "reference": "RV1", 
+      "text": [
+        {
+          "orientation": "H", 
+          "reference": "RV1", 
+          "hjustify": "C", 
+          "number": 0, 
+          "vjustify": "C", 
+          "visible": true, 
+          "bounding_box": [
+            [
+              -75, 
+              58.33333333333333
+            ], 
+            [
+              75, 
+              141.66666666666669
+            ]
+          ], 
+          "italic": false, 
+          "y": "-100", 
+          "x": "0", 
+          "size": "50", 
+          "bold": false
+        }, 
+        {
+          "orientation": "H", 
+          "reference": "POT", 
+          "hjustify": "C", 
+          "number": 1, 
+          "vjustify": "C", 
+          "visible": true, 
+          "bounding_box": [
+            [
+              -75, 
+              -41.66666666666667
+            ], 
+            [
+              75, 
+              41.66666666666667
+            ]
+          ], 
+          "italic": false, 
+          "y": "0", 
+          "x": "0", 
+          "size": "50", 
+          "bold": false
+        }, 
+        {
+          "text": " \"~\" 0 0 60 H V C CNN", 
+          "bounding_box": [
+            [
+              0, 
+              0
+            ], 
+            [
+              0, 
+              0
+            ]
+          ], 
+          "number": "2"
+        }, 
+        {
+          "text": " \"~\" 0 0 60 H V C CNN", 
+          "bounding_box": [
+            [
+              0, 
+              0
+            ], 
+            [
+              0, 
+              0
+            ]
+          ], 
+          "number": "3"
+        }
+      ], 
+      "pin": [
+        {
+          "direction": "R", 
+          "name": "1", 
+          "length": "100", 
+          "number": "1", 
+          "visible": true, 
+          "shape": null, 
+          "text_size_number": "40", 
+          "y": "0", 
+          "x": "-250", 
+          "electrical_type": "P", 
+          "de_morgan_alternate_shape": "1", 
+          "text_size_name": "40", 
+          "unit": "1"
+        }, 
+        {
+          "direction": "D", 
+          "name": "2", 
+          "length": "80", 
+          "number": "2", 
+          "visible": true, 
+          "shape": null, 
+          "text_size_number": "40", 
+          "y": "150", 
+          "x": "0", 
+          "electrical_type": "P", 
+          "de_morgan_alternate_shape": "1", 
+          "text_size_name": "40", 
+          "unit": "1"
+        }, 
+        {
+          "direction": "L", 
+          "name": "3", 
+          "length": "100", 
+          "number": "3", 
+          "visible": true, 
+          "shape": null, 
+          "text_size_number": "40", 
+          "y": "0", 
+          "x": "250", 
+          "electrical_type": "P", 
+          "de_morgan_alternate_shape": "1", 
+          "text_size_name": "40", 
+          "unit": "1"
+        }
+      ], 
+      "bounding_box": [
+        [
+          -250, 
+          -50
+        ], 
+        [
+          250, 
+          150
+        ]
+      ], 
+      "power_flag": "N", 
+      "text_offset": "40", 
+      "draw_pin_name": false, 
+      "units_locked": "F", 
+      "draw_pin_number": true, 
+      "unit_count": 1, 
+      "coarse_bounding_box": [
+        [
+          -250, 
+          -58.33333333333333
+        ], 
+        [
+          250, 
+          150
+        ]
+      ]
+    }, 
+    "~GND": {
+      "art": [
+        {
+          "count": 4, 
+          "line_width": "0", 
+          "convert": "1", 
+          "shape": "path", 
+          "path": [
+            [
+              -50, 
+              0
+            ], 
+            [
+              0, 
+              -50
+            ], 
+            [
+              50, 
+              0
+            ], 
+            [
+              -50, 
+              0
+            ]
+          ], 
+          "de_morgan_alternate_shape": "1", 
+          "unit": "0", 
+          "fill": "N"
+        }
+      ], 
+      "name": "~GND", 
+      "reference": "#PWR19", 
+      "text": [
+        {
+          "orientation": "H", 
+          "reference": "#PWR19", 
+          "hjustify": "C", 
+          "number": 0, 
+          "vjustify": "C", 
+          "visible": false, 
+          "bounding_box": [
+            [
+              -90, 
+              -25
+            ], 
+            [
+              90, 
+              25
+            ]
+          ], 
+          "italic": false, 
+          "y": "0", 
+          "x": "0", 
+          "size": "30", 
+          "bold": false
+        }, 
+        {
+          "orientation": "H", 
+          "reference": "GND", 
+          "hjustify": "C", 
+          "number": 1, 
+          "vjustify": "C", 
+          "visible": false, 
+          "bounding_box": [
+            [
+              -45, 
+              45
+            ], 
+            [
+              45, 
+              95
+            ]
+          ], 
+          "italic": false, 
+          "y": "-70", 
+          "x": "0", 
+          "size": "30", 
+          "bold": false
+        }
+      ], 
+      "pin": [
+        {
+          "pin_type": "N", 
+          "direction": "U", 
+          "name": "GND", 
+          "number": "1", 
+          "visible": false, 
+          "shape": " N", 
+          "text_size_number": "30", 
+          "x": "0", 
+          "y": "0", 
+          "length": "0", 
+          "electrical_type": "W", 
+          "de_morgan_alternate_shape": "1", 
+          "text_size_name": "30", 
+          "unit": "1"
+        }
+      ], 
+      "bounding_box": [
+        [
+          -50, 
+          -50
+        ], 
+        [
+          50, 
+          0
+        ]
+      ], 
+      "power_flag": "P", 
+      "text_offset": "0", 
+      "draw_pin_name": true, 
+      "units_locked": "F", 
+      "draw_pin_number": true, 
+      "unit_count": 1, 
+      "coarse_bounding_box": [
+        [
+          -90, 
+          -50
+        ], 
+        [
+          90, 
+          0
+        ]
+      ]
+    }, 
+    "DIODE": {
+      "art": [
+        {
+          "count": 2, 
+          "line_width": "6", 
+          "convert": "1", 
+          "shape": "path", 
+          "path": [
+            [
+              50, 
+              50
+            ], 
+            [
+              50, 
+              -50
+            ]
+          ], 
+          "de_morgan_alternate_shape": "1", 
+          "unit": "0", 
+          "fill": "N"
+        }, 
+        {
+          "count": 3, 
+          "line_width": "0", 
+          "convert": "1", 
+          "shape": "path", 
+          "path": [
+            [
+              -50, 
+              50
+            ], 
+            [
+              50, 
+              0
+            ], 
+            [
+              -50, 
+              -50
+            ]
+          ], 
+          "de_morgan_alternate_shape": "1", 
+          "unit": "0", 
+          "fill": "F"
+        }
+      ], 
+      "name": "DIODE", 
+      "reference": "D2", 
+      "text": [
+        {
+          "orientation": "H", 
+          "reference": "D1", 
+          "hjustify": "C", 
+          "text": "D1", 
+          "number": 0, 
+          "vjustify": "C", 
+          "visible": true, 
+          "bounding_box": [
+            [
+              -40, 
+              -133.33333333333334
+            ], 
+            [
+              40, 
+              -66.66666666666666
+            ]
+          ], 
+          "italic": false, 
+          "y": "100", 
+          "x": "0", 
+          "size": "40", 
+          "bold": false
+        }, 
+        {
+          "orientation": "H", 
+          "reference": "DIODE", 
+          "hjustify": "C", 
+          "text": "DIODE", 
+          "number": 1, 
+          "vjustify": "C", 
+          "visible": true, 
+          "bounding_box": [
+            [
+              -100, 
+              66.66666666666666
+            ], 
+            [
+              100, 
+              133.33333333333334
+            ]
+          ], 
+          "italic": false, 
+          "y": "-100", 
+          "x": "0", 
+          "size": "40", 
+          "bold": false
+        }, 
+        {
+          "text": " \"~\" 0 0 60 H V C CNN", 
+          "bounding_box": [
+            [
+              0, 
+              0
+            ], 
+            [
+              0, 
+              0
+            ]
+          ], 
+          "number": "2"
+        }, 
+        {
+          "text": " \"~\" 0 0 60 H V C CNN", 
+          "bounding_box": [
+            [
+              0, 
+              0
+            ], 
+            [
+              0, 
+              0
+            ]
+          ], 
+          "number": "3"
+        }
+      ], 
+      "pin": [
+        {
+          "direction": "R", 
+          "name": "A", 
+          "length": "150", 
+          "number": "1", 
+          "visible": true, 
+          "shape": null, 
+          "text_size_number": "40", 
+          "y": "0", 
+          "x": "-200", 
+          "electrical_type": "P", 
+          "de_morgan_alternate_shape": "1", 
+          "text_size_name": "40", 
+          "unit": "1"
+        }, 
+        {
+          "direction": "L", 
+          "name": "K", 
+          "length": "150", 
+          "number": "2", 
+          "visible": true, 
+          "shape": null, 
+          "text_size_number": "40", 
+          "y": "0", 
+          "x": "200", 
+          "electrical_type": "P", 
+          "de_morgan_alternate_shape": "1", 
+          "text_size_name": "40", 
+          "unit": "1"
+        }
+      ], 
+      "bounding_box": [
+        [
+          -200, 
+          -50
+        ], 
+        [
+          200, 
+          50
+        ]
+      ], 
+      "power_flag": "N", 
+      "text_offset": "40", 
+      "draw_pin_name": false, 
+      "units_locked": "F", 
+      "draw_pin_number": false, 
+      "unit_count": 1, 
+      "hideFlag": false, 
+      "coarse_bounding_box": [
+        [
+          -200, 
+          -66.66666666666666
+        ], 
+        [
+          200, 
+          66.66666666666666
+        ]
+      ]
+    }, 
+    "~CONN_1": {
+      "art": [
+        {
+          "line_width": "0", 
+          "shape": "circle", 
+          "r": 31, 
+          "y": 0, 
+          "x": 0, 
+          "de_morgan_alternate_shape": "1", 
+          "unit": "0", 
+          "fill": "N"
+        }, 
+        {
+          "count": 2, 
+          "line_width": "0", 
+          "convert": "1", 
+          "shape": "path", 
+          "path": [
+            [
+              -30, 
+              0
+            ], 
+            [
+              -50, 
+              0
+            ]
+          ], 
+          "de_morgan_alternate_shape": "1", 
+          "unit": "0", 
+          "fill": "N"
+        }
+      ], 
+      "name": "~CONN_1", 
+      "reference": "P6", 
+      "text": [
+        {
+          "orientation": "H", 
+          "reference": "P6", 
+          "hjustify": "L", 
+          "number": 0, 
+          "vjustify": "C", 
+          "visible": true, 
+          "bounding_box": [
+            [
+              80, 
+              -33.333333333333336
+            ], 
+            [
+              160, 
+              33.333333333333336
+            ]
+          ], 
+          "italic": false, 
+          "y": "0", 
+          "x": "80", 
+          "size": "40", 
+          "bold": false
+        }, 
+        {
+          "orientation": "H", 
+          "reference": "CONN_1", 
+          "hjustify": "C", 
+          "number": 1, 
+          "vjustify": "C", 
+          "visible": false, 
+          "bounding_box": [
+            [
+              -90, 
+              -80
+            ], 
+            [
+              90, 
+              -30
+            ]
+          ], 
+          "italic": false, 
+          "y": "55", 
+          "x": "0", 
+          "size": "30", 
+          "bold": false
+        }
+      ], 
+      "pin": [
+        {
+          "direction": "R", 
+          "name": "1", 
+          "length": "100", 
+          "number": "1", 
+          "visible": true, 
+          "shape": null, 
+          "text_size_number": "60", 
+          "y": "0", 
+          "x": "-150", 
+          "electrical_type": "P", 
+          "de_morgan_alternate_shape": "1", 
+          "text_size_name": "60", 
+          "unit": "1"
+        }
+      ], 
+      "bounding_box": [
+        [
+          -150, 
+          -31
+        ], 
+        [
+          31, 
+          31
+        ]
+      ], 
+      "power_flag": "N", 
+      "text_offset": "30", 
+      "draw_pin_name": false, 
+      "units_locked": "F", 
+      "draw_pin_number": false, 
+      "unit_count": 1, 
+      "coarse_bounding_box": [
+        [
+          -150, 
+          -31
+        ], 
+        [
+          160, 
+          31
+        ]
+      ]
+    }, 
+    "IC_DIL8-SOIC8_SO-8": {
+      "art": [
+        {
+          "count": 2, 
+          "line_width": "16", 
+          "convert": "0", 
+          "shape": "path", 
+          "path": [
+            [
+              -200, 
+              200
+            ], 
+            [
+              -200, 
+              -300
+            ]
+          ], 
+          "de_morgan_alternate_shape": "0", 
+          "unit": "0", 
+          "fill": "N"
+        }, 
+        {
+          "count": 2, 
+          "line_width": "16", 
+          "convert": "0", 
+          "shape": "path", 
+          "path": [
+            [
+              -200, 
+              -300
+            ], 
+            [
+              200, 
+              -300
+            ]
+          ], 
+          "de_morgan_alternate_shape": "0", 
+          "unit": "0", 
+          "fill": "N"
+        }, 
+        {
+          "count": 2, 
+          "line_width": "16", 
+          "convert": "0", 
+          "shape": "path", 
+          "path": [
+            [
+              200, 
+              -300
+            ], 
+            [
+              200, 
+              200
+            ]
+          ], 
+          "de_morgan_alternate_shape": "0", 
+          "unit": "0", 
+          "fill": "N"
+        }, 
+        {
+          "count": 2, 
+          "line_width": "16", 
+          "convert": "0", 
+          "shape": "path", 
+          "path": [
+            [
+              200, 
+              200
+            ], 
+            [
+              100, 
+              200
+            ]
+          ], 
+          "de_morgan_alternate_shape": "0", 
+          "unit": "0", 
+          "fill": "N"
+        }, 
+        {
+          "count": 2, 
+          "line_width": "16", 
+          "convert": "0", 
+          "shape": "path", 
+          "path": [
+            [
+              -100, 
+              200
+            ], 
+            [
+              -200, 
+              200
+            ]
+          ], 
+          "de_morgan_alternate_shape": "0", 
+          "unit": "0", 
+          "fill": "N"
+        }, 
+        {
+          "line_width": 16, 
+          "start_angle": 3.141592653589793, 
+          "end_angle": 0, 
+          "shape": "arc", 
+          "r": 100, 
+          "counterclockwise": true, 
+          "y": 200, 
+          "x": 0, 
+          "de_morgan_alternate_shape": "0", 
+          "unit": "0", 
+          "fill": "N"
+        }, 
+        {
+          "direction": "0", 
+          "text": ">NAME", 
+          "shape": "text", 
+          "type": "0", 
+          "y": 237, 
+          "x": -200, 
+          "direction_unit": "deci-degrees", 
+          "de_morgan_alternate_shape": "0", 
+          "unit": "0", 
+          "size": "70"
+        }, 
+        {
+          "direction": "0", 
+          "text": ">VALUE", 
+          "shape": "text", 
+          "type": "0", 
+          "y": -400, 
+          "x": -200, 
+          "direction_unit": "deci-degrees", 
+          "de_morgan_alternate_shape": "0", 
+          "unit": "0", 
+          "size": "70"
+        }
+      ], 
+      "name": "IC_DIL8-SOIC8_SO-8", 
+      "reference": "U1", 
+      "text": [
+        {
+          "orientation": "H", 
+          "reference": "U1", 
+          "hjustify": "C", 
+          "number": 0, 
+          "vjustify": "C", 
+          "visible": false, 
+          "bounding_box": [
+            [
+              0, 
+              0
+            ], 
+            [
+              0, 
+              0
+            ]
+          ], 
+          "italic": false, 
+          "y": "0", 
+          "x": "0", 
+          "size": "0", 
+          "bold": false
+        }, 
+        {
+          "orientation": "H", 
+          "reference": "IC_DIL8-SOIC8_SO-8", 
+          "hjustify": "C", 
+          "number": 1, 
+          "vjustify": "C", 
+          "visible": false, 
+          "bounding_box": [
+            [
+              0, 
+              0
+            ], 
+            [
+              0, 
+              0
+            ]
+          ], 
+          "italic": false, 
+          "y": "0", 
+          "x": "0", 
+          "size": "0", 
+          "bold": false
+        }
+      ], 
+      "pin": [
+        {
+          "direction": "R", 
+          "name": "1", 
+          "length": "100", 
+          "number": "1", 
+          "visible": true, 
+          "shape": null, 
+          "text_size_number": "0", 
+          "y": "100", 
+          "x": "-300", 
+          "electrical_type": "B", 
+          "de_morgan_alternate_shape": "0", 
+          "text_size_name": "0", 
+          "unit": "0"
+        }, 
+        {
+          "direction": "R", 
+          "name": "2", 
+          "length": "100", 
+          "number": "2", 
+          "visible": true, 
+          "shape": null, 
+          "text_size_number": "0", 
+          "y": "0", 
+          "x": "-300", 
+          "electrical_type": "B", 
+          "de_morgan_alternate_shape": "0", 
+          "text_size_name": "0", 
+          "unit": "0"
+        }, 
+        {
+          "direction": "R", 
+          "name": "3", 
+          "length": "100", 
+          "number": "3", 
+          "visible": true, 
+          "shape": null, 
+          "text_size_number": "0", 
+          "y": "-100", 
+          "x": "-300", 
+          "electrical_type": "B", 
+          "de_morgan_alternate_shape": "0", 
+          "text_size_name": "0", 
+          "unit": "0"
+        }, 
+        {
+          "direction": "R", 
+          "name": "4", 
+          "length": "100", 
+          "number": "4", 
+          "visible": true, 
+          "shape": null, 
+          "text_size_number": "0", 
+          "y": "-200", 
+          "x": "-300", 
+          "electrical_type": "B", 
+          "de_morgan_alternate_shape": "0", 
+          "text_size_name": "0", 
+          "unit": "0"
+        }, 
+        {
+          "direction": "L", 
+          "name": "5", 
+          "length": "100", 
+          "number": "5", 
+          "visible": true, 
+          "shape": null, 
+          "text_size_number": "0", 
+          "y": "-200", 
+          "x": "300", 
+          "electrical_type": "B", 
+          "de_morgan_alternate_shape": "0", 
+          "text_size_name": "0", 
+          "unit": "0"
+        }, 
+        {
+          "direction": "L", 
+          "name": "6", 
+          "length": "100", 
+          "number": "6", 
+          "visible": true, 
+          "shape": null, 
+          "text_size_number": "0", 
+          "y": "-100", 
+          "x": "300", 
+          "electrical_type": "B", 
+          "de_morgan_alternate_shape": "0", 
+          "text_size_name": "0", 
+          "unit": "0"
+        }, 
+        {
+          "direction": "L", 
+          "name": "7", 
+          "length": "100", 
+          "number": "7", 
+          "visible": true, 
+          "shape": null, 
+          "text_size_number": "0", 
+          "y": "0", 
+          "x": "300", 
+          "electrical_type": "B", 
+          "de_morgan_alternate_shape": "0", 
+          "text_size_name": "0", 
+          "unit": "0"
+        }, 
+        {
+          "direction": "L", 
+          "name": "8", 
+          "length": "100", 
+          "number": "8", 
+          "visible": true, 
+          "shape": null, 
+          "text_size_number": "0", 
+          "y": "100", 
+          "x": "300", 
+          "electrical_type": "B", 
+          "de_morgan_alternate_shape": "0", 
+          "text_size_name": "0", 
+          "unit": "0"
+        }
+      ], 
+      "bounding_box": [
+        [
+          -300, 
+          -470
+        ], 
+        [
+          300, 
+          307
+        ]
+      ], 
+      "power_flag": "N", 
+      "text_offset": "100", 
+      "draw_pin_name": true, 
+      "units_locked": "0", 
+      "draw_pin_number": true, 
+      "unit_count": 2, 
+      "coarse_bounding_box": [
+        [
+          -300, 
+          -470
+        ], 
+        [
+          300, 
+          307
+        ]
+      ]
+    }, 
+    "IC_FAN5331-SOT-23-5_SOT-23-5": {
+      "art": [
+        {
+          "count": 2, 
+          "line_width": "16", 
+          "convert": "0", 
+          "shape": "path", 
+          "path": [
+            [
+              -300, 
+              -200
+            ], 
+            [
+              -300, 
+              200
+            ]
+          ], 
+          "de_morgan_alternate_shape": "0", 
+          "unit": "0", 
+          "fill": "N"
+        }, 
+        {
+          "count": 2, 
+          "line_width": "16", 
+          "convert": "0", 
+          "shape": "path", 
+          "path": [
+            [
+              -300, 
+              200
+            ], 
+            [
+              300, 
+              200
+            ]
+          ], 
+          "de_morgan_alternate_shape": "0", 
+          "unit": "0", 
+          "fill": "N"
+        }, 
+        {
+          "count": 2, 
+          "line_width": "16", 
+          "convert": "0", 
+          "shape": "path", 
+          "path": [
+            [
+              300, 
+              200
+            ], 
+            [
+              300, 
+              -200
+            ]
+          ], 
+          "de_morgan_alternate_shape": "0", 
+          "unit": "0", 
+          "fill": "N"
+        }, 
+        {
+          "count": 2, 
+          "line_width": "16", 
+          "convert": "0", 
+          "shape": "path", 
+          "path": [
+            [
+              300, 
+              -200
+            ], 
+            [
+              -300, 
+              -200
+            ]
+          ], 
+          "de_morgan_alternate_shape": "0", 
+          "unit": "0", 
+          "fill": "N"
+        }
+      ], 
+      "name": "IC_FAN5331-SOT-23-5_SOT-23-5", 
+      "reference": "U3", 
+      "text": [
+        {
+          "orientation": "H", 
+          "reference": "U3", 
+          "hjustify": "C", 
+          "number": 0, 
+          "vjustify": "C", 
+          "visible": false, 
+          "bounding_box": [
+            [
+              0, 
+              0
+            ], 
+            [
+              0, 
+              0
+            ]
+          ], 
+          "italic": false, 
+          "y": "0", 
+          "x": "0", 
+          "size": "0", 
+          "bold": false
+        }, 
+        {
+          "orientation": "H", 
+          "reference": "IC_FAN5331-SOT-23-5_SOT-23-5", 
+          "hjustify": "C", 
+          "number": 1, 
+          "vjustify": "C", 
+          "visible": false, 
+          "bounding_box": [
+            [
+              0, 
+              0
+            ], 
+            [
+              0, 
+              0
+            ]
+          ], 
+          "italic": false, 
+          "y": "0", 
+          "x": "0", 
+          "size": "0", 
+          "bold": false
+        }
+      ], 
+      "pin": [
+        {
+          "direction": "R", 
+          "name": "SW", 
+          "length": "100", 
+          "number": "1", 
+          "visible": true, 
+          "shape": null, 
+          "text_size_number": "0", 
+          "y": "100", 
+          "x": "-400", 
+          "electrical_type": "B", 
+          "de_morgan_alternate_shape": "0", 
+          "text_size_name": "60", 
+          "unit": "0"
+        }, 
+        {
+          "direction": "R", 
+          "name": "GND", 
+          "length": "100", 
+          "number": "2", 
+          "visible": true, 
+          "shape": null, 
+          "text_size_number": "0", 
+          "y": "0", 
+          "x": "-400", 
+          "electrical_type": "B", 
+          "de_morgan_alternate_shape": "0", 
+          "text_size_name": "60", 
+          "unit": "0"
+        }, 
+        {
+          "direction": "R", 
+          "name": "FB", 
+          "length": "100", 
+          "number": "3", 
+          "visible": true, 
+          "shape": null, 
+          "text_size_number": "0", 
+          "y": "-100", 
+          "x": "-400", 
+          "electrical_type": "B", 
+          "de_morgan_alternate_shape": "0", 
+          "text_size_name": "60", 
+          "unit": "0"
+        }, 
+        {
+          "direction": "L", 
+          "name": "!SHDN", 
+          "length": "100", 
+          "number": "4", 
+          "visible": true, 
+          "shape": null, 
+          "text_size_number": "0", 
+          "y": "-100", 
+          "x": "400", 
+          "electrical_type": "B", 
+          "de_morgan_alternate_shape": "0", 
+          "text_size_name": "60", 
+          "unit": "0"
+        }, 
+        {
+          "direction": "L", 
+          "name": "VIN", 
+          "length": "100", 
+          "number": "5", 
+          "visible": true, 
+          "shape": null, 
+          "text_size_number": "0", 
+          "y": "100", 
+          "x": "400", 
+          "electrical_type": "B", 
+          "de_morgan_alternate_shape": "0", 
+          "text_size_name": "60", 
+          "unit": "0"
+        }
+      ], 
+      "bounding_box": [
+        [
+          -400, 
+          -200
+        ], 
+        [
+          400, 
+          200
+        ]
+      ], 
+      "power_flag": "N", 
+      "text_offset": "100", 
+      "draw_pin_name": true, 
+      "units_locked": "0", 
+      "draw_pin_number": true, 
+      "unit_count": 2, 
+      "coarse_bounding_box": [
+        [
+          -400, 
+          -200
+        ], 
+        [
+          400, 
+          200
+        ]
+      ]
+    }, 
+    "VCC": {
+      "art": [
+        {
+          "line_width": "0", 
+          "shape": "circle", 
+          "r": 20, 
+          "y": 50, 
+          "x": 0, 
+          "de_morgan_alternate_shape": "1", 
+          "unit": "0", 
+          "fill": "N"
+        }, 
+        {
+          "count": 3, 
+          "line_width": "0", 
+          "convert": "1", 
+          "shape": "path", 
+          "path": [
+            [
+              0, 
+              0
+            ], 
+            [
+              0, 
+              30
+            ], 
+            [
+              0, 
+              30
+            ]
+          ], 
+          "de_morgan_alternate_shape": "1", 
+          "unit": "0", 
+          "fill": "N"
+        }
+      ], 
+      "name": "VCC", 
+      "reference": "#PWR15", 
+      "text": [
+        {
+          "orientation": "H", 
+          "reference": "#PWR15", 
+          "hjustify": "C", 
+          "number": 0, 
+          "vjustify": "C", 
+          "visible": false, 
+          "bounding_box": [
+            [
+              -90, 
+              -125
+            ], 
+            [
+              90, 
+              -75
+            ]
+          ], 
+          "italic": false, 
+          "y": "100", 
+          "x": "0", 
+          "size": "30", 
+          "bold": false
+        }, 
+        {
+          "orientation": "H", 
+          "reference": "VCC", 
+          "hjustify": "C", 
+          "number": 1, 
+          "vjustify": "C", 
+          "visible": true, 
+          "bounding_box": [
+            [
+              -45, 
+              -125
+            ], 
+            [
+              45, 
+              -75
+            ]
+          ], 
+          "italic": false, 
+          "y": "100", 
+          "x": "0", 
+          "size": "30", 
+          "bold": false
+        }
+      ], 
+      "pin": [
+        {
+          "pin_type": "N", 
+          "direction": "U", 
+          "name": "VCC", 
+          "number": "1", 
+          "visible": false, 
+          "shape": " N", 
+          "text_size_number": "20", 
+          "x": "0", 
+          "y": "0", 
+          "length": "0", 
+          "electrical_type": "W", 
+          "de_morgan_alternate_shape": "0", 
+          "text_size_name": "20", 
+          "unit": "0"
+        }
+      ], 
+      "bounding_box": [
+        [
+          -20, 
+          0
+        ], 
+        [
+          20, 
+          70
+        ]
+      ], 
+      "power_flag": "P", 
+      "text_offset": "0", 
+      "draw_pin_name": true, 
+      "units_locked": "F", 
+      "draw_pin_number": true, 
+      "unit_count": 1, 
+      "coarse_bounding_box": [
+        [
+          -90, 
+          0
+        ], 
+        [
+          90, 
+          75
+        ]
+      ]
+    }, 
+    "ATTINY13-P": {
+      "art": [
+        {
+          "line_width": "10", 
+          "height": 700, 
+          "width": 1600, 
+          "shape": "rectangle", 
+          "y": 0, 
+          "x": 0, 
+          "de_morgan_alternate_shape": "1", 
+          "unit": "0", 
+          "fill": "f"
+        }
+      ], 
+      "name": "ATTINY13-P", 
+      "reference": "IC1", 
+      "text": [
+        {
+          "orientation": "H", 
+          "reference": "IC1", 
+          "hjustify": "C", 
+          "number": 0, 
+          "vjustify": "C", 
+          "visible": true, 
+          "bounding_box": [
+            [
+              10, 
+              -100
+            ], 
+            [
+              190, 
+              0
+            ]
+          ], 
+          "italic": false, 
+          "y": "50", 
+          "x": "100", 
+          "size": "60", 
+          "bold": false
+        }, 
+        {
+          "orientation": "H", 
+          "reference": "ATTINY13-P", 
+          "hjustify": "C", 
+          "number": 1, 
+          "vjustify": "C", 
+          "visible": true, 
+          "bounding_box": [
+            [
+              1000, 
+              700
+            ], 
+            [
+              1600, 
+              800
+            ]
+          ], 
+          "italic": false, 
+          "y": "-750", 
+          "x": "1300", 
+          "size": "60", 
+          "bold": false
+        }, 
+        {
+          "text": " \"DIP8\" 100 -750 60 H I C CNN", 
+          "bounding_box": [
+            [
+              0, 
+              0
+            ], 
+            [
+              0, 
+              0
+            ]
+          ], 
+          "number": "2"
+        }
+      ], 
+      "pin": [
+        {
+          "direction": "R", 
+          "name": "PB5(~RESET~/ADC0/PCINT5/dW)", 
+          "length": "200", 
+          "number": "1", 
+          "visible": true, 
+          "shape": null, 
+          "text_size_number": "50", 
+          "y": "-600", 
+          "x": "-200", 
+          "electrical_type": "B", 
+          "de_morgan_alternate_shape": "1", 
+          "text_size_name": "50", 
+          "unit": "1"
+        }, 
+        {
+          "direction": "R", 
+          "name": "PB3(CLKI/ADC3/PCINT3)", 
+          "length": "200", 
+          "number": "2", 
+          "visible": true, 
+          "shape": null, 
+          "text_size_number": "50", 
+          "y": "-400", 
+          "x": "-200", 
+          "electrical_type": "B", 
+          "de_morgan_alternate_shape": "1", 
+          "text_size_name": "50", 
+          "unit": "1"
+        }, 
+        {
+          "direction": "R", 
+          "name": "PB4(ADC2/PCINT4)", 
+          "length": "200", 
+          "number": "3", 
+          "visible": true, 
+          "shape": null, 
+          "text_size_number": "50", 
+          "y": "-500", 
+          "x": "-200", 
+          "electrical_type": "B", 
+          "de_morgan_alternate_shape": "1", 
+          "text_size_name": "50", 
+          "unit": "1"
+        }, 
+        {
+          "direction": "L", 
+          "name": "GND", 
+          "length": "200", 
+          "number": "4", 
+          "visible": true, 
+          "shape": null, 
+          "text_size_number": "50", 
+          "y": "-600", 
+          "x": "1800", 
+          "electrical_type": "W", 
+          "de_morgan_alternate_shape": "1", 
+          "text_size_name": "50", 
+          "unit": "1"
+        }, 
+        {
+          "direction": "R", 
+          "name": "PB0(MOSI/AIN0/OC0A/PCINT0)", 
+          "length": "200", 
+          "number": "5", 
+          "visible": true, 
+          "shape": null, 
+          "text_size_number": "50", 
+          "y": "-100", 
+          "x": "-200", 
+          "electrical_type": "B", 
+          "de_morgan_alternate_shape": "1", 
+          "text_size_name": "50", 
+          "unit": "1"
+        }, 
+        {
+          "direction": "R", 
+          "name": "PB1(MISO/AIN1/OC0B/INT0/PCINT1)", 
+          "length": "200", 
+          "number": "6", 
+          "visible": true, 
+          "shape": null, 
+          "text_size_number": "50", 
+          "y": "-200", 
+          "x": "-200", 
+          "electrical_type": "B", 
+          "de_morgan_alternate_shape": "1", 
+          "text_size_name": "50", 
+          "unit": "1"
+        }, 
+        {
+          "direction": "R", 
+          "name": "PB2(SCK/ADC1/T0/PCINT2)", 
+          "length": "200", 
+          "number": "7", 
+          "visible": true, 
+          "shape": null, 
+          "text_size_number": "50", 
+          "y": "-300", 
+          "x": "-200", 
+          "electrical_type": "B", 
+          "de_morgan_alternate_shape": "1", 
+          "text_size_name": "50", 
+          "unit": "1"
+        }, 
+        {
+          "direction": "L", 
+          "name": "VCC", 
+          "length": "200", 
+          "number": "8", 
+          "visible": true, 
+          "shape": null, 
+          "text_size_number": "50", 
+          "y": "-100", 
+          "x": "1800", 
+          "electrical_type": "W", 
+          "de_morgan_alternate_shape": "1", 
+          "text_size_name": "50", 
+          "unit": "1"
+        }
+      ], 
+      "bounding_box": [
+        [
+          -200, 
+          -700
+        ], 
+        [
+          1800, 
+          0
+        ]
+      ], 
+      "power_flag": "N", 
+      "text_offset": "40", 
+      "draw_pin_name": true, 
+      "units_locked": "F", 
+      "draw_pin_number": true, 
+      "unit_count": 1, 
+      "coarse_bounding_box": [
+        [
+          -200, 
+          -700
+        ], 
+        [
+          1800, 
+          0
+        ]
+      ]
+    }, 
+    "INDUCTOR": {
+      "art": [
+        {
+          "line_width": 0, 
+          "start_angle": -1.551597705022959, 
+          "end_angle": 1.551597705022959, 
+          "shape": "arc", 
+          "r": 50, 
+          "counterclockwise": true, 
+          "y": -150, 
+          "x": 0, 
+          "de_morgan_alternate_shape": "1", 
+          "unit": "0", 
+          "fill": "N"
+        }, 
+        {
+          "line_width": 0, 
+          "start_angle": -1.551597705022959, 
+          "end_angle": 1.551597705022959, 
+          "shape": "arc", 
+          "r": 51, 
+          "counterclockwise": true, 
+          "y": -49, 
+          "x": 0, 
+          "de_morgan_alternate_shape": "1", 
+          "unit": "0", 
+          "fill": "N"
+        }, 
+        {
+          "line_width": 0, 
+          "start_angle": -1.551597705022959, 
+          "end_angle": 1.551597705022959, 
+          "shape": "arc", 
+          "r": 51, 
+          "counterclockwise": true, 
+          "y": 51, 
+          "x": 0, 
+          "de_morgan_alternate_shape": "1", 
+          "unit": "0", 
+          "fill": "N"
+        }, 
+        {
+          "line_width": 0, 
+          "start_angle": -1.551597705022959, 
+          "end_angle": 1.551597705022959, 
+          "shape": "arc", 
+          "r": 48, 
+          "counterclockwise": true, 
+          "y": 148, 
+          "x": 0, 
+          "de_morgan_alternate_shape": "1", 
+          "unit": "0", 
+          "fill": "N"
+        }
+      ], 
+      "name": "INDUCTOR", 
+      "reference": "L1", 
+      "text": [
+        {
+          "orientation": "V", 
+          "reference": "L1", 
+          "hjustify": "C", 
+          "number": 0, 
+          "vjustify": "C", 
+          "visible": true, 
+          "bounding_box": [
+            [
+              -83.33333333333334, 
+              -40
+            ], 
+            [
+              -16.666666666666664, 
+              40
+            ]
+          ], 
+          "italic": false, 
+          "y": "0", 
+          "x": "-50", 
+          "size": "40", 
+          "bold": false
+        }, 
+        {
+          "orientation": "V", 
+          "reference": "INDUCTOR", 
+          "hjustify": "C", 
+          "number": 1, 
+          "vjustify": "C", 
+          "visible": true, 
+          "bounding_box": [
+            [
+              66.66666666666666, 
+              -160
+            ], 
+            [
+              133.33333333333334, 
+              160
+            ]
+          ], 
+          "italic": false, 
+          "y": "0", 
+          "x": "100", 
+          "size": "40", 
+          "bold": false
+        }, 
+        {
+          "text": " \"~\" 0 0 60 H V C CNN", 
+          "bounding_box": [
+            [
+              0, 
+              0
+            ], 
+            [
+              0, 
+              0
+            ]
+          ], 
+          "number": "2"
+        }, 
+        {
+          "text": " \"~\" 0 0 60 H V C CNN", 
+          "bounding_box": [
+            [
+              0, 
+              0
+            ], 
+            [
+              0, 
+              0
+            ]
+          ], 
+          "number": "3"
+        }
+      ], 
+      "pin": [
+        {
+          "direction": "D", 
+          "name": "1", 
+          "length": "100", 
+          "number": "1", 
+          "visible": true, 
+          "shape": null, 
+          "text_size_number": "70", 
+          "y": "300", 
+          "x": "0", 
+          "electrical_type": "P", 
+          "de_morgan_alternate_shape": "1", 
+          "text_size_name": "70", 
+          "unit": "1"
+        }, 
+        {
+          "direction": "U", 
+          "name": "2", 
+          "length": "100", 
+          "number": "2", 
+          "visible": true, 
+          "shape": null, 
+          "text_size_number": "70", 
+          "y": "-300", 
+          "x": "0", 
+          "electrical_type": "P", 
+          "de_morgan_alternate_shape": "1", 
+          "text_size_name": "70", 
+          "unit": "1"
+        }
+      ], 
+      "bounding_box": [
+        [
+          0, 
+          -300
+        ], 
+        [
+          51, 
+          300
+        ]
+      ], 
+      "power_flag": "N", 
+      "text_offset": "40", 
+      "draw_pin_name": false, 
+      "units_locked": "F", 
+      "draw_pin_number": false, 
+      "unit_count": 1, 
+      "coarse_bounding_box": [
+        [
+          -83.33333333333334, 
+          -300
+        ], 
+        [
+          133.33333333333334, 
+          300
+        ]
+      ]
+    }, 
+    "R": {
+      "art": [
+        {
+          "line_width": "12", 
+          "height": 300, 
+          "width": 80, 
+          "shape": "rectangle", 
+          "y": 150, 
+          "x": -40, 
+          "de_morgan_alternate_shape": "1", 
+          "unit": "0", 
+          "fill": "N"
+        }
+      ], 
+      "name": "R", 
+      "reference": "R3", 
+      "text": [
+        {
+          "orientation": "V", 
+          "reference": "R3", 
+          "hjustify": "C", 
+          "number": 0, 
+          "vjustify": "C", 
+          "visible": true, 
+          "bounding_box": [
+            [
+              46.666666666666664, 
+              -40
+            ], 
+            [
+              113.33333333333334, 
+              40
+            ]
+          ], 
+          "italic": false, 
+          "y": "0", 
+          "x": "80", 
+          "size": "40", 
+          "bold": false
+        }, 
+        {
+          "orientation": "V", 
+          "reference": "R", 
+          "hjustify": "C", 
+          "number": 1, 
+          "vjustify": "C", 
+          "visible": true, 
+          "bounding_box": [
+            [
+              -26.333333333333336, 
+              -21
+            ], 
+            [
+              40.333333333333336, 
+              19
+            ]
+          ], 
+          "italic": false, 
+          "y": "1", 
+          "x": "7", 
+          "size": "40", 
+          "bold": false
+        }, 
+        {
+          "text": " \"~\" -70 0 30 V V C CNN", 
+          "bounding_box": [
+            [
+              0, 
+              0
+            ], 
+            [
+              0, 
+              0
+            ]
+          ], 
+          "number": "2"
+        }, 
+        {
+          "text": " \"~\" 0 0 30 H V C CNN", 
+          "bounding_box": [
+            [
+              0, 
+              0
+            ], 
+            [
+              0, 
+              0
+            ]
+          ], 
+          "number": "3"
+        }
+      ], 
+      "pin": [
+        {
+          "direction": "D", 
+          "name": "~", 
+          "length": "100", 
+          "number": "1", 
+          "visible": true, 
+          "shape": null, 
+          "text_size_number": "60", 
+          "y": "250", 
+          "x": "0", 
+          "electrical_type": "P", 
+          "de_morgan_alternate_shape": "1", 
+          "text_size_name": "60", 
+          "unit": "1"
+        }, 
+        {
+          "direction": "U", 
+          "name": "~", 
+          "length": "100", 
+          "number": "2", 
+          "visible": true, 
+          "shape": null, 
+          "text_size_number": "60", 
+          "y": "-250", 
+          "x": "0", 
+          "electrical_type": "P", 
+          "de_morgan_alternate_shape": "1", 
+          "text_size_name": "60", 
+          "unit": "1"
+        }
+      ], 
+      "bounding_box": [
+        [
+          -40, 
+          -250
+        ], 
+        [
+          40, 
+          250
+        ]
+      ], 
+      "power_flag": "N", 
+      "text_offset": "0", 
+      "draw_pin_name": true, 
+      "units_locked": "F", 
+      "draw_pin_number": false, 
+      "unit_count": 1, 
+      "coarse_bounding_box": [
+        [
+          -40, 
+          -250
+        ], 
+        [
+          113.33333333333334, 
+          250
+        ]
+      ]
+    }
+  }, 
+  "net_pin_id_map": {
+    "12518124-dd55-0549-87a2-fa86d70d43a3:8": {
+      "netcode": 1, 
+      "id": "12518124-dd55-0549-87a2-fa86d70d43a3", 
+      "pin": "8"
+    }, 
+    "12518124-dd55-0549-87a2-fa86d70d43a3:1": {
+      "netcode": 104, 
+      "id": "12518124-dd55-0549-87a2-fa86d70d43a3", 
+      "pin": "1"
+    }, 
+    "de3ccc21-5565-9a70-0a68-00ac0d389c4a:2": {
+      "netcode": 1, 
+      "id": "de3ccc21-5565-9a70-0a68-00ac0d389c4a", 
+      "pin": "2"
+    }, 
+    "12518124-dd55-0549-87a2-fa86d70d43a3:3": {
+      "netcode": 16, 
+      "id": "12518124-dd55-0549-87a2-fa86d70d43a3", 
+      "pin": "3"
+    }, 
+    "3661cfb0-d2fe-a8ca-f0e9-9c812155e350:1": {
+      "netcode": 109, 
+      "id": "3661cfb0-d2fe-a8ca-f0e9-9c812155e350", 
+      "pin": "1"
+    }, 
+    "12518124-dd55-0549-87a2-fa86d70d43a3:5": {
+      "netcode": 20, 
+      "id": "12518124-dd55-0549-87a2-fa86d70d43a3", 
+      "pin": "5"
+    }, 
+    "12518124-dd55-0549-87a2-fa86d70d43a3:4": {
+      "netcode": 18, 
+      "id": "12518124-dd55-0549-87a2-fa86d70d43a3", 
+      "pin": "4"
+    }, 
+    "12518124-dd55-0549-87a2-fa86d70d43a3:7": {
+      "netcode": 107, 
+      "id": "12518124-dd55-0549-87a2-fa86d70d43a3", 
+      "pin": "7"
+    }, 
+    "12518124-dd55-0549-87a2-fa86d70d43a3:6": {
+      "netcode": 106, 
+      "id": "12518124-dd55-0549-87a2-fa86d70d43a3", 
+      "pin": "6"
+    }, 
+    "b4ef3b9f-9486-68d6-9843-4efb3a37dad2:2": {
+      "netcode": 5, 
+      "id": "b4ef3b9f-9486-68d6-9843-4efb3a37dad2", 
+      "pin": "2"
+    }, 
+    "71837bab-338f-6f1b-d7b5-e4cc3b2f725a:5": {
+      "netcode": 12, 
+      "id": "71837bab-338f-6f1b-d7b5-e4cc3b2f725a", 
+      "pin": "5"
+    }, 
+    "b4ef3b9f-9486-68d6-9843-4efb3a37dad2:1": {
+      "netcode": 1, 
+      "id": "b4ef3b9f-9486-68d6-9843-4efb3a37dad2", 
+      "pin": "1"
+    }, 
+    "71837bab-338f-6f1b-d7b5-e4cc3b2f725a:3": {
+      "netcode": 5, 
+      "id": "71837bab-338f-6f1b-d7b5-e4cc3b2f725a", 
+      "pin": "3"
+    }, 
+    "71837bab-338f-6f1b-d7b5-e4cc3b2f725a:2": {
+      "netcode": 18, 
+      "id": "71837bab-338f-6f1b-d7b5-e4cc3b2f725a", 
+      "pin": "2"
+    }, 
+    "71837bab-338f-6f1b-d7b5-e4cc3b2f725a:1": {
+      "netcode": 9, 
+      "id": "71837bab-338f-6f1b-d7b5-e4cc3b2f725a", 
+      "pin": "1"
+    }, 
+    "30dcea69-12de-1e82-ae2a-88f55268a531:1": {
+      "netcode": 111, 
+      "id": "30dcea69-12de-1e82-ae2a-88f55268a531", 
+      "pin": "1"
+    }, 
+    "80025c5a-d3a9-d039-72a8-86f94d42ca1a:2": {
+      "netcode": 9, 
+      "id": "80025c5a-d3a9-d039-72a8-86f94d42ca1a", 
+      "pin": "2"
+    }, 
+    "f0486ec9-f0ea-9e0f-9c8d-14f06cf08788:1": {
+      "netcode": 1, 
+      "id": "f0486ec9-f0ea-9e0f-9c8d-14f06cf08788", 
+      "pin": "1"
+    }, 
+    "f0486ec9-f0ea-9e0f-9c8d-14f06cf08788:2": {
+      "netcode": 43, 
+      "id": "f0486ec9-f0ea-9e0f-9c8d-14f06cf08788", 
+      "pin": "2"
+    }, 
+    "3fdfc214-e3fc-b1a5-ef56-abf0da9d97c7:1": {
+      "netcode": 39, 
+      "id": "3fdfc214-e3fc-b1a5-ef56-abf0da9d97c7", 
+      "pin": "1"
+    }, 
+    "3fdfc214-e3fc-b1a5-ef56-abf0da9d97c7:2": {
+      "netcode": 18, 
+      "id": "3fdfc214-e3fc-b1a5-ef56-abf0da9d97c7", 
+      "pin": "2"
+    }, 
+    "de3ccc21-5565-9a70-0a68-00ac0d389c4a:1": {
+      "netcode": 9, 
+      "id": "de3ccc21-5565-9a70-0a68-00ac0d389c4a", 
+      "pin": "1"
+    }, 
+    "12518124-dd55-0549-87a2-fa86d70d43a3:2": {
+      "netcode": 105, 
+      "id": "12518124-dd55-0549-87a2-fa86d70d43a3", 
+      "pin": "2"
+    }, 
+    "f46be548-e43d-2987-6107-3cb27b1e0266:2": {
+      "netcode": 18, 
+      "id": "f46be548-e43d-2987-6107-3cb27b1e0266", 
+      "pin": "2"
+    }, 
+    "07230a70-c0a9-fe15-ab58-803b48f36225:1": {
+      "netcode": 1, 
+      "id": "07230a70-c0a9-fe15-ab58-803b48f36225", 
+      "pin": "1"
+    }, 
+    "97e4f376-1006-48a7-77d0-0bd2515cc0a0:1": {
+      "netcode": 110, 
+      "id": "97e4f376-1006-48a7-77d0-0bd2515cc0a0", 
+      "pin": "1"
+    }, 
+    "07230a70-c0a9-fe15-ab58-803b48f36225:3": {
+      "netcode": 18, 
+      "id": "07230a70-c0a9-fe15-ab58-803b48f36225", 
+      "pin": "3"
+    }, 
+    "07230a70-c0a9-fe15-ab58-803b48f36225:2": {
+      "netcode": 16, 
+      "id": "07230a70-c0a9-fe15-ab58-803b48f36225", 
+      "pin": "2"
+    }, 
+    "f46be548-e43d-2987-6107-3cb27b1e0266:1": {
+      "netcode": 12, 
+      "id": "f46be548-e43d-2987-6107-3cb27b1e0266", 
+      "pin": "1"
+    }, 
+    "63d2ec08-adee-ba9c-bfe1-064278bea9c9:1": {
+      "netcode": 39, 
+      "id": "63d2ec08-adee-ba9c-bfe1-064278bea9c9", 
+      "pin": "1"
+    }, 
+    "63d2ec08-adee-ba9c-bfe1-064278bea9c9:3": {
+      "netcode": 43, 
+      "id": "63d2ec08-adee-ba9c-bfe1-064278bea9c9", 
+      "pin": "3"
+    }, 
+    "63d2ec08-adee-ba9c-bfe1-064278bea9c9:2": {
+      "netcode": 20, 
+      "id": "63d2ec08-adee-ba9c-bfe1-064278bea9c9", 
+      "pin": "2"
+    }, 
+    "80025c5a-d3a9-d039-72a8-86f94d42ca1a:1": {
+      "netcode": 12, 
+      "id": "80025c5a-d3a9-d039-72a8-86f94d42ca1a", 
+      "pin": "1"
+    }, 
+    "09c941a1-b77a-cbe0-5853-419c72a55c4d:2": {
+      "netcode": 18, 
+      "id": "09c941a1-b77a-cbe0-5853-419c72a55c4d", 
+      "pin": "2"
+    }, 
+    "71837bab-338f-6f1b-d7b5-e4cc3b2f725a:4": {
+      "netcode": 18, 
+      "id": "71837bab-338f-6f1b-d7b5-e4cc3b2f725a", 
+      "pin": "4"
+    }, 
+    "346350bb-b14a-8991-0b36-a212fad55c7c:1": {
+      "netcode": 108, 
+      "id": "346350bb-b14a-8991-0b36-a212fad55c7c", 
+      "pin": "1"
+    }, 
+    "09c941a1-b77a-cbe0-5853-419c72a55c4d:1": {
+      "netcode": 12, 
+      "id": "09c941a1-b77a-cbe0-5853-419c72a55c4d", 
+      "pin": "1"
+    }, 
+    "2daa98c5-894f-f91d-5d93-da75adcd24a7:2": {
+      "netcode": 18, 
+      "id": "2daa98c5-894f-f91d-5d93-da75adcd24a7", 
+      "pin": "2"
+    }, 
+    "2daa98c5-894f-f91d-5d93-da75adcd24a7:1": {
+      "netcode": 5, 
+      "id": "2daa98c5-894f-f91d-5d93-da75adcd24a7", 
+      "pin": "1"
+    }, 
+    "1a7a3465-b518-1c28-df95-e9bb934867c9:1": {
+      "netcode": 1, 
+      "id": "1a7a3465-b518-1c28-df95-e9bb934867c9", 
+      "pin": "1"
+    }, 
+    "50d8f90a-abc5-58e3-54fd-fa4fc49922a8:2": {
+      "netcode": 18, 
+      "id": "50d8f90a-abc5-58e3-54fd-fa4fc49922a8", 
+      "pin": "2"
+    }, 
+    "50d8f90a-abc5-58e3-54fd-fa4fc49922a8:1": {
+      "netcode": 1, 
+      "id": "50d8f90a-abc5-58e3-54fd-fa4fc49922a8", 
+      "pin": "1"
+    }, 
+    "1a7a3465-b518-1c28-df95-e9bb934867c9:2": {
+      "netcode": 18, 
+      "id": "1a7a3465-b518-1c28-df95-e9bb934867c9", 
+      "pin": "2"
+    }
+  }, 
+  "element": [
+    {
+      "orientation": 0, 
+      "text": "v3.3", 
+      "id": "8a669a81-b001-743b-6794-aad5411c8d95", 
+      "y": -1300, 
+      "x": 150, 
+      "type": "label", 
+      "dimension": 40
+    }, 
+    {
+      "reference": "IC1", 
+      "nn": "1", 
+      "mm": "1", 
+      "timestamp": "5213C820", 
+      "transform": [
+        [
+          1, 
+          0
+        ], 
+        [
+          0, 
+          -1
+        ]
+      ], 
+      "text": [
+        {
+          "orientation": "H", 
+          "reference": "IC1", 
+          "hjustify": "C", 
+          "text": "IC1", 
+          "number": 0, 
+          "vjustify": "C", 
+          "visible": true, 
+          "bounding_box": [
+            [
+              10, 
+              -100
+            ], 
+            [
+              190, 
+              0
+            ]
+          ], 
+          "italic": false, 
+          "y": -1600, 
+          "x": -2100, 
+          "size": "60", 
+          "id": "12518124-dd55-0549-87a2-fa86d70d43a3,a5303b07-4bf5-2f8e-7411-a38ed719ba02", 
+          "bold": false
+        }, 
+        {
+          "orientation": "H", 
+          "reference": "ATTINY13-P", 
+          "hjustify": "C", 
+          "text": "ATTINY13-P", 
+          "number": 1, 
+          "vjustify": "C", 
+          "visible": true, 
+          "bounding_box": [
+            [
+              1000, 
+              700
+            ], 
+            [
+              1600, 
+              800
+            ]
+          ], 
+          "italic": false, 
+          "y": -2400, 
+          "x": -900, 
+          "size": "60", 
+          "id": "12518124-dd55-0549-87a2-fa86d70d43a3,1a3d58b0-2041-543d-aa7a-0382e41fc538", 
+          "bold": false
+        }
+      ], 
+      "y": -1650, 
+      "x": -2200, 
+      "pinData": {
+        "1": {
+          "y": -1050, 
+          "x": -2400, 
+          "netcode": 104, 
+          "type": "box", 
+          "size": 50
+        }, 
+        "3": {
+          "y": -1150, 
+          "x": -2400, 
+          "netcode": 16, 
+          "type": "box", 
+          "size": 50
+        }, 
+        "2": {
+          "y": -1250, 
+          "x": -2400, 
+          "netcode": 105, 
+          "type": "box", 
+          "size": 50
+        }, 
+        "5": {
+          "y": -1550, 
+          "x": -2400, 
+          "netcode": 20, 
+          "type": "box", 
+          "size": 50
+        }, 
+        "4": {
+          "y": -1050, 
+          "x": -400, 
+          "netcode": 18, 
+          "type": "box", 
+          "size": 50
+        }, 
+        "7": {
+          "y": -1350, 
+          "x": -2400, 
+          "netcode": 107, 
+          "type": "box", 
+          "size": 50
+        }, 
+        "6": {
+          "y": -1450, 
+          "x": -2400, 
+          "netcode": 106, 
+          "type": "box", 
+          "size": 50
+        }, 
+        "8": {
+          "y": -1550, 
+          "x": -400, 
+          "netcode": 1, 
+          "type": "box", 
+          "size": 50
+        }
+      }, 
+      "type": "component", 
+      "id": "12518124-dd55-0549-87a2-fa86d70d43a3", 
+      "hideFlag": false, 
+      "name": "ATTINY13-P"
+    }, 
+    {
+      "reference": "#PWR1", 
+      "nn": "1", 
+      "mm": "1", 
+      "timestamp": "5213C820", 
+      "powerPinData": {
+        "1": {
+          "y": -1800, 
+          "x": -300, 
+          "netcode": 1, 
+          "type": "box", 
+          "size": 50
+        }
+      }, 
+      "transform": [
+        [
+          1, 
+          0
+        ], 
+        [
+          0, 
+          -1
+        ]
+      ], 
+      "text": [
+        {
+          "orientation": "H", 
+          "reference": "#PWR1", 
+          "hjustify": "C", 
+          "text": "#PWR1", 
+          "number": 0, 
+          "vjustify": "C", 
+          "visible": false, 
+          "bounding_box": [
+            [
+              -75, 
+              -125
+            ], 
+            [
+              75, 
+              -75
+            ]
+          ], 
+          "italic": false, 
+          "y": -1700, 
+          "x": -300, 
+          "size": "30", 
+          "id": "eccbb1db-95aa-3049-cac8-266e9f68467c,e8353596-60f5-2a52-44b4-4f9a29c2bb79", 
+          "bold": false
+        }, 
+        {
+          "orientation": "H", 
+          "reference": "VCC", 
+          "hjustify": "C", 
+          "text": "VCC", 
+          "number": 1, 
+          "vjustify": "C", 
+          "visible": true, 
+          "bounding_box": [
+            [
+              -45, 
+              -125
+            ], 
+            [
+              45, 
+              -75
+            ]
+          ], 
+          "italic": false, 
+          "y": -1700, 
+          "x": -300, 
+          "size": "30", 
+          "id": "eccbb1db-95aa-3049-cac8-266e9f68467c,9014aeb1-b62e-83d7-3f4a-45651c2f6b0a", 
+          "bold": false
+        }
+      ], 
+      "y": -1800, 
+      "x": -300, 
+      "type": "component", 
+      "id": "eccbb1db-95aa-3049-cac8-266e9f68467c", 
+      "hideFlag": false, 
+      "name": "VCC"
+    }, 
+    {
+      "startx": -400, 
+      "starty": -1550, 
+      "endy": -1550, 
+      "endx": -300, 
+      "data": {
+        "netcode": 1, 
+        "y1": -1550, 
+        "y0": -1550, 
+        "x0": -400, 
+        "x1": -300, 
+        "type": "rect", 
+        "size": 50
+      }, 
+      "bounding_box": [
+        [
+          -400, 
+          -1600
+        ], 
+        [
+          -300, 
+          -1500
+        ]
+      ], 
+      "type": "wireline", 
+      "id": "a71e1381-5b29-5845-1f37-637862cd7034", 
+      "hideFlag": false
+    }, 
+    {
+      "startx": -300, 
+      "starty": -1550, 
+      "endy": -1800, 
+      "endx": -300, 
+      "data": {
+        "netcode": 1, 
+        "y1": -1800, 
+        "y0": -1550, 
+        "x0": -300, 
+        "x1": -300, 
+        "type": "rect", 
+        "size": 50
+      }, 
+      "bounding_box": [
+        [
+          -350, 
+          -1800
+        ], 
+        [
+          -250, 
+          -1550
+        ]
+      ], 
+      "type": "wireline", 
+      "id": "e9c41163-424b-a0b0-2ecc-19fd99336bf8", 
+      "hideFlag": false
+    }, 
+    {
+      "reference": "#PWR2", 
+      "nn": "1", 
+      "mm": "1", 
+      "timestamp": "5213C820", 
+      "powerPinData": {
+        "1": {
+          "y": -900, 
+          "x": -300, 
+          "netcode": 18, 
+          "type": "box", 
+          "size": 50
+        }
+      }, 
+      "transform": [
+        [
+          1, 
+          0
+        ], 
+        [
+          0, 
+          -1
+        ]
+      ], 
+      "text": [
+        {
+          "orientation": "H", 
+          "reference": "#PWR2", 
+          "hjustify": "C", 
+          "text": "#PWR2", 
+          "number": 0, 
+          "vjustify": "C", 
+          "visible": false, 
+          "bounding_box": [
+            [
+              -75, 
+              -25
+            ], 
+            [
+              75, 
+              25
+            ]
+          ], 
+          "italic": false, 
+          "y": -900, 
+          "x": -300, 
+          "size": "30", 
+          "id": "54a7668e-7c22-4a25-af94-d01a6ca5a603,5f42c161-ee61-dc9b-69d6-dc8f0895cec9", 
+          "bold": false
+        }, 
+        {
+          "orientation": "H", 
+          "reference": "GND", 
+          "hjustify": "C", 
+          "text": "~GND", 
+          "number": 1, 
+          "vjustify": "C", 
+          "visible": false, 
+          "bounding_box": [
+            [
+              -45, 
+              45
+            ], 
+            [
+              45, 
+              95
+            ]
+          ], 
+          "italic": false, 
+          "y": -970, 
+          "x": -300, 
+          "size": "30", 
+          "id": "54a7668e-7c22-4a25-af94-d01a6ca5a603,3e0cc973-2905-6e99-f4e1-2aef853b1366", 
+          "bold": false
+        }
+      ], 
+      "y": -900, 
+      "x": -300, 
+      "type": "component", 
+      "id": "54a7668e-7c22-4a25-af94-d01a6ca5a603", 
+      "hideFlag": false, 
+      "name": "~GND"
+    }, 
+    {
+      "startx": -400, 
+      "starty": -1050, 
+      "endy": -1050, 
+      "endx": -300, 
+      "data": {
+        "netcode": 18, 
+        "y1": -1050, 
+        "y0": -1050, 
+        "x0": -400, 
+        "x1": -300, 
+        "type": "rect", 
+        "size": 50
+      }, 
+      "bounding_box": [
+        [
+          -400, 
+          -1100
+        ], 
+        [
+          -300, 
+          -1000
+        ]
+      ], 
+      "type": "wireline", 
+      "id": "512d8182-16f9-da67-3647-0c19ae4df3f4", 
+      "hideFlag": false
+    }, 
+    {
+      "startx": -300, 
+      "starty": -1050, 
+      "endy": -900, 
+      "endx": -300, 
+      "data": {
+        "netcode": 18, 
+        "y1": -900, 
+        "y0": -1050, 
+        "x0": -300, 
+        "x1": -300, 
+        "type": "rect", 
+        "size": 50
+      }, 
+      "bounding_box": [
+        [
+          -350, 
+          -1050
+        ], 
+        [
+          -250, 
+          -900
+        ]
+      ], 
+      "type": "wireline", 
+      "id": "008b126a-1d97-f31c-6fa0-958b67137c8d", 
+      "hideFlag": false
+    }, 
+    {
+      "reference": "C1", 
+      "nn": "1", 
+      "mm": "1", 
+      "timestamp": "5213C820", 
+      "transform": [
+        [
+          1, 
+          0
+        ], 
+        [
+          0, 
+          -1
+        ]
+      ], 
+      "text": [
+        {
+          "orientation": "H", 
+          "reference": "C1", 
+          "hjustify": "L", 
+          "text": "C1", 
+          "number": 0, 
+          "vjustify": "C", 
+          "visible": true, 
+          "bounding_box": [
+            [
+              0, 
+              -133.33333333333334
+            ], 
+            [
+              80, 
+              -66.66666666666666
+            ]
+          ], 
+          "italic": false, 
+          "y": -2100, 
+          "x": 50, 
+          "size": "40", 
+          "id": "1a7a3465-b518-1c28-df95-e9bb934867c9,0f650e48-2011-341c-26f2-3caf1cf4019d", 
+          "bold": false
+        }, 
+        {
+          "orientation": "H", 
+          "reference": "C", 
+          "hjustify": "L", 
+          "text": "C", 
+          "number": 1, 
+          "vjustify": "C", 
+          "visible": true, 
+          "bounding_box": [
+            [
+              6, 
+              51.666666666666664
+            ], 
+            [
+              46, 
+              118.33333333333334
+            ]
+          ], 
+          "italic": false, 
+          "y": -2285, 
+          "x": 56, 
+          "size": "40", 
+          "id": "1a7a3465-b518-1c28-df95-e9bb934867c9,1fdf8c2d-9a19-1797-d331-6314a89a8558", 
+          "bold": false
+        }
+      ], 
+      "y": -2200, 
+      "x": 50, 
+      "pinData": {
+        "1": {
+          "y": -2400, 
+          "x": 50, 
+          "netcode": 1, 
+          "type": "box", 
+          "size": 50
+        }, 
+        "2": {
+          "y": -2000, 
+          "x": 50, 
+          "netcode": 18, 
+          "type": "box", 
+          "size": 50
+        }
+      }, 
+      "type": "component", 
+      "id": "1a7a3465-b518-1c28-df95-e9bb934867c9", 
+      "hideFlag": false, 
+      "name": "C"
+    }, 
+    {
+      "startx": 2400, 
+      "starty": -1300, 
+      "endy": -1350, 
+      "endx": 2400, 
+      "data": {
+        "netcode": 1, 
+        "y1": -1350, 
+        "y0": -1300, 
+        "x0": 2400, 
+        "x1": 2400, 
+        "type": "rect", 
+        "size": 50
+      }, 
+      "bounding_box": [
+        [
+          1950, 
+          1000
+        ], 
+        [
+          2050, 
+          1050
+        ]
+      ], 
+      "type": "wireline", 
+      "id": "64d367f9-2a7e-26c8-10e9-d35d0f4960b1"
+    }, 
+    {
+      "startx": 1900, 
+      "starty": -1300, 
+      "endy": -1300, 
+      "endx": 2400, 
+      "data": {
+        "netcode": 1, 
+        "y1": -1300, 
+        "y0": -1300, 
+        "x0": 1900, 
+        "x1": 2400, 
+        "type": "rect", 
+        "size": 50
+      }, 
+      "bounding_box": [
+        [
+          1500, 
+          1000
+        ], 
+        [
+          2000, 
+          1100
+        ]
+      ], 
+      "type": "wireline", 
+      "id": "1e0a7f1e-41f9-9a4e-e115-0a4419b533e3"
+    }, 
+    {
+      "y": -1300, 
+      "x": 1900, 
+      "type": "connection", 
+      "id": "cfc334bb-23d8-882f-af67-34169f99efbe"
+    }, 
+    {
+      "reference": "#PWR4", 
+      "nn": "1", 
+      "mm": "1", 
+      "timestamp": "5213C820", 
+      "powerPinData": {
+        "1": {
+          "y": -2550, 
+          "x": 50, 
+          "netcode": 1, 
+          "type": "box", 
+          "size": 50
+        }
+      }, 
+      "transform": [
+        [
+          1, 
+          0
+        ], 
+        [
+          0, 
+          -1
+        ]
+      ], 
+      "text": [
+        {
+          "orientation": "H", 
+          "reference": "#PWR4", 
+          "hjustify": "C", 
+          "text": "#PWR4", 
+          "number": 0, 
+          "vjustify": "C", 
+          "visible": false, 
+          "bounding_box": [
+            [
+              -75, 
+              -125
+            ], 
+            [
+              75, 
+              -75
+            ]
+          ], 
+          "italic": false, 
+          "y": -2450, 
+          "x": 50, 
+          "size": "30", 
+          "id": "a5222efa-e394-44e2-f57e-fe8a29796aad,573c3f28-4eaa-d918-a218-ed6529c31667", 
+          "bold": false
+        }, 
+        {
+          "orientation": "H", 
+          "reference": "VCC", 
+          "hjustify": "C", 
+          "text": "VCC", 
+          "number": 1, 
+          "vjustify": "C", 
+          "visible": true, 
+          "bounding_box": [
+            [
+              -45, 
+              -125
+            ], 
+            [
+              45, 
+              -75
+            ]
+          ], 
+          "italic": false, 
+          "y": -2450, 
+          "x": 50, 
+          "size": "30", 
+          "id": "a5222efa-e394-44e2-f57e-fe8a29796aad,340452e9-680f-1f89-4c39-cc0e86997820", 
+          "bold": false
+        }
+      ], 
+      "y": -2550, 
+      "x": 50, 
+      "type": "component", 
+      "id": "a5222efa-e394-44e2-f57e-fe8a29796aad", 
+      "hideFlag": false, 
+      "name": "VCC"
+    }, 
+    {
+      "startx": 50, 
+      "starty": -2550, 
+      "endy": -2400, 
+      "endx": 50, 
+      "data": {
+        "netcode": 1, 
+        "y1": -2400, 
+        "y0": -2550, 
+        "x0": 50, 
+        "x1": 50, 
+        "type": "rect", 
+        "size": 50
+      }, 
+      "bounding_box": [
+        [
+          50, 
+          -2500
+        ], 
+        [
+          150, 
+          -2350
+        ]
+      ], 
+      "type": "wireline", 
+      "id": "a3c1e74f-7bb7-1626-4a47-b98fa20563fa", 
+      "hideFlag": false
+    }, 
+    {
+      "reference": "#PWR5", 
+      "nn": "1", 
+      "mm": "1", 
+      "timestamp": "5213C820", 
+      "powerPinData": {
+        "1": {
+          "y": -1850, 
+          "x": 50, 
+          "netcode": 18, 
+          "type": "box", 
+          "size": 50
+        }
+      }, 
+      "transform": [
+        [
+          1, 
+          0
+        ], 
+        [
+          0, 
+          -1
+        ]
+      ], 
+      "text": [
+        {
+          "orientation": "H", 
+          "reference": "#PWR5", 
+          "hjustify": "C", 
+          "text": "#PWR5", 
+          "number": 0, 
+          "vjustify": "C", 
+          "visible": false, 
+          "bounding_box": [
+            [
+              -75, 
+              -25
+            ], 
+            [
+              75, 
+              25
+            ]
+          ], 
+          "italic": false, 
+          "y": -1850, 
+          "x": 50, 
+          "size": "30", 
+          "id": "6ec50f8d-1f86-a14a-a719-aecca090f5b5,839ed500-227f-7a0d-aae1-eedd7df6f3d5", 
+          "bold": false
+        }, 
+        {
+          "orientation": "H", 
+          "reference": "GND", 
+          "hjustify": "C", 
+          "text": "~GND", 
+          "number": 1, 
+          "vjustify": "C", 
+          "visible": false, 
+          "bounding_box": [
+            [
+              -45, 
+              45
+            ], 
+            [
+              45, 
+              95
+            ]
+          ], 
+          "italic": false, 
+          "y": -1920, 
+          "x": 50, 
+          "size": "30", 
+          "id": "6ec50f8d-1f86-a14a-a719-aecca090f5b5,cd1c59f6-6b3e-6c1a-dff0-5ed946fac037", 
+          "bold": false
+        }
+      ], 
+      "y": -1850, 
+      "x": 50, 
+      "type": "component", 
+      "id": "6ec50f8d-1f86-a14a-a719-aecca090f5b5", 
+      "hideFlag": false, 
+      "name": "~GND"
+    }, 
+    {
+      "startx": 50, 
+      "starty": -2000, 
+      "endy": -1850, 
+      "endx": 50, 
+      "data": {
+        "netcode": 18, 
+        "y1": -1850, 
+        "y0": -2000, 
+        "x0": 50, 
+        "x1": 50, 
+        "type": "rect", 
+        "size": 50
+      }, 
+      "bounding_box": [
+        [
+          50, 
+          -1950
+        ], 
+        [
+          150, 
+          -1800
+        ]
+      ], 
+      "type": "wireline", 
+      "id": "c644c67c-f766-7a49-7038-8853022fb01f", 
+      "hideFlag": false
+    }, 
+    {
+      "reference": "#PWR15", 
+      "nn": "1", 
+      "mm": "1", 
+      "timestamp": "5213C820", 
+      "powerPinData": {
+        "1": {
+          "y": -1350, 
+          "x": 2400, 
+          "netcode": 1, 
+          "type": "box", 
+          "size": 50
+        }
+      }, 
+      "transform": [
+        [
+          1, 
+          0
+        ], 
+        [
+          0, 
+          -1
+        ]
+      ], 
+      "text": [
+        {
+          "orientation": "H", 
+          "reference": "#PWR15", 
+          "hjustify": "C", 
+          "text": "#PWR15", 
+          "number": 0, 
+          "vjustify": "C", 
+          "visible": false, 
+          "bounding_box": [
+            [
+              -90, 
+              -125
+            ], 
+            [
+              90, 
+              -75
+            ]
+          ], 
+          "italic": false, 
+          "y": -1250, 
+          "x": 2400, 
+          "size": "30", 
+          "id": "6cd65554-6486-b3ca-2dbe-2916ee064a31,d54fdc06-6d46-42cd-ab85-122e9d2e610f", 
+          "bold": false
+        }, 
+        {
+          "orientation": "H", 
+          "reference": "VCC", 
+          "hjustify": "C", 
+          "text": "VCC", 
+          "number": 1, 
+          "vjustify": "C", 
+          "visible": true, 
+          "bounding_box": [
+            [
+              -45, 
+              -125
+            ], 
+            [
+              45, 
+              -75
+            ]
+          ], 
+          "italic": false, 
+          "y": -1250, 
+          "x": 2400, 
+          "size": "30", 
+          "id": "6cd65554-6486-b3ca-2dbe-2916ee064a31,82f0d701-e184-d9d7-e902-34cef391e73c", 
+          "bold": false
+        }
+      ], 
+      "y": -1350, 
+      "x": 2400, 
+      "type": "component", 
+      "id": "6cd65554-6486-b3ca-2dbe-2916ee064a31", 
+      "name": "VCC"
+    }, 
+    {
+      "orientation": 0, 
+      "text": "fb", 
+      "id": "9e1a5c46-41fe-cf23-ef08-5ff6048962ba", 
+      "y": -750, 
+      "x": 1550, 
+      "type": "label", 
+      "dimension": 40
+    }, 
+    {
+      "startx": 1550, 
+      "starty": -750, 
+      "endy": -750, 
+      "endx": 1900, 
+      "data": {
+        "netcode": 5, 
+        "y1": -750, 
+        "y0": -750, 
+        "x0": 1550, 
+        "x1": 1900, 
+        "type": "rect", 
+        "size": 50
+      }, 
+      "bounding_box": [
+        [
+          1150, 
+          1550
+        ], 
+        [
+          1500, 
+          1650
+        ]
+      ], 
+      "type": "wireline", 
+      "id": "226abab7-56e4-abae-4980-3733cd8b8415"
+    }, 
+    {
+      "y": -750, 
+      "x": 1900, 
+      "type": "connection", 
+      "id": "f3e05264-4de6-c983-c277-bf9fa1b9721d"
+    }, 
+    {
+      "startx": 1900, 
+      "starty": -800, 
+      "endy": -700, 
+      "endx": 1900, 
+      "data": {
+        "netcode": 5, 
+        "y1": -700, 
+        "y0": -800, 
+        "x0": 1900, 
+        "x1": 1900, 
+        "type": "rect", 
+        "size": 50
+      }, 
+      "bounding_box": [
+        [
+          1450, 
+          1550
+        ], 
+        [
+          1550, 
+          1650
+        ]
+      ], 
+      "type": "wireline", 
+      "id": "3f2dd571-8b1a-8c37-2255-0e6d341edbb6"
+    }, 
+    {
+      "startx": 1650, 
+      "starty": -1300, 
+      "endy": -1300, 
+      "endx": 1900, 
+      "data": {
+        "netcode": 1, 
+        "y1": -1300, 
+        "y0": -1300, 
+        "x0": 1650, 
+        "x1": 1900, 
+        "type": "rect", 
+        "size": 50
+      }, 
+      "bounding_box": [
+        [
+          1250, 
+          1000
+        ], 
+        [
+          1500, 
+          1100
+        ]
+      ], 
+      "type": "wireline", 
+      "id": "afbd289b-ef07-0fa1-1841-551ff3f08335"
+    }, 
+    {
+      "startx": -2400, 
+      "starty": -1150, 
+      "endy": -1150, 
+      "endx": -2650, 
+      "data": {
+        "netcode": 16, 
+        "y1": -1150, 
+        "y0": -1150, 
+        "x0": -2400, 
+        "x1": -2650, 
+        "type": "rect", 
+        "size": 50
+      }, 
+      "bounding_box": [
+        [
+          -2650, 
+          -1400
+        ], 
+        [
+          -2400, 
+          -1300
+        ]
+      ], 
+      "type": "wireline", 
+      "id": "6bda1f19-bfbb-36f1-bf29-6c52940bf335", 
+      "hideFlag": false
+    }, 
+    {
+      "orientation": 2, 
+      "text": "sense", 
+      "id": "2c836fd6-bb5e-ecb8-dc21-c70042dfcdc2", 
+      "y": -1150, 
+      "x": -2650, 
+      "type": "label", 
+      "dimension": 40, 
+      "hideFlag": false
+    }, 
+    {
+      "startx": -2400, 
+      "starty": -1550, 
+      "endy": -1550, 
+      "endx": -2650, 
+      "data": {
+        "netcode": 20, 
+        "y1": -1550, 
+        "y0": -1550, 
+        "x0": -2400, 
+        "x1": -2650, 
+        "type": "rect", 
+        "size": 50
+      }, 
+      "bounding_box": [
+        [
+          -2650, 
+          -1600
+        ], 
+        [
+          -2400, 
+          -1500
+        ]
+      ], 
+      "type": "wireline", 
+      "id": "73a2ce0e-08c0-3107-8654-5cf4771f93cd", 
+      "hideFlag": false
+    }, 
+    {
+      "orientation": 2, 
+      "text": "light_pwm", 
+      "id": "3d4ae9b3-50de-7608-2c42-aca668aed36e", 
+      "y": -1550, 
+      "x": -2650, 
+      "type": "label", 
+      "dimension": 40, 
+      "hideFlag": false
+    }, 
+    {
+      "reference": "Q1", 
+      "nn": "1", 
+      "mm": "1", 
+      "timestamp": "5213C820", 
+      "transform": [
+        [
+          1, 
+          0
+        ], 
+        [
+          0, 
+          -1
+        ]
+      ], 
+      "text": [
+        {
+          "orientation": "H", 
+          "reference": "Q1", 
+          "hjustify": "R", 
+          "text": "Q1", 
+          "number": 0, 
+          "vjustify": "C", 
+          "visible": true, 
+          "bounding_box": [
+            [
+              -100, 
+              108.33333333333333
+            ], 
+            [
+              0, 
+              191.66666666666669
+            ]
+          ], 
+          "italic": false, 
+          "y": -1800, 
+          "x": -3400, 
+          "size": "50", 
+          "id": "63d2ec08-adee-ba9c-bfe1-064278bea9c9,ef0ca495-c0b5-85ad-36b5-20e2b9cb98dc", 
+          "bold": false
+        }, 
+        {
+          "orientation": "H", 
+          "reference": "NPN", 
+          "hjustify": "R", 
+          "text": "NPN", 
+          "number": 1, 
+          "vjustify": "C", 
+          "visible": true, 
+          "bounding_box": [
+            [
+              -150, 
+              -191.66666666666669
+            ], 
+            [
+              0, 
+              -108.33333333333333
+            ]
+          ], 
+          "italic": false, 
+          "y": -1500, 
+          "x": -3400, 
+          "size": "50", 
+          "id": "63d2ec08-adee-ba9c-bfe1-064278bea9c9,60dd5537-5c11-a03e-268a-f469affaee95", 
+          "bold": false
+        }
+      ], 
+      "y": -1650, 
+      "x": -3400, 
+      "pinData": {
+        "1": {
+          "y": -1450, 
+          "x": -3300, 
+          "netcode": 39, 
+          "type": "box", 
+          "size": 50
+        }, 
+        "3": {
+          "y": -1850, 
+          "x": -3300, 
+          "netcode": 43, 
+          "type": "box", 
+          "size": 50
+        }, 
+        "2": {
+          "y": -1650, 
+          "x": -3600, 
+          "netcode": 20, 
+          "type": "box", 
+          "size": 50
+        }
+      }, 
+      "type": "component", 
+      "id": "63d2ec08-adee-ba9c-bfe1-064278bea9c9", 
+      "hideFlag": false, 
+      "name": "NPN"
+    }, 
+    {
+      "reference": "R1", 
+      "nn": "1", 
+      "mm": "1", 
+      "timestamp": "5213C820", 
+      "transform": [
+        [
+          1, 
+          0
+        ], 
+        [
+          0, 
+          -1
+        ]
+      ], 
+      "text": [
+        {
+          "orientation": "V", 
+          "reference": "R1", 
+          "hjustify": "C", 
+          "text": "R1", 
+          "number": 0, 
+          "vjustify": "C", 
+          "visible": true, 
+          "bounding_box": [
+            [
+              46.666666666666664, 
+              -40
+            ], 
+            [
+              113.33333333333334, 
+              40
+            ]
+          ], 
+          "italic": false, 
+          "y": -1100, 
+          "x": -3220, 
+          "size": "40", 
+          "id": "3fdfc214-e3fc-b1a5-ef56-abf0da9d97c7,b70cdc03-2efd-e72b-55a7-91dbb48e26a6", 
+          "bold": false
+        }, 
+        {
+          "orientation": "V", 
+          "reference": "R", 
+          "hjustify": "C", 
+          "text": "R", 
+          "number": 1, 
+          "vjustify": "C", 
+          "visible": true, 
+          "bounding_box": [
+            [
+              -26.333333333333336, 
+              -21
+            ], 
+            [
+              40.333333333333336, 
+              19
+            ]
+          ], 
+          "italic": false, 
+          "y": -1099, 
+          "x": -3293, 
+          "size": "40", 
+          "id": "3fdfc214-e3fc-b1a5-ef56-abf0da9d97c7,8e91830c-6218-1443-7633-ce272a078582", 
+          "bold": false
+        }
+      ], 
+      "y": -1100, 
+      "x": -3300, 
+      "pinData": {
+        "1": {
+          "y": -1350, 
+          "x": -3300, 
+          "netcode": 39, 
+          "type": "box", 
+          "size": 50
+        }, 
+        "2": {
+          "y": -850, 
+          "x": -3300, 
+          "netcode": 18, 
+          "type": "box", 
+          "size": 50
+        }
+      }, 
+      "type": "component", 
+      "id": "3fdfc214-e3fc-b1a5-ef56-abf0da9d97c7", 
+      "hideFlag": false, 
+      "name": "R"
+    }, 
+    {
+      "reference": "P2", 
+      "nn": "1", 
+      "mm": "1", 
+      "timestamp": "5213C820", 
+      "transform": [
+        [
+          1, 
+          0
+        ], 
+        [
+          0, 
+          -1
+        ]
+      ], 
+      "bounding_box": [
+        [
+          -3150, 
+          -2650
+        ], 
+        [
+          -2700, 
+          -2350
+        ]
+      ], 
+      "text": [
+        {
+          "orientation": "V", 
+          "reference": "P2", 
+          "hjustify": "C", 
+          "text": "P2", 
+          "number": 0, 
+          "vjustify": "C", 
+          "visible": true, 
+          "bounding_box": [
+            [
+              -2883.3333333333335, 
+              -2540
+            ], 
+            [
+              -2816.6666666666665, 
+              -2460
+            ]
+          ], 
+          "italic": false, 
+          "y": -2100, 
+          "x": -3000, 
+          "size": "40", 
+          "id": "f0486ec9-f0ea-9e0f-9c8d-14f06cf08788,4d193782-d333-ef55-4b63-441f7e6f1142", 
+          "bold": false
+        }, 
+        {
+          "orientation": "V", 
+          "reference": "CONN_2", 
+          "hjustify": "C", 
+          "text": "palm_led", 
+          "number": 1, 
+          "vjustify": "C", 
+          "visible": true, 
+          "bounding_box": [
+            [
+              -2783.3333333333335, 
+              -2660
+            ], 
+            [
+              -2716.6666666666665, 
+              -2340
+            ]
+          ], 
+          "italic": false, 
+          "y": -2100, 
+          "x": -2900, 
+          "size": "40", 
+          "id": "f0486ec9-f0ea-9e0f-9c8d-14f06cf08788,d5f733f8-2581-9138-1db3-898ead899ace", 
+          "bold": false
+        }
+      ], 
+      "y": -2100, 
+      "x": -2950, 
+      "pinData": {
+        "1": {
+          "y": -2200, 
+          "x": -3300, 
+          "netcode": 1, 
+          "type": "box", 
+          "size": 50
+        }, 
+        "2": {
+          "y": -2000, 
+          "x": -3300, 
+          "netcode": 43, 
+          "type": "box", 
+          "size": 50
+        }
+      }, 
+      "type": "component", 
+      "id": "f0486ec9-f0ea-9e0f-9c8d-14f06cf08788", 
+      "hideFlag": false, 
+      "name": "CONN_2"
+    }, 
+    {
+      "reference": "#PWR7", 
+      "nn": "1", 
+      "mm": "1", 
+      "timestamp": "5213C820", 
+      "powerPinData": {
+        "1": {
+          "y": -2350, 
+          "x": -3300, 
+          "netcode": 1, 
+          "type": "box", 
+          "size": 50
+        }
+      }, 
+      "transform": [
+        [
+          1, 
+          0
+        ], 
+        [
+          0, 
+          -1
+        ]
+      ], 
+      "text": [
+        {
+          "orientation": "H", 
+          "reference": "#PWR7", 
+          "hjustify": "C", 
+          "text": "#PWR7", 
+          "number": 0, 
+          "vjustify": "C", 
+          "visible": false, 
+          "bounding_box": [
+            [
+              -75, 
+              -125
+            ], 
+            [
+              75, 
+              -75
+            ]
+          ], 
+          "italic": false, 
+          "y": -2250, 
+          "x": -3300, 
+          "size": "30", 
+          "id": "e7dbc437-2e97-9277-9d3c-379c3aa4b0c1,7f8983a1-734d-8705-cb2d-a82dfcc03104", 
+          "bold": false
+        }, 
+        {
+          "orientation": "H", 
+          "reference": "VCC", 
+          "hjustify": "C", 
+          "text": "VCC", 
+          "number": 1, 
+          "vjustify": "C", 
+          "visible": true, 
+          "bounding_box": [
+            [
+              -45, 
+              -125
+            ], 
+            [
+              45, 
+              -75
+            ]
+          ], 
+          "italic": false, 
+          "y": -2250, 
+          "x": -3300, 
+          "size": "30", 
+          "id": "e7dbc437-2e97-9277-9d3c-379c3aa4b0c1,4f0b549b-eaea-b7e4-dac5-207b428428d0", 
+          "bold": false
+        }
+      ], 
+      "y": -2350, 
+      "x": -3300, 
+      "type": "component", 
+      "id": "e7dbc437-2e97-9277-9d3c-379c3aa4b0c1", 
+      "hideFlag": false, 
+      "name": "VCC"
+    }, 
+    {
+      "startx": -3300, 
+      "starty": -2000, 
+      "endy": -1850, 
+      "endx": -3300, 
+      "data": {
+        "netcode": 43, 
+        "y1": -1850, 
+        "y0": -2000, 
+        "x0": -3300, 
+        "x1": -3300, 
+        "type": "rect", 
+        "size": 50
+      }, 
+      "bounding_box": [
+        [
+          -3700, 
+          -1850
+        ], 
+        [
+          -3600, 
+          -1700
+        ]
+      ], 
+      "type": "wireline", 
+      "id": "df79b53a-45a2-b1a7-3765-555b635803ef", 
+      "hideFlag": false
+    }, 
+    {
+      "startx": -3300, 
+      "starty": -1450, 
+      "endy": -1350, 
+      "endx": -3300, 
+      "data": {
+        "netcode": 39, 
+        "y1": -1350, 
+        "y0": -1450, 
+        "x0": -3300, 
+        "x1": -3300, 
+        "type": "rect", 
+        "size": 50
+      }, 
+      "bounding_box": [
+        [
+          -3700, 
+          -1300
+        ], 
+        [
+          -3600, 
+          -1200
+        ]
+      ], 
+      "type": "wireline", 
+      "id": "1068cae9-7e58-c13b-ed38-07c8e8b6516f", 
+      "hideFlag": false
+    }, 
+    {
+      "startx": -3300, 
+      "starty": -2350, 
+      "endy": -2200, 
+      "endx": -3300, 
+      "data": {
+        "netcode": 1, 
+        "y1": -2200, 
+        "y0": -2350, 
+        "x0": -3300, 
+        "x1": -3300, 
+        "type": "rect", 
+        "size": 50
+      }, 
+      "bounding_box": [
+        [
+          -3700, 
+          -2400
+        ], 
+        [
+          -3600, 
+          -2250
+        ]
+      ], 
+      "type": "wireline", 
+      "id": "4100b1c7-a1cb-b885-712c-0a8270d3c168", 
+      "hideFlag": false
+    }, 
+    {
+      "reference": "#PWR8", 
+      "nn": "1", 
+      "mm": "1", 
+      "timestamp": "5213C820", 
+      "powerPinData": {
+        "1": {
+          "y": -750, 
+          "x": -3300, 
+          "netcode": 18, 
+          "type": "box", 
+          "size": 50
+        }
+      }, 
+      "transform": [
+        [
+          1, 
+          0
+        ], 
+        [
+          0, 
+          -1
+        ]
+      ], 
+      "text": [
+        {
+          "orientation": "H", 
+          "reference": "#PWR8", 
+          "hjustify": "C", 
+          "text": "#PWR8", 
+          "number": 0, 
+          "vjustify": "C", 
+          "visible": false, 
+          "bounding_box": [
+            [
+              -75, 
+              -25
+            ], 
+            [
+              75, 
+              25
+            ]
+          ], 
+          "italic": false, 
+          "y": -750, 
+          "x": -3300, 
+          "size": "30", 
+          "id": "20d31178-c379-82a4-5382-1b438b4578dc,02b649ea-2b1c-00ba-6dee-6572abad09c2", 
+          "bold": false
+        }, 
+        {
+          "orientation": "H", 
+          "reference": "GND", 
+          "hjustify": "C", 
+          "text": "~GND", 
+          "number": 1, 
+          "vjustify": "C", 
+          "visible": false, 
+          "bounding_box": [
+            [
+              -45, 
+              45
+            ], 
+            [
+              45, 
+              95
+            ]
+          ], 
+          "italic": false, 
+          "y": -820, 
+          "x": -3300, 
+          "size": "30", 
+          "id": "20d31178-c379-82a4-5382-1b438b4578dc,1cea1ba3-bb8b-b786-c42e-cbd5b0e0eaf6", 
+          "bold": false
+        }
+      ], 
+      "y": -750, 
+      "x": -3300, 
+      "type": "component", 
+      "id": "20d31178-c379-82a4-5382-1b438b4578dc", 
+      "hideFlag": false, 
+      "name": "~GND"
+    }, 
+    {
+      "startx": -3300, 
+      "starty": -850, 
+      "endy": -750, 
+      "endx": -3300, 
+      "data": {
+        "netcode": 18, 
+        "y1": -750, 
+        "y0": -850, 
+        "x0": -3300, 
+        "x1": -3300, 
+        "type": "rect", 
+        "size": 50
+      }, 
+      "bounding_box": [
+        [
+          -3700, 
+          -700
+        ], 
+        [
+          -3600, 
+          -600
+        ]
+      ], 
+      "type": "wireline", 
+      "id": "d9d40161-3e09-9d09-9d43-6b91fc6750f3", 
+      "hideFlag": false
+    }, 
+    {
+      "startx": -3600, 
+      "starty": -1650, 
+      "endy": -1650, 
+      "endx": -3750, 
+      "data": {
+        "netcode": 20, 
+        "y1": -1650, 
+        "y0": -1650, 
+        "x0": -3600, 
+        "x1": -3750, 
+        "type": "rect", 
+        "size": 50
+      }, 
+      "bounding_box": [
+        [
+          -4100, 
+          -1550
+        ], 
+        [
+          -3950, 
+          -1450
+        ]
+      ], 
+      "type": "wireline", 
+      "id": "f7bf9fe3-ab94-51ad-1324-cf733ba853e8", 
+      "hideFlag": false
+    }, 
+    {
+      "orientation": 2, 
+      "text": "light_pwm", 
+      "id": "5d9e3b0b-6a12-e5b8-4d65-4637323ac967", 
+      "y": -1650, 
+      "x": -3750, 
+      "type": "label", 
+      "dimension": 40, 
+      "hideFlag": false
+    }, 
+    {
+      "y": -1050, 
+      "x": -2400, 
+      "type": "noconn", 
+      "id": "0fbafd21-8e56-4592-a1c4-785db0d76b9a", 
+      "hideFlag": false
+    }, 
+    {
+      "reference": "#PWR9", 
+      "nn": "1", 
+      "mm": "1", 
+      "timestamp": "5213C820", 
+      "powerPinData": {
+        "1": {
+          "y": -2600, 
+          "x": -2200, 
+          "netcode": 1, 
+          "type": "box", 
+          "size": 50
+        }
+      }, 
+      "transform": [
+        [
+          1, 
+          0
+        ], 
+        [
+          0, 
+          -1
+        ]
+      ], 
+      "text": [
+        {
+          "orientation": "H", 
+          "reference": "#PWR9", 
+          "hjustify": "C", 
+          "text": "#PWR9", 
+          "number": 0, 
+          "vjustify": "C", 
+          "visible": false, 
+          "bounding_box": [
+            [
+              -75, 
+              -125
+            ], 
+            [
+              75, 
+              -75
+            ]
+          ], 
+          "italic": false, 
+          "y": -2500, 
+          "x": -2200, 
+          "size": "30", 
+          "id": "42266d5e-b046-d3d1-36b0-5c9d5cba2c12,ac9f8143-39ea-7a3f-5948-53561a2a53c6", 
+          "bold": false
+        }, 
+        {
+          "orientation": "H", 
+          "reference": "VCC", 
+          "hjustify": "C", 
+          "text": "VCC", 
+          "number": 1, 
+          "vjustify": "C", 
+          "visible": true, 
+          "bounding_box": [
+            [
+              -45, 
+              -125
+            ], 
+            [
+              45, 
+              -75
+            ]
+          ], 
+          "italic": false, 
+          "y": -2500, 
+          "x": -2200, 
+          "size": "30", 
+          "id": "42266d5e-b046-d3d1-36b0-5c9d5cba2c12,4fd5159b-3ec8-5d32-2403-7024445f1b55", 
+          "bold": false
+        }
+      ], 
+      "y": -2600, 
+      "x": -2200, 
+      "type": "component", 
+      "id": "42266d5e-b046-d3d1-36b0-5c9d5cba2c12", 
+      "hideFlag": false, 
+      "name": "VCC"
+    }, 
+    {
+      "startx": -2200, 
+      "starty": -2600, 
+      "endy": -2500, 
+      "endx": -2200, 
+      "data": {
+        "netcode": 1, 
+        "y1": -2500, 
+        "y0": -2600, 
+        "x0": -2200, 
+        "x1": -2200, 
+        "type": "rect", 
+        "size": 50
+      }, 
+      "bounding_box": [
+        [
+          -2600, 
+          -2650
+        ], 
+        [
+          -2500, 
+          -2550
+        ]
+      ], 
+      "type": "wireline", 
+      "id": "895e6ca9-d125-48e9-98ad-2865633c246e", 
+      "hideFlag": false
+    }, 
+    {
+      "reference": "#PWR10", 
+      "nn": "1", 
+      "mm": "1", 
+      "timestamp": "5213C820", 
+      "powerPinData": {
+        "1": {
+          "y": -2200, 
+          "x": -2200, 
+          "netcode": 18, 
+          "type": "box", 
+          "size": 50
+        }
+      }, 
+      "transform": [
+        [
+          1, 
+          0
+        ], 
+        [
+          0, 
+          -1
+        ]
+      ], 
+      "text": [
+        {
+          "orientation": "H", 
+          "reference": "#PWR10", 
+          "hjustify": "C", 
+          "text": "#PWR10", 
+          "number": 0, 
+          "vjustify": "C", 
+          "visible": false, 
+          "bounding_box": [
+            [
+              -90, 
+              -25
+            ], 
+            [
+              90, 
+              25
+            ]
+          ], 
+          "italic": false, 
+          "y": -2200, 
+          "x": -2200, 
+          "size": "30", 
+          "id": "7d32eff6-ab1a-7ee4-542b-a57ace5cca18,a1e6de3e-58be-3eda-2b73-89faefc349f7", 
+          "bold": false
+        }, 
+        {
+          "orientation": "H", 
+          "reference": "GND", 
+          "hjustify": "C", 
+          "text": "~GND", 
+          "number": 1, 
+          "vjustify": "C", 
+          "visible": false, 
+          "bounding_box": [
+            [
+              -45, 
+              45
+            ], 
+            [
+              45, 
+              95
+            ]
+          ], 
+          "italic": false, 
+          "y": -2270, 
+          "x": -2200, 
+          "size": "30", 
+          "id": "7d32eff6-ab1a-7ee4-542b-a57ace5cca18,6fd91f77-86ac-4f68-05bc-46c1f1e0de7d", 
+          "bold": false
+        }
+      ], 
+      "y": -2200, 
+      "x": -2200, 
+      "type": "component", 
+      "id": "7d32eff6-ab1a-7ee4-542b-a57ace5cca18", 
+      "hideFlag": false, 
+      "name": "~GND"
+    }, 
+    {
+      "startx": -2200, 
+      "starty": -2300, 
+      "endy": -2200, 
+      "endx": -2200, 
+      "data": {
+        "netcode": 18, 
+        "y1": -2200, 
+        "y0": -2300, 
+        "x0": -2200, 
+        "x1": -2200, 
+        "type": "rect", 
+        "size": 50
+      }, 
+      "bounding_box": [
+        [
+          -2600, 
+          -2050
+        ], 
+        [
+          -2500, 
+          -1950
+        ]
+      ], 
+      "type": "wireline", 
+      "id": "5ab25653-c66b-feea-ffc9-4035d96fdb99", 
+      "hideFlag": false
+    }, 
+    {
+      "startx": -2200, 
+      "starty": -2400, 
+      "endy": -2400, 
+      "endx": -2300, 
+      "data": {
+        "netcode": 16, 
+        "y1": -2400, 
+        "y0": -2400, 
+        "x0": -2200, 
+        "x1": -2300, 
+        "type": "rect", 
+        "size": 50
+      }, 
+      "bounding_box": [
+        [
+          -2800, 
+          -2350
+        ], 
+        [
+          -2700, 
+          -2250
+        ]
+      ], 
+      "type": "wireline", 
+      "id": "2b655e8c-2461-76c3-84c6-f9d56f8b4f7a", 
+      "hideFlag": false
+    }, 
+    {
+      "orientation": 2, 
+      "text": "sense", 
+      "id": "be47e5ba-531a-ce43-d9f4-afd173a93ab5", 
+      "y": -2400, 
+      "x": -2300, 
+      "type": "label", 
+      "dimension": 40, 
+      "hideFlag": false
+    }, 
+    {
+      "startx": 1100, 
+      "starty": -1050, 
+      "endy": -1300, 
+      "endx": 1100, 
+      "data": {
+        "netcode": 9, 
+        "y1": -1300, 
+        "y0": -1050, 
+        "x0": 1100, 
+        "x1": 1100, 
+        "type": "rect", 
+        "size": 50
+      }, 
+      "bounding_box": [
+        [
+          650, 
+          1050
+        ], 
+        [
+          750, 
+          1300
+        ]
+      ], 
+      "type": "wireline", 
+      "id": "54e0ed87-e3b5-0bac-cd7e-4f0e23270aff"
+    }, 
+    {
+      "startx": 600, 
+      "starty": -2150, 
+      "endy": -2150, 
+      "endx": 500, 
+      "data": {
+        "netcode": 12, 
+        "y1": -2150, 
+        "y0": -2150, 
+        "x0": 600, 
+        "x1": 500, 
+        "type": "rect", 
+        "size": 50
+      }, 
+      "bounding_box": [
+        [
+          500, 
+          -2200
+        ], 
+        [
+          600, 
+          -2100
+        ]
+      ], 
+      "type": "wireline", 
+      "id": "a47241ff-1f8d-2532-b8e5-95d51d3b3f07", 
+      "hideFlag": false
+    }, 
+    {
+      "startx": 500, 
+      "starty": -2150, 
+      "endy": -2300, 
+      "endx": 500, 
+      "data": {
+        "netcode": 12, 
+        "y1": -2300, 
+        "y0": -2150, 
+        "x0": 500, 
+        "x1": 500, 
+        "type": "rect", 
+        "size": 50
+      }, 
+      "bounding_box": [
+        [
+          450, 
+          -2300
+        ], 
+        [
+          550, 
+          -2150
+        ]
+      ], 
+      "type": "wireline", 
+      "id": "edb819d6-f175-5df6-3b7c-a73fcaa6f5dc", 
+      "hideFlag": false
+    }, 
+    {
+      "reference": "#PWR11", 
+      "nn": "1", 
+      "mm": "1", 
+      "timestamp": "5213C820", 
+      "powerPinData": {
+        "1": {
+          "y": -1800, 
+          "x": 500, 
+          "netcode": 18, 
+          "type": "box", 
+          "size": 50
+        }
+      }, 
+      "transform": [
+        [
+          1, 
+          0
+        ], 
+        [
+          0, 
+          -1
+        ]
+      ], 
+      "text": [
+        {
+          "orientation": "H", 
+          "reference": "#PWR11", 
+          "hjustify": "C", 
+          "text": "#PWR11", 
+          "number": 0, 
+          "vjustify": "C", 
+          "visible": false, 
+          "bounding_box": [
+            [
+              -90, 
+              -25
+            ], 
+            [
+              90, 
+              25
+            ]
+          ], 
+          "italic": false, 
+          "y": -1800, 
+          "x": 500, 
+          "size": "30", 
+          "id": "4f24c659-6a93-af24-615a-a68547280c90,2ffaf2f9-a4fc-2dbe-405f-3859af3126f8", 
+          "bold": false
+        }, 
+        {
+          "orientation": "H", 
+          "reference": "GND", 
+          "hjustify": "C", 
+          "text": "~GND", 
+          "number": 1, 
+          "vjustify": "C", 
+          "visible": false, 
+          "bounding_box": [
+            [
+              -45, 
+              45
+            ], 
+            [
+              45, 
+              95
+            ]
+          ], 
+          "italic": false, 
+          "y": -1870, 
+          "x": 500, 
+          "size": "30", 
+          "id": "4f24c659-6a93-af24-615a-a68547280c90,5976fdc9-1ea5-c211-64d7-8b3280d9d4fb", 
+          "bold": false
+        }
+      ], 
+      "y": -1800, 
+      "x": 500, 
+      "type": "component", 
+      "id": "4f24c659-6a93-af24-615a-a68547280c90", 
+      "hideFlag": false, 
+      "name": "~GND"
+    }, 
+    {
+      "startx": 500, 
+      "starty": -1800, 
+      "endy": -1950, 
+      "endx": 500, 
+      "data": {
+        "netcode": 18, 
+        "y1": -1950, 
+        "y0": -1800, 
+        "x0": 500, 
+        "x1": 500, 
+        "type": "rect", 
+        "size": 50
+      }, 
+      "bounding_box": [
+        [
+          450, 
+          -1950
+        ], 
+        [
+          550, 
+          -1800
+        ]
+      ], 
+      "type": "wireline", 
+      "id": "3b38b82f-8ed0-ef25-271b-29552f881c45", 
+      "hideFlag": false
+    }, 
+    {
+      "startx": 500, 
+      "starty": -1950, 
+      "endy": -1950, 
+      "endx": 600, 
+      "data": {
+        "netcode": 18, 
+        "y1": -1950, 
+        "y0": -1950, 
+        "x0": 500, 
+        "x1": 600, 
+        "type": "rect", 
+        "size": 50
+      }, 
+      "bounding_box": [
+        [
+          500, 
+          -2000
+        ], 
+        [
+          600, 
+          -1900
+        ]
+      ], 
+      "type": "wireline", 
+      "id": "e8cc47d6-9e4c-63a7-a546-aed25ac2b4f3", 
+      "hideFlag": false
+    }, 
+    {
+      "orientation": 0, 
+      "text": "v3.3", 
+      "id": "85f37776-6341-a7ff-acab-7a7ff1f1c203", 
+      "y": -2300, 
+      "x": 500, 
+      "type": "label", 
+      "dimension": 40, 
+      "hideFlag": false
+    }, 
+    {
+      "y": -1450, 
+      "x": -2400, 
+      "type": "noconn", 
+      "id": "2a32c8e5-0bcb-c2ad-3535-24b3819e89a5", 
+      "hideFlag": false
+    }, 
+    {
+      "y": -1350, 
+      "x": -2400, 
+      "type": "noconn", 
+      "id": "197ca6d0-3181-6227-a119-d7917e5592c8", 
+      "hideFlag": false
+    }, 
+    {
+      "y": -1250, 
+      "x": -2400, 
+      "type": "noconn", 
+      "id": "4a80ba1b-cf93-92fb-4258-f17610cf77c4", 
+      "hideFlag": false
+    }, 
+    {
+      "reference": "K2", 
+      "nn": "1", 
+      "mm": "1", 
+      "timestamp": "5213C820", 
+      "transform": [
+        [
+          1, 
+          0
+        ], 
+        [
+          0, 
+          -1
+        ]
+      ], 
+      "bounding_box": [
+        [
+          -1700, 
+          -300
+        ], 
+        [
+          -1250, 
+          0
+        ]
+      ], 
+      "text": [
+        {
+          "orientation": "V", 
+          "reference": "K2", 
+          "hjustify": "C", 
+          "text": "K2", 
+          "number": 0, 
+          "vjustify": "C", 
+          "visible": true, 
+          "bounding_box": [
+            [
+              -1441.6666666666667, 
+              -200
+            ], 
+            [
+              -1358.3333333333333, 
+              -100
+            ]
+          ], 
+          "italic": false, 
+          "y": -2400, 
+          "x": -1900, 
+          "size": "50", 
+          "id": "07230a70-c0a9-fe15-ab58-803b48f36225,6f87ed76-d152-599e-f21c-d9660042e0b1", 
+          "bold": false
+        }, 
+        {
+          "orientation": "V", 
+          "reference": "CONN_3", 
+          "hjustify": "C", 
+          "text": "sense_pot", 
+          "number": 1, 
+          "vjustify": "C", 
+          "visible": true, 
+          "bounding_box": [
+            [
+              -1333.3333333333333, 
+              -330
+            ], 
+            [
+              -1266.6666666666667, 
+              30
+            ]
+          ], 
+          "italic": false, 
+          "y": -2400, 
+          "x": -1800, 
+          "size": "40", 
+          "id": "07230a70-c0a9-fe15-ab58-803b48f36225,6a0fdda6-6e4c-c45c-d563-b52c11dda597", 
+          "bold": false
+        }
+      ], 
+      "y": -2400, 
+      "x": -1850, 
+      "pinData": {
+        "1": {
+          "y": -2500, 
+          "x": -2200, 
+          "netcode": 1, 
+          "type": "box", 
+          "size": 50
+        }, 
+        "3": {
+          "y": -2300, 
+          "x": -2200, 
+          "netcode": 18, 
+          "type": "box", 
+          "size": 50
+        }, 
+        "2": {
+          "y": -2400, 
+          "x": -2200, 
+          "netcode": 16, 
+          "type": "box", 
+          "size": 50
+        }
+      }, 
+      "type": "component", 
+      "id": "07230a70-c0a9-fe15-ab58-803b48f36225", 
+      "hideFlag": false, 
+      "name": "CONN_3"
+    }, 
+    {
+      "reference": "P3", 
+      "nn": "1", 
+      "mm": "1", 
+      "timestamp": "5213C820", 
+      "transform": [
+        [
+          1, 
+          0
+        ], 
+        [
+          0, 
+          -1
+        ]
+      ], 
+      "text": [
+        {
+          "orientation": "H", 
+          "reference": "P3", 
+          "hjustify": "L", 
+          "text": "P3", 
+          "number": 0, 
+          "vjustify": "C", 
+          "visible": true, 
+          "bounding_box": [
+            [
+              80, 
+              -33.333333333333336
+            ], 
+            [
+              160, 
+              33.333333333333336
+            ]
+          ], 
+          "italic": false, 
+          "y": -3050, 
+          "x": -770, 
+          "size": "40", 
+          "id": "346350bb-b14a-8991-0b36-a212fad55c7c,c3ea0430-5f91-6c5d-387d-d8cae4b39f8a", 
+          "bold": false
+        }, 
+        {
+          "orientation": "H", 
+          "reference": "CONN_1", 
+          "hjustify": "C", 
+          "text": "~CONN_1", 
+          "number": 1, 
+          "vjustify": "C", 
+          "visible": false, 
+          "bounding_box": [
+            [
+              -90, 
+              -80
+            ], 
+            [
+              90, 
+              -30
+            ]
+          ], 
+          "italic": false, 
+          "y": -2995, 
+          "x": -850, 
+          "size": "30", 
+          "id": "346350bb-b14a-8991-0b36-a212fad55c7c,231481b3-d89a-b18e-e461-f405af856392", 
+          "bold": false
+        }
+      ], 
+      "y": -3050, 
+      "x": -850, 
+      "pinData": {
+        "1": {
+          "y": -3050, 
+          "x": -1000, 
+          "netcode": 108, 
+          "type": "box", 
+          "size": 50
+        }
+      }, 
+      "type": "component", 
+      "id": "346350bb-b14a-8991-0b36-a212fad55c7c", 
+      "hideFlag": false, 
+      "name": "~CONN_1"
+    }, 
+    {
+      "reference": "P4", 
+      "nn": "1", 
+      "mm": "1", 
+      "timestamp": "5213C820", 
+      "transform": [
+        [
+          1, 
+          0
+        ], 
+        [
+          0, 
+          -1
+        ]
+      ], 
+      "text": [
+        {
+          "orientation": "H", 
+          "reference": "P4", 
+          "hjustify": "L", 
+          "text": "P4", 
+          "number": 0, 
+          "vjustify": "C", 
+          "visible": true, 
+          "bounding_box": [
+            [
+              80, 
+              -33.333333333333336
+            ], 
+            [
+              160, 
+              33.333333333333336
+            ]
+          ], 
+          "italic": false, 
+          "y": -2900, 
+          "x": -770, 
+          "size": "40", 
+          "id": "3661cfb0-d2fe-a8ca-f0e9-9c812155e350,366026bb-1245-4973-43c0-d094058fed30", 
+          "bold": false
+        }, 
+        {
+          "orientation": "H", 
+          "reference": "CONN_1", 
+          "hjustify": "C", 
+          "text": "~CONN_1", 
+          "number": 1, 
+          "vjustify": "C", 
+          "visible": false, 
+          "bounding_box": [
+            [
+              -90, 
+              -80
+            ], 
+            [
+              90, 
+              -30
+            ]
+          ], 
+          "italic": false, 
+          "y": -2845, 
+          "x": -850, 
+          "size": "30", 
+          "id": "3661cfb0-d2fe-a8ca-f0e9-9c812155e350,9538d005-7c95-3c18-903c-3fff42e63895", 
+          "bold": false
+        }
+      ], 
+      "y": -2900, 
+      "x": -850, 
+      "pinData": {
+        "1": {
+          "y": -2900, 
+          "x": -1000, 
+          "netcode": 109, 
+          "type": "box", 
+          "size": 50
+        }
+      }, 
+      "type": "component", 
+      "id": "3661cfb0-d2fe-a8ca-f0e9-9c812155e350", 
+      "hideFlag": false, 
+      "name": "~CONN_1"
+    }, 
+    {
+      "reference": "P5", 
+      "nn": "1", 
+      "mm": "1", 
+      "timestamp": "5213C820", 
+      "transform": [
+        [
+          1, 
+          0
+        ], 
+        [
+          0, 
+          -1
+        ]
+      ], 
+      "text": [
+        {
+          "orientation": "H", 
+          "reference": "P5", 
+          "hjustify": "L", 
+          "text": "P5", 
+          "number": 0, 
+          "vjustify": "C", 
+          "visible": true, 
+          "bounding_box": [
+            [
+              80, 
+              -33.333333333333336
+            ], 
+            [
+              160, 
+              33.333333333333336
+            ]
+          ], 
+          "italic": false, 
+          "y": -2750, 
+          "x": -770, 
+          "size": "40", 
+          "id": "97e4f376-1006-48a7-77d0-0bd2515cc0a0,6eeb2c67-3175-ed2e-9b61-ed06dbb0a637", 
+          "bold": false
+        }, 
+        {
+          "orientation": "H", 
+          "reference": "CONN_1", 
+          "hjustify": "C", 
+          "text": "~CONN_1", 
+          "number": 1, 
+          "vjustify": "C", 
+          "visible": false, 
+          "bounding_box": [
+            [
+              -90, 
+              -80
+            ], 
+            [
+              90, 
+              -30
+            ]
+          ], 
+          "italic": false, 
+          "y": -2695, 
+          "x": -850, 
+          "size": "30", 
+          "id": "97e4f376-1006-48a7-77d0-0bd2515cc0a0,3a91a56e-810e-4c9d-0ce6-e283b27b8372", 
+          "bold": false
+        }
+      ], 
+      "y": -2750, 
+      "x": -850, 
+      "pinData": {
+        "1": {
+          "y": -2750, 
+          "x": -1000, 
+          "netcode": 110, 
+          "type": "box", 
+          "size": 50
+        }
+      }, 
+      "type": "component", 
+      "id": "97e4f376-1006-48a7-77d0-0bd2515cc0a0", 
+      "hideFlag": false, 
+      "name": "~CONN_1"
+    }, 
+    {
+      "reference": "P6", 
+      "nn": "1", 
+      "mm": "1", 
+      "timestamp": "5213C820", 
+      "transform": [
+        [
+          1, 
+          0
+        ], 
+        [
+          0, 
+          -1
+        ]
+      ], 
+      "text": [
+        {
+          "orientation": "H", 
+          "reference": "P6", 
+          "hjustify": "L", 
+          "text": "P6", 
+          "number": 0, 
+          "vjustify": "C", 
+          "visible": true, 
+          "bounding_box": [
+            [
+              80, 
+              -33.333333333333336
+            ], 
+            [
+              160, 
+              33.333333333333336
+            ]
+          ], 
+          "italic": false, 
+          "y": -2600, 
+          "x": -770, 
+          "size": "40", 
+          "id": "30dcea69-12de-1e82-ae2a-88f55268a531,9450ea8c-f7b5-8fbc-4d8c-a660462a05ab", 
+          "bold": false
+        }, 
+        {
+          "orientation": "H", 
+          "reference": "CONN_1", 
+          "hjustify": "C", 
+          "text": "~CONN_1", 
+          "number": 1, 
+          "vjustify": "C", 
+          "visible": false, 
+          "bounding_box": [
+            [
+              -90, 
+              -80
+            ], 
+            [
+              90, 
+              -30
+            ]
+          ], 
+          "italic": false, 
+          "y": -2545, 
+          "x": -850, 
+          "size": "30", 
+          "id": "30dcea69-12de-1e82-ae2a-88f55268a531,61872b11-98ed-56f5-e602-35dce12a760e", 
+          "bold": false
+        }
+      ], 
+      "y": -2600, 
+      "x": -850, 
+      "pinData": {
+        "1": {
+          "y": -2600, 
+          "x": -1000, 
+          "netcode": 111, 
+          "type": "box", 
+          "size": 50
+        }
+      }, 
+      "type": "component", 
+      "id": "30dcea69-12de-1e82-ae2a-88f55268a531", 
+      "hideFlag": false, 
+      "name": "~CONN_1"
+    }, 
+    {
+      "y": -2600, 
+      "x": -1000, 
+      "type": "noconn", 
+      "id": "609604b1-bcb4-e84c-74fe-395bee18a484", 
+      "hideFlag": false
+    }, 
+    {
+      "y": -2750, 
+      "x": -1000, 
+      "type": "noconn", 
+      "id": "6437bc6d-1571-d3c5-4526-a31fe2215672", 
+      "hideFlag": false
+    }, 
+    {
+      "y": -2900, 
+      "x": -1000, 
+      "type": "noconn", 
+      "id": "32594ee9-a3aa-bf80-5c76-9918fe1cfc74", 
+      "hideFlag": false
+    }, 
+    {
+      "y": -3050, 
+      "x": -1000, 
+      "type": "noconn", 
+      "id": "aabb595d-4048-664e-c506-8cafe4c1cf07", 
+      "hideFlag": false
+    }, 
+    {
+      "reference": "D2", 
+      "nn": "1", 
+      "mm": "1", 
+      "timestamp": "5213C820", 
+      "transform": [
+        [
+          1, 
+          0
+        ], 
+        [
+          0, 
+          -1
+        ]
+      ], 
+      "text": [
+        {
+          "orientation": "H", 
+          "reference": "D1", 
+          "hjustify": "C", 
+          "text": "D1", 
+          "number": 0, 
+          "vjustify": "C", 
+          "visible": true, 
+          "bounding_box": [
+            [
+              -40, 
+              -133.33333333333334
+            ], 
+            [
+              40, 
+              -66.66666666666666
+            ]
+          ], 
+          "italic": false, 
+          "y": -1200, 
+          "x": 1450, 
+          "size": "40", 
+          "id": "de3ccc21-5565-9a70-0a68-00ac0d389c4a,b86518c6-dec3-4f0c-d941-72dc394ee4e4", 
+          "bold": false
+        }, 
+        {
+          "orientation": "H", 
+          "reference": "DIODE", 
+          "hjustify": "C", 
+          "text": "DIODE", 
+          "number": 1, 
+          "vjustify": "C", 
+          "visible": true, 
+          "bounding_box": [
+            [
+              -100, 
+              66.66666666666666
+            ], 
+            [
+              100, 
+              133.33333333333334
+            ]
+          ], 
+          "italic": false, 
+          "y": -1400, 
+          "x": 1450, 
+          "size": "40", 
+          "id": "de3ccc21-5565-9a70-0a68-00ac0d389c4a,8401bffa-f73a-c736-307c-08143a27c64c", 
+          "bold": false
+        }
+      ], 
+      "y": -1300, 
+      "x": 1450, 
+      "pinData": {
+        "1": {
+          "y": -1300, 
+          "x": 1250, 
+          "netcode": 9, 
+          "type": "box", 
+          "size": 50
+        }, 
+        "2": {
+          "y": -1300, 
+          "x": 1650, 
+          "netcode": 1, 
+          "type": "box", 
+          "size": 50
+        }
+      }, 
+      "type": "component", 
+      "id": "de3ccc21-5565-9a70-0a68-00ac0d389c4a", 
+      "hideFlag": false, 
+      "name": "DIODE"
+    }, 
+    {
+      "reference": "R3", 
+      "nn": "1", 
+      "mm": "1", 
+      "timestamp": "5213C820", 
+      "transform": [
+        [
+          1, 
+          0
+        ], 
+        [
+          0, 
+          -1
+        ]
+      ], 
+      "text": [
+        {
+          "orientation": "V", 
+          "reference": "R3", 
+          "hjustify": "C", 
+          "text": "R3", 
+          "number": 0, 
+          "vjustify": "C", 
+          "visible": true, 
+          "bounding_box": [
+            [
+              46.666666666666664, 
+              -40
+            ], 
+            [
+              113.33333333333334, 
+              40
+            ]
+          ], 
+          "italic": false, 
+          "y": -450, 
+          "x": 1980, 
+          "size": "40", 
+          "id": "2daa98c5-894f-f91d-5d93-da75adcd24a7,33311486-aec1-7cfe-327e-c1bebdacf221", 
+          "bold": false
+        }, 
+        {
+          "orientation": "V", 
+          "reference": "R", 
+          "hjustify": "C", 
+          "text": "R", 
+          "number": 1, 
+          "vjustify": "C", 
+          "visible": true, 
+          "bounding_box": [
+            [
+              -26.333333333333336, 
+              -21
+            ], 
+            [
+              40.333333333333336, 
+              19
+            ]
+          ], 
+          "italic": false, 
+          "y": -449, 
+          "x": 1907, 
+          "size": "40", 
+          "id": "2daa98c5-894f-f91d-5d93-da75adcd24a7,a8c2c3cf-c92e-2c79-3836-52b3f4f09f78", 
+          "bold": false
+        }
+      ], 
+      "y": -450, 
+      "x": 1900, 
+      "pinData": {
+        "1": {
+          "y": -700, 
+          "x": 1900, 
+          "netcode": 5, 
+          "type": "box", 
+          "size": 50
+        }, 
+        "2": {
+          "y": -200, 
+          "x": 1900, 
+          "netcode": 18, 
+          "type": "box", 
+          "size": 50
+        }
+      }, 
+      "type": "component", 
+      "id": "2daa98c5-894f-f91d-5d93-da75adcd24a7", 
+      "hideFlag": false, 
+      "name": "R"
+    }, 
+    {
+      "reference": "L1", 
+      "nn": "1", 
+      "mm": "1", 
+      "timestamp": "5213C820", 
+      "transform": [
+        [
+          0, 
+          -1
+        ], 
+        [
+          -1, 
+          0
+        ]
+      ], 
+      "text": [
+        {
+          "orientation": "V", 
+          "reference": "L1", 
+          "hjustify": "C", 
+          "text": "L1", 
+          "number": 0, 
+          "vjustify": "C", 
+          "visible": true, 
+          "bounding_box": [
+            [
+              -83.33333333333334, 
+              -40
+            ], 
+            [
+              -16.666666666666664, 
+              40
+            ]
+          ], 
+          "italic": false, 
+          "y": -1300, 
+          "x": 600, 
+          "size": "40", 
+          "id": "80025c5a-d3a9-d039-72a8-86f94d42ca1a,c78a6a5e-1ced-706d-cb0c-ab9002b46d99", 
+          "bold": false
+        }, 
+        {
+          "orientation": "V", 
+          "reference": "INDUCTOR", 
+          "hjustify": "C", 
+          "text": "INDUCTOR", 
+          "number": 1, 
+          "vjustify": "C", 
+          "visible": true, 
+          "bounding_box": [
+            [
+              66.66666666666666, 
+              -160
+            ], 
+            [
+              133.33333333333334, 
+              160
+            ]
+          ], 
+          "italic": false, 
+          "y": -1300, 
+          "x": 750, 
+          "size": "40", 
+          "id": "80025c5a-d3a9-d039-72a8-86f94d42ca1a,3e859efa-dc4d-372e-2c4e-c3c0045574e6", 
+          "bold": false
+        }
+      ], 
+      "y": -1300, 
+      "x": 650, 
+      "pinData": {
+        "1": {
+          "y": -1300, 
+          "x": 350, 
+          "netcode": 12, 
+          "type": "box", 
+          "size": 50
+        }, 
+        "2": {
+          "y": -1300, 
+          "x": 950, 
+          "netcode": 9, 
+          "type": "box", 
+          "size": 50
+        }
+      }, 
+      "type": "component", 
+      "id": "80025c5a-d3a9-d039-72a8-86f94d42ca1a", 
+      "hideFlag": false, 
+      "name": "INDUCTOR"
+    }, 
+    {
+      "reference": "C2", 
+      "nn": "1", 
+      "mm": "1", 
+      "timestamp": "5213C820", 
+      "transform": [
+        [
+          1, 
+          0
+        ], 
+        [
+          0, 
+          -1
+        ]
+      ], 
+      "bounding_box": [
+        [
+          1870, 
+          1500
+        ], 
+        [
+          2030, 
+          1900
+        ]
+      ], 
+      "text": [
+        {
+          "orientation": "H", 
+          "reference": "C2", 
+          "hjustify": "L", 
+          "text": "C2", 
+          "number": 0, 
+          "vjustify": "C", 
+          "visible": true, 
+          "bounding_box": [
+            [
+              1950, 
+              1566.6666666666667
+            ], 
+            [
+              2030, 
+              1633.3333333333333
+            ]
+          ], 
+          "italic": false, 
+          "y": -850, 
+          "x": 2400, 
+          "size": "40", 
+          "id": "50d8f90a-abc5-58e3-54fd-fa4fc49922a8,cf74fea5-c53e-d392-d885-ff234aa3d1ef", 
+          "bold": false
+        }, 
+        {
+          "orientation": "H", 
+          "reference": "C", 
+          "hjustify": "L", 
+          "text": "1uF", 
+          "number": 1, 
+          "vjustify": "C", 
+          "visible": true, 
+          "bounding_box": [
+            [
+              2000, 
+              1766.6666666666667
+            ], 
+            [
+              2120, 
+              1833.3333333333333
+            ]
+          ], 
+          "italic": false, 
+          "y": -1050, 
+          "x": 2450, 
+          "size": "40", 
+          "id": "50d8f90a-abc5-58e3-54fd-fa4fc49922a8,9f17e2cc-39d1-e076-22bd-95ca310c80a7", 
+          "bold": false
+        }
+      ], 
+      "y": -950, 
+      "x": 2400, 
+      "pinData": {
+        "1": {
+          "y": -1150, 
+          "x": 2400, 
+          "netcode": 1, 
+          "type": "box", 
+          "size": 50
+        }, 
+        "2": {
+          "y": -750, 
+          "x": 2400, 
+          "netcode": 18, 
+          "type": "box", 
+          "size": 50
+        }
+      }, 
+      "type": "component", 
+      "id": "50d8f90a-abc5-58e3-54fd-fa4fc49922a8", 
+      "hideFlag": false, 
+      "name": "C"
+    }, 
+    {
+      "reference": "R2", 
+      "nn": "1", 
+      "mm": "1", 
+      "timestamp": "5213C820", 
+      "transform": [
+        [
+          1, 
+          0
+        ], 
+        [
+          0, 
+          -1
+        ]
+      ], 
+      "text": [
+        {
+          "orientation": "V", 
+          "reference": "R2", 
+          "hjustify": "C", 
+          "text": "R2", 
+          "number": 0, 
+          "vjustify": "C", 
+          "visible": true, 
+          "bounding_box": [
+            [
+              46.666666666666664, 
+              -40
+            ], 
+            [
+              113.33333333333334, 
+              40
+            ]
+          ], 
+          "italic": false, 
+          "y": -1050, 
+          "x": 1980, 
+          "size": "40", 
+          "id": "b4ef3b9f-9486-68d6-9843-4efb3a37dad2,e9c6ca2a-b571-94da-b731-25d00354d55b", 
+          "bold": false
+        }, 
+        {
+          "orientation": "V", 
+          "reference": "R", 
+          "hjustify": "C", 
+          "text": "R", 
+          "number": 1, 
+          "vjustify": "C", 
+          "visible": true, 
+          "bounding_box": [
+            [
+              -26.333333333333336, 
+              -21
+            ], 
+            [
+              40.333333333333336, 
+              19
+            ]
+          ], 
+          "italic": false, 
+          "y": -1049, 
+          "x": 1907, 
+          "size": "40", 
+          "id": "b4ef3b9f-9486-68d6-9843-4efb3a37dad2,6af99828-4eac-384e-9aaf-a7dbd7ae5b80", 
+          "bold": false
+        }
+      ], 
+      "y": -1050, 
+      "x": 1900, 
+      "pinData": {
+        "1": {
+          "y": -1300, 
+          "x": 1900, 
+          "netcode": 1, 
+          "type": "box", 
+          "size": 50
+        }, 
+        "2": {
+          "y": -800, 
+          "x": 1900, 
+          "netcode": 5, 
+          "type": "box", 
+          "size": 50
+        }
+      }, 
+      "type": "component", 
+      "id": "b4ef3b9f-9486-68d6-9843-4efb3a37dad2", 
+      "hideFlag": false, 
+      "name": "R"
+    }, 
+    {
+      "reference": "U3", 
+      "nn": "1", 
+      "mm": "1", 
+      "timestamp": "5213C820", 
+      "transform": [
+        [
+          1, 
+          0
+        ], 
+        [
+          0, 
+          -1
+        ]
+      ], 
+      "text": [
+        {
+          "orientation": "H", 
+          "reference": "U3", 
+          "hjustify": "C", 
+          "text": "U3", 
+          "number": 0, 
+          "vjustify": "C", 
+          "visible": false, 
+          "bounding_box": [
+            [
+              0, 
+              0
+            ], 
+            [
+              0, 
+              0
+            ]
+          ], 
+          "italic": false, 
+          "y": -50, 
+          "x": 1100, 
+          "size": "0", 
+          "id": "71837bab-338f-6f1b-d7b5-e4cc3b2f725a,2917a17f-6a52-d90d-701f-8df132d24982", 
+          "bold": false
+        }, 
+        {
+          "orientation": "H", 
+          "reference": "IC_FAN5331-SOT-23-5_SOT-23-5", 
+          "hjustify": "C", 
+          "text": "IC_FAN5331-SOT-23-5_SOT-23-5", 
+          "number": 1, 
+          "vjustify": "C", 
+          "visible": false, 
+          "bounding_box": [
+            [
+              0, 
+              0
+            ], 
+            [
+              0, 
+              0
+            ]
+          ], 
+          "italic": false, 
+          "y": -50, 
+          "x": 1100, 
+          "size": "0", 
+          "id": "71837bab-338f-6f1b-d7b5-e4cc3b2f725a,5ceccd9b-8e48-ece9-2ea4-d676d3adda38", 
+          "bold": false
+        }
+      ], 
+      "y": -50, 
+      "x": 1100, 
+      "pinData": {
+        "1": {
+          "y": -150, 
+          "x": 700, 
+          "netcode": 9, 
+          "type": "box", 
+          "size": 50
+        }, 
+        "3": {
+          "y": 50, 
+          "x": 700, 
+          "netcode": 5, 
+          "type": "box", 
+          "size": 50
+        }, 
+        "2": {
+          "y": -50, 
+          "x": 700, 
+          "netcode": 18, 
+          "type": "box", 
+          "size": 50
+        }, 
+        "5": {
+          "y": -150, 
+          "x": 1500, 
+          "netcode": 12, 
+          "type": "box", 
+          "size": 50
+        }, 
+        "4": {
+          "y": 50, 
+          "x": 1500, 
+          "netcode": 18, 
+          "type": "box", 
+          "size": 50
+        }
+      }, 
+      "type": "component", 
+      "id": "71837bab-338f-6f1b-d7b5-e4cc3b2f725a", 
+      "name": "IC_FAN5331-SOT-23-5_SOT-23-5"
+    }, 
+    {
+      "reference": "C3", 
+      "nn": "1", 
+      "mm": "1", 
+      "timestamp": "5213C820", 
+      "transform": [
+        [
+          1, 
+          0
+        ], 
+        [
+          0, 
+          -1
+        ]
+      ], 
+      "bounding_box": [
+        [
+          -730, 
+          1050
+        ], 
+        [
+          -570, 
+          1450
+        ]
+      ], 
+      "text": [
+        {
+          "orientation": "H", 
+          "reference": "C3", 
+          "hjustify": "L", 
+          "text": "C3", 
+          "number": 0, 
+          "vjustify": "C", 
+          "visible": true, 
+          "bounding_box": [
+            [
+              -650, 
+              1116.6666666666667
+            ], 
+            [
+              -570, 
+              1183.3333333333333
+            ]
+          ], 
+          "italic": false, 
+          "y": -750, 
+          "x": 250, 
+          "size": "40", 
+          "id": "09c941a1-b77a-cbe0-5853-419c72a55c4d,02d1b23b-47eb-436e-3746-777833b3de7c", 
+          "bold": false
+        }, 
+        {
+          "orientation": "H", 
+          "reference": "C", 
+          "hjustify": "L", 
+          "text": "1uF", 
+          "number": 1, 
+          "vjustify": "C", 
+          "visible": true, 
+          "bounding_box": [
+            [
+              -644, 
+              1301.6666666666667
+            ], 
+            [
+              -524, 
+              1368.3333333333333
+            ]
+          ], 
+          "italic": false, 
+          "y": -935, 
+          "x": 256, 
+          "size": "40", 
+          "id": "09c941a1-b77a-cbe0-5853-419c72a55c4d,278aba9d-a479-8a17-adc1-d864fcb88cb8", 
+          "bold": false
+        }
+      ], 
+      "y": -850, 
+      "x": 250, 
+      "pinData": {
+        "1": {
+          "y": -1050, 
+          "x": 250, 
+          "netcode": 12, 
+          "type": "box", 
+          "size": 50
+        }, 
+        "2": {
+          "y": -650, 
+          "x": 250, 
+          "netcode": 18, 
+          "type": "box", 
+          "size": 50
+        }
+      }, 
+      "type": "component", 
+      "id": "09c941a1-b77a-cbe0-5853-419c72a55c4d", 
+      "hideFlag": false, 
+      "name": "C"
+    }, 
+    {
+      "startx": 1250, 
+      "starty": -1300, 
+      "endy": -1300, 
+      "endx": 950, 
+      "data": {
+        "netcode": 9, 
+        "y1": -1300, 
+        "y0": -1300, 
+        "x0": 1250, 
+        "x1": 950, 
+        "type": "rect", 
+        "size": 50
+      }, 
+      "bounding_box": [
+        [
+          550, 
+          1000
+        ], 
+        [
+          850, 
+          1100
+        ]
+      ], 
+      "type": "wireline", 
+      "id": "90851938-2db0-4f1f-9c2b-9d1867850403"
+    }, 
+    {
+      "startx": 1900, 
+      "starty": -200, 
+      "endy": -100, 
+      "endx": 1900, 
+      "data": {
+        "netcode": 18, 
+        "y1": -100, 
+        "y0": -200, 
+        "x0": 1900, 
+        "x1": 1900, 
+        "type": "rect", 
+        "size": 50
+      }, 
+      "bounding_box": [
+        [
+          1400, 
+          600
+        ], 
+        [
+          1500, 
+          700
+        ]
+      ], 
+      "type": "wireline", 
+      "id": "9d1d928d-50e3-6086-8bac-646d7a518e0a"
+    }, 
+    {
+      "startx": 150, 
+      "starty": -1300, 
+      "endy": -1300, 
+      "endx": 350, 
+      "data": {
+        "netcode": 12, 
+        "y1": -1300, 
+        "y0": -1300, 
+        "x0": 150, 
+        "x1": 350, 
+        "type": "rect", 
+        "size": 50
+      }, 
+      "bounding_box": [
+        [
+          -250, 
+          1000
+        ], 
+        [
+          -50, 
+          1100
+        ]
+      ], 
+      "type": "wireline", 
+      "id": "11646217-f9ee-f728-d5d6-4051766fefd9"
+    }, 
+    {
+      "reference": "#PWR14", 
+      "nn": "1", 
+      "mm": "1", 
+      "timestamp": "5213C820", 
+      "powerPinData": {
+        "1": {
+          "y": -100, 
+          "x": 1900, 
+          "netcode": 18, 
+          "type": "box", 
+          "size": 50
+        }
+      }, 
+      "transform": [
+        [
+          1, 
+          0
+        ], 
+        [
+          0, 
+          -1
+        ]
+      ], 
+      "text": [
+        {
+          "orientation": "H", 
+          "reference": "#PWR14", 
+          "hjustify": "C", 
+          "text": "#PWR14", 
+          "number": 0, 
+          "vjustify": "C", 
+          "visible": false, 
+          "bounding_box": [
+            [
+              -90, 
+              -25
+            ], 
+            [
+              90, 
+              25
+            ]
+          ], 
+          "italic": false, 
+          "y": -100, 
+          "x": 1900, 
+          "size": "30", 
+          "id": "cfad1b39-4cb0-524e-e9ca-3ac12e02b131,8290d27f-d163-3dc5-c8c8-24cd37a94fef", 
+          "bold": false
+        }, 
+        {
+          "orientation": "H", 
+          "reference": "GND", 
+          "hjustify": "C", 
+          "text": "~GND", 
+          "number": 1, 
+          "vjustify": "C", 
+          "visible": false, 
+          "bounding_box": [
+            [
+              -45, 
+              45
+            ], 
+            [
+              45, 
+              95
+            ]
+          ], 
+          "italic": false, 
+          "y": -170, 
+          "x": 1900, 
+          "size": "30", 
+          "id": "cfad1b39-4cb0-524e-e9ca-3ac12e02b131,7883b66f-cf21-179c-9d85-23f39af85e96", 
+          "bold": false
+        }
+      ], 
+      "y": -100, 
+      "x": 1900, 
+      "type": "component", 
+      "id": "cfad1b39-4cb0-524e-e9ca-3ac12e02b131", 
+      "name": "~GND"
+    }, 
+    {
+      "reference": "#PWR16", 
+      "nn": "1", 
+      "mm": "1", 
+      "timestamp": "5213C820", 
+      "powerPinData": {
+        "1": {
+          "y": -500, 
+          "x": 250, 
+          "netcode": 18, 
+          "type": "box", 
+          "size": 50
+        }
+      }, 
+      "transform": [
+        [
+          1, 
+          0
+        ], 
+        [
+          0, 
+          -1
+        ]
+      ], 
+      "text": [
+        {
+          "orientation": "H", 
+          "reference": "#PWR16", 
+          "hjustify": "C", 
+          "text": "#PWR16", 
+          "number": 0, 
+          "vjustify": "C", 
+          "visible": false, 
+          "bounding_box": [
+            [
+              -90, 
+              -25
+            ], 
+            [
+              90, 
+              25
+            ]
+          ], 
+          "italic": false, 
+          "y": -500, 
+          "x": 250, 
+          "size": "30", 
+          "id": "ad927a40-75ab-707e-ef1e-9990537f9f3f,1231a59f-0035-0b88-f446-3953da9a4afd", 
+          "bold": false
+        }, 
+        {
+          "orientation": "H", 
+          "reference": "GND", 
+          "hjustify": "C", 
+          "text": "~GND", 
+          "number": 1, 
+          "vjustify": "C", 
+          "visible": false, 
+          "bounding_box": [
+            [
+              -45, 
+              45
+            ], 
+            [
+              45, 
+              95
+            ]
+          ], 
+          "italic": false, 
+          "y": -570, 
+          "x": 250, 
+          "size": "30", 
+          "id": "ad927a40-75ab-707e-ef1e-9990537f9f3f,1abc1623-35aa-ff7a-a59c-ad5c7c68ba1a", 
+          "bold": false
+        }
+      ], 
+      "y": -500, 
+      "x": 250, 
+      "type": "component", 
+      "id": "ad927a40-75ab-707e-ef1e-9990537f9f3f", 
+      "name": "~GND"
+    }, 
+    {
+      "startx": 250, 
+      "starty": -650, 
+      "endy": -500, 
+      "endx": 250, 
+      "data": {
+        "netcode": 18, 
+        "y1": -500, 
+        "y0": -650, 
+        "x0": 250, 
+        "x1": 250, 
+        "type": "rect", 
+        "size": 50
+      }, 
+      "bounding_box": [
+        [
+          -200, 
+          1700
+        ], 
+        [
+          -100, 
+          1850
+        ]
+      ], 
+      "type": "wireline", 
+      "id": "23f641f0-2fbf-22d3-f41a-96c1c57c7cc3"
+    }, 
+    {
+      "y": -1300, 
+      "x": 250, 
+      "type": "connection", 
+      "id": "8110e815-d06f-3438-68bc-8a0153346628"
+    }, 
+    {
+      "startx": 250, 
+      "starty": -1050, 
+      "endy": -1300, 
+      "endx": 250, 
+      "data": {
+        "netcode": 12, 
+        "y1": -1300, 
+        "y0": -1050, 
+        "x0": 250, 
+        "x1": 250, 
+        "type": "rect", 
+        "size": 50
+      }, 
+      "bounding_box": [
+        [
+          -200, 
+          1050
+        ], 
+        [
+          -100, 
+          1300
+        ]
+      ], 
+      "type": "wireline", 
+      "id": "786f9d06-32e4-a5c7-8b1d-1f3279df4edb"
+    }, 
+    {
+      "y": -1300, 
+      "x": 2400, 
+      "type": "connection", 
+      "id": "d248b990-ef81-5271-994f-1c79eb9cc837"
+    }, 
+    {
+      "startx": 2400, 
+      "starty": -1150, 
+      "endy": -1300, 
+      "endx": 2400, 
+      "data": {
+        "netcode": 1, 
+        "y1": -1300, 
+        "y0": -1150, 
+        "x0": 2400, 
+        "x1": 2400, 
+        "type": "rect", 
+        "size": 50
+      }, 
+      "bounding_box": [
+        [
+          1950, 
+          1050
+        ], 
+        [
+          2050, 
+          1200
+        ]
+      ], 
+      "type": "wireline", 
+      "id": "be7734d3-b3f5-9153-fcd1-d692402a1995"
+    }, 
+    {
+      "reference": "#PWR17", 
+      "nn": "1", 
+      "mm": "1", 
+      "timestamp": "5213C820", 
+      "powerPinData": {
+        "1": {
+          "y": -650, 
+          "x": 2400, 
+          "netcode": 18, 
+          "type": "box", 
+          "size": 50
+        }
+      }, 
+      "transform": [
+        [
+          1, 
+          0
+        ], 
+        [
+          0, 
+          -1
+        ]
+      ], 
+      "text": [
+        {
+          "orientation": "H", 
+          "reference": "#PWR17", 
+          "hjustify": "C", 
+          "text": "#PWR17", 
+          "number": 0, 
+          "vjustify": "C", 
+          "visible": false, 
+          "bounding_box": [
+            [
+              -90, 
+              -25
+            ], 
+            [
+              90, 
+              25
+            ]
+          ], 
+          "italic": false, 
+          "y": -650, 
+          "x": 2400, 
+          "size": "30", 
+          "id": "053c92bc-e1f6-146d-6b0f-504e889de73a,05860c05-90d1-f44f-654d-c436075f70a1", 
+          "bold": false
+        }, 
+        {
+          "orientation": "H", 
+          "reference": "GND", 
+          "hjustify": "C", 
+          "text": "~GND", 
+          "number": 1, 
+          "vjustify": "C", 
+          "visible": false, 
+          "bounding_box": [
+            [
+              -45, 
+              45
+            ], 
+            [
+              45, 
+              95
+            ]
+          ], 
+          "italic": false, 
+          "y": -720, 
+          "x": 2400, 
+          "size": "30", 
+          "id": "053c92bc-e1f6-146d-6b0f-504e889de73a,daf7fa33-9e4b-9dfc-eec7-f5f0719b2cd3", 
+          "bold": false
+        }
+      ], 
+      "y": -650, 
+      "x": 2400, 
+      "type": "component", 
+      "id": "053c92bc-e1f6-146d-6b0f-504e889de73a", 
+      "name": "~GND"
+    }, 
+    {
+      "startx": 2400, 
+      "starty": -750, 
+      "endy": -650, 
+      "endx": 2400, 
+      "data": {
+        "netcode": 18, 
+        "y1": -650, 
+        "y0": -750, 
+        "x0": 2400, 
+        "x1": 2400, 
+        "type": "rect", 
+        "size": 50
+      }, 
+      "bounding_box": [
+        [
+          1950, 
+          1600
+        ], 
+        [
+          2050, 
+          1700
+        ]
+      ], 
+      "type": "wireline", 
+      "id": "b9369a2d-84da-eda0-3d48-5f082cd5d76e"
+    }, 
+    {
+      "orientation": 0, 
+      "text": "v3.3", 
+      "id": "8c6c0f2d-b1f4-7d64-782f-ae930fe57f69", 
+      "y": -150, 
+      "x": 1500, 
+      "type": "label", 
+      "dimension": 40
+    }, 
+    {
+      "reference": "#PWR18", 
+      "nn": "1", 
+      "mm": "1", 
+      "timestamp": "5213C820", 
+      "powerPinData": {
+        "1": {
+          "y": 150, 
+          "x": 1600, 
+          "netcode": 18, 
+          "type": "box", 
+          "size": 50
+        }
+      }, 
+      "transform": [
+        [
+          1, 
+          0
+        ], 
+        [
+          0, 
+          -1
+        ]
+      ], 
+      "text": [
+        {
+          "orientation": "H", 
+          "reference": "#PWR18", 
+          "hjustify": "C", 
+          "text": "#PWR18", 
+          "number": 0, 
+          "vjustify": "C", 
+          "visible": false, 
+          "bounding_box": [
+            [
+              -90, 
+              -25
+            ], 
+            [
+              90, 
+              25
+            ]
+          ], 
+          "italic": false, 
+          "y": 150, 
+          "x": 1600, 
+          "size": "30", 
+          "id": "50a31c57-56c8-3c45-8097-10de3f40ca54,2def85ff-e75e-ca13-38a0-4c19d9cfcae8", 
+          "bold": false
+        }, 
+        {
+          "orientation": "H", 
+          "reference": "GND", 
+          "hjustify": "C", 
+          "text": "~GND", 
+          "number": 1, 
+          "vjustify": "C", 
+          "visible": false, 
+          "bounding_box": [
+            [
+              -45, 
+              45
+            ], 
+            [
+              45, 
+              95
+            ]
+          ], 
+          "italic": false, 
+          "y": 80, 
+          "x": 1600, 
+          "size": "30", 
+          "id": "50a31c57-56c8-3c45-8097-10de3f40ca54,eafa5bc3-a3e4-9a1e-e5aa-a10a6a17f99d", 
+          "bold": false
+        }
+      ], 
+      "y": 150, 
+      "x": 1600, 
+      "type": "component", 
+      "id": "50a31c57-56c8-3c45-8097-10de3f40ca54", 
+      "name": "~GND"
+    }, 
+    {
+      "startx": 1500, 
+      "starty": 50, 
+      "endy": 50, 
+      "endx": 1600, 
+      "data": {
+        "netcode": 18, 
+        "y1": 50, 
+        "y0": 50, 
+        "x0": 1500, 
+        "x1": 1600, 
+        "type": "rect", 
+        "size": 50
+      }, 
+      "bounding_box": [
+        [
+          1250, 
+          350
+        ], 
+        [
+          1350, 
+          450
+        ]
+      ], 
+      "type": "wireline", 
+      "id": "2f9b162e-fc62-69ac-8400-2cfad019cfd0"
+    }, 
+    {
+      "startx": 1600, 
+      "starty": 50, 
+      "endy": 150, 
+      "endx": 1600, 
+      "data": {
+        "netcode": 18, 
+        "y1": 150, 
+        "y0": 50, 
+        "x0": 1600, 
+        "x1": 1600, 
+        "type": "rect", 
+        "size": 50
+      }, 
+      "bounding_box": [
+        [
+          1300, 
+          400
+        ], 
+        [
+          1400, 
+          500
+        ]
+      ], 
+      "type": "wireline", 
+      "id": "53e2b606-03ef-3c81-d7e8-3d6aaed4bd8e"
+    }, 
+    {
+      "reference": "#PWR19", 
+      "nn": "1", 
+      "mm": "1", 
+      "timestamp": "5213C820", 
+      "powerPinData": {
+        "1": {
+          "y": 50, 
+          "x": 450, 
+          "netcode": 18, 
+          "type": "box", 
+          "size": 50
+        }
+      }, 
+      "transform": [
+        [
+          1, 
+          0
+        ], 
+        [
+          0, 
+          -1
+        ]
+      ], 
+      "text": [
+        {
+          "orientation": "H", 
+          "reference": "#PWR19", 
+          "hjustify": "C", 
+          "text": "#PWR19", 
+          "number": 0, 
+          "vjustify": "C", 
+          "visible": false, 
+          "bounding_box": [
+            [
+              -90, 
+              -25
+            ], 
+            [
+              90, 
+              25
+            ]
+          ], 
+          "italic": false, 
+          "y": 50, 
+          "x": 450, 
+          "size": "30", 
+          "id": "ddca5330-0390-ff08-2e8d-fce4f28677a9,28b91699-7481-e4af-5248-17bdcaa9e5d1", 
+          "bold": false
+        }, 
+        {
+          "orientation": "H", 
+          "reference": "GND", 
+          "hjustify": "C", 
+          "text": "~GND", 
+          "number": 1, 
+          "vjustify": "C", 
+          "visible": false, 
+          "bounding_box": [
+            [
+              -45, 
+              45
+            ], 
+            [
+              45, 
+              95
+            ]
+          ], 
+          "italic": false, 
+          "y": -20, 
+          "x": 450, 
+          "size": "30", 
+          "id": "ddca5330-0390-ff08-2e8d-fce4f28677a9,eb47758c-70ae-2113-ed63-5cca7e993388", 
+          "bold": false
+        }
+      ], 
+      "y": 50, 
+      "x": 450, 
+      "type": "component", 
+      "id": "ddca5330-0390-ff08-2e8d-fce4f28677a9", 
+      "name": "~GND"
+    }, 
+    {
+      "startx": 450, 
+      "starty": 50, 
+      "endy": -50, 
+      "endx": 450, 
+      "data": {
+        "netcode": 18, 
+        "y1": -50, 
+        "y0": 50, 
+        "x0": 450, 
+        "x1": 450, 
+        "type": "rect", 
+        "size": 50
+      }, 
+      "bounding_box": [
+        [
+          150, 
+          300
+        ], 
+        [
+          250, 
+          400
+        ]
+      ], 
+      "type": "wireline", 
+      "id": "2670f681-d3fa-b4de-1ce7-fea3c3fb22fb"
+    }, 
+    {
+      "startx": 450, 
+      "starty": -50, 
+      "endy": -50, 
+      "endx": 700, 
+      "data": {
+        "netcode": 18, 
+        "y1": -50, 
+        "y0": -50, 
+        "x0": 450, 
+        "x1": 700, 
+        "type": "rect", 
+        "size": 50
+      }, 
+      "bounding_box": [
+        [
+          200, 
+          250
+        ], 
+        [
+          450, 
+          350
+        ]
+      ], 
+      "type": "wireline", 
+      "id": "e2fec4ff-f90a-1818-ca0a-4dca713ee51c"
+    }, 
+    {
+      "orientation": 2, 
+      "text": "fb", 
+      "id": "ef286ac3-dbaa-641f-7701-b82e09202afb", 
+      "y": 50, 
+      "x": 700, 
+      "type": "label", 
+      "dimension": 40
+    }, 
+    {
+      "orientation": 2, 
+      "text": "sw", 
+      "id": "f4ecd7c9-778f-73f5-9b28-eca5cadc9413", 
+      "y": -150, 
+      "x": 700, 
+      "type": "label", 
+      "dimension": 40
+    }, 
+    {
+      "orientation": 0, 
+      "text": "sw", 
+      "id": "7f09239e-0cbc-3fb9-6a6b-bcef1222bbd8", 
+      "y": -1050, 
+      "x": 1100, 
+      "type": "label", 
+      "dimension": 40
+    }, 
+    {
+      "y": -1300, 
+      "x": 1100, 
+      "type": "connection", 
+      "id": "e47b1554-84fe-e6ce-4719-ff815196f4a3"
+    }, 
+    {
+      "reference": "P1", 
+      "nn": "1", 
+      "mm": "1", 
+      "timestamp": "5213C820", 
+      "transform": [
+        [
+          1, 
+          0
+        ], 
+        [
+          0, 
+          -1
+        ]
+      ], 
+      "text": [
+        {
+          "orientation": "V", 
+          "reference": "P1", 
+          "hjustify": "C", 
+          "text": "P1", 
+          "number": 0, 
+          "vjustify": "C", 
+          "visible": true, 
+          "bounding_box": [
+            [
+              866.6666666666666, 
+              -2090
+            ], 
+            [
+              933.3333333333334, 
+              -2010
+            ]
+          ], 
+          "italic": false, 
+          "y": -2050, 
+          "x": 900, 
+          "size": "40", 
+          "id": "f46be548-e43d-2987-6107-3cb27b1e0266,c7304e44-270e-3e2c-258c-556b208c2bd1", 
+          "bold": false
+        }, 
+        {
+          "orientation": "V", 
+          "reference": "CONN_2", 
+          "hjustify": "C", 
+          "text": "pwr", 
+          "number": 1, 
+          "vjustify": "C", 
+          "visible": true, 
+          "bounding_box": [
+            [
+              966.6666666666666, 
+              -2110
+            ], 
+            [
+              1033.3333333333333, 
+              -1990
+            ]
+          ], 
+          "italic": false, 
+          "y": -2050, 
+          "x": 1000, 
+          "size": "40", 
+          "id": "f46be548-e43d-2987-6107-3cb27b1e0266,0d699655-f711-724e-6de7-a996b421219d", 
+          "bold": false
+        }
+      ], 
+      "y": -2050, 
+      "x": 950, 
+      "pinData": {
+        "1": {
+          "y": -2150, 
+          "x": 600, 
+          "netcode": 12, 
+          "type": "box", 
+          "size": 50
+        }, 
+        "2": {
+          "y": -1950, 
+          "x": 600, 
+          "netcode": 18, 
+          "type": "box", 
+          "size": 50
+        }
+      }, 
+      "type": "component", 
+      "id": "f46be548-e43d-2987-6107-3cb27b1e0266", 
+      "name": "CONN_2"
+    }
+  ]
+}
