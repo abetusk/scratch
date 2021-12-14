@@ -21,8 +21,12 @@ Electronics Notes
 
 * Bike invader
 * GRBL shield
+  - motor driver with digital potentiometer for setting current
 * Kears
 * BLDC driver + encoder
 * Inverted cross earring
+* Motor earring ("Dagger for Damocles")
 * OLED business card
+* Lupalm
+
 
