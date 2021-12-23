@@ -8,6 +8,7 @@ Electronics Notes
 * `AS5600` - magnetic rotary encoder ([digikey](https://www.digikey.com/product-detail/en/ams/AS5600-ASOT/AS5600-ASOTCT-ND/7793265)) ([diametric magnet](https://amfmagnets.com/neodymium-disc-6mm-x-2-5mm-n35-diametrically-magnetised.html))
 * `LV8548MC-D` - tiny motor driver ([digikey](https://www.digikey.com/product-detail/en/on-semiconductor/LV8548MC-AH/869-1287-1-ND/2651531))
 * `LTC7103` - buck converter ([digikey](https://www.digikey.com/en/products/base-product/analog-devices-inc/505/LTC7103/118301))
+* `TB67H451FNG` - small h-bridge motor driver ([digikey](https://www.digikey.com/en/products/detail/toshiba-semiconductor-and-storage/TB67H451FNG-EL/11568781) [datasheet](file:///home/abe/Downloads/TB67H451FNG_datasheet_en_20201126.pdf))
 
 ---
 
