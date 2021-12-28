@@ -13,6 +13,16 @@ The times are:
 * Place of birth (country, city/town or lat/lon)
 
 
+---
+
+Note, some files only available via ftp.
+User `anonymous` and email as password (it will give some help text to that effect).
+
+```
+ftp astro.com
+```
+
+
 
 
 References
@@ -23,3 +33,5 @@ References
 * [AstroWiki](https://www.astro.com/astrowiki/en/Main_Page)
 * [cafeastrology.com](https://cafeastrology.com)
 * [Wikipedia: Natal Astrology](https://en.wikipedia.org/wiki/Natal_astrology) ([Astrological Aspect](https://en.wikipedia.org/wiki/Astrological_aspect))
+* [JPL FTP](https://ssd.jpl.nasa.gov/ftp/eph/planets/Linux/)
+* [astro.com 00readme.txt](https://www.astro.com/ftp/swisseph/00readme.txt)
