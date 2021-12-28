@@ -65,6 +65,8 @@ clean:
 """
 
 
+
+
 def usage(ofp):
   ofp.write("\nusage:\n\n    tplate <language>\n\n")
   ofp.write(" <language>    (html|c|c++|cpp|make|makefile)\n")
@@ -75,6 +77,9 @@ if len(sys.argv) < 2:
   sys.exit(-1)
 
 cmd = sys.argv[1]
+modifier = ""
+if len(sys.argv) > 2:
+  modifier = sys.argv[2]
 
 if cmd == "help":
   usage(sys.stdout)
