@@ -46,6 +46,8 @@ python3 epd_4in2_test.py
 Working Example
 ---
 
+After making sure the `lib` and `pic` directories are copied over into your
+working directory from the above repo:
 
 ```
 #!/usr/bin/python3
