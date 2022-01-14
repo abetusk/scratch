@@ -33,7 +33,7 @@
 
 void usage(FILE *fp) {
   fprintf(fp, "\nirnd: command line random number generator (base 10)\n\n");
-  fprintf(fp, "usage:\n  irnd [-h] [-n range] [-s seed]\n");
+  fprintf(fp, "usage:\n  irnd [-h] [-n range] [-s seed] [range]\n");
   fprintf(fp, "\n\n");
   fprintf(fp, "  [-n range]   range (default 2)\n");
   fprintf(fp, "  [-s seed]    seed (default random)\n");
@@ -69,6 +69,10 @@ int main(int argc, char **argv) {
         exit(-1);
         break;
     }
+  }
+  
+  if (optind < argc) {
+    n = atoi(argv[optind]);
   }
 
   if (seed==0) {
