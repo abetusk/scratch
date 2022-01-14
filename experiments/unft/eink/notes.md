@@ -20,9 +20,7 @@ Enable `SPI` through `raspi-config` (`Interface Options -> SPI -> Yes`) and `reb
 ```
 sudo bash
 apt-get update
-apt-get install python3-pip
-apt-get install python3-pil
-apt-get install python3-numpy
+apt-get install -y python3-pip python3-pil python3-numpy
 pip3 install RPi.GPIO
 pip3 install spidev
 ```
