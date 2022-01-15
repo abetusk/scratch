@@ -1,0 +1,57 @@
+#!/usr/bin/python3
+#
+#
+
+import sys
+import os
+
+bdir= os.path.join(os.environ['HOME'], "bin")
+
+picdir = os.path.join(bdir, 'pic')
+libdir = os.path.join(bdir, 'lib')
+
+if os.path.exists(libdir): sys.path.append(libdir)
+
+from waveshare_epd import epd4in2
+import time
+from PIL import Image,ImageDraw,ImageFont
+import traceback
+
+bmp_fn = os.path.join(picdir, "exquisite-corpse.bmp")
+
+if len(sys.argv) > 1:
+  bmp_fn = sys.argv[1]
+
+try:
+
+  epd = epd4in2.EPD()
+
+  print(">> init")
+  epd.init()
+
+  # 0: black, 255: white
+  #
+  print(">> clear")
+  epd.Clear()
+
+  font24 = ImageFont.truetype(os.path.join(picdir, 'Font.ttc'), 24)
+  font18 = ImageFont.truetype(os.path.join(picdir, 'Font.ttc'), 18)
+  font35 = ImageFont.truetype(os.path.join(picdir, 'Font.ttc'), 35)
+
+  print(">>> loading bmp", bmp_fn)
+  #_image = Image.open(os.path.join(picdir, bmp_fn))
+  _image = Image.open(bmp_fn)
+  epd.display(epd.getbuffer(_image))
+
+  print(">> sleep")
+  epd.sleep()
+
+except IOError as e:
+  print("exception:", e)
+
+except KeyboardInterrupt:
+  epd4in2.epdconfig.module_exit()
+  exit()
+
+print(">> done")
+

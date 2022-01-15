@@ -1,0 +1,48 @@
+#!/bin/bash
+#
+# License: CC0 (https://creativecommons.org/publicdomain/zero/1.0/)
+#
+# To the extent possible under law, all copyright and related or neighboring rights are waived
+# on this file.
+# This work is published from: United States.
+#
+
+export VERBOSE='1'
+
+export bdir="$HOME/bin"
+
+export logdir="$HOME/log"
+export imgdir="$HOME/log.img"
+
+export EINK_DIM="300x400"
+export THERM_DIM="384"
+
+mkdir -p $logdir
+mkdir -p $imgdir
+
+_fn=`$bdir/unft_tarot | grep -v '#'`
+bfn=`basename $_fn .png`
+fn="$imgdir/$bfn.png"
+
+mv $_fn $imgdir/
+
+# for eink display
+#
+eink_bmp_fn="$imgdir/eink_${bfn}.bmp"
+if [[ $VERBOSE != "" ]]; then echo "# converting to $eink_bmp_fn" ; fi
+convert $fn -gravity center -resize $EINK_DIM -extent $EINK_DIM $eink_bmp_fn
+
+if [[ $VERBOSE != "" ]]; then echo "# displaying on e-ink display" ; fi
+$bdir/eink_display $eink_bmp_fn
+
+# for thermal paper printer
+#
+therm_png_fn="$imgdir/therm_${bfn}.png"
+if [[ $VERBOSE != "" ]]; then echo "# converting to $therm_png_fn" ; fi
+convert $fn -gravity center -resize $THERM_DIM -extent $THERM_DIM $therm_png_fn
+
+if [[ $VERBOSE != "" ]]; then echo "# sending to thermal printer" ; fi
+$bdir/thermprint $therm_png_fn
+
+
+

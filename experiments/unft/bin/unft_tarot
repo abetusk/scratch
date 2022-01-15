@@ -1,0 +1,110 @@
+#!/bin/bash
+#
+# License: CC0 (https://creativecommons.org/publicdomain/zero/1.0/)
+#
+# To the extent possible under law, all copyright and related or neighboring rights are waived
+# on this file.
+# This work is published from: United States.
+#
+
+export IMGDIR="$HOME/img"
+#export OFILE=`mktemp -u`
+export OFILE=""
+export WIDTH=""
+
+export HEADIDX=""
+export CHESTIDX=""
+export ARMIDX=""
+export LEGIDX=""
+export FEETIDX=""
+
+
+function rand_monster {
+  HEADIDX=${HEADIDX:-$( irnd $( ls $IMGDIR/head_*.png | wc -l ) )}
+  CHESTIDX=${CHESTIDX:-$( irnd $( ls $IMGDIR/chest_*.png | wc -l ) )}
+  ARMIDX=${ARMIDX:-$( irnd $( ls $IMGDIR/arm_*.png | wc -l ) )}
+  LEGIDX=${LEGIDX:-$( irnd $( ls $IMGDIR/leg_*.png | wc -l ) )}
+  FEETIDX=${FEETIDX:-$( irnd $( ls $IMGDIR/feet_*.png | wc -l ) )}
+}
+
+function usage {
+  echo ""
+  echo "unft_tarot: create a random tarot image"
+  echo ""
+  echo "usage:"
+  echo ""
+  echo "  unft_tarot [-h] [-I imgdir] [-H #] [-C #] [-A #] [-L #] [-F #] [-w width] [-o out]"
+  echo ""
+  echo "  [-I imgdir] image directory (default $IMGDIR)"
+  echo "  [-H #]      head image number"
+  echo "  [-C #]      chest image number"
+  echo "  [-A #]      arm image number"
+  echo "  [-L #]      leg image number"
+  echo "  [-F #]      feet image number"
+  echo "  [-w width]  output image width (default from source image)"
+  echo "  [-o out]    output image file (default random)"
+  echo "  [-h]        help (this screen)"
+  echo ""
+}
+export -f usage
+
+
+while getopts "hI:H:C:A:L:F:w:o:" opt ; do
+  case "${opt}" in
+    I)
+      IMGDIR="$OPTARG"
+      ;;
+    H)
+      HEADIDX="$OPTARG"
+      ;;
+    C)
+      CHESTIDX="$OPTARG"
+      ;;
+    A)
+      ARMIDX="$OPTARG"
+      ;;
+    L)
+      LEGIDX="$OPTARG"
+      ;;
+    F)
+      FEETIDX="$OPTARG"
+      ;;
+    w)
+      WIDTH="$OPTARG"
+      ;;
+    o)
+      OFILE="$OPTARG"
+      ;;
+    h)
+      usage
+      exit 0
+      ;;
+    \?)
+      usage
+      exit -1
+      ;;
+    *)
+      usage
+      exit -1
+      ;;
+  esac
+done
+
+rand_monster
+
+if [[ "$OFILE" == "" ]] ; then
+  x=`pwgen -n1`
+  OFILE="/tmp/tarot_${x}_"`date +'%Y.%m.%d.%H.%M.%S.'`"h${HEADIDX}.c${CHESTIDX}.a${ARMIDX}.l${LEGIDX}.f${FEETIDX}.png"
+fi
+
+echo "# Using: $IMGDIR, {h$HEADIDX,c$CHESTIDX,a$ARMIDX,l$LEGIDX,f$FEETIDX}, width:$WIDTH"
+echo "$OFILE"
+
+export d=$IMGDIR
+export ih=`printf "head_%02d.png" $HEADIDX`
+export ic=`printf "chest_%02d.png" $CHESTIDX`
+export ia=`printf "arm_%02d.png" $ARMIDX`
+export il=`printf "leg_%02d.png" $LEGIDX`
+export if=`printf "feet_%02d.png" $FEETIDX`
+
+convert $d/$ih $d/$ic $d/$ia $d/$il $d/$if -layers merge $OFILE
