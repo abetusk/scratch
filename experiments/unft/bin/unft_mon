@@ -1,0 +1,66 @@
+#!/usr/bin/python3
+
+import os
+import sys
+import datetime
+import time
+import subprocess as sp
+
+BUTTON_FN = os.path.join( os.environ['HOME'], "config", "button.state")
+LED_FN = os.path.join( os.environ['HOME'], "config", "led.state")
+
+counter = 0
+SLEEPY = 0.05
+
+CUR_STATE = {
+  "button" : "",
+  "led" : "idle",
+  "sys" : "idle"
+}
+
+def get_button_state():
+  s = ""
+  with open(BUTTON_FN, "r") as fp:
+    s = fp.read().strip()
+  return s
+
+def update_led_state():
+  with open(LED_FN + ".tmp", "w") as fp:
+    fp.write( CUR_STATE['led'] + "\n" )
+  os.rename( LED_FN + ".tmp", LED_FN )
+
+
+CUR_STATE['button'] = get_button_state()
+update_led_state()
+
+while True:
+  dt = datetime.datetime.today()
+  dt_fmt = str(dt.strftime("%Y-%m-%d %H:%M:%S"))
+
+  if (counter % 100) == 0:
+    print("# unft_mon:", dt_fmt)
+
+  btn_state = get_button_state()
+  if btn_state != CUR_STATE['button']:
+    CUR_STATE['button'] = btn_state
+
+    if CUR_STATE['sys'] == "idle":
+      CUR_STATE['sys'] = "gen"
+      CUR_STATE['led'] = 'busy'
+      update_led_state()
+
+      print("BANG")
+
+      sp.run(["/home/pi/bin/run_the_tarot"])
+
+      CUR_STATE['sys'] = "idle"
+      CUR_STATE['led'] = 'idle'
+      CUR_STATE['button'] = get_button_state()
+      update_led_state()
+
+      print("ok")
+
+
+
+  time.sleep(SLEEPY)
+  counter+=1

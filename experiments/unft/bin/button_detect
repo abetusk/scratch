@@ -1,0 +1,28 @@
+#!/usr/bin/python3
+
+import os
+import RPi.GPIO as GPIO
+import datetime
+
+BUTTON_STATE_FILE = os.path.join( os.environ['HOME'], "config", "button.state")
+
+BUTTON_PIN = 23
+
+def button_callback(channel):
+  dt = datetime.datetime.today()
+  print("push")
+  with open(BUTTON_STATE_FILE + ".tmp", "w") as fp:
+    fp.write("push " + str(dt.strftime("%Y-%m-%d %H:%M:%S")) + "\n")
+  os.rename(BUTTON_STATE_FILE + ".tmp", BUTTON_STATE_FILE)
+
+GPIO.setwarnings(False)
+
+#GPIO.setmode(GPIO.BOARD)
+GPIO.setmode(GPIO.BCM)
+
+GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.add_event_detect(BUTTON_PIN, GPIO.RISING,callback=button_callback)
+
+message = input("Press enter to quit\n\n")
+
+GPIO.cleanup()

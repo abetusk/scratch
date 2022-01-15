@@ -1,0 +1,135 @@
+#!/usr/bin/python3
+
+import os
+import RPi.GPIO as GPIO
+import time
+import math
+
+SYSTEM_STATE_FILE = os.path.join( os.environ['HOME'], "config", "led.state" )
+
+# idle
+# busy
+#
+CURRENT_STATE = 'idle'
+
+GPIO.setmode(GPIO.BCM)
+
+GPIO.setup(18, GPIO.OUT)
+pwm = GPIO.PWM(18, 1000)
+
+#EX = 0.65
+EX = 1.5
+
+MAX_LIN_VAL = 99
+MIN_LIN_VAL = 25
+
+DIV_CHECK = 30.0
+
+PAUSE_SLEEP = 0.1
+BRIGHT_SLEEP = 5.0
+DARK_SLEEP = 5
+
+BUSY_PAUSE_SLEEP = 0.01
+BUSY_BRIGHT_SLEEP = 1.0/16.0
+BUSY_DARK_SLEEP = 1.0/16.0
+BUSY_SKIP_STEP = 4
+
+lin_val = 0
+pwm.start(0)
+
+def check_system_state():
+  _state = ""
+  with open(SYSTEM_STATE_FILE, "r") as fp:
+    _state = fp.read()
+  _state = _state.strip()
+  return _state
+
+def idle():
+  #for lin_val in range(0, MAX_LIN_VAL+1, 1):
+  for lin_val in range(MIN_LIN_VAL, MAX_LIN_VAL+1, 1):
+    f_val = 100.0*math.pow(float(lin_val)/100.0, EX)
+    pwm.ChangeDutyCycle(f_val)
+    #pwm.ChangeDutyCycle(int(f_val))
+    time.sleep(PAUSE_SLEEP)
+
+    state = check_system_state()
+    if state != "idle": return state
+
+
+  state = check_system_state()
+  if state != "idle": return state
+
+  for x in range(int(DIV_CHECK)):
+    time.sleep(float(BRIGHT_SLEEP)/DIV_CHECK)
+    state = check_system_state()
+    if state != "idle": return state
+
+
+  #for lin_val in range(MAX_LIN_VAL, 0, -1):
+  for lin_val in range(MAX_LIN_VAL, MIN_LIN_VAL, -1):
+    f_val = 100.0*math.pow(float(lin_val)/100.0, EX)
+    pwm.ChangeDutyCycle(f_val)
+    #pwm.ChangeDutyCycle(int(f_val))
+    time.sleep(PAUSE_SLEEP)
+
+    state = check_system_state()
+    if state != "idle": return state
+
+  #pwm.ChangeDutyCycle(0)
+  f_val = 100.0*math.pow(float(MIN_LIN_VAL)/100.0, EX)
+  pwm.ChangeDutyCycle(f_val)
+  #pwm.ChangeDutyCycle(int(f_val))
+
+  state = check_system_state()
+  if state != "idle": return state
+
+  for x in range(int(DIV_CHECK)):
+    time.sleep(float(DARK_SLEEP)/DIV_CHECK)
+    state = check_system_state()
+    if state != "idle": return state
+
+  return "idle"
+
+def busy():
+  for lin_val in range(0, MAX_LIN_VAL+1, BUSY_SKIP_STEP):
+    f_val = 100.0*math.pow(float(lin_val)/100.0, EX)
+    pwm.ChangeDutyCycle(f_val)
+    time.sleep(BUSY_PAUSE_SLEEP)
+
+  state = check_system_state()
+  if state != "busy": return state
+
+  time.sleep(BUSY_BRIGHT_SLEEP)
+
+  for lin_val in range(MAX_LIN_VAL, 0, -BUSY_SKIP_STEP):
+    f_val = 100.0*math.pow(float(lin_val)/100.0, EX)
+    pwm.ChangeDutyCycle(f_val)
+    time.sleep(BUSY_PAUSE_SLEEP)
+
+  pwm.ChangeDutyCycle(0)
+  time.sleep(BUSY_DARK_SLEEP)
+
+  state = check_system_state()
+  if state != "busy": return state
+
+  return "busy"
+
+
+
+
+
+try:
+  while True:
+
+    print(">>>", CURRENT_STATE)
+
+    if CURRENT_STATE == "idle":
+      CURRENT_STATE = idle()
+    else:
+      CURRENT_STATE = busy()
+
+except KeyboardInterrupt:
+  print("finishing")
+
+pwm.stop()
+GPIO.cleanup()
