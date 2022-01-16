@@ -4,8 +4,8 @@ Notes
 Following the [Medium tutorial](https://medium.com/swlh/create-an-e-paper-display-for-your-raspberry-pi-with-python-2b0de7c8820c).
 
 
-| Header Pin | RPi Pin | Name | Description
-|---------|------|---|
+| Header Pin | RPi Pin | Name | Description |
+|---------|------|---|---|
 | `17` | `3.3v`  | `3.3v` | power |
 | `20` | `gnd` | `GND` | ground |
 | `19` | `gpio 10/mosi` | `DIN` | data in |
