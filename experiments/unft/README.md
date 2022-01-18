@@ -14,6 +14,15 @@ convert orig.png -gravity center -resize 300x400 -extent 300x400 eink_tarot.bmp
 convert orig.png -gravity center -resize 384 -extent 384 therm_tarot.png
 ```
 
+---
+
+`pigpio` needs to be setup:
+
+```
+systemctl enable pigpio
+systemctl start pigpio
+```
+
 Quick Information
 ---
 
