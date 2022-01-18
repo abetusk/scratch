@@ -1,7 +1,15 @@
 #!/usr/bin/python3
+#
+# License: CC0 (https://creativecommons.org/publicdomain/zero/1.0/)
+#
+# To the extent possible under law, all copyright and related or neighboring rights are waived
+# on this file.
+# This work is published from: United States.
+#
 
 import os
 import RPi.GPIO as GPIO
+import datetime
 import time
 import math
 
@@ -121,7 +129,9 @@ def busy():
 try:
   while True:
 
-    print(">>>", CURRENT_STATE)
+    dt = datetime.datetime.today()
+    dt_fmt = str(dt.strftime("%Y-%m-%d %H:%M:%S"))
+    print("# [" + str(dt_fmt) + "]: button_led_pwm: state:", CURRENT_STATE)
 
     if CURRENT_STATE == "idle":
       CURRENT_STATE = idle()
@@ -129,7 +139,10 @@ try:
       CURRENT_STATE = busy()
 
 except KeyboardInterrupt:
-  print("finishing")
+  dt = datetime.datetime.today()
+  dt_fmt = str(dt.strftime("%Y-%m-%d %H:%M:%S"))
+
+  print("# [" + str(dt_fmt) + "]: button_led_pwm: finishing")
 
 pwm.stop()
 GPIO.cleanup()

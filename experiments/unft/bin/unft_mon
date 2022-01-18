@@ -1,4 +1,11 @@
 #!/usr/bin/python3
+#
+# License: CC0 (https://creativecommons.org/publicdomain/zero/1.0/)
+#
+# To the extent possible under law, all copyright and related or neighboring rights are waived
+# on this file.
+# This work is published from: United States.
+#
 
 import os
 import sys
@@ -38,7 +45,7 @@ while True:
   dt_fmt = str(dt.strftime("%Y-%m-%d %H:%M:%S"))
 
   if (counter % 100) == 0:
-    print("# unft_mon:", dt_fmt)
+    print("# [" + str(dt_fmt) + "]: unft_mon: ping")
 
   btn_state = get_button_state()
   if btn_state != CUR_STATE['button']:
@@ -49,7 +56,7 @@ while True:
       CUR_STATE['led'] = 'busy'
       update_led_state()
 
-      print("BANG")
+      print("# [" + str(dt_fmt) + "]: unft_mon: start")
 
       sp.run(["/home/pi/bin/run_the_tarot"])
 
@@ -58,9 +65,7 @@ while True:
       CUR_STATE['button'] = get_button_state()
       update_led_state()
 
-      print("ok")
-
-
+      print("# [" + str(dt_fmt) "]: unft_mon: end")
 
   time.sleep(SLEEPY)
   counter+=1
