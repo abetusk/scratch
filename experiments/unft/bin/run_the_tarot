@@ -9,10 +9,15 @@
 
 export VERBOSE='1'
 
-export bdir="$HOME/bin"
+export BASEDIR="/home/pi"
 
-export logdir="$HOME/log"
-export imgdir="$HOME/log.img"
+#export bdir="$HOME/bin"
+#export logdir="$HOME/log"
+#export imgdir="$HOME/log.img"
+
+export bdir="$BASEDIR/bin"
+export logdir="$BASEDIR/log"
+export imgdir="$BASEDIR/log.img"
 
 export EINK_DIM="300x400"
 export THERM_DIM="384"

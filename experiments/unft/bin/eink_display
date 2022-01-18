@@ -5,7 +5,9 @@
 import sys
 import os
 
-bdir= os.path.join(os.environ['HOME'], "bin")
+BASEDIR="/home/pi"
+#bdir= os.path.join(os.environ['HOME'], "bin")
+bdir= os.path.join(BASEDIR, "bin")
 
 picdir = os.path.join(bdir, 'pic')
 libdir = os.path.join(bdir, 'lib')
@@ -34,9 +36,9 @@ try:
   print(">> clear")
   epd.Clear()
 
-  font24 = ImageFont.truetype(os.path.join(picdir, 'Font.ttc'), 24)
-  font18 = ImageFont.truetype(os.path.join(picdir, 'Font.ttc'), 18)
-  font35 = ImageFont.truetype(os.path.join(picdir, 'Font.ttc'), 35)
+  #font24 = ImageFont.truetype(os.path.join(picdir, 'Font.ttc'), 24)
+  #font18 = ImageFont.truetype(os.path.join(picdir, 'Font.ttc'), 18)
+  #font35 = ImageFont.truetype(os.path.join(picdir, 'Font.ttc'), 35)
 
   print(">>> loading bmp", bmp_fn)
   #_image = Image.open(os.path.join(picdir, bmp_fn))

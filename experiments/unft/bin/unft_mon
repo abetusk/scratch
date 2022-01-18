@@ -13,8 +13,13 @@ import datetime
 import time
 import subprocess as sp
 
-BUTTON_FN = os.path.join( os.environ['HOME'], "config", "button.state")
-LED_FN = os.path.join( os.environ['HOME'], "config", "led.state")
+BASEDIR="/home/pi"
+
+#BUTTON_FN = os.path.join( os.environ['HOME'], "config", "button.state")
+#LED_FN = os.path.join( os.environ['HOME'], "config", "led.state")
+
+BUTTON_FN = os.path.join( BASEDIR, "config", "button.state")
+LED_FN = os.path.join( BASEDIR, "config", "led.state")
 
 counter = 0
 SLEEPY = 0.05
@@ -45,7 +50,7 @@ while True:
   dt_fmt = str(dt.strftime("%Y-%m-%d %H:%M:%S"))
 
   if (counter % 100) == 0:
-    print("# [" + str(dt_fmt) + "]: unft_mon: ping")
+    print("# [" + str(dt_fmt) + "]: unft_mon: heartbeat")
 
   btn_state = get_button_state()
   if btn_state != CUR_STATE['button']:
@@ -65,7 +70,7 @@ while True:
       CUR_STATE['button'] = get_button_state()
       update_led_state()
 
-      print("# [" + str(dt_fmt) "]: unft_mon: end")
+      print("# [" + str(dt_fmt) + "]: unft_mon: end")
 
   time.sleep(SLEEPY)
   counter+=1

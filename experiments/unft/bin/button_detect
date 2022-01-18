@@ -13,7 +13,10 @@ import RPi.GPIO as GPIO
 import datetime
 import time
 
-BUTTON_STATE_FILE = os.path.join( os.environ['HOME'], "config", "button.state")
+BASEDIR = "/home/pi"
+
+#BUTTON_STATE_FILE = os.path.join( os.environ['HOME'], "config", "button.state")
+BUTTON_STATE_FILE = os.path.join( BASEDIR, "config", "button.state")
 
 BUTTON_PIN = 23
 
@@ -49,7 +52,7 @@ try:
 
     t_now = time.time()
     if (t_now - t_prev) > RATE_LIMIT:
-      print("# [" + str(dt_fmt) +"]: button_detect: sleep")
+      print("# [" + str(dt_fmt) +"]: button_detect: heartbeat")
       t_prev = t_now
 
     time.sleep(SLEEPY)
