@@ -1,0 +1,13 @@
+#!/bin/bash
+
+## wtf openscad
+
+sed -i 's;mm;;g' unft_kiosk.svg
+
+svg2ngc unft_kiosk.svg
+
+echo -e 'G90\nG21\n\n' > _unft_kiosk.ngc
+cat unft_kiosk.ngc >> _unft_kiosk.ngc
+
+grecode -shift 15 15 _unft_kiosk.ngc > unft_kiosk.ngc
+
