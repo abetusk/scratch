@@ -1,0 +1,18 @@
+#!/bin/bash
+
+n=0
+for f in `find . -maxdepth 1 -name '*.[ot]tf' ` ; do
+  ff=`basename $f`
+
+  echo '@font-face {'
+  echo '  font-family: customfont'$n';'
+  echo '  font-smooth: always;'
+  echo '  font-size: 250px;'
+  echo '  text-rendering: geometricPrecision;'
+  echo '  src: url("fonts/'$ff'"); '
+  echo '}'
+  echo ''
+
+  n=`echo "$n+1" | bc`
+done
+

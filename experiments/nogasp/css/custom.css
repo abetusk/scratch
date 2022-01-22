@@ -1,0 +1,873 @@
+@font-face {
+  font-family: customfont0;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/dans_disney_ui.ttf"); 
+  text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #e60073, 0 0 40px #e60073, 0 0 50px #e60073, 0 0 60px #e60073, 0 0 70px #e60073;
+}
+
+@font-face {
+  font-family: customfont1;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/Rokkitt-Bold.ttf"); 
+}
+
+@font-face {
+  font-family: customfont2;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/MagicSchoolOne.ttf"); 
+}
+
+@font-face {
+  font-family: customfont3;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/FallingSkyExBdObl.otf"); 
+}
+
+@font-face {
+  font-family: customfont4;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/FallingSkyLight.otf"); 
+}
+
+@font-face {
+  font-family: customfont5;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/WarsawGothicSuExtShdObl.otf"); 
+}
+
+@font-face {
+  font-family: customfont6;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/WarsawGothicExtShd.otf"); 
+}
+
+@font-face {
+  font-family: customfont7;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/WarsawGothicWoodtypeObl.otf"); 
+}
+
+@font-face {
+  font-family: customfont8;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/WarsawGothicSuExt3D.otf"); 
+}
+
+@font-face {
+  font-family: customfont9;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/WarsawGothicCond.otf"); 
+}
+
+@font-face {
+  font-family: customfont10;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/AsimovNarOu.otf"); 
+}
+
+@font-face {
+  font-family: customfont11;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/CaviarDreams_Italic.ttf"); 
+}
+
+@font-face {
+  font-family: customfont12;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/WarsawGothicCondObl.otf"); 
+}
+
+@font-face {
+  font-family: customfont13;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/AsimovNarIt.otf"); 
+}
+
+@font-face {
+  font-family: customfont14;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/Messages-Italic.ttf"); 
+}
+
+@font-face {
+  font-family: customfont15;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/AsimovWidOuIt.otf"); 
+}
+
+@font-face {
+  font-family: customfont16;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/WarsawGothicSuExt.otf"); 
+}
+
+@font-face {
+  font-family: customfont17;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/DoubleFeature21.ttf"); 
+}
+
+@font-face {
+  font-family: customfont18;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/FallingSkyExtOuObl.otf"); 
+}
+
+@font-face {
+  font-family: customfont19;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/WarsawGothicOuLn.otf"); 
+}
+
+@font-face {
+  font-family: customfont20;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/CaviarDreams_BoldItalic.ttf"); 
+}
+
+@font-face {
+  font-family: customfont21;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/WarsawGothicExt3D.otf"); 
+}
+
+@font-face {
+  font-family: customfont22;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/WarsawGothicObl.otf"); 
+}
+
+@font-face {
+  font-family: customfont23;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/WarsawGothicShd.otf"); 
+}
+
+@font-face {
+  font-family: customfont24;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/WarsawGothic.otf"); 
+}
+
+@font-face {
+  font-family: customfont25;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/FallingSkyOu.otf"); 
+}
+
+@font-face {
+  font-family: customfont26;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/RemarcleLeft.ttf"); 
+}
+
+@font-face {
+  font-family: customfont27;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/ROCKYAOE.ttf"); 
+}
+
+@font-face {
+  font-family: customfont28;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/FallingSkyExtObl.otf"); 
+}
+
+@font-face {
+  font-family: customfont29;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/WarsawGothicSuExtShd.otf"); 
+}
+
+@font-face {
+  font-family: customfont30;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/StartlingFontOpen.ttf"); 
+}
+
+@font-face {
+  font-family: customfont31;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/FallingSkyBd+Obl.otf"); 
+}
+
+@font-face {
+  font-family: customfont32;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/WarsawGothicExt.otf"); 
+}
+
+@font-face {
+  font-family: customfont33;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/Messages.ttf"); 
+}
+
+@font-face {
+  font-family: customfont34;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/FallingSkyExBd.otf"); 
+}
+
+@font-face {
+  font-family: customfont35;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/FallingSkyBlkObl.otf"); 
+}
+
+@font-face {
+  font-family: customfont36;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/AsimovXWidIt.otf"); 
+}
+
+@font-face {
+  font-family: customfont37;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/Gidole-Regular.ttf"); 
+}
+
+@font-face {
+  font-family: customfont38;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/Mickorama.ttf"); 
+}
+
+@font-face {
+  font-family: customfont39;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/MagicSchoolTwo.ttf"); 
+}
+
+@font-face {
+  font-family: customfont40;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/new_walt_disney_ui.ttf"); 
+}
+
+@font-face {
+  font-family: customfont41;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/Varela-Regular.ttf"); 
+}
+
+@font-face {
+  font-family: customfont42;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/WarsawGothicExtOuLn.otf"); 
+}
+
+@font-face {
+  font-family: customfont43;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/CaviarDreams_Bold.ttf"); 
+}
+
+@font-face {
+  font-family: customfont44;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/FallingSky.otf"); 
+}
+
+@font-face {
+  font-family: customfont45;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/CheGuevaraONKA-Regular.ttf"); 
+}
+
+@font-face {
+  font-family: customfont46;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/WarsawGothicSuExt3DObl.otf"); 
+}
+
+@font-face {
+  font-family: customfont47;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/AsimovNarOuIt.otf"); 
+}
+
+@font-face {
+  font-family: customfont48;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/AsimovWidOu.otf"); 
+}
+
+@font-face {
+  font-family: customfont49;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/AsimovWid.otf"); 
+}
+
+@font-face {
+  font-family: customfont50;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/FallingSkyBd+.otf"); 
+}
+
+@font-face {
+  font-family: customfont51;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/AsimovNar.otf"); 
+}
+
+@font-face {
+  font-family: customfont52;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/sometimelater.otf"); 
+}
+
+@font-face {
+  font-family: customfont53;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/AsimovDistIt.otf"); 
+}
+
+@font-face {
+  font-family: customfont54;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/Sancreek-Regular.ttf"); 
+}
+
+@font-face {
+  font-family: customfont55;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/edosz.ttf"); 
+}
+
+@font-face {
+  font-family: customfont56;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/new_walt_disney.ttf"); 
+}
+
+@font-face {
+  font-family: customfont57;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/FallingSkyExt.otf"); 
+}
+
+@font-face {
+  font-family: customfont58;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/WarsawGothic3D.otf"); 
+}
+
+@font-face {
+  font-family: customfont59;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/FallingSkyBlk.otf"); 
+}
+
+@font-face {
+  font-family: customfont60;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/WarsawGothicOuLnObl.otf"); 
+}
+
+@font-face {
+  font-family: customfont61;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/WarsawGothicSuExtObl.otf"); 
+}
+
+@font-face {
+  font-family: customfont62;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/Circus.ttf"); 
+}
+
+@font-face {
+  font-family: customfont63;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/FallingSkyCondObl.otf"); 
+}
+
+@font-face {
+  font-family: customfont64;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/Asimov.otf"); 
+}
+
+@font-face {
+  font-family: customfont65;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/WarsawGothic3DObl.otf"); 
+}
+
+@font-face {
+  font-family: customfont66;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/FallingSkyCondOu.otf"); 
+}
+
+@font-face {
+  font-family: customfont67;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/WarsawGothicShdObl.otf"); 
+}
+
+@font-face {
+  font-family: customfont68;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/AsimovXWidOuIt.otf"); 
+}
+
+@font-face {
+  font-family: customfont69;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/FallingSkyCond.otf"); 
+}
+
+@font-face {
+  font-family: customfont70;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/RemarcleRight.ttf"); 
+}
+
+@font-face {
+  font-family: customfont71;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/dans_disney_v5.ttf"); 
+}
+
+@font-face {
+  font-family: customfont72;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/AsimovDist.otf"); 
+}
+
+@font-face {
+  font-family: customfont73;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/Langdon.otf"); 
+}
+
+@font-face {
+  font-family: customfont74;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/AsimovOu.otf"); 
+}
+
+@font-face {
+  font-family: customfont75;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/FallingSkyExtOu.otf"); 
+}
+
+@font-face {
+  font-family: customfont76;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/FallingSkyBdObl.otf"); 
+}
+
+@font-face {
+  font-family: customfont77;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/Remarcle.ttf"); 
+}
+
+@font-face {
+  font-family: customfont78;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/carnevalee_freakshow.ttf"); 
+}
+
+@font-face {
+  font-family: customfont79;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/FallingSkyLightObl.otf"); 
+}
+
+@font-face {
+  font-family: customfont80;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/AsimovOuIt.otf"); 
+}
+
+@font-face {
+  font-family: customfont81;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/FallingSkyObl.otf"); 
+}
+
+@font-face {
+  font-family: customfont82;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/WarsawGothicExtOuLnObl.otf"); 
+}
+
+@font-face {
+  font-family: customfont83;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/FallingSkySeBd.otf"); 
+}
+
+@font-face {
+  font-family: customfont84;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/AsimovWidIt.otf"); 
+}
+
+@font-face {
+  font-family: customfont85;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/FallingSkyOuObl.otf"); 
+}
+
+@font-face {
+  font-family: customfont86;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/AsimovSuIt.otf"); 
+}
+
+@font-face {
+  font-family: customfont87;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/Bevan.ttf"); 
+}
+
+@font-face {
+  font-family: customfont88;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/WarsawGothicExt3DObl.otf"); 
+}
+
+@font-face {
+  font-family: customfont89;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/FallingSkyMedObl.otf"); 
+}
+
+@font-face {
+  font-family: customfont90;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/FallingSkyCondOuObl.otf"); 
+}
+
+@font-face {
+  font-family: customfont91;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/WarsawGothicWoodtype.otf"); 
+}
+
+@font-face {
+  font-family: customfont92;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/FallingSkyMed.otf"); 
+}
+
+@font-face {
+  font-family: customfont93;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/wizzta.ttf"); 
+}
+
+@font-face {
+  font-family: customfont94;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/AsimovXWidOu.otf"); 
+}
+
+@font-face {
+  font-family: customfont95;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/FallingSkySeBdObl.otf"); 
+}
+
+@font-face {
+  font-family: customfont96;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/WarsawGothicExtShdObl.otf"); 
+}
+
+@font-face {
+  font-family: customfont97;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/AsimovXWid.otf"); 
+}
+
+@font-face {
+  font-family: customfont98;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/Oswald.ttf"); 
+}
+
+@font-face {
+  font-family: customfont99;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/Rokkitt-Regular.ttf"); 
+}
+
+@font-face {
+  font-family: customfont100;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/StartlingFont.ttf"); 
+}
+
+@font-face {
+  font-family: customfont101;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/AsimovIt.otf"); 
+}
+
+@font-face {
+  font-family: customfont102;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/Parisish.ttf"); 
+}
+
+@font-face {
+  font-family: customfont103;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/FallingSkyBd.otf"); 
+}
+
+@font-face {
+  font-family: customfont104;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/WarsawGothicExtObl.otf"); 
+}
+
+@font-face {
+  font-family: customfont105;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/PleaseOptimize-DemiBold.otf"); 
+}
+
+@font-face {
+  font-family: customfont106;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/CaviarDreams.ttf"); 
+}
+
+@font-face {
+  font-family: customfont107;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/berantas_korupsi.ttf"); 
+}
+
+@font-face {
+  font-family: customfont108;
+  font-smooth: always;
+  font-size: 250px;
+  text-rendering: geometricPrecision;
+  src: url("fonts/PoiretOne-Regular.ttf"); 
+}
+
