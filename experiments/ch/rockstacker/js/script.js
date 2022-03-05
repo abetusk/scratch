@@ -1,5 +1,8 @@
 
 var g_info = {
+  "disp_canvas": {},
+  "disp_ctx": {},
+
   "b_canvas": {},
   "b_ctx": {},
   "subsample": 16,
@@ -9,21 +12,15 @@ var g_info = {
 
 function label_corner() {
   let ctx = g_info.b_ctx;
-
   let dw = 4;
-
   for (let key in g_info.found_info) {
     let rc = g_info.found_info[key];
-
     ctx.fillStyle = "rgba(255,0,0,1.0)";
     ctx.fillRect(rc.c-dw/2, rc.r-dw/2, dw, dw);
   }
 }
 
 function square_cw_intersect(img_data, r, c, ds) {
-
-  let ctx = g_info.b_ctx;
-
   let path_choice = [
     { "sx": -ds, "sy":  ds, "dx":  1, "dy":  0, "ex":  ds, "ey":  ds },
     { "sx":  ds, "sy":  ds, "dx":  0, "dy": -1, "ex":  ds, "ey": -ds },
@@ -44,7 +41,6 @@ function square_cw_intersect(img_data, r, c, ds) {
   let dx = pc.dx;
   let dy = pc.dy;
 
-
   let found = false;
   for (; pidx<path_choice.length; pidx++) {
     let pc = path_choice[pidx];
@@ -57,13 +53,7 @@ function square_cw_intersect(img_data, r, c, ds) {
       let idx = ((r+y)*w + (c+x))*4;
 
       if ((idx<0) || (idx>=_max)) { continue; }
-
-      ctx.fillStyle = "rgba(255,0,255,1.0)";
-      ctx.fillRect(c+x, r+y, 1, 1);
-
       if (pix_dat[idx+3] == 0) {
-        ctx.fillStyle= "rgba(0,255,0,1.0)";
-        ctx.fillRect(c+x, r+y, 3, 3);
         found=true;
         break;
       }
@@ -92,13 +82,7 @@ function square_cw_intersect(img_data, r, c, ds) {
       let idx = ((r+y)*w + (c+x))*4;
 
       if ((idx<0) || (idx>=_max)) { continue; }
-
-      ctx.fillStyle = "rgba(255,0,255,1.0)";
-      ctx.fillRect(c+x, r+y, 1, 1);
-
       if (pix_dat[idx+3] != 0) {
-        ctx.fillStyle= "rgba(0,0,255,1.0)";
-        ctx.fillRect(c+x, r+y, 3, 3);
         found=true;
         break;
       }
@@ -110,6 +94,24 @@ function square_cw_intersect(img_data, r, c, ds) {
   if (!found) { return [-1,-1]; }
 
   return [ r+y, c+x ];
+}
+
+function construct_bounding_paths() {
+  let img_data = g_info.b_img_data;
+  let img_dat = img_data.data;
+
+  let subdiv = g_info.subsample;
+  for (let key in g_info.found_info) {
+    let rc = g_info.found_info[key];
+    let raw_path = trace_boundary_path(img_data, rc.c, rc.r);
+
+    let sub_path = [];
+    for (let i=0; i<raw_path.length; i+= subdiv) {
+      sub_path.push( {"x": raw_path[i][0], "y":raw_path[i][1] } );
+    }
+
+    g_info.rock.push({"p":sub_path});
+  }
 
 }
 
@@ -120,30 +122,12 @@ function rect_path(ctx,p) {
   }
 }
 
-function construct_bounding_paths() {
+
+function debug_path() {
   let ctx = g_info.b_ctx;
-  let img_data = g_info.b_img_data;
-  let img_dat = img_data.data;
-
-  let subdiv = g_info.subsample;
-
-  for (let key in g_info.found_info) {
-    let rc = g_info.found_info[key];
-
-    let raw_path = trace_boundary_path(img_data, rc.c, rc.r);
-
-    let sub_path = [];
-
-    for (let i=0; i<raw_path.length; i+= subdiv) {
-      sub_path.push( {"x": raw_path[i][0], "y":raw_path[i][1] } );
-    }
-
-    g_info.rock.push({"p":sub_path});
-
-    rect_path(ctx, sub_path);
+  for (let i=0; i<g_info.rock.length; i++) {
+    rect_path(ctx, g_info.rock[i].p);
   }
-
-  console.log("done");
 }
 
 function trace_boundary_path(img_data, c,r) {
@@ -167,10 +151,6 @@ function trace_boundary_path(img_data, c,r) {
 
   let _path = [];
 
-  //DEBUG
-  let ctx = g_info.b_ctx;
-  //DEBUG
-
   let w = img_data.width;
   let h = img_data.height;
   let pix_data = img_data.data;
@@ -190,10 +170,6 @@ function trace_boundary_path(img_data, c,r) {
   let iter=0;
 
   for (; iter<max_iter; iter++) {
-
-    //DEBUG
-    //ctx.fillStyle = "rgba(255,0,0,1.0)";
-    //ctx.fillRect(cur_c, cur_r, 3, 3);
 
     for (let i=0; i<8; i++) {
       let sched_win = _dwin_idx[i];
@@ -251,95 +227,61 @@ function trace_boundary_path(img_data, c,r) {
 
 }
 
+function uu(a) {
+  let ctx = g_info.disp_ctx;
 
+  let src_x = 300;
+  let src_y = 150;
+  let src_w = 300;
+  let src_h = 300;
 
-function fufu() {
-  let img = g_info.data[0];
+  let dst_x = 200;
+  let dst_y = 200;
+  let dst_w = 150;
+  let dst_h = 150;
 
-  let w = img.width;
-  let h = img.height;
+  ctx.save();
 
-  let canvas = g_info.b_canvas;
-  let ctx = g_info.b_ctx;
+  ctx.translate(dst_x+dst_w/2, dst_y+dst_h/2);
+  //ctx.rotate(12*Math.PI/7);
+  ctx.rotate(a);
+  ctx.translate(-dst_x-dst_w/2, -dst_y-dst_h/2);
 
-  let grid_w = 300;
-  let grid_h = 300;
-  let grid_offset_w = 0;
-  let grid_offset_h = 150;
+  ctx.drawImage(g_info.data[0],
+    src_x, src_y, src_w, src_h,
+    dst_x, dst_y, dst_w, dst_h);
 
-  let count1 = 0;
+  ctx.restore();
+}
 
+function disp_rock(ctx, rock_idx_x, rock_idx_y, x, y, a, s, debug) {
 
-  let img_data = g_info.b_img_data;
-  let img_dat = img_data.data;
+  let x_offset = 300;
+  let y_offset = 150;
 
-  for (let gr=grid_offset_h; gr<(h); gr+=grid_h) {
-    for (let gc=grid_offset_w; gc<(w); gc+=grid_w) {
+  let src_w = 300;
+  let src_h = 300;
 
-      for (let jj=0; jj<grid_h; jj++) {
-        for (let ii=0; ii<grid_w; ii++) {
-          let _c = gc + ii;
-          let _r = gr + jj;
-          let idx = 4*(_c + w*_r);
-          for (let p=0; p<4; p++) {
-            if (img_dat[idx+p] != 0) {
-              count1++;
-            }
-          }
+  let src_x = rock_idx_x*src_w + x_offset;
+  let src_y = rock_idx_y*src_h + y_offset;
 
-        }
-      }
+  let dst_x = x;
+  let dst_y = y;
+  let dst_w = src_w*s;
+  let dst_h = src_h*s;
+  
+  ctx.save();
 
+  ctx.translate(dst_x+dst_w/2, dst_y+dst_h/2);
+  ctx.rotate(a);
+  ctx.translate(-dst_x-dst_w/2, -dst_y-dst_h/2);
 
-      let found=false;
-      let pilot_r = -1, pilot_c = -1;
+  ctx.drawImage(g_info.data[0],
+    src_x, src_y, src_w, src_h,
+    dst_x, dst_y, dst_w, dst_h);
 
-      for (let idx=0; idx<grid_w; idx++) {
-        let _c = gc + idx;
-        let _r = gr + idx;
-
-        if ((_c >= w) || (_r >= h)) { continue; }
-        let pix_idx = 4*(_c + _r*w);
-
-        console.log(">>", _r, _c, 4*(_c + _r*w), "(", w, ")", img_dat[pix_idx], img_dat[pix_idx+1], img_dat[pix_idx+2], img_dat[pix_idx+3]);
-
-
-
-        if (img_dat[pix_idx+1] != 0) {
-
-          console.log(">>", gr, gc, _r, _c, pix_idx, img_dat[pix_idx]);
-
-          found=true;
-          pilot_r = _r;
-          pilot_c = _c;
-          break;
-        }
-        else {
-          //console.log(img_dat[pix_idx], img_dat[pix_idx+1], img_dat[pix_idx+2], img_dat[pix_idx+2]);
-
-          //img_dat[pix_idx+0] = 128;
-          //img_dat[pix_idx+1] = 0;
-          //img_dat[pix_idx+2] = 0;
-          //img_dat[pix_idx+3] = 255;
-        }
-
-
-      }
-
-      if (found) {
-        console.log("FOUND", gr, gc, pilot_r, pilot_c);
-      }
-      else {
-        console.log("not found", gr, gc);
-      }
-
-    }
-  }
-
-  ctx.putImageData(img_data, 0, 0);
-
-  console.log("count1", count1);
-
+  ctx.restore();
+  
 }
 
 // grid 300 x 300 pixels,
@@ -349,17 +291,13 @@ function fufu() {
 //
 
 function img_load_done(x) {
-  console.log("done", x);
-
-  console.log(g_info.data[0]);
-
   let img = g_info.data[0];
 
   let w = img.width;
   let h= img.height;
 
-  //let canvas = document.createElement("canvas");
-  let canvas = document.getElementById("canvas");
+  //let canvas = document.getElementById("canvas");
+  let canvas = document.getElementById("back_canvas");
   canvas.width = w;
   canvas.height = h;
   let ctx = canvas.getContext("2d");
@@ -371,56 +309,30 @@ function img_load_done(x) {
 
   ctx.drawImage(img, 0, 0);
 
-  //let img_data = ctx.createImageData(w,h);
   let img_data = ctx.getImageData(0,0,w,h);
 
   g_info.b_img_data = img_data;
 
-  console.log(img_data);
-
   let img_dat = img_data.data;
-
-  let count=0;
-  /*
-  for (let i=0; i<img_dat.length; i++) {
-    if (img_dat[i] != 0) {
-      count++;
-      //img_dat[i] = 128;
-    }
-  }
-  */
-
-
-  console.log(count);
 
   let grid_w = 300;
   let grid_h = 300;
   let grid_offset_w = 0;
   let grid_offset_h = 150;
 
-  let count1 = 0;
-
   let found_info = {};
+
+  //DEBUG
+  //
+  let t_img = ctx.getImageData(300,150,300,300);
+
+  g_info.sub_img = t_img;
+
+  //
+  //DEBUG
 
   for (let gr=grid_offset_h; gr<(h); gr+=grid_h) {
     for (let gc=grid_offset_w; gc<(w); gc+=grid_w) {
-
-      /*
-      for (let jj=0; jj<grid_h; jj++) {
-        for (let ii=0; ii<grid_w; ii++) {
-          let _c = gc + ii;
-          let _r = gr + jj;
-          let idx = 4*(_c + w*_r);
-          for (let p=0; p<4; p++) {
-            if (img_dat[idx+p] != 0) {
-              count1++;
-              //img_dat[idx+p] = 128;
-            }
-          }
-        }
-      }
-      */
-
 
       let found=false;
       let pilot_r = -1, pilot_c = -1;
@@ -432,11 +344,7 @@ function img_load_done(x) {
         if ((_c >= w) || (_r >= h)) { continue; }
         let pix_idx = 4*(_c + _r*w);
 
-        //console.log(">>", _r, _c, 4*(_c + _r*w), "(", w, ")", img_dat[pix_idx], img_dat[pix_idx+1], img_dat[pix_idx+2], img_dat[pix_idx+3]);
-
         if (img_dat[pix_idx+3] != 0) {
-
-          //console.log(">>", gr, gc, _r, _c, pix_idx, img_dat[pix_idx], img_dat[pix_idx+1], img_dat[pix_idx+2], img_dat[pix_idx+3]);
 
           found_info[pix_idx] = {"r": _r, "c": _c };
 
@@ -446,38 +354,218 @@ function img_load_done(x) {
           break;
         }
         else {
-          //console.log(img_dat[pix_idx], img_dat[pix_idx+1], img_dat[pix_idx+2], img_dat[pix_idx+2]);
-
-          //img_dat[pix_idx+0] = 128;
-          //img_dat[pix_idx+1] = 0;
-          //img_dat[pix_idx+2] = 0;
-          //img_dat[pix_idx+3] = 255;
         }
-
 
       }
 
       if (found) {
-        //console.log("FOUND", gr, gc, pilot_r, pilot_c);
       }
       else {
-        //console.log("not found", gr, gc);
       }
 
     }
   }
 
-  //ctx.putImageData(img_data, 0, 0);
-
-  //DEBUG
-  //ctx.putImageData(img_data, 0, 0);
-  //return;
-
   g_info.found_info = found_info;
 
-  console.log("count1", count1);
-
   construct_bounding_paths();
+
+  let disp_canvas = document.getElementById("canvas");
+  disp_canvas.width = w;
+  disp_canvas.height = h;
+  let disp_ctx = disp_canvas.getContext("2d");
+  disp_ctx.width = w;
+  disp_ctx.height = h;
+
+  g_info.disp_canvas = disp_canvas;
+  g_info.disp_ctx = disp_ctx;
+  //uu();
+
+  for (let i=0; i<4; i++) {
+    for (let j=0; j<8; j++) {
+      let a = (i/4)*(j/8)*Math.PI;
+      disp_rock(g_info.disp_ctx, i, j, 140*i, 140*j, a, 0.5, true);
+
+    }
+  }
+
+  //disp_ctx.drawImage(img, 0, 0);
+  //disp_ctx.drawImage(g_info.data[0], 0, 0);
+    //src_x, src_y, src_w, src_h,
+    //dst_x, dst_y, dst_w, dst_h);
+
+
+  //uu();
+}
+
+function img_stick_load_done() {
+  console.log("...");
+}
+
+function flood_fill(img_data) {
+  let pix_data = img_data.data;
+
+  let w = img_data.width;
+  let h = img_data.height;
+
+  let _h = {};
+
+  let iter = 0;
+  let _max_count = w*h;
+
+  let xcount=0;
+
+  _h[0] = 1;
+  let _h_count=1;
+  let zz=0;
+
+  let neg = 0;
+  while ((_h_count>0) && (iter < _max_count)) {
+
+    for (let key in _h) {
+
+      let idx = parseInt(key);
+
+      if (pix_data[idx] != 127) {
+
+        zz++;
+
+        let idx_l = idx - 4;
+        let idx_r = idx + 4;
+        let idx_u = idx - 4*w;
+        let idx_d = idx + 4*w;
+
+        if ((idx_l >= 0) && (pix_data[idx_l] != 127)) {
+          _h[idx_l] = 1;
+          _h_count++;
+        }
+
+        if ((idx_u >= 0) && (pix_data[idx_u] != 127)) {
+          _h[idx_u] = 1;
+          _h_count++;
+        }
+
+        if ((idx_r < (4*w*h)) && (pix_data[idx_r] != 127)) {
+          _h[idx_r] = 1;
+          _h_count++;
+        }
+
+        if ((idx_d < (4*w*h)) && (pix_data[idx_d] != 127)) {
+          _h[idx_d] = 1;
+          _h_count++;
+        }
+
+      }
+
+      if ((pix_data[idx+0] == 0) &&
+          (pix_data[idx+1] == 0) &&
+          (pix_data[idx+2] == 0) &&
+          (pix_data[idx+3] == 0)) {
+        pix_data[idx+0] = 127;
+        pix_data[idx+3] = 255;
+        xcount++;
+      }
+      else {
+        pix_data[idx] = 127;
+        pix_data[idx+1] = 127;
+        pix_data[idx+3] = 255;
+      }
+
+      _h_count--;
+      delete _h[key];
+
+      neg++;
+
+      if (key in _h) {
+        console.log(">>> wtf" );
+      }
+
+      break;
+    }
+
+    iter++;
+
+    if ((iter%10000)==0) {
+      console.log(iter, _h_count, xcount, zz, neg);
+    }
+  }
+
+  console.log(">>>", iter, _h_count);
+}
+
+function img_stick_display() {
+  let img = g_info.data[1];
+
+  let w = img.width;
+  let h = img.height;
+
+  let canvas = document.getElementById("back_canvas");
+  canvas.width = w;
+  canvas.height = h;
+  let ctx = canvas.getContext("2d");
+  ctx.width = w;
+  ctx.height = h;
+
+  g_info.b_canvas = canvas;
+  g_info.b_ctx = ctx;
+
+  ctx.drawImage(img, 0, 0);
+  let img_data = ctx.getImageData(0,0,w,h);
+
+  let pix_data = img_data.data;
+
+  // count
+  /*
+  let count_0 = 0;
+  let count_255 = 0;
+  let count_tot = 0;
+  let count_nz=0;
+  let alpha_freq = [];
+  for (let i=0; i<256; i++) { alpha_freq.push(0); }
+  for (let i=0; i<pix_data.length; i+=4) {
+    count_tot++;
+
+    alpha_freq[ pix_data[i+3] ]++;
+
+    if (pix_data[i+3] == 0) {
+      count_0++;
+    }
+    else if (pix_data[i+3]==255) {
+      count_255++;
+    }
+
+    if ((pix_data[i+0] > 0) ||
+        (pix_data[i+1] > 0) ||
+        (pix_data[i+2] > 0) ||
+        (pix_data[i+3] > 0)) {
+      count_nz++;
+    }
+  }
+  console.log(count_0, count_255, count_tot, count_nz);
+
+  for (let i=0; i<alpha_freq.length; i++) {
+    if (alpha_freq[i]>0) {
+      console.log(i, alpha_freq[i]);
+    }
+  }
+  */
+
+  console.log("cp");
+  flood_fill(img_data);
+
+  for (let r=0; r<h; r++) {
+    for (let c=0; c<w; c++) {
+      let idx = 4*(r*w + c);
+
+      if (pix_data[idx+3] == 255) {
+        pix_data[idx+0] = 127;
+        pix_data[idx+3] = 255;
+      }
+
+    }
+  }
+
+  ctx.putImageData(img_data, 0, 0);
 
 }
 
@@ -487,6 +575,11 @@ function init() {
   let img = new Image();
   img.src = "img/Tinyrocks_l2_1.png";
   img.addEventListener('load', img_load_done);
-
   g_info.data.push(img);
+
+  let img_stick = new Image();
+  img_stick.src = "img/sticks.png";
+  img_stick.addEventListener("load", img_stick_load_done);
+  g_info.data.push(img_stick);
+
 }
