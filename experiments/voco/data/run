@@ -1,0 +1,8 @@
+#!/bin/bash
+
+/usr/bin/espeak -p 50 "[[h@l]]" --stdout > 'he.wav'
+/usr/bin/espeak -p 50 "[['oU]]" --stdout > 'llo.wav'
+
+ffmpeg -y -i he.wav -af "asetrate=44100*.6,aresample=44100,atempo=1/0.9" he_0.wav
+ffmpeg -y -i llo.wav -af "asetrate=44100*.4,aresample=44100,atempo=1/0.9" llo_0.wav
+

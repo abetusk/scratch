@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# espeak --voices
+#
+
+# LD_LIBRARY_PATH=/usr/local/lib espeak-ng --stdout hello |  aplay
+
+echo -e 'hello\nwelcome\ntake a deep breath\nbreathe in\n you are here\n' | espeak -ven+f2 -p 40 -s110
