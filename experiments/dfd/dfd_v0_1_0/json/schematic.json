@@ -1,0 +1,389 @@
+{
+  "component_lib": {
+    "unknown": {
+      "art": [
+        {
+          "count": 5, 
+          "line_width": 0, 
+          "shape": "path", 
+          "path": [
+            [
+              250, 
+              250
+            ], 
+            [
+              -250, 
+              250
+            ], 
+            [
+              -250, 
+              -250
+            ], 
+            [
+              250, 
+              -250
+            ], 
+            [
+              250, 
+              250
+            ]
+          ], 
+          "de_morgan_alternate_shape": "1", 
+          "unit": "0", 
+          "fill": "N"
+        }
+      ], 
+      "name": "unknown", 
+      "reference": "Z", 
+      "mm": 1, 
+      "timestamp": "52566B9A", 
+      "transform": [
+        [
+          1, 
+          0
+        ], 
+        [
+          0, 
+          -1
+        ]
+      ], 
+      "unknown_text_field": {
+        "orientation": "H", 
+        "reference": "??", 
+        "hjustify": "C", 
+        "text": "??", 
+        "number": 0, 
+        "vjustify": "C", 
+        "transform": [
+          [
+            1, 
+            0
+          ], 
+          [
+            0, 
+            -1
+          ]
+        ], 
+        "visible": true, 
+        "bounding_box": [
+          [
+            -50, 
+            -50
+          ], 
+          [
+            50, 
+            50
+          ]
+        ], 
+        "flags": "0000 C CNN", 
+        "italic": true, 
+        "y": 0, 
+        "x": 0, 
+        "size": "100", 
+        "bold": false
+      }, 
+      "bounding_box": [
+        [
+          -250, 
+          -250
+        ], 
+        [
+          250, 
+          250
+        ]
+      ], 
+      "text": [
+        {
+          "orientation": "H", 
+          "reference": "SIL-4", 
+          "hjustify": "C", 
+          "text": "SIL-4", 
+          "number": 0, 
+          "vjustify": "C", 
+          "visible": true, 
+          "bounding_box": [
+            [
+              -430, 
+              230
+            ], 
+            [
+              -130, 
+              330
+            ]
+          ], 
+          "flags": "0000 C CNN", 
+          "italic": false, 
+          "y": -280, 
+          "x": -280, 
+          "size": "60", 
+          "bold": false
+        }, 
+        {
+          "orientation": "H", 
+          "reference": "??", 
+          "hjustify": "C", 
+          "text": "Val**", 
+          "number": 1, 
+          "vjustify": "C", 
+          "visible": false, 
+          "bounding_box": [
+            [
+              220, 
+              -330
+            ], 
+            [
+              340, 
+              -230
+            ]
+          ], 
+          "flags": "0000 C CNN", 
+          "italic": false, 
+          "y": 280, 
+          "x": 280, 
+          "size": "60", 
+          "bold": false
+        }
+      ], 
+      "nn": 1, 
+      "type": "component", 
+      "coarse_bounding_box": [
+        [
+          -430, 
+          -250
+        ], 
+        [
+          340, 
+          250
+        ]
+      ]
+    }
+  }, 
+  "net_pin_id_map": {}, 
+  "element": [
+    {
+      "reference": "Z", 
+      "nn": "1", 
+      "mm": "1", 
+      "timestamp": "5213C820", 
+      "transform": [
+        [
+          1, 
+          0
+        ], 
+        [
+          0, 
+          1
+        ]
+      ], 
+      "text": [
+        {
+          "orientation": "H", 
+          "reference": "SIL-2", 
+          "hjustify": "C", 
+          "text": "SIL-2", 
+          "number": 0, 
+          "vjustify": "C", 
+          "visible": true, 
+          "bounding_box": [
+            [
+              -430, 
+              230
+            ], 
+            [
+              -130, 
+              330
+            ]
+          ], 
+          "flags": "0000 C CNN", 
+          "italic": false, 
+          "y": -280, 
+          "x": -280, 
+          "size": "60", 
+          "id": "43b7e8d8-050e-3f1d-3662-8515875163e9,93a56c21-b9f5-7b12-fe61-8092f2ca02a5", 
+          "bold": false
+        }, 
+        {
+          "orientation": "H", 
+          "reference": "??", 
+          "hjustify": "C", 
+          "text": "Val**", 
+          "number": 1, 
+          "vjustify": "C", 
+          "visible": false, 
+          "bounding_box": [
+            [
+              220, 
+              -330
+            ], 
+            [
+              340, 
+              -230
+            ]
+          ], 
+          "flags": "0000 C CNN", 
+          "italic": false, 
+          "y": 280, 
+          "x": 280, 
+          "size": "60", 
+          "id": "43b7e8d8-050e-3f1d-3662-8515875163e9,879cb43e-49e9-637f-537e-598794b511be", 
+          "bold": false
+        }
+      ], 
+      "y": 0, 
+      "x": 0, 
+      "type": "component", 
+      "id": "43b7e8d8-050e-3f1d-3662-8515875163e9", 
+      "name": "unknown"
+    }, 
+    {
+      "reference": "Z", 
+      "nn": "1", 
+      "mm": "1", 
+      "timestamp": "5213C820", 
+      "transform": [
+        [
+          1, 
+          0
+        ], 
+        [
+          0, 
+          1
+        ]
+      ], 
+      "text": [
+        {
+          "orientation": "H", 
+          "reference": "SIL-2", 
+          "hjustify": "C", 
+          "text": "SIL-2", 
+          "number": 0, 
+          "vjustify": "C", 
+          "visible": true, 
+          "bounding_box": [
+            [
+              -430, 
+              230
+            ], 
+            [
+              -130, 
+              330
+            ]
+          ], 
+          "flags": "0000 C CNN", 
+          "italic": false, 
+          "y": -280, 
+          "x": -280, 
+          "size": "60", 
+          "id": "46b797b1-c8de-87c1-7dbc-9a5295285542,9e58f712-be1c-b261-5d16-97e0dee72aaf", 
+          "bold": false
+        }, 
+        {
+          "orientation": "H", 
+          "reference": "??", 
+          "hjustify": "C", 
+          "text": "Val**", 
+          "number": 1, 
+          "vjustify": "C", 
+          "visible": false, 
+          "bounding_box": [
+            [
+              220, 
+              -330
+            ], 
+            [
+              340, 
+              -230
+            ]
+          ], 
+          "flags": "0000 C CNN", 
+          "italic": false, 
+          "y": 280, 
+          "x": 280, 
+          "size": "60", 
+          "id": "46b797b1-c8de-87c1-7dbc-9a5295285542,c23feba7-fdaf-dba1-fcb5-a7fda1523a84", 
+          "bold": false
+        }
+      ], 
+      "y": 0, 
+      "x": 0, 
+      "type": "component", 
+      "id": "46b797b1-c8de-87c1-7dbc-9a5295285542", 
+      "name": "unknown"
+    }, 
+    {
+      "reference": "Z", 
+      "nn": "1", 
+      "mm": "1", 
+      "timestamp": "5213C820", 
+      "transform": [
+        [
+          1, 
+          0
+        ], 
+        [
+          0, 
+          1
+        ]
+      ], 
+      "text": [
+        {
+          "orientation": "H", 
+          "reference": "SIL-4", 
+          "hjustify": "C", 
+          "text": "SIL-4", 
+          "number": 0, 
+          "vjustify": "C", 
+          "visible": true, 
+          "bounding_box": [
+            [
+              -430, 
+              230
+            ], 
+            [
+              -130, 
+              330
+            ]
+          ], 
+          "flags": "0000 C CNN", 
+          "italic": false, 
+          "y": -280, 
+          "x": -280, 
+          "size": "60", 
+          "id": "a63b8784-c5f2-da25-5ebf-43ed29642da9,bcc583d7-ee51-d023-793f-d7b07666d180", 
+          "bold": false
+        }, 
+        {
+          "orientation": "H", 
+          "reference": "??", 
+          "hjustify": "C", 
+          "text": "Val**", 
+          "number": 1, 
+          "vjustify": "C", 
+          "visible": false, 
+          "bounding_box": [
+            [
+              220, 
+              -330
+            ], 
+            [
+              340, 
+              -230
+            ]
+          ], 
+          "flags": "0000 C CNN", 
+          "italic": false, 
+          "y": 280, 
+          "x": 280, 
+          "size": "60", 
+          "id": "a63b8784-c5f2-da25-5ebf-43ed29642da9,1dd9720b-7c2d-c76e-19a4-48971312830e", 
+          "bold": false
+        }
+      ], 
+      "y": 0, 
+      "x": 0, 
+      "type": "component", 
+      "id": "a63b8784-c5f2-da25-5ebf-43ed29642da9", 
+      "name": "unknown"
+    }
+  ]
+}

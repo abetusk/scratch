@@ -1,0 +1,332 @@
+PCBNEW-BOARD Version 2 date Tue 14 Dec 2021 04:37:01 EST
+
+# Created by pykicad jsonbrd.py 2014-03-05
+
+$GENERAL
+encoding utf-8
+Units mm
+LayerCount 2
+EnabledLayers 1FFF8001
+Links 36
+NoConn 4
+Di 47.249999 24.273 111.027001 100.650001
+Ndraw 7
+Ntrack 168
+Nzone 0
+BoardThickness 1.6
+Nmodule 8
+Nnets 8
+$EndGENERAL
+
+$SHEETDESCR
+Sheet A3 16535 11693
+Title ""
+Date "30 nov 2013"
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndSHEETDESCR
+
+$SETUP
+Layers 2
+Layer[0] B.Cu signal
+Layer[15] F.Cu signal
+TrackWidth 0.254
+TrackClearence 0.254
+ZoneClearence 0.508
+Zone_45_Only 0
+TrackMinWidth 0.254
+DrawSegmWidth 0.2
+EdgeSegmWidth 0.1
+ViaSize 0.889
+ViaDrill 0.635
+ViaMinSize 0.889
+ViaMinDrill 0.508
+MicroViaSize 0.508
+MicroViaDrill 0.127
+MicroViasAllowed 0
+MicroViaMinSize 0.508
+MicroViaMinDrill 0.127
+TextPcbWidth 0.3
+TextPcbSize 1.5 1.5
+EdgeModWidth 0.15
+TextModSize 1 1
+TextModWidth 0.15
+PadSize 1.5 1.5
+PadDrill 0.6
+Pad2MaskClearance 0
+SolderMaskMinWidth 0
+AuxiliaryAxisOrg 0 0
+VisibleElements 7FFFFFFF
+PcbPlotParams (pcbplotparams (layerselection 3178497) (usegerberextensions true) (excludeedgelayer true) (linewidth 0.150000) (plotframeref false) (viasonmask false) (mode 1) (useauxorigin false) (hpglpennumber 1) (hpglpenspeed 20) (hpglpendiameter 15) (hpglpenoverlay 2) (psnegative false) (psa4output false) (plotreference true) (plotvalue true) (plotothertext true) (plotinvisibletext false) (padsonsilk false) (subtractmaskfromsilk false) (outputformat 1) (mirror false) (drillshape 1) (scaleselection 1) (outputdirectory ""))
+$EndSETUP
+
+$EQUIPOT
+Na 0 ""
+St ~
+$EndEQUIPOT
+$EQUIPOT
+Na 1 "N-00001"
+St ~
+$EndEQUIPOT
+$EQUIPOT
+Na 2 "N-00002"
+St ~
+$EndEQUIPOT
+$EQUIPOT
+Na 3 "N-00003"
+St ~
+$EndEQUIPOT
+$EQUIPOT
+Na 4 "N-00004"
+St ~
+$EndEQUIPOT
+$EQUIPOT
+Na 5 "N-00005"
+St ~
+$EndEQUIPOT
+$EQUIPOT
+Na 6 "N-00006"
+St ~
+$EndEQUIPOT
+$EQUIPOT
+Na 7 "N-00007"
+St ~
+$EndEQUIPOT
+$EQUIPOT
+Na 8 "N-00008"
+St ~
+$EndEQUIPOT
+$EQUIPOT
+Na 9 "N-00009"
+St ~
+$EndEQUIPOT
+$EQUIPOT
+Na 10 "N-00010"
+St ~
+$EndEQUIPOT
+$EQUIPOT
+Na 11 "N-00011"
+St ~
+$EndEQUIPOT
+$EQUIPOT
+Na 12 "N-00012"
+St ~
+$EndEQUIPOT
+$EQUIPOT
+Na 13 "N-00013"
+St ~
+$EndEQUIPOT
+$EQUIPOT
+Na 14 "N-00014"
+St ~
+$EndEQUIPOT
+$EQUIPOT
+Na 15 "N-00015"
+St ~
+$EndEQUIPOT
+$EQUIPOT
+Na 16 "N-00016"
+St ~
+$EndEQUIPOT
+$EQUIPOT
+Na 17 "N-00017"
+St ~
+$EndEQUIPOT
+$EQUIPOT
+Na 18 "N-00018"
+St ~
+$EndEQUIPOT
+$EQUIPOT
+Na 19 "N-00019"
+St ~
+$EndEQUIPOT
+$NCLASS
+Name "Default"
+Desc "This is the default net class."
+Clearance 0.254
+TrackWidth 0.254
+ViaDia 1.19888
+ViaDrill 0.635
+uViaDia 0.508
+uViaDrill 0.127
+$EndNCLASS
+$MODULE SIL-2
+Po 6.35 -5.08 0 15 00200000 "00000000" "~~"
+Li SIL-2
+Sc 0
+Op 0 0 0
+T0 0.0 -2.54 1.08712 1.72974 0 0 N V 21  N "SIL-2"
+T1 0.0 -2.54 1.016 1.524 0 0 N  21  N "Val**"
+DS -2.54 1.27 -2.54 -1.27 0.3048 21
+DS -2.54 -1.27 2.54 -1.27 0.3048 21
+DS 2.54 -1.27 2.54 1.27 0.3048 21
+DS 2.54 1.27 -2.54 1.27 0.3048 21
+$PAD
+Sh "1" R 1.397 1.397 0.0 0.0 0
+Dr 0.8128 0.0 0.0
+At STD N 00E0FFFF
+Ne 18 "N-00018"
+Po -1.27 0.0
+$EndPAD
+$PAD
+Sh "2" C 1.397 1.397 0.0 0.0 0
+Dr 0.8128 0.0 0.0
+At STD N 00E0FFFF
+Ne 19 "N-00019"
+Po 1.27 0.0
+$EndPAD
+$EndMODULE
+$MODULE SIL-2
+Po 6.35 -7.62 0 15 00200000 "00000000" "~~"
+Li SIL-2
+Sc 0
+Op 0 0 0
+T0 0.0 -2.54 1.08712 1.72974 0 0 N V 21  N "SIL-2"
+T1 0.0 -2.54 1.016 1.524 0 0 N  21  N "Val**"
+DS -2.54 1.27 -2.54 -1.27 0.3048 21
+DS -2.54 -1.27 2.54 -1.27 0.3048 21
+DS 2.54 -1.27 2.54 1.27 0.3048 21
+DS 2.54 1.27 -2.54 1.27 0.3048 21
+$PAD
+Sh "1" R 1.397 1.397 0.0 0.0 0
+Dr 0.8128 0.0 0.0
+At STD N 00E0FFFF
+Ne 16 "N-00016"
+Po -1.27 0.0
+$EndPAD
+$PAD
+Sh "2" C 1.397 1.397 0.0 0.0 0
+Dr 0.8128 0.0 0.0
+At STD N 00E0FFFF
+Ne 17 "N-00017"
+Po 1.27 0.0
+$EndPAD
+$EndMODULE
+$MODULE SIL-4
+Po 15.24 -6.35 -900 15 00200000 "00000000" "~~"
+Li SIL-4
+Sc 0
+Op 0 0 0
+T0 0.0 -2.54 1.08712 1.73482 -900 0 N V 21  N "SIL-4"
+T1 0.0 -2.54 1.016 1.524 -900 0 N  21  N "Val**"
+DS -5.08 -1.27 -5.08 -1.27 0.3048 21
+DS -5.08 1.27 -5.08 -1.27 0.3048 21
+DS -5.08 -1.27 -5.08 -1.27 0.3048 21
+DS -5.08 -1.27 5.08 -1.27 0.3048 21
+DS 5.08 -1.27 5.08 1.27 0.3048 21
+DS 5.08 1.27 -5.08 1.27 0.3048 21
+DS -2.54 1.27 -2.54 -1.27 0.3048 21
+$PAD
+Sh "1" R 1.397 1.397 0.0 0.0 -900
+Dr 0.8128 0.0 0.0
+At STD N 00E0FFFF
+Ne 16 "N-00016"
+Po -3.81 0.0
+$EndPAD
+$PAD
+Sh "2" C 1.397 1.397 0.0 0.0 -900
+Dr 0.8128 0.0 0.0
+At STD N 00E0FFFF
+Ne 17 "N-00017"
+Po -1.27 0.0
+$EndPAD
+$PAD
+Sh "3" C 1.397 1.397 0.0 0.0 -900
+Dr 0.8128 0.0 0.0
+At STD N 00E0FFFF
+Ne 19 "N-00019"
+Po 1.27 0.0
+$EndPAD
+$PAD
+Sh "4" C 1.397 1.397 0.0 0.0 -900
+Dr 0.8128 0.0 0.0
+At STD N 00E0FFFF
+Ne 18 "N-00018"
+Po 3.81 0.0
+$EndPAD
+$EndMODULE
+$DRAWSEGMENT
+Po 0 2.54 -3.81 3.81 -2.54 0.508
+De 28 0 900 0 0
+$EndDRAWSEGMENT
+$DRAWSEGMENT
+Po 0 3.81 -2.54 11.43 -2.54 0.508
+De 28 0 900 0 0
+$EndDRAWSEGMENT
+$DRAWSEGMENT
+Po 0 11.43 -2.54 13.97 0.0 0.508
+De 28 0 900 0 0
+$EndDRAWSEGMENT
+$DRAWSEGMENT
+Po 0 13.97 0.0 16.383 0.0 0.508
+De 28 0 900 0 0
+$EndDRAWSEGMENT
+$DRAWSEGMENT
+Po 0 16.383 0.0 17.78 -1.27 0.508
+De 28 0 900 0 0
+$EndDRAWSEGMENT
+$DRAWSEGMENT
+Po 0 17.78 -1.27 17.78 -11.43 0.508
+De 28 0 900 0 0
+$EndDRAWSEGMENT
+$DRAWSEGMENT
+Po 0 17.78 -11.43 16.51 -12.7 0.508
+De 28 0 900 0 0
+$EndDRAWSEGMENT
+$DRAWSEGMENT
+Po 0 16.51 -12.7 13.843 -12.7 0.508
+De 28 0 900 0 0
+$EndDRAWSEGMENT
+$DRAWSEGMENT
+Po 0 13.843 -12.7 11.43 -10.16 0.508
+De 28 0 900 0 0
+$EndDRAWSEGMENT
+$DRAWSEGMENT
+Po 0 11.43 -10.16 3.81 -10.16 0.508
+De 28 0 900 0 0
+$EndDRAWSEGMENT
+$DRAWSEGMENT
+Po 0 3.81 -10.16 2.54 -8.89 0.508
+De 28 0 900 0 0
+$EndDRAWSEGMENT
+$DRAWSEGMENT
+Po 0 2.54 -8.89 2.54 -3.81 0.508
+De 28 0 900 0 0
+$EndDRAWSEGMENT
+$TRACK
+Po 0 5.08 -7.62 5.08 -8.382 0.3048
+De 15 0 16 0 400000
+Po 0 5.08 -8.382 5.588 -8.89 0.3048
+De 15 0 16 0 400000
+Po 0 5.588 -8.89 13.97 -8.89 0.3048
+De 15 0 16 0 400000
+Po 0 13.97 -8.89 15.24 -10.16 0.3048
+De 15 0 16 0 400000
+Po 0 7.62 -7.62 11.43 -7.62 0.3048
+De 15 0 17 0 400000
+Po 0 11.43 -7.62 15.24 -7.62 0.3048
+De 15 0 17 0 400000
+Po 0 5.08 -5.08 5.461 -5.08 0.3048
+De 15 0 18 0 400000
+Po 0 5.461 -5.08 6.985 -3.556 0.3048
+De 15 0 18 0 400000
+Po 0 6.985 -3.556 14.224 -3.556 0.3048
+De 15 0 18 0 400000
+Po 0 14.224 -3.556 15.24 -2.54 0.3048
+De 15 0 18 0 400000
+Po 0 7.62 -5.08 10.541 -5.08 0.3048
+De 15 0 19 0 400000
+Po 0 10.541 -5.08 10.668 -5.207 0.3048
+De 15 0 19 0 400000
+Po 0 10.668 -5.207 15.113 -5.207 0.3048
+De 15 0 19 0 400000
+Po 0 15.113 -5.207 15.24 -5.08 0.3048
+De 15 0 19 0 400000
+$EndTRACK
+$ZONE
+$EndZONE
+$EndBOARD

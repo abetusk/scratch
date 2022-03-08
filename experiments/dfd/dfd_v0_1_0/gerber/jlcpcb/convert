@@ -1,0 +1,7 @@
+#!/bin/bash
+
+for x in `ls ../*_Cu\.*` ; do
+
+
+  echo $x
+done

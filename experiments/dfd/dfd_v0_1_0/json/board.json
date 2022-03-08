@@ -1,0 +1,2343 @@
+{
+  "equipot": [
+    {
+      "net_name": "", 
+      "net_number": 0
+    }, 
+    {
+      "net_number": 1, 
+      "net_name": "N-00001"
+    }, 
+    {
+      "net_number": 2, 
+      "net_name": "N-00002"
+    }, 
+    {
+      "net_number": 3, 
+      "net_name": "N-00003"
+    }, 
+    {
+      "net_number": 4, 
+      "net_name": "N-00004"
+    }, 
+    {
+      "net_number": 5, 
+      "net_name": "N-00005"
+    }, 
+    {
+      "net_number": 6, 
+      "net_name": "N-00006"
+    }, 
+    {
+      "net_number": 7, 
+      "net_name": "N-00007"
+    }, 
+    {
+      "net_number": 8, 
+      "net_name": "N-00008"
+    }, 
+    {
+      "net_number": 9, 
+      "net_name": "N-00009"
+    }, 
+    {
+      "net_number": 10, 
+      "net_name": "N-00010"
+    }, 
+    {
+      "net_number": 11, 
+      "net_name": "N-00011"
+    }, 
+    {
+      "net_number": 12, 
+      "net_name": "N-00012"
+    }, 
+    {
+      "net_number": 13, 
+      "net_name": "N-00013"
+    }, 
+    {
+      "net_number": 14, 
+      "net_name": "N-00014"
+    }, 
+    {
+      "net_number": 15, 
+      "net_name": "N-00015"
+    }, 
+    {
+      "net_number": 16, 
+      "net_name": "N-00016"
+    }, 
+    {
+      "net_number": 17, 
+      "net_name": "N-00017"
+    }, 
+    {
+      "net_number": 18, 
+      "net_name": "N-00018"
+    }, 
+    {
+      "net_number": 19, 
+      "net_name": "N-00019"
+    }
+  ], 
+  "net_name_map": {
+    "": 0, 
+    "N-00015": 15, 
+    "N-00013": 13, 
+    "N-00014": 14, 
+    "N-00016": 16, 
+    "N-00012": 12, 
+    "N-00002": 2, 
+    "N-00003": 3, 
+    "N-00017": 17, 
+    "N-00001": 1, 
+    "N-00006": 6, 
+    "N-00007": 7, 
+    "N-00004": 4, 
+    "N-00005": 5, 
+    "N-00011": 11, 
+    "N-00008": 8, 
+    "N-00009": 9, 
+    "N-00019": 19, 
+    "N-00018": 18, 
+    "N-00010": 10
+  }, 
+  "net_code_map": {
+    "11": "N-00011", 
+    "10": "N-00010", 
+    "13": "N-00013", 
+    "12": "N-00012", 
+    "15": "N-00015", 
+    "14": "N-00014", 
+    "17": "N-00017", 
+    "16": "N-00016", 
+    "19": "N-00019", 
+    "18": "N-00018", 
+    "1": "N-00001", 
+    "0": "", 
+    "3": "N-00003", 
+    "2": "N-00002", 
+    "5": "N-00005", 
+    "4": "N-00004", 
+    "7": "N-00007", 
+    "6": "N-00006", 
+    "9": "N-00009", 
+    "8": "N-00008"
+  }, 
+  "element": [
+    {
+      "library_name": "SIL-2", 
+      "layer": "15", 
+      "art": [
+        {
+          "line_width": 120, 
+          "startx": -1000, 
+          "starty": 500, 
+          "endy": -500, 
+          "endx": -1000, 
+          "layer": "21", 
+          "shape": "segment"
+        }, 
+        {
+          "line_width": 120, 
+          "startx": -1000, 
+          "starty": -500, 
+          "endy": -500, 
+          "endx": 1000, 
+          "layer": "21", 
+          "shape": "segment"
+        }, 
+        {
+          "line_width": 120, 
+          "startx": 1000, 
+          "starty": -500, 
+          "endy": 500, 
+          "endx": 1000, 
+          "layer": "21", 
+          "shape": "segment"
+        }, 
+        {
+          "line_width": 120, 
+          "startx": 1000, 
+          "starty": 500, 
+          "endy": 500, 
+          "endx": -1000, 
+          "layer": "21", 
+          "shape": "segment"
+        }
+      ], 
+      "orientation": "0", 
+      "text": [
+        {
+          "layer": "21", 
+          "angle": 0, 
+          "sizex": 681, 
+          "misc": " N \"SIL-2\"", 
+          "sizey": 428, 
+          "number": "0", 
+          "visible": true, 
+          "flag": "N", 
+          "text": "SIL-2", 
+          "y": -1000, 
+          "x": 0, 
+          "rotation": "0", 
+          "id": "43b7e8d8-050e-3f1d-3662-8515875163e9,6bf1938a-c09c-4c69-0de5-a79cbce7d489", 
+          "penwidth": 120
+        }, 
+        {
+          "layer": "21", 
+          "angle": 0, 
+          "sizex": 600, 
+          "misc": " N \"Val**\"", 
+          "sizey": 400, 
+          "number": "1", 
+          "visible": false, 
+          "flag": "N", 
+          "text": "Val**", 
+          "y": -1000, 
+          "x": 0, 
+          "rotation": "0", 
+          "id": "43b7e8d8-050e-3f1d-3662-8515875163e9,bb9e61f5-065b-1e8d-662d-dac30410fc3f", 
+          "penwidth": 120
+        }
+      ], 
+      "bounding_box": [
+        [
+          1500, 
+          -2500
+        ], 
+        [
+          3500, 
+          -1500
+        ]
+      ], 
+      "rotation_cost_90": "0", 
+      "id": "43b7e8d8-050e-3f1d-3662-8515875163e9", 
+      "coarse_bounding_box": [
+        [
+          797.5, 
+          -3214
+        ], 
+        [
+          4202.5, 
+          -1500
+        ]
+      ], 
+      "angle": 0, 
+      "timestamp_op": "0", 
+      "pad": [
+        {
+          "bounding_box": [
+            [
+              1725, 
+              -2275
+            ], 
+            [
+              2275, 
+              -1725
+            ]
+          ], 
+          "angle": 0, 
+          "name": "1", 
+          "drill_diam": 320, 
+          "deltax": 0, 
+          "deltay": 0, 
+          "sizex": 550, 
+          "sizey": 550, 
+          "drill_x": 0, 
+          "layer_mask": "00E0FFFF", 
+          "shape": "rectangle", 
+          "orientation": 0, 
+          "net_name": "", 
+          "drill_y": 0, 
+          "posy": 0, 
+          "posx": -500, 
+          "shape_code": "R", 
+          "type": "STD", 
+          "id": "43b7e8d8-050e-3f1d-3662-8515875163e9,c31ba82d-abf7-2095-feaa-464e383428d9", 
+          "drill_shape": "circle", 
+          "net_number": 18
+        }, 
+        {
+          "bounding_box": [
+            [
+              2725, 
+              -2275
+            ], 
+            [
+              3275, 
+              -1725
+            ]
+          ], 
+          "angle": 0, 
+          "name": "2", 
+          "drill_diam": 320, 
+          "deltax": 0, 
+          "deltay": 0, 
+          "sizex": 550, 
+          "sizey": 550, 
+          "drill_x": 0, 
+          "layer_mask": "00E0FFFF", 
+          "shape": "circle", 
+          "orientation": 0, 
+          "net_name": "", 
+          "drill_y": 0, 
+          "posy": 0, 
+          "posx": 500, 
+          "shape_code": "C", 
+          "type": "STD", 
+          "id": "43b7e8d8-050e-3f1d-3662-8515875163e9,f7a271a9-5e12-96ab-7f46-bd891fb15411", 
+          "drill_shape": "circle", 
+          "net_number": 19
+        }
+      ], 
+      "units": "mm", 
+      "attribute1": "00000000", 
+      "type": "module", 
+      "timestamp": "00200000", 
+      "attribute2": "~~", 
+      "rotation_cost_misc": "0", 
+      "name": "SIL-2", 
+      "keyword": [
+        " Connecteurs 2 pins"
+      ], 
+      "rotation_cost_180": "0", 
+      "y": -2000, 
+      "x": 2500
+    }, 
+    {
+      "library_name": "SIL-2", 
+      "layer": "15", 
+      "art": [
+        {
+          "line_width": 120, 
+          "startx": -1000, 
+          "starty": 500, 
+          "endy": -500, 
+          "endx": -1000, 
+          "layer": "21", 
+          "shape": "segment"
+        }, 
+        {
+          "line_width": 120, 
+          "startx": -1000, 
+          "starty": -500, 
+          "endy": -500, 
+          "endx": 1000, 
+          "layer": "21", 
+          "shape": "segment"
+        }, 
+        {
+          "line_width": 120, 
+          "startx": 1000, 
+          "starty": -500, 
+          "endy": 500, 
+          "endx": 1000, 
+          "layer": "21", 
+          "shape": "segment"
+        }, 
+        {
+          "line_width": 120, 
+          "startx": 1000, 
+          "starty": 500, 
+          "endy": 500, 
+          "endx": -1000, 
+          "layer": "21", 
+          "shape": "segment"
+        }
+      ], 
+      "orientation": "0", 
+      "text": [
+        {
+          "layer": "21", 
+          "angle": 0, 
+          "sizex": 681, 
+          "misc": " N \"SIL-2\"", 
+          "sizey": 428, 
+          "number": "0", 
+          "visible": true, 
+          "flag": "N", 
+          "text": "SIL-2", 
+          "y": -1000, 
+          "x": 0, 
+          "rotation": "0", 
+          "id": "46b797b1-c8de-87c1-7dbc-9a5295285542,4d23bf94-cdb0-6866-1376-d8777f383a45", 
+          "penwidth": 120
+        }, 
+        {
+          "layer": "21", 
+          "angle": 0, 
+          "sizex": 600, 
+          "misc": " N \"Val**\"", 
+          "sizey": 400, 
+          "number": "1", 
+          "visible": false, 
+          "flag": "N", 
+          "text": "Val**", 
+          "y": -1000, 
+          "x": 0, 
+          "rotation": "0", 
+          "id": "46b797b1-c8de-87c1-7dbc-9a5295285542,ce4ccedd-5480-666b-6536-744567bc186a", 
+          "penwidth": 120
+        }
+      ], 
+      "bounding_box": [
+        [
+          1500, 
+          -3500
+        ], 
+        [
+          3500, 
+          -2500
+        ]
+      ], 
+      "rotation_cost_90": "0", 
+      "id": "46b797b1-c8de-87c1-7dbc-9a5295285542", 
+      "coarse_bounding_box": [
+        [
+          797.5, 
+          -4214
+        ], 
+        [
+          4202.5, 
+          -2500
+        ]
+      ], 
+      "angle": 0, 
+      "timestamp_op": "0", 
+      "pad": [
+        {
+          "bounding_box": [
+            [
+              1725, 
+              -3275
+            ], 
+            [
+              2275, 
+              -2725
+            ]
+          ], 
+          "angle": 0, 
+          "name": "1", 
+          "drill_diam": 320, 
+          "deltax": 0, 
+          "deltay": 0, 
+          "sizex": 550, 
+          "sizey": 550, 
+          "drill_x": 0, 
+          "layer_mask": "00E0FFFF", 
+          "shape": "rectangle", 
+          "orientation": 0, 
+          "net_name": "", 
+          "drill_y": 0, 
+          "posy": 0, 
+          "posx": -500, 
+          "shape_code": "R", 
+          "type": "STD", 
+          "id": "46b797b1-c8de-87c1-7dbc-9a5295285542,f14c34ca-b5b9-83ca-4ed9-b6b50fed5c02", 
+          "drill_shape": "circle", 
+          "net_number": 16
+        }, 
+        {
+          "bounding_box": [
+            [
+              2725, 
+              -3275
+            ], 
+            [
+              3275, 
+              -2725
+            ]
+          ], 
+          "angle": 0, 
+          "name": "2", 
+          "drill_diam": 320, 
+          "deltax": 0, 
+          "deltay": 0, 
+          "sizex": 550, 
+          "sizey": 550, 
+          "drill_x": 0, 
+          "layer_mask": "00E0FFFF", 
+          "shape": "circle", 
+          "orientation": 0, 
+          "net_name": "", 
+          "drill_y": 0, 
+          "posy": 0, 
+          "posx": 500, 
+          "shape_code": "C", 
+          "type": "STD", 
+          "id": "46b797b1-c8de-87c1-7dbc-9a5295285542,20c423a5-6fbb-ced4-10bc-ce2b03f9089d", 
+          "drill_shape": "circle", 
+          "net_number": 17
+        }
+      ], 
+      "units": "mm", 
+      "attribute1": "00000000", 
+      "type": "module", 
+      "timestamp": "00200000", 
+      "attribute2": "~~", 
+      "rotation_cost_misc": "0", 
+      "name": "SIL-2", 
+      "keyword": [
+        " Connecteurs 2 pins"
+      ], 
+      "rotation_cost_180": "0", 
+      "y": -3000, 
+      "x": 2500
+    }, 
+    {
+      "library_name": "SIL-4", 
+      "layer": "15", 
+      "art": [
+        {
+          "line_width": 120, 
+          "startx": -2000, 
+          "starty": -500, 
+          "endy": -500, 
+          "endx": -2000, 
+          "layer": "21", 
+          "shape": "segment"
+        }, 
+        {
+          "line_width": 120, 
+          "startx": -2000, 
+          "starty": 500, 
+          "endy": -500, 
+          "endx": -2000, 
+          "layer": "21", 
+          "shape": "segment"
+        }, 
+        {
+          "line_width": 120, 
+          "startx": -2000, 
+          "starty": -500, 
+          "endy": -500, 
+          "endx": -2000, 
+          "layer": "21", 
+          "shape": "segment"
+        }, 
+        {
+          "line_width": 120, 
+          "startx": -2000, 
+          "starty": -500, 
+          "endy": -500, 
+          "endx": 2000, 
+          "layer": "21", 
+          "shape": "segment"
+        }, 
+        {
+          "line_width": 120, 
+          "startx": 2000, 
+          "starty": -500, 
+          "endy": 500, 
+          "endx": 2000, 
+          "layer": "21", 
+          "shape": "segment"
+        }, 
+        {
+          "line_width": 120, 
+          "startx": 2000, 
+          "starty": 500, 
+          "endy": 500, 
+          "endx": -2000, 
+          "layer": "21", 
+          "shape": "segment"
+        }, 
+        {
+          "line_width": 120, 
+          "startx": -1000, 
+          "starty": 500, 
+          "endy": -500, 
+          "endx": -1000, 
+          "layer": "21", 
+          "shape": "segment"
+        }
+      ], 
+      "orientation": -900, 
+      "text": [
+        {
+          "layer": "21", 
+          "angle": -1.5707963267948966, 
+          "sizex": 683, 
+          "misc": " N \"SIL-4\"", 
+          "sizey": 428, 
+          "number": "0", 
+          "visible": true, 
+          "flag": "N", 
+          "text": "SIL-4", 
+          "y": -1000, 
+          "x": 0, 
+          "rotation": -900, 
+          "id": "a63b8784-c5f2-da25-5ebf-43ed29642da9,ee117094-bec5-5eab-5b46-e18205d1ab3e", 
+          "penwidth": 120
+        }, 
+        {
+          "layer": "21", 
+          "angle": -1.5707963267948966, 
+          "sizex": 600, 
+          "misc": " N \"Val**\"", 
+          "sizey": 400, 
+          "number": "1", 
+          "visible": false, 
+          "flag": "N", 
+          "text": "Val**", 
+          "y": -1000, 
+          "x": 0, 
+          "rotation": -900, 
+          "id": "a63b8784-c5f2-da25-5ebf-43ed29642da9,e39bcdb7-b63f-64fa-3e4c-fe9269a399f1", 
+          "penwidth": 120
+        }
+      ], 
+      "bounding_box": [
+        [
+          5500, 
+          -4500
+        ], 
+        [
+          6500, 
+          -500
+        ]
+      ], 
+      "rotation_cost_90": "0", 
+      "id": "a63b8784-c5f2-da25-5ebf-43ed29642da9", 
+      "coarse_bounding_box": [
+        [
+          5500, 
+          -4500
+        ], 
+        [
+          7214, 
+          -500
+        ]
+      ], 
+      "angle": -1.5707963267948966, 
+      "timestamp_op": "0", 
+      "pad": [
+        {
+          "bounding_box": [
+            [
+              5725, 
+              -4275
+            ], 
+            [
+              6275, 
+              -3725
+            ]
+          ], 
+          "angle": -1.5707963267948966, 
+          "name": "1", 
+          "drill_diam": 320, 
+          "deltax": 0, 
+          "deltay": 0, 
+          "sizex": 550, 
+          "sizey": 550, 
+          "drill_x": 0, 
+          "layer_mask": "00E0FFFF", 
+          "shape": "rectangle", 
+          "orientation": -900, 
+          "net_name": "", 
+          "drill_y": 0, 
+          "posy": 0, 
+          "posx": -1500, 
+          "shape_code": "R", 
+          "type": "STD", 
+          "id": "a63b8784-c5f2-da25-5ebf-43ed29642da9,bea00503-e835-85b2-0555-94ac598e91f1", 
+          "drill_shape": "circle", 
+          "net_number": 16
+        }, 
+        {
+          "bounding_box": [
+            [
+              5725, 
+              -3275
+            ], 
+            [
+              6275, 
+              -2725
+            ]
+          ], 
+          "angle": -1.5707963267948966, 
+          "name": "2", 
+          "drill_diam": 320, 
+          "deltax": 0, 
+          "deltay": 0, 
+          "sizex": 550, 
+          "sizey": 550, 
+          "drill_x": 0, 
+          "layer_mask": "00E0FFFF", 
+          "shape": "circle", 
+          "orientation": -900, 
+          "net_name": "", 
+          "drill_y": 0, 
+          "posy": 0, 
+          "posx": -500, 
+          "shape_code": "C", 
+          "type": "STD", 
+          "id": "a63b8784-c5f2-da25-5ebf-43ed29642da9,70be52af-d2a6-adea-fd7d-531e3aa4fc87", 
+          "drill_shape": "circle", 
+          "net_number": 17
+        }, 
+        {
+          "bounding_box": [
+            [
+              5725, 
+              -2275
+            ], 
+            [
+              6275, 
+              -1725
+            ]
+          ], 
+          "angle": -1.5707963267948966, 
+          "name": "3", 
+          "drill_diam": 320, 
+          "deltax": 0, 
+          "deltay": 0, 
+          "sizex": 550, 
+          "sizey": 550, 
+          "drill_x": 0, 
+          "layer_mask": "00E0FFFF", 
+          "shape": "circle", 
+          "orientation": -900, 
+          "net_name": "", 
+          "drill_y": 0, 
+          "posy": 0, 
+          "posx": 500, 
+          "shape_code": "C", 
+          "type": "STD", 
+          "id": "a63b8784-c5f2-da25-5ebf-43ed29642da9,0003af5c-f421-0c25-292e-1260c61ea3db", 
+          "drill_shape": "circle", 
+          "net_number": 19
+        }, 
+        {
+          "bounding_box": [
+            [
+              5725, 
+              -1275
+            ], 
+            [
+              6275, 
+              -725
+            ]
+          ], 
+          "angle": -1.5707963267948966, 
+          "name": "4", 
+          "drill_diam": 320, 
+          "deltax": 0, 
+          "deltay": 0, 
+          "sizex": 550, 
+          "sizey": 550, 
+          "drill_x": 0, 
+          "layer_mask": "00E0FFFF", 
+          "shape": "circle", 
+          "orientation": -900, 
+          "net_name": "", 
+          "drill_y": 0, 
+          "posy": 0, 
+          "posx": 1500, 
+          "shape_code": "C", 
+          "type": "STD", 
+          "id": "a63b8784-c5f2-da25-5ebf-43ed29642da9,099589aa-8296-87b6-faf0-81006f5a8517", 
+          "drill_shape": "circle", 
+          "net_number": 18
+        }
+      ], 
+      "units": "mm", 
+      "attribute1": "00000000", 
+      "type": "module", 
+      "timestamp": "00200000", 
+      "attribute2": "~~", 
+      "rotation_cost_misc": "0", 
+      "name": "SIL-4", 
+      "keyword": [
+        " Connecteur 4 pibs"
+      ], 
+      "rotation_cost_180": "0", 
+      "y": -2500, 
+      "x": 6000
+    }, 
+    {
+      "status": "400000", 
+      "netcode": 16, 
+      "layer": 15, 
+      "shape_code": 0, 
+      "extra": "", 
+      "timestamp": "0", 
+      "bounding_box": [
+        [
+          1880, 
+          -3420
+        ], 
+        [
+          2120, 
+          -2880
+        ]
+      ], 
+      "width": 120, 
+      "shape": "track", 
+      "y1": -3300, 
+      "y0": -3000, 
+      "x0": 2000, 
+      "x1": 2000, 
+      "type": "track", 
+      "id": "881c6a82-8292-f758-871f-2c764478a02b", 
+      "coarse_bounding_box": [
+        [
+          1880, 
+          -3420
+        ], 
+        [
+          2120, 
+          -2880
+        ]
+      ]
+    }, 
+    {
+      "status": "400000", 
+      "netcode": 16, 
+      "layer": 15, 
+      "shape_code": 0, 
+      "extra": "", 
+      "timestamp": "0", 
+      "bounding_box": [
+        [
+          1880, 
+          -3620
+        ], 
+        [
+          2320, 
+          -3180
+        ]
+      ], 
+      "width": 120, 
+      "shape": "track", 
+      "y1": -3500, 
+      "y0": -3300, 
+      "x0": 2000, 
+      "x1": 2200, 
+      "type": "track", 
+      "id": "e397c2fa-6ad3-499c-3e5b-f3c5699a6858", 
+      "coarse_bounding_box": [
+        [
+          1880, 
+          -3620
+        ], 
+        [
+          2320, 
+          -3180
+        ]
+      ]
+    }, 
+    {
+      "status": "400000", 
+      "netcode": 16, 
+      "layer": 15, 
+      "shape_code": 0, 
+      "extra": "", 
+      "timestamp": "0", 
+      "bounding_box": [
+        [
+          2080, 
+          -3620
+        ], 
+        [
+          5620, 
+          -3380
+        ]
+      ], 
+      "width": 120, 
+      "shape": "track", 
+      "y1": -3500, 
+      "y0": -3500, 
+      "x0": 2200, 
+      "x1": 5500, 
+      "type": "track", 
+      "id": "7c9030cc-23e8-6d20-4889-802e31da28f4", 
+      "coarse_bounding_box": [
+        [
+          2080, 
+          -3620
+        ], 
+        [
+          5620, 
+          -3380
+        ]
+      ]
+    }, 
+    {
+      "status": "400000", 
+      "netcode": 16, 
+      "layer": 15, 
+      "shape_code": 0, 
+      "extra": "", 
+      "timestamp": "0", 
+      "bounding_box": [
+        [
+          5380, 
+          -4120
+        ], 
+        [
+          6120, 
+          -3380
+        ]
+      ], 
+      "width": 120, 
+      "shape": "track", 
+      "y1": -4000, 
+      "y0": -3500, 
+      "x0": 5500, 
+      "x1": 6000, 
+      "type": "track", 
+      "id": "42f42e05-03d6-9ce8-ad32-6a8fde658753", 
+      "coarse_bounding_box": [
+        [
+          5380, 
+          -4120
+        ], 
+        [
+          6120, 
+          -3380
+        ]
+      ]
+    }, 
+    {
+      "status": "400000", 
+      "netcode": 17, 
+      "layer": 15, 
+      "shape_code": 0, 
+      "extra": "", 
+      "timestamp": "0", 
+      "bounding_box": [
+        [
+          2880, 
+          -3120
+        ], 
+        [
+          4620, 
+          -2880
+        ]
+      ], 
+      "width": 120, 
+      "shape": "track", 
+      "y1": -3000, 
+      "y0": -3000, 
+      "x0": 3000, 
+      "x1": 4500, 
+      "type": "track", 
+      "id": "a1bc6228-6782-c33a-5af3-f5766893c438", 
+      "coarse_bounding_box": [
+        [
+          2880, 
+          -3120
+        ], 
+        [
+          4620, 
+          -2880
+        ]
+      ]
+    }, 
+    {
+      "status": "400000", 
+      "netcode": 17, 
+      "layer": 15, 
+      "shape_code": 0, 
+      "extra": "", 
+      "timestamp": "0", 
+      "bounding_box": [
+        [
+          4380, 
+          -3120
+        ], 
+        [
+          6120, 
+          -2880
+        ]
+      ], 
+      "width": 120, 
+      "shape": "track", 
+      "y1": -3000, 
+      "y0": -3000, 
+      "x0": 4500, 
+      "x1": 6000, 
+      "type": "track", 
+      "id": "8a31f657-2289-8390-7096-14f13041b590", 
+      "coarse_bounding_box": [
+        [
+          4380, 
+          -3120
+        ], 
+        [
+          6120, 
+          -2880
+        ]
+      ]
+    }, 
+    {
+      "status": "400000", 
+      "netcode": 18, 
+      "layer": 15, 
+      "shape_code": 0, 
+      "extra": "", 
+      "timestamp": "0", 
+      "bounding_box": [
+        [
+          1880, 
+          -2120
+        ], 
+        [
+          2270, 
+          -1880
+        ]
+      ], 
+      "width": 120, 
+      "shape": "track", 
+      "y1": -2000, 
+      "y0": -2000, 
+      "x0": 2000, 
+      "x1": 2150, 
+      "type": "track", 
+      "id": "061b1e39-f947-76e7-da59-728a96faf5ed", 
+      "coarse_bounding_box": [
+        [
+          1880, 
+          -2120
+        ], 
+        [
+          2270, 
+          -1880
+        ]
+      ]
+    }, 
+    {
+      "status": "400000", 
+      "netcode": 18, 
+      "layer": 15, 
+      "shape_code": 0, 
+      "extra": "", 
+      "timestamp": "0", 
+      "bounding_box": [
+        [
+          2030, 
+          -2120
+        ], 
+        [
+          2870, 
+          -1280
+        ]
+      ], 
+      "width": 120, 
+      "shape": "track", 
+      "y1": -1400, 
+      "y0": -2000, 
+      "x0": 2150, 
+      "x1": 2750, 
+      "type": "track", 
+      "id": "da5b7b5b-dc50-3dfc-64d5-af7ebbbfd3cf", 
+      "coarse_bounding_box": [
+        [
+          2030, 
+          -2120
+        ], 
+        [
+          2870, 
+          -1280
+        ]
+      ]
+    }, 
+    {
+      "status": "400000", 
+      "netcode": 18, 
+      "layer": 15, 
+      "shape_code": 0, 
+      "extra": "", 
+      "timestamp": "0", 
+      "bounding_box": [
+        [
+          2630, 
+          -1520
+        ], 
+        [
+          5720, 
+          -1280
+        ]
+      ], 
+      "width": 120, 
+      "shape": "track", 
+      "y1": -1400, 
+      "y0": -1400, 
+      "x0": 2750, 
+      "x1": 5600, 
+      "type": "track", 
+      "id": "421fd2d3-1857-2806-e9da-461e0360387d", 
+      "coarse_bounding_box": [
+        [
+          2630, 
+          -1520
+        ], 
+        [
+          5720, 
+          -1280
+        ]
+      ]
+    }, 
+    {
+      "status": "400000", 
+      "netcode": 18, 
+      "layer": 15, 
+      "shape_code": 0, 
+      "extra": "", 
+      "timestamp": "0", 
+      "bounding_box": [
+        [
+          5480, 
+          -1520
+        ], 
+        [
+          6120, 
+          -880
+        ]
+      ], 
+      "width": 120, 
+      "shape": "track", 
+      "y1": -1000, 
+      "y0": -1400, 
+      "x0": 5600, 
+      "x1": 6000, 
+      "type": "track", 
+      "id": "5bf9ec7d-123d-1f7d-3814-5f6931411b60", 
+      "coarse_bounding_box": [
+        [
+          5480, 
+          -1520
+        ], 
+        [
+          6120, 
+          -880
+        ]
+      ]
+    }, 
+    {
+      "status": "400000", 
+      "netcode": 19, 
+      "layer": 15, 
+      "shape_code": 0, 
+      "extra": "", 
+      "timestamp": "0", 
+      "bounding_box": [
+        [
+          2880, 
+          -2120
+        ], 
+        [
+          4270, 
+          -1880
+        ]
+      ], 
+      "width": 120, 
+      "shape": "track", 
+      "y1": -2000, 
+      "y0": -2000, 
+      "x0": 3000, 
+      "x1": 4150, 
+      "type": "track", 
+      "id": "d4566d21-27a4-4a05-adc8-cb593b027c4d", 
+      "coarse_bounding_box": [
+        [
+          2880, 
+          -2120
+        ], 
+        [
+          4270, 
+          -1880
+        ]
+      ]
+    }, 
+    {
+      "status": "400000", 
+      "netcode": 19, 
+      "layer": 15, 
+      "shape_code": 0, 
+      "extra": "", 
+      "timestamp": "0", 
+      "bounding_box": [
+        [
+          4030, 
+          -2170
+        ], 
+        [
+          4320, 
+          -1880
+        ]
+      ], 
+      "width": 120, 
+      "shape": "track", 
+      "y1": -2050, 
+      "y0": -2000, 
+      "x0": 4150, 
+      "x1": 4200, 
+      "type": "track", 
+      "id": "e9151a0d-56db-9b26-04e8-2e267bf15f9b", 
+      "coarse_bounding_box": [
+        [
+          4030, 
+          -2170
+        ], 
+        [
+          4320, 
+          -1880
+        ]
+      ]
+    }, 
+    {
+      "status": "400000", 
+      "netcode": 19, 
+      "layer": 15, 
+      "shape_code": 0, 
+      "extra": "", 
+      "timestamp": "0", 
+      "bounding_box": [
+        [
+          4080, 
+          -2170
+        ], 
+        [
+          6070, 
+          -1930
+        ]
+      ], 
+      "width": 120, 
+      "shape": "track", 
+      "y1": -2050, 
+      "y0": -2050, 
+      "x0": 4200, 
+      "x1": 5950, 
+      "type": "track", 
+      "id": "21b07b35-e672-7bab-66fd-6165c78af350", 
+      "coarse_bounding_box": [
+        [
+          4080, 
+          -2170
+        ], 
+        [
+          6070, 
+          -1930
+        ]
+      ]
+    }, 
+    {
+      "status": "400000", 
+      "netcode": 19, 
+      "layer": 15, 
+      "shape_code": 0, 
+      "extra": "", 
+      "timestamp": "0", 
+      "bounding_box": [
+        [
+          5830, 
+          -2170
+        ], 
+        [
+          6120, 
+          -1880
+        ]
+      ], 
+      "width": 120, 
+      "shape": "track", 
+      "y1": -2000, 
+      "y0": -2050, 
+      "x0": 5950, 
+      "x1": 6000, 
+      "type": "track", 
+      "id": "d73b07ea-fed3-0189-760b-3fb373cb4b85", 
+      "coarse_bounding_box": [
+        [
+          5830, 
+          -2170
+        ], 
+        [
+          6120, 
+          -1880
+        ]
+      ]
+    }, 
+    {
+      "status": "0", 
+      "layer": 28, 
+      "shape_code": "0", 
+      "angle": "900", 
+      "timestamp": "0", 
+      "bounding_box": [
+        [
+          800, 
+          -1700
+        ], 
+        [
+          1700, 
+          -800
+        ]
+      ], 
+      "width": 200, 
+      "shape": "line", 
+      "y1": -1000, 
+      "y0": -1500, 
+      "x0": 1000, 
+      "x1": 1500, 
+      "type": "drawsegment", 
+      "id": "3d36c530-9eb3-26fd-f189-024e5b95d55a", 
+      "coarse_bounding_box": [
+        [
+          800, 
+          -1700
+        ], 
+        [
+          1700, 
+          -800
+        ]
+      ]
+    }, 
+    {
+      "status": "0", 
+      "layer": 28, 
+      "shape_code": "0", 
+      "angle": "900", 
+      "timestamp": "0", 
+      "bounding_box": [
+        [
+          1300, 
+          -1200
+        ], 
+        [
+          4700, 
+          -800
+        ]
+      ], 
+      "width": 200, 
+      "shape": "line", 
+      "y1": -1000, 
+      "y0": -1000, 
+      "x0": 1500, 
+      "x1": 4500, 
+      "type": "drawsegment", 
+      "id": "ff6bf63c-1f7d-5168-5a10-959190109e31", 
+      "coarse_bounding_box": [
+        [
+          1300, 
+          -1200
+        ], 
+        [
+          4700, 
+          -800
+        ]
+      ]
+    }, 
+    {
+      "status": "0", 
+      "layer": 28, 
+      "shape_code": "0", 
+      "angle": "900", 
+      "timestamp": "0", 
+      "bounding_box": [
+        [
+          4300, 
+          -1200
+        ], 
+        [
+          5700, 
+          200
+        ]
+      ], 
+      "width": 200, 
+      "shape": "line", 
+      "y1": 0, 
+      "y0": -1000, 
+      "x0": 4500, 
+      "x1": 5500, 
+      "type": "drawsegment", 
+      "id": "c610d9ff-98c2-0c22-b407-46c1c291aa4a", 
+      "coarse_bounding_box": [
+        [
+          4300, 
+          -1200
+        ], 
+        [
+          5700, 
+          200
+        ]
+      ]
+    }, 
+    {
+      "status": "0", 
+      "layer": 28, 
+      "shape_code": "0", 
+      "angle": "900", 
+      "timestamp": "0", 
+      "bounding_box": [
+        [
+          5300, 
+          -200
+        ], 
+        [
+          6650, 
+          200
+        ]
+      ], 
+      "width": 200, 
+      "shape": "line", 
+      "y1": 0, 
+      "y0": 0, 
+      "x0": 5500, 
+      "x1": 6450, 
+      "type": "drawsegment", 
+      "id": "51346502-bdcd-9a38-34c4-d7d99c55b0c1", 
+      "coarse_bounding_box": [
+        [
+          5300, 
+          -200
+        ], 
+        [
+          6650, 
+          200
+        ]
+      ]
+    }, 
+    {
+      "status": "0", 
+      "layer": 28, 
+      "shape_code": "0", 
+      "angle": "900", 
+      "timestamp": "0", 
+      "bounding_box": [
+        [
+          6250, 
+          -700
+        ], 
+        [
+          7200, 
+          200
+        ]
+      ], 
+      "width": 200, 
+      "shape": "line", 
+      "y1": -500, 
+      "y0": 0, 
+      "x0": 6450, 
+      "x1": 7000, 
+      "type": "drawsegment", 
+      "id": "85773500-b29d-9405-6fed-fe470dfb6b63", 
+      "coarse_bounding_box": [
+        [
+          6250, 
+          -700
+        ], 
+        [
+          7200, 
+          200
+        ]
+      ]
+    }, 
+    {
+      "status": "0", 
+      "layer": 28, 
+      "shape_code": "0", 
+      "angle": "900", 
+      "timestamp": "0", 
+      "bounding_box": [
+        [
+          6800, 
+          -4700
+        ], 
+        [
+          7200, 
+          -300
+        ]
+      ], 
+      "width": 200, 
+      "shape": "line", 
+      "y1": -4500, 
+      "y0": -500, 
+      "x0": 7000, 
+      "x1": 7000, 
+      "type": "drawsegment", 
+      "id": "499cc08b-479f-2dc9-6080-1bf3398a60da", 
+      "coarse_bounding_box": [
+        [
+          6800, 
+          -4700
+        ], 
+        [
+          7200, 
+          -300
+        ]
+      ]
+    }, 
+    {
+      "status": "0", 
+      "layer": 28, 
+      "shape_code": "0", 
+      "angle": "900", 
+      "timestamp": "0", 
+      "bounding_box": [
+        [
+          6300, 
+          -5200
+        ], 
+        [
+          7200, 
+          -4300
+        ]
+      ], 
+      "width": 200, 
+      "shape": "line", 
+      "y1": -5000, 
+      "y0": -4500, 
+      "x0": 7000, 
+      "x1": 6500, 
+      "type": "drawsegment", 
+      "id": "1988e6ab-7d40-35dd-7624-b4723d6efc0b", 
+      "coarse_bounding_box": [
+        [
+          6300, 
+          -5200
+        ], 
+        [
+          7200, 
+          -4300
+        ]
+      ]
+    }, 
+    {
+      "status": "0", 
+      "layer": 28, 
+      "shape_code": "0", 
+      "angle": "900", 
+      "timestamp": "0", 
+      "bounding_box": [
+        [
+          5250, 
+          -5200
+        ], 
+        [
+          6700, 
+          -4800
+        ]
+      ], 
+      "width": 200, 
+      "shape": "line", 
+      "y1": -5000, 
+      "y0": -5000, 
+      "x0": 6500, 
+      "x1": 5450, 
+      "type": "drawsegment", 
+      "id": "121d5738-bf04-a3b9-02f2-0f30a15e87c4", 
+      "coarse_bounding_box": [
+        [
+          5250, 
+          -5200
+        ], 
+        [
+          6700, 
+          -4800
+        ]
+      ]
+    }, 
+    {
+      "status": "0", 
+      "layer": 28, 
+      "shape_code": "0", 
+      "angle": "900", 
+      "timestamp": "0", 
+      "bounding_box": [
+        [
+          4300, 
+          -5200
+        ], 
+        [
+          5650, 
+          -3800
+        ]
+      ], 
+      "width": 200, 
+      "shape": "line", 
+      "y1": -4000, 
+      "y0": -5000, 
+      "x0": 5450, 
+      "x1": 4500, 
+      "type": "drawsegment", 
+      "id": "cea9c3ca-8eba-f748-ea98-bcc266e1403c", 
+      "coarse_bounding_box": [
+        [
+          4300, 
+          -5200
+        ], 
+        [
+          5650, 
+          -3800
+        ]
+      ]
+    }, 
+    {
+      "status": "0", 
+      "layer": 28, 
+      "shape_code": "0", 
+      "angle": "900", 
+      "timestamp": "0", 
+      "bounding_box": [
+        [
+          1300, 
+          -4200
+        ], 
+        [
+          4700, 
+          -3800
+        ]
+      ], 
+      "width": 200, 
+      "shape": "line", 
+      "y1": -4000, 
+      "y0": -4000, 
+      "x0": 4500, 
+      "x1": 1500, 
+      "type": "drawsegment", 
+      "id": "524dc5f9-7549-b2dd-e1ad-21a94a3a1fdb", 
+      "coarse_bounding_box": [
+        [
+          1300, 
+          -4200
+        ], 
+        [
+          4700, 
+          -3800
+        ]
+      ]
+    }, 
+    {
+      "status": "0", 
+      "layer": 28, 
+      "shape_code": "0", 
+      "angle": "900", 
+      "timestamp": "0", 
+      "bounding_box": [
+        [
+          800, 
+          -4200
+        ], 
+        [
+          1700, 
+          -3300
+        ]
+      ], 
+      "width": 200, 
+      "shape": "line", 
+      "y1": -3500, 
+      "y0": -4000, 
+      "x0": 1500, 
+      "x1": 1000, 
+      "type": "drawsegment", 
+      "id": "d921ead7-057a-6659-f4a0-68e6d92488e6", 
+      "coarse_bounding_box": [
+        [
+          800, 
+          -4200
+        ], 
+        [
+          1700, 
+          -3300
+        ]
+      ]
+    }, 
+    {
+      "status": "0", 
+      "layer": 28, 
+      "shape_code": "0", 
+      "angle": "900", 
+      "timestamp": "0", 
+      "bounding_box": [
+        [
+          800, 
+          -3700
+        ], 
+        [
+          1200, 
+          -1300
+        ]
+      ], 
+      "width": 200, 
+      "shape": "line", 
+      "y1": -1500, 
+      "y0": -3500, 
+      "x0": 1000, 
+      "x1": 1000, 
+      "type": "drawsegment", 
+      "id": "86590f44-3207-0b79-6fcd-e93d0e2e13d0", 
+      "coarse_bounding_box": [
+        [
+          800, 
+          -3700
+        ], 
+        [
+          1200, 
+          -1300
+        ]
+      ]
+    }
+  ], 
+  "net_class": {
+    "Default": {
+      "name": "Default", 
+      "via_diameter": 472, 
+      "via_drill_diameter": 250, 
+      "uvia_drill_diameter": 50, 
+      "track_width": 100, 
+      "uvia_diameter": 200, 
+      "clearance": 100, 
+      "net": [], 
+      "unit": "deci-thou", 
+      "description": "This is the default net class."
+    }
+  }, 
+  "units": "deci-mils", 
+  "sch_to_brd_net_map": {}, 
+  "sch_pin_id_net_map": {}, 
+  "footprint_lib": {
+    "meow": {
+      "library_name": "meow", 
+      "layer": "15", 
+      "units": "deci-mils", 
+      "art": [], 
+      "orientation": "0", 
+      "keyword": [
+        "meow"
+      ], 
+      "coarse_bounding_box": [
+        [
+          -393.7007874015748, 
+          -1771.6535433070867
+        ], 
+        [
+          393.7007874015748, 
+          3149.6062992125985
+        ]
+      ], 
+      "timestamp": "00200000", 
+      "timestamp_op": "0", 
+      "rotation_cost_180": "0", 
+      "attribute2": "~~", 
+      "bounding_box": [
+        [
+          -393.7007874015748, 
+          -1771.6535433070867
+        ], 
+        [
+          393.7007874015748, 
+          3149.6062992125985
+        ]
+      ], 
+      "pad": [
+        {
+          "sizex": 787.4015748031496, 
+          "angle": 0, 
+          "orientation": 0, 
+          "drill_diam": 393.7007874015748, 
+          "deltax": 0, 
+          "deltay": 0, 
+          "net_number": 1, 
+          "drill_y": 0, 
+          "drill_x": 0, 
+          "sizey": 787.4015748031496, 
+          "layer_mask": "00E0FFFF", 
+          "bounding_box": [
+            [
+              -393.7007874015748, 
+              -1771.6535433070867
+            ], 
+            [
+              393.7007874015748, 
+              -984.251968503937
+            ]
+          ], 
+          "shape": "circle", 
+          "net_name": "", 
+          "posx": 0, 
+          "posy": -1377.9527559055118, 
+          "shape_code": "C", 
+          "type": "STD", 
+          "drill_shape": "circle", 
+          "name": "1"
+        }, 
+        {
+          "sizex": 787.4015748031496, 
+          "angle": 0, 
+          "orientation": 0, 
+          "drill_diam": 393.7007874015748, 
+          "deltax": 0, 
+          "deltay": 0, 
+          "net_number": 2, 
+          "drill_y": 0, 
+          "drill_x": 0, 
+          "sizey": 787.4015748031496, 
+          "layer_mask": "00E0FFFF", 
+          "bounding_box": [
+            [
+              -393.7007874015748, 
+              -393.7007874015748
+            ], 
+            [
+              393.7007874015748, 
+              393.7007874015748
+            ]
+          ], 
+          "shape": "circle", 
+          "net_name": "", 
+          "posx": 0, 
+          "posy": 0, 
+          "shape_code": "C", 
+          "type": "STD", 
+          "drill_shape": "circle", 
+          "name": "2"
+        }, 
+        {
+          "sizex": 787.4015748031496, 
+          "angle": 0, 
+          "orientation": 0, 
+          "drill_diam": 393.7007874015748, 
+          "deltax": 0, 
+          "deltay": 0, 
+          "net_number": 3, 
+          "drill_y": 0, 
+          "drill_x": 0, 
+          "sizey": 787.4015748031496, 
+          "layer_mask": "00E0FFFF", 
+          "bounding_box": [
+            [
+              -393.7007874015748, 
+              984.251968503937
+            ], 
+            [
+              393.7007874015748, 
+              1771.6535433070867
+            ]
+          ], 
+          "shape": "circle", 
+          "net_name": "", 
+          "posx": 0, 
+          "posy": 1377.9527559055118, 
+          "shape_code": "C", 
+          "type": "STD", 
+          "drill_shape": "circle", 
+          "name": "3"
+        }, 
+        {
+          "sizex": 787.4015748031496, 
+          "angle": 0, 
+          "orientation": 0, 
+          "drill_diam": 393.7007874015748, 
+          "deltax": 0, 
+          "deltay": 0, 
+          "net_number": 4, 
+          "drill_y": 0, 
+          "drill_x": 0, 
+          "sizey": 787.4015748031496, 
+          "layer_mask": "00E0FFFF", 
+          "bounding_box": [
+            [
+              -393.7007874015748, 
+              2362.2047244094488
+            ], 
+            [
+              393.7007874015748, 
+              3149.6062992125985
+            ]
+          ], 
+          "shape": "circle", 
+          "net_name": "", 
+          "posx": 0, 
+          "posy": 2755.9055118110236, 
+          "shape_code": "C", 
+          "type": "STD", 
+          "drill_shape": "circle", 
+          "name": "4"
+        }
+      ], 
+      "x": 0, 
+      "text": [
+        {
+          "layer": "21", 
+          "angle": 0, 
+          "misc": "misc", 
+          "sizex": 0, 
+          "number": "0", 
+          "sizey": 0, 
+          "visible": true, 
+          "flag": "N", 
+          "text": "", 
+          "y": 0, 
+          "x": 0, 
+          "rotation": "0", 
+          "penwidth": 0
+        }, 
+        {
+          "layer": "21", 
+          "angle": 0, 
+          "misc": "misc", 
+          "sizex": 0, 
+          "number": "0", 
+          "sizey": 0, 
+          "visible": true, 
+          "flag": "N", 
+          "text": "", 
+          "y": 0, 
+          "x": 0, 
+          "rotation": "0", 
+          "penwidth": 0
+        }
+      ], 
+      "y": 0, 
+      "angle": 0, 
+      "rotation_cost_90": "0", 
+      "attribute1": "00000000", 
+      "type": "module", 
+      "name": "meow"
+    }, 
+    "SIL-4": {
+      "library_name": "SIL-4", 
+      "layer": "15", 
+      "art": [
+        {
+          "line_width": 120, 
+          "startx": -2000, 
+          "starty": -500, 
+          "endy": -500, 
+          "endx": -2000, 
+          "layer": "21", 
+          "shape": "segment"
+        }, 
+        {
+          "line_width": 120, 
+          "startx": -2000, 
+          "starty": 500, 
+          "endy": -500, 
+          "endx": -2000, 
+          "layer": "21", 
+          "shape": "segment"
+        }, 
+        {
+          "line_width": 120, 
+          "startx": -2000, 
+          "starty": -500, 
+          "endy": -500, 
+          "endx": -2000, 
+          "layer": "21", 
+          "shape": "segment"
+        }, 
+        {
+          "line_width": 120, 
+          "startx": -2000, 
+          "starty": -500, 
+          "endy": -500, 
+          "endx": 2000, 
+          "layer": "21", 
+          "shape": "segment"
+        }, 
+        {
+          "line_width": 120, 
+          "startx": 2000, 
+          "starty": -500, 
+          "endy": 500, 
+          "endx": 2000, 
+          "layer": "21", 
+          "shape": "segment"
+        }, 
+        {
+          "line_width": 120, 
+          "startx": 2000, 
+          "starty": 500, 
+          "endy": 500, 
+          "endx": -2000, 
+          "layer": "21", 
+          "shape": "segment"
+        }, 
+        {
+          "line_width": 120, 
+          "startx": -1000, 
+          "starty": 500, 
+          "endy": -500, 
+          "endx": -1000, 
+          "layer": "21", 
+          "shape": "segment"
+        }
+      ], 
+      "orientation": -900, 
+      "text": [
+        {
+          "layer": "21", 
+          "angle": -1.5707963267948966, 
+          "sizex": 683, 
+          "misc": " N \"SIL-4\"", 
+          "sizey": 428, 
+          "number": "0", 
+          "visible": true, 
+          "flag": "N", 
+          "text": "SIL-4", 
+          "y": -1000, 
+          "x": 0, 
+          "rotation": -900, 
+          "penwidth": 120
+        }, 
+        {
+          "layer": "21", 
+          "angle": -1.5707963267948966, 
+          "sizex": 600, 
+          "misc": " N \"Val**\"", 
+          "sizey": 400, 
+          "number": "1", 
+          "visible": false, 
+          "flag": "N", 
+          "text": "Val**", 
+          "y": -1000, 
+          "x": 0, 
+          "rotation": -900, 
+          "penwidth": 120
+        }
+      ], 
+      "bounding_box": [
+        [
+          25000, 
+          11000
+        ], 
+        [
+          26000, 
+          15000
+        ]
+      ], 
+      "rotation_cost_90": "0", 
+      "coarse_bounding_box": [
+        [
+          25000, 
+          11000
+        ], 
+        [
+          26714, 
+          15000
+        ]
+      ], 
+      "angle": -1.5707963267948966, 
+      "timestamp_op": "0", 
+      "pad": [
+        {
+          "bounding_box": [
+            [
+              25225, 
+              11225
+            ], 
+            [
+              25775, 
+              11775
+            ]
+          ], 
+          "angle": -1.5707963267948966, 
+          "name": "1", 
+          "drill_diam": 320, 
+          "deltax": 0, 
+          "deltay": 0, 
+          "sizex": 550, 
+          "sizey": 550, 
+          "drill_x": 0, 
+          "layer_mask": "00E0FFFF", 
+          "shape": "rectangle", 
+          "orientation": -900, 
+          "net_name": "", 
+          "drill_y": 0, 
+          "posy": 0, 
+          "posx": -1500, 
+          "shape_code": "R", 
+          "type": "STD", 
+          "drill_shape": "circle", 
+          "net_number": 20
+        }, 
+        {
+          "bounding_box": [
+            [
+              25225, 
+              12225
+            ], 
+            [
+              25775, 
+              12775
+            ]
+          ], 
+          "angle": -1.5707963267948966, 
+          "name": "2", 
+          "drill_diam": 320, 
+          "deltax": 0, 
+          "deltay": 0, 
+          "sizex": 550, 
+          "sizey": 550, 
+          "drill_x": 0, 
+          "layer_mask": "00E0FFFF", 
+          "shape": "circle", 
+          "orientation": -900, 
+          "net_name": "", 
+          "drill_y": 0, 
+          "posy": 0, 
+          "posx": -500, 
+          "shape_code": "C", 
+          "type": "STD", 
+          "drill_shape": "circle", 
+          "net_number": 21
+        }, 
+        {
+          "bounding_box": [
+            [
+              25225, 
+              13225
+            ], 
+            [
+              25775, 
+              13775
+            ]
+          ], 
+          "angle": -1.5707963267948966, 
+          "name": "3", 
+          "drill_diam": 320, 
+          "deltax": 0, 
+          "deltay": 0, 
+          "sizex": 550, 
+          "sizey": 550, 
+          "drill_x": 0, 
+          "layer_mask": "00E0FFFF", 
+          "shape": "circle", 
+          "orientation": -900, 
+          "net_name": "", 
+          "drill_y": 0, 
+          "posy": 0, 
+          "posx": 500, 
+          "shape_code": "C", 
+          "type": "STD", 
+          "drill_shape": "circle", 
+          "net_number": 22
+        }, 
+        {
+          "bounding_box": [
+            [
+              25225, 
+              14225
+            ], 
+            [
+              25775, 
+              14775
+            ]
+          ], 
+          "angle": -1.5707963267948966, 
+          "name": "4", 
+          "drill_diam": 320, 
+          "deltax": 0, 
+          "deltay": 0, 
+          "sizex": 550, 
+          "sizey": 550, 
+          "drill_x": 0, 
+          "layer_mask": "00E0FFFF", 
+          "shape": "circle", 
+          "orientation": -900, 
+          "net_name": "", 
+          "drill_y": 0, 
+          "posy": 0, 
+          "posx": 1500, 
+          "shape_code": "C", 
+          "type": "STD", 
+          "drill_shape": "circle", 
+          "net_number": 23
+        }
+      ], 
+      "units": "mm", 
+      "attribute1": "00000000", 
+      "type": "module", 
+      "timestamp": "00200000", 
+      "attribute2": "~~", 
+      "rotation_cost_misc": "0", 
+      "name": "SIL-4", 
+      "keyword": [
+        " Connecteur 4 pibs"
+      ], 
+      "rotation_cost_180": "0", 
+      "y": 13000, 
+      "x": 25500
+    }, 
+    "SIL-2": {
+      "library_name": "SIL-2", 
+      "layer": "15", 
+      "art": [
+        {
+          "line_width": 120, 
+          "startx": -1000, 
+          "starty": 500, 
+          "endy": -500, 
+          "endx": -1000, 
+          "layer": "21", 
+          "shape": "segment"
+        }, 
+        {
+          "line_width": 120, 
+          "startx": -1000, 
+          "starty": -500, 
+          "endy": -500, 
+          "endx": 1000, 
+          "layer": "21", 
+          "shape": "segment"
+        }, 
+        {
+          "line_width": 120, 
+          "startx": 1000, 
+          "starty": -500, 
+          "endy": 500, 
+          "endx": 1000, 
+          "layer": "21", 
+          "shape": "segment"
+        }, 
+        {
+          "line_width": 120, 
+          "startx": 1000, 
+          "starty": 500, 
+          "endy": 500, 
+          "endx": -1000, 
+          "layer": "21", 
+          "shape": "segment"
+        }
+      ], 
+      "orientation": "0", 
+      "text": [
+        {
+          "layer": "21", 
+          "angle": 0, 
+          "sizex": 681, 
+          "misc": " N \"SIL-2\"", 
+          "sizey": 428, 
+          "number": "0", 
+          "visible": true, 
+          "flag": "N", 
+          "text": "SIL-2", 
+          "y": -1000, 
+          "x": 0, 
+          "rotation": "0", 
+          "penwidth": 120
+        }, 
+        {
+          "layer": "21", 
+          "angle": 0, 
+          "sizex": 600, 
+          "misc": " N \"Val**\"", 
+          "sizey": 400, 
+          "number": "1", 
+          "visible": false, 
+          "flag": "N", 
+          "text": "Val**", 
+          "y": -1000, 
+          "x": 0, 
+          "rotation": "0", 
+          "penwidth": 120
+        }
+      ], 
+      "bounding_box": [
+        [
+          10000, 
+          12500
+        ], 
+        [
+          12000, 
+          13500
+        ]
+      ], 
+      "rotation_cost_90": "0", 
+      "coarse_bounding_box": [
+        [
+          9297.5, 
+          11786
+        ], 
+        [
+          12702.5, 
+          13500
+        ]
+      ], 
+      "angle": 0, 
+      "timestamp_op": "0", 
+      "pad": [
+        {
+          "bounding_box": [
+            [
+              10225, 
+              12725
+            ], 
+            [
+              10775, 
+              13275
+            ]
+          ], 
+          "angle": 0, 
+          "name": "1", 
+          "drill_diam": 320, 
+          "deltax": 0, 
+          "deltay": 0, 
+          "sizex": 550, 
+          "sizey": 550, 
+          "drill_x": 0, 
+          "layer_mask": "00E0FFFF", 
+          "shape": "rectangle", 
+          "orientation": 0, 
+          "net_name": "", 
+          "drill_y": 0, 
+          "posy": 0, 
+          "posx": -500, 
+          "shape_code": "R", 
+          "type": "STD", 
+          "drill_shape": "circle", 
+          "net_number": 16
+        }, 
+        {
+          "bounding_box": [
+            [
+              11225, 
+              12725
+            ], 
+            [
+              11775, 
+              13275
+            ]
+          ], 
+          "angle": 0, 
+          "name": "2", 
+          "drill_diam": 320, 
+          "deltax": 0, 
+          "deltay": 0, 
+          "sizex": 550, 
+          "sizey": 550, 
+          "drill_x": 0, 
+          "layer_mask": "00E0FFFF", 
+          "shape": "circle", 
+          "orientation": 0, 
+          "net_name": "", 
+          "drill_y": 0, 
+          "posy": 0, 
+          "posx": 500, 
+          "shape_code": "C", 
+          "type": "STD", 
+          "drill_shape": "circle", 
+          "net_number": 17
+        }
+      ], 
+      "units": "mm", 
+      "attribute1": "00000000", 
+      "type": "module", 
+      "timestamp": "00200000", 
+      "attribute2": "~~", 
+      "rotation_cost_misc": "0", 
+      "name": "SIL-2", 
+      "keyword": [
+        " Connecteurs 2 pins"
+      ], 
+      "rotation_cost_180": "0", 
+      "y": 13000, 
+      "x": 11000
+    }
+  }, 
+  "brd_to_sch_net_map": {}
+}
