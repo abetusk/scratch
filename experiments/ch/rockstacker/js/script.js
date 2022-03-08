@@ -1,19 +1,237 @@
 
 var _M = numeric.dot;
 
+function _rnd() {
+  return Math.random();
+}
+
+
+
 var g_info = {
   "disp_canvas": {},
   "disp_ctx": {},
 
   "n_loaded": 0,
 
+  "rock_placement": {},
+
   "b_canvas": {},
   "b_ctx": {},
   "subsample": 16,
   "rock": [],
   "rock_h": {},
-  "data": []
+  "data": [],
+
+  "debug_data":[]
 };
+
+//---
+
+
+function _clip_union( rop_pgns, _pgns) {
+  let clpr = new ClipperLib.Clipper();
+  let joinType = ClipperLib.JoinType.jtRtound;
+  let fillType = ClipperLib.PolyFillType.pftPositive;
+  let subjPolyType = ClipperLib.PolyType.ptSubject;
+  let clipPolyType = ClipperLib.PolyType.ptClip;
+  let clipType = ClipperLib.ClipType.ctUnion;
+
+  let scale = 16384;
+  let sol_polytree= new ClipperLib.PolyTree();
+
+  let pgns = [];
+  for (let i=0; i<_pgns.length; i++) {
+    let idx = pgns.length;
+    pgns.push([]);
+    for (let j=0; j<_pgns[i].length; j++) {
+      pgns[idx].push( { "X": _pgns[i][j].X, "Y": _pgns[i][j].Y } );
+    }
+  }
+
+  ClipperLib.JS.ScaleUpPaths(pgns, scale);
+
+  clpr.AddPaths( pgns, subjPolyType );
+  clpr.Execute( clipType, sol_polytree, fillType, fillType);
+
+  let sol_paths = ClipperLib.Clipper.PolyTreeToPaths(sol_polytree);
+  for (let i=0; i<sol_paths.length; i++) {
+    let idx = rop_pgns.length;
+    rop_pgns.push([]);
+    for (let j=0; j<sol_paths[i].length; j++) {
+      rop_pgns[idx].push( { "X": sol_paths[i][j].X / scale, "Y": sol_paths[i][j].Y / scale } );
+
+    }
+  }
+
+  return rop_pgns;
+}
+
+function _copy_pgns(_pgns) {
+  let pgns = [];
+  for (let i=0; i<_pgns.length; i++) {
+    let idx = pgns.length;
+    pgns.push([]);
+    for (let j=0; j<_pgns[i].length; j++) {
+      pgns[idx].push( { "X": _pgns[i][j].X, "Y": _pgns[i][j].Y } );
+    }
+  }
+
+  return pgns;
+}
+
+function _clip_intersect( rop_pgns, _pgnsA, _pgnsB ) {
+  var clpr = new ClipperLib.Clipper();
+  var joinType = ClipperLib.JoinType.jtRtound;
+  var fillType = ClipperLib.PolyFillType.pftPositive;
+  var subjPolyType = ClipperLib.PolyType.ptSubject;
+  var clipPolyType = ClipperLib.PolyType.ptClip;
+  var clipType = ClipperLib.ClipType.ctIntersection;
+
+  let scale = 16384;
+  let sol_polytree= new ClipperLib.PolyTree();
+
+  let pgnsA = _copy_pgns(_pgnsA);
+  let pgnsB = _copy_pgns(_pgnsB);
+
+  ClipperLib.JS.ScaleUpPaths(pgnsA, scale);
+  ClipperLib.JS.ScaleUpPaths(pgnsB, scale);
+
+  clpr.AddPaths( pgnsA, subjPolyType, true );
+  clpr.AddPaths( pgnsB, clipPolyType, true );
+  clpr.Execute( clipType, sol_polytree, fillType, fillType );
+  
+  let sol_paths = ClipperLib.Clipper.PolyTreeToPaths(sol_polytree);
+  for (let i=0; i<sol_paths.length; i++) {
+    let idx = rop_pgns.length;
+    rop_pgns.push([]);
+    for (let j=0; j<sol_paths[i].length; j++) {
+      rop_pgns[idx].push( { "X": sol_paths[i][j].X / scale, "Y": sol_paths[i][j].Y / scale } );
+    }
+  }
+
+  return rop_pgns;
+}
+
+function _clip_difference ( rop_pgns, _pgnsA, _pgnsB ) {
+  var clpr = new ClipperLib.Clipper();
+  var joinType = ClipperLib.JoinType.jtRtound;
+  var fillType = ClipperLib.PolyFillType.pftPositive;
+  var subjPolyType = ClipperLib.PolyType.ptSubject;
+  var clipPolyType = ClipperLib.PolyType.ptClip;
+  var clipType = ClipperLib.ClipType.ctDifference;
+
+  let scale = 16384;
+  let sol_polytree= new ClipperLib.PolyTree();
+
+  let pgnsA = _copy_pgns(_pgnsA);
+  let pgnsB = _copy_pgns(_pgnsB);
+
+  ClipperLib.JS.ScaleUpPaths(pgnsA, scale);
+  ClipperLib.JS.ScaleUpPaths(pgnsB, scale);
+
+  clpr.AddPaths( pgnsA, subjPolyType, true );
+  clpr.AddPaths( pgnsB, clipPolyType, true );
+  clpr.Execute( clipType, sol_polytree, fillType, fillType );
+
+  let sol_paths = ClipperLib.Clipper.PolyTreeToPaths(sol_polytree);
+  for (let i=0; i<sol_paths.length; i++) {
+    let idx = rop_pgns.length;
+    rop_pgns.push([]);
+    for (let j=0; j<sol_paths[i].length; j++) {
+      rop_pgns[idx].push( { "X": sol_paths[i][j].X / scale, "Y": sol_paths[i][j].Y / scale } );
+    }
+  }
+
+  return rop_pgns;
+}
+
+function _clip_xor( rop_pgns, _pgnsA, _pgnsB ) {
+  var clpr = new ClipperLib.Clipper();
+  var joinType = ClipperLib.JoinType.jtRtound;
+  var fillType = ClipperLib.PolyFillType.pftPositive;
+  var subjPolyType = ClipperLib.PolyType.ptSubject;
+  var clipPolyType = ClipperLib.PolyType.ptClip;
+  var clipType = ClipperLib.ClipType.ctXor;
+  
+  let scale = 16384;
+  let sol_polytree= new ClipperLib.PolyTree();
+
+  let pgnsA = _copy_pgns(_pgnsA);
+  let pgnsB = _copy_pgns(_pgnsB);
+
+  ClipperLib.JS.ScaleUpPaths(pgnsA, scale);
+  ClipperLib.JS.ScaleUpPaths(pgnsB, scale);
+
+  clpr.AddPaths( pgnsA, subjPolyType, true );
+  clpr.AddPaths( pgnsB, clipPolyType, true );
+  clpr.Execute( clipType, sol_polytree, fillType, fillType );
+
+  let sol_paths = ClipperLib.Clipper.PolyTreeToPaths(sol_polytree);
+  for (let i=0; i<sol_paths.length; i++) {
+    let idx = rop_pgns.length;
+    rop_pgns.push([]);
+    for (let j=0; j<sol_paths[i].length; j++) {
+      rop_pgns[idx].push( { "X": sol_paths[i][j].X / scale, "Y": sol_paths[i][j].Y / scale } );
+    }
+  }
+
+  return rop_pgns;
+}
+
+function _clip_offset( ofs_pgns, inp_pgns, ds ) {
+  var joinType = ClipperLib.JoinType.jtRound;
+  var miterLimit = 10;
+  var autoFix = true;
+
+  var clpr = new ClipperLib.Clipper();
+
+  var t_pgns = clpr.OffsetPolygons( inp_pgns, ds, joinType, miterLimit, autoFix );
+
+  for (var ind in t_pgns) {
+    ofs_pgns.push(t_pgns[ind]);
+  }
+
+}
+
+function polygon_with_holes(ctx, x, y, pgn, color) {
+  ctx.lineWidth = 0;
+  ctx.fillStyle = color;
+  ctx.beginPath();
+
+  ctx.moveTo(x,y);
+  for (let i=0; i<pgn.length; i++) {
+    for (let j=0; j<pgn[i].length; j++) {
+      if (j==0) {
+        ctx.moveTo(x + pgn[i][j].X, y + pgn[i][j].Y);
+        continue;
+      }
+      ctx.lineTo(x + pgn[i][j].X, y + pgn[i][j].Y);
+    }
+  }
+
+  ctx.fill();
+}
+
+function polygons(ctx, x, y, pgn, color) {
+  ctx.lineWidth = 0;
+  ctx.fillStyle = color;
+  ctx.beginPath();
+
+  ctx.moveTo(x,y);
+  for (let i=0; i<pgn.length; i++) {
+    for (let j=0; j<pgn[i].length; j++) {
+      if (j==0) {
+        ctx.moveTo(x + pgn[i][j].X, y + pgn[i][j].Y);
+        continue;
+      }
+      ctx.lineTo(x + pgn[i][j].X, y + pgn[i][j].Y);
+    }
+  }
+  ctx.fill();
+
+}
+
+//---
 
 function label_corner() {
   let ctx = g_info.b_ctx;
@@ -265,6 +483,7 @@ function mat3_i() {
   ];
 }
 
+
 function disp_rock(ctx, rock_idx_x, rock_idx_y, x, y, a, s, debug) {
   let x_offset = 300;
   let y_offset = 150;
@@ -294,6 +513,7 @@ function disp_rock(ctx, rock_idx_x, rock_idx_y, x, y, a, s, debug) {
 
   ctx.restore();
 
+  /*
   let ri = g_info.rock_h[ rock_idx_x.toString() + ":" + rock_idx_y.toString() ];
   if (typeof ri !== "undefined") {
     let p = ri.p;
@@ -312,6 +532,7 @@ function disp_rock(ctx, rock_idx_x, rock_idx_y, x, y, a, s, debug) {
       ctx.fillRect( pnt[0], pnt[1], 2, 2 );
     }
   }
+  */
 
   
 }
@@ -338,14 +559,22 @@ function rock_info(idx_x, idx_y, opt) {
     "u": [0,0],
     "l": [0,0],
     "r": [0,0],
-    "com": [0,0]
+    "com": [0,0],
+    "boundary": [],
+    "info": {}
   };
 
   let ri = g_info.rock_h[ idx_x.toString() + ":" + idx_y.toString() ];
   if (typeof ri === "undefined") { return undefined; }
 
+  info.info = ri;
+
   let p = ri.p;
   let v = ri.v;
+  for (let i=0; i<p.length; i++) {
+    let pnt = _M( _m, [v[i][0], v[i][1], 1 ]);
+    info.boundary.push(pnt);
+  }
 
   for (let i=0; i<p.length; i++) {
     let pnt = _M( _m, [v[i][0], v[i][1], 1 ]);
@@ -380,7 +609,6 @@ function rock_info(idx_x, idx_y, opt) {
   info.com[1] /= p.length;
 
   return info;
-
 }
 
 function anim() {
@@ -396,6 +624,174 @@ function anim() {
   ctx.fillRect(0,h-4,w, 4);
   ctx.fillRect(0,0,4,h);
   ctx.fillRect(w-4,0,4,h);
+
+  //---
+
+  let rock_placement = [];
+
+  let _iter = 200;
+  let _step_y = 10;
+  let N = 10;
+  for (let idx=0; idx<N; idx++) {
+
+    let a = (_rnd() - 0.5)*Math.PI*2;
+    let x_idx = Math.floor(_rnd()*4);
+    let y_idx = Math.floor(_rnd()*8);
+
+    let opt = {
+      "x": 0,
+      "y": 0,
+      "a": a,
+      "w": 150,
+      "h": 150,
+      "s": 0.5
+    };
+
+    let _px = 0;
+    let _py = 0;
+    let _py_prv = 0;
+    let ri = rock_info(x_idx,y_idx,opt);
+
+    let rock_data = {
+      "x": _px,
+      "y": _py,
+      "a": a,
+      "s": 0.5,
+      "opt": opt,
+      "x_idx" : x_idx,
+      "y_idx": y_idx,
+      "b": [],
+      "info": ri
+    };
+
+    _px = w/2  + (_rnd() - 0.5)*2*w/3 - 150/2;
+
+    let _stop = false;
+    for (let _it=1; _it<_iter; _it++) {
+
+      ri = rock_info(x_idx,y_idx,opt);
+
+      _py_prv = (_step_y * (_it-1));
+      _py = _step_y * _it;
+
+      //let _py = h - ri.u[1] - idx*90;
+
+
+      rock_data = {
+        "x": _px,
+        "y": _py,
+        "a": a,
+        "s": 0.5,
+        "opt": opt,
+        "x_idx" : x_idx,
+        "y_idx": y_idx,
+        "b": [],
+        "info": ri
+      };
+
+      for (let ii=0; ii<ri.boundary.length; ii++) {
+        ri.boundary[ii][0] += _px;
+        ri.boundary[ii][1] += _py;
+        rock_data.b.push( { "X": ri.boundary[ii][0], "Y": ri.boundary[ii][1] } );
+      }
+
+      if (_py > (h - ri.u[1])) {
+
+        console.log("cp0");
+
+        _stop=true;
+      }
+
+      if (_stop) { break; }
+
+      for (let ii=0; ii<idx; ii++) {
+
+        let rop = [];
+        let u = _clip_intersect( rop, [rock_placement[ii].b], [rock_data.b] );
+
+        if (rop.length > 0) {
+
+          g_info.debug_data.push(rop);
+
+          console.log("cp1", idx, ii, rop);
+
+          ctx.fillStyle = "rgba(255,255,255,1.0)";
+          ctx.beginPath();
+          ctx.moveTo(rop[0][0].X, rop[0][0].Y);
+          for (let _i=1; _i<rop[0].length; _i++) {
+            ctx.lineTo(rop[0][_i].X, rop[0][_i].Y);
+          }
+          ctx.closePath();
+          ctx.fill();
+
+          _stop=true;
+          break;
+        }
+
+
+      }
+
+      if (_stop) { break; }
+      _py_prv = _py;
+
+    }
+
+    rock_placement.push(rock_data);
+
+    //disp_rock(ctx, x_idx, y_idx, _px, _py, opt.a, opt.s);
+
+    //DEBUG
+    //
+    for (let ii=0; ii<ri.boundary.length; ii++) {
+      ctx.fillStyle = "rgba(255,0,0,0.9)";
+      ctx.fillRect( rock_data.info.boundary[ii][0], rock_data.info.boundary[ii][1], 2, 2 );
+    }
+    for (let key in ri) {
+      ctx.fillStyle = "rgba(0,255,255,0.9)";
+      ctx.fillRect(ri[key][0] + _px, ri[key][1] + _py, 10,10);
+    }
+
+  }
+
+  g_info.rock_placement = rock_placement;
+
+  for (let i=0; i<g_info.rock_placement.length; i++) {
+    let _rock = g_info.rock_placement[i];
+    disp_rock(ctx,
+      _rock.x_idx,
+      _rock.y_idx,
+      _rock.x,
+      _rock.y,
+      _rock.a,
+      _rock.s);
+
+  }
+
+  for (let i=0; i<g_info.debug_data.length; i++) {
+    let rop = g_info.debug_data[i];
+
+          ctx.fillStyle = "rgba(255,255,0,1.0)";
+          ctx.beginPath();
+          ctx.moveTo(rop[0][0].X, rop[0][0].Y);
+          for (let _i=1; _i<rop[0].length; _i++) {
+            ctx.lineTo(rop[0][_i].X, rop[0][_i].Y);
+          }
+          ctx.closePath();
+          ctx.fill();
+  }
+
+  // DEBUG
+  /*
+  for (let idx_a=0; idx_a<rock_placement.length; idx_a++) {
+    for (let idx_b=idx_a+1; idx_b<rock_placement.length; idx_b++) {
+      let rop = [];
+      let u = _clip_intersect( rop, [rock_placement[idx_a].b], [rock_placement[idx_b].b] );
+      console.log(idx_a, idx_b, u, rop);
+    }
+  }
+  */
+
+  return;
 
   let opt = {
     "x": 0,
@@ -423,15 +819,29 @@ function anim() {
   //disp_rock(ctx, 1, 1, opt.x, opt.y, opt.a, opt.s);
   disp_rock(ctx, 1, 1, _px, _py, opt.a, opt.s);
 
-  return;
+  //---
 
-  for (let i=0; i<4; i++) {
-    for (let j=0; j<8; j++) {
-      let a = (i/4)*(j/8)*Math.PI;
-      disp_rock(ctx, i, j, 140*i, 140*j, a, 0.5, true);
+  let opt1 = {
+    "x": 0,
+    "y": 0,
 
-    }
+    "a": -Math.PI/12,
+
+    "w": 150,
+    "h": 150,
+    "s": 0.5
+  };
+  let ri1 = rock_info(1,2,opt1);
+
+  let _px1 = w/8;
+  let _py1 = h - ri1.u[1];
+
+
+  for (let key in ri1) {
+    ctx.fillStyle = "rgba(0,255,255,0.9)";
+    ctx.fillRect(ri1[key][0] + _px1, ri1[key][1] + _py1, 10,10);
   }
+  disp_rock(ctx, 1, 2, _px1, _py1, opt1.a, opt1.s);
 
 }
 
@@ -456,7 +866,7 @@ function init_fin() {
 
 
   g_info.width = 500;
-  g_info.height = 500;
+  g_info.height = 700;
 
   let w = g_info.width;
   let h = g_info.height;
@@ -558,14 +968,6 @@ function calc_outline(img) {
   g_info.found_info = found_info;
 
   construct_bounding_paths();
-
-  //disp_ctx.drawImage(img, 0, 0);
-  //disp_ctx.drawImage(g_info.data[0], 0, 0);
-    //src_x, src_y, src_w, src_h,
-    //dst_x, dst_y, dst_w, dst_h);
-
-
-  //uu();
 }
 
 function img_stick_load_done() {
