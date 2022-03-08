@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+</head>
+<body>
+
+  <div id="log"></div>
+
+  <script id="worker1" type="javascript/worker">
+importScripts('js/browser-sibyl.js');
+//importScripts('bs.js');
+  var svg_header = '<svg version="1.1"' +
+    ' id="Frame_0" xmlns="http://www.w3.org/2000/svg"' +
+    ' xmlns:xlink="http://www.w3.org/1999/xlink"' +
+    ' width="190px"' +
+    ' height="317px">'
+
+  var txt_ele_numeral = '<text x="0" y="0" id="_text_numeral">' +
+    '<tspan' +
+    '  id="_tspan_numeral"' +
+    //'  x="216"' +
+    '  x="95"' +
+    //'  y="64"' +
+    '  y="28"' +
+    ' text-anchor="middle"' +
+    '  style="fill:rgb(50,50,50);font-style:normal;font-variant:normal;font-weight:bold;' +
+      //'font-stretch:normal;font-size:33px;font-family:\'Caviar Dreams\';' +
+      'font-stretch:normal;font-size:15px;font-family:\'Caviar Dreams\';' +
+      '-inkscape-font-specification:\'Caviar Dreams, Bold\';' +
+      'font-variant-ligatures:normal;font-variant-caps:' +
+      'normal;font-variant-numeric:normal;font-feature-settings:' +
+      'normal;text-align:center;writing-mode:lr-tb;' +
+      'text-anchor:middle;stroke-width:0.26458332px">' +
+    //'<!--::TEXT::-->' +
+    'num' +
+    '</tspan>' +
+    '</text> ';
+
+  var txt_ele_name =
+    //'<rect rx="23" x="41" y="608" width="351" height="46" fill="#efefef" > ' +
+    '<rect rx="10" x="18" y="267" width="154" height="20" fill="#efefef" > ' +
+    '</rect>' +
+    '<text x="0" y="0" id="_text_name">' +
+    '<tspan' +
+    '  id="_tspan_name"' +
+    ' text-anchor="middle"' +
+    //'  x="216"' +
+    '  x="95"' +
+    //'  y="644"' +
+    '  y="283"' +
+    '  style="fill:rgb(50,50,50);font-style:normal;font-variant:normal;' +
+      //'font-weight:bold;font-stretch:normal;font-size:33px;' +
+      'font-weight:bold;font-stretch:normal;font-size:15px;' +
+      'font-family:\'Caviar Dreams\';-inkscape-font-specification:\'Caviar Dreams, Bold\';'+
+      'font-variant-ligatures:normal;font-variant-caps:normal;' +
+      'font-variant-numeric:normal;font-feature-settings:normal;' +
+      'text-align:center;writing-mode:lr-tb;text-anchor:middle;' +
+      'stroke-width:0.26458332px">' +
+    //'<!--::TEXT::-->' +
+    'text' +
+    '</tspan>' +
+    '</text> ';
+
+var test_svg = svg_header + txt_ele_numeral + txt_ele_name + "</svg>";
+
+    // This script won't be parsed by JS engines
+    // because its type is javascript/worker.
+    self.onmessage = function(e) {
+
+var json_data = JSON.parse(e.data);
+//var testimg = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==';
+      //self.postMessage('msg from worker:' + e.data);
+      //self.postMessage(testimg);
+self.postMessage(json_data.img);
+
+//var ibp = createImageBitmap(test_svg).then( _bm => { self.postMessage(_bm); } );
+}
+
+    // Rest of your worker code goes here.
+//importScripts('bs.js');
+    function log(msg) {
+      // Use a fragment: browser will only render/reflow once.
+      var fragment = document.createDocumentFragment();
+      fragment.appendChild(document.createTextNode(msg));
+      fragment.appendChild(document.createElement('br'));
+
+      document.querySelector("#log").appendChild(fragment);
+    }
+
+    var blob = new Blob([document.querySelector('#worker1').textContent]);
+
+    var worker = new Worker(window.URL.createObjectURL(blob));
+
+console.log(worker);
+    worker.onmessage = function(e) {
+      //log("Received: " + e.data);
+var img = document.createElement("img");
+img.src = e.data;
+var ele = document.getElementById('log');
+ele.appendChild(img);
+
+    }
+
+
+var testimg = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==';
+var dat = {"svg":"", "img":testimg };
+
+    worker.postMessage(JSON.stringify(dat)); // Start the worker.
+  </script>
+</body>
+</html>

@@ -1,0 +1,230 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Generatarot</title>
+  <link rel="icon" type="image/png" href="images/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <script type='text/javascript' src='js/jquery.js'></script>
+
+  <script type='text/javascript' src='js/canvg.js'></script>
+  <script type='text/javascript' src='js/browser-sibyl.js'></script>
+  <script type='text/javascript' src='js/pixi.js'></script>
+  <script type='text/javascript' src='js/pixi-tarot.js'></script>
+
+  <link rel='stylesheet' href='css/skeleton.css'>
+  <link rel='stylesheet' href='css/custom.css'>
+
+  <script>
+    let type = "WebGL"
+    if(!PIXI.utils.isWebGLSupported()){
+      type = "canvas"
+    }   
+
+    PIXI.utils.sayHello(type)
+
+
+    async function test_simple_deck() {
+      var parent = document.getElementById("ui_tarot");
+
+      console.log("start:", new Date().toLocaleString());
+      for (var ii=0; ii<80; ii++) {
+        //const canvas = document.querySelector('canvas');
+        var canvas = document.createElement('canvas');
+
+        const ctx = canvas.getContext('2d');
+
+        var s = sibyl.cmd();
+          
+        //v = canvg.Canvg.fromString(ctx, '<svg width="600" height="600"><text x="50" y="50">Hello World!</text></svg>');
+        v = await canvg.Canvg.fromString(ctx, s);
+
+        // Start SVG rendering with animations and mouse handling.
+        //v.start();
+        await v.render();
+
+        parent.appendChild(canvas);
+      }
+      console.log("finish:", new Date().toLocaleString());
+    }
+
+    async function svgstr2canvas(ui_id, s, canvas_id) {
+      canvas_id = ((typeof canvas_id === "undefined") ? "_ui_canvas_id" : canvas_id);
+      var canvas = document.createElement('canvas');
+      canvas.id = canvas_id;
+      const gfx_ctx = canvas.getContext('2d');
+
+
+      var parent = document.getElementById(ui_id);
+      var v = await canvg.Canvg.fromString(gfx_ctx, s);
+      v.start();
+      parent.appendChild(canvas);
+    }
+
+    function test_simple_layers() {
+      var creature_sched = { "base": "minor_arcana_2_0", "attach":{"nesting":[ {"base":"empty" }, {"base":"empty"},{ "base":"goat" }]}};
+      var suite_sched = { "base": "minor_arcana_2_0", "attach":{"nesting":[ {"base":"pentacle" }, {"base":"pentacle"},{ "base":"empty" }]}};
+      var background_sched = { "base": "cloud", "attach":{"nesting":[{"base":"skull"}]}};
+
+      var seed = '123x';
+
+      var fg_ctx = sibyl.fg_ctx;
+      var bg_ctx = sibyl.bg_ctx;
+
+      fg_ctx.global_scale = 0.88;
+
+      fg_ctx.create_background_rect = false;
+      var creature_svg_str  = sibyl.mystic_symbolic_sched(fg_ctx, creature_sched);
+      var suite_svg_str = sibyl.mystic_symbolic_sched(fg_ctx, suite_sched);
+
+      var bg_id = "bg_ok1234";
+      bg_ctx.svg_id = "__background_creature_" + seed;
+      bg_ctx.create_background_rect = false;
+      bg_ctx.create_svg_header = false;
+      bg_ctx.scale = 0.2;
+      bg_ctx.global_scale = 0.5;
+
+
+      var bg_svg_str_single = '<g id="' + bg_id + '">\n' + sibyl.mystic_symbolic_sched(bg_ctx, background_sched) + '\n</g>';
+
+      var _bg = "#777";
+      var svg_extra_header = "";
+      var w = bg_ctx.svg_width;
+      var h = bg_ctx.svg_height;
+
+      var first_bg = true;
+      svg_extra_header += "<rect x=\"-" + w.toString() + 
+        "\" y=\"-" + h.toString() + "\" " +
+        "width=\"" + (3*w).toString() + 
+        "\" height=\"" + (3*h).toString() + 
+        "\" fill=\"" + _bg + 
+        "\" data-is-background=\"true\">\n</rect>\n";
+
+      var _n_x = 8;
+      var _n_y = 11;
+      var dx = 175*bg_ctx.global_scale;
+      var dy = 100*bg_ctx.global_scale;
+
+      var bg_svg_str;
+      for (var x_idx=0; x_idx<_n_x; x_idx++) {
+        for (var y_idx=0; y_idx<_n_y; y_idx++) {
+          var _x = Math.floor( x_idx - (_n_x/2) )*dx ;
+          var _y = Math.floor( y_idx - (_n_y/2) )*dy ;
+
+          if ((y_idx%2)==1) { _x += dx/2; }
+
+          bg_svg_str += "<g transform=\"";
+          bg_svg_str += " translate(" + (-_x).toString() + " " + (-_y).toString() + ")";
+          bg_svg_str += "\">";
+
+          if (first_bg) {
+            bg_svg_str += bg_svg_str_single;
+            first_bg = false;
+          }
+          else {
+            bg_svg_str += '<use xlink:href="#' + bg_id + '"/>\n';
+          }
+
+
+          bg_svg_str  += "</g>";
+
+        }
+      }
+
+      //var bg_hdr='<svg version="1.1" id="bg_frame" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1000px" height="1000px">';
+      var bg_hdr = '<svg version="1.1" id="bg_frame" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="500px" height="500px">';
+
+
+
+      //var bg_svg_str = sibyl.svg_header + bg_svg_str_single + sibyl.svg_footer;
+      //bg_svg_str = sibyl.svg_header + bg_svg_str + sibyl.svg_footer;
+      bg_svg_str = bg_hdr + bg_svg_str + "</svg>";
+
+
+
+      svgstr2canvas("ui_tarot", creature_svg_str, "ui_canvas0");
+      svgstr2canvas("ui_tarot", suite_svg_str, "ui_canvas1");
+      svgstr2canvas("ui_tarot", bg_svg_str, "ui_canvas2");
+
+      setTimeout(function() {
+        var fg_png = document.getElementById("ui_canvas0").toDataURL();
+        var su_png = document.getElementById("ui_canvas1").toDataURL();
+        var bg_png = document.getElementById("ui_canvas2").toDataURL();
+        init_card_canvas("ui_canvas_x", bg_png, fg_png, su_png, "img/st.png");
+        //init_card_canvas("ui_canvas_x", bg_png, fg_png, su_png);
+        //init_card_canvas("ui_canvas_x", bg_png, fg_png, undefined, "img/st.png");
+      }, 0);
+
+
+      // testing full card with mask
+      fg_ctx.create_background_rect = true;
+      sibyl.opt.use_mask = true;
+      //sibyl.opt.scale = 0.425;
+      sibyl.opt.scale = 0.25;
+      sibyl.opt.tile_background = true;
+      sibyl.opt.complexity = 5;
+      sibyl.opt.attach_depth = 2;
+      sibyl.opt.max_nest_depth = 2;
+      sibyl.opt.global_scale = 0.5;
+
+      sibyl.opt.use_background_image = true;
+      sibyl.opt.background_image = "table";
+      sibyl.opt.background_scale_set = true;
+      sibyl.opt.background_scale_x = 0.2;
+      sibyl.opt.background_scale_y = 0.175;
+      sibyl.opt.line_width = 6;
+      sibyl.opt.dx = -144;
+      sibyl.opt.cmd = "pomegranate ! goat ~ cloud | stars_7 . poot";
+
+      //sibyl.fg_ctx.global_scale = 0.5;
+      sibyl.fg_ctx.global_scale = 0.44;
+
+      var full_card_test = sibyl.cmd();
+
+
+      svgstr2canvas("ui_tarot", full_card_test, "ui_canvas3");
+
+      /*
+      return;
+
+      var canvas = document.createElement('canvas');
+      const gfx_ctx = canvas.getContext('2d');
+
+
+      var parent = document.getElementById("ui_tarot");
+      var v = canvg.Canvg.fromString(gfx_ctx, creature_svg_str);
+      v.start();
+      parent.appendChild(canvas);
+      */
+
+   }
+
+    window.onload = () => {
+      console.log("start:", new Date().getTime() / 1000);
+      //test_simple_deck();
+      test_simple_layers();
+      console.log("finish:", new Date().getTime() / 1000);
+    };
+  </script>
+
+
+</head>
+
+  <body>
+
+    <div class='container'>
+
+      <h1> svgtest </h1>
+
+      <div id='ui_tarot'>
+      </div>
+
+      <canvas id='ui_canvas_x'>
+      </canvas>
+
+    </div>
+
+  </body>
+</html>
+

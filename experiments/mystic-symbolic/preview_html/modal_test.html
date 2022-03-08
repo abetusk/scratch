@@ -1,0 +1,80 @@
+<html>
+  <head>
+<link rel='stylesheet' href='css/skeleton.css'>
+<link rel='stylesheet' href='css/custom.css'>
+  <script type='text/javascript' src='js/jquery.js'></script>
+
+  <script>
+    var ui_modal_state = "off";
+    $(document).ready(function() {
+
+      $("#ui_modal").click( function(e) {
+        if (ui_modal_state == "off") {
+          ui_modal_state = "on";
+          $("#ui_dialog").fadeIn();
+        }
+        else {
+          ui_modal_state = "off";
+          $("#ui_dialog").fadeOut();
+        }
+      });
+
+      $("#ui_modal_toggle").click( function(e) {
+        ui_modal_state = "off";
+        $("#ui_dialog").fadeOut();
+      });
+
+    });
+  </script>
+
+</head>
+
+
+
+<body id='ui_body'>
+
+  <div id='ui_xcontainer'>
+    <input type="checkbox" id="toggle">
+    <label id='ui_modal' for="toggle">Open Overlay</label>
+  </div>
+
+  <dialog id="ui_dialog">
+    <p>
+      Think of a question you want answered and type it in.
+    </p>
+
+    <p>
+      The question will be used as a seed to randomly create the deck. Though your question is
+      only local to your browser, it's encouraged to not type in anything too sensitive.
+    </p>
+
+    <p>
+      Leave blank to create a random deck.
+    </p>
+    <input type='text' id='ui_modal_text' >
+    
+    <div class='row'>
+      <div class='columns'>
+        <label id='ui_modal_toggle' for="toggle">Generate</label>
+      </div>
+    </div>
+
+    <!--
+    <div class='row'>
+      <div class='four columns'>
+        <label id='ui_modal_toggle' for="toggle">close overlay</label>
+      </div>
+
+      <div class='four columns'>
+        <label id='ui_modal_x' for="toggle">x</label>
+      </div>
+
+      <div class='four columns'>
+        <label id='ui_modal_cancel' for="toggle">don't care, just show me</label>
+      </div>
+
+    </div>
+    -->
+
+  </dialog>
+</body>

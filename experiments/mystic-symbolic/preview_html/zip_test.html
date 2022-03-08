@@ -1,0 +1,61 @@
+<html>
+
+  <head>
+    <link rel='stylesheet' href='css/skeleton.css'>
+    <link rel='stylesheet' href='css/custom.css'>
+    <script type='text/javascript' src='js/jquery.js'></script>
+    <script type='text/javascript' src='js/jszip.js'></script>
+
+
+    <script>
+function saveAs(blob, filename) {
+  if (window.navigator.msSaveOrOpenBlob) {
+    window.navigator.msSaveOrOpenBlob(blob, filename);
+  } else {
+    const a = document.createElement('a');
+    document.body.appendChild(a);
+    const url = window.URL.createObjectURL(blob);
+    a.href = url;
+    a.download = filename;
+    a.click();
+    setTimeout(() => {
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    }, 0)
+  }
+}
+
+      function yo() {
+
+        var _img= document.getElementById("ui_img");
+
+        var c = document.getElementById("ui_canvas");
+        var ctx = c.getContext("2d");
+        ctx.drawImage(_img, 0, 0);
+        var imgData = c.toDataURL();
+
+        console.log(imgData);
+
+        var fuckyou= imgData.slice("data:image/png;base64,".length);
+
+        var zip = new JSZip();
+        zip.file("Hello.txt", "Hello World\n");
+        var img = zip.folder("images");
+        //img.file("smile.gif", imgData, {base64: true});
+        img.file("smile.gif", fuckyou, {base64: true});
+        zip.generateAsync({type:"blob"})
+          .then(function(content) {
+            console.log("fffff", content);
+            // see FileSaver.js
+            saveAs(content, "example.zip");
+          });
+      }
+    </script>
+  </head>
+
+  <body>
+    <canvas id='ui_canvas' width='256' height='256'></canvas>
+    <img src='img/st.png' id='ui_img'</img>
+  </body>
+
+</html>
