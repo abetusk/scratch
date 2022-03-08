@@ -23,7 +23,8 @@ node_modules
 experiments/unft/src/irnd
 experiments/unft/src/cas
 experiments/unft/bin/irnd
-experiments/src/music/fspike
+src/music/fspike
+src/noimg/noimg
 
 node_modules
 

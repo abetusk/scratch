@@ -1,0 +1,20 @@
+#!/bin/bash
+
+for f in {1..100}; do
+  L=UNIX
+  o=convert
+  k=50
+  i=0
+  a=($($o -list font|awk '/nt:/{print $2}'|shuf))
+  x="eval w"
+  s=""
+  w() {
+    s=$s" -font ${a[$i]} -draw 'text $[k+150*$i],0 ${L:$i:1}'"
+    i=$[++i]
+  }
+  $x
+  $x
+  $x
+  $x
+  echo "convert -size 600x400 xc: -gravity west -pointsize 80 $s -negate $f.png"
+done | sh
