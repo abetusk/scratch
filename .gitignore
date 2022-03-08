@@ -16,6 +16,7 @@ node_modules
 *.gp
 *.ngc
 *.ps
+*.gcode
 
 ## individual files
 
