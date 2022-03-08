@@ -27,6 +27,24 @@ var g_info = {
 
 //---
 
+function _clip_area( _pgns ) {
+  let clpr = new ClipperLib.Clipper();
+  let scale = 16384;
+
+  let pgns = [];
+  for (let i=0; i<_pgns.length; i++) {
+    let idx = pgns.length;
+    pgns.push([]);
+    for (let j=0; j<_pgns[i].length; j++) {
+      pgns[idx].push( { "X": _pgns[i][j].X, "Y": _pgns[i][j].Y } );
+    }
+  }
+
+  ClipperLib.JS.ScaleUpPaths(pgns, scale);
+
+  clpr.Area( pgns[0] );
+
+}
 
 function _clip_union( rop_pgns, _pgns) {
   let clpr = new ClipperLib.Clipper();
@@ -612,6 +630,8 @@ function rock_info(idx_x, idx_y, opt) {
 }
 
 function anim() {
+  let _debug = false;
+
   let w = g_info.width;
   let h = g_info.height;
 
@@ -629,8 +649,12 @@ function anim() {
 
   let rock_placement = [];
 
+
   let _iter = 200;
   let _step_y = 10;
+
+  let area_threshold = 10*_step_y*_step_y;
+
   let N = 10;
   for (let idx=0; idx<N; idx++) {
 
@@ -667,6 +691,7 @@ function anim() {
     _px = w/2  + (_rnd() - 0.5)*2*w/3 - 150/2;
 
     let _stop = false;
+    let _reject = false;
     for (let _it=1; _it<_iter; _it++) {
 
       ri = rock_info(x_idx,y_idx,opt);
@@ -704,7 +729,7 @@ function anim() {
 
       if (_stop) { break; }
 
-      for (let ii=0; ii<idx; ii++) {
+      for (let ii=0; ii<rock_placement.length; ii++) {
 
         let rop = [];
         let u = _clip_intersect( rop, [rock_placement[ii].b], [rock_data.b] );
@@ -713,42 +738,46 @@ function anim() {
 
           g_info.debug_data.push(rop);
 
-          console.log("cp1", idx, ii, rop);
+          let _area = ClipperLib.JS.AreaOfPolygons( rop );
 
-          ctx.fillStyle = "rgba(255,255,255,1.0)";
-          ctx.beginPath();
-          ctx.moveTo(rop[0][0].X, rop[0][0].Y);
-          for (let _i=1; _i<rop[0].length; _i++) {
-            ctx.lineTo(rop[0][_i].X, rop[0][_i].Y);
+          if (_area < area_threshold) {
+            _stop=true;
+            break;
           }
-          ctx.closePath();
-          ctx.fill();
-
-          _stop=true;
-          break;
+          else {
+            console.log("rejecting", _area);
+            _reject = true;
+            break;
+          }
         }
 
 
       }
+
+      if (_reject) { continue; }
 
       if (_stop) { break; }
       _py_prv = _py;
 
     }
 
-    rock_placement.push(rock_data);
+    if (_stop && (!_reject)) {
+      rock_placement.push(rock_data);
+    }
 
     //disp_rock(ctx, x_idx, y_idx, _px, _py, opt.a, opt.s);
 
     //DEBUG
     //
-    for (let ii=0; ii<ri.boundary.length; ii++) {
-      ctx.fillStyle = "rgba(255,0,0,0.9)";
-      ctx.fillRect( rock_data.info.boundary[ii][0], rock_data.info.boundary[ii][1], 2, 2 );
-    }
-    for (let key in ri) {
-      ctx.fillStyle = "rgba(0,255,255,0.9)";
-      ctx.fillRect(ri[key][0] + _px, ri[key][1] + _py, 10,10);
+    if (_debug) {
+      for (let ii=0; ii<ri.boundary.length; ii++) {
+        ctx.fillStyle = "rgba(255,0,0,0.9)";
+        ctx.fillRect( rock_data.info.boundary[ii][0], rock_data.info.boundary[ii][1], 2, 2 );
+      }
+      for (let key in ri) {
+        ctx.fillStyle = "rgba(0,255,255,0.9)";
+        ctx.fillRect(ri[key][0] + _px, ri[key][1] + _py, 10,10);
+      }
     }
 
   }
@@ -767,17 +796,21 @@ function anim() {
 
   }
 
-  for (let i=0; i<g_info.debug_data.length; i++) {
-    let rop = g_info.debug_data[i];
+  // DEBUG
+  //
+  if (_debug) {
+    for (let i=0; i<g_info.debug_data.length; i++) {
+      let rop = g_info.debug_data[i];
 
-          ctx.fillStyle = "rgba(255,255,0,1.0)";
-          ctx.beginPath();
-          ctx.moveTo(rop[0][0].X, rop[0][0].Y);
-          for (let _i=1; _i<rop[0].length; _i++) {
-            ctx.lineTo(rop[0][_i].X, rop[0][_i].Y);
-          }
-          ctx.closePath();
-          ctx.fill();
+            ctx.fillStyle = "rgba(255,255,0,1.0)";
+            ctx.beginPath();
+            ctx.moveTo(rop[0][0].X, rop[0][0].Y);
+            for (let _i=1; _i<rop[0].length; _i++) {
+              ctx.lineTo(rop[0][_i].X, rop[0][_i].Y);
+            }
+            ctx.closePath();
+            ctx.fill();
+    }
   }
 
   // DEBUG
