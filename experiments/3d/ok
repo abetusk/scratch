@@ -1,0 +1,5 @@
+#!/bin/bash
+
+fnt="./ROCKYAOE.ttf"
+
+fontforge -c 'import fontforge;fontforge.open("'$fnt'").generate("out.svg")'
