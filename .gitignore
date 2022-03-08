@@ -10,3 +10,16 @@ tmp/
 package.json
 package-lock.json
 node_modules
+
+## exported files
+
+*.gp
+*.ngc
+*.ps
+
+## individual files
+
+experiments/unft/src/irnd
+experiments/unft/src/cas
+
+
