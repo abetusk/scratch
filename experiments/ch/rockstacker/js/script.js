@@ -13,6 +13,10 @@ var g_info = {
 
   "n_loaded": 0,
 
+  "n_rock": 6,
+  "n_window": 30,
+  "n_board": 20,
+
   "rock_placement": {},
   "board_placement": {},
   "window_placement": {},
@@ -533,6 +537,7 @@ function trace_boundary_path(img_data, c,r) {
 
   }
 
+  /*
   if (iter==1000) {
     console.log("!!", iter);
 
@@ -548,6 +553,7 @@ function trace_boundary_path(img_data, c,r) {
 
     }
   }
+  */
 
   return _path;
 
@@ -770,7 +776,7 @@ function rock_info(idx_x, idx_y, idx_z, opt) {
 }
 
 function place_rocks() {
-  let _debug = true;
+  let _debug = false;
 
   let w = g_info.width;
   let h = g_info.height;
@@ -783,7 +789,7 @@ function place_rocks() {
 
   let area_threshold = 10*_step_y*_step_y;
 
-  let N = 10;
+  let N = g_info.n_rock;
   for (let idx=0; idx<N; idx++) {
 
     let a = (_rnd() - 0.5)*Math.PI*2;
@@ -895,7 +901,6 @@ function place_rocks() {
     }
 
     if (_stop && (!_reject)) {
-      console.log("pushing!", _reject);
       rock_placement.push(rock_data);
     }
 
@@ -922,33 +927,83 @@ function place_rocks() {
   return rock_placement;
 }
 
+function ellipse_pos(t, rx, ry, alpha, cx, cy) {
+  t = ((typeof t === "undefined") ? 0.0 : t);
+  rx = ((typeof rx === "undefined") ? 1.0 : rx);
+  ry = ((typeof ry === "undefined") ? 1.0 : ry);
+  alpha = ((typeof alpha === "undefined") ? 0 : alpha);
+  cx = ((typeof cx === "undefined") ? 0 : cx);
+  cy = ((typeof cy === "undefined") ? 0 : cy);
+
+  console.log(t, rx, ry, alpha, cx, cy);
+
+  let _ca = Math.cos(alpha);
+  let _sa = Math.sin(alpha);
+
+  let _ct = Math.cos(t*Math.PI*2);
+  let _st = Math.sin(t*Math.PI*2);
+
+  console.log("ca:", _ca, "sa:", _sa, "ct:", _ct, "st:", _st);
+
+  let x = rx*_ca*_ct - ry*_sa*_st + cx;
+  let y = rx*_sa*_ct + ry*_ca*_st + cy;
+
+  return { "X": x, "Y": y };
+}
+
 function place_boards() {
   let w = g_info.width;
   let h = g_info.height;
 
+  let margin_w = w/12;
+  let margin_h = h/12;
+
   let line = [
-    {"X": 50, "Y": 100 },
-    {"X": 300, "Y": 300 }
+    //{"X": 50, "Y": 100 },
+    //{"X": 300, "Y": 300 }
   ];
+
+  line.push({
+    "X": _rnd()*(w - margin_w*2) + margin_w,
+    "Y": _rnd()*(h - h/2) + margin_h,
+  });
+
+  line.push({
+    "X": _rnd()*(w - margin_w*2) + margin_w,
+    "Y": _rnd()*(h - margin_h*2) + margin_h,
+  });
 
   let board_placement = [];
 
+  let _img_idx = Math.floor(_rnd()*g_info.data.board.length);
 
-  let N = 20;
+  let sweep_range = ((_rnd() < 0.5) ? 0.5 : 1);
+  let cx = _rnd()*(w - margin_w*2) + margin_w;
+  let cy = _rnd()*(h - h/2) + margin_h;
+
+  let ex = _rnd()*(w - margin_w)/2;
+  let ey = _rnd()*(h - margin_h)/2;
+
+  let ea = _rnd()*2*Math.PI;
+
+  let N = g_info.n_board;
   for (let idx=0; idx<N; idx++) {
     let s = (idx/(N-1));
 
     let _scale = 0.25;
-    let _img_idx = Math.floor(_rnd()*g_info.data.board.length);
     let _img = g_info.data.board[_img_idx];
 
+    let xy = ellipse_pos(s*sweep_range, ex, ey, ea, cx, cy);
+
     let board_info = {
-      "X": s*line[1].X + (1-s)*line[0].X,
-      "Y": s*line[1].Y + (1-s)*line[0].Y,
+      //"X": s*line[1].X + (1-s)*line[0].X,
+      //"Y": s*line[1].Y + (1-s)*line[0].Y,
+      "X": xy.X,
+      "Y": xy.Y,
       "s": 0.25,
       "w": _scale * _img.width,
       "h": _scale * _img.height,
-      "a": 0,
+      "a": (_rnd()/3+ s/2) * Math.PI*2,
       "img_idx": _img_idx
     };
 
@@ -970,31 +1025,48 @@ function place_windows() {
   let margin_w = w/6;
   let margin_h = h/6;
 
-  let cx = margin_w + (_rnd()*(w - 2*margin_w));
-  let cy = margin_h + (_rnd()*(h - 2*margin_h));
-  let r = margin_w*2;
+  //let cx = margin_w + (_rnd()*(w - 2*margin_w));
+  //let cy = margin_h + (_rnd()*(h - 2*margin_h));
+  //let r = margin_w*2;
 
-  let N = 20;
+  let sweep_range = ((_rnd() < 0.5) ? 0.5 : 1);
+  let cx = _rnd()*(w - margin_w*2) + margin_w;
+  let cy = _rnd()*(h - h/2) + margin_h;
+
+  let ex = _rnd()*(w - margin_w)/2;
+  let ey = _rnd()*(h - margin_h)/2;
+
+  let ea = _rnd()*2*Math.PI;
+
+  let N = g_info.n_window;
   for (let idx=0; idx<N; idx++) {
     let s = (idx/(N-1));
 
-    let _scale = 0.25;
+    //let _scale = 0.25;
     let _img_idx = Math.floor(_rnd()*g_info.data.window.length);
     let _img = g_info.data.window[_img_idx];
 
-    let pos_a = Math.PI*2*_rnd();
-    let pos_r = r*_rnd();
+    //let pos_a = Math.PI*2*_rnd();
+    //let pos_r = r*_rnd();
 
-    let x = cx + Math.cos(pos_a)*pos_r;
-    let y = cy + Math.sin(pos_a)*pos_r;
+    //let x = cx + Math.cos(pos_a)*pos_r;
+    //let y = cy + Math.sin(pos_a)*pos_r;
+
+    let xy = ellipse_pos(s, ex, ey, ea, cx, cy);
+
+    let _scale = _rnd()*0.25 + .125;
+    let _ang = _rnd()*Math.PI*2;
 
     let win_info = {
-      "X": x,
-      "Y": y,
-      "s": 0.25,
+      //"X": x,
+      //"Y": y,
+      "X": xy.X,
+      "Y": xy.Y,
+      //"s": 0.25,
+      "s": _scale,
       "w": _scale * _img.width,
       "h": _scale * _img.height,
-      "a": 0,
+      "a": _ang,
       "img_idx": _img_idx
     };
 
@@ -1008,7 +1080,7 @@ function place_windows() {
 }
 
 function anim() {
-  let _debug = true;
+  let _debug = false;
 
   let w = g_info.width;
   let h = g_info.height;
@@ -1035,11 +1107,12 @@ function anim() {
     ctx.save();
     ctx.globalAlpha = 0.5;
 
-    /*
-    ctx.translate(_board.X, _board.Y);
+    let dx = _board.X + _board.w/2;
+    let dy = _board.Y + _board.h/2;
+
+    ctx.translate(dx, dy);
     ctx.rotate(_board.a);
-    ctx.translate(-_board.X, -_board.Y);
-    */
+    ctx.translate(-dx, -dy);
 
     let _img = g_info.data.board[_board.img_idx];
 
@@ -1057,11 +1130,12 @@ function anim() {
     ctx.save();
     ctx.globalAlpha = 0.35;
 
-    /*
-    ctx.translate(_win.X, _win.Y);
+    let dx = _win.X + _win.w/2;
+    let dy = _win.Y + _win.h/2;
+
+    ctx.translate(dx,dy);
     ctx.rotate(_win.a);
-    ctx.translate(-_win.X, -_win.Y);
-    */
+    ctx.translate(-dx,-dy);
 
     let _img = g_info.data.window[_win.img_idx];
 
@@ -1134,8 +1208,6 @@ function anim() {
 function img_load_done(x) {
 
   g_info.n_loaded++;
-
-  console.log(">>", g_info.n_loaded);
 
   let tot = g_info.img_location.rock.length +
             g_info.img_location.window.length +
