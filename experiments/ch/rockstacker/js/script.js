@@ -14,13 +14,127 @@ var g_info = {
   "n_loaded": 0,
 
   "rock_placement": {},
+  "board_placement": {},
+  "window_placement": {},
+
+  "grid": {
+    "width": 300,
+    "height": 300,
+    "x_offset": 300,
+    "y_offset" : 150
+  },
+
+  "img_location": {
+    "rock": [
+      "img/Tinyrocks_l1_1.png",
+      "img/Tinyrocks_l1_2.png",
+      "img/Tinyrocks_l1_3.png",
+      "img/Tinyrocks_l1_4.png",
+      "img/Tinyrocks_l2_1.png",
+      "img/Tinyrocks_l2_2.png",
+      "img/Tinyrocks_l2_3.png",
+      "img/Tinyrocks_l2_4.png",
+      "img/Tinyrocks_l2_5.png",
+      "img/Tinyrocks_l3.png"
+    ],
+    "house": [
+    ],
+    "window": [
+      "img/window_h4_0.png",
+      "img/window_h4_1.png",
+      "img/window_h4_2.png",
+      "img/window_h4_3.png",
+      "img/window_h4_4.png",
+      "img/window_h4_5.png",
+      "img/window_h4_6.png",
+      "img/window_h4_7.png",
+      "img/window_h4_8.png",
+      "img/window_h4_9.png",
+      "img/window_h4_10.png",
+      "img/window_h4_11.png",
+      "img/window_h4_12.png",
+      "img/window_h4_13.png",
+      "img/window_h4_14.png",
+      "img/window_h4_15.png",
+      "img/window_h4_16.png",
+      "img/window_h4_17.png",
+      "img/window_h4_18.png",
+      "img/window_h4_19.png",
+      "img/window_h4_20.png",
+      "img/window_h4_21.png",
+      "img/window_h4_22.png",
+      "img/window_h4_23.png",
+      "img/window_h4_24.png",
+      "img/window_h4_25.png",
+      "img/window_h4_26.png",
+      "img/window_h4_27.png",
+      "img/window_h4_28.png",
+      "img/window_h4_29.png",
+      "img/window_h4_30.png",
+      "img/window_h4_31.png",
+      "img/window_h4_32.png",
+      "img/window_h4_33.png",
+      "img/window_h4_34.png",
+      "img/window_h4_35.png",
+      "img/window_h4_36.png"
+    ],
+    "board": [
+      "img/board_h4_1.png",
+      "img/board_h4_2.png",
+      "img/board_h4_3.png",
+      "img/board_h4_4.png",
+      "img/board_h4_5.png",
+      "img/board_h4_6.png",
+      "img/board_h4_7.png",
+      "img/board_h4_8.png",
+      "img/board_h4_9.png",
+      "img/board_h4_10.png",
+      "img/board_h4_11.png",
+      "img/board_h4_12.png",
+      "img/board_h4_13.png",
+      "img/board_h4_14.png",
+      "img/board_h4_15.png",
+      "img/board_h4_16.png",
+      "img/board_h4_17.png",
+      "img/board_h4_18.png",
+      "img/board_h4_19.png",
+      "img/board_h4_20.png",
+      "img/board_h4_21.png",
+      "img/board_h4_22.png",
+      "img/board_h4_23.png",
+      "img/board_h4_24.png",
+      "img/board_h4_25.png",
+      "img/board_h4_26.png",
+      "img/board_h4_27.png",
+      "img/board_h4_28.png",
+      "img/board_h4_29.png",
+      "img/board_h4_30.png",
+      "img/board_h4_32.png",
+      "img/board_h4_33.png",
+      "img/board_h4_34.png",
+      "img/board_h4_35.png",
+      "img/board_h4_36.png",
+      "img/board_h4_37.png",
+      "img/board_h4_38.png",
+      "img/board_h4_39.png",
+      "img/board_h4_40.png",
+      "img/board_h4_41.png",
+      "img/board_h4_42.png",
+      "img/board_h4_43.png"
+    ]
+  },
 
   "b_canvas": {},
   "b_ctx": {},
   "subsample": 16,
   "rock": [],
   "rock_h": {},
-  "data": [],
+  "data": {
+    "house": [],
+    "rock": [],
+    "window": [],
+    "board": []
+  },
 
   "debug_data":[]
 };
@@ -269,21 +383,31 @@ function vec2a(u) {
   return v;
 }
 
-function construct_bounding_paths() {
-  let img_data = g_info.b_img_data;
-  let img_dat = img_data.data;
+function construct_bounding_paths(img_data, z_idx, found_info) {
+  z_idx = ((typeof z_idx === "undefined") ? 0 : z_idx);
 
-  let x_offset = 300;
-  let y_offset = 150;
+  //let img_data = g_info.b_img_data;
+  //let img_dat = img_data.data;
 
-  let x_width = 300;
-  let y_height = 300;
+  //let x_offset = 300;
+  //let y_offset = 150;
+
+  //let x_width = 300;
+  //let y_height = 300;
+
+  let x_offset = g_info.grid.x_offset;
+  let y_offset = g_info.grid.y_offset;
+
+  let x_width = g_info.grid.width;
+  let y_height = g_info.grid.height;
 
   let _scale = 1.0;
 
   let subdiv = g_info.subsample;
-  for (let key in g_info.found_info) {
-    let rc = g_info.found_info[key];
+  //for (let key in g_info.found_info) {
+  for (let key in found_info) {
+    //let rc = g_info.found_info[key];
+    let rc = found_info[key];
     let raw_path = trace_boundary_path(img_data, rc.c, rc.r);
 
     let sub_path = [];
@@ -291,11 +415,11 @@ function construct_bounding_paths() {
       sub_path.push( {"x": raw_path[i][0], "y":raw_path[i][1] } );
     }
 
-    g_info.rock.push({"p":sub_path});
+    //g_info.rock.push({"p":sub_path});
 
     let x_idx = Math.floor((sub_path[0].x - x_offset)/x_width);
     let y_idx = Math.floor((sub_path[0].y - y_offset)/y_height);
-    let hkey = x_idx.toString() + ":" + y_idx.toString();
+    let hkey = x_idx.toString() + ":" + y_idx.toString() + ":" + z_idx.toString() ;
 
     let v = vec2a(sub_path);
 
@@ -324,14 +448,20 @@ function debug_path() {
   }
 }
 
+// use a small 8 pixel window to trace the path
+//
 function trace_boundary_path(img_data, c,r) {
 
+  // relative pixel locations (x,y)
+  //
   let _dwin = [
     [-1,-1], [0,-1], [1,-1],
     [-1 ,0],         [1, 0],
     [-1, 1], [0, 1], [1, 1]
   ];
 
+  // cw order of pixel testing
+  //
   let _dwin_idx = [
     [0,1,2],
     [1,2,4],
@@ -349,10 +479,10 @@ function trace_boundary_path(img_data, c,r) {
   let h = img_data.height;
   let pix_data = img_data.data;
 
+  // alpha channel, test the pixel
+  //
   let _s = 3;
-
   let idx = (r*w + c)*4;
-
   if (pix_data[idx+_s] == 0) { return -1; }
 
   _path.push( [c,r] );
@@ -365,7 +495,9 @@ function trace_boundary_path(img_data, c,r) {
 
   for (; iter<max_iter; iter++) {
 
-    for (let i=0; i<8; i++) {
+    let found = false;
+    //for (let i=0; i<8; i++) {
+    for (let i=0; i<_dwin_idx.length; i++) {
       let sched_win = _dwin_idx[i];
       let pi = sched_win[0];
       let mi = sched_win[1];
@@ -441,7 +573,7 @@ function uu(a) {
   ctx.rotate(a);
   ctx.translate(-dst_x-dst_w/2, -dst_y-dst_h/2);
 
-  ctx.drawImage(g_info.data[0],
+  ctx.drawImage(g_info.data.rock[0],
     src_x, src_y, src_w, src_h,
     dst_x, dst_y, dst_w, dst_h);
 
@@ -502,12 +634,19 @@ function mat3_i() {
 }
 
 
-function disp_rock(ctx, rock_idx_x, rock_idx_y, x, y, a, s, debug) {
-  let x_offset = 300;
-  let y_offset = 150;
+function disp_rock(ctx, rock_idx_x, rock_idx_y, rock_idx_z, x, y, a, s, debug) {
 
-  let src_w = 300;
-  let src_h = 300;
+
+  //let x_offset = 300;
+  //let y_offset = 150;
+  //let src_w = 300;
+  //let src_h = 300;
+
+  let x_offset = g_info.grid.x_offset;
+  let y_offset = g_info.grid.y_offset;
+
+  let src_w = g_info.grid.width;
+  let src_h = g_info.grid.height;
 
   let src_x = rock_idx_x*src_w + x_offset;
   let src_y = rock_idx_y*src_h + y_offset;
@@ -525,7 +664,8 @@ function disp_rock(ctx, rock_idx_x, rock_idx_y, x, y, a, s, debug) {
   ctx.rotate(a);
   ctx.translate(-dst_x-dst_w/2, -dst_y-dst_h/2);
 
-  ctx.drawImage(g_info.data[0],
+  //ctx.drawImage(g_info.data[0],
+  ctx.drawImage(g_info.data.rock[rock_idx_z],
     src_x, src_y, src_w, src_h,
     dst_x, dst_y, dst_w, dst_h);
 
@@ -555,7 +695,7 @@ function disp_rock(ctx, rock_idx_x, rock_idx_y, x, y, a, s, debug) {
   
 }
 
-function rock_info(idx_x, idx_y, opt) {
+function rock_info(idx_x, idx_y, idx_z, opt) {
   opt = ((typeof opt === "undefined") ? {} : opt);
 
   let a = ((typeof opt.a === "undefined") ? 0 : opt.a);
@@ -582,7 +722,7 @@ function rock_info(idx_x, idx_y, opt) {
     "info": {}
   };
 
-  let ri = g_info.rock_h[ idx_x.toString() + ":" + idx_y.toString() ];
+  let ri = g_info.rock_h[ idx_x.toString() + ":" + idx_y.toString()  + ":" + idx_z.toString() ];
   if (typeof ri === "undefined") { return undefined; }
 
   info.info = ri;
@@ -629,23 +769,11 @@ function rock_info(idx_x, idx_y, opt) {
   return info;
 }
 
-function anim() {
-  let _debug = false;
+function place_rocks() {
+  let _debug = true;
 
   let w = g_info.width;
   let h = g_info.height;
-
-  let ctx = g_info.disp_ctx;
-
-  // outline (frame)
-  //
-  ctx.fillStyle = "rgba(50,50,50,0.9)";
-  ctx.fillRect(0,0,w, 4);
-  ctx.fillRect(0,h-4,w, 4);
-  ctx.fillRect(0,0,4,h);
-  ctx.fillRect(w-4,0,4,h);
-
-  //---
 
   let rock_placement = [];
 
@@ -661,6 +789,7 @@ function anim() {
     let a = (_rnd() - 0.5)*Math.PI*2;
     let x_idx = Math.floor(_rnd()*4);
     let y_idx = Math.floor(_rnd()*8);
+    let z_idx = Math.floor(_rnd()*3);
 
     let opt = {
       "x": 0,
@@ -672,9 +801,14 @@ function anim() {
     };
 
     let _px = 0;
+    //let _py = 0;
+    //let _py_prv = 0;
+
+    let _py_start = -100;
+
     let _py = 0;
     let _py_prv = 0;
-    let ri = rock_info(x_idx,y_idx,opt);
+    let ri = rock_info(x_idx, y_idx, z_idx, opt);
 
     let rock_data = {
       "x": _px,
@@ -684,6 +818,7 @@ function anim() {
       "opt": opt,
       "x_idx" : x_idx,
       "y_idx": y_idx,
+      "z_idx": z_idx,
       "b": [],
       "info": ri
     };
@@ -694,10 +829,10 @@ function anim() {
     let _reject = false;
     for (let _it=1; _it<_iter; _it++) {
 
-      ri = rock_info(x_idx,y_idx,opt);
+      ri = rock_info(x_idx, y_idx, z_idx, opt);
 
-      _py_prv = (_step_y * (_it-1));
-      _py = _step_y * _it;
+      _py_prv = (_step_y * (_it-1)) + _py_start;
+      _py = _step_y * _it + _py_start;
 
       //let _py = h - ri.u[1] - idx*90;
 
@@ -710,6 +845,7 @@ function anim() {
         "opt": opt,
         "x_idx" : x_idx,
         "y_idx": y_idx,
+        "z_idx": z_idx,
         "b": [],
         "info": ri
       };
@@ -721,9 +857,6 @@ function anim() {
       }
 
       if (_py > (h - ri.u[1])) {
-
-        console.log("cp0");
-
         _stop=true;
       }
 
@@ -762,6 +895,7 @@ function anim() {
     }
 
     if (_stop && (!_reject)) {
+      console.log("pushing!", _reject);
       rock_placement.push(rock_data);
     }
 
@@ -770,12 +904,13 @@ function anim() {
     //DEBUG
     //
     if (_debug) {
+      let ctx = g_info.disp_ctx;
       for (let ii=0; ii<ri.boundary.length; ii++) {
         ctx.fillStyle = "rgba(255,0,0,0.9)";
         ctx.fillRect( rock_data.info.boundary[ii][0], rock_data.info.boundary[ii][1], 2, 2 );
       }
       for (let key in ri) {
-        ctx.fillStyle = "rgba(0,255,255,0.9)";
+        ctx.fillStyle = "rgba(0,255,255,0.05)";
         ctx.fillRect(ri[key][0] + _px, ri[key][1] + _py, 10,10);
       }
     }
@@ -784,11 +919,166 @@ function anim() {
 
   g_info.rock_placement = rock_placement;
 
+  return rock_placement;
+}
+
+function place_boards() {
+  let w = g_info.width;
+  let h = g_info.height;
+
+  let line = [
+    {"X": 50, "Y": 100 },
+    {"X": 300, "Y": 300 }
+  ];
+
+  let board_placement = [];
+
+
+  let N = 20;
+  for (let idx=0; idx<N; idx++) {
+    let s = (idx/(N-1));
+
+    let _scale = 0.25;
+    let _img_idx = Math.floor(_rnd()*g_info.data.board.length);
+    let _img = g_info.data.board[_img_idx];
+
+    let board_info = {
+      "X": s*line[1].X + (1-s)*line[0].X,
+      "Y": s*line[1].Y + (1-s)*line[0].Y,
+      "s": 0.25,
+      "w": _scale * _img.width,
+      "h": _scale * _img.height,
+      "a": 0,
+      "img_idx": _img_idx
+    };
+
+    board_placement.push(board_info);
+
+  }
+
+  g_info.board_placement = board_placement;
+
+  return board_placement;
+}
+
+function place_windows() {
+  let w = g_info.width;
+  let h = g_info.height;
+
+  let win_placement = [];
+
+  let margin_w = w/6;
+  let margin_h = h/6;
+
+  let cx = margin_w + (_rnd()*(w - 2*margin_w));
+  let cy = margin_h + (_rnd()*(h - 2*margin_h));
+  let r = margin_w*2;
+
+  let N = 20;
+  for (let idx=0; idx<N; idx++) {
+    let s = (idx/(N-1));
+
+    let _scale = 0.25;
+    let _img_idx = Math.floor(_rnd()*g_info.data.window.length);
+    let _img = g_info.data.window[_img_idx];
+
+    let pos_a = Math.PI*2*_rnd();
+    let pos_r = r*_rnd();
+
+    let x = cx + Math.cos(pos_a)*pos_r;
+    let y = cy + Math.sin(pos_a)*pos_r;
+
+    let win_info = {
+      "X": x,
+      "Y": y,
+      "s": 0.25,
+      "w": _scale * _img.width,
+      "h": _scale * _img.height,
+      "a": 0,
+      "img_idx": _img_idx
+    };
+
+    win_placement.push(win_info);
+
+  }
+
+  g_info.window_placement = win_placement;
+
+  return win_placement;
+}
+
+function anim() {
+  let _debug = true;
+
+  let w = g_info.width;
+  let h = g_info.height;
+
+  let ctx = g_info.disp_ctx;
+
+  // outline (frame)
+  //
+  ctx.fillStyle = "rgba(50,50,50,0.9)";
+  ctx.fillRect(0,0,w, 4);
+  ctx.fillRect(0,h-4,w, 4);
+  ctx.fillRect(0,0,4,h);
+  ctx.fillRect(w-4,0,4,h);
+
+  //---
+
+  place_rocks();
+  place_boards();
+  place_windows();
+
+  for (let i=0; i<g_info.board_placement.length; i++) {
+    let _board = g_info.board_placement[i];
+
+    ctx.save();
+    ctx.globalAlpha = 0.5;
+
+    /*
+    ctx.translate(_board.X, _board.Y);
+    ctx.rotate(_board.a);
+    ctx.translate(-_board.X, -_board.Y);
+    */
+
+    let _img = g_info.data.board[_board.img_idx];
+
+    ctx.drawImage(_img,
+      0, 0, _img.width, _img.height,
+      _board.X, _board.Y, _board.w, _board.h);
+
+    ctx.restore();
+
+  }
+
+  for (let i=0; i<g_info.window_placement.length; i++) {
+    let _win = g_info.window_placement[i];
+
+    ctx.save();
+    ctx.globalAlpha = 0.35;
+
+    /*
+    ctx.translate(_win.X, _win.Y);
+    ctx.rotate(_win.a);
+    ctx.translate(-_win.X, -_win.Y);
+    */
+
+    let _img = g_info.data.window[_win.img_idx];
+
+    ctx.drawImage(_img,
+      0, 0, _img.width, _img.height,
+      _win.X, _win.Y, _win.w, _win.h);
+
+    ctx.restore();
+
+  }
+
   for (let i=0; i<g_info.rock_placement.length; i++) {
     let _rock = g_info.rock_placement[i];
     disp_rock(ctx,
       _rock.x_idx,
       _rock.y_idx,
+      _rock.z_idx,
       _rock.x,
       _rock.y,
       _rock.a,
@@ -802,7 +1092,7 @@ function anim() {
     for (let i=0; i<g_info.debug_data.length; i++) {
       let rop = g_info.debug_data[i];
 
-            ctx.fillStyle = "rgba(255,255,0,1.0)";
+            ctx.fillStyle = "rgba(255,255,0,0.05)";
             ctx.beginPath();
             ctx.moveTo(rop[0][0].X, rop[0][0].Y);
             for (let _i=1; _i<rop[0].length; _i++) {
@@ -824,58 +1114,6 @@ function anim() {
   }
   */
 
-  return;
-
-  let opt = {
-    "x": 0,
-    "y": 0,
-
-    "a": Math.PI/12,
-    //"a": 0,
-
-    "w": 150,
-    "h": 150,
-    "s": 0.5
-  };
-  let ri = rock_info(1,1,opt);
-  console.log(">>", ri);
-
-  let _px = w/2;
-  let _py = h - ri.u[1];
-
-
-  for (let key in ri) {
-    ctx.fillStyle = "rgba(0,255,255,0.9)";
-    ctx.fillRect(ri[key][0] + _px, ri[key][1] + _py, 10,10);
-  }
-  //disp_rock(ctx, 1, 1, 200, h-100, 0, 0.5);
-  //disp_rock(ctx, 1, 1, opt.x, opt.y, opt.a, opt.s);
-  disp_rock(ctx, 1, 1, _px, _py, opt.a, opt.s);
-
-  //---
-
-  let opt1 = {
-    "x": 0,
-    "y": 0,
-
-    "a": -Math.PI/12,
-
-    "w": 150,
-    "h": 150,
-    "s": 0.5
-  };
-  let ri1 = rock_info(1,2,opt1);
-
-  let _px1 = w/8;
-  let _py1 = h - ri1.u[1];
-
-
-  for (let key in ri1) {
-    ctx.fillStyle = "rgba(0,255,255,0.9)";
-    ctx.fillRect(ri1[key][0] + _px1, ri1[key][1] + _py1, 10,10);
-  }
-  disp_rock(ctx, 1, 2, _px1, _py1, opt1.a, opt1.s);
-
 }
 
 
@@ -885,12 +1123,27 @@ function anim() {
 //  horizontal: 0
 //  vertical: 150
 //
+//
+// img_load_done ->
+//   init_fin ->
+//     calc_outline ->
+//       construct_bounding_paths ->
+//         trace_boundary_paths
+//   
 
 function img_load_done(x) {
 
   g_info.n_loaded++;
 
-  if (g_info.n_loaded==1) {
+  console.log(">>", g_info.n_loaded);
+
+  let tot = g_info.img_location.rock.length +
+            g_info.img_location.window.length +
+            g_info.img_location.board.length;
+
+
+  //if (g_info.n_loaded==g_info.img_location.rock.length) {
+  if (g_info.n_loaded==tot) {
     init_fin();
   }
 }
@@ -914,11 +1167,14 @@ function init_fin() {
   g_info.disp_canvas = disp_canvas;
   g_info.disp_ctx = disp_ctx;
 
-  calc_outline(g_info.data[0]);
+  for (let i=0; i<g_info.data.rock.length; i++) {
+    calc_outline(g_info.data.rock[i], i);
+  }
   anim();
 }
 
-function calc_outline(img) {
+function calc_outline(img, z_idx) {
+  z_idx = ((typeof z_idx === "undefined") ? 0 : z_idx);
 
   //let img = g_info.data[0];
 
@@ -939,6 +1195,9 @@ function calc_outline(img) {
   g_info.b_canvas = canvas;
   g_info.b_ctx = ctx;
 
+  ctx.fillStyle = "rgba(255,255,255,1.0)";
+  ctx.fillRect(0, 0, w, h);
+  ctx.clearRect(0,0,w,h);
   ctx.drawImage(img, 0, 0);
 
   let img_data = ctx.getImageData(0,0,w,h);
@@ -953,15 +1212,6 @@ function calc_outline(img) {
   let grid_offset_h = 150;
 
   let found_info = {};
-
-  //DEBUG
-  //
-  let t_img = ctx.getImageData(300,150,300,300);
-
-  g_info.sub_img = t_img;
-
-  //
-  //DEBUG
 
   for (let gr=grid_offset_h; gr<(h); gr+=grid_h) {
     for (let gc=grid_offset_w; gc<(w); gc+=grid_w) {
@@ -998,9 +1248,11 @@ function calc_outline(img) {
     }
   }
 
-  g_info.found_info = found_info;
+  //g_info.found_info = found_info;
 
-  construct_bounding_paths();
+  construct_bounding_paths(img_data, z_idx, found_info);
+
+  return found_info;
 }
 
 function img_stick_load_done() {
@@ -1099,7 +1351,7 @@ function flood_fill(img_data) {
 }
 
 function img_stick_display() {
-  let img = g_info.data[1];
+  let img = g_info.data.rock[1];
 
   let w = img.width;
   let h = img.height;
@@ -1175,16 +1427,26 @@ function img_stick_display() {
 }
 
 function init() {
-  console.log("ok");
 
-  let img = new Image();
-  img.src = "img/Tinyrocks_l2_1.png";
-  img.addEventListener('load', img_load_done);
-  g_info.data.push(img);
+  for (let i=0; i<g_info.img_location.rock.length; i++) {
+    let img = new Image();
+    img.src = g_info.img_location.rock[i];
+    img.addEventListener('load', img_load_done);
+    g_info.data.rock.push(img);
+  }
 
-  let img_stick = new Image();
-  img_stick.src = "img/sticks.png";
-  img_stick.addEventListener("load", img_stick_load_done);
-  g_info.data.push(img_stick);
+  for (let i=0; i<g_info.img_location.window.length; i++) {
+    let img = new Image();
+    img.src = g_info.img_location.window[i];
+    img.addEventListener('load', img_load_done);
+    g_info.data.window.push(img);
+  }
+
+  for (let i=0; i<g_info.img_location.board.length; i++) {
+    let img = new Image();
+    img.src = g_info.img_location.board[i];
+    img.addEventListener('load', img_load_done);
+    g_info.data.board.push(img);
+  }
 
 }
