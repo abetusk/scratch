@@ -15,11 +15,16 @@ var g_info = {
 
   "n_rock": 6,
   "n_window": 30,
-  "n_board": 20,
+  "n_board": 50,
 
-  "rock_placement": {},
-  "board_placement": {},
-  "window_placement": {},
+  "group": {
+    "rock": [],
+    "board": [],
+    "window": []
+  },
+  //"rock_placement": {},
+  //"board_placement": {},
+  //"window_placement": {},
 
   "grid": {
     "width": 300,
@@ -559,33 +564,6 @@ function trace_boundary_path(img_data, c,r) {
 
 }
 
-function uu(a) {
-  let ctx = g_info.disp_ctx;
-
-  let src_x = 300;
-  let src_y = 150;
-  let src_w = 300;
-  let src_h = 300;
-
-  let dst_x = 200;
-  let dst_y = 200;
-  let dst_w = 150;
-  let dst_h = 150;
-
-  ctx.save();
-
-  ctx.translate(dst_x+dst_w/2, dst_y+dst_h/2);
-  //ctx.rotate(12*Math.PI/7);
-  ctx.rotate(a);
-  ctx.translate(-dst_x-dst_w/2, -dst_y-dst_h/2);
-
-  ctx.drawImage(g_info.data.rock[0],
-    src_x, src_y, src_w, src_h,
-    dst_x, dst_y, dst_w, dst_h);
-
-  ctx.restore();
-}
-
 function v_transform(u, dx, dy, s, a) {
   let v = [];
 
@@ -922,7 +900,7 @@ function place_rocks() {
 
   }
 
-  g_info.rock_placement = rock_placement;
+  //g_info.rock_placement = rock_placement;
 
   return rock_placement;
 }
@@ -1011,7 +989,7 @@ function place_boards() {
 
   }
 
-  g_info.board_placement = board_placement;
+  //g_info.board_placement = board_placement;
 
   return board_placement;
 }
@@ -1097,67 +1075,90 @@ function anim() {
 
   //---
 
-  place_rocks();
-  place_boards();
-  place_windows();
+  g_info.group.rock.push(place_rocks());
+  g_info.group.board.push(place_boards());
+  g_info.group.board.push(place_boards());
+  g_info.group.window.push(place_windows());
+  g_info.group.window.push(place_windows());
 
-  for (let i=0; i<g_info.board_placement.length; i++) {
-    let _board = g_info.board_placement[i];
+  for (let g=0; g<g_info.group.board.length; g++) {
 
-    ctx.save();
-    ctx.globalAlpha = 0.5;
+    //for (let i=0; i<g_info.board_placement.length; i++) {
+    //  let _board = g_info.board_placement[i];
 
-    let dx = _board.X + _board.w/2;
-    let dy = _board.Y + _board.h/2;
+    let board_placement = g_info.group.board[g];
+    for (let i=0; i<board_placement.length; i++) {
+      let _board = board_placement[i];
 
-    ctx.translate(dx, dy);
-    ctx.rotate(_board.a);
-    ctx.translate(-dx, -dy);
+      ctx.save();
+      ctx.globalAlpha = 0.5;
 
-    let _img = g_info.data.board[_board.img_idx];
+      let dx = _board.X + _board.w/2;
+      let dy = _board.Y + _board.h/2;
 
-    ctx.drawImage(_img,
-      0, 0, _img.width, _img.height,
-      _board.X, _board.Y, _board.w, _board.h);
+      ctx.translate(dx, dy);
+      ctx.rotate(_board.a);
+      ctx.translate(-dx, -dy);
 
-    ctx.restore();
+      let _img = g_info.data.board[_board.img_idx];
 
+      ctx.drawImage(_img,
+        0, 0, _img.width, _img.height,
+        _board.X, _board.Y, _board.w, _board.h);
+
+      ctx.restore();
+
+    }
   }
 
-  for (let i=0; i<g_info.window_placement.length; i++) {
-    let _win = g_info.window_placement[i];
+  for (let g=0; g<g_info.group.window.length; g++) {
 
-    ctx.save();
-    ctx.globalAlpha = 0.35;
+    //for (let i=0; i<g_info.window_placement.length; i++) {
+    //  let _win = g_info.window_placement[i];
 
-    let dx = _win.X + _win.w/2;
-    let dy = _win.Y + _win.h/2;
+    let window_placement = g_info.group.window[g];
+    for (let i=0; i<window_placement.length; i++) {
+      let _win = window_placement[i];
 
-    ctx.translate(dx,dy);
-    ctx.rotate(_win.a);
-    ctx.translate(-dx,-dy);
+      ctx.save();
+      ctx.globalAlpha = 0.35;
 
-    let _img = g_info.data.window[_win.img_idx];
+      let dx = _win.X + _win.w/2;
+      let dy = _win.Y + _win.h/2;
 
-    ctx.drawImage(_img,
-      0, 0, _img.width, _img.height,
-      _win.X, _win.Y, _win.w, _win.h);
+      ctx.translate(dx,dy);
+      ctx.rotate(_win.a);
+      ctx.translate(-dx,-dy);
 
-    ctx.restore();
+      let _img = g_info.data.window[_win.img_idx];
 
+      ctx.drawImage(_img,
+        0, 0, _img.width, _img.height,
+        _win.X, _win.Y, _win.w, _win.h);
+
+      ctx.restore();
+
+    }
   }
 
-  for (let i=0; i<g_info.rock_placement.length; i++) {
-    let _rock = g_info.rock_placement[i];
-    disp_rock(ctx,
-      _rock.x_idx,
-      _rock.y_idx,
-      _rock.z_idx,
-      _rock.x,
-      _rock.y,
-      _rock.a,
-      _rock.s);
+  for (let g=0; g<g_info.group.rock.length; g++) {
+    //for (let i=0; i<g_info.rock_placement.length; i++) {
 
+    let rock_placement = g_info.group.rock[g];
+
+    for (let i=0; i<rock_placement.length; i++) {
+      //let _rock = g_info.rock_placement[i];
+      let _rock = rock_placement[i];
+      disp_rock(ctx,
+        _rock.x_idx,
+        _rock.y_idx,
+        _rock.z_idx,
+        _rock.x,
+        _rock.y,
+        _rock.a,
+        _rock.s);
+
+    }
   }
 
   // DEBUG
