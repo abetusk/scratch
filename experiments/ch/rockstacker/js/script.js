@@ -13,13 +13,19 @@ var g_info = {
 
   "n_loaded": 0,
 
-  "n_rock": 6,
-  "n_window": 30,
-  "n_board": 50,
+  "n_rock": 8,
+
+  //"n_window": 20,
+  //"n_board": 50,
+  //"n_board": 32,
+
+  "density_board": 1/16,
+  "density_window": 1/16,
 
   "group": {
     "rock": [],
     "board": [],
+    "house": [],
     "window": []
   },
   //"rock_placement": {},
@@ -46,8 +52,15 @@ var g_info = {
       "img/Tinyrocks_l2_5.png",
       "img/Tinyrocks_l3.png"
     ],
+
     "house": [
+      "img/house_123_0.png",
+      "img/house_123_1.png",
+      "img/house_123_2.png",
+      "img/house_123_6.png",
+      "img/house_123_12.png"
     ],
+
     "window": [
       "img/window_h4_0.png",
       "img/window_h4_1.png",
@@ -205,6 +218,15 @@ function _clip_union( rop_pgns, _pgns) {
   }
 
   return rop_pgns;
+}
+
+function _copy_pgn(_pgn) {
+  let pgn = [];
+	for (let j=0; j<_pgn.length; j++) {
+		pgn.push( { "X": _pgn[j].X, "Y": _pgn[j].Y } );
+	}
+
+  return pgn;
 }
 
 function _copy_pgns(_pgns) {
@@ -620,12 +642,6 @@ function mat3_i() {
 
 function disp_rock(ctx, rock_idx_x, rock_idx_y, rock_idx_z, x, y, a, s, debug) {
 
-
-  //let x_offset = 300;
-  //let y_offset = 150;
-  //let src_w = 300;
-  //let src_h = 300;
-
   let x_offset = g_info.grid.x_offset;
   let y_offset = g_info.grid.y_offset;
 
@@ -648,34 +664,11 @@ function disp_rock(ctx, rock_idx_x, rock_idx_y, rock_idx_z, x, y, a, s, debug) {
   ctx.rotate(a);
   ctx.translate(-dst_x-dst_w/2, -dst_y-dst_h/2);
 
-  //ctx.drawImage(g_info.data[0],
   ctx.drawImage(g_info.data.rock[rock_idx_z],
     src_x, src_y, src_w, src_h,
     dst_x, dst_y, dst_w, dst_h);
 
   ctx.restore();
-
-  /*
-  let ri = g_info.rock_h[ rock_idx_x.toString() + ":" + rock_idx_y.toString() ];
-  if (typeof ri !== "undefined") {
-    let p = ri.p;
-    let v = ri.v;
-
-    let _m = _M( mat3_t(dst_x, dst_y),
-                 _M( mat3_t(dst_w/2, dst_h/2),
-                     _M( mat3_r(a),
-                         _M( mat3_t(-dst_w/2, -dst_h/2),
-                         mat3_s(0.5) ))));
-
-    for (let i=0; i<p.length; i++) {
-      let pnt = _M( _m, [v[i][0], v[i][1], 1 ]);
-
-      ctx.fillStyle = "rgba(255,0,0,1.0)";
-      ctx.fillRect( pnt[0], pnt[1], 2, 2 );
-    }
-  }
-  */
-
   
 }
 
@@ -753,6 +746,208 @@ function rock_info(idx_x, idx_y, idx_z, opt) {
   return info;
 }
 
+function house_info(img_idx, opt) {
+  opt = ((typeof opt === "undefined") ? {} : opt);
+
+  let a = ((typeof opt.a === "undefined") ? 0 : opt.a);
+  let s = ((typeof opt.s === "undefined") ? 1 : opt.s);
+  let x = ((typeof opt.x === "undefined") ? 0 : opt.x);
+  let y = ((typeof opt.y === "undefined") ? 0 : opt.y);
+
+  let w = ((typeof opt.w === "undefined") ? 300 : opt.w);
+  let h = ((typeof opt.h === "undefined") ? 300 : opt.h);
+
+  let img = g_info.data.house[img_idx];
+  let _w = img.width;
+  let _h = img.height;
+
+  let _m = _M( mat3_t(x, y),
+               _M( mat3_t(w/2, h/2),
+                   _M( mat3_r(a),
+                       _M( mat3_t(-w/2, -h/2),
+                       mat3_s(s) ))));
+
+  let info = {
+    "d": [0,0],
+    "u": [0,0],
+    "l": [0,0],
+    "r": [0,0],
+    "com": [0,0],
+    "boundary": [],
+    "info": {}
+  };
+
+  // this is an approoximation...
+  //
+  let dw = img.width/4;
+  let dh = img.height/4 + 35;
+  let v = [
+    [ -dw + _w/2, -dh + _h/2 ],
+    [  dw + _w/2, -dh + _h/2 ],
+    [  dw + _w/2,  dh + _h/2 ],
+    [ -dw + _w/2,  dh + _h/2 ]
+  ];
+
+  for (let i=0; i<v.length; i++) {
+    let pnt = _M( _m, [v[i][0], v[i][1], 1 ]);
+    info.boundary.push(pnt);
+  }
+
+  for (let i=0; i<v.length; i++) {
+    let pnt = _M( _m, [v[i][0], v[i][1], 1 ]);
+
+    info.com[0] += pnt[0];
+    info.com[1] += pnt[1];
+
+    if (i==0) {
+      info.d[0] = pnt[0]; info.d[1] = pnt[1];
+      info.u[0] = pnt[0]; info.u[1] = pnt[1];
+      info.r[0] = pnt[0]; info.r[1] = pnt[1];
+      info.l[0] = pnt[0]; info.l[1] = pnt[1];
+    }
+
+    if (info.d[1] > pnt[1]) {
+      info.d[0] = pnt[0]; info.d[1] = pnt[1];
+    }
+    if (info.u[1] < pnt[1]) {
+      info.u[0] = pnt[0]; info.u[1] = pnt[1];
+    }
+
+    if (info.l[0] > pnt[0]) {
+      info.l[0] = pnt[0]; info.l[1] = pnt[1];
+    }
+    if (info.r[0] < pnt[0] ) {
+      info.r[0] = pnt[0]; info.r[1] = pnt[1];
+    }
+
+  }
+
+  info.com[0] /= v.length;
+  info.com[1] /= v.length;
+
+  return info;
+}
+
+function place_house( _collision_info ) {
+  let _debug = false;
+
+  let w = g_info.width;
+  let h = g_info.height;
+
+  let house_placement = [];
+
+  let margin_w = w/24;
+  let margin_h = h/24;
+
+
+  let max_iter = 10;
+
+  let collision_info = [];
+  for (let ii=0; ii<_collision_info.length; ii++) {
+    collision_info.push( {"b": _copy_pgn( _collision_info[ii].b )} );
+  }
+
+  console.log(">>", collision_info);
+
+  let N = 2;
+  for (let idx=0; idx<N; idx++) {
+    //let s = (idx/(N-1));
+
+    let house_data = {
+      "X": 0,
+      "Y": 0,
+      "s": 0,
+      "w": 0,
+      "h": 0,
+      "a": 0,
+      "b": [],
+      "img_idx": -1
+    };
+
+
+    let _stop = false;
+    let _reject = false;
+    for (let iter=0; iter<max_iter; iter++) {
+      _reject = false;
+
+      let _scale = _rnd()*0.25 + .125;
+      let _img_idx = Math.floor(_rnd()*g_info.data.house.length);
+      let _img = g_info.data.house[_img_idx];
+      let _ang = _rnd()*Math.PI*2;
+
+
+      let cx = _rnd()*(w - margin_w*2) + margin_w ;
+      let cy = _rnd()*(h - margin_h*2) + margin_h ;
+
+
+      //_scale = 0.25;
+      //_ang = 0;
+
+      house_data = {
+        "X": cx,
+        "Y": cy,
+        "s": _scale,
+        "w": _scale * _img.width,
+        "h": _scale * _img.height,
+        "a": _ang,
+        "b": [],
+        "img_idx": _img_idx
+      };
+
+
+      let opt = {
+        "x": 0,
+        "y": 0,
+        "a": _ang,
+        "w": _scale * _img.width,
+        "h": _scale * _img.height,
+        "s": _scale
+      };
+
+      let hi = house_info(_img_idx, opt);
+      for (let ii=0; ii<hi.boundary.length; ii++) {
+        hi.boundary[ii][0] += cx;
+        hi.boundary[ii][1] += cy;
+        house_data.b.push( { "X": hi.boundary[ii][0], "Y": hi.boundary[ii][1] } );
+      }
+
+      // simple brute force comparison collision detection
+      //
+      for (let ii=0; ii<collision_info.length; ii++) {
+        let rop = [];
+
+        let u = _clip_intersect( rop, [collision_info[ii].b], [house_data.b] );
+
+        g_info.debug_data.push( [house_data.b] );
+
+        if (rop.length > 0) {
+          console.log("...collision...");
+          _reject = true;
+          break;
+        }
+
+      }
+
+      if (_reject) { continue; }
+      _stop = true;
+      break;
+    }
+
+    if (_stop && (!_reject)) {
+      console.log("adding...");
+      house_placement.push(house_data);
+
+      collision_info.push( {"b": house_data.b} );
+    }
+    else {
+      console.log("rejecting!");
+    }
+
+  }
+
+  return house_placement;
+}
+
 function place_rocks() {
   let _debug = false;
 
@@ -760,7 +955,6 @@ function place_rocks() {
   let h = g_info.height;
 
   let rock_placement = [];
-
 
   let _iter = 200;
   let _step_y = 10;
@@ -785,8 +979,6 @@ function place_rocks() {
     };
 
     let _px = 0;
-    //let _py = 0;
-    //let _py_prv = 0;
 
     let _py_start = -100;
 
@@ -853,7 +1045,7 @@ function place_rocks() {
 
         if (rop.length > 0) {
 
-          g_info.debug_data.push(rop);
+          //g_info.debug_data.push(rop);
 
           let _area = ClipperLib.JS.AreaOfPolygons( rop );
 
@@ -913,7 +1105,7 @@ function ellipse_pos(t, rx, ry, alpha, cx, cy) {
   cx = ((typeof cx === "undefined") ? 0 : cx);
   cy = ((typeof cy === "undefined") ? 0 : cy);
 
-  console.log(t, rx, ry, alpha, cx, cy);
+  //console.log(t, rx, ry, alpha, cx, cy);
 
   let _ca = Math.cos(alpha);
   let _sa = Math.sin(alpha);
@@ -921,7 +1113,7 @@ function ellipse_pos(t, rx, ry, alpha, cx, cy) {
   let _ct = Math.cos(t*Math.PI*2);
   let _st = Math.sin(t*Math.PI*2);
 
-  console.log("ca:", _ca, "sa:", _sa, "ct:", _ct, "st:", _st);
+  //console.log("ca:", _ca, "sa:", _sa, "ct:", _ct, "st:", _st);
 
   let x = rx*_ca*_ct - ry*_sa*_st + cx;
   let y = rx*_sa*_ct + ry*_ca*_st + cy;
@@ -936,10 +1128,7 @@ function place_boards() {
   let margin_w = w/12;
   let margin_h = h/12;
 
-  let line = [
-    //{"X": 50, "Y": 100 },
-    //{"X": 300, "Y": 300 }
-  ];
+  let line = [];
 
   line.push({
     "X": _rnd()*(w - margin_w*2) + margin_w,
@@ -964,7 +1153,14 @@ function place_boards() {
 
   let ea = _rnd()*2*Math.PI;
 
-  let N = g_info.n_board;
+  let len_approx = 4*Math.sqrt(ex*ex + ey*ey);
+
+  //let N = g_info.n_board;
+  //let N = 32;
+  let N = Math.ceil(len_approx * g_info.density_board * sweep_range);
+
+  console.log(">>>", N, ex, ey, len_approx);
+
   for (let idx=0; idx<N; idx++) {
     let s = (idx/(N-1));
 
@@ -974,8 +1170,6 @@ function place_boards() {
     let xy = ellipse_pos(s*sweep_range, ex, ey, ea, cx, cy);
 
     let board_info = {
-      //"X": s*line[1].X + (1-s)*line[0].X,
-      //"Y": s*line[1].Y + (1-s)*line[0].Y,
       "X": xy.X,
       "Y": xy.Y,
       "s": 0.25,
@@ -988,8 +1182,6 @@ function place_boards() {
     board_placement.push(board_info);
 
   }
-
-  //g_info.board_placement = board_placement;
 
   return board_placement;
 }
@@ -1016,7 +1208,11 @@ function place_windows() {
 
   let ea = _rnd()*2*Math.PI;
 
-  let N = g_info.n_window;
+  let len_approx = 4*Math.sqrt(ex*ex + ey*ey);
+
+  //let N = g_info.n_window;
+  let N = Math.ceil( g_info.density_window * len_approx * sweep_range );
+
   for (let idx=0; idx<N; idx++) {
     let s = (idx/(N-1));
 
@@ -1081,10 +1277,9 @@ function anim() {
   g_info.group.window.push(place_windows());
   g_info.group.window.push(place_windows());
 
-  for (let g=0; g<g_info.group.board.length; g++) {
+  g_info.group.house.push(place_house( g_info.group.rock[0] ));
 
-    //for (let i=0; i<g_info.board_placement.length; i++) {
-    //  let _board = g_info.board_placement[i];
+  for (let g=0; g<g_info.group.board.length; g++) {
 
     let board_placement = g_info.group.board[g];
     for (let i=0; i<board_placement.length; i++) {
@@ -1113,9 +1308,6 @@ function anim() {
 
   for (let g=0; g<g_info.group.window.length; g++) {
 
-    //for (let i=0; i<g_info.window_placement.length; i++) {
-    //  let _win = g_info.window_placement[i];
-
     let window_placement = g_info.group.window[g];
     for (let i=0; i<window_placement.length; i++) {
       let _win = window_placement[i];
@@ -1141,13 +1333,37 @@ function anim() {
     }
   }
 
+  for (let g=0; g<g_info.group.house.length; g++) {
+
+    let house_placement = g_info.group.house[g];
+    for (let i=0; i<house_placement.length; i++) {
+      let _house = house_placement[i];
+
+      ctx.save();
+
+      let dx = _house.X + _house.w/2;
+      let dy = _house.Y + _house.h/2;
+
+      ctx.translate(dx,dy);
+      ctx.rotate(_house.a);
+      ctx.translate(-dx,-dy);
+
+      let _img = g_info.data.house[_house.img_idx];
+
+      ctx.drawImage(_img,
+        0, 0, _img.width, _img.height,
+        _house.X, _house.Y, _house.w, _house.h);
+
+      ctx.restore();
+
+    }
+  }
+
   for (let g=0; g<g_info.group.rock.length; g++) {
-    //for (let i=0; i<g_info.rock_placement.length; i++) {
 
     let rock_placement = g_info.group.rock[g];
 
     for (let i=0; i<rock_placement.length; i++) {
-      //let _rock = g_info.rock_placement[i];
       let _rock = rock_placement[i];
       disp_rock(ctx,
         _rock.x_idx,
@@ -1167,6 +1383,7 @@ function anim() {
     for (let i=0; i<g_info.debug_data.length; i++) {
       let rop = g_info.debug_data[i];
 
+            //ctx.fillStyle = "rgba(255,255,0,0.05)";
             ctx.fillStyle = "rgba(255,255,0,0.05)";
             ctx.beginPath();
             ctx.moveTo(rop[0][0].X, rop[0][0].Y);
@@ -1211,6 +1428,7 @@ function img_load_done(x) {
   g_info.n_loaded++;
 
   let tot = g_info.img_location.rock.length +
+            g_info.img_location.house.length +
             g_info.img_location.window.length +
             g_info.img_location.board.length;
 
@@ -1520,6 +1738,13 @@ function init() {
     img.src = g_info.img_location.board[i];
     img.addEventListener('load', img_load_done);
     g_info.data.board.push(img);
+  }
+
+  for (let i=0; i<g_info.img_location.house.length; i++) {
+    let img = new Image();
+    img.src = g_info.img_location.house[i];
+    img.addEventListener('load', img_load_done);
+    g_info.data.house.push(img);
   }
 
 }
