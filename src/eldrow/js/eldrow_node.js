@@ -515,7 +515,7 @@ for (let j=0; (j<_init.length) && (j<10); j++) {
 }
 */
 
-let init_guess = false;
+let init_guess = true;
 
 // from common_words
 // 0 { w: 'tares', v: 4.2929138319585025 }
@@ -544,9 +544,16 @@ let init_guess = false;
 //
 if (init_guess) {
   let _entg = entropy_guess(filt_list);
-  for (let j=0; (j<_entg.length) && (j<10); j++) {
-    console.log(j, _entg[j]);
+  //for (let j=0; (j<_entg.length) && (j<10); j++) {
+  //  console.log(j, _entg[j]);
+  //}
+  //
+
+
+  for (let i=0; i<_entg.length; i++) {
+    console.log(i, _entg[i]);
   }
+  process.exit();
 }
 
 // common ...

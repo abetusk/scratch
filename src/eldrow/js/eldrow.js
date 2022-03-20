@@ -805,6 +805,46 @@ function process_key(key) {
 
 $(document).ready(function() {
 
+  $(document).on('keyup', function(e) {
+    //let tag = e.target.tagName.toLowerCase();
+    //console.log(tag, e);
+    console.log(e.key, e.which);
+
+    if (e.key == "Backspace") {
+      let _id = "#ui_kb_bksp";
+      $(_id).click();
+    }
+    else if ((e.key == "ArrowUp") || (e.key=="ArrowDown")) {
+
+      let dx = 0;
+      if (e.key == "ArrowUp") { dx = 1; }
+      else if (e.key == "ArrowDown") { dx = 2; }
+
+      let _id = "#ui_button_" + g_info.cursor.row + "_" + g_info.cursor.col;
+
+      g_info.button_state[_id] = (g_info.button_state[_id]+dx)%3;
+
+      if (g_info.button_state[_id] == 0) {
+        $(_id).css('background', "#fff");
+      }
+      else if (g_info.button_state[_id] == 1) {
+        $(_id).css('background', "#b9e776");
+      }
+      else if (g_info.button_state[_id] == 2) {
+        $(_id).css('background', "#fbea81");
+      }
+
+    }
+    else {
+
+      let key = e.key.replace(/[^a-zA-Z]/g, '');
+      if (key.length > 0) {
+        let _id = "#ui_kb_" + e.key.toLowerCase();
+        $(_id).click();
+      }
+    }
+  });
+
   load_lists();
 
   for (let i=0; i<5; i++) {
@@ -812,6 +852,7 @@ $(document).ready(function() {
       let _id = "#ui_button_" + i + "_" + j;
 
       g_info.button_state[_id] = 0;
+      $(_id).css("user-select", "none");
 
       $(_id).click( (function(_x) {
         return function(e) {
@@ -858,7 +899,6 @@ $(document).ready(function() {
   let key_list = [];
   for (let i=0; i<alphabet.length; i++) {
     let ch = alphabet.charAt(i);
-
     key_list.push(ch);
   }
   key_list.push("bksp");
@@ -902,9 +942,7 @@ $(document).ready(function() {
 
     $(_id).click( (function(_x) {
         return function(e) {
-
           let tok = _x.split("_");
-
           process_key(tok[2]);
         };
       })(_id)

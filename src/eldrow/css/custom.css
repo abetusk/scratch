@@ -1,10 +1,10 @@
-
 .tbutton,
 tbutton,
 input[type="tbutton"] {
   display: inline-block;
   height: 55px;
   padding: 0 15px;
+  width: 7vw;
   color: #777;
   text-align: center;
   font-size: 11px;
@@ -36,5 +36,48 @@ tbutton,
 .tbutton {
   margin-bottom: 1rem;
 }
+
+/* **** */
+
+.wbutton,
+wbutton,
+input[type="wbutton"] {
+  display: inline-block;
+  /* height: 55px; */
+  height: 7vh;
+  padding: 0 15px;
+  width: 10vw;
+  color: #777;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 38px;
+  letter-spacing: .1rem;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  background-color: transparent;
+  border-radius: 4px;
+  border: 1px solid #bbb;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.wbutton:hover,
+wbutton:hover,
+input[type="wbutton"]:hover,
+.wbutton:focus,
+wbutton:focus,
+input[type="wbutton"]:focus {
+  color: #777;
+  border-color: #888;
+  outline: 0;
+}
+
+wbutton,
+.wbutton {
+  margin-bottom: 1rem;
+}
+
 
 
