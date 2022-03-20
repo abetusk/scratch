@@ -728,15 +728,24 @@ function process_row(_row) {
   let common_filt_list = filter_list(g_info.common_filt_list, guess_list);
   let common_entropy_clue = entropy_guess(common_filt_list);
 
-  for (let i=0; (i<10) && (i<entropy_clue.length); i++) {
+  let i=0;
+  for (i=0; (i<10) && (i<entropy_clue.length); i++) {
     let _id = "#ui_suggestion_" + i;
-
     $(_id).html(entropy_clue[i].w);
   }
+  for (; i<10; i++) {
+    let _id = "#ui_suggestion_" + i;
+    $(_id).html("...");
+  }
 
-  for (let i=0; (i<10) && (i<common_entropy_clue.length); i++) {
+  i=0;
+  for (i=0; (i<10) && (i<common_entropy_clue.length); i++) {
     let _id = "#ui_common_suggestion_" + i;
     $(_id).html(common_entropy_clue[i].w);
+  }
+  for (; i<10; i++) {
+    let _id = "#ui_common_suggestion_" + i;
+    $(_id).html("...");
   }
 
   g_info.filt_list = filt_list;
