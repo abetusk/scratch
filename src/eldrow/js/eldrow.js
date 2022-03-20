@@ -1,79 +1,107 @@
 
-var fs = require("fs");
-/*
-var readline = require("readline").createInterface({
-  "input": process.stdin,
-  "output": process.stdout
-});
-*/
-var readline = require("readline-sync");
+var g_info = {
+  "ready": false,
 
-let data = fs.readFileSync("./words", "utf8");
-let word_list = data.split("\n");
+  "button_state": {},
 
-let eldrow_list = [];
-let eldrow_lookup = {};
+  "cursor": {
+    "row": 0,
+    "col": 0
+  },
 
-let common_data = fs.readFileSync("./common_words", "utf8");
-let common_word_list = common_data.split("\n");
-let common_eldrow_list = [];
-let common_eldrow_lookup = {};
+  "filt_list" : [],
+  "common_filt_list" : [],
+
+  "eldrow_list" : [],
+  "eldrow_lookup": {},
+
+  "common_eldrow_list": [],
+  "common_eldrow_lookup": {}
+};
 
 
-for (let i=0; i<word_list.length; i++) {
-
-  if (word_list[i].match(/^[a-zA-Z][a-zA-Z][a-zA-Z][a-zA-Z][a-zA-Z]$/)) {
-    let w = word_list[i].toLowerCase();
-    if (w in eldrow_lookup) {
-      continue;
+function xhr_request(fn, cb) {
+  let xhr = new XMLHttpRequest();
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState==4) {
+      if (xhr.status==200) {
+        cb(xhr.responseText);
+      }
+      else {
+        console.log("failed to load", fn);
+      }
     }
-    eldrow_lookup[w] = eldrow_list.length;
-    eldrow_list.push(w);
+  };
+
+  xhr.open("GET", fn);
+  xhr.send();
+}
+
+function check_finished() {
+  console.log("###", g_info.eldrow_list.length, g_info.common_eldrow_list.length);
+}
+
+function process_wordlist(data) {
+  //console.log("got wordlist:", data);
+
+  word_list = data.split("\n");
+  let eldrow_list = [];
+  let eldrow_lookup = {};
+
+  for (let i=0; i<word_list.length; i++) {
+
+    if (word_list[i].match(/^[a-zA-Z][a-zA-Z][a-zA-Z][a-zA-Z][a-zA-Z]$/)) {
+      let w = word_list[i].toLowerCase();
+      if (w in eldrow_lookup) {
+        continue;
+      }
+      eldrow_lookup[w] = eldrow_list.length;
+      eldrow_list.push(w);
+    }
+
   }
 
+  g_info.eldrow_list = eldrow_list;
+  g_info.eldrow_lookup = eldrow_lookup;
+
+  g_info.filt_list = eldrow_list;
+
+  check_finished();
 }
 
-for (let i=0; i<common_word_list.length; i++) {
+function process_common_wordlist(common_data) {
+  //console.log("got common wordlist:", common_data);
 
-  if (common_word_list[i].match(/^[a-zA-Z][a-zA-Z][a-zA-Z][a-zA-Z][a-zA-Z]$/)) {
-    let w = common_word_list[i].toLowerCase();
-    if (w in common_eldrow_lookup) {
-      continue;
+  common_word_list = common_data.split("\n");
+  let common_eldrow_list = [];
+  let common_eldrow_lookup = {};
+
+  for (let i=0; i<common_word_list.length; i++) {
+
+    if (common_word_list[i].match(/^[a-zA-Z][a-zA-Z][a-zA-Z][a-zA-Z][a-zA-Z]$/)) {
+      let w = common_word_list[i].toLowerCase();
+      if (w in common_eldrow_lookup) {
+        continue;
+      }
+      common_eldrow_lookup[w] = common_eldrow_list.length;
+      common_eldrow_list.push(w);
     }
-    common_eldrow_lookup[w] = common_eldrow_list.length;
-    common_eldrow_list.push(w);
+
   }
 
+  g_info.common_eldrow_list = common_eldrow_list;
+  g_info.common_eldrow_lookup = common_eldrow_lookup;
+
+  g_info.common_filt_list = common_eldrow_list;
+
+  check_finished();
 }
 
-console.log("###", eldrow_list.length, common_eldrow_list.length);
-
-/*
-let ch_freq = {};
-
-for (let i=0; i<eldrow_list.length; i++) {
-  for (let j=0; j<5; j++) {
-    let ch = eldrow_list[i].charAt(j);
-
-    if (!(ch in ch_freq)) {
-      ch_freq[ch] = 0;
-    }
-    ch_freq[ch]++;
-  }
+function load_lists() {
+  xhr_request("data/combined_wordlist.txt", process_wordlist);
+  xhr_request("data/common_words", process_common_wordlist);
 }
 
-let alphabet = "abcdefghijklmnopqrstuvwxyz";
-
-let ch_freq_list = [];
-
-for (let i=0; i<alphabet.length; i++) {
-  let ch = alphabet.charAt(i);
-
-  ch_freq_list.push( { "c": ch, "f": ch_freq[ch] } );
-}
-
-ch_freq_list.sort( function(a,b) { return ((a.f > b.f) ? -1 : 1); } )
-*/
 
 function print_freq(ch_f_l) {
   for (let i=0; i<ch_f_l.length; i++) {
@@ -505,9 +533,6 @@ function _test_entropy_guess() {
 //-----------
 //-----------
 
-let filt_list = eldrow_list;
-let common_filt_list = common_eldrow_list;
-
 /*
 let _init = simple_guess(filt_list);
 for (let j=0; (j<_init.length) && (j<10); j++) {
@@ -515,148 +540,388 @@ for (let j=0; (j<_init.length) && (j<10); j++) {
 }
 */
 
-let init_guess = false;
+function _nop_0() {
 
-// from common_words
-// 0 { w: 'tares', v: 4.2929138319585025 }
-// 1 { w: 'lares', v: 4.262320253156736 }
-// 2 { w: 'rales', v: 4.237659195416323 }
-// 3 { w: 'rates', v: 4.2251119474655345 }
-// 4 { w: 'teras', v: 4.211508949219614 }
-// 5 { w: 'nares', v: 4.2047236162954675 }
-// 6 { w: 'soare', v: 4.200955816765088 }
-// 7 { w: 'tales', v: 4.19651403834994 }
-// 8 { w: 'reais', v: 4.192902374040881 }
-// 9 { w: 'tears', v: 4.180813674342018 }
-//
-//
-// for dict words...
-// 0 { w: 'tares', v: 4.31516606489582 }
-// 1 { w: 'aires', v: 4.266811500170044 }
-// 2 { w: 'aries', v: 4.251729916339912 }
-// 3 { w: 'tales', v: 4.243375458081789 }
-// 4 { w: 'rates', v: 4.235345876507782 }
-// 5 { w: 'saner', v: 4.209790936114125 }
-// 6 { w: 'lanes', v: 4.205873736883651 }
-// 7 { w: 'tears', v: 4.198283971438555 }
-// 8 { w: 'dares', v: 4.191971269117911 }
-// 9 { w: 'reals', v: 4.186939975131778 }
-//
-if (init_guess) {
-  let _entg = entropy_guess(filt_list);
-  for (let j=0; (j<_entg.length) && (j<10); j++) {
-    console.log(j, _entg[j]);
-  }
-}
+  let filt_list = eldrow_list;
+  let common_filt_list = common_eldrow_list;
 
-// common ...
-// 0 { w: 'tares', v: 4.35545617859925 }
-// 1 { w: 'sante', v: 4.292023695903776 }
-// 2 { w: 'rates', v: 4.280554229735229 }
-// 3 { w: 'tears', v: 4.275069412520974 }
-// 4 { w: 'saile', v: 4.270638240003648 }
-// 5 { w: 'tales', v: 4.264966223562772 }
-// 6 { w: 'saine', v: 4.264139158399639 }
-// 7 { w: 'saner', v: 4.25567122764231 }
-// 8 { w: 'artes', v: 4.240703415121273 }
-// 9 { w: 'tires', v: 4.225039954040188 }
-// ...
-//
-//
-if (init_guess) {
-  let _entg = entropy_guess(common_filt_list);
-  for (let j=0; (j<_entg.length) && (j<10); j++) {
-    console.log(j, _entg[j]);
+
+  let init_guess = false;
+
+  // from common_words
+  // 0 { w: 'tares', v: 4.2929138319585025 }
+  // 1 { w: 'lares', v: 4.262320253156736 }
+  // 2 { w: 'rales', v: 4.237659195416323 }
+  // 3 { w: 'rates', v: 4.2251119474655345 }
+  // 4 { w: 'teras', v: 4.211508949219614 }
+  // 5 { w: 'nares', v: 4.2047236162954675 }
+  // 6 { w: 'soare', v: 4.200955816765088 }
+  // 7 { w: 'tales', v: 4.19651403834994 }
+  // 8 { w: 'reais', v: 4.192902374040881 }
+  // 9 { w: 'tears', v: 4.180813674342018 }
+  //
+  //
+  // for dict words...
+  // 0 { w: 'tares', v: 4.31516606489582 }
+  // 1 { w: 'aires', v: 4.266811500170044 }
+  // 2 { w: 'aries', v: 4.251729916339912 }
+  // 3 { w: 'tales', v: 4.243375458081789 }
+  // 4 { w: 'rates', v: 4.235345876507782 }
+  // 5 { w: 'saner', v: 4.209790936114125 }
+  // 6 { w: 'lanes', v: 4.205873736883651 }
+  // 7 { w: 'tears', v: 4.198283971438555 }
+  // 8 { w: 'dares', v: 4.191971269117911 }
+  // 9 { w: 'reals', v: 4.186939975131778 }
+  //
+  if (init_guess) {
+    let _entg = entropy_guess(filt_list);
+    for (let j=0; (j<_entg.length) && (j<10); j++) {
+      console.log(j, _entg[j]);
+    }
   }
 
-  let n = _entg.length;
-  for (let j=0; j<10; j++) {
-    console.log(n-j-1, _entg[n-j-1]);
-  }
-}
+  // common ...
+  // 0 { w: 'tares', v: 4.35545617859925 }
+  // 1 { w: 'sante', v: 4.292023695903776 }
+  // 2 { w: 'rates', v: 4.280554229735229 }
+  // 3 { w: 'tears', v: 4.275069412520974 }
+  // 4 { w: 'saile', v: 4.270638240003648 }
+  // 5 { w: 'tales', v: 4.264966223562772 }
+  // 6 { w: 'saine', v: 4.264139158399639 }
+  // 7 { w: 'saner', v: 4.25567122764231 }
+  // 8 { w: 'artes', v: 4.240703415121273 }
+  // 9 { w: 'tires', v: 4.225039954040188 }
+  // ...
+  //
+  //
+  if (init_guess) {
+    let _entg = entropy_guess(common_filt_list);
+    for (let j=0; (j<_entg.length) && (j<10); j++) {
+      console.log(j, _entg[j]);
+    }
 
-for (let i=0; i<5; i++) {
-  console.log("[a-z] - green\n[A-Z] - yellow\n![a-zA-Z] - black\n");
-  let word = readline.question(i.toString() +  "> ");
-
-  if (word.split(/  */).length != 5) {
-    console.log("::: Invalid word (", word, "), please re-enter");
-    i--;
-    continue;
-  }
-
-  let pw = parse_word(word);
-
-  filt_list = filter_list(filt_list, pw);
-  common_filt_list = filter_list(common_filt_list, pw);
-
-  if (filt_list.length==1) {
-    console.log("FOUND:", filt_list[0]);
-    break;
-  }
-
-  if (filt_list.length==0) {
-    console.log("ERROR, not found");
-    break;
-  }
-
-  //console.log(filt_list);
-
-  //for (let j=0; (j<filt_list.length) && (j<10) ; j++) {
-  //  console.log("xx:", j, filt_list[j]);
-  //}
-
-  console.log("# filtered word count:", filt_list.length, common_filt_list.length );
-
-  _entg = entropy_guess(filt_list);
-  for (let j=0; (j<_entg.length) && (j<5); j++) {
-    console.log(j, _entg[j]);
-  }
-
-  if (_entg.length > 10) {
     let n = _entg.length;
-    for (let j=0; j<5; j++) {
+    for (let j=0; j<10; j++) {
       console.log(n-j-1, _entg[n-j-1]);
     }
   }
 
-  console.log("...");
+  for (let i=0; i<5; i++) {
+    console.log("[a-z] - green\n[A-Z] - yellow\n![a-zA-Z] - black\n");
+    let word = readline.question(i.toString() +  "> ");
 
-  _common_entg = entropy_guess(common_filt_list);
-
-  if (_common_entg.length < 25) {
-    for (let j=0; j<_common_entg.length; j++) {
-      console.log("common:", j, _common_entg[j]);
+    if (word.split(/  */).length != 5) {
+      console.log("::: Invalid word (", word, "), please re-enter");
+      i--;
+      continue;
     }
-  }
-  else {
-    for (let j=0; (j<_common_entg.length) && (j<5); j++) {
-      console.log("common:", j, _common_entg[j]);
-    }
-    if (_common_entg.length>25) {
 
-      console.log("...");
-      let n = _common_entg.length;
+    let pw = parse_word(word);
+
+    filt_list = filter_list(filt_list, pw);
+    common_filt_list = filter_list(common_filt_list, pw);
+
+    if (filt_list.length==1) {
+      console.log("FOUND:", filt_list[0]);
+      break;
+    }
+
+    if (filt_list.length==0) {
+      console.log("ERROR, not found");
+      break;
+    }
+
+    //console.log(filt_list);
+
+    //for (let j=0; (j<filt_list.length) && (j<10) ; j++) {
+    //  console.log("xx:", j, filt_list[j]);
+    //}
+
+    console.log("# filtered word count:", filt_list.length, common_filt_list.length );
+
+    _entg = entropy_guess(filt_list);
+    for (let j=0; (j<_entg.length) && (j<5); j++) {
+      console.log(j, _entg[j]);
+    }
+
+    if (_entg.length > 10) {
+      let n = _entg.length;
       for (let j=0; j<5; j++) {
-        console.log("common:", n-j-1, _common_entg[n-j-1]);
+        console.log(n-j-1, _entg[n-j-1]);
       }
-
     }
-  }
 
-  //for (let j= (((_entg.length - 5) < 0) ? _entg.length : (_entg.length-5)); j<(_entg.length); j++) {
-  //for (let j=(_entg.length-1); (j>0) && (j>_entg.length-5); j--) {
-  //  console.log(j, _entg[j]);
-  //}
+    console.log("...");
 
-  /*
-  console.log("");
-  let _g = simple_guess(filt_list);
-  for (let j=0; (j<_g.length) && (j<10); j++) {
-    console.log(j, _g[j]);
+    _common_entg = entropy_guess(common_filt_list);
+
+    if (_common_entg.length < 25) {
+      for (let j=0; j<_common_entg.length; j++) {
+        console.log("common:", j, _common_entg[j]);
+      }
+    }
+    else {
+      for (let j=0; (j<_common_entg.length) && (j<5); j++) {
+        console.log("common:", j, _common_entg[j]);
+      }
+      if (_common_entg.length>25) {
+
+        console.log("...");
+        let n = _common_entg.length;
+        for (let j=0; j<5; j++) {
+          console.log("common:", n-j-1, _common_entg[n-j-1]);
+        }
+
+      }
+    }
+
+    //for (let j= (((_entg.length - 5) < 0) ? _entg.length : (_entg.length-5)); j<(_entg.length); j++) {
+    //for (let j=(_entg.length-1); (j>0) && (j>_entg.length-5); j--) {
+    //  console.log(j, _entg[j]);
+    //}
+
+    /*
+    console.log("");
+    let _g = simple_guess(filt_list);
+    for (let j=0; (j<_g.length) && (j<10); j++) {
+      console.log(j, _g[j]);
+    }
+    */
+
   }
-  */
 
 }
+
+//----
+
+function flash_button(_id) {
+  setTimeout( function() { $(_id).css("background", "#f00"); }, 100 );
+  setTimeout( function() { $(_id).css("background", "#fff"); }, 200 );
+  setTimeout( function() { $(_id).css("background", "#f00"); }, 300 );
+  setTimeout( function() { $(_id).css("background", "#fff"); }, 400 );
+}
+
+function process_row(_row) {
+
+  let guess_list = [];
+  for (let i=0; i<5; i++) {
+    let button_id = "#ui_button_" + _row + "_" + i;
+    let ch = $(button_id).html();
+
+    let val = -1;
+    if (g_info.button_state[button_id] == 0) {
+      val = -1;
+    }
+    else if (g_info.button_state[button_id] == 1) {
+      val = 1;
+    }
+    else if (g_info.button_state[button_id] == 2) {
+      val = 0;
+    }
+
+    guess_list.push( { "c": ch, "v": val });
+  }
+
+  let filt_list = filter_list(g_info.filt_list, guess_list);
+  let entropy_clue = entropy_guess(filt_list);
+
+  let common_filt_list = filter_list(g_info.common_filt_list, guess_list);
+  let common_entropy_clue = entropy_guess(common_filt_list);
+
+  for (let i=0; (i<10) && (i<entropy_clue.length); i++) {
+    let _id = "#ui_suggestion_" + i;
+
+    $(_id).html(entropy_clue[i].w);
+  }
+
+  for (let i=0; (i<10) && (i<common_entropy_clue.length); i++) {
+    let _id = "#ui_common_suggestion_" + i;
+    $(_id).html(common_entropy_clue[i].w);
+  }
+
+  g_info.filt_list = filt_list;
+  g_info.common_filt_list = common_filt_list;
+
+}
+
+function process_key(key) {
+  let button_id = "#ui_button_" + g_info.cursor.row + "_" + g_info.cursor.col;
+
+  console.log(">>>", key, g_info.cursor.row, g_info.cursor.col);
+
+  if (key == 'enter') {
+    console.log("enter");
+
+    if (g_info.cursor.col < 5) {
+      flash_button(button_id);
+      return;
+    }
+
+    process_row(g_info.cursor.row);
+
+    g_info.cursor.row++;
+    g_info.cursor.col=0;
+    return;
+  }
+
+  if (key == 'bksp') {
+
+    console.log("before:", g_info.cursor.col);
+
+    g_info.cursor.col--;
+    if (g_info.cursor.col < 0) {
+      g_info.cursor.col = 0;
+    }
+    let _id = "#ui_button_" + g_info.cursor.row + "_" + g_info.cursor.col;
+    $(_id).html("&nbsp;");
+
+    return;
+  }
+
+  if (g_info.cursor.col >= 5) {
+    console.log("eol:", g_info.cursor.row, g_info.cursor.col);
+    return;
+  }
+
+  //let button_id = "#ui_button_" + g_info.cursor.row + "_" + g_info.cursor.col;
+
+  $(button_id).html(key);
+
+  g_info.cursor.col++;
+  if (g_info.cursor.col > 4) {
+    g_info.cursor.col = 5;
+  }
+
+}
+
+$(document).ready(function() {
+
+  load_lists();
+
+  for (let i=0; i<5; i++) {
+    for (let j=0; j<5; j++) {
+      let _id = "#ui_button_" + i + "_" + j;
+
+      g_info.button_state[_id] = 0;
+
+      $(_id).click( (function(_x) {
+        return function(e) {
+          g_info.button_state[_x] = (g_info.button_state[_x]+1)%3;
+
+          if (g_info.button_state[_x] == 0) {
+            $(_x).css('background', "#fff");
+          }
+          else if (g_info.button_state[_x] == 1) {
+            $(_x).css('background', "#b9e776");
+          }
+          else if (g_info.button_state[_x] == 2) {
+            $(_x).css('background', "#fbea81");
+          }
+
+        };
+      })(_id) );
+
+    /*
+    $(_id).mouseenter( (function(_x) {
+      return function(e) { $(_x).css("background", "#eee"); }; })(_id)
+    );
+
+    $(_id).mouseleave( (function(_x) {
+      return function(e) { $(_x).css("background", "#fff"); }; })(_id)
+    );
+
+    $(_id).mousedown( (function(_x) {
+      return function(e) { $(_x).css("background", "#aaa"); }; })(_id)
+    );
+
+    $(_id).mouseup( (function(_x) {
+      return function(e) { $(_x).css("background", "#eee"); }; })(_id)
+    );
+    */
+
+
+
+    }
+  }
+
+  let alphabet = "abcdefghijklmnopqrstuvwxyz";
+
+  let key_list = [];
+  for (let i=0; i<alphabet.length; i++) {
+    let ch = alphabet.charAt(i);
+
+    key_list.push(ch);
+  }
+  key_list.push("bksp");
+  key_list.push("enter");
+
+
+  for (let i=0; i<key_list.length; i++) {
+    let ch = key_list[i];
+
+    let _id = "#ui_kb_" + ch;
+
+    $(_id).css("user-select", "none");
+
+    $(_id).mouseenter( (function(_x) {
+        return function(e) {
+          $(_x).css("background", "#eee");
+        };
+      })(_id)
+    );
+
+    $(_id).mouseleave( (function(_x) {
+        return function(e) {
+          $(_x).css("background", "#fff");
+        };
+      })(_id)
+    );
+
+    $(_id).mousedown( (function(_x) {
+        return function(e) {
+          $(_x).css("background", "#aaa");
+        };
+      })(_id)
+    );
+
+    $(_id).mouseup( (function(_x) {
+        return function(e) {
+          $(_x).css("background", "#eee");
+        };
+      })(_id)
+    );
+
+    $(_id).click( (function(_x) {
+        return function(e) {
+
+          let tok = _x.split("_");
+
+          process_key(tok[2]);
+        };
+      })(_id)
+    );
+
+
+  }
+
+  let init_word = [ "tares", "aires", "aries", "tales", "rates", "saner", "lanes", "tears", "dares", "reals" ];
+  let common_init_word = [
+    "tares", "sante", "rates", "tears", "saile", "tales", "saine", "saner", "artes", "tires"
+  ];
+
+  for (let i=0; (i<10) ; i++) {
+    let _id = "#ui_suggestion_" + i;
+
+    $(_id).html( init_word[i] );
+  }
+
+  for (let i=0; (i<10); i++) {
+    let _id = "#ui_common_suggestion_" + i;
+    $(_id).html( common_init_word[i] );
+  }
+
+
+
+});
 
 
