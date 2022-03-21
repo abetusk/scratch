@@ -2,6 +2,15 @@ span {
   font-size: 25px;
 }
 
+
+dialog {
+  /* animation: appear 350ms ease-in-out 1; */
+  max-width: 500px;
+  background: #fafafa;
+  z-index: 99;
+}
+
+
 .tbutton,
 tbutton,
 input[type="tbutton"] {

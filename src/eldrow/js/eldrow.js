@@ -1275,6 +1275,14 @@ $(document).ready(function() {
   }
 
 
+  $("#ui_help").click( function() {
+    $("#ui_modal_help").css("display", "block");
+  });
+
+  $("#ui_modal_help").click( function() {
+    $("#ui_modal_help").css("display", "none");
+  });
+
 
 });
 
