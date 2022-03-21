@@ -3,14 +3,71 @@
 // * patch
 // * fling
 // * buggy
-//
-//
+
 // denim in 4 with 200
 // denim in 4 with 1000
 
 // floor in 4 with 200
 // floor in 3 with 1000
 
+// wedge in 4 with 200
+// wedge in 4 with 1000
+
+// fetus in 5 with 200
+// fetus in 5 with 1000
+
+// mayor in 3 with 200
+// mayor in 3 with 1000
+
+
+// herbs in 3
+// snail in 4
+// broad in 3
+// sleet in 3
+// synod in 4
+// facet in 3
+// diver in 4
+// icing in 4
+// index in 3
+// lanai in 4
+// banjo in 4
+// yacht in 4 (yacht in 3/teres)
+// onion in 4
+// court in 3
+// madam in 3
+// forum in 4
+// point in 4
+// thief in 3
+// enemy in 4
+// divan in 4
+// genie in 4
+// party in 2
+// rally in 3
+// waste in 3
+// petal in 4
+// emery in 3
+// synod in 4
+// macaw in 5
+// moody in 4
+// track in 3
+// elbow in 4
+// mixer in 6
+// reply in 3
+// ankle in 5 (3/tares)
+// digit in 4
+// socks in 6 (/tares) (3/torse)
+// pizza in 4
+// drunk in 3
+// visit in 3
+// forum in 4
+// vixen in 4
+// stick in 4
+// jelly in 5
+// touch in 3
+// inbox in 4
+// table in 3
+//
+// 
 
 var g_info = {
   "ready": false,
@@ -552,6 +609,32 @@ function _test_eldrow_string() {
 
 
 
+// The idea is to measure the entropy
+// of the guess by comparing what each
+// pattern the guess produces from the
+// remaining filter list.
+//
+// Consider a word W
+// For each U in filt_list (not W)
+//    create the pattern with W as the guess
+//    and U as the hidden pattern, P.
+//   Save the pattern P, counting the duplicates
+//   Once all patterns are collected, create
+//    the entropy score ( #{P_U} / \sum #{P_U} )
+// Go through each W to find each of their respective
+//   entropy scores, sorting from maximum entropy to
+//   min.
+//
+// Picking maximum entropy indicates the space partitions
+//   maximallya (I hope)..
+// For example lets say there's a filt_list of some large
+//   size but with only one entry that has 'zzzzz' and
+//   none of the others having any 'z's in them. Picking
+//   'zzzzz' will pick out the one pattern (as 'ggggg')
+//   but won't give you any indication as to the rest.
+//   Picking a pattern that will split the other patterns
+//   will help you make progress faster.
+//
 function entropy_guess(filt_list) {
 
   if (filt_list.length<2) {

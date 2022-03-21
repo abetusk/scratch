@@ -1,10 +1,15 @@
+span {
+  font-size: 25px;
+}
+
 .tbutton,
 tbutton,
 input[type="tbutton"] {
   display: inline-block;
-  height: 55px;
+  /* height: 55px; */
+  height: 55px; */
   padding: 0 15px;
-  width: 7vw;
+  width: 8vw;
   color: #777;
   text-align: center;
   font-size: 11px;
@@ -43,15 +48,19 @@ tbutton,
 wbutton,
 input[type="wbutton"] {
   display: inline-block;
-  /* height: 55px; */
-  height: 7vh;
-  padding: 0 15px;
-  width: 10vw;
+  height: 85px;
+  /* height: 7vh; */
+  /* height: 100px; */
+  /* padding: 0 15px; */
+  padding 10px 10px 1px 10px;
+  /* width: 10vw; */
+  width: 100px;
   color: #777;
   text-align: center;
-  font-size: 11px;
+  font-size: 30px;
   font-weight: 600;
-  line-height: 38px;
+  /* line-height: 38px; */
+  line-height: 78px;
   letter-spacing: .1rem;
   text-transform: uppercase;
   text-decoration: none;
@@ -76,7 +85,7 @@ input[type="wbutton"]:focus {
 
 wbutton,
 .wbutton {
-  margin-bottom: 1rem;
+  /* margin-bottom: 1rem; */
 }
 
 
