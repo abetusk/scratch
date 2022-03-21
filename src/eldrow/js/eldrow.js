@@ -2,7 +2,15 @@
 // hard words:
 // * patch
 // * fling
+// * buggy
 //
+//
+// denim in 4 with 200
+// denim in 4 with 1000
+
+// floor in 4 with 200
+// floor in 3 with 1000
+
 
 var g_info = {
   "ready": false,
@@ -545,12 +553,18 @@ function _test_eldrow_string() {
 
 
 function entropy_guess(filt_list) {
+
   if (filt_list.length<2) {
     if (filt_list.length==0) { return []; }
-    return [ { "w": filt_list[0].w, "p": filt_list[0].p, "v": 0 } ];
+    return [ { "w": filt_list[0].w, "p": filt_list[0].p, "v": 0, "r": 0 } ];
   }
 
   let entropy_score = [];
+
+  let R = 0;
+  for (let i=0; i<filt_list.length; i++) {
+    R += filt_list[i].p;
+  }
 
   for (let i=0; i<filt_list.length; i++) {
     let guess = filt_list[i].w;
@@ -581,7 +595,7 @@ function entropy_guess(filt_list) {
       entropy += -(p*Math.log(p));
     }
 
-    entropy_score.push( {"w": guess, "v": entropy });
+    entropy_score.push( {"w": guess, "v": entropy, "p": filt_list[i].p, "r": filt_list[i].p/R });
 
     if ((i>0) && ((i%250)==0)) {
       console.log("###", i);
@@ -645,7 +659,7 @@ function entropy_guess_x(filt_list, candidate) {
       entropy += -(p*Math.log(p));
     }
 
-    entropy_score.push( {"w": guess, "v": entropy });
+    entropy_score.push( {"w": guess, "v": entropy, "p":0, "r":0 });
 
     //if ((i>0) && ((i%250)==0)) { console.log("###", i); }
   }
@@ -875,9 +889,31 @@ function process_row(_row) {
   let filt_list = filter_list(g_info.filt_list, guess_list);
   let entropy_clue = entropy_guess(filt_list);
 
-  if (filt_list.length < 100) {
+  console.log(">>filt_list:", filt_list.length, filt_list);
 
-    console.log(">>filt_list:", filt_list.length, filt_list);
+  if (entropy_clue.length < 20) {
+    for (let i=0; i<entropy_clue.length; i++) {
+      console.log("ebef:", entropy_clue[i]);
+    }
+  }
+
+  //HACK
+  //
+  if (filt_list.length <= 2) {
+
+    //...
+
+    entropy_clue.sort( function(a,b) { return ((a.r > b.r) ? -1 : 1); } );
+
+    console.log("!!!!", filt_list.length);
+    for (let ii=0; ii<entropy_clue.length; ii++) {
+      console.log("...", entropy_clue[ii]);
+    }
+
+  }
+
+  else if (filt_list.length < 1000) {
+  //else if (filt_list.length < 200) {
 
     let _x_entropy_clue = entropy_guess_x(filt_list, g_info.eldrow_list);
 
@@ -892,6 +928,12 @@ function process_row(_row) {
 
     //entropy_score.sort( function(a,b) { return ((a.v > b.v) ? -1 : 1); } );
     entropy_clue.sort( function(a,b) { return ((a.v > b.v) ? -1 : 1); });
+
+    console.log(">>>entropy_clue");
+    let n = ((entropy_clue.length < 10) ? entropy_clue.length : 10);
+    for (let ii=0; ii<n; ii++) {
+      console.log("  ..:", entropy_clue[ii]);
+    }
   }
 
   let common_filt_list = filter_list(g_info.common_filt_list, guess_list);
