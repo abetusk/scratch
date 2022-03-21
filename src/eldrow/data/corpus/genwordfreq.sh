@@ -9,6 +9,6 @@ cat *.txt | \
   uniq -c | \
   sort -n -r | \
   sed 's/^ *//' | \
-  sed 's/^\(.*\) \(.*\)$/\2,\1/' > freq.list
+  sed 's/^\(.*\) \(.*\)$/\2,\1/' > word_freq
 
 
