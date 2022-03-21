@@ -1,6 +1,7 @@
 
 // hard words:
 // * patch
+// * fling
 //
 
 var g_info = {
@@ -873,6 +874,25 @@ function process_row(_row) {
 
   let filt_list = filter_list(g_info.filt_list, guess_list);
   let entropy_clue = entropy_guess(filt_list);
+
+  if (filt_list.length < 100) {
+
+    console.log(">>filt_list:", filt_list.length, filt_list);
+
+    let _x_entropy_clue = entropy_guess_x(filt_list, g_info.eldrow_list);
+
+    for (let ii=0; ii<_x_entropy_clue.length; ii++) {
+
+      if (ii<10) {
+        console.log(">>>", _x_entropy_clue[ii]);
+      }
+
+      entropy_clue.push( _x_entropy_clue[ii] );
+    }
+
+    //entropy_score.sort( function(a,b) { return ((a.v > b.v) ? -1 : 1); } );
+    entropy_clue.sort( function(a,b) { return ((a.v > b.v) ? -1 : 1); });
+  }
 
   let common_filt_list = filter_list(g_info.common_filt_list, guess_list);
   let common_entropy_clue = entropy_guess(common_filt_list);
