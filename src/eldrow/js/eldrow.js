@@ -1,3 +1,12 @@
+// 
+//   
+// To the extent possible under law, the person who associated CC0 with
+// this source has waived all copyright and related or neighboring rights
+// to data.
+//       
+// You should have received a copy of the CC0 legalcode along with this
+// work. If not, see <http://creativecommons.org/publicdomain/zero/1.0/>.
+//
 
 // hard words:
 // * patch
@@ -88,6 +97,12 @@ var g_info = {
   "freq_list": [],
   "freq_lookup": {},
 
+  "allow_list": [],
+  "allow_lookup": {},
+
+  "allow_processed": false,
+
+
   "common_eldrow_list": [],
   "common_eldrow_lookup": {}
 };
@@ -113,9 +128,30 @@ function xhr_request(fn, cb) {
 function check_finished() {
   console.log("###", g_info.eldrow_list.length, g_info.common_eldrow_list.length, g_info.freq_list.length);
 
+
   let skip = 0;
 
   if ((g_info.eldrow_list.length > 0) && (g_info.freq_list.length>0)) {
+
+    //if (!g_info.allow_processed) { return; }
+    if (g_info.allow_processed) {
+
+      if (g_info.allow_list.length == 0) { return; }
+
+      let _filt_list = g_info.eldrow_list;
+      let filt_list = [];
+      for (let i=0; i<_filt_list.length; i++) {
+        if (_filt_list[i].w in g_info.allow_lookup) {
+          filt_list.push( _filt_list[i] );
+        }
+      }
+      g_info.filt_list = filt_list;
+    }
+    else {
+      g_info.allow_list = g_info.eldrow_list;
+      g_info.allow_lookup = g_info.eldrow_lookup;
+    }
+
     let list = g_info.eldrow_list;
     let list_lookup = g_info.eldrow_lookup;
     let freq_list = g_info.freq_list;
@@ -141,6 +177,36 @@ function check_finished() {
     console.log("# skipped", skip, "from", g_info.freq_list.length);
   }
 
+
+}
+
+function process_allowlist(data) {
+
+  word_list = data.split("\n");
+  let allow_list = [];
+  let allow_lookup = {};
+
+  for (let i=0; i<word_list.length; i++) {
+
+    let p = 1;
+
+    if (word_list[i].match(/^[a-zA-Z][a-zA-Z][a-zA-Z][a-zA-Z][a-zA-Z]$/)) {
+      let w = word_list[i].toLowerCase();
+      if (w in allow_lookup) {
+        continue;
+      }
+      allow_lookup[w] = allow_list.length;
+      allow_list.push({"w":w, "p": p});
+    }
+
+  }
+
+  g_info.allow_list = allow_list;
+  g_info.allow_lookup = allow_lookup;
+
+  g_info.allow_list = allow_list;
+
+  check_finished();
 }
 
 function process_wordlist(data) {
@@ -239,6 +305,11 @@ function load_lists() {
   xhr_request("data/common_words", process_common_wordlist);
 
   xhr_request("data/word_freq", process_word_freq);
+
+
+  if (g_info.allow_processed) {
+    xhr_request("data/words_wordle_solutions.txt", process_allowlist);
+  }
 }
 
 
@@ -302,7 +373,6 @@ function filter_list(wlist, flist, debug) {
     }
 
     let reject = false;
-    //let y_count = 0;
     
     // positional matching
     //
@@ -313,11 +383,6 @@ function filter_list(wlist, flist, debug) {
       // reject
       //
       if ( (flist[j].v == 1) && (ch != flist[j].c) ) {
-
-        if (debug) {
-          //console.log("reject0", w, ch, "!=", flist[j].c, "(", flist[j].v, ")");
-        }
-
         reject = true;
         break;
       }
@@ -326,15 +391,9 @@ function filter_list(wlist, flist, debug) {
       // reject
       //
       if ( (flist[j].v == 0) && (ch == flist[j].c) ) {
-
-        if (debug) {
-          //console.log("reject1", w, ch, "!=", flist[j].c, "(", flist[j].v, ")");
-        }
-
         reject = true;
         break;
       }
-      //if ( (flist[j].v == -1) && (
 
       // if the letter isblack and the character *does* match,
       // reject
@@ -342,20 +401,8 @@ function filter_list(wlist, flist, debug) {
       if ( (flist[j].v == -1) && (ch == flist[j].c) ) {
         reject = true;
       }
-      //if (chmap[ch] == 0) { y_count++; }
     }
     if (reject) { continue; }
-
-    /*
-    if (y_count != src_y_count) {
-      //console.log("reject2", w, y_count, src_y_count);
-      continue;
-    }
-    */
-
-    if (debug) {
-      console.log("here:", w);
-    }
 
     let w_count = {};
     for (let j=0; j<w.length; j++) {
@@ -367,14 +414,6 @@ function filter_list(wlist, flist, debug) {
       w_count[ch]++;
     }
 
-    if (debug) {
-      console.log("filter word bounds:");
-      for (let key in bounds) {
-        console.log("  ", key, bounds[key]);
-      }
-      console.log("---");
-    }
-
     for (let ch in bounds) {
       let count = 0;
       if (ch in w_count) {
@@ -382,12 +421,6 @@ function filter_list(wlist, flist, debug) {
       }
 
       if ((count < bounds[ch].min) || (count > bounds[ch].max)) {
-
-
-        if (debug) {
-          console.log("YES, REJECT");
-        }
-
         reject=true;
         break;
       }
@@ -395,29 +428,13 @@ function filter_list(wlist, flist, debug) {
 
     for (let ch in w_count) {
       if (!(ch in bounds)) {
-
-        if (debug) {
-          console.log(ch, "!in", w, "...skpping");
-        }
-
         continue;
-      }
-
-      if (debug) {
-        console.log("w_count[", ch, "]", w_count[ch], "bounds[", ch, "]:", bounds[ch]);
       }
 
       if ((w_count[ch] < bounds[ch].min) || (w_count[ch] > bounds[ch].max)) {
         reject = true;
         break;
       }
-    }
-
-
-
-
-    if (debug) {
-      console.log("");
     }
 
     if (reject) { continue; }
@@ -452,10 +469,14 @@ function _test_filter_list(_list) {
 
 }
 
-//DEBUG
-//_test_filter_list(eldrow_list);
-//process.exit();
-
+// for 'interactive'
+//
+// format is:
+//
+// lowercase - green
+// uppercase - yellow
+// !char     - (a '!' followed by the character) black
+//
 function parse_word(w) {
   let z = [];
 
@@ -515,6 +536,16 @@ function simple_guess(filt_list) {
   return guess_list;
 }
 
+
+// Return color pattern for guess against the reference_word.
+// That is, if the 'hidden' word is reference_word,
+// return what the string in 'guess' would resultin.
+// Example:
+//
+//   guess - 'eerie'
+//   ref   - 'agree'
+//   ->      'ybgbg'
+//
 function eldrow_string(guess,reference_word) {
 
   let a = guess;
@@ -592,7 +623,8 @@ function _test_eldrow_string() {
     [ "eerie", "elect" ],
     [ "ecelt", "elect" ],
     [ "lecte", "elect" ],
-    [ "eases", "onion" ]
+    [ "eases", "onion" ],
+    [ "eerie", "agree" ]
   ];
 
   for (let i=0; i<test_pair.length; i++) {
@@ -601,12 +633,6 @@ function _test_eldrow_string() {
   }
 
 }
-
-//DEBUG
-//
-//_test_eldrow_string();
-//process.exit();
-
 
 
 // The idea is to measure the entropy
@@ -969,7 +995,15 @@ function process_row(_row) {
     guess_list.push( { "c": ch, "v": val });
   }
 
-  let filt_list = filter_list(g_info.filt_list, guess_list);
+  let _filt_list = filter_list(g_info.filt_list, guess_list);
+
+  let filt_list = [];
+  for (let i=0; i<_filt_list.length; i++) {
+    if (_filt_list[i].w in g_info.allow_lookup) {
+      filt_list.push( _filt_list[i] );
+    }
+  }
+
   let entropy_clue = entropy_guess(filt_list);
 
   console.log(">>filt_list:", filt_list.length, filt_list);
@@ -1097,7 +1131,19 @@ function process_key(key) {
 
 }
 
+if ((typeof $ !== "undefined") && (typeof document !== "undefined")) {
+
 $(document).ready(function() {
+
+  let url = window.location.href;
+  let url_tok = url.split("?");
+  console.log(url_tok);
+  if (url_tok.length > 1) {
+    if (url_tok[1] == "nyt") {
+      console.log("???");
+      g_info.allow_processed = true;
+    }
+  }
 
   $(document).on('keyup', function(e) {
     //let tag = e.target.tagName.toLowerCase();
@@ -1287,3 +1333,150 @@ $(document).ready(function() {
 });
 
 
+}
+
+else {
+
+  let fs = require("fs");
+
+  g_info.allow_processed = true;
+
+  let word_data = fs.readFileSync("../data/combined_wordlist.txt", "utf8");
+  //let word_data = fs.readFileSync("../data/words_wordle.txt", "utf8");
+  process_wordlist(word_data);
+
+  let common_word_data = fs.readFileSync("../data/common_words", "utf8");
+  process_common_wordlist(common_word_data);
+
+  let freq_data = fs.readFileSync("../data/word_freq", "utf8");
+  process_word_freq(freq_data);
+
+  let allow_data = fs.readFileSync("../data/words_wordle_solutions.txt", "utf8");
+  process_allowlist(allow_data);
+
+  console.log("# filt_list:", g_info.filt_list.length);
+
+  let ok = [
+    "rebut", "sissy", "humph", "awake", "blush", "focal", "evade", "naval", "serve",
+    "heath", "dwarf", "model", "karma", "stink", "grade", "quiet", "bench", "abate",
+    "feign", "major", "death", "fresh", "crust", "stool", "colon", "abase", "marry",
+    "react", "batty", "pride", "floss", "helix", "croak", "staff", "paper", "unfed",
+    "whelp", "trawl", "outdo", "adobe", "crazy", "sower", "repay", "digit", "crate",
+    "cluck", "spike", "mimic", "pound", "maxim", "linen", "unmet", "flesh", "booby",
+    "forth", "first", "stand", "belly", "ivory", "seedy", "print", "yearn", "drain",
+    "bribe", "stout", "panel", "crass", "flume", "offal", "agree", "error", "swirl",
+    "argue", "bleed", "delta", "flick", "totem", "wooer", "front", "shrub", "parry",
+    "biome", "lapel", "start", "greet", "goner", "golem", "lusty", "loopy", "round",
+    "audit", "lying", "gamma", "labor", "islet", "civic", "forge", "corny", "moult",
+    "basic", "salad", "agate", "spicy", "spray", "essay", "fjord", "spend", "kebab",
+    "guild", "aback", "motor", "alone", "hatch", "hyper", "thumb", "dowry", "ought",
+    "belch", "dutch", "pilot", "tweed", "comet", "jaunt", "enema", "steed", "abyss",
+    "growl", "fling", "dozen", "boozy", "erode", "world", "gouge", "click", "briar",
+    "great", "altar", "pulpy", "blurt", "coast", "duchy", "groin", "fixer", "group",
+    "rogue", "badly", "smart", "pithy", "gaudy", "chill", "heron", "vodka", "finer",
+    "surer", "radio", "rouge", "perch", "retch", "wrote", "clock", "tilde", "store",
+    "prove", "bring", "solve", "cheat", "grime", "exult", "usher", "epoch", "triad",
+    "break", "rhino", "viral", "conic", "masse", "sonic", "vital", "trace", "using",
+    "peach", "champ", "baton", "brake", "pluck", "craze", "gripe", "weary", "picky",
+    "acute", "ferry", "aside", "tapir", "troll", "unify", "rebus", "boost", "truss",
+    "siege", "tiger", "banal", "slump", "crank", "gorge", "query", "drink", "favor",
+    "abbey", "tangy", "panic", "solar", "shire", "proxy", "point", "robot", "prick",
+    "wince", "crimp", "knoll", "sugar", "whack", "mount", "perky", "could", "wrung",
+    "light", "those", "moist", "shard", "pleat", "aloft", "skill", "elder", "frame",
+    "humor", "pause", "ulcer", "ultra", "robin", "cynic", "aroma", "caulk", "shake",
+    "dodge", "swill", "tacit", "other", "thorn", "trove", "bloke", "vivid", "spill",
+    "chant", "choke", "rupee", "nasty", "mourn", "ahead", "brine", "cloth", "hoard",
+    "sweet", "month", "lapse", "watch", "today", "focus", "smelt", "tease", "cater",
+    "movie", "saute", "allow", "renew", "their", "slosh", "purge", "chest", "depot",
+    "epoxy", "nymph", "found", "shall", "harry", "stove", "lowly", "snout", "trope",
+    "fewer", "shawl", "natal", "comma", "foray", "scare", "stair", "black", "squad",
+    "royal", "chunk", "mince", "shame", "cheek", "ample", "flair", "foyer", "cargo",
+    "oxide", "plant", "olive", "inert", "askew", "heist", "shown", "zesty", "hasty",
+    "trash", "fella", "larva", "forgo", "story", "hairy", "train", "homer", "badge",
+    "midst", "canny", "fetus", "butch", "farce", "slung", "tipsy", "metal", "yield",
+    "delve", "being", "scour", "glass", "gamer", "scrap", "money", "hinge", "album",
+    "vouch", "asset", "tiara", "crept", "bayou", "atoll", "manor", "creak", "showy",
+    "phase", "froth", "depth", "gloom", "flood", "trait", "girth", "piety", "payer",
+    "goose", "float", "donor", "atone", "primo", "apron", "blown", "cacao", "loser",
+    "input", "gloat", "awful", "brink", "smite", "beady", "rusty", "retro", "droll",
+    "gawky", "hutch", "pinto", "gaily", "egret", "lilac", "sever", "field", "fluff",
+    "hydro", "flack", "agape", "voice", "stead", "stalk", "berth", "madam", "night",
+    "bland", "liver", "wedge", "augur", "roomy", "wacky", "flock", "angry", "bobby",
+    "trite", "aphid", "tryst", "midge", "power", "elope", "cinch", "motto", "stomp",
+    "upset", "bluff", "cramp", "quart", "coyly", "youth", "rhyme", "buggy", "alien",
+    "smear", "unfit", "patty", "cling", "glean", "label", "hunky", "khaki", "poker",
+    "gruel", "twice", "twang", "shrug", "treat", "unlit", "waste", "merit", "woven",
+    "octal", "needy", "clown", "widow", "irony", "ruder", "gauze", "chief", "onset",
+    "prize", "fungi", "charm", "gully", "inter", "whoop", "taunt", "leery", "class",
+    "theme", "lofty", "tibia", "booze", "alpha", "thyme", "eclat", "doubt", "parer",
+    "chute", "stick", "trice", "alike", "sooth", "recap", "saint", "liege", "glory",
+    "grate", "admit", "brisk", "soggy", "usurp", "scald", "scorn", "leave", "twine",
+    "sting", "bough", "marsh", "sloth", "dandy", "vigor", "howdy", "enjoy"];
+
+
+  for (let idx=0; idx<ok.length; idx++) {
+    let ref_word = ok[idx];
+
+    let guess = "tares";
+    //let guess = "soars";
+
+    console.log("## ref:", ref_word);
+
+    let _filt_list = g_info.eldrow_list;
+    let filt_list = [];
+    for (let i=0; i<_filt_list.length; i++) {
+      if (_filt_list[i].w in g_info.allow_lookup) {
+        filt_list.push( _filt_list[i] );
+      }
+    }
+
+
+    let it=0;
+    for (it=0; it<5; it++) {
+
+      if (guess == ref_word) { break; }
+
+      let _c = eldrow_string(guess, ref_word);
+
+      let _x = "";
+      for (let i=0; i<_c.length; i++) {
+        let ch = _c.charAt(i);
+        if (i>0) { _x += " "; }
+        if (ch == 'g') { _x += guess.charAt(i); }
+        else if (ch == 'y') { _x += guess.charAt(i).toUpperCase(); }
+        else if (ch == 'b') { _x += "!" + guess.charAt(i); }
+      }
+      let pw = parse_word(_x);
+
+
+      console.log(guess, _c, _x, pw);
+
+      filt_list = filter_list(filt_list, pw);
+
+      let entropy_clue = entropy_guess(filt_list);
+
+      if (filt_list.length <= 2) {
+        entropy_clue.sort( function(a,b) { return ((a.r > b.r) ? -1 : 1); } );
+      }
+      else if (filt_list.length < 1000) {
+        let _x_entropy_clue = entropy_guess_x(filt_list, g_info.eldrow_list);
+        for (let ii=0; ii<_x_entropy_clue.length; ii++) {
+          entropy_clue.push( _x_entropy_clue[ii] );
+        }
+        entropy_clue.sort( function(a,b) { return ((a.v > b.v) ? -1 : 1); });
+      }
+
+      if (entropy_clue.length == 0) {
+        console.log("ERROR on", ref_word);
+        break;
+      }
+
+      guess = entropy_clue[0].w;
+    }
+
+    console.log("DONE:", it+1);
+
+  }
+
+  console.log("...");
+}
