@@ -1005,6 +1005,8 @@ function place_rocks() {
     let _reject = false;
     for (let _it=1; _it<_iter; _it++) {
 
+      console.log("??");
+
       ri = rock_info(x_idx, y_idx, z_idx, opt);
 
       _py_prv = (_step_y * (_it-1)) + _py_start;
@@ -1253,6 +1255,20 @@ function place_windows() {
   return win_placement;
 }
 
+function anim_setup() {
+
+  //---
+
+  g_info.group.rock.push(place_rocks());
+  g_info.group.board.push(place_boards());
+  g_info.group.board.push(place_boards());
+  g_info.group.window.push(place_windows());
+  g_info.group.window.push(place_windows());
+
+  g_info.group.house.push(place_house( g_info.group.rock[0] ));
+
+}
+
 function anim() {
   let _debug = false;
 
@@ -1269,15 +1285,8 @@ function anim() {
   ctx.fillRect(0,0,4,h);
   ctx.fillRect(w-4,0,4,h);
 
-  //---
+  anim_setup();
 
-  g_info.group.rock.push(place_rocks());
-  g_info.group.board.push(place_boards());
-  g_info.group.board.push(place_boards());
-  g_info.group.window.push(place_windows());
-  g_info.group.window.push(place_windows());
-
-  g_info.group.house.push(place_house( g_info.group.rock[0] ));
 
   for (let g=0; g<g_info.group.board.length; g++) {
 
@@ -1461,6 +1470,9 @@ function init_fin() {
   for (let i=0; i<g_info.data.rock.length; i++) {
     calc_outline(g_info.data.rock[i], i);
   }
+
+
+
   anim();
 }
 

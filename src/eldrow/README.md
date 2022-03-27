@@ -14,3 +14,8 @@ used under a CC-BY-SA license.
 |---|---|---|---|
 | 2022-03-20 | 4 | renew | tares |
 | 2022-03-21 | 3 | their | tares |
+| 2022-03-23 | 3 | purge | tares |
+| 2022-03-24 | 4 | chest | tares |
+| 2022-03-25 | 4 | depot | tares |
+| 2022-03-26 | 4 | epoxy | tares |
+| 2022-03-27 | 4 | nymph | tares |
