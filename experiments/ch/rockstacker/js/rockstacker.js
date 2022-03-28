@@ -15,6 +15,8 @@ var g_info = {
 
   "n_rock": 8,
 
+  "bg_color": "rgba(255,255,255,1.0)",
+
   //"n_window": 20,
   //"n_board": 50,
   //"n_board": 32,
@@ -156,6 +158,21 @@ var g_info = {
     "rock": [],
     "window": [],
     "board": []
+  },
+
+  "state": {
+    "name": "anim",
+    "ttl": 50
+  },
+
+  // physics
+  //
+  "world":{},
+  "body": {
+    "rock": {},
+    "house": {},
+    "window": {},
+    "board": {}
   },
 
   "debug_data":[]
@@ -1269,6 +1286,21 @@ function anim_setup() {
 
 }
 
+function clear(ctx, clear_width, clear_height, bg_color) {
+  ctx = ((typeof ctx === "undefined") ? g_info.ctx : ctx);
+  clear_width  = ((typeof clear_width  === "undefined") ? g_info.canvas.width  : clear_width)
+  clear_height = ((typeof clear_height === "undefined") ? g_info.canvas.height : clear_height)
+  bg_color     = ((typeof bg_color === "undefined") ? g_info.bg_color : bg_color)
+
+  ctx.clearRect(0, 0, clear_width, clear_height);
+  ctx.fillStyle = bg_color;
+
+  //ctx.rect(0,0, clear_width, clear_height);
+  //ctx.fill();
+  ctx.beginPath();
+  ctx.fillRect(0, 0, clear_width, clear_height);
+}
+
 function anim() {
   let _debug = false;
 
@@ -1277,6 +1309,10 @@ function anim() {
 
   let ctx = g_info.disp_ctx;
 
+  window.requestAnimationFrame(anim);
+
+  clear(ctx, w, h);
+
   // outline (frame)
   //
   ctx.fillStyle = "rgba(50,50,50,0.9)";
@@ -1284,8 +1320,6 @@ function anim() {
   ctx.fillRect(0,h-4,w, 4);
   ctx.fillRect(0,0,4,h);
   ctx.fillRect(w-4,0,4,h);
-
-  anim_setup();
 
 
   for (let g=0; g<g_info.group.board.length; g++) {
@@ -1388,6 +1422,58 @@ function anim() {
 
   // DEBUG
   //
+  for (let i=0; i<g_info.group.rock[0].length; i++) {
+    let _rock  = g_info.group.rock[0][i];
+    ctx.fillStyle = "rgba(255,0,0,0.5)";
+    ctx.fillRect( _rock.x, _rock.y, 3, 3, );
+  }
+
+  for (let i=0; i<g_info.world_rock.length; i++) {
+    let _rb = g_info.world_rock[i].p2_info;
+    let a = _rb.angle;
+    let p = _rb.position;
+    let b = g_info.world_rock[i].b;
+
+    let com = g_info.world_rock[i].com;
+
+    let _cosa = Math.cos(a);
+    let _sina = Math.sin(a);
+
+    let info = g_info.world_rock[i].info;
+
+    let _dx = info.x - com[0];
+    let _dy = info.y - com[1];
+
+    let dx = _cosa*_dx - _sina*_dy;
+    let dy = _sina*_dx - _cosa*_dy;
+    dx = _dx;
+    dy = _dy;
+
+    let _xx = p[0] + dx;
+    let _yy = p[1] + dy;
+    let _aa = a + info.a;
+
+    disp_rock(ctx,
+      info.x_idx,
+      info.y_idx,
+      info.z_idx,
+      _xx, _yy, _aa,
+      info.s);
+
+    for (let j=0; j<b.length; j++) {
+
+      let _x = b[j][0]*_cosa - b[j][1]*_sina;
+      let _y = b[j][0]*_sina + b[j][1]*_cosa;
+
+
+      ctx.fillStyle = "rgba(255,100, 0, 0.8)";
+      //ctx.fillRect( p[0] + b[j][0], p[1] + b[j][1], 3, 3 );
+      ctx.fillRect( p[0] + _x, p[1] + _y, 5, 5);
+    }
+  }
+
+  g_info.world.step(1/30,1/30,5);
+
   if (_debug) {
     for (let i=0; i<g_info.debug_data.length; i++) {
       let rop = g_info.debug_data[i];
@@ -1472,7 +1558,95 @@ function init_fin() {
   }
 
 
+  //---
 
+  g_info.group.rock.push(place_rocks());
+  g_info.group.board.push(place_boards());
+  g_info.group.board.push(place_boards());
+  g_info.group.window.push(place_windows());
+  g_info.group.window.push(place_windows());
+
+  g_info.group.house.push(place_house( g_info.group.rock[0] ));
+
+  //---
+
+  g_info.ready = true;
+
+  let _w2 = g_info.width/2;
+  let _h2 = g_info.height/2;
+  let _h = g_info.height;
+
+  g_info.world = new p2.World({ gravity : [0, 9.8] });
+
+  g_info.world.setGlobalStiffness(1e4);
+  g_info.world.solver.iterations = 20;
+  g_info.world.solver.tolerance = 0.01;
+  g_info.islandSplit = true;
+
+  g_info.world.solver.frictionIterations = 10;
+
+  // floor
+  //
+
+  let floor_shape = new p2.Plane();
+  let floor = new p2.Body({
+    "angle": Math.PI,
+    "mass": 0,
+    "position": [0, _h - 5]
+  });
+
+  floor.addShape(floor_shape);
+  g_info.world.addBody(floor);
+
+  //debug
+  g_info.floor = floor;
+
+  g_info.world.on("addBody", function(evt) {
+    evt.body.setDensity(1);
+  });
+
+  g_info.world_rock = [];
+
+  let arock = g_info.group.rock[0];
+  for (let i=0; i<arock.length; i++) {
+  //for (let i=0; i<1; i++) {
+
+    let _rp = g_info.group.rock[0][i].b;
+    let rock_path = [];
+    let rock_com = [0,0];
+
+    for (let i=0; i<_rp.length; i++) {
+      rock_path.push( [ _rp[i].X, _rp[i].Y ] );
+
+      rock_com[0] += _rp[i].X;
+      rock_com[1] += _rp[i].Y;
+    }
+
+    rock_com[0] /= _rp.length;
+    rock_com[1] /= _rp.length;
+    for (let i=0; i<rock_path.length; i++) {
+      rock_path[i][0] -= rock_com[0];
+      rock_path[i][1] -= rock_com[1];
+    }
+
+    let dx = rock_com[0] - arock[i].x;
+    let dy = rock_com[1] - arock[i].y;
+
+    let rock_body = new p2.Body({
+      mass : 1,
+      position: [ rock_com[0], rock_com[1] ]
+    });
+
+    rock_body.fromPolygon(rock_path);
+    g_info.world.addBody(rock_body);
+
+    // save info
+    //
+    g_info.world_rock.push({ "p2_info":rock_body, "com": rock_com, "b": rock_path, "info": g_info.group.rock[0][i]  });
+  }
+
+  // kick off 
+  //
   anim();
 }
 
