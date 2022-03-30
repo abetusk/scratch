@@ -13,7 +13,7 @@ var g_info = {
 
   "n_loaded": 0,
 
-  "n_rock": 8,
+  "n_rock": 16,
 
   "bg_color": "rgba(255,255,255,1.0)",
 
@@ -458,9 +458,18 @@ function construct_bounding_paths(img_data, z_idx, found_info) {
     let rc = found_info[key];
     let raw_path = trace_boundary_path(img_data, rc.c, rc.r);
 
+    let grid_com_dx = 0, grid_com_dy = 0;
     let sub_path = [];
     for (let i=0; i<raw_path.length; i+= subdiv) {
       sub_path.push( {"x": raw_path[i][0], "y":raw_path[i][1] } );
+
+      grid_com_dx += raw_path[i][0];
+      grid_com_dy += raw_path[i][1];
+    }
+
+    if (sub_path.length > 0) {
+      grid_com_dx /= sub_path.length;
+      grid_com_dy /= sub_path.length;
     }
 
     //g_info.rock.push({"p":sub_path});
@@ -476,7 +485,17 @@ function construct_bounding_paths(img_data, z_idx, found_info) {
       v[i][1] = _scale*((v[i][1] - y_offset) - y_height*y_idx);
     }
 
-    g_info.rock_h[hkey] = {"p": sub_path, "v": v};
+    let grid_y = y_height*y_idx + y_offset;
+    let grid_x = x_width*x_idx + x_offset;
+
+    g_info.rock_h[hkey] = {
+      "p": sub_path,
+      "v": v,
+      "grid_com": {
+        "d": [grid_com_dx - grid_x, grid_com_dy - grid_y],
+        "raw": [grid_com_dx, grid_com_dy]
+      }
+    };
   }
 
 }
@@ -689,6 +708,36 @@ function disp_rock(ctx, rock_idx_x, rock_idx_y, rock_idx_z, x, y, a, s, debug) {
   
 }
 
+function disp_rock1(ctx, rock_idx_x, rock_idx_y, rock_idx_z, dst_x, dst_y, a, s, com_x, com_y) {
+
+  let x_offset = g_info.grid.x_offset;
+  let y_offset = g_info.grid.y_offset;
+
+  let src_w = g_info.grid.width;
+  let src_h = g_info.grid.height;
+
+  let src_x = rock_idx_x*src_w + x_offset ;
+  let src_y = rock_idx_y*src_h + y_offset ;
+
+  let dst_w = src_w*s;
+  let dst_h = src_h*s;
+
+  let _scale = dst_w / src_w;
+
+  ctx.save();
+
+  ctx.translate( dst_x ,  dst_y );
+  ctx.rotate(a);
+  ctx.translate(-dst_x -com_x, -dst_y -com_y);
+
+  ctx.drawImage(g_info.data.rock[rock_idx_z],
+    src_x, src_y, src_w, src_h,
+    dst_x, dst_y, dst_w, dst_h);
+
+  ctx.restore();
+  
+}
+
 function rock_info(idx_x, idx_y, idx_z, opt) {
   opt = ((typeof opt === "undefined") ? {} : opt);
 
@@ -713,6 +762,7 @@ function rock_info(idx_x, idx_y, idx_z, opt) {
     "r": [0,0],
     "com": [0,0],
     "boundary": [],
+    "b": [],
     "info": {}
   };
 
@@ -726,6 +776,8 @@ function rock_info(idx_x, idx_y, idx_z, opt) {
   for (let i=0; i<p.length; i++) {
     let pnt = _M( _m, [v[i][0], v[i][1], 1 ]);
     info.boundary.push(pnt);
+
+    info.b.push([ pnt[0], pnt[1] ]);
   }
 
   for (let i=0; i<p.length; i++) {
@@ -759,6 +811,14 @@ function rock_info(idx_x, idx_y, idx_z, opt) {
 
   info.com[0] /= p.length;
   info.com[1] /= p.length;
+
+  for (let i=0; i<info.b.length; i++) {
+    info.b[i][0] -= info.com[0];
+    info.b[i][1] -= info.com[1];
+  }
+
+  console.log(info);
+
 
   return info;
 }
@@ -966,6 +1026,61 @@ function place_house( _collision_info ) {
 }
 
 function place_rocks() {
+
+  let rock_placement = [];
+
+  let N = g_info.n_rock;
+  for (let idx=0; idx<N; idx++) {
+
+    let posx = _rnd()*350 + 100;
+    let posy = _rnd()*500 + 100;
+    let a = (_rnd() - 0.5)*Math.PI*2;
+
+    console.log(idx, posx, posy, a);
+
+    let x_idx = Math.floor(_rnd()*4);
+    let y_idx = Math.floor(_rnd()*8);
+    let z_idx = Math.floor(_rnd()*3);
+
+    let opt = {
+      "x": 0,
+      "y": 0,
+      "a": 0,
+      "w": 150,
+      "h": 150,
+      "s": 0.5
+    };
+
+    let ri = rock_info(x_idx, y_idx, z_idx, opt);
+
+    let rock_body = new p2.Body({
+      "mass": 1000,
+      "angle": a,
+      "position": [ posx, posy ]
+    });
+
+    rock_body.fromPolygon( ri.b );
+    g_info.world.addBody(rock_body);
+
+    let data = {
+      "x_idx": x_idx,
+      "y_idx": y_idx,
+      "z_idx": z_idx,
+      "x": posx,
+      "y": posy,
+      "a": a,
+      "s": 0.5,
+      "p2_info": rock_body,
+      "info": ri
+    };
+
+    rock_placement.push(data);
+  }
+
+  return rock_placement;
+}
+
+function old_place_rocks() {
   let _debug = false;
 
   let w = g_info.width;
@@ -1408,17 +1523,68 @@ function anim() {
 
     for (let i=0; i<rock_placement.length; i++) {
       let _rock = rock_placement[i];
-      disp_rock(ctx,
+
+      let _x = _rock.p2_info.position[0];
+      let _y = _rock.p2_info.position[1];
+      let _a = _rock.p2_info.angle;
+
+      disp_rock1(ctx,
         _rock.x_idx,
         _rock.y_idx,
         _rock.z_idx,
-        _rock.x,
-        _rock.y,
-        _rock.a,
-        _rock.s);
+        //_rock.x,
+        //_rock.y,
+        //_rock.a,
+        _x, _y, _a,
+        _rock.s,
+        _rock.info.com[0],
+        _rock.info.com[1]);
+
+      let p2info = rock_placement[i].p2_info;
+
+      let p2pos = p2info.position;
+
+      ctx.fillStyle = "rgba(255,0,0, 0.9)";
+      ctx.fillRect( p2pos[0], p2pos[1], 5, 5);
+
+      let b = rock_placement[i].info.b;
+      let p = p2pos;
+      let a = p2info.angle;
+
+      let _cosa = Math.cos(a);
+      let _sina = Math.sin(a);
+
+      for (let j=0; j<b.length; j++) {
+
+        let _x = b[j][0]*_cosa - b[j][1]*_sina;
+        let _y = b[j][0]*_sina + b[j][1]*_cosa;
+
+
+        ctx.fillStyle = "rgba(255,100, 0, 0.8)";
+        //ctx.fillRect( p[0] + b[j][0], p[1] + b[j][1], 3, 3 );
+        ctx.fillRect( p[0] + _x, p[1] + _y, 5, 5);
+      }
+
+      let ccp = p2info.concavePath;
+      for (let j=0; j<ccp.length; j++) {
+        let _x = ccp[j][0]*_cosa - ccp[j][1]*_sina;
+        let _y = ccp[j][0]*_sina + ccp[j][1]*_cosa;
+
+        ctx.fillStyle = "rgba(100,100, 255, 0.8)";
+        //ctx.fillRect( ccp[j][0] + p[0], ccp[j][1] + p[1], 5, 5);
+        ctx.fillRect( _x + p[0], _y + p[1], 5, 5);
+      }
+
+
 
     }
+
   }
+
+  //g_info.world.step(1/30,1/30,5);
+  g_info.world.step(1/5,1/5,5);
+
+  return;
 
   // DEBUG
   //
@@ -1428,11 +1594,27 @@ function anim() {
     ctx.fillRect( _rock.x, _rock.y, 3, 3, );
   }
 
+  if (!("debug_angle" in g_info)) {
+    g_info.debug_angle = 0;
+    g_info.debug_pos = [ g_info.width/2, g_info.height/2 ];
+  }
+  g_info.debug_angle += Math.PI/360;
+  if (g_info.debug_angle > (2*Math.PI)) {
+    g_info.debug_angle -= 2*Math.PI;
+  }
+
+
+
   for (let i=0; i<g_info.world_rock.length; i++) {
     let _rb = g_info.world_rock[i].p2_info;
     let a = _rb.angle;
     let p = _rb.position;
     let b = g_info.world_rock[i].b;
+
+    //DEBUG
+    //
+    p = g_info.debug_pos;
+    a = g_info.debug_angle;
 
     let com = g_info.world_rock[i].com;
 
@@ -1449,16 +1631,32 @@ function anim() {
     dx = _dx;
     dy = _dy;
 
-    let _xx = p[0] + dx;
-    let _yy = p[1] + dy;
+    //let _xx = p[0] + dx;
+    //let _yy = p[1] + dy;
+    let _xx = p[0] ;
+    let _yy = p[1] ;
     let _aa = a + info.a;
 
-    disp_rock(ctx,
+    ctx.fillStyle = "rgba(100, 255, 100, 0.9)";
+    ctx.fillRect( _xx, _yy, 5, 5);
+    ctx.fillStyle = "rgba(100, 100, 255, 0.9)";
+    ctx.fillRect( p[0], p[1], 5, 5);
+
+    let grid_com_dx = info.info.info.grid_com.d[0];
+    let grid_com_dy = info.info.info.grid_com.d[1];
+
+
+    grid_com_dx = 0;
+    grid_com_dy = 0;
+
+
+    disp_rock1(ctx,
       info.x_idx,
       info.y_idx,
       info.z_idx,
       _xx, _yy, _aa,
-      info.s);
+      info.s,
+      grid_com_dx, grid_com_dy);
 
     for (let j=0; j<b.length; j++) {
 
@@ -1470,9 +1668,11 @@ function anim() {
       //ctx.fillRect( p[0] + b[j][0], p[1] + b[j][1], 3, 3 );
       ctx.fillRect( p[0] + _x, p[1] + _y, 5, 5);
     }
+
+    break;
   }
 
-  g_info.world.step(1/30,1/30,5);
+  //g_info.world.step(1/30,1/30,5);
 
   if (_debug) {
     for (let i=0; i<g_info.debug_data.length; i++) {
@@ -1560,23 +1760,15 @@ function init_fin() {
 
   //---
 
-  g_info.group.rock.push(place_rocks());
-  g_info.group.board.push(place_boards());
-  g_info.group.board.push(place_boards());
-  g_info.group.window.push(place_windows());
-  g_info.group.window.push(place_windows());
-
-  g_info.group.house.push(place_house( g_info.group.rock[0] ));
-
-  //---
-
   g_info.ready = true;
 
   let _w2 = g_info.width/2;
   let _h2 = g_info.height/2;
   let _h = g_info.height;
+  let _w = g_info.width;
 
-  g_info.world = new p2.World({ gravity : [0, 9.8] });
+  //g_info.world = new p2.World({ gravity : [0, 9.8] });
+  g_info.world = new p2.World({ gravity : [0, 30] });
 
   g_info.world.setGlobalStiffness(1e4);
   g_info.world.solver.iterations = 20;
@@ -1585,7 +1777,7 @@ function init_fin() {
 
   g_info.world.solver.frictionIterations = 10;
 
-  // floor
+  // floor and walls
   //
 
   let floor_shape = new p2.Plane();
@@ -1594,9 +1786,26 @@ function init_fin() {
     "mass": 0,
     "position": [0, _h - 5]
   });
-
   floor.addShape(floor_shape);
   g_info.world.addBody(floor);
+
+  let right_wall_shape = new p2.Plane();
+  let right_wall = new p2.Body({
+    "angle": Math.PI/2,
+    "mass": 0,
+    "position": [_w-5, 0]
+  });
+  right_wall.addShape(right_wall_shape);
+  g_info.world.addBody(right_wall);
+
+  let left_wall_shape = new p2.Plane();
+  let left_wall = new p2.Body({
+    "angle": -Math.PI/2,
+    "mass": 0,
+    "position": [5, 0]
+  });
+  left_wall.addShape(left_wall_shape);
+  g_info.world.addBody(left_wall);
 
   //debug
   g_info.floor = floor;
@@ -1605,6 +1814,7 @@ function init_fin() {
     evt.body.setDensity(1);
   });
 
+  /*
   g_info.world_rock = [];
 
   let arock = g_info.group.rock[0];
@@ -1644,6 +1854,19 @@ function init_fin() {
     //
     g_info.world_rock.push({ "p2_info":rock_body, "com": rock_com, "b": rock_path, "info": g_info.group.rock[0][i]  });
   }
+  */
+
+  //---
+
+  g_info.group.rock.push(place_rocks());
+  g_info.group.board.push(place_boards());
+  g_info.group.board.push(place_boards());
+  g_info.group.window.push(place_windows());
+  g_info.group.window.push(place_windows());
+
+  //g_info.group.house.push(place_house( g_info.group.rock[0] ));
+
+
 
   // kick off 
   //
