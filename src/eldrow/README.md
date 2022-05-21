@@ -19,4 +19,6 @@ used under a CC-BY-SA license.
 | 2022-03-25 | 4 | depot | tares |
 | 2022-03-26 | 4 | epoxy | tares |
 | 2022-03-27 | 4 | nymph | tares |
-| 2022-03-27 | 5 | found | tares |
+| 2022-03-28 | 5 | found | tares |
+| 2022-03-31 | 5 | lowly | tares |
+| 2022-04-01 | 4 | snout | tares |
