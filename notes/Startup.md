@@ -260,3 +260,46 @@ Weebly  is a no-code (?) website builder
   - feature which propels you to PMF will make up for rest
   - product has "need" that differentiates product from competitors and attracts customers
 
+
+### [How to Sell](https://www.youtube.com/watch?v=xZi4kTJG-LE)
+
+* Talking to customers is selling
+* Early startups should be either building or talking to customers
+* Three channels for sales: network/conferences/email
+  - use your network to get introductions
+  - go to conferences
+  - cold emails
+* Going to conferences:
+  - research who's going and email before conference to see if they can meet for a 30min 'pitch'
+  - line up your day with pitches to everyone who will listen
+* Cold email structure:
+  - Who I am; What we do; Why it's interesting to customer; Ask for interaction even if not interested in sales;
+    Give concrete time to chat
+  - keep short and to the point
+* Sales is about listening
+  - calls should be 70% listening
+* Be diligent about follow up
+  - successful sales can have many emails that haven't been responded to
+  - being persistent can not be rude but helpful as customers have a lot of things going on
+    that might have caused them to lose focus on the sale
+* Value in driving conversation to 'yes' or 'no' as 'no' gives feedback about
+  when not to invest any more energy
+* Closing:
+  - have agreement at the ready to give them
+  - YC has open source template
+  - don't quibble over minor details
+  - close quickly
+* The "just one more feature" request is often a 'polite' pass rather than
+  a promise of purchase after the feature is implemented
+  - best to avoid this and just treat it as a pass
+  - exception is if they sign a contract for purchase after feature has been implemented
+* Free trial can be a trap
+  - does not validate concept
+* Sales pipeline should be tailored to number of prospective customers
+  - high touch sales can work for 1k customers at $100k each
+  - low touch sales for 100k customers at $10 each (by necessity)
+* Nudge email follow up in a week
+* Early startups often need 'renaissance' reps (vs. 'coin-op' reps)
+  - 'renaissance' - can figure out things on their own, can experiment, iterate, etc.
+  - 'coin-op' - given a script and all information, can churn through quickly
+ 
