@@ -12,6 +12,8 @@
 * Death by despair / death of despair
 * Blitter heart
 * Through a Pixel, Darkly
+* Vegan Metal Vampire Bat
+* Vegan Witch
 
 
 ---
