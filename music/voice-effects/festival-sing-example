@@ -43,3 +43,5 @@ EOF
 
 text2wave -mode singing doremi.xml -o doremi.wav
 text2wave -mode singing doremi1.xml -o doremi1.wav
+text2wave -mode singing doremi2.xml -o doremi2.wav
+text2wave -eval  '(voice_us1_mbrola)' -mode singing doremi3.xml -o doremi3.wav
