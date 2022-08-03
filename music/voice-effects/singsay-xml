@@ -1,0 +1,116 @@
+#!/usr/bin/python3
+#
+# To the extent possible under law, the person who associated CC0 with
+# this project has waived all copyright and related or neighboring rights
+# to this project.
+# 
+# You should have received a copy of the CC0 legalcode along with this
+# work.  If not, see <http://creativecommons.org/publicdomain/zero/1.0/>.
+#
+
+# A simple program to output 'singing' xml for festival
+#
+# Example usage:
+#
+# text2wave -eval '(voice_us1_mbrola)' -mode singing <( ./singsay-xml -b 80 "hello friend." )  -o hello.wav ; mplayer hello.wav  
+#
+
+# Note that this is a work in progress.
+# Currently only supoprts a fixed set of random syllable lengths and note distribution
+#
+
+import sys
+import re
+import syllables
+import random
+import getopt
+
+BPM=80
+
+def usage():
+  print("...")
+
+try:
+  opts, args = getopt.getopt(sys.argv[1:], "h:b:", ["help" ])
+except getopt.GetoptError as err:
+  # print help information and exit:
+  print(str(err))
+  usage()
+  sys.exit(2)
+output = None
+verbose = False
+for o, a in opts:
+  if o == "-b":
+    BPM = float(a)
+  elif o in ("-h", "--help"):
+    usage()
+    sys.exit(-1)
+  else:
+    assert False, "unhandled option"
+
+#sent="Hello there daisy, friend, how are you?"
+sent = ""
+if len(args)>0:
+  sent  = args[0]
+
+
+HDR = """<?xml version="1.0"?>
+<!DOCTYPE SINGING PUBLIC "-//SINGING//DTD SINGING mark up//EN" "Singing.v0_1.dtd" []>
+"""
+HDR += '<SINGING BPM="' + str(BPM) + '">\n'
+FTR = '<REST BEATS="1.0"></REST>\n</SINGING>'
+
+
+def rbeat():
+  v = [ 0.33, 0.5, 0.66, 0.75, 1.0, 1.125 ]
+  return random.choice(v)
+
+def rpitch():
+  v = ["A3", "Bb3", "C4", "D4", "Eb4", "F3", "F4", "G3" ]
+  v = ["A4", "Bb4", "C5", "D5", "Eb5", "F4", "F5", "G4" ]
+  return random.choice(v)
+
+
+def sent2singxml(sent, info):
+  toks = re.split('  *', sent)
+
+  lines = []
+
+  for tok in toks:
+    beat = [ 0.66 ]
+    pitch = [ "A3" ]
+    
+
+    m = syllables.estimate(tok)
+
+    beats = []
+    pitches = []
+    for idx in range(m):
+      beats.append( rbeat() )
+      pitches.append( rpitch() )
+
+    xml_line = '<DURATION '
+    xml_line += 'BEATS="' + ",".join(list(map(str,beats))) + '"'
+    xml_line += '>'
+
+    xml_line += '<PITCH '
+    xml_line += 'NOTE="' + ",".join(list(map(str,pitches))) + '"'
+    xml_line += '>'
+
+    xml_line += tok
+
+    xml_line += '</PITCH></DURATION>'
+    lines.append(xml_line)
+
+  return "\n".join(lines)
+
+
+
+
+o = sent2singxml(sent, {})
+
+print(HDR)
+print(o)
+print(FTR)
+
+

@@ -1,0 +1,11 @@
+#!/bin/bash
+
+txt="$1"
+
+if [[ "$txt" == "" ]] ; then
+  echo "provide text"
+  exit 1
+fi
+
+text2wave -eval '(voice_us1_mbrola)' -mode singing <( ./singsay-xml -b 80 "${txt}" ) -o XXX.wav
+aplay XXX.wav
