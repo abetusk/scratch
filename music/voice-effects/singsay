@@ -2,11 +2,23 @@
 
 txt="$1"
 bpm=120
+voice="voice_us1_mbrola"
+
+opt="$2"
+
+# festival : (voice.list)
+# rab_diphone us2_mbrola kal_diphone us1_mbrola us3_mbrola don_diphone en1_mbrola ked_diphone
+
 
 if [[ "$txt" == "" ]] ; then
   echo "provide text"
   exit 1
 fi
 
-text2wave -eval '(voice_us1_mbrola)' -mode singing <( ./singsay-xml -b ${bpm} "${txt}" ) -o XXX.wav
+if [[ "$opt" != "" ]] ; then
+  voice="$opt"
+fi
+
+
+text2wave -eval '('${voice}')' -mode singing <( ./singsay-xml -b ${bpm} "${txt}" ) -o XXX.wav
 aplay XXX.wav
