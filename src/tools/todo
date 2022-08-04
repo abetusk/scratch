@@ -6,10 +6,12 @@
 datafn="$HOME/data/personal/todo.json"
 
 opt="$1"
+mod="$2"
 
 
 if [[ "$opt" == "" ]] ;  then
-  opt=`date +'%Y-%m-%d'`
+  #opt=`date +'%Y-%m-%d'`
+  opt="current"
 elif [[ "$opt"  == "yesterday" ]] ; then
   opt=`date --date yesterday +'%Y-%m-%d'`
 elif [[ "$opt"  == "today" ]] ; then
@@ -18,17 +20,32 @@ elif [[ "$opt" == "help" ]] ; then
   echo ""
   echo "usage:"
   echo ""
-  echo "  todo [yesterday|today|all|<YYYY-MM-DD] [help]"
+  echo "  todo [current|yesterday|today|all|<YYYY-MM-DD>|help] [pending|completed|true|false|all]"
   echo ""
   echo "  parse JSON file from '$datafn' and display"
   echo ""
   exit 0
 fi
 
+if [[ "$mod" == "" ]] || [[ "$mod" == "true" ]]  ; then
+  mod="pending"
+elif [[ "$mod" == "completed" ]] || [[ "$mod" == "false" ]] ; then
+  mod="completed"
+fi
 
 
 if [[ "$opt" == "all" ]] ; then
   jq . $HOME/data/personal/todo.json
 else
-  jq '.["'$opt'"] | { "'$opt'":. }' "$datafn"
+
+  if [[ "$mod" == "all" ]] ; then
+    #jq '.["'$opt'"] | { "'$opt'":. }' "$datafn"
+    jq -c '.["'$opt'"][] ' "$datafn"
+  elif [[ "$mod" == "completed" ]] ; then
+    jq -c '.["'$opt'"][] | select( .completed == true) ' "$datafn"
+  else
+    jq -c '.["'$opt'"][] | select( .completed == false) ' "$datafn"
+  fi
+
+
 fi
