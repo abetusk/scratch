@@ -157,14 +157,12 @@ function BeliefPropagationCollapse(data, x, width, height, depth, opt) {
 
   this.h_v = new Array(this.tilesize);
   this.mu_v = new Array(this.tilesize);
-  this.u_v = [];
+  this.u_v = []; //new Array(this.tilesize);
 
   this.svd = {};
   this.SVs = [];
   this.Us = [];
 
-  // NOT WORKING
-  //
   if (typeof numeric !== "undefined") {
 
     let testA = [];
@@ -245,6 +243,8 @@ BeliefPropagationCollapse.prototype.uMv = function(u,M,v) {
 
   n = M.length;
   m = v.length;
+
+  //console.log("uMv: n:", n, "m:", m, "u:", u.length, "M:", M.length, M[0].length, "v:", v.length);
 
   for (a=0; a<n; a++) {
     u[a] = 0;
@@ -1029,9 +1029,9 @@ BeliefPropagationCollapse.prototype.bp_step_svd = function() {
           }
 
           this.uMv(this.u_v, this.SVs[anch_s], this.h_v);
-          this.uMv(this.h_v, this.Us[anch_s], this.u_v);
+          this.uMv(this.mu_v, this.Us[anch_s], this.u_v);
+          //this.Fs_dot_v(this.mu_v, anch_s, this.h_v);
 
-          this.Fs_dot_v(this.mu_v, anch_s, this.h_v);
           for (let anch_b_idx=0; anch_b_idx < anch_cell_tile_n; anch_b_idx++) {
             let anch_b_val = this.cell_tile[ anch_z*this.CELL_STRIDE1 + anch_y*this.CELL_STRIDE2 + anch_x*this.CELL_STRIDE3 + anch_b_idx ];
 
@@ -1422,8 +1422,6 @@ if (typeof module !== "undefined") {
 
   }
 
-  // NOTE WORKING - something wrong with svd optimization
-  //
   function test5() {
     let tilelib = _load("./data/stair.json");
     let bpc = new BeliefPropagationCollapse(tilelib,null, 3,3,1);
