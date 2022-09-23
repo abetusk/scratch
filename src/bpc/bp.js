@@ -137,16 +137,45 @@ function BeliefPropagationCollapse(data, x, width, height, depth, opt) {
   this.FS_STRIDE1 = this.tilesize*this.tilesize;
   this.FS_STRIDE2 = this.tilesize;
 
-  let fs_stride0 = this.tilesize*this.tilesize*this.D*2 ;
+  this.Cn = new Array( this.tilesize*this.tilesize*this.D*2 );
+
+  this.tile_conn = new Array( this.tilesize*this.D*2 );
+  this.TILE_CONN_STRIDE0 = this.tilesize*this.D*2;
+  this.TILE_CONN_STRIDE1 = this.D*2;
+
   for (let sdir=0; sdir<this.dxyz.length; sdir++) {
     for (let a=0; a<this.tilesize; a++) {
+
+      let has_conn = 0;
+
       for (let b=0; b<this.tilesize; b++) {
         let dv_key = this.dxyz[sdir].join(":");
         this.Fs[ sdir*this.FS_STRIDE1 + a*this.FS_STRIDE2 + b ] = data.F[dv_key][a][b];
+
+        let src_name = this.tile_name[a];
+        let dst_name = this.tile_name[b];
+        let conn_val = 0;
+        if ( src_name in this.data.admissible_nei ) {
+          if ( dst_name in this.data.admissible_nei[src_name][dv_key] ) {
+            conn_val = ( this.data.admissible_nei[src_name][dv_key][dst_name].conn ? 1 : 0 );
+
+            if (conn_val>0) { has_conn=1; }
+          }
+        }
+
+        this.Cn[ sdir*this.FS_STRIDE1 + a*this.FS_STRIDE2 + b ] = conn_val;
       }
+
+      this.tile_conn[ a*this.TILE_CONN_STRIDE1 + sdir ] = has_conn;
     }
 
+
   }
+
+  //---
+
+
+  //---
 
   for (let ii=0; ii<this.n; ii++) { this.buf[ii] = Math.random(); }
 
@@ -255,6 +284,28 @@ BeliefPropagationCollapse.prototype.uMv = function(u,M,v) {
 
 
 }
+
+BeliefPropagationCollapse.prototype.debug_print_FC = function() {
+
+  for (let sdir=0; sdir<this.dxyz.length; sdir++) {
+
+    console.log("Fs;Cn:", this.dxyz[sdir].join(":"));
+    console.log("x,", this.tile_name.join(","));
+
+    for (let a=0; a<this.tilesize; a++) {
+      let ss = this.tile_name[a];
+      for (let b=0; b<this.tilesize; b++) {
+        let idx = sdir*this.FS_STRIDE1 + a*this.FS_STRIDE2 + b;
+        ss += "," + this.Fs[idx].toString() + ";" + this.Cn[idx].toString();
+      }
+      console.log(ss);
+    }
+
+  }
+
+}
+
+
 
 // u = Fs[s] . v
 //
@@ -528,6 +579,214 @@ BeliefPropagationCollapse.prototype.clear = function(t) {
   }
 
 }
+
+//---
+
+BeliefPropagationCollapse.prototype.cull_boundary = function() {
+
+  // cull edge
+  //
+
+  let anch_z=0,
+      anch_y=0,
+      anch_x=0,
+      anch_b_val=0,
+      anch_b_idx=0,
+      anch_s=0,
+      anch_v = [0,0,0];
+  let nei_v = [0,0,0];
+  let anch_cell_tile_n=0,
+      anch_cell_tile = {};
+
+  let dv = this.dxyz;
+  let cull_tile = false,
+      _tmp = 0;
+
+  for (anch_z=0; anch_z<this.FMZ; anch_z++) {
+    for (anch_y=0; anch_y<this.FMY; anch_y++) {
+      for (anch_x=0; anch_x<this.FMX; anch_x++) {
+        anch_v[0] = anch_x;
+        anch_v[1] = anch_y;
+        anch_v[2] = anch_z;
+
+        anch_cell_tile_n = this.cell_tile_n[ anch_z*this.CELL_STRIDE_N1 + anch_y*this.CELL_STRIDE_N2 + anch_x ];
+        if (anch_cell_tile_n<=1) { continue; }
+
+        anch_b_idx = 0;
+        while (anch_b_idx < anch_cell_tile_n) {
+        //for (anch_b_idx=0; anch_b_idx<anch_cell_tile_n; anch_b_idx++) {
+          anch_b_val = this.cell_tile[ anch_z*this.CELL_STRIDE1 + anch_y*this.CELL_STRIDE2 + anch_x*this.CELL_STRIDE3 + anch_b_idx ]; 
+
+          cull_tile = false;
+
+          for (anch_s=0; anch_s<(2*this.D); anch_s++) {
+
+            this.pos(nei_v, anch_x+dv[anch_s][0], anch_y+dv[anch_s][1], anch_z+dv[anch_s][2]);
+            if ( (this.oob(nei_v[0], nei_v[1], nei_v[2])) &&
+                 (this.tile_conn[ this.TILE_CONN_STRIDE1*anch_b_val + anch_s ] == 1) ) {
+              cull_tile  = true;
+              break;
+            }
+          }
+
+          if (cull_tile) {
+            anch_cell_tile_n--;
+            _tmp = this.cell_tile[ anch_z*this.CELL_STRIDE1 + anch_y*this.CELL_STRIDE2 + anch_x*this.CELL_STRIDE3 + anch_cell_tile_n ];
+            this.cell_tile[ anch_z*this.CELL_STRIDE1 + anch_y*this.CELL_STRIDE2 + anch_x*this.CELL_STRIDE3 + anch_cell_tile_n ] = anch_b_val;
+            this.cell_tile[ anch_z*this.CELL_STRIDE1 + anch_y*this.CELL_STRIDE2 + anch_x*this.CELL_STRIDE3 + anch_b_idx ] = _tmp;
+            this.cell_tile_n[ anch_z*this.CELL_STRIDE_N1 + anch_y*this.CELL_STRIDE_N2 + anch_x ]--;
+            continue;
+          }
+          anch_b_idx++;
+
+        }
+
+      }
+    }
+  }
+
+}
+
+/*
+function grid_cull_remove_invalid(gr) {
+  let _ret = { "status": "success", "state":"done", "msg":"...", "data": []};
+
+  for (let z=0; z<gr.length; z++) {
+    for (let y=0; y<gr[z].length; y++) {
+      for (let x=0; x<gr[z][y].length; x++) {
+
+        let idx = 0;
+        while (idx < gr[z][y][x].length) {
+          if (!(gr[z][y][x][idx].valid)) {
+            let u = gr[z][y][x][idx].name;
+            gr[z][y][x][idx] = gr[z][y][x][ gr[z][y][x].length-1 ];
+            gr[z][y][x].pop();
+
+            _ret.state = "processing";
+            _ret.data.push( {"name":u, "pos":[x,y,z] });
+            continue;
+          }
+          idx++;
+        }
+
+      }
+    }
+  }
+
+  return _ret;
+
+}
+*/
+
+/*
+function grid_cull_propagate(gr, debug) {
+  let _ret = { "status": "success", "state":"processing", "msg":"..." };
+
+  let admissible_nei = g_template.admissible_nei;
+  let admissible_pos = g_template.admissible_pos;
+  let oppo = g_template.oppo;
+
+  let still_processing = true;
+  while (still_processing) {
+
+    still_processing = false;
+
+    let _rrp = grid_cull_remove_invalid(gr);
+    if (_rrp.status != "success") {
+      _ret.status = "error";
+      _ret.msg = "grid_cull_remove_invalid:" + _rrp.msg;
+      continue;
+    }
+
+    for (let z=0; z<gr.length; z++) {
+      for (let y=0; y<gr[z].length; y++) {
+        for (let x=0; x<gr[z][y].length; x++) {
+
+
+          let gr_cell = gr[z][y][x];
+          for (let cidx=0; cidx<gr_cell.length; cidx++) {
+            let key_anchor = gr_cell[cidx].name;
+
+            let tile_valid = true;
+
+            for (let posidx=0; posidx<admissible_pos.length; posidx++) {
+              let dv_key = admissible_pos[posidx].dv_key;
+              let dv = admissible_pos[posidx].dv;
+
+              let _p = _posbc(gr, x+dv[0], y+dv[1], z+dv[2]);
+              let ux = _p[0],
+                  uy = _p[1],
+                  uz = _p[2];
+
+              if (!(dv_key in admissible_nei[key_anchor])) { continue; }
+
+              // oob check
+              //
+              for (let key_nei in admissible_nei[key_anchor][dv_key]) {
+                if (admissible_nei[key_anchor][dv_key][key_nei].conn) {
+
+                  if (_oob(gr, ux,uy,uz)) {
+                    tile_valid = false;
+                    break;
+                  }
+                }
+              }
+
+              if (!(tile_valid)) {
+                gr_cell[cidx].valid = false;
+                still_processing = true;
+                break;;
+              }
+
+              if (_oob(gr, ux,uy,uz)) {
+                continue;
+              }
+
+
+              let anchor_has_valid_conn = false;
+
+              let gr_nei = gr[uz][uy][ux];
+              for (let nei_idx=0; nei_idx<gr_nei.length; nei_idx++) {
+                let dv_nei_key = oppo[dv_key];
+                let key_nei = gr_nei[nei_idx].name;
+
+                // if anchor has hvaid connection to at least one
+                // tile ...
+                //
+                if (key_nei in admissible_nei[key_anchor][dv_key]) {
+                  let dv_nei_key = oppo[dv_key];
+                  if (admissible_nei[key_anchor][dv_key][key_nei].conn == admissible_nei[key_nei][dv_nei_key][key_anchor].conn) {
+                    anchor_has_valid_conn = true;
+
+                    break;
+                  }
+                }
+
+              }
+
+              if (!anchor_has_valid_conn) {
+                tile_valid = false;
+
+                gr_cell[cidx].valid = false;
+                still_processing = true;
+                break;
+              }
+
+            }
+
+          }
+
+        }
+      }
+    }
+
+  }
+
+  return _ret;
+}
+*/
+
+//---
 
 BeliefPropagationCollapse.prototype.bp_step_naive_x = function() {
   let t_cur = this.step_idx;
@@ -1470,6 +1729,16 @@ if (typeof module !== "undefined") {
 
   }
 
+  function test6() {
+    let tilelib = _load("./data/stair.json");
+    let bpc = new BeliefPropagationCollapse(tilelib,null, 3,3,1);
+
+    bpc.cull_boundary();
+    bpc.debug_print(bpc.step_idx);
+
+  }
+
+
   function debugg___() {
     let tilelib = _load("./data/stair.json");
     let bpc = new BeliefPropagationCollapse(tilelib,null, 2,3,4);
@@ -1501,12 +1770,13 @@ if (typeof module !== "undefined") {
     //test2();
     //console.log("---");
     //test3();
-    //process.exit();
-
+    //console.log("---");
     //test4();
-    //process.exit();
+    //console.log("---");
+    //test5();
+    //console.log("---");
 
-    test5();
+    test6();
     process.exit();
 
     let tilelib = _load("./data/stair.json");
