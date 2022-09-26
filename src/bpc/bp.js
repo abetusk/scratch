@@ -58,6 +58,7 @@ function BeliefPropagationCollapse(data, x, width, height, depth, opt) {
   width = ((typeof width === "undefined") ? 8 : width);
   height = ((typeof height === "undefined") ? 8 : height);
   depth = ((typeof depth === "undefined") ? 8 : depth);
+  opt = ((typeof opt === "undefined") ? {} : opt);
 
   this.data = data;
 
@@ -68,6 +69,7 @@ function BeliefPropagationCollapse(data, x, width, height, depth, opt) {
   }
 
   this.eps = (1/(1024*1024));
+  this.zero_eps = (1/(1024*1024*1024*1024));
   this.max_iter = 1000;
 
   this.FMX = width;
@@ -143,6 +145,36 @@ function BeliefPropagationCollapse(data, x, width, height, depth, opt) {
 
   //--
 
+  this.visited = new Array(this.FMZ*this.FMY*this.FMX);
+  this.VISITED_STRIDE0 = this.FMZ*this.FMY*this.FMX;
+  this.VISITED_STRIDE1 = this.FMY*this.FMX;
+  this.VISITED_STRIDE2 = this.FMX;
+  for (let ii=0; ii<this.VISITED_STRIDE0; ii++) {
+    this.visited[ii] = 0;
+  }
+
+  this.grid_note = new Array(this.step_n*this.FMZ*this.FMY*this.FMX);
+  this.GRID_NOTE0 = this.step_n*this.FMZ*this.FMY*this.FMX;
+  this.GRID_NOTE1 = this.FMZ*this.FMY*this.FMX;
+  this.GRID_NOTE2 = this.FMY*this.FMX;
+  this.GRID_NOTE2 = this.FMX;
+  for (let ii=0; ii<this.GRID_NOTE0; ii++) {
+    this.grid_note[ii] = 0;
+  }
+
+  this.grid_note_v_sz = this.step_n*this.FMZ*this.FMY*this.FMX*this.D;
+  this.GRID_NOTE_V_STRIDE0 = this.step_n*this.FMZ*this.FMY*this.FMX*this.D;
+  this.GRID_NOTE_V_STRIDE1 = this.FMZ*this.FMY*this.FMX*this.D;
+  this.grid_note_v_n = [0,0];
+  this.grid_note_v = new Array(this.grid_note_v_sz);
+  for (let ii=0; ii<this.GRID_NOTE_V_STRIDE0; ii++) {
+    this.grid_note_v[ii] = 0;
+  }
+
+
+
+  //--
+
   this.F = new Array( this.tilesize*this.tilesize );
   this.F_STRIDE0 = this.tilesize*this.tilesize;
   this.F_STRIDE1 = this.tilesize;
@@ -204,6 +236,11 @@ function BeliefPropagationCollapse(data, x, width, height, depth, opt) {
   this.opt = {
     "periodic" : "z"
   };
+
+  this.rnd = Math.random;
+  if ("rnd" in opt) {
+    this.rnd = opt.rnd;
+  }
 
 
   this.h_v = new Array(this.tilesize);
@@ -624,6 +661,21 @@ BeliefPropagationCollapse.prototype.clear = function(t) {
 
 //---
 
+BeliefPropagationCollapse.prototype.tile_remove = function(anch_x, anch_y, anch_z, anch_b_idx) {
+  let anch_cell_tile_n = this.cell_tile_n[ anch_z*this.CELL_STRIDE_N1 + anch_y*this.CELL_STRIDE_N2 + anch_x ];
+  if (anch_cell_tile_n == 0) { return false; }
+  anch_cell_tile_n--;
+
+  let anch_b_val = this.cell_tile[ anch_z*this.CELL_STRIDE1 + anch_y*this.CELL_STRIDE2 + anch_x*this.CELL_STRIDE3 + anch_b_idx ]; 
+
+  let _tmp = this.cell_tile[ anch_z*this.CELL_STRIDE1 + anch_y*this.CELL_STRIDE2 + anch_x*this.CELL_STRIDE3 + anch_cell_tile_n ];
+  this.cell_tile[ anch_z*this.CELL_STRIDE1 + anch_y*this.CELL_STRIDE2 + anch_x*this.CELL_STRIDE3 + anch_cell_tile_n ] = anch_b_val;
+  this.cell_tile[ anch_z*this.CELL_STRIDE1 + anch_y*this.CELL_STRIDE2 + anch_x*this.CELL_STRIDE3 + anch_b_idx ] = _tmp;
+  this.cell_tile_n[ anch_z*this.CELL_STRIDE_N1 + anch_y*this.CELL_STRIDE_N2 + anch_x ]--;
+
+  return true;
+}
+
 BeliefPropagationCollapse.prototype.cull_boundary = function() {
 
   // cull edge
@@ -718,6 +770,10 @@ BeliefPropagationCollapse.prototype.cell_belief = function(cell_info) {
   cell_info[2] = 0;
   cell_info[3] = 0;
 
+  let _eps = this.zero_eps;
+  let d = 0;
+  let n_dup = 0;
+
   for (z=0; z<this.FMZ; z++) {
     for (y=0; y<this.FMY; y++) {
       for (x=0; x<this.FMX; x++) {
@@ -739,19 +795,22 @@ BeliefPropagationCollapse.prototype.cell_belief = function(cell_info) {
             idx = this.idx(t, x, y, z, b_val, sidx);
             S *= this.pdf[b_val] * this.buf[idx];
 
-            console.log("  cell_belief:", x,y,z, this.tile_name[b_val], this.dxyz[sidx].join(":"), "pdf:", this.pdf[b_val], "mu:", this.buf[idx]);
+            //console.log("  cell_belief:", x,y,z, this.tile_name[b_val], this.dxyz[sidx].join(":"), "pdf:", this.pdf[b_val], "mu:", this.buf[idx]);
           }
 
-          console.log("cell_belief:", x,y,z, this.tile_name[b_val], "S:", S);
+          //console.log("cell_belief:", x,y,z, this.tile_name[b_val], "S:", S);
 
-          if (S > max_belief) {
+          // There's an element of randomness involved with the initial setup of mu
+          // which allows for some variation of choice if the beliefs are similar
+          //
+          if ((S - max_belief) > _eps) {
             max_belief = S;
             cell_info[0] = x;
             cell_info[1] = y;
             cell_info[2] = z;
             cell_info[3] = b_val;
+            n_dup = 1;
           }
-
         }
 
       }
@@ -759,6 +818,375 @@ BeliefPropagationCollapse.prototype.cell_belief = function(cell_info) {
   }
 
   return max_belief;
+}
+
+BeliefPropagationCollapse.prototype.__fill_accessed = function(accessed, x,y,z) {
+  let v = [0,0,0];
+  for (let sidx=0; sidx<(2*this.D); sidx++) {
+    this.pos(v, x+this.dxyz[sidx][0], y+this.dxyz[sidx][1], z+this.dxyz[sidx][2]);
+    if (this.oob(v[0], v[1], v[2])) { continue; }
+    accessed[ v.join(":") ] = [v[0], v[1], v[2]];
+  }
+}
+
+BeliefPropagationCollapse.prototype._fill_accessed = function(x,y,z,gn_idx) {
+  let nei_v = [0,0,0];
+  let n = 0;
+
+  let base = gn_idx*this.GRID_NOTE_V_STRIDE1;
+
+  //DEBUG
+  //console.log("_fill_accessed[", gn_idx, "]:", x,y,z, "(base:", base, ")");
+  
+  for (let sidx=0; sidx<(2*this.D); sidx++) {
+    let dv = this.dxyz[sidx];
+
+    this.pos(nei_v, x+dv[0], y+dv[1], z+dv[2]);
+    if (this.oob(nei_v[0], nei_v[1], nei_v[2])) {
+
+      //DEBUG
+      //console.log("  skipping", nei_v[0], nei_v[1], nei_v[2], "(oob)");
+
+      continue;
+    }
+
+    if (this.visited[ nei_v[2]*this.VISITED_STRIDE1 + nei_v[1]*this.VISITED_STRIDE2 + nei_v[0] ]!=0) {
+
+      //DEBUG
+      //console.log("  skipping", nei_v[0], nei_v[1], nei_v[2], "(visited)");
+
+      continue;
+    }
+
+    n = this.grid_note_v_n[gn_idx];
+
+    this.visited[ nei_v[2]*this.VISITED_STRIDE1 + nei_v[1]*this.VISITED_STRIDE2 + nei_v[0] ] = 1;
+
+    this.grid_note_v[base + n+0] = nei_v[0];
+    this.grid_note_v[base + n+1] = nei_v[1];
+    this.grid_note_v[base + n+2] = nei_v[2];
+    this.grid_note_v_n[gn_idx] += 3;
+
+    //DEBUG
+    //console.log("  adding", nei_v[0], nei_v[1], nei_v[2], ", grid_note_v_n[", gn_idx, "]:", this.grid_note_v_n[gn_idx]);
+
+  }
+
+}
+
+BeliefPropagationCollapse.prototype._unfill_accessed = function(gn_idx) {
+  let v = [0,0,0];
+  let n = 0;
+
+  let base = gn_idx*this.GRID_NOTE_STRIDE1; 
+
+  for (let ii=0; ii < this.grid_note_v_n[gn_idx]; ii+=3) {
+    v[0] = this.grid_note_v[base + ii+0];
+    v[1] = this.grid_note_v[base + ii+1];
+    v[2] = this.grid_note_v[base + ii+2];
+
+    this.visited[ v[2]*this.VISITED_STRIDE1 + v[1]*this.VISITED_STRIDE2 + v[0] ] = 0;
+  }
+  
+}
+
+// info
+//   .consider_list - list of x,y,z positions to consider for culling
+//   .consider_n    - length of list (not incuding stride=3)
+//   .collapse_list - list of x,y,z,b tile position/value to collapse
+//   .collapse_n    - length of list (not including stride=4)
+//
+// there are two major tests to cull a tile at a cell:
+// * if it connects outward to an out-of-bound area, cull it
+// * if it does not have a valid connection to a neighboring cell, cull it
+//
+// The algorithm uses a list of cell positions to consider to make it more efficient.
+//
+// In pseudo-code:
+//
+// while (consider_list non-empty) {
+//   for (anch_v in consider_lit) {
+//     for (tile in anch_v position) {
+//       if (tile @ anch_v has connection, out of bounds) {
+//         cull it
+//         add neighbors to consider_list
+//       }
+//       if oob triggered, skip neighbor test
+//       if (tile @ anch_v does not have at least one valid connection to neighboring tiles) {
+//         cull it
+//         add neighbors to consider_list
+//       }
+//     }
+//   }
+//     
+// }
+//
+// A simple array is kept to add the cell positions to consider, only adding if the
+// temporary 'visited' array is not already set.
+// At the end of the loop, unwind the 'visited' marks instead of doing a whole sweep,
+// for efficiency reasons
+//
+//
+BeliefPropagationCollapse.prototype.cell_constraint_propagate = function() {
+  let ii=0,
+      collapse_stride = 4,
+      consider_stride = 3,
+      //sz  = info.collapse_sz,
+      //n   = info.collapse_n,
+      anch_v = [0,0,0,0],
+      nei_v = [0,0,0,0];
+
+  /*
+  let collapse_buf    = info.collapse_list,
+      collapse_idx    = 0,
+      consider_idx    = 0,
+      consider_buf    = info.consider_list,
+      consider_len    = 0;
+  */
+
+  let anch_x = 0,
+      anch_y = 0,
+      anch_z = 0,
+      anch_b_idx = 0,
+      anch_b_val = 0,
+      anch_n_tile = 0;
+
+  let anch_s = 0,
+      nei_s  = 0,
+      nei_a_idx = 0,
+      nei_a_val = 0,
+      nei_n_tile = 0;
+
+  let key = '';
+  let accessed = {},
+      accessed_nxt = {};
+
+  let tc = this.tile_conn,
+      tc_stride = this.TILE_CONN_STRIDE1;
+
+  let gn_idx = 0;
+
+  let base_idx = 0;
+  let still_culling = true;
+  while (still_culling) {
+
+    console.log("...");
+
+    let gnv_stride = this.GRID_NOTE_V_STRIDE1;
+
+    console.log("ccp: grid_note_v_n[", gn_idx, "]:", this.grid_note_v_n[gn_idx]);
+
+    for (ii=0; ii<this.grid_note_v_n[gn_idx]; ii+=this.D) {
+      anch_v[0] = this.grid_note_v[gn_idx*gnv_stride + ii+0];
+      anch_v[1] = this.grid_note_v[gn_idx*gnv_stride + ii+1];
+      anch_v[2] = this.grid_note_v[gn_idx*gnv_stride + ii+2];
+
+      //DEBUG
+      //console.log("considering(", anch_v.join(","),")");
+
+      let anch_n_tile = this.cell_tile_n[ anch_v[2]*this.CELL_STRIDE_N1 + anch_v[1]*this.CELL_STRIDE_N2 + anch_v[0] ];
+      for (anch_b_idx=0; anch_b_idx < anch_n_tile; anch_b_idx++) {
+
+        let tile_valid = true;
+        anch_b_val = this.cell_tile[ anch_v[2]*this.CELL_STRIDE1 + anch_v[1]*this.CELL_STRIDE2 + anch_v[0]*this.CELL_STRIDE3 + anch_b_idx ];
+
+        //DEBUG
+        console.log(" considering(", anch_v.join(","),")", this.tile_name[anch_b_val], anch_b_idx);
+
+
+        // First do a "connected" out o fbound test,
+        // testing if the anchor tile has a connection that falls out of bounds.
+        // If so, remove it, add to the 'considered' list continue
+        //
+        for (anch_s=0; anch_s<(2*this.D); anch_s++) {
+          let dv = this.dxyz[anch_s];
+          this.pos(nei_v, anch_v[0]+dv[0], anch_v[1]+dv[1], anch_v[2]+dv[2]);
+
+          if ( (this.oob(nei_v[0], nei_v[1], nei_v[2])) &&
+               (this.tile_conn[ this.TILE_CONN_STRIDE1*anch_b_val + anch_s ] == 1) ) {
+
+            //DEBUG
+            console.log("  CULL.oob:", anch_v[0], anch_v[1], anch_v[2], anch_b_idx, "(", this.tile_name[anch_b_val], ")");
+
+            this.tile_remove(anch_v[0], anch_v[1], anch_v[2], anch_b_idx);
+            anch_b_idx--;
+            anch_n_tile--;
+
+            tile_valid = false;
+
+            this._fill_accessed(anch_v[0], anch_v[1], anch_v[2], 1-gn_idx);
+            break;
+          }
+        }
+
+        if (!tile_valid) { continue; }
+
+
+        // Test for at least one valid neighbor
+        //
+        for (anch_s=0; anch_s<(2*this.D); anch_s++) {
+          let dv = this.dxyz[anch_s];
+          this.pos(nei_v, anch_v[0]+dv[0], anch_v[1]+dv[1], anch_v[2]+dv[2]);
+
+          // ignore oob as it would have been caught above
+          //
+          if (this.oob(nei_v[0], nei_v[1], nei_v[2])) { continue; }
+
+          let anchor_has_valid_conn = false;
+
+          nei_n_tile = this.cell_tile_n[ nei_v[2]*this.CELL_STRIDE_N1 + nei_v[1]*this.CELL_STRIDE_N2 + nei_v[0] ];
+          for (nei_a_idx=0; nei_a_idx < nei_n_tile; nei_a_idx++) {
+            nei_a_val = this.cell_tile[ nei_v[2]*this.CELL_STRIDE1 + nei_v[1]*this.CELL_STRIDE2 + nei_v[0]*this.CELL_STRIDE3 + nei_a_idx ];
+
+            //DEBUG
+            //console.log("  ??", this.tile_name[anch_b_val], "--(" + this.dxyz[anch_s].join(":") + ")-->", this.tile_name[nei_a_val],
+            //  "(", this.f_s(anch_s, anch_b_val, nei_a_val), ")");
+
+            if (this.f_s(anch_s, anch_b_val, nei_a_val)==1) {
+              anchor_has_valid_conn = true;
+              break;
+            }
+          }
+
+          if (!anchor_has_valid_conn) {
+            tile_valid = false;
+
+            //DEBUG
+            console.log("  CULL.nei:", anch_v[0], anch_v[1], anch_v[2], anch_b_idx, "(", this.tile_name[anch_b_val], ")");
+
+            this.tile_remove(anch_v[0], anch_v[1], anch_v[2], anch_b_idx);
+            anch_b_idx--;
+            anch_n_tile--;
+
+            this._fill_accessed(anch_v[0], anch_v[1], anch_v[2], 1-gn_idx);
+            break;
+          }
+
+        }
+
+        if (!tile_valid) { continue; }
+
+      }
+
+    }
+
+    this._unfill_accessed(gn_idx);
+
+    this.grid_note_v_n[gn_idx]=0;
+    gn_idx = 1-gn_idx;
+
+    if (this.grid_note_v_n[gn_idx]==0) { still_culling = false; }
+
+  }
+
+  return;
+
+  //---
+
+  /*
+  while (still_culling) {
+
+    accessed_nxt = {};
+
+    for (key in accessed) {
+      let anch_v = accessed[key];
+
+      let anch_n_tile = this.cell_tile_n[ anch_v[2]*this.CELL_STRIDE_N1 + anch_v[1]*this.CELL_STRIDE_N2 + anch_v[0] ];
+      for (anch_b_idx=0; anch_b_idx < anch_n_tile; anch_b_idx++) {
+
+        anch_b_val = this.cell_tile[ anch_v[2]*this.CELL_STRIDE1 + anch_v[1]*this.CELL_STRIDE2 + anch_v[0]*this.CELL_STRIDE3 + anch_b_idx ];
+
+        let tile_valid = true;
+
+        // neighbor connect oob check
+        //
+        for (sidx=0; sidx<(2*this.D); sidx++) {
+          let dv = this.dxyz[sidx];
+          this.pos(nei_v, anch_v[0]+dv[0], anch_v[1]+dv[1], anch_v[2]+dv[2]);
+
+          if ( (this.oob(nei_v[0], nei_v[1], nei_v[2])) &&
+               (this.tile_conn[ this.TILE_CONN_STRIDE1*anch_b_val + anch_s ] == 1) ) {
+            this.tile_remove(v[0], v[1], v[2], b_idx);
+            anch_b_idx--;
+            anch_n_tile--;
+
+            tile_valid = false;
+
+            this._fill_accessed(accessed_nxt, anch_v[0], anch_v[1], anch_v[2], 1-gn_idx);
+            break;
+          }
+
+        }
+
+        if (!tile_valid) { continue; }
+
+        //XXX
+
+
+      }
+
+
+    }
+
+    for (ii=0; ii<n; ii+=collapse_stride) {
+      anch_x      = collapse_list[ii+0];
+      anch_y      = collapse_list[ii+1];
+      anch_z      = collapse_list[ii+2];
+      anch_b_idx  = collapse_list[ii+4];
+
+      // collapse element from `collapse_list`
+      //
+      this.cell_idx_collapse(anch_x,anch_y,anch_z,anch_b_idx);
+
+      // add all dimensional cell neighbors for consideration
+      //
+      for (sidx=0; sidx<(2*this.D); sidx++) {
+        this.pos(nei_v, anch_x+this.dxyz[sidx][0], anch_y+this.dxyz[sidx][1], anch_z+this.dxyz[sidx][2]);
+        if (this.oob(nei_v[0], nei_v[1], nei_v[2])) { continue; }
+
+        consider_list[consider_idx + 0] = nei_v[0];
+        consider_list[consider_idx + 1] = nei_v[1];
+        consider_list[consider_idx + 2] = nei_v[2];
+        consider_idx += consider_stride;
+      }
+    }
+
+    collapse_idx = 0;
+    consider_len = consider_idx;
+
+    for (consider_idx=0; consider_idx<consider_len; consider_idx+=consider_strid) {
+
+      anch_x = consider_list[consider_idx+0];
+      anch_y = consider_list[consider_idx+1];
+      anch_z = consider_list[consider_idx+2];
+
+      for (sidx=0; sidx<(2*this.D); sidx++) {
+        this.pos(nei_v, anch_x+this.dxyz[anch_s][0], anch_y+this.dxyz[anch_s][1], anch_z+this.dxyz[anch_s][2]);
+        ntile = this.cell_tile_n[ anch_z*this.CELL_STRIDE_N1 + anch_y*this.CELL_STRIDE_N2 + anch_x ];
+        for (anch_b_idx=0; anch_b_idx<ntile; anch_b_idx++) {
+          anch_b_val = this.cell_tile[ anch_z*this.CELL_STRIDE1 + anch_y*this.CELL_STRIDE2 + anch_x*this.CELL_STRIDE3 + anch_b_idx];
+
+          // tile connects out of bounds, mark for removal
+          //
+          if ( (this.oob(nei_v[0], nei_v[1], nei_v[2])) &&
+               (this.tile_conn[ this.TILE_CONN_STRIDE1*anch_b_val + anch_s ] == 1) ) {
+            collapse_list[collapse_idx+0] = x;
+            collapse_list[collapse_idx+1] = y;
+            collapse_list[collapse_idx+2] = z;
+            collapse_list[collapse_idx+3] = b_val;
+            consider_idx += consider_stride;
+          }
+          //else if (this.tile_
+
+
+        }
+      
+    }
+
+
+  }
+  */
+
 }
 
 /*
@@ -1244,13 +1672,7 @@ BeliefPropagationCollapse.prototype.bp_step_mat = function() {
         anch_v[2] = anch_z;
 
         let anch_cell_tile_n = this.cell_tile_n[ anch_z*this.CELL_STRIDE_N1 + anch_y*this.CELL_STRIDE_N2 + anch_x ];
-        if (anch_cell_tile_n<=1) {
-
-          //DEBUG
-          //console.log("anchor tile", anch_x, anch_y, anch_z, "(", anch_cell_tile_n, ") ...  skipping");
-
-          continue;
-        }
+        if (anch_cell_tile_n<=1) { continue; }
 
         for (anch_s=0; anch_s<(2*this.D); anch_s++) {
 
@@ -1261,19 +1683,12 @@ BeliefPropagationCollapse.prototype.bp_step_mat = function() {
             //
             for (let anch_b_idx=0; anch_b_idx < anch_cell_tile_n; anch_b_idx++) {
               let anch_b_val = this.cell_tile[ anch_z*this.CELL_STRIDE1 + anch_y*this.CELL_STRIDE2 + anch_x*this.CELL_STRIDE3 + anch_b_idx ];
-
-              //DEBUG
-              //console.log("anchor tile", anch_x, anch_y, anch_z, this.tile_name[anch_b_val], dv[anch_s].join(":"), "... oob -> mu_v = 1");
-
               nxt_anch_idx = this.idx(t_nxt, anch_x, anch_y, anch_z, anch_b_val, anch_s);
               this.buf[nxt_anch_idx] = 1;
             }
 
             continue;
           }
-
-          //DEBUG
-          //console.log("anchor", anch_x, anch_y, anch_z, "s" + anch_s.toString(), "(dv:", dv[anch_s], ")", "(n:", anch_cell_tile_n, ")");
 
           anch_s_inv = this.dxyz_inv_idx[anch_s];
 
@@ -1290,10 +1705,6 @@ BeliefPropagationCollapse.prototype.bp_step_mat = function() {
             //
             for (let anch_b_idx=0; anch_b_idx < anch_cell_tile_n; anch_b_idx++) {
               let anch_b_val = this.cell_tile[ anch_z*this.CELL_STRIDE1 + anch_y*this.CELL_STRIDE2 + anch_x*this.CELL_STRIDE3 + anch_b_idx ];
-
-              //DEBUG
-              //console.log("anchor tile", anch_x, anch_y, anch_z, this.tile_name[anch_b_val], dv[anch_s].join(":"), "... |nei|=1 -> mu_v = 1");
-
               nxt_anch_idx = this.idx(t_nxt, anch_x, anch_y, anch_z, anch_b_val, anch_s);
               this.buf[nxt_anch_idx] = 1;
             }
@@ -1305,20 +1716,10 @@ BeliefPropagationCollapse.prototype.bp_step_mat = function() {
             let nei_a_val = this.cell_tile[ nei_v[2]*this.CELL_STRIDE1 + nei_v[1]*this.CELL_STRIDE2 + nei_v[0]*this.CELL_STRIDE3 + nei_a_idx ];
 
             this.h_v[nei_a_val] = this.pdf[nei_a_val];
-
-            //DEBUG
-            //console.log("  g(" + this.tile_name[nei_a_val] +") =", this.pdf[nei_a_val]);
-
             for (nei_s=0; nei_s<(2*this.D); nei_s++) {
               if (nei_s == anch_s_inv) { continue; }
               nei_idx = this.idx(t_cur, nei_v[0], nei_v[1], nei_v[2], nei_a_val, nei_s);
               this.h_v[nei_a_val] *= this.buf[nei_idx];
-
-              //DEBUG
-              //console.log("  mu_(d[" + this.dxyz[nei_s].join(":") + "],[" + nei_v.join(",") + "])(" + this.tile_name[nei_a_val] + ") =",
-              //  this.buf[nei_idx]);
-
-
             }
 
           }
@@ -1329,11 +1730,6 @@ BeliefPropagationCollapse.prototype.bp_step_mat = function() {
           this.Fs_dot_v(this.mu_v, anch_s, this.h_v);
           for (let anch_b_idx=0; anch_b_idx < anch_cell_tile_n; anch_b_idx++) {
             let anch_b_val = this.cell_tile[ anch_z*this.CELL_STRIDE1 + anch_y*this.CELL_STRIDE2 + anch_x*this.CELL_STRIDE3 + anch_b_idx ];
-
-            //DEBUG
-            //console.log("mu_{[" + nei_v.join(",") + "],[" + [anch_x,anch_y,anch_z].join(",") + "]}(" + this.tile_name[anch_b_val] + ") =",
-            //  this.mu_v[anch_b_val]);
-
             nxt_anch_idx = this.idx(t_nxt, anch_x, anch_y, anch_z, anch_b_val, anch_s);
             this.buf[nxt_anch_idx] = this.mu_v[anch_b_val];
           }
@@ -1406,22 +1802,12 @@ BeliefPropagationCollapse.prototype.bp_step_svd = function() {
         anch_v[2] = anch_z;
 
         let anch_cell_tile_n = this.cell_tile_n[ anch_z*this.CELL_STRIDE_N1 + anch_y*this.CELL_STRIDE_N2 + anch_x ];
-        if (anch_cell_tile_n<=1) {
-
-          //DEBUG
-          //console.log("anchor tile", anch_x, anch_y, anch_z, "(", anch_cell_tile_n, ") ...  skipping");
-
-          continue;
-        }
+        if (anch_cell_tile_n<=1) { continue; }
 
         for (anch_s=0; anch_s<(2*this.D); anch_s++) {
 
           this.pos(nei_v, anch_x+dv[anch_s][0], anch_y+dv[anch_s][1], anch_z+dv[anch_s][2]);
           if (this.oob(nei_v[0], nei_v[1], nei_v[2])) { continue; }
-
-          //DEBUG
-          //console.log("anchor", anch_x, anch_y, anch_z, "s" + anch_s.toString(), "(dv:", dv[anch_s], ")", "(n:", anch_cell_tile_n, ")");
-
           anch_s_inv = this.dxyz_inv_idx[anch_s];
 
           // init our h^t_{i,j}(a) vector
@@ -1447,7 +1833,6 @@ BeliefPropagationCollapse.prototype.bp_step_svd = function() {
 
           this.uMv(this.u_v, this.SVs[anch_s], this.h_v);
           this.uMv(this.mu_v, this.Us[anch_s], this.u_v);
-          //this.Fs_dot_v(this.mu_v, anch_s, this.h_v);
 
           for (let anch_b_idx=0; anch_b_idx < anch_cell_tile_n; anch_b_idx++) {
             let anch_b_val = this.cell_tile[ anch_z*this.CELL_STRIDE1 + anch_y*this.CELL_STRIDE2 + anch_x*this.CELL_STRIDE3 + anch_b_idx ];
@@ -1992,6 +2377,21 @@ if (typeof module !== "undefined") {
 
   }
 
+  function test9(X,Y,Z) {
+    X = ((typeof X === "undefined") ? 2 : X);
+    Y = ((typeof X === "undefined") ? 2 : Y);
+    Z = ((typeof X === "undefined") ? 1 : Z);
+    let tilelib = _load("./data/stair.json");
+    let bpc = new BeliefPropagationCollapse(tilelib,null, X,Y,Z);
+
+    bpc._fill_accessed(0,0,0,0);
+    bpc.cell_constraint_propagate();
+
+    bpc.debug_print(bpc.step_idx);
+
+
+  }
+
 
   function debugg___() {
     let tilelib = _load("./data/stair.json");
@@ -2035,7 +2435,8 @@ if (typeof module !== "undefined") {
     //test7(10,10,10);
     //test7(20,20,20);
     //test7(30,30,30);
-    test8(3,3,1);
+    //test8(3,3,1);
+    test9(2,2,1);
     //test6_1(3,3,1);
     process.exit();
 
