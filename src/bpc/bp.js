@@ -94,9 +94,14 @@ function BeliefPropagationCollapse(data, x, width, height, depth, opt) {
 
   //this.pdf = data.pdf;
   this.pdf = new Array(this.tilesize);
-  for (let ii=0; ii<this.pdf.length; ii++) {
-    this.pdf[ii] = 1/this.pdf.length;
-  }
+  for (let ii=0; ii<this.pdf.length; ii++) { this.pdf[ii] = 1/this.pdf.length; }
+
+  //DEBUG
+  // fiddle with pdf
+  this.pdf[0] *= 1/2;
+  let pdf_S = 0;
+  for (let ii=0; ii<this.pdf.length; ii++) { pdf_S += this.pdf[ii]; }
+  for (let ii=0; ii<this.pdf.length; ii++) { this.pdf[ii] /= pdf_S; }
 
   this.buf = new Array(this.n);
 
@@ -171,6 +176,7 @@ function BeliefPropagationCollapse(data, x, width, height, depth, opt) {
     this.grid_note_v[ii] = 0;
   }
 
+  this.grid_note_idx = 0;
 
 
   //--
@@ -753,7 +759,7 @@ BeliefPropagationCollapse.prototype.cell_idx_collapse = function(x,y,z,b_idx) {
   let idx = z*this.CELL_STRIDE1 + y*this.CELL_STRIDE2 + x*this.CELL_STRIDE3;
   let b_val = this.cell_tile[idx+b_idx];
   this.cell_tile[idx+b_idx] = this.cell_tile[idx];
-  this.cell_ilte[idx] = b_val;
+  this.cell_tile[idx] = b_val;
   this.cell_tile_n[ z*this.CELL_STRIDE_N1 + y*this.CELL_STRIDE_N2 + x ] = 1;
 
   return true;
@@ -778,7 +784,7 @@ BeliefPropagationCollapse.prototype.cell_belief = function(cell_info) {
     for (y=0; y<this.FMY; y++) {
       for (x=0; x<this.FMX; x++) {
 
-        cell_tile_n = this.cell_tile_n[ z*this.CELL_STRIDE_N1 * y*this.CELL_STRIDE_N2 + x ];
+        cell_tile_n = this.cell_tile_n[ z*this.CELL_STRIDE_N1 + y*this.CELL_STRIDE_N2 + x ];
         if (cell_tile_n<=1) { continue; }
 
         for (b_idx=0; b_idx<cell_tile_n; b_idx++) {
@@ -808,7 +814,8 @@ BeliefPropagationCollapse.prototype.cell_belief = function(cell_info) {
             cell_info[0] = x;
             cell_info[1] = y;
             cell_info[2] = z;
-            cell_info[3] = b_val;
+            cell_info[3] = b_idx;
+            cell_info[4] = b_val;
             n_dup = 1;
           }
         }
@@ -955,7 +962,13 @@ BeliefPropagationCollapse.prototype.cell_constraint_propagate = function() {
   let tc = this.tile_conn,
       tc_stride = this.TILE_CONN_STRIDE1;
 
-  let gn_idx = 0;
+  let gn_idx = this.grid_note_idx;
+  this._unfill_accessed(gn_idx);
+
+  //DEBUG
+  //console.log(">>gn_idx:", gn_idx);
+  //console.log("DEBUG: start: grid_note_v:", this.grid_note_v.join(","));
+  //console.log("DEBUG: start: visited:", this.visited.join(","));
 
   let base_idx = 0;
   let still_culling = true;
@@ -1001,6 +1014,8 @@ BeliefPropagationCollapse.prototype.cell_constraint_propagate = function() {
             this.tile_remove(anch_v[0], anch_v[1], anch_v[2], anch_b_idx);
             anch_b_idx--;
             anch_n_tile--;
+
+            if (anch_n_tile==0) { return false; }
 
             tile_valid = false;
 
@@ -1048,6 +1063,8 @@ BeliefPropagationCollapse.prototype.cell_constraint_propagate = function() {
             anch_b_idx--;
             anch_n_tile--;
 
+            if (anch_n_tile==0) { return false; }
+
             this._fill_accessed(anch_v[0], anch_v[1], anch_v[2], 1-gn_idx);
             break;
           }
@@ -1062,19 +1079,22 @@ BeliefPropagationCollapse.prototype.cell_constraint_propagate = function() {
 
     this._unfill_accessed(1-gn_idx);
 
+    /*
     if (!this._sanity_accessed(gn_idx)) {
       console.log("ERROR: VISITED NOT ZERO");
-
       console.log("(", gn_idx, ") grid_note_v[", this.grid_note_v_n[gn_idx], "]:", this.grid_note_v.join(","));
     }
+    */
 
     this.grid_note_v_n[gn_idx]=0;
     gn_idx = 1-gn_idx;
+    this.grid_note_idx = gn_idx;
 
     if (this.grid_note_v_n[gn_idx]==0) { still_culling = false; }
 
   }
 
+  return true;
 }
 
 /*
@@ -1920,6 +1940,52 @@ BeliefPropagationCollapse.prototype.filter_discard = function(x,y,z, tile_map) {
   this.cell_tile_n[ ctn_idx ] = ntile;
 }
 
+BeliefPropagationCollapse.prototype.simple_realize = function() {
+
+  this.cull_boundary();
+  this.renormalize();
+
+  let cell_info = [0,0,0,0,0];
+  let cell_belief = 0;
+
+  let count = 0;
+
+  while (cell_belief >= 0) {
+    if ((count%10)==0) {
+      console.log(">>", count);
+    }
+    count++;
+
+    let iter = 0, max_it = 1000, maxdiff=-1;
+    for (iter=0; iter<max_it; iter++) {
+
+      //console.log("ITER[", iter, "]: step_idx:", this.step_idx, "\n---");
+      //console.log("maxdiff:", maxdiff, "\n---\n");
+
+      maxdiff = this.bp_step_svd();
+
+      this.step_idx = 1-this.step_idx
+      if (Math.abs(maxdiff) < this.eps) { break; }
+    }
+
+    //this.debug_print(this.step_idx);
+    cell_belief = this.cell_belief(cell_info);
+
+    //console.log("belief:", cell_belief, ", cell:[", cell_info.join(","), "]");
+
+    this.cell_idx_collapse(cell_info[0], cell_info[1], cell_info[2], cell_info[3]);
+    this.renormalize();
+
+    this._fill_accessed(cell_info[0], cell_info[1], cell_info[2], this.grid_note_idx);
+    this.cell_constraint_propagate();
+
+    //console.log("after fix ([", cell_info.join(","), "])");
+    //this.debug_print(this.step_idx);
+    //console.log("\n\n");
+  }
+
+}
+
 
 if (typeof module !== "undefined") {
 
@@ -2199,8 +2265,8 @@ if (typeof module !== "undefined") {
 
   function test7(X,Y,Z) {
     X = ((typeof X === "undefined") ? 3 : X);
-    Y = ((typeof X === "undefined") ? 3 : Y);
-    Z = ((typeof X === "undefined") ? 1 : Z);
+    Y = ((typeof Y === "undefined") ? 3 : Y);
+    Z = ((typeof Z === "undefined") ? 1 : Z);
     let tilelib = _load("./data/stair.json");
     let bpc = new BeliefPropagationCollapse(tilelib,null, X,Y,Z);
     bpc.cull_boundary();
@@ -2232,14 +2298,14 @@ if (typeof module !== "undefined") {
 
   function test8(X,Y,Z) {
     X = ((typeof X === "undefined") ? 3 : X);
-    Y = ((typeof X === "undefined") ? 3 : Y);
-    Z = ((typeof X === "undefined") ? 1 : Z);
+    Y = ((typeof Y === "undefined") ? 3 : Y);
+    Z = ((typeof Z === "undefined") ? 1 : Z);
     let tilelib = _load("./data/stair.json");
     let bpc = new BeliefPropagationCollapse(tilelib,null, X,Y,Z);
     bpc.cull_boundary();
     bpc.renormalize();
 
-    let cell_info = [0,0,0,0];
+    let cell_info = [0,0,0,0,0];
 
 
     let iter = 0, max_it = 1000, maxdiff=-1;
@@ -2298,6 +2364,116 @@ if (typeof module !== "undefined") {
     bpc.debug_print(bpc.step_idx);
   }
 
+  function test11(X,Y,Z) {
+    X = ((typeof X === "undefined") ? 2 : X);
+    Y = ((typeof Y === "undefined") ? 2 : Y);
+    Z = ((typeof Z === "undefined") ? 1 : Z);
+    let tilelib = _load("./data/stair.json");
+    let bpc = new BeliefPropagationCollapse(tilelib,null, X,Y,Z);
+
+    let bad_tile_idx = 0;
+    for (let ii=0; ii<bpc.tile_name.length; ii++) {
+      if (bpc.tile_name[ii] == "|000") { bad_tile_idx=ii; break; }
+    }
+
+    bpc.cell_idx_collapse(0,0,0,bad_tile_idx);
+
+    bpc._fill_accessed_one(0,0,0,0);
+    let p = bpc.VISITED_STRIDE1*0 + bpc.VISITED_STRIDE2*0 + 0;
+    bpc.visited[p] = 0;
+
+    let res = bpc.cell_constraint_propagate();
+    
+    console.log(">>>", res);
+
+    bpc.debug_print(bpc.step_idx);
+  }
+
+  function test12(X,Y,Z) {
+    X = ((typeof X === "undefined") ? 3 : X);
+    Y = ((typeof Y === "undefined") ? 3 : Y);
+    Z = ((typeof Z === "undefined") ? 1 : Z);
+    let tilelib = _load("./data/stair.json");
+    let bpc = new BeliefPropagationCollapse(tilelib,null, X,Y,Z);
+
+    let cell_info = [0,0,0,0,0];
+
+    let blank_idx = 0;
+    for (let ii=0; ii<bpc.tile_name.length; ii++) {
+      if (bpc.tile_name[ii] == ".000") { blank_idx=0; break; }
+    }
+
+    for (let z=0; z<Z; z++) {
+      for (let y=0; y<Y; y++) {
+        for (let x=0; x<X; x++) {
+          bpc.cell_idx_collapse(x,y,z,blank_idx);
+        }
+      }
+    }
+
+    let v = bpc.cell_belief(cell_info);
+    console.log(">>>", v, cell_info.join(","));
+
+    bpc.debug_print(bpc.step_idx);
+
+  }
+
+  function test13(X,Y,Z) {
+    X = ((typeof X === "undefined") ? 3 : X);
+    Y = ((typeof Y === "undefined") ? 3 : Y);
+    Z = ((typeof Z === "undefined") ? 1 : Z);
+    let tilelib = _load("./data/stair.json");
+    let bpc = new BeliefPropagationCollapse(tilelib,null, X,Y,Z);
+    bpc.cull_boundary();
+    bpc.renormalize();
+
+    let cell_info = [0,0,0,0,0];
+    let cell_belief = 0;
+
+    while (cell_belief >= 0) {
+
+      let iter = 0, max_it = 1000, maxdiff=-1;
+      for (iter=0; iter<max_it; iter++) {
+
+        console.log("ITER[", iter, "]: step_idx:", bpc.step_idx, "\n---");
+        console.log("maxdiff:", maxdiff, "\n---\n");
+
+        maxdiff = bpc.bp_step_svd();
+
+        bpc.step_idx = 1-bpc.step_idx
+        if (Math.abs(maxdiff) < bpc.eps) { break; }
+      }
+
+      bpc.debug_print(bpc.step_idx);
+      cell_belief = bpc.cell_belief(cell_info);
+
+      console.log("belief:", cell_belief, ", cell:[", cell_info.join(","), "]");
+
+      bpc.cell_idx_collapse(cell_info[0], cell_info[1], cell_info[2], cell_info[3]);
+      bpc.renormalize();
+
+      bpc._fill_accessed(cell_info[0], cell_info[1], cell_info[2], bpc.grid_note_idx);
+      bpc.cell_constraint_propagate();
+
+      console.log("after fix ([", cell_info.join(","), "])");
+      bpc.debug_print(bpc.step_idx);
+
+      console.log("\n\n");
+    }
+
+  }
+
+  function test14(X,Y,Z) {
+    X = ((typeof X === "undefined") ? 3 : X);
+    Y = ((typeof Y === "undefined") ? 3 : Y);
+    Z = ((typeof Z === "undefined") ? 1 : Z);
+    let tilelib = _load("./data/stair.json");
+    let bpc = new BeliefPropagationCollapse(tilelib,null, X,Y,Z);
+
+    bpc.simple_realize(X,Y,Z);
+    bpc.debug_print();
+  }
+
 
   function debugg___() {
     let tilelib = _load("./data/stair.json");
@@ -2345,8 +2521,17 @@ if (typeof module !== "undefined") {
     //test9(2,2,1);
     //test9(3,2,1);
     //test9(3,3,1);
-    //test9(5,5,1);
-    test10(3,3,3);
+    //test9(3,3,3);
+    //test10(3,3,3);
+    //test11();
+    //test12();
+    //test13();
+    //test13(3,3,3);
+
+    //test14(10,10,10); // 1m43s
+    //test14(16,16,8); // 9m23s
+    test14(6,6,6); // 21s
+
     //test6_1(3,3,1);
     process.exit();
 
