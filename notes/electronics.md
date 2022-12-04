@@ -32,4 +32,15 @@ Electronics Notes
 * OLED business card
 * Lupalm
 
+###### practice
 
+* electronic dice (led)
+* electronic random thumper (buzzer motor)
+* counter (7 segment display)
+* 16 segment display (board diffusor)
+* beam tripper (with sound?)
+* sound locator (triangulation)
+* business card synth
+
+
+---

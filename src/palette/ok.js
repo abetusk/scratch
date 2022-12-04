@@ -52,4 +52,3 @@ for (let palidx=0; palidx<palette.length; palidx++) {
   //console.log("");
 }
 
-

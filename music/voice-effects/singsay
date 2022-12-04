@@ -3,6 +3,9 @@
 txt="$1"
 bpm=120
 voice="voice_us1_mbrola"
+#voice="voice_us2_mbrola"
+#voice="voice_us3_mbrola"
+#voice="voice_en1_mbrola"
 
 opt="$2"
 

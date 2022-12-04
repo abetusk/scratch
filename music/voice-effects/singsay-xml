@@ -68,8 +68,14 @@ def rbeat():
   return random.choice(v)
 
 def rpitch():
-  v = ["A3", "Bb3", "C4", "D4", "Eb4", "F3", "F4", "G3" ]
+  #v = ["A2", "Bb2", "C3", "D3", "Eb3", "F2", "F3", "G2" ]
+  #v = ["A3", "Bb3", "C4", "D4", "Eb4", "F3", "F4", "G3" ]
   v = ["A4", "Bb4", "C5", "D5", "Eb5", "F4", "F5", "G4" ]
+
+  # aeolian?
+  #v = ['C3', 'D3', 'D#3', 'F3', 'G3', 'G#3', 'A#4']
+  # ionian?
+  #v = ['C3', 'D3', 'E3', 'F3', 'G3', 'A4', 'B4' ]
   return random.choice(v)
 
 
