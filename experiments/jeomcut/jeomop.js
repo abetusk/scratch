@@ -6,6 +6,7 @@
 
 var numeric = require("./numeric.js");
 var jeom = require("./jeom.js");
+var mcut = require("./mcut.js");
 
 let JEOMOP_VERSION = "0.2.0";
 
@@ -225,8 +226,18 @@ function _debug() {
 
   let _debug_tri = jeom_extrude(_test_pgn);
   jeom_stl_print(_debug_tri);
-
 }
 
-_main(jeom_opt);
-//_debug();
+
+
+function _wait_lib_load() {
+  if (!mcut.calledRun) {
+    setTimeout(_wait_lib_load, 1);
+    return;
+  }
+
+  _main(jeom_opt);
+}
+
+_wait_lib_load();
+
