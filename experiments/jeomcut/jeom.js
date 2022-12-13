@@ -400,12 +400,6 @@ function jeom_sphere(info) {
 
   let _eps = JEOM_EPS;
 
-  //DEBUG
-  slice_zdir = 2;
-  slice_a = 3;
-
-
-
   let n = slice_zdir,
       m = slice_a;
 
@@ -416,7 +410,6 @@ function jeom_sphere(info) {
   let vert = [ ];
 
   for (let i=0; i<n; i++) {
-  //for (let i=0; i<(n-1); i++) {
     let v_prv = (i/(n));
     let v_nxt = (((i+1)%(n+1))/n);
     for (let j=0; j<m; j++) {
@@ -455,67 +448,34 @@ function jeom_sphere(info) {
 
       let p3 = [x,y,z];
 
-      //if ((i>0) && (j>0)) {
       if (i>0) {
-      //if ((i>0) && (i<=(n-1))) {
 
+        /*
         let zcount = 0;
         if (numeric.norm2(numeric.sub(p2, p1)) < _eps) { zcount++; }
         if (numeric.norm2(numeric.sub(p1, p0)) < _eps) { zcount++; }
         if (numeric.norm2(numeric.sub(p2, p0)) < _eps) { zcount++; }
+        if (zcount > 0) {
+          console.log("###!!!! a:", zcount, "(", i, "/", n, j, "/", m, ")", p0, p3, p2);
+        }
+        */
 
-      //console.log("\n#a i:", i, "/", n, "j:", j, "/", m);
-      //console.log( p2.join(" ") );
-      //console.log( p1.join(" ") );
-      //console.log( p0.join(" ") );
-
-
-
-        //if ( (i<(n-1))  ) {
-
-        //if ((i<(n-1)) || (j<(m-1))) { 
-        //if (zcount<1) {
-
-      //if (i<(n-1)) { 
-
-      if (zcount > 0) {
-        console.log("###!!!! a:", zcount, "(", i, "/", n, j, "/", m, ")", p0, p3, p2);
+        vert.push(p2[0], p2[1], p2[2]);
+        vert.push(p1[0], p1[1], p1[2]);
+        vert.push(p0[0], p0[1], p0[2]);
       }
-
-          vert.push(p2[0], p2[1], p2[2]);
-          vert.push(p1[0], p1[1], p1[2]);
-          vert.push(p0[0], p0[1], p0[2]);
-
-      //}
-
-        //}
-
-      }
-
-      zcount = 0;
-      if (numeric.norm2(numeric.sub(p0, p3)) < _eps) { zcount++; }
-      if (numeric.norm2(numeric.sub(p3, p2)) < _eps) { zcount++; }
-      if (numeric.norm2(numeric.sub(p2, p0)) < _eps) { zcount++; }
-
-      //if (zcount<1) {
-      //if (i<=(n-1)) {
-      //if ((i<(n-1)) || (j<(m-1))) { 
-
-      //if ((i<=(n-1)) && (j<=(m-1))) {
-      //if (i<(n-1)) {
-      //if (j<(m-2)) {
-      //if (i<(n-1)) { 
-
-      //console.log("\n#b i:", i, "/", n, "j:", j, "/", m);
-      //console.log( p0.join(" ") );
-      //console.log( p3.join(" ") );
-      //console.log( p2.join(" ") );
 
       if (i<(n-1)) { 
-      if (zcount > 0) {
-        console.log("###!!!! b:", zcount, "(", i, "/", n, j, "/", m, ")", p0, p3, p2);
-      }
 
+        /*
+        zcount = 0;
+        if (numeric.norm2(numeric.sub(p0, p3)) < _eps) { zcount++; }
+        if (numeric.norm2(numeric.sub(p3, p2)) < _eps) { zcount++; }
+        if (numeric.norm2(numeric.sub(p2, p0)) < _eps) { zcount++; }
+        if (zcount > 0) {
+          console.log("###!!!! b:", zcount, "(", i, "/", n, j, "/", m, ")", p0, p3, p2);
+        }
+        */
 
         vert.push(p0[0], p0[1], p0[2]);
         vert.push(p3[0], p3[1], p3[2]);
@@ -525,9 +485,6 @@ function jeom_sphere(info) {
 
     }
   }
-
-  //DEBUG
-  //process.exit();
 
   return vert;
 }
