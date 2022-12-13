@@ -391,7 +391,7 @@ function jeom_cube(info) {
 
 function jeom_sphere(info) {
   info = ((typeof info === "undefined") ? jeom_info : info);
-  let slice_zdir = ((typeof info.slice === "undefined") ? 8 : info.slice_v );
+  let slice_zdir = ((typeof info.slice_v === "undefined") ? 8 : info.slice_v );
   let slice_a = ((typeof info.slice === "undefined") ? 8 : info.slice );
   let r = ((typeof info.r === "undefined") ? 0.5 : info.r );
   let rx = ((typeof info.rx === "undefined") ? r : info.rx );
@@ -399,6 +399,12 @@ function jeom_sphere(info) {
   let rz = ((typeof info.rz === "undefined") ? r : info.rz );
 
   let _eps = JEOM_EPS;
+
+  //DEBUG
+  slice_zdir = 2;
+  slice_a = 3;
+
+
 
   let n = slice_zdir,
       m = slice_a;
@@ -469,9 +475,18 @@ function jeom_sphere(info) {
 
         //if ((i<(n-1)) || (j<(m-1))) { 
         //if (zcount<1) {
+
+      //if (i<(n-1)) { 
+
+      if (zcount > 0) {
+        console.log("###!!!! a:", zcount, "(", i, "/", n, j, "/", m, ")", p0, p3, p2);
+      }
+
           vert.push(p2[0], p2[1], p2[2]);
           vert.push(p1[0], p1[1], p1[2]);
           vert.push(p0[0], p0[1], p0[2]);
+
+      //}
 
         //}
 
@@ -489,17 +504,23 @@ function jeom_sphere(info) {
       //if ((i<=(n-1)) && (j<=(m-1))) {
       //if (i<(n-1)) {
       //if (j<(m-2)) {
-      if (i<(n-1)) { 
+      //if (i<(n-1)) { 
 
       //console.log("\n#b i:", i, "/", n, "j:", j, "/", m);
       //console.log( p0.join(" ") );
       //console.log( p3.join(" ") );
       //console.log( p2.join(" ") );
 
+      if (i<(n-1)) { 
+      if (zcount > 0) {
+        console.log("###!!!! b:", zcount, "(", i, "/", n, j, "/", m, ")", p0, p3, p2);
+      }
+
 
         vert.push(p0[0], p0[1], p0[2]);
         vert.push(p3[0], p3[1], p3[2]);
         vert.push(p2[0], p2[1], p2[2]);
+
       }
 
     }
@@ -1298,6 +1319,7 @@ function jeom_off_print(fp, tri, face) {
   //console.log(tri.length/3, tri.length/9, 0);
   if (implicit_face) {
     fp.write( (tri.length/3).toString() + " " + (tri.length/9).toString() + " 0\n");
+    //fp.write( (tri.length/3).toString() + " " + (tri.length/3).toString() + " 0\n");
   }
   else {
     fp.write( (tri.length/3).toString() + " " + (face.length/3).toString() + " 0\n");
@@ -1314,9 +1336,14 @@ function jeom_off_print(fp, tri, face) {
       //console.log(3, i+3, i+4, i+5);
       //console.log(3, i+6, i+7, i+8);
 
-      fp.write("3 " + (i+0).toString() + " " + (i+1).toString() + " " + (i+2).toString() + "\n");
-      fp.write("3 " + (i+3).toString() + " " + (i+4).toString() + " " + (i+5).toString() + "\n");
-      fp.write("3 " + (i+6).toString() + " " + (i+7).toString() + " " + (i+8).toString() + "\n");
+      let p0 = i/3;
+      let p1 = (i+3)/3;
+      let p2 = (i+6)/3;
+      fp.write("3 " + (p0).toString() + " " + (p1).toString() + " " + (p2).toString() + "\n");
+
+      //fp.write("3 " + (i+0).toString() + " " + (i+1).toString() + " " + (i+2).toString() + "\n");
+      //fp.write("3 " + (i+3).toString() + " " + (i+4).toString() + " " + (i+5).toString() + "\n");
+      //fp.write("3 " + (i+6).toString() + " " + (i+7).toString() + " " + (i+8).toString() + "\n");
     }
   }
   else {
@@ -1347,18 +1374,15 @@ function jeom_obj_print(fp, tri) {
 function _vkey(v, _eps) {
   _eps = ((typeof _eps === "undefined") ? (1/(1024*1024)) : _eps);
   let N = Math.floor(1/_eps);
-  let ix = Math.floor(N*v[0]);
-  let iy = Math.floor(N*v[1]);
-  let iz = Math.floor(N*v[2]);
+  let ix = Math.floor(N*v[0] + 0.5);
+  let iy = Math.floor(N*v[1] + 0.5);
+  let iz = Math.floor(N*v[2] + 0.5);
   let key = ix.toString() + ":" + iy.toString() + ":" + iz.toString();
   return key;
 }
 
 function jeom_stitch(tri, _eps) {
   _eps = ((typeof _eps === "undefined") ? (1/(1024*1024)) : _eps);
-
-  //let _h = {};
-  //let _repr = {};
 
   let vtx_uniq = [];
   let vtx_rep_idx = {};
@@ -1367,18 +1391,9 @@ function jeom_stitch(tri, _eps) {
 
   let N = Math.floor(1/_eps);
   for (let idx=0; idx<tri.length; idx+=3) {
-    /*
-    let ix = Math.floor(N*tri[idx+0]);
-    let iy = Math.floor(N*tri[idx+1]);
-    let iz = Math.floor(N*tri[idx+2]);
-    let key = ix.toString() + ":" + iy.toString() + ":" + iz.toString();
-    */
     let key = _vkey([ tri[idx+0], tri[idx+1], tri[idx+2] ], _eps);
 
     if (!(key in vtx_rep_idx)) {
-      //_h[key] = [];
-      //_repr[key] = idx;
-
       let uniq_idx = vtx_uniq.length;
 
       vtx.push( tri[idx+0], tri[idx+1], tri[idx+2] );
@@ -1386,7 +1401,6 @@ function jeom_stitch(tri, _eps) {
       vtx_uniq.push( { "name": key, "p": [ tri[idx+0], tri[idx+1], tri[idx+2] ] } );
       vtx_rep_idx[key] = uniq_idx;
     }
-    //_h[key].push( Math.floor(idx/3) );
 
   }
 

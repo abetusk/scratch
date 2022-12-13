@@ -92,11 +92,22 @@ function _pill() {
 
   let s_r = 0.125;
 
-  let us = jeom.sphere({"r":s_r});
-
+  let us = jeom.sphere({"r":s_r, "slice": 64, "slice_v": 64});
+  //jeom.scale(us, [1/(2*s_r), 1/(2*s_r), 1.0]);
+  jeom.mov(us, [0,0,0.5])
   us = jeom.stitch(us);
-  jeom.off_print(process.stdout, us.v, us.f);
 
+  //console.log(us);
+
+  //jeom.off_print(process.stdout, us.v, us.f);
+  //return;
+
+  //jeom.off_print(process.stdout, pl.v, pl.f);
+  //return;
+
+
+  let ok = mcut_bop(pl, us, 0);
+  jeom.off_print(process.stdout, ok.v, ok.f);
 }
 
 function _column() {

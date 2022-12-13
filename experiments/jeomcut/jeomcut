@@ -183,6 +183,12 @@ function _main(_opt) {
     _geom = jeom.torus();
   }
 
+  else {
+    process.stderr.write("provide object shape\n\n");
+    show_help(process.stderr);
+    process.exit(-1);
+  }
+
 
   jeom.scale(_geom, [ _opt.scale, _opt.scale, _opt.scale ] );
   jeom.mov(_geom, [ _opt.dx, _opt.dy, _opt.dz ] );
