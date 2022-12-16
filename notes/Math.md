@@ -18,3 +18,30 @@ $$
 
 
 
+---
+
+
+A potential tactic for converting a number partition problem into a belief propagation problem:
+
+Consider $n$ numbers, $a_i \in \mathbb{Z}$.
+Choose $m$ primes such that $\sum_{i=0}^{n-1} a_i < \prox_{k=0}^{m-1} p_k$.
+
+Construct variables $x_{i,j} \in \{ a_i \% p_j, -a_i \% p_j \}$, auxiliary "sum" variable
+$s_{a,b,j,u} \in \{ (0,0), (0,1), \cdots, (0,p_j-1), (1,0), (1,1), \cdots, (1,p_j-1), \cdots (p_j-1,p_j-1) \}$
+and auxiliary "sum transfer" variable $t_{j,u} \in \{ 0, 1, \cdots, p_j-1 \}$.
+
+We can now construct at least one portion of the sum:
+
+```
+  ...
+
+  x_{a,j} ---
+             \
+              ---- s_{a,b,j,u} --- t_{j,u} ---
+  x_{b,j} ---/
+
+  ...
+
+```
+
+ 

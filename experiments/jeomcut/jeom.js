@@ -7,11 +7,11 @@
 
 var JEOM_VERSION = "0.2.0";
 var JEOM_EPS = (1.0/(1024.0*1024.0));
+//var JEOM_EPS = (1.0/(1024.0*512.0));
 
 if (typeof module !== "undefined") {
   var numeric = require("./numeric.js");
 }
-
 
 var jeom_info = {
   "w": 1/4,
@@ -1204,7 +1204,7 @@ function jeom_stl_print(fp, tri) {
 
   let x = 0, y = 0, z = 0;
   let d = 1;
-  let _eps = (1.0/(1024.0*1024.0));
+  let _eps = JEOM_EPS;
 
   //console.log("solid");
   fp.write("solid\n");
@@ -1329,7 +1329,8 @@ function jeom_obj_print(fp, tri) {
 }
 
 function _vkey(v, _eps) {
-  _eps = ((typeof _eps === "undefined") ? (1/(1024*1024)) : _eps);
+  //_eps = ((typeof _eps === "undefined") ? (1/(1024*1024)) : _eps);
+  _eps = ((typeof _eps === "undefined") ? JEOM_EPS : _eps);
   let N = Math.floor(1/_eps);
   let ix = Math.floor(N*v[0] + 0.5);
   let iy = Math.floor(N*v[1] + 0.5);
@@ -1339,7 +1340,8 @@ function _vkey(v, _eps) {
 }
 
 function jeom_stitch(tri, _eps) {
-  _eps = ((typeof _eps === "undefined") ? (1/(1024*1024)) : _eps);
+  //_eps = ((typeof _eps === "undefined") ? (1/(1024*1024)) : _eps);
+  _eps = ((typeof _eps === "undefined") ? JEOM_EPS : _eps);
 
   let vtx_uniq = [];
   let vtx_rep_idx = {};
@@ -1384,7 +1386,6 @@ function jeom_stitch(tri, _eps) {
 }
 
 if (typeof module !== "undefined") {
-
   module.exports["extrude_angle"] = jeom_extrude_angle;
   module.exports["extrude"] = jeom_extrude;
   module.exports["flatten"] = jeom_flatten;
@@ -1411,4 +1412,9 @@ if (typeof module !== "undefined") {
   module.exports["off_print"] = jeom_off_print;
   module.exports["obj_print"] = jeom_obj_print;
   module.exports["stitch"] = jeom_stitch;
+
+  module.exports["precision"] = function(_e) {
+    if (typeof _e === "undefined") { return JEOM_EPS; }
+    JEOM_EPS = _e;
+  };
 }
