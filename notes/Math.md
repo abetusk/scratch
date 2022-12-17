@@ -34,14 +34,76 @@ We can now construct at least one portion of the sum:
 
 ```
   ...
-
+           f_{\alpha}: D \times (D,D) \mapsto \{0,1\}
   x_{a,j} ---
-             \
-              ---- s_{a,b,j,u} --- t_{j,u} ---
+             \              f_{\gamma}: (D,D) \times D \mapsto \{0,1\}
+              s_{a,b,j,u} --------------- t_{j,u} ---
   x_{b,j} ---/
-
+           f_{\beta}: D \times (D,D) \mapsto \{0,1\}
   ...
 
 ```
+
+With $x_{a,j}$ and $x_{b,j}$ being random variables that have the integral modular domain ($\{0,1,\cdots,p_j-1\}$),
+the $s_{a,b,j,u}$ random variable having domain $\{(0,0),(0,1),(0,2),\cdots,(0,p_j-1),(1,0),(1,1),(1,2),\cdots,(p_j-1,p_j-2),(p_j-1,p_j-1)$
+(at level $u$)
+and the final $t_{j,u}$ having domain $\{0,1,\cdots,p_j-1\}$.
+
+The $s_{a,b,j,u}$ variable is essentially a Cartesian product of the two inputs ($x_{a,j}$,$x_{b,j}$) with
+$f_{\gamma}$ and the subsequent $t_{j,u}$ doing the actual modular sum, converting back from the Cartesian
+product domain back to the original module integral domain.
+
+By structuring it in this way, there are three functions that allow pairwise consideration and result in modular summation.
+
+For example, here is a simple example for the prime $3$:
+
+| $x_{a,j}$ | $s_{a,b,j,u}$ | $f_{\alpha}$ |   | $x_{b,j}$ | $s_{a,b,j,u}$ | $f_{\beta}$ |
+|-----------|---------------|--------------|---|-----------|---------------|-------------|
+| $0$       |  $(0,0)$      |   $1$        |   |   $0$     |   $(0,0)$     |  $1$        |
+| $1$       |  $(0,0)$      |   $0$        |   |   $1$     |   $(0,0)$     |  $0$        |
+| $2$       |  $(0,0)$      |   $0$        |   |   $2$     |   $(0,0)$     |  $0$        |
+| $0$       |  $(0,1)$      |   $1$        |   |   $0$     |   $(0,1)$     |  $0$        |
+| $1$       |  $(0,1)$      |   $0$        |   |   $1$     |   $(0,1)$     |  $1$        |
+| $2$       |  $(0,1)$      |   $0$        |   |   $2$     |   $(0,1)$     |  $0$        |
+| $0$       |  $(0,2)$      |   $1$        |   |   $0$     |   $(0,2)$     |  $0$        |
+| $1$       |  $(0,2)$      |   $0$        |   |   $1$     |   $(0,2)$     |  $0$        |
+| $2$       |  $(0,2)$      |   $0$        |   |   $2$     |   $(0,2)$     |  $1$        |
+| $0$       |  $(1,0)$      |   $0$        |   |   $0$     |   $(1,0)$     |  $1$        |
+| $1$       |  $(1,0)$      |   $1$        |   |   $1$     |   $(1,0)$     |  $0$        |
+| $2$       |  $(1,0)$      |   $0$        |   |   $2$     |   $(1,0)$     |  $0$        |
+| $0$       |  $(1,1)$      |   $0$        |   |   $0$     |   $(1,1)$     |  $0$        |
+| $1$       |  $(1,1)$      |   $1$        |   |   $1$     |   $(1,1)$     |  $1$        |
+| $2$       |  $(1,1)$      |   $0$        |   |   $2$     |   $(1,1)$     |  $0$        |
+| $0$       |  $(1,2)$      |   $0$        |   |   $0$     |   $(1,2)$     |  $0$        |
+| $1$       |  $(1,2)$      |   $1$        |   |   $1$     |   $(1,2)$     |  $0$        |
+| $2$       |  $(1,2)$      |   $0$        |   |   $2$     |   $(1,2)$     |  $1$        |
+| $0$       |  $(2,0)$      |   $0$        |   |   $0$     |   $(2,0)$     |  $1$        |
+| $1$       |  $(2,0)$      |   $0$        |   |   $1$     |   $(2,0)$     |  $0$        |
+| $2$       |  $(2,0)$      |   $1$        |   |   $2$     |   $(2,0)$     |  $0$        |
+| $0$       |  $(2,1)$      |   $0$        |   |   $0$     |   $(2,1)$     |  $0$        |
+| $1$       |  $(2,1)$      |   $0$        |   |   $1$     |   $(2,1)$     |  $1$        |
+| $2$       |  $(2,1)$      |   $1$        |   |   $2$     |   $(2,1)$     |  $0$        |
+| $0$       |  $(2,2)$      |   $0$        |   |   $0$     |   $(2,2)$     |  $0$        |
+| $1$       |  $(2,2)$      |   $0$        |   |   $1$     |   $(2,2)$     |  $0$        |
+| $2$       |  $(2,2)$      |   $1$        |   |   $2$     |   $(2,2)$     |  $1$        |
+
+That is, the $f_{\alpha}$ and $f_{\beta}$ are only "true" when the inputs match the corresponding
+entry in the Cartesian product domain.
+
+Now we can map back to the original domain and do the modular summation with $f_{\gamma}$:
+
+| $s_{a,b,j,u}$ | $t_{j,u}$ | $f_{\gamma}$ |   | $s_{a,b,j,u}$ | $t_{j,u}$ | $f_{\gamma}$ |   | $s_{a,b,j,u}$ | $t_{j,u}$ | $f_{\gamma}$ |
+|---------------|-----------|--------------|---|---------------|-----------|--------------|---|---------------|-----------|--------------|
+| $(0,0)$       |   $0$     |    $1$       |   |  $(0,0)$      | $1$       | $0$          |   |  $(0,0)$      | $2$       | $0$          |
+| $(0,1)$       |   $0$     |    $0$       |   |  $(0,1)$      | $1$       | $1$          |   |  $(0,1)$      | $2$       | $0$          |
+| $(0,2)$       |   $0$     |    $0$       |   |  $(0,2)$      | $1$       | $0$          |   |  $(0,2)$      | $2$       | $1$          |
+| $(1,0)$       |   $0$     |    $0$       |   |  $(1,0)$      | $1$       | $1$          |   |  $(1,0)$      | $2$       | $0$          |
+| $(1,1)$       |   $0$     |    $0$       |   |  $(1,1)$      | $1$       | $0$          |   |  $(1,1)$      | $2$       | $1$          |
+| $(1,2)$       |   $0$     |    $1$       |   |  $(1,2)$      | $1$       | $0$          |   |  $(1,2)$      | $2$       | $0$          |
+| $(2,0)$       |   $0$     |    $0$       |   |  $(2,0)$      | $1$       | $0$          |   |  $(2,0)$      | $2$       | $1$          |
+| $(2,1)$       |   $0$     |    $1$       |   |  $(2,1)$      | $1$       | $0$          |   |  $(2,1)$      | $2$       | $0$          |
+| $(2,2)$       |   $0$     |    $0$       |   |  $(2,2)$      | $1$       | $1$          |   |  $(2,2)$      | $2$       | $0$          |
+
+Again, all this is a complicated way to do modular arithmetic under the language of MRF with these pairwise functions between random variables.
 
  
