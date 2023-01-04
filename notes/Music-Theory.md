@@ -189,7 +189,7 @@ There is some overlap in note names.
 For example $A^\sharp$ and $B^\flat$ represent the same note.
 The reason for the note naming conventions, including the redundancy in note names, is probably a historical
 artifact and won't be discussed much further in this document.
-Unless specifically needed, the "sharp" notation ($\sharp$) will be used over the "flat" notation ($\flat$).
+Unless specifically needed, the "sharp" notation (${\sharp}$) will be used over the "flat" notation (${\flat}$).
 
 ### Chords
 
@@ -213,22 +213,22 @@ The 12 note scale is most probably a cultural artifact but, under the right set 
 the 12 note equal-tempered scale can be considered a reasonable scale choice.
 
 To illustrate this point further, consider taking the ratio of frequencies of two note pairs, $r$,
-and taking the smallest integral $p,q$ such that $ | \frac{p}{q} - r | < \epsilon $, for some given $\epsilon$.
-Here is a table of the ratio of the larger frequency to the smaller one for $ \epsilon = 0.06$:
+and taking the smallest integral $p,q$ such that $| \frac{p}{q} - r | < \epsilon$, for some given ${\epsilon}$.
+Here is a table of the ratio of the larger frequency to the smaller one for ${\epsilon} = 0.06$:
 
 | Note ratio | Fractional Approximation |
 |---|---|
-| $2^{ \frac{ 1 }{ 12 }} $ | $ \frac{ 17 }{ 16 }$ |
-| $2^{ \frac{ 2 }{ 12 }} $ | $ \frac{ 9 }{ 8 }$ |
-| $2^{ \frac{ 3 }{ 12 }} $ | $ \frac{ 6 }{ 5 }$ |
-| $2^{ \frac{ 4 }{ 12 }} $ | $ \frac{ 5 }{ 4 }$ |
-| $2^{ \frac{ 5 }{ 12 }} $ | $ \frac{ 4 }{ 3 }$ |
-| $2^{ \frac{ 6 }{ 12 }} $ | $ \frac{ 17 }{ 12 }$ |
-| $2^{ \frac{ 7 }{ 12 }} $ | $ \frac{ 3 }{ 2  }$ |
-| $2^{ \frac{ 8 }{ 12 }} $ | $ \frac{ 19 }{ 12 }$ |
-| $2^{ \frac{ 9 }{ 12 }} $ | $ \frac{ 5 }{ 3 }$ |
-| $2^{ \frac{ 10 }{ 12 }} $ | $ \frac{ 16 }{ 9 }$ |
-| $2^{ \frac{11 }{ 12} } $ | $ \frac{ 17 }{ 9 }$ |
+| $2^{ \frac{ 1 }{ 12 }}$ | ${\frac{ 17 }{ 16 }}$ |
+| $2^{ \frac{ 2 }{ 12 }}$ | ${\frac{ 9 }{ 8 }}$ |
+| $2^{ \frac{ 3 }{ 12 }}$ | ${\frac{ 6 }{ 5 }}$ |
+| $2^{ \frac{ 4 }{ 12 }}$ | ${\frac{ 5 }{ 4 }}$ |
+| $2^{ \frac{ 5 }{ 12 }}$ | ${\frac{ 4 }{ 3 }}$ |
+| $2^{ \frac{ 6 }{ 12 }}$ | ${\frac{ 17 }{ 12 }}$ |
+| $2^{ \frac{ 7 }{ 12 }}$ | ${\frac{ 3 }{ 2  }}$ |
+| $2^{ \frac{ 8 }{ 12 }}$ | ${\frac{ 19 }{ 12 }}$ |
+| $2^{ \frac{ 9 }{ 12 }}$ | ${\frac{ 5 }{ 3 }}$ |
+| $2^{ \frac{ 10 }{ 12 }}$ | ${\frac{ 16 }{ 9 }}$ |
+| $2^{ \frac{11 }{ 12} }$ | ${\frac{ 17 }{ 9 }}$ |
 
 Taking two notes right next to each other in this 12 note scale produces a reduced fraction that is "large" ([\*\*\*\*\*\*](#Note-5)),
 whereas taking the third and the seventh produce reduced fractions that are "small".
