@@ -370,7 +370,7 @@ To give a brief overview of this section, here are the salient points:
 
 * As a good approximation of the human auditory system, frequencies are perceived on a logarithmic scale
 * Rhythm is tied heavily with language and the tempo of speech, word length and frequency
-* Note combinations sound more "pleasing" when the ration of their frequencies are small as reduced fractions 
+* Note combinations sound more "pleasing" when the ratio of their frequencies are small as reduced fractions 
 * The 12 note chromatic scale is a good compromise of number of notes and enough pleasantly sounding note combinations
 * The 12 note chromatic scale is generated from a base frequency of 440Hz multiplied by the twelfth roots of 2
 * The 12 note chromatic scale can be further restricted to the diatonic scales to help further restrict the note
@@ -517,6 +517,37 @@ var scale = []
 for (var exponent=0; exponent<12; exponent++) { scale.push( Math.floor(440.0*Math.pow(2.0, exponent/12.0))) ; }
 ```
 
+Synth
+---
+
+```
+
+ ---------------------------------
+ |                               |
+ |       osc                     |
+ |     ---------                 |
+ |     |       |                 |
+ |     | square|                 |
+ |     | sine  |     filter      v  amplitude     speaker
+ |     | saw   |   ----------   ------------    ----------
+ |     | pwm   |   |        |   |          |    |        |
+ |     |       |   |        |   |          |    |        |
+note ->|       |-->|        |-->|          |--->|        |
+ |     ---------   ----------   ------------    ----------
+ |                      ^          ^
+ |                      |          |  adsr
+ |                 ----------    ----------
+ |                 |        |    |        |
+ |                 |        |    |        |
+ |                 |        |    |        |
+ |                 ----------    ----------
+ |                 modulation      ^
+ |                                 |
+ -----------------------------------
+
+```
+
+
 License
 ---
 
@@ -546,6 +577,8 @@ References
 * [9](https://github.com/abetusk/papers/blob/release/Music/rhythm-music_Patel_Daniel.pdf)
 * [10](https://github.com/abetusk/papers/blob/release/Music/measures-consonances_honingh.pdf)
 * [11](https://www.youtube.com/watch?v=aEjcK5JFEFE)
+
+* [xxx](https://www.renegadeproducer.com/audio-synthesis.html)
 
 TODO
 ---

@@ -54,6 +54,13 @@ var g_data = {
   "level" : []
 };
 
+function print_key(_dat) {
+  let ti = _dat.tile_info;
+  for (let key in ti) {
+    console.log("#", key, "    ", ti[key].type);
+  }
+}
+
 function irnd(n) {
   return Math.floor(Math.random()*n);
 }
@@ -197,6 +204,7 @@ function make_level(dat, opt) {
 }
 
 make_blank_level(g_data);
+
 print_level(g_data);
 
 
@@ -217,6 +225,8 @@ grow_place(g_data, [6,6], 40, '+' );
 grow_place(g_data, [45,8], 40, '~');
 
 console.log(g_data.bounds);
+
+print_key(g_data);
 
 print_level(g_data);
 //make_level(g_data);
