@@ -16,6 +16,7 @@ for (let palidx=0; palidx<palette.length; palidx++) {
 
   let txt = "#" + name + "\n";
 
+  let first_pnt = "";
   for (let ci=0; ci<color.length; ci++) {
     let c = color[ci];
     //console.log(c);
@@ -36,7 +37,13 @@ for (let palidx=0; palidx<palette.length; palidx++) {
 
     let px = lightness*Math.cos(2*Math.PI*hue/360);
     let py = lightness*Math.sin(2*Math.PI*hue/360);
+
+    //txt += "\n\n0 0\n";
     txt += px.toString() + " " + py.toString() + " " + lch[1].toString() + "\n";
+
+    if (first_pnt.length==0) {
+      first_pnt = px.toString() + " " + py.toString() + " " + lch[1].toString() + "\n";
+    }
 
     //let px = chrom*Math.cos(2*Math.PI*hue/360);
     //let py = chrom*Math.sin(2*Math.PI*hue/360);
@@ -46,6 +53,8 @@ for (let palidx=0; palidx<palette.length; palidx++) {
 
 
   }
+
+  txt += first_pnt;
 
   fs.writeFile("data/" + palidx.toString() + ".gp", txt, function(err) { if (err) { console.log(err); } } );
 
