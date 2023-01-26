@@ -8,6 +8,7 @@ import math
 
 EPS = 0.1
 EFFICIENCY_THRESHOLD = 6
+#FAREY_BOUND = 24
 FAREY_BOUND = 24
 
 if len(sys.argv) > 1:
@@ -21,6 +22,10 @@ print("# EFFICIENCY_THRESHOLD:", EFFICIENCY_THRESHOLD)
 print("# FAREY_BOUND:", FAREY_BOUND)
 
 # from https://www.johndcook.com/blog/2010/10/20/best-rational-approximation/
+# approximate the (floating point number) x with the closest fraction whose
+# denominator does not exceed N.
+#
+# Return: numerator, denominator
 #
 def farey(x, N):
   a, b = 0, 1
@@ -105,30 +110,76 @@ def list_semi(div):
 
 #print find_q( math.pow(2.0, 1.0/12.0), 0.06 )
 
-for p in range(2, 64):
+def efficiency_single():
+  for p in range(2, 64):
 
-  r = get_semi(p)
-  print("#")
-  print("#************************")
-  print("#", p, "semitones:")
-  print("#---")
+    r = get_semi(p)
+    print("#")
+    print("#************************")
+    print("#", p, "semitones:")
+    print("#---")
 
-  count = 0
+    count = 0
 
-  for x in r:
-    print( "# 2^{", x["r"], "/", x["n"], "} :", x["p"], "/", x["q"], "(", x["v"], ",", 1.0/float(x["v"]), ")", "((", x["pp"], "/", x["qq"], ") farey(", x["p"], "/", x["q"], "))", x["note"])
-    #if (x["p"] < x["n"]) and (x["q"] < x["n"]):
-    #if (x["p"] < 10) and (x["q"] < 10):
-    #if (x["p"] < EFFICIENCY_THRESHOLD) and (x["q"] < EFFICIENCY_THRESHOLD):
+    for x in r:
+      print( "# 2^{", x["r"], "/", x["n"], "} :", x["p"], "/", x["q"], "(", x["v"], ",", 1.0/float(x["v"]), ")", "((", x["pp"], "/", x["qq"], ") farey(", x["p"], "/", x["q"], "))", x["note"])
+      #if (x["p"] < x["n"]) and (x["q"] < x["n"]):
+      #if (x["p"] < 10) and (x["q"] < 10):
+      #if (x["p"] < EFFICIENCY_THRESHOLD) and (x["q"] < EFFICIENCY_THRESHOLD):
 
-    if x["q"] < EFFICIENCY_THRESHOLD:
-      count+=1
+      if x["q"] < EFFICIENCY_THRESHOLD:
+        count+=1
 
-  print( "#count:", count, ", efficiency:", float(count) / float(p))
-  print(p, float(count)/float(p))
-  #list_semi(p)
+    print( "#count:", count, ", efficiency:", float(count) / float(p))
+    print(p, float(count)/float(p))
+    #list_semi(p)
 
-  #r = get_semi(p)
-  #print r
-  print( "#************************")
+    #r = get_semi(p)
+    #print r
+    print( "#************************")
 
+
+def efficiency_3d():
+  for p in range(6, 64):
+
+    print("\n\n")
+
+    r = get_semi(p)
+
+    for thresh in range(4,12):
+
+      count = 0
+      for x in r:
+        if x["q"] < thresh:
+          count+=1
+
+      #print( "#count:", count, ", efficiency:", float(count) / float(p))
+      print(p, thresh, float(count)/float(p))
+
+def efficiency_thresh_fn():
+  for p in range(6, 64):
+
+    #print("\n\n")
+
+    r = get_semi(p)
+
+    fp = open("data/s" + str(p) + ".gp", "w")
+    fp.write("# scale: " + str(p) + ", thres: [4,12]\n")
+
+
+    for thresh in range(4,12):
+
+      count = 0
+      for x in r:
+        if x["q"] < thresh:
+          count+=1
+
+      #print( "#count:", count, ", efficiency:", float(count) / float(p))
+      #print(p, thresh, float(count)/float(p))
+      fp.write( str(thresh) + " " + str(float(count)/float(p)) + "\n")
+
+    fp.close()
+
+
+
+efficiency_thresh_fn()
