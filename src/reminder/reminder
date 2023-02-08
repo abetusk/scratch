@@ -1,0 +1,93 @@
+#!/usr/bin/node
+
+// To the extent possible under law, the person who associated CC0 with
+// this file has waived all copyright and related or neighboring rights
+//  to this file.
+//
+
+var fs = require("fs");
+
+var base_dir = process.env["HOME"] + "/.config/reminder";
+var config_fn = base_dir + "/reminder_config.json";
+var data_fn = base_dir + "/reminder.json";
+
+var raw_data = {};
+
+function write_reminder_data(data) {
+  let data_str = JSON.stringify(data, undefined, 2);
+  fs.writeFileSync(data_fn, data_str);
+}
+
+try {
+  let raw_data_str = fs.readFileSync(data_fn);
+  raw_data = JSON.parse(raw_data_str);
+
+}
+catch (err) {
+  write_reminder_data(raw_data);
+}
+
+
+var item =  [
+  { "op": "help", "description": "show help", "action": show_help_and_exit },
+  { "op": "add", "description": "add reminder itme", "action": add_item },
+  { "op": "rem", "description": "remove reminder itme", "action": rem_item },
+];
+
+function show_help() {
+  console.log("\nusage:\n\n  reminder <item>\n\n");
+  console.log("current items are:\n");
+  for (let i=0; i<item.length; i++) {
+    console.log("  ", item[i].op, "  ", item[i].description);
+  }
+  console.log("\n");
+}
+
+function show_help_and_exit() {
+  show_help();
+  process.exit(-1);
+}
+
+function add_item(item_info) {
+}
+
+function rem_item(item_info) {
+}
+
+function reminder_kw(op, data) {
+
+  for (let key in data) {
+    if (op == key) {
+      console.log(data[op].description);
+    }
+  }
+}
+
+
+let argv = process.argv.slice(2);
+if (argv.length == 0) {
+  show_help();
+  process.exit(-1);
+}
+
+let op = argv[0];
+
+let idx=0;
+for (idx=0; idx<item.length; idx++) {
+  //console.log(item[idx]);
+  if (item[idx].op == op) {
+    item[idx].action();
+    break;
+  }
+}
+
+if (idx == item.length) {
+  reminder_kw(op, raw_data);
+}
+
+//if (op == "help") { show_help(); }
+
+
+
+
+
