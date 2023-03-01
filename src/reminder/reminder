@@ -32,6 +32,7 @@ var item =  [
   { "op": "help", "description": "show help", "action": show_help_and_exit },
   { "op": "add", "description": "add reminder itme", "action": add_item },
   { "op": "rem", "description": "remove reminder itme", "action": rem_item },
+  { "op": "kw", "description": "show keywords", "action": reminder_kw_show },
 ];
 
 function show_help() {
@@ -46,6 +47,12 @@ function show_help() {
 function show_help_and_exit() {
   show_help();
   process.exit(-1);
+}
+
+function reminder_kw_show() {
+  for (let key in raw_data) {
+    console.log(" ", key);
+  }
 }
 
 function add_item(item_info) {
