@@ -1312,8 +1312,6 @@ function jeom_off_print(fp, tri, face) {
 
 function jeom_obj_print(fp, tri) {
   for (let i=0; i<tri.length; i+=3) {
-
-    //console.log("v", tri[i+0], tri[i+1], tri[i+2]);
     fp.write("v " + tri[i+0].toString() + " " + tri[i+1].toString() + " " + tri[i+2].toString() + "\n");
   }
 
@@ -1323,7 +1321,6 @@ function jeom_obj_print(fp, tri) {
     v1 = Math.floor((i+3)/3);
     v2 = Math.floor((i+6)/3);
 
-    //console.log("f", v0+1, v1+1, v2+1);
     fp.write("f " + (v0+1).toString() + " "  + (v1+1).toString() + " " + (v2+1).toString() + "\n" );
   }
 }

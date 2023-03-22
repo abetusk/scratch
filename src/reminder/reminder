@@ -32,6 +32,8 @@ var item =  [
   { "op": "help", "description": "show help", "action": show_help_and_exit },
   { "op": "add", "description": "add reminder itme", "action": add_item },
   { "op": "rem", "description": "remove reminder itme", "action": rem_item },
+  { "op": "del", "description": "remove reminder itme", "action": rem_item },
+  { "op": "rm", "description": "remove reminder itme", "action": rem_item },
   { "op": "kw", "description": "show keywords", "action": reminder_kw_show },
 ];
 
@@ -55,10 +57,27 @@ function reminder_kw_show() {
   }
 }
 
-function add_item(item_info) {
+function add_item(reminder_json, item_info) {
+
+  if (item_info.length < 2) { return; }
+
+  let key = item_info[0];
+  let val = item_info.slice(1).join(" " );
+
+  reminder_json[key] = { "op": key, "description": val, "action" :"" };
+
+  write_reminder_data(reminder_json);
 }
 
-function rem_item(item_info) {
+function rem_item(reminder_json, item_info) {
+  if (item_info.length < 1) { return; }
+  let key = item_info.join(" ");
+
+  if (key in reminder_json) {
+    delete reminder_json[key];
+    write_reminder_data(reminder_json);
+  }
+
 }
 
 function reminder_kw(op, data) {
@@ -83,7 +102,7 @@ let idx=0;
 for (idx=0; idx<item.length; idx++) {
   //console.log(item[idx]);
   if (item[idx].op == op) {
-    item[idx].action();
+    item[idx].action( raw_data, argv.slice(1) );
     break;
   }
 }
