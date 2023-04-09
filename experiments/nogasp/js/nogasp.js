@@ -10,10 +10,17 @@ var g_ctx = {
 
   "pause": false,
 
-  "fgdt" : 500,
+  "family": "",
+  "color": "",
+
+  //"fgdt" : 500,
+  "fgdt" : 900,
   "fgrgb" : "#eee",
   "bgdt" : 500,
   "fgrgb" : "#222",
+
+  "letter_width" : [ 15, 15, 15, 15, 15, 15, 15, 15 ],
+  "ds": (1/(2000/50)),
 
   "msg" : ["NO GASP"],
   "msg_idx" : 0,
@@ -162,6 +169,9 @@ function display_msg(msg, fam, color) {
   fam = ((typeof fam === "undefined") ? ("customfont" + irnd(N)) : fam);
   color = ((typeof color === "undefined") ? ((irnd(2)==0) ? "black" : "#eee") : color);
 
+  g_ctx.family = fam;
+  g_ctx.color = color;
+
   let ele = document.getElementById("ui_main");
   ele.innerHTML = "";
 
@@ -170,19 +180,25 @@ function display_msg(msg, fam, color) {
   let n = 1;
   if (msg.length > n) { n = msg.length; }
   let letter_width = Math.ceil( 100/n );
-  letter_width += "vw";
+
+  g_ctx.letter_width = letter_width;
+  g_ctx.msg_let_w = [];
+
+  let letter_width_s = letter_width.toString() + "vw";
 
   for (let idx=0; idx<msg.length; idx++) {
     let span = document.createElement("span");
     span.id = "ui_span" + idx;
 
     span.innerHTML = ((msg[idx] == " ") ? "&nbsp;" : msg[idx]);
-    span.style.fontSize = letter_width;
+    span.style.fontSize = letter_width_s;
     span.style.fontFamily = fam;
     span.style.margin = "1vw";
     span.style.color = color;
 
     ele.appendChild(span);
+
+    g_ctx.msg_let_w.push( g_ctx.letter_width );
   }
 }
 
@@ -235,6 +251,9 @@ function update_ikol_msg(msg, fam, color, let_idx) {
   fam = ((typeof fam === "undefined") ? ("customfont" + irnd(N)) : fam);
   color = ((typeof color === "undefined") ? rgb_hex : color);
 
+  g_ctx.family = fam;
+  g_ctx.color = color;
+
   //let_idx = ((typeof let_idx === "undefined") ? irnd(msg.length) : let_idx);
   if (typeof let_idx === "undefined") {
     if (g_ctx.perm.length == 0) {
@@ -259,9 +278,16 @@ function update_ikol_msg(msg, fam, color, let_idx) {
 }
 
 function update_ikol_msg_all(msg, fam, color) {
+  let n = 1;
+  if (msg.length > n) { n = msg.length; }
+  let letter_width = 100/n;
+
   msg = ((typeof msg === "undefined") ? "..." : msg);
   for (let i=0; i<msg.length; i++) {
     update_ikol_msg(msg, fam, color, i);
+
+    g_ctx.msg_let_w[i] = letter_width;
+
   }
 }
 
@@ -328,6 +354,34 @@ function _pause()   { g_ctx.paused = true; }
 function _resume()  { g_ctx.paused = false; }
 
 
+function _wobbly_timer() {
+  //let ds = 1.0 / (4000/50);
+  let ds = g_ctx.ds;
+
+  //let fam = g_ctx.family;
+  //let color = g_ctx.color;
+
+  let msg = g_ctx.msg[0];
+  for (let idx=0; idx<msg.length; idx++) {
+    let span = document.getElementById("ui_span" + idx.toString());
+
+    let lw_s = g_ctx.msg_let_w[idx].toString() + "vw";
+
+    //span.innerHTML = ((msg[idx] == " ") ? "&nbsp;" : msg[idx]);
+    span.style.fontSize = lw_s;
+    //span.style.fontFamily = fam;
+    //span.style.margin = "1vw";
+    //span.style.color = color;
+
+    g_ctx.msg_let_w[idx] += ds;
+
+    if (idx==0) {
+      //console.log( g_ctx.msg_let_w[idx]);
+    }
+  }
+
+}
+
 function init() {
 
   let param = new URLSearchParams(window.location.search);
@@ -356,6 +410,8 @@ function init() {
   update_ikol_msg_all(g_ctx.msg[g_ctx.msg_idx]); 
 
   setInterval(_process, g_ctx.fgdt);
+
+  setInterval(_wobbly_timer, 50);
 
 }
 
