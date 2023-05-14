@@ -30,10 +30,10 @@ catch (err) {
 
 var item =  [
   { "op": "help", "description": "show help", "action": show_help_and_exit },
-  { "op": "add", "description": "add reminder itme", "action": add_item },
-  { "op": "rem", "description": "remove reminder itme", "action": rem_item },
-  { "op": "del", "description": "remove reminder itme", "action": rem_item },
-  { "op": "rm", "description": "remove reminder itme", "action": rem_item },
+  { "op": "add", "description": "add reminder item", "action": add_item },
+  { "op": "rem", "description": "remove reminder item", "action": rem_item },
+  { "op": "del", "description": "remove reminder item", "action": rem_item },
+  { "op": "rm", "description": "remove reminder item", "action": rem_item },
   { "op": "kw", "description": "show keywords", "action": reminder_kw_show },
 ];
 
