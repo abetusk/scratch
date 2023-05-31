@@ -41,7 +41,9 @@ function show_help() {
   console.log("\nusage:\n\n  reminder <item>\n\n");
   console.log("current items are:\n");
   for (let i=0; i<item.length; i++) {
-    console.log("  ", item[i].op, "  ", item[i].description);
+    let _ws = "";
+    for (let j=0; j<(5-item[i].op.length); j++) { _ws += " "; };
+    console.log("  ", item[i].op, _ws, item[i].description);
   }
   console.log("\n");
 }
