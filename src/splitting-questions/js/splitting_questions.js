@@ -13,7 +13,29 @@ var g_data = {
     "input"  : "",
     "output" : ""
   },
+
+  // questions should be designed to get information on what differences
+  // in philosophy that cause friction
+  //
+
+  // free speech
+  // state sponsored religion
+  // copyright
+  // cultural appropriation
+  //
+
   "survey" : [
+
+    { "question" : "Do you think speech or expression which causes psychological harm in others should be criminilized?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "society", "politics" ] },
+    { "question" : "Do you think speech or expression that encourages violence should be criminilized?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "society", "politics" ] },
+    { "question" : "Do you think whistleblowers that publish classified documents exposing illegality should be jailed?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "society", "politics" ] },
+
+    { "question" : "Do you think it should be illegal for citizens to sell digital reproductions of 200 year or older art that their government has taken by violence or stolen?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "society", "politics" ] },
+    { "question" : "Do you think it should be illegal to copy an artists style, without permission, if it's less than 50 years old?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "society", "politics" ] },
+    { "question" : "Do you think, in general, it should be legal to be able to copy and resell any art 50 years after its creation?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "society", "politics" ] },
+
+
+
     { "question" : "Do you think sex work should be decriminalized?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "society", "politics" ] },
 
     { "question" : "Do you think transsexual people should be referred to by their preferred pronouns (he/she/they/etc.)?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "society", "politics" ] },
@@ -24,7 +46,7 @@ var g_data = {
     { "question" : "Do you believe we should reduce our population?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "society", "politics" ] },
 
     { "question" : "Do you consider yourself a Republican?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "US", "US politics", "politics" ] },
-    { "question" : "Do you consider yourself an Independent?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "US", "US politics", "politics" ] },
+    { "question" : "Do you consider yourself an Independent, in the political sense?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "US", "US politics", "politics" ] },
 
     { "question" : "Do you believe it's more difficult to be of African descent in the US than it is to be white?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "US", "US politics", "politics" ] },
     { "question" : "Do you believe it's more difficult to be of Asian descent in the US than it is to be white?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "US", "US politics", "politics" ] },
@@ -44,7 +66,8 @@ var g_data = {
     { "question" : "Do you think Cannabis (Marijuana/Weed) should be legal for medicinal use?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "politics", "crime", "drugs" ] },
     { "question" : "Do you think Cannabis (Marijuana/Weed) should be legal for recreational use?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "politics", "crime", "drugs" ] },
     { "question" : "Do you think the use of all recreational drugs should be decriminalized?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "politics", "crime", "drugs" ] },
-    { "question" : "Do you think a drug dealer should get the same or worse punishment as a murder?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "politics", "crime" ] },
+//    { "question" : "Do you think a drug dealer should get the same or worse punishment as a murder?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "politics", "crime" ] },
+    { "question" : "Do you think punishment for drug dealing should be worse than that of murder?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "politics", "crime" ] },
 
     { "question" : "Do you consider yourself against legalized abortion?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [  "politics", "abortion" ] },
     { "question" : "Do you consider yourself for legalized abortion?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "politics", "abortion" ] },
@@ -63,11 +86,12 @@ var g_data = {
     { "question" : "Do you believe in the Devil?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "religion" ] },
     { "question" : "Do you believe in a soul?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "religion" ] },
 
-    { "question" : "Do you consider yourself Christian?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "religion" ] },
-    { "question" : "Do you consider yourself Catholic?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "religion" ] },
-    { "question" : "Do you consider yourself Jewish in the religious sense?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "religion" ] },
-    { "question" : "Do you consider yourself Muslim?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "religion" ] },
-    { "question" : "Do you consider yourself Buddhist?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "religion" ] },
+//    { "question" : "Do you consider yourself Christian?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "religion" ] },
+//    { "question" : "Do you consider yourself Catholic?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "religion" ] },
+//    { "question" : "Do you consider yourself Jewish in the religious sense?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "religion" ] },
+//    { "question" : "Do you consider yourself Muslim?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "religion" ] },
+//    { "question" : "Do you consider yourself Buddhist?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "religion" ] },
+
     { "question" : "Do you consider yourself agnostic?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "religion" ] },
     { "question" : "Do you consider yourself an atheist?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "religion" ] },
     { "question" : "Do you consider yourself a dualist?", "answer_candidate" : [ "yes", "no", "skip" ], "tag" : [ "religion" ] },
