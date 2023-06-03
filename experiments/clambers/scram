@@ -1,0 +1,44 @@
+#!/usr/bin/python3
+#
+# License: CC0
+#
+
+import sys
+import re
+import os
+
+try:
+  os.makedir("./data")
+except:
+  pass
+
+def letsort(w):
+  a = []
+  for idx in range(len(w)):
+    a.append( w[idx] )
+
+  a.sort()
+  return "".join(a)
+
+sw = sys.argv[1]
+
+ssw = letsort(sw)
+
+SCRAM_FN = "./scram.word"
+
+rword_lookup = {}
+
+with open(SCRAM_FN) as fp:
+  for line in fp:
+    line = line.strip()
+    tok = line.split(" ")
+    rword_lookup[tok[0]] = tok[1:]
+
+ans = []
+if ssw in rword_lookup:
+  ans = rword_lookup[ssw]
+
+print( sw, ">>>", ssw , ">>>", " ".join(ans) )
+
+
+
