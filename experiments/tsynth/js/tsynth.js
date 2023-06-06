@@ -1,6 +1,97 @@
 // https://pdm.lsupathways.org/3_audio/2_synthsandmusic/1_lesson_1/envelopes/
 //
 
+function noise_filter() {
+	const filter = new Tone.Filter(1500, "highpass").toDestination();
+	filter.frequency.rampTo(20000, 10);
+	const noise = new Tone.Noise().connect(filter).start();
+}
+
+function tsynth(f) {
+  let synth_opt = {
+    "oscillator": {
+      "volume": 0.9,
+      "count": 3,
+      //"spread": 40,
+      "spread": 10,
+      //"type": "square"
+      "type": "sawtooth"
+    },
+    "envelope": {
+      "attack": 0.5,
+      "decay": 0.5,
+      "sustain": 1,
+      "release": 5
+    },
+    "detune": -1,
+
+    "filterEnvelope": {
+      "attack": 0.5,
+      "decay": 0.5,
+      "sustain": 1,
+      "release": 5
+    },
+
+    "filter" : {
+      "type": "lowpass",
+      //"gain": 1,
+      "frequency": f,
+      "rolloff" : -12,
+      "Q": 0.25
+    }
+
+  };
+
+  let _xx = {
+    "filterEnvelope": {
+      "attack": -100.5,
+      "decay": 0.5,
+      "sustain": 1,
+      "release": 100
+    }
+  };
+
+  let amp_opt = {
+    "attack": 0.1,
+    "decay": 0.2,
+    "sustain": 1.0,
+    "release": 0.8
+  };
+
+
+  let filt_opt = {
+    "type": "lowpass",
+    //"gain": 1,
+    "frequency": f,
+    "rolloff" : -12,
+    "Q": 1
+  };
+
+  //let filter = new Tone.Filter(filt_opt);
+  let filter = new Tone.Filter(f, "lowpass");
+  let delay = new Tone.FeedbackDelay(0.125, 0.125);
+
+  let synth =
+    new Tone.PolySynth( Tone.MonoSynth,
+                        synth_opt );
+  synth.connect(filter);
+  filter.connect(delay);
+
+  //synth.connect(delay);
+
+  delay.toDestination();
+  //filter.toDestination();
+
+  //synth = synth.connect(delay);
+
+
+  //synth = synth.connect(filter);
+  //synth = synth.toDestination();
+
+
+  //synth.triggerAttackRelease("C4", "8n");
+  synth.triggerAttackRelease(["C4", "E4", "A4"], 1);
+}
 
 
 function init() {
