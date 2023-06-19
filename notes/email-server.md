@@ -34,7 +34,7 @@ note: DNS needs to be updated to point to the appropriate place
 
 ```
 # certbot --nginx
-...: example.com,www.example.com
+...: arborgorge.com,www.arborgorge.com,webmail.arborgorge.com
 
 # systemctl restart nginx
 ```
@@ -45,6 +45,11 @@ note: DNS needs to be updated to point to the appropriate place
 apt-get install -y postfix
 apt-get install -y dovecot-core dovecot-dev dovecot-imapd dovecot-pop3d
 ```
+
+```
+sudo apt-get install -y libsasl2-2 sasl2-bin libsasl2-modules
+```
+
 ### DKIM, SpamAssassin
 
 ```
@@ -218,6 +223,121 @@ meow@arborgorge.com meow@arborgorge.com
 
 ---
 
+
+### roundcube
+
+* `/usr/share/doc/roundcube`
+* `dbconfig-common`
+
+
+
+```
+# apt install roundcube
+# apt install -y php php-fpm php-gd php-common php-json php-imagick php-imap php-xml php-mbstring php-curl php-zip php-bz2 php-intl php-ldap
+```
+
+During installation, depending on your setup, roundcube can set up a database and user.
+
+`certbot` altered the `/etc/nginx/conf.d/roundcube.conf` configuration.
+Regardless, the configuration should look something like:
+
+```
+server {
+
+  server_name webmail.arborgorge.com;
+  root /var/www/roundcube;
+
+  index index.php index.html index.htm;
+
+  error_log /var/log/nginx/roundcube.error;
+  access_log /var/log/nginx/roundcube.access;
+
+  ## TEMPORARY TO ONLY ALLOW ACCESS FROM ONE HOST WHEN INSTALLING
+  #location / {
+  #  allow 8.7.5.6; # filler ip
+  #  deny all;
+  #}
+
+
+  location ~ ^/(README.md|INSTALL|LICENSE|CHANGELOG|UPGRADING)$ {
+    deny all;
+  }
+
+  location ~ ^/(config|temp|logs)/ {
+    deny all;
+  }
+
+  location ~ /\. {
+    deny all;
+  }
+
+  location ~ \.php$ {
+    include snippets/fastcgi-php.conf;
+    fastcgi_pass unix:/run/php/php8.1-fpm.sock;
+  } 
+
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/arborgorge.com/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/arborgorge.com/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+}
+
+server {
+    if ($host = webmail.arborgorge.com) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+  listen 80;
+
+  server_name webmail.arborgorge.com;
+    return 404; # managed by Certbot
+
+
+}
+```
+
+`/etc/dovecot/conf.d`:
+
+```
+#mail_location = mbox:~/mail:INBOX=/var/mail/%u
+mail_location = maildir:~/Maildir
+```
+
+`/etc/postfix/main.cf`:
+
+```
+home_mailbox = Maildir/
+mydestination = $myhostname, webmail.$myhostname, localhost
+```
+
+`/var/www/roundcube/config/config.inc.php`:
+
+```
+$config['db_dsnw'] = 'mysql://roundcube:XXX@localhost/roundcube';
+
+$config['product_name'] = 'Roundcube Webmail';
+
+$config['des_key']  = 'XXXXXXXXXXXXXXXXXXXXXXXX';
+
+
+$config['default_host'] = [
+  'webmail.arborgorge.com' => 'Arbor Gorge Webmail'
+];
+
+
+// IMAP
+$rcmail_config['default_host'] = 'arborgorge.com';
+$rcmail_config['default_port'] = 143;
+// SMTP
+$rcmail_config['smtp_server'] = 'arborgorge.com';
+$rcmail_config['smtp_port'] = 25;
+
+```
+
+
 ### user addition
 
 ```
@@ -234,6 +354,7 @@ Glossary
 | `MTA` | Mail Transfer Agent | email transmission |
 | `MDA` | Mail Delivery Agent | delivery of mail to (local) user |
 | `MUA` | Mail User Agent | email client (thunderbird, outlook, etc) |
+| `sasl` | Simple Authentication and Security Layer | framework for authentication and security |
 
 
 References
@@ -247,3 +368,5 @@ References
 * [postfix DO](https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-postfix-on-ubuntu-20-04)
 * [postfix upcloud](https://upcloud.com/resources/tutorials/secure-postfix-using-lets-encrypt)
 * [rfc5321](http://www.faqs.org/rfcs/rfc5321.html)
+* [roundcube on ubuntu with nginx](https://www.linuxtuto.com/how-to-install-roundcube-on-ubuntu-22-04/)
+* [sasl](https://www.civo.com/learn/setting-up-a-postfix-mail-server-with-dovecot)
