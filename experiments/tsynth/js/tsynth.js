@@ -123,10 +123,12 @@ function init2() {
   synth.triggerAttackRelease(["C4", "E4", "A4"], 1);
 }
 
+var g_info = {};
+
 function init3() {
   let _synth = new Tone.Synth({
     oscillator : {
-      volume: 5,
+      volume: 1,
       count: 3,
       spread: 90,
       type : "fatsawtooth"
@@ -139,11 +141,46 @@ function init3() {
     }
   });
 
-  const synth = new Tone.PolySynth( Tone.Synth, _synth.get() ).toDestination();
+  let synth = new Tone.PolySynth( Tone.Synth, _synth.get() ).toDestination();
   //const synth = new Tone.PolySynth( Tone.Synth ).toDestination();
-  synth.set({ detune: -1200 });
+  synth.set({ detune: -10 });
   synth.triggerAttackRelease(["C4", "E4", "A4"], 1);
+
+  g_info.synth = synth;
 }
+
+function init4() {
+  let _synth = new Tone.MonoSynth({
+    oscillator : {
+      volume: 1,
+      count: 3,
+      spread: 90,
+      type : "fatsawtooth"
+    },
+    envelope : {
+      attack: 2,
+      decay: 1,
+      sustain: 0.4,
+      release: 4
+    },
+    filterEnvelope : {
+      attack: 2,
+      decay: 1,
+      sustain: 0.4,
+      release: 4
+    }
+
+  });
+
+  let synth = new Tone.PolySynth( Tone.MonoSynth, _synth.get() ).toDestination();
+  synth.set({ detune: -10 });
+  //synth.triggerAttackRelease(["C4", "E4", "A4"], 1);
+  synth.triggerAttackRelease(["C4"], 1);
+
+  g_info.synth = synth;
+}
+
+
 
 function _x() {
 
