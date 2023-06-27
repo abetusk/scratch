@@ -218,6 +218,100 @@ spamfilter unix  -       n       n       -       -       pipe
 ...
 ```
 
+---
+
+### Using Dovecot's mdbox
+
+---
+
+Use local mail transport protocol (`lmtp`)
+
+```
+# apt-get install -y dovecot-lmtp
+```
+
+`/etc/dovecot/dovecot.conf`:
+
+```
+...
+!include conf.d/*.conf
+...
+mail_location = mdbox:~/mdbox
+...
+protocols = imap lmtp
+...
+service lmtp { 
+  unix_listener /var/spool/postfix/private/dovecot-lmtp  {
+    group = postfix
+    mode = 0600
+    user = postfix
+  }
+}
+...
+```
+
+---
+
+Strip the domain name when passing in user to authenticate (`%Ln` lowercase userName):
+
+`/etc/dovecot/conf.d/20-lmtp.conf`:
+
+```
+protocol lmtp {
+  hostname = arborgorge.com
+  auth_username_format = %Ln
+}
+```
+
+This threw me because `auth_username_format` is available at a higher level but needs to be specified here
+to work.
+
+---
+
+Get rid of the errors of UID 0 accessing the `passwd` file (or some such):
+
+`/etc/dovecot/conf.d/10-mail.conf`:
+
+```
+...
+first_valid_gid = 0
+...
+```
+
+---
+
+Finally, make sure Postfix knows about how to deliver mail to the `lmtp` agent:
+
+`/etc/postfix/main.cf`:
+
+```
+...
+mailbox_transport = lmtp:unix:private/dovecot-lmtp
+virtual_transport = lmtp:unix:private/dovecot-lmtp
+...
+```
+
+---
+
+Some notes on administrative usage to search the `mdbox` formatted files (see [here](https://superuser.com/questions/1523594/how-can-i-view-mail-using-doveadm) and [here](https://wiki.dovecot.org/Tools/Doveadm/Fetch)): 
+
+```
+# doveadm fetch -u abetusk "mailbox guid" '*'
+mailbox: Sent
+guid: c25fa40c3a789a640acf0400cba4f65e
+
+mailbox: INBOX
+guid: c06d92030e769a6457cb0400cba4f65e
+# doveadm fetch -u abetusk "mailbox text" guid c25fa40c3a789a640acf0400cba4f65e
+...
+```
+
+Presumably you can import with the same tool...
+
+---
+
+
+---
 
 ---
 
@@ -568,6 +662,20 @@ $rcmail_config['smtp_port'] = 25;
 # groupadd -g 5000 vmail
 # useradd -g vmail -u 5000 vmail -d /var/mail/vmail -m 
 ```
+
+Misc. Notes
+---
+
+Roundcube is basically a server hosted IMAP client, using, in this case, Dovecot
+to manage the IMAP interface.
+
+
+* `mbox` is an old standard way of storing emails in a single huge file (see [here](https://www.loc.gov/preservation/digital/formats/fdd/fdd000383.shtml))
+* `Maildir` is another standard that uses a file per message (see [here](https://en.wikipedia.org/wiki/Maildir), [man](https://manpages.debian.org/stretch/qmail/maildir.5.en.html), [dovecot](https://doc.dovecot.org/admin_manual/mailbox_formats/maildir/), )
+* `dbox` is dovecots own answer, grouping multiple messages into a single file but keeping the grouped messages in a single directory ([dbox](https://doc.dovecot.org/admin_manual/mailbox_formats/dbox/#dbox-mbox-format))
+  - for what it's worth, this looks a lot like what SmarterMail is doing (even going so far as to name their files `.grp` with year, day, month file name)
+
+
 
 
 Glossary
