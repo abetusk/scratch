@@ -1,6 +1,15 @@
 Git Notes
 ===
 
+Git has four basic types:
+
+* `blob`
+* `tree`
+* `commits`
+* `tag`
+
+---
+
 The basic `blob` unit.
 The content of the file is prefixed with the `blob `
 and ASCII length, terminated by a `0` character.
@@ -56,6 +65,20 @@ $ zlib-flate -uncompress < .git/objects/97/b49d4c943e3715fe30f141cc6f27a8548cee0
 0000002d
 ```
 
+Misc. Notes
+---
+
+Git has different policies for knowing when to update files which could be based on individual file
+alteration time, directory alteration time, etc.
+This means through a clever combination of cache policy and size, date or other intentional manipulation,
+you can fool git into thinking something shouldn't need to be committed even though it's been altered.
+
+Providing full inspection of every file when determining what to commit is thorough but can be slow
+as it needs to inspect every byte of every file, which is why the different policies for determining
+what to update can be put into place.
+
+Not every policy is good for every workflow so different policies can be put into place subject to taste.
+
 
 References
 ---
@@ -63,3 +86,4 @@ References
 * [Advanced Git Graphs, Hashes, and Compression, Oh My!](https://www.youtube.com/watch?v=ig5E8CcdM9g)
 * [SO: How to uncompress zlib data in UNIX?](https://unix.stackexchange.com/questions/22834/how-to-uncompress-zlib-data-in-unix/49066#49066)
 * [SO: What is the internal format of a Git tree object?](https://stackoverflow.com/questions/14790681/what-is-the-internal-format-of-a-git-tree-object)
+* [O'Reilly Git](https://www.oreilly.com/library/view/version-control-with/9781449345037/ch04.html)

@@ -125,7 +125,7 @@ function _romcol() {
     //let pp = _pill(0.1, 0.1, 0.9);
     let pp = _pill(pill_r, pill_r, pill_h, slice);
 
-    console.log("??", pp.v.length, pp.f.length);
+    //console.log("??", pp.v.length, pp.f.length);
 
     jeom.mov(pp.v, [dx,dy,0]);
     //pp = jeom.stitch(pp.v);
@@ -145,6 +145,12 @@ function _romcol() {
   }
 
   jeom.off_print(process.stdout, pl.v, pl.f);
+
+  //jeom.stl_print(process.stdout, pl.v);
+
+  //DEBUG
+  //console.log(pl.v, pl.f);
+
 }
 
 function _pill(x,y,z, slice) {
@@ -173,15 +179,15 @@ function _pill(x,y,z, slice) {
   jeom.mov(us1, [0,0,-0.5 + s_r/2])
   us1 = jeom.stitch(us1);
 
-  console.log("pl:", pl.v.length, pl.f.length, "us0:", us0.v.length, us0.f.length, "us1:", us1.v.length, us1.f.length);
+  //console.log("pl:", pl.v.length, pl.f.length, "us0:", us0.v.length, us0.f.length, "us1:", us1.v.length, us1.f.length);
 
   let ok = mcut_bop(pl, us0, 2);
 
-  console.log("  pl+us0:", ok.v.length, ok.f.length);
+  //console.log("  pl+us0:", ok.v.length, ok.f.length);
 
   ok = mcut_bop(ok, us1, 2);
 
-  console.log("  xx+us1:", ok.v.length, ok.f.length);
+  //console.log("  xx+us1:", ok.v.length, ok.f.length);
 
   //jeom.scale(ok.v, [0.5,0.5,0.9]);
   jeom.scale(ok.v, [x,y,z]);
@@ -197,8 +203,6 @@ function _column() {
   let sub_r = 0.125;
 
   let pl = jeom.stitch(jeom.pillar({"r":base_r, "slice":64 }));
-
-
 
   let _otr = 0.61;
 
@@ -221,10 +225,8 @@ function _column() {
 }
 
 function _main() {
-
   //_pill();
   _romcol();
-
 }
 
 function _wait_lib_load() {
@@ -232,8 +234,8 @@ function _wait_lib_load() {
     setTimeout(_wait_lib_load, 1);
     return;
   }
-
   _main();
 }
+
 _wait_lib_load();
 

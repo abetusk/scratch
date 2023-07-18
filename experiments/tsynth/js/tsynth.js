@@ -2,9 +2,96 @@
 //
 
 function noise_filter() {
-	const filter = new Tone.Filter(1500, "highpass").toDestination();
-	filter.frequency.rampTo(20000, 10);
-	const noise = new Tone.Noise().connect(filter).start();
+  const filter = new Tone.Filter(1500, "highpass").toDestination();
+  filter.frequency.rampTo(20000, 10);
+  const noise = new Tone.Noise().connect(filter).start();
+}
+
+function noise_note() {
+
+  let osc,
+   ampEnv,
+   ampLfo,
+   highFilter,
+   lowFilter,
+   noise,
+   ampEnvNoise;
+
+  //function setup() {
+  let reverb = new Tone.Reverb().toDestination();
+  reverb.generate().then(() => {
+     document.body.innerHTML = 'Reverb Ready! '
+  });
+    
+  ampLfo = new Tone.LFO('4n', -60, -3).start();
+  lfo2 = new Tone.LFO(10, 50, 500).start();
+
+  highFilter = new Tone.Filter(200, "highpass");
+  lowFilter = new Tone.Filter(200, "lowpass");
+
+  osc = new Tone.AMOscillator({
+    frequency: '440',
+    type: "sine",
+    modulationType: "square"
+  }).start();
+
+  noise = new Tone.Noise().start();
+
+  ampEnv = new Tone.AmplitudeEnvelope({
+    "attack": 0.1,
+    "decay": 0.2,
+    "sustain": 1,
+    "release": 0.8
+  }).connect(reverb);
+
+    // where the LFO is connected to what its modulating 
+  ampLfo.connect(osc.volume);
+  lfo2.connect(lowFilter.frequency);
+
+  highFilter.connect(ampEnv);
+  lowFilter.connect(ampEnv);
+
+  osc.connect(highFilter);
+  noise.connect(lowFilter);
+
+  let notes = [297.898, 330, 335.238, 342.222, 391.111, 385, 440]; 
+  let randomNote = Math.floor(Math.random()*notes.length); 
+  console.log(notes[randomNote])
+  osc.frequency.value = notes[randomNote]; 
+  ampEnv.triggerAttackRelease(1);
+
+  /*
+  function keyPressed() {
+   console.log(keyCode);
+   if (keyCode == 32) {
+      let notes = [297.898, 330, 335.238, 342.222, 391.111, 385, 440]; 
+      let randomNote = Math.floor(Math.random()*notes.length); 
+      console.log(notes[randomNote])
+      osc.frequency.value = notes[randomNote]; 
+    ampEnv.triggerAttackRelease(1);
+   } else if (keyCode == ENTER) {
+    ampEnv.attack = random(0.1, 2);
+    ampEnv.decay = random(0.2, 0.5);
+    ampEnv.release = random(0.1, 2);
+    console.log(`attack: ${ampEnv.attack}, decay: ${ampEnv.decay}, release: ${ampEnv.release}`)
+   } else if (keyCode == 49) {
+      
+    lfo2.frequency.value = 1;
+    ampLfo.frequency.value = 2;
+   } else if (keyCode == 50) {
+    lfo2.frequency.value = 2;
+    ampLfo.frequency.value = 4;
+
+   } else if (keyCode == 51) {
+    lfo2.frequency.value = 3;
+    ampLfo.frequency.value = 6;
+
+   } else if (keyCode == 52) {
+    lfo2.frequency.value = 4;
+    ampLfo.frequency.value = 8;
+   }
+  }
+  */
 }
 
 function tsynth(f) {

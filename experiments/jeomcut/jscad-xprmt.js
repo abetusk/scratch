@@ -529,6 +529,8 @@ function twist_sq() {
   let z0 = -0.5,
       dz = 1;
 
+  seg = 4;
+
   //let v = Math.sqrt(2)/2;
   let v = Math.sqrt(dx*dx + dy*dy)
 
@@ -539,9 +541,6 @@ function twist_sq() {
   let phi2 = 2*Math.PI/2;
   let phi3 = 3*Math.PI/2;
 
-  seg = 2;
-  //seg = 8;
-  seg = 64;
   for (let i=0; i<=seg; i++) {
     let a = ((i/seg)*dst_a) + (Math.PI/4);
     let z = (i/seg)*dz + z0;
@@ -559,15 +558,6 @@ function twist_sq() {
     pnt.push( [ xy2[0], xy2[1],  z ] );
     pnt.push( [ xy1[0], xy1[1],  z ] );
 
-    if (i==0) {
-      fce.push( [ 0, 2, 1 ] );
-      fce.push( [ 2, 0, 3 ] );
-    }
-    if (i==seg) {
-      fce.push( [ i0, i2, i3 ] );
-      fce.push( [ i0, i1, i2 ] );
-    }
-
     let i0 = 4*i+0;
     let i1 = 4*i+1;
     let i2 = 4*i+2;
@@ -577,6 +567,15 @@ function twist_sq() {
     let j1 = 4*(i-1)+1;
     let j2 = 4*(i-1)+2;
     let j3 = 4*(i-1)+3;
+
+    if (i==0) {
+      fce.push( [ 0, 2, 1 ] );
+      fce.push( [ 2, 0, 3 ] );
+    }
+    if (i==seg) {
+      fce.push( [ i0, i2, i3 ] );
+      fce.push( [ i0, i1, i2 ] );
+    }
 
     if (i>0) {
       fce.push( [ i0, j0, j1 ] );
@@ -682,7 +681,138 @@ function test_spiral() {
 
 }
 
-test_spiral();
+// top and bottom flange column are cylinders with
+// donuts subtrated off of them, with angle of top
+// flang intersection at pi/4.
+//
+function center_column_0() {
+
+  let config = {
+    "pill_n" : 0,
+    "pill_width_percent": 0.75,
+    //"pill_cap": "blunt",
+    "pill_cap": "sphere",
+    "pill_segments": 16
+  };
+
+  let pill_n = config.pill_n;
+
+  let _seg = 32;
+
+  let t_ri_theta = Math.PI / 4.0;
+
+  let c_hm = 0.8;
+
+  let c_ri = 0.125;
+  let c_ht = 0.05;
+
+  let t_ri = c_ht / Math.sin(t_ri_theta);
+  let c_del = c_ht / Math.tan((Math.PI/2) - t_ri_theta);
+
+  let c_ro = c_ri + c_del;
+
+  let t_or = c_ri + t_ri;
+
+  let c_circ_i = 2.0 * Math.PI * c_ri;
+
+
+  let _top_c = jscad.primitives.cylinder({"radius": c_ro, "height":c_ht, "segments": _seg, "center":[ 0,0,  c_ht/2]});
+  let _bot_c = jscad.primitives.cylinder({"radius": c_ro, "height":c_ht, "segments": _seg, "center":[ 0,0, -c_ht/2]});
+  let _tor = jscad.primitives.torus({"innerRadius": t_ri, "outerRadius": t_or, "segments": _seg });
+
+  //let _top = jscad.booleans.union( _top_c, _tor );
+  let _top = jscad.transforms.translate([0,0, c_hm/2], jscad.booleans.subtract( _top_c, _tor ));
+  let _bot = jscad.transforms.translate([0,0,-c_hm/2], jscad.booleans.subtract( _bot_c, _tor ));
+
+  let _mid = jscad.primitives.cylinder({"radius": c_ri, "height": c_hm, "segments": _seg, "center":[0,0,0]});
+
+  let _res = jscad.booleans.union([_top, _mid, _bot]);
+
+  if (config.pill_n > 0) {
+
+    //let _pill_r = 0.01;
+    //let _pill_r = .75*(c_circ_i / pill_n)/2;
+    let _pill_r = config.pill_width_percent*(c_circ_i / pill_n)/2;
+    let _pill_h = c_hm - 0.015;
+    //let _pill_seg = 16;
+    let _pill_seg = config.pill_segments;
+
+    let pill_geom = [];
+    for (let i=0; i<pill_n; i++) {
+      let _a = 2.0*Math.PI*i/pill_n;
+
+      let _x = Math.cos(_a) * (c_ri);
+      let _y = Math.sin(_a) * (c_ri);
+
+      //let _x = Math.cos(_a) * (c_ri )
+      //let _y = Math.sin(_a) * (c_ri );
+
+      let _p = {};
+
+      if (config.pill_cap == "blunt") {
+        _p = jscad.transforms.translate([ _x, _y, 0], jscad.primitives.cylinder({"radius": _pill_r, "height": _pill_h, "segments": _pill_seg}));
+      }
+      else {
+        _p = jscad.transforms.translate([ _x, _y, 0], pill({ "r": _pill_r, "r_c": _pill_r, "h": _pill_h, "segments": _pill_seg }));
+      }
+
+      pill_geom.push(_p);
+
+    }
+
+    _res = jscad.booleans.subtract( _res, pill_geom);
+
+    //let _res = jscad.booleans.union( jscad.booleans.union([_top, _mid, _bot]), pill_geom);
+    //let _res = jscad.booleans.union(pill_geom);
+
+  }
+
+  return _res;
+}
+
+function _center_column_0() {
+
+  let _ch_e = 0.05;
+  let _ch_m = 0.8;
+  let _cr = 0.125;
+  let _seg = 32;
+
+  let _eh = 0.1;
+
+  let _ch_t = 0.05;
+
+
+  let _t_theta = Math.PI / 4;
+
+  let _t_ri = _ch_t / Math.sin(_t_theta);
+
+  //let _c_ri = 0.125;
+  let _c_ri = _t_ri * Math.cos(_t_theta);
+  let _c_ro = _c_ri + (_t_ri * Math.sqrt(2) / 2.0);
+
+  let _t_or = _c_ri + _t_ri;
+
+  //let _tor = jscad.primitives.torus({"innerRadius":_t_ri, "outerRadius": _t_or, "segments": _seg, "center": [0,0,(_ch_m+_ch_e)/2] });
+  //let _top_c = jscad.primitives.cylinder({"radius": _cr + 0.1, "height":_ch_e, "center":[0,0,(_ch_m+_ch_e)/2], "segments": _seg});
+
+  let _tor = jscad.primitives.torus({"innerRadius":_t_ri, "outerRadius": _t_or, "segments": _seg });
+  //let _top_c = jscad.primitives.cylinder({"radius": _cr + _t_ri, "height":_ch_e, "segments": _seg, "center":[ 0,0, _ch_e/2] });
+  let _top_c = jscad.primitives.cylinder({"radius": _c_ro, "height":_ch_e, "segments": _seg, "center":[ 0,0, _ch_e/2] });
+
+  //let _top = jscad.booleans.subtract( _top_c, _tor );
+  let _top = jscad.booleans.union( _top_c, _tor );
+  return _top;
+
+
+  let c = jscad.primitives.cylinder({"radius": _cr, "height":_ch_m, "center":[0,0,0], "segments": _seg});
+
+
+  return c;
+}
+
+toobj(center_column_0());
+
+//test_spiral();
 
 //toobj(column_mid_blasius_twist({"a": Math.PI, "w": 0.25, "r_c": (1/32) }));
 
@@ -697,8 +827,9 @@ test_spiral();
 //toobj(pillar_part_flare_circle());
 //toobj(pillar_part_pancake());
 
-//let p = pill();
+//let p = pill({ "r": 0.125, "r_c": 0.125, "h": 1, "segments": 32 });
 //toobj(p);
+
 //let p = pill({"h":0.85, "r":1/32, "r_c":1/48});
 //toobj(p);
 
@@ -707,6 +838,9 @@ test_spiral();
 
 
 //----
+
+//let z = cube({"size":1});
+//toobj(z);
 
 function main () {
   return cube({ size: 1 })
