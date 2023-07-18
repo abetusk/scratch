@@ -688,8 +688,14 @@ function test_spiral() {
 function center_column_0() {
 
   let config = {
-    "pill_n" : 0,
-    "pill_width_percent": 0.75,
+    "height_mid": .8,
+    "height_end": 0.05,
+    //"innerRadius": 0.125,
+    "outerRadius": 0.13,
+    "segments": 32,
+
+    "pill_n" : 16,
+    "pill_width_percent": 0.55,
     //"pill_cap": "blunt",
     "pill_cap": "sphere",
     "pill_segments": 16
@@ -697,19 +703,28 @@ function center_column_0() {
 
   let pill_n = config.pill_n;
 
-  let _seg = 32;
+  //let _seg = 32;
+  let _seg = config.segments;
 
   let t_ri_theta = Math.PI / 4.0;
 
-  let c_hm = 0.8;
+  //let c_hm = 0.8;
+  let c_hm = config.height_mid;
 
-  let c_ri = 0.125;
-  let c_ht = 0.05;
+  //let c_ri = 0.125;
+  //let c_ht = 0.05;
+  let c_ht = config.height_end;
+
+  //c_ri = config.innerRadius;
+
 
   let t_ri = c_ht / Math.sin(t_ri_theta);
   let c_del = c_ht / Math.tan((Math.PI/2) - t_ri_theta);
 
-  let c_ro = c_ri + c_del;
+  let c_ro = config.outerRadius;
+  let c_ri = c_ro - c_del;
+
+  //let c_ro = c_ri + c_del;
 
   let t_or = c_ri + t_ri;
 
