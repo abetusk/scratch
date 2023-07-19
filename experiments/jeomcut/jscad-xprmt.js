@@ -15,6 +15,8 @@
 
 var jscad = require('@jscad/modeling')
 var io = require("@jscad/io");
+const stlSerializer = require('@jscad/stl-serializer')
+
 
 const { cube } = jscad.primitives
 
@@ -45,6 +47,12 @@ function toobj(geom) {
   console.log(obj_txt_out.join("\n"));
 }
 
+function tostl(geom) {
+  let stl_out = stlSerializer.serialize({binary: false}, geom);
+  console.log(stl_out.join("\n"));
+}
+
+
 function pill(info) {
   info = ((typeof info === "undefined") ? {} : info);
   let _cr = ((typeof info.r === "undefined") ? 0.25 : info.r );
@@ -65,6 +73,8 @@ function pill(info) {
   return u;
 }
 
+// looks to be a midsection, not a bsae?
+//
 function pillar_base() {
 
   let r = 0.25;
@@ -101,6 +111,9 @@ function pillar_base() {
   return cyl
 }
 
+
+// 'fat' disc
+//
 function sconut(info) {
   info = ((typeof info === "undefined") ? {} : info);
   let seg = ((typeof info.segments === "undefined") ? 64 : info.segments);
@@ -122,6 +135,8 @@ function sconut(info) {
   return _res;
 }
 
+// donut subtracted out from disc
+//
 function scinut(info) {
   info = ((typeof info === "undefined") ? {} : info);
   let seg = ((typeof info.segments === "undefined") ? 64 : info.segments);
@@ -144,6 +159,8 @@ function scinut(info) {
   return _res;
 }
 
+// fat disc
+//
 function pillar_part_pancake(info) {
   info = ((typeof info === "undefined") ? {} : info);
   let seg = ((typeof info.segments === "undefined") ? 64 : info.segments);
@@ -166,6 +183,9 @@ function pillar_part_pancake(info) {
   return _res;
 }
 
+// trapezoidal like structure, rounded top, goes to shar square at (smaller)
+// bottom
+//
 function pillar_part_flare_square(info) {
   info = ((typeof info === "undefined") ? {} : info);
   let seg = ((typeof info.segments === "undefined") ? 64 : info.segments);
@@ -204,6 +224,8 @@ function pillar_part_flare_square(info) {
   return _res;
 }
 
+// rouned square on tpo to flat circle underneath
+//
 function pillar_part_flare_circle(info) {
   info = ((typeof info === "undefined") ? {} : info);
   let seg = ((typeof info.segments === "undefined") ? 64 : info.segments);
@@ -681,18 +703,61 @@ function test_spiral() {
 
 }
 
+function column_end_0(_info) {
+  if (typeof _info === "undefined") { _info = {}; }
+  let info = {};
+
+  // bound box size
+  //
+  let default_info = {
+    "size": [0.25, 0.25, 0.05],
+    "columnRadius": 0.12/2,
+    "roundRadius": 0.05/4,
+    "segments": 32,
+    "center": [0,0,0]
+  };
+  for (let _k in default_info) {
+    info[_k] = default_info[_k];
+    if (_k in _info) { info[_k] = _info[_k]; }
+  }
+
+  let h = info.size[2];
+
+  let r = info.roundRadius;
+  let dx = (info.size[0]/2) - r + info.center[0];
+  let dy = (info.size[1]/2) - r + info.center[1];
+  let dz = (info.size[2]/2) - r + info.center[2];
+
+  let s0 = jscad.primitives.sphere({"radius":r, "center":[-dx, -dy, dz]});
+  let s1 = jscad.primitives.sphere({"radius":r, "center":[ dx, -dy, dz]});
+  let s2 = jscad.primitives.sphere({"radius":r, "center":[ dx,  dy, dz]});
+  let s3 = jscad.primitives.sphere({"radius":r, "center":[-dx,  dy, dz]});
+
+  let c_r = info.columnRadius;
+
+  let cy = jscad.primitives.cylinder({"radius": c_r, "height": h, "center": [ info.center[0], info.center[1], info.center[2] ]});
+
+  let _hull = jscad.hulls.hull(s0,s1,s2,s3, cy);
+  return _hull;
+
+}
+
 // top and bottom flange column are cylinders with
 // donuts subtrated off of them, with angle of top
 // flang intersection at pi/4.
 //
-function center_column_0() {
+function column_center_0(_info) {
+  if (typeof _info === "undefined") { _info = {}; }
+  let info = {};
 
-  let config = {
+  let default_info = {
     "height_mid": .8,
     "height_end": 0.05,
     //"innerRadius": 0.125,
     "outerRadius": 0.13,
     "segments": 32,
+
+    "theta": Math.PI / 4.0,
 
     "pill_n" : 16,
     "pill_width_percent": 0.55,
@@ -700,28 +765,35 @@ function center_column_0() {
     "pill_cap": "sphere",
     "pill_segments": 16
   };
+  for (let _k in default_info) {
+    if (_k in _info) { info[_k] = _info[_k]; }
+    else { info[_k] = default_info[_k]; }
+  }
 
-  let pill_n = config.pill_n;
+
+
+  let pill_n = info.pill_n;
 
   //let _seg = 32;
-  let _seg = config.segments;
+  let _seg = info.segments;
 
-  let t_ri_theta = Math.PI / 4.0;
+  //let t_ri_theta = Math.PI / 4.0;
+  let t_ri_theta = info.theta;
 
   //let c_hm = 0.8;
-  let c_hm = config.height_mid;
+  let c_hm = info.height_mid;
 
   //let c_ri = 0.125;
   //let c_ht = 0.05;
-  let c_ht = config.height_end;
+  let c_ht = info.height_end;
 
-  //c_ri = config.innerRadius;
+  //c_ri = info.innerRadius;
 
 
   let t_ri = c_ht / Math.sin(t_ri_theta);
-  let c_del = c_ht / Math.tan((Math.PI/2) - t_ri_theta);
+  let c_del = c_ht / Math.tan( (Math.PI - t_ri_theta) / 2 );
 
-  let c_ro = config.outerRadius;
+  let c_ro = info.outerRadius;
   let c_ri = c_ro - c_del;
 
   //let c_ro = c_ri + c_del;
@@ -743,14 +815,14 @@ function center_column_0() {
 
   let _res = jscad.booleans.union([_top, _mid, _bot]);
 
-  if (config.pill_n > 0) {
+  if (info.pill_n > 0) {
 
     //let _pill_r = 0.01;
     //let _pill_r = .75*(c_circ_i / pill_n)/2;
-    let _pill_r = config.pill_width_percent*(c_circ_i / pill_n)/2;
+    let _pill_r = info.pill_width_percent*(c_circ_i / pill_n)/2;
     let _pill_h = c_hm - 0.015;
     //let _pill_seg = 16;
-    let _pill_seg = config.pill_segments;
+    let _pill_seg = info.pill_segments;
 
     let pill_geom = [];
     for (let i=0; i<pill_n; i++) {
@@ -764,7 +836,7 @@ function center_column_0() {
 
       let _p = {};
 
-      if (config.pill_cap == "blunt") {
+      if (info.pill_cap == "blunt") {
         _p = jscad.transforms.translate([ _x, _y, 0], jscad.primitives.cylinder({"radius": _pill_r, "height": _pill_h, "segments": _pill_seg}));
       }
       else {
@@ -783,6 +855,67 @@ function center_column_0() {
   }
 
   return _res;
+}
+
+function marker() {
+
+  let ds = 1/64;
+
+  let geom_list = [];
+
+  for (let ix=0; ix<2; ix++) {
+    for (let iy=0; iy<2; iy++) {
+      for (let iz=0; iz<2; iz++) {
+
+        let dx = (ix-0.5);
+        let dy = (iy-0.5);
+        let dz = (iz-0.5);
+
+        let c = jscad.primitives.cube({"size":ds, "center": [dx, dy, dz]});
+        geom_list.push(c);
+
+      }
+    }
+  }
+
+
+  return geom_list;
+}
+
+function column_0() {
+
+  //let base_s = 0.18/2;
+  let base_s = 0.3;
+  let col_r = 0.15;
+  let _seg = 32;
+
+  let _top_h = 0.05;
+  let _mid_ch = 0.8;
+  let _mid_th = 0.05;
+
+  let dz = (_mid_ch/2) + _mid_th + (_top_h/2);
+
+  let _t = column_end_0({
+    "size": [base_s, base_s, _top_h],
+    "columnRadius": col_r,
+    "roundRadius": _top_h/4,
+    "segments": _seg,
+    "center": [0,0, dz]
+  });
+
+  let _m = column_center_0({
+    "outerRadius": col_r,
+    "height_mid": _mid_ch,
+    "height_end": _mid_th
+  });
+
+  //DEBUG
+  let _marker = marker();
+  let xx = jscad.primitives.cylinder({"height":0.125, "radius": col_r, "center":[0,0,-1]});
+
+  return jscad.booleans.union(_t, _m, _marker, xx);
+
+
 }
 
 function _center_column_0() {
@@ -825,7 +958,39 @@ function _center_column_0() {
   return c;
 }
 
-toobj(center_column_0());
+
+function scene_experiment_0() {
+
+  let dx = 2.0, dy = 2.0;
+
+  dx = 1.0;
+  dy = 1.0;
+
+  let _column = column_center_0();
+
+  let n = 2;
+
+  let o = [];
+  for (i=0; i<n; i++) {
+    for (j=0; j<n; j++) {
+      o.push( jscad.transforms.translate([i*dx, j*dy, 0], _column) );
+    }
+  }
+
+  return o;
+  //return jscad.booleans.union(o);
+}
+
+//toobj(center_column_0());
+
+//toobj(scene_experiment_0());
+//tostl(scene_experiment_0());
+
+//tostl( pillar_part_flare_circle() );
+tostl( column_0() );
+
+//tostl(column_end_0());
+//tostl(jscad.booleans.union( column_end_0({"center":[0,0,0.5], "roundRadius":0.0125}), marker() ));
 
 //test_spiral();
 
