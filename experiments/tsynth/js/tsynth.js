@@ -180,6 +180,28 @@ function init4() {
   g_info.synth = synth;
 }
 
+function multiple_osc_test() {
+  let ampEnv = new Tone.AmplitudeEnvelope({
+    attack: 0.1,
+    decay: 0.2,
+    sustain: 1.0,
+    release: 0.8
+  }).toDestination();
+
+  let osc0 = new Tone.Oscillator(440, "sine");
+  let osc1 = new Tone.Oscillator(440.5, "sawtooth");
+  let osc2 = new Tone.Oscillator(439.5, "sawtooth");
+
+  // create an oscillator and connect it
+  //const osc123 = new Tone.Oscillator().connect(ampEnv).start();
+
+  osc0.connect(ampEnv).start();
+  osc1.connect(ampEnv).start();
+  osc2.connect(ampEnv).start();
+
+  ampEnv.triggerAttackRelease("8t");
+}
+
 
 
 function _x() {
