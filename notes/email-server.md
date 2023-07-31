@@ -1,6 +1,324 @@
 Email Server Notes
 ===
 
+Following DO tutorial.
+
+```
+# cat /etc/lsb-release 
+DISTRIB_ID=Ubuntu
+DISTRIB_RELEASE=22.04
+DISTRIB_CODENAME=jammy
+DISTRIB_DESCRIPTION="Ubuntu 22.04.2 LTS"
+```
+
+```
+# apt-get intall -y postfix dovecot-core dovecot-imapd dovecot-pop3d
+```
+
+---
+
+`/etc/postfix/master.cf`:
+
+```
+submission inet n       -       y       -       -       smtpd
+  -o syslog_name=postfix/submission
+  -o smtpd_tls_wrappermode=no
+  -o smtpd_tls_security_level=encrypt
+  -o smtpd_sasl_auth_enable=yes
+  -o smtpd_recipient_restrictions=permit_mynetworks,permit_sasl_authenticated,reject
+  -o milter_macro_daemon_name=ORIGINATING
+  -o smtpd_sasl_type=dovecot
+  -o smtpd_sasl_path=private/auth
+```
+
+---
+
+`/etc/postfix/main.cf`:
+
+```
+...
+smtpd_tls_cert_file = /etc/letsencrypt/live/arborgorge.com/fullchain.pem
+smtpd_tls_key_file = /etc/letsencrypt/live/arborgorge.com/privkey.pem
+smtpd_use_tls = yes
+smtpd_tls_session_cache_database = btree:${data_directory}/smtpd_scache
+smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
+
+smtpd_tls_protocols = !SSLv2, !SSLv3
+
+local_recipient_maps = proxy:unix:passwd.byname $alias_maps
+smtpd_sasl_security_options = noanonymous
+mydestination = mail.$myhostname, $myhostname, localhost
+...
+```
+
+---
+
+`/etc/dovecot/dovecot.conf`:
+
+```
+disable_plaintext_auth = no
+mail_privileged_group = mail
+mail_location = mbox:~/mail:INBOX=/var/mail/%u
+userdb {
+  driver = passwd
+}
+passdb {
+  args = %s
+  driver = pam
+}
+protocols = " imap"
+namespace inbox {
+  inbox = yes
+  mailbox Trash {
+    auto = subscribe # autocreate and autosubscribe the Trash mailbox
+    special_use = \Trash
+  }
+  mailbox Sent {
+    auto = subscribe # autocreate and autosubscribe the Sent mailbox
+    special_use = \Sent
+  }
+}
+service auth {
+  unix_listener /var/spool/postfix/private/auth {
+    group = postfix
+    mode = 0660
+    user = postfix
+  }
+}
+ssl=required
+ssl_cert = </etc/letsencrypt/live/arborgorge.com/fullchain.pem
+ssl_key = </etc/letsencrypt/live/arborgorge.com/privkey.pem
+```
+
+Note, the above is the entirety of the file. All default text was removed.
+
+---
+
+`/etc/nginx/conf.d/roundcube.conf`:
+
+```
+server {
+
+  server_name webmail.arborgorge.com;
+  root /var/www/roundcube;
+
+  index index.php index.html index.htm;
+
+  error_log /var/log/nginx/roundcube.error;
+  access_log /var/log/nginx/roundcube.access;
+
+  # for first time installation of roundcube
+  #location / {
+  #  allow 24.59.252.206;
+  #  deny all;
+  #}
+
+
+  location ~ ^/(README.md|INSTALL|LICENSE|CHANGELOG|UPGRADING)$ {
+    deny all;
+  }
+
+  location ~ ^/(config|temp|logs)/ {
+    deny all;
+  }
+
+  location ~ /\. {
+    deny all;
+  }
+
+  location ~ \.php$ {
+    include snippets/fastcgi-php.conf;
+    fastcgi_pass unix:/run/php/php8.1-fpm.sock;
+  } 
+
+  listen 443 ssl; # managed by Certbot
+  ssl_certificate /etc/letsencrypt/live/arborgorge.com/fullchain.pem; # managed by Certbot
+  ssl_certificate_key /etc/letsencrypt/live/arborgorge.com/privkey.pem; # managed by Certbot
+  include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+  ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+}
+
+server {
+  if ($host = webmail.arborgorge.com) {
+    return 301 https://$host$request_uri;
+  } # managed by Certbot
+  listen 80;
+  server_name webmail.arborgorge.com;
+    return 404; # managed by Certbot
+}
+
+```
+
+---
+
+`/var/www/roundcube/config`:
+
+```
+...
+$config['default_host'] = [
+  'webmail.arborgorge.com' => 'Arbor Gorge Webmail'
+];
+$config['support_url'] = "https://arborgorge.com/support";
+$config['product_name'] = 'Arbor Gorge Webmail';
+
+$config['smtp_server'] = 'tls://arborgorge.com';
+$config['smtp_port'] = 587;
+$config['smtp_user'] = '%u';
+$config['smtp_pass'] = '%p';
+
+
+$config['des_key']  = 'XXXXXXXXXXXXXXXXXXXXXXXX';
+
+$config['plugins'] = [
+  'archive',
+  'zipdownload',
+];
+
+$config['skin'] = 'elastic';
+$config['skin_logo'] = "https://arborgorge.com/img/custom.png";
+$rcmail_config['default_host'] = 'arborgorge.com';
+$rcmail_config['default_port'] = 143;
+
+$config['enable_installer'] = false;
+...
+```
+
+---
+
+Make sure to add an SPF DNS record or Gmail will not accept mail.
+
+Also make sure to setup a `webmail` CNAME record.
+
+---
+
+```
+# apt-get install -y spamassassin spamc
+```
+
+`/usr/bin/spamfilter.sh
+```
+#!/bin/bash
+SENDMAIL=/usr/sbin/sendmail
+SPAMASSASSIN=/usr/bin/spamc
+
+logger <<<"Spam filter piping to SpamAssassin, then to: $SENDMAIL $@"
+${SPAMASSASSIN} | ${SENDMAIL} "$@"
+
+exit $?
+```
+
+`/etc/postfix/master.cf`:
+
+```
+...
+smtp      inet  n       -       y       -       -       smtpd -o content_filter=spamfilter
+...
+spamfilter unix  -       n       n       -       -       pipe
+  flags=Rq user=spamd argv=/usr/bin/spamfilter.sh -oi -f ${sender} ${recipient}
+...
+```
+
+---
+
+### Using Dovecot's mdbox
+
+---
+
+Use local mail transport protocol (`lmtp`)
+
+```
+# apt-get install -y dovecot-lmtp
+```
+
+`/etc/dovecot/dovecot.conf`:
+
+```
+...
+!include conf.d/*.conf
+...
+mail_location = mdbox:~/mdbox
+...
+protocols = imap lmtp
+...
+service lmtp { 
+  unix_listener /var/spool/postfix/private/dovecot-lmtp  {
+    group = postfix
+    mode = 0600
+    user = postfix
+  }
+}
+...
+```
+
+---
+
+Strip the domain name when passing in user to authenticate (`%Ln` lowercase userName):
+
+`/etc/dovecot/conf.d/20-lmtp.conf`:
+
+```
+protocol lmtp {
+  hostname = arborgorge.com
+  auth_username_format = %Ln
+}
+```
+
+This threw me because `auth_username_format` is available at a higher level but needs to be specified here
+to work.
+
+---
+
+Get rid of the errors of UID 0 accessing the `passwd` file (or some such):
+
+`/etc/dovecot/conf.d/10-mail.conf`:
+
+```
+...
+first_valid_gid = 0
+...
+```
+
+---
+
+Finally, make sure Postfix knows about how to deliver mail to the `lmtp` agent:
+
+`/etc/postfix/main.cf`:
+
+```
+...
+mailbox_transport = lmtp:unix:private/dovecot-lmtp
+virtual_transport = lmtp:unix:private/dovecot-lmtp
+...
+```
+
+---
+
+Some notes on administrative usage to search the `mdbox` formatted files (see [here](https://superuser.com/questions/1523594/how-can-i-view-mail-using-doveadm) and [here](https://wiki.dovecot.org/Tools/Doveadm/Fetch)): 
+
+```
+# doveadm fetch -u abetusk "mailbox guid" '*'
+mailbox: Sent
+guid: c25fa40c3a789a640acf0400cba4f65e
+
+mailbox: INBOX
+guid: c06d92030e769a6457cb0400cba4f65e
+# doveadm fetch -u abetusk "mailbox text" guid c25fa40c3a789a640acf0400cba4f65e
+...
+```
+
+Presumably you can import with the same tool...
+
+---
+
+
+---
+
+---
+
+## vestigital info...
+
+---
+
 ### Changing Hostname
 
 ```
@@ -103,7 +421,7 @@ admin@arborgorge.com arborgorge.com
 `/etc/postfix/main.cf`:
 
 ```
-mtpd_tls_cert_file = /etc/letsencrypt/live/arborgorge.com/fullchain.pem
+smtpd_tls_cert_file = /etc/letsencrypt/live/arborgorge.com/fullchain.pem
 smtpd_tls_key_file = /etc/letsencrypt/live/arborgorge.com/privkey.pem
 smtpd_tls_security_level=may
 
@@ -345,6 +663,20 @@ $rcmail_config['smtp_port'] = 25;
 # useradd -g vmail -u 5000 vmail -d /var/mail/vmail -m 
 ```
 
+Misc. Notes
+---
+
+Roundcube is basically a server hosted IMAP client, using, in this case, Dovecot
+to manage the IMAP interface.
+
+
+* `mbox` is an old standard way of storing emails in a single huge file (see [here](https://www.loc.gov/preservation/digital/formats/fdd/fdd000383.shtml))
+* `Maildir` is another standard that uses a file per message (see [here](https://en.wikipedia.org/wiki/Maildir), [man](https://manpages.debian.org/stretch/qmail/maildir.5.en.html), [dovecot](https://doc.dovecot.org/admin_manual/mailbox_formats/maildir/), )
+* `dbox` is dovecots own answer, grouping multiple messages into a single file but keeping the grouped messages in a single directory ([dbox](https://doc.dovecot.org/admin_manual/mailbox_formats/dbox/#dbox-mbox-format))
+  - for what it's worth, this looks a lot like what SmarterMail is doing (even going so far as to name their files `.grp` with year, day, month file name)
+
+
+
 
 Glossary
 ---
@@ -370,3 +702,5 @@ References
 * [rfc5321](http://www.faqs.org/rfcs/rfc5321.html)
 * [roundcube on ubuntu with nginx](https://www.linuxtuto.com/how-to-install-roundcube-on-ubuntu-22-04/)
 * [sasl](https://www.civo.com/learn/setting-up-a-postfix-mail-server-with-dovecot)
+* [spamassassin](https://cwiki.apache.org/confluence/display/spamassassin/IntegratedSpamdInPostfix)
+* [spamassassin with postfix on Ubuntu](https://www.vultr.com/docs/how-to-install-spamassassin-with-postfix-on-ubuntu/)
