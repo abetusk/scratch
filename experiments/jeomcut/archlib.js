@@ -26,6 +26,10 @@
 // stair_0
 // block_0
 
+// unless otherwise specified, x-y plane is on the floor (x right, y back)
+// with z pointing upwards
+//
+
 var jscad = require('@jscad/modeling')
 var io = require("@jscad/io");
 const stlSerializer = require('@jscad/stl-serializer')
@@ -88,7 +92,7 @@ function pill(info) {
 
 // looks to be a midsection, not a bsae?
 //
-function pillar_base() {
+function neocal_pillar_base() {
 
   let r = 0.25;
   let h = 1;
@@ -124,57 +128,9 @@ function pillar_base() {
   return cyl
 }
 
-
-// 'fat' disc
-//
-function sconut(info) {
-  info = ((typeof info === "undefined") ? {} : info);
-  let seg = ((typeof info.segments === "undefined") ? 64 : info.segments);
-  let h = ((typeof info.h === "undefined") ? (1/32) : info.h);;
-  let r0 = 2*h/3;
-  let r1 = h;
-  //let c = 0.25;
-  let c = ((typeof info.r === "undefined") ? (0.25) : info.r);
-  let center = ((typeof info.center === "undefined") ? [0,0,0] : info.center);
-
-  let cyl_h = 2*h;
-
-  let el = jscad.primitives.ellipse({"radius": [r0,r1], "center":[c,0]});
-  let sn = jscad.extrusions.extrudeRotate({"segments":seg}, el);
-
-  let cyl = jscad.primitives.cylinder({"radius":c,"height":cyl_h, "center":[0,0,0], "segments": seg});
-  let _res = jscad.transforms.translate( center, jscad.booleans.union( cyl, sn ) );
-
-  return _res;
-}
-
-// donut subtracted out from disc
-//
-function scinut(info) {
-  info = ((typeof info === "undefined") ? {} : info);
-  let seg = ((typeof info.segments === "undefined") ? 64 : info.segments);
-  let h = ((typeof info.h === "undefined") ? (1/32) : info.h);;
-  let r0 = 2*h/3;
-  let r1 = h;
-  //let c = 0.25;
-  let c = ((typeof info.r === "undefined") ? (0.25) : info.r);
-
-  let cyl_h = 2*h;
-  let center = ((typeof info.center === "undefined") ? [0,0,0] : info.center);
-
-  let el = jscad.primitives.ellipse({"radius": [r0,r1], "center":[c,0]});
-  let sn = jscad.extrusions.extrudeRotate({"segments":seg}, el);
-
-  let cyl = jscad.primitives.cylinder({"radius":c,"height":cyl_h, "center":[0,0,0], "segments": seg});
-
-  let _res = jscad.transforms.translate( center, jscad.booleans.subtract( cyl, sn ) );
-
-  return _res;
-}
-
 // fat disc
 //
-function pillar_part_pancake(info) {
+function neocal_pillar_part_pancake(info) {
   info = ((typeof info === "undefined") ? {} : info);
   let seg = ((typeof info.segments === "undefined") ? 64 : info.segments);
   let h = ((typeof info.h === "undefined") ? (1/32) : info.h);;
@@ -199,7 +155,7 @@ function pillar_part_pancake(info) {
 // trapezoidal like structure, rounded top, goes to shar square at (smaller)
 // bottom
 //
-function pillar_part_flare_square(info) {
+function neocal_pillar_part_flare_square(info) {
   info = ((typeof info === "undefined") ? {} : info);
   let seg = ((typeof info.segments === "undefined") ? 64 : info.segments);
   let h = ((typeof info.h === "undefined") ? (1/7) : info.h);
@@ -239,7 +195,7 @@ function pillar_part_flare_square(info) {
 
 // rouned square on tpo to flat circle underneath
 //
-function pillar_part_flare_circle(info) {
+function neocal_pillar_part_flare_circle(info) {
   info = ((typeof info === "undefined") ? {} : info);
   let seg = ((typeof info.segments === "undefined") ? 64 : info.segments);
   let h = ((typeof info.h === "undefined") ? (1/7) : info.h);
@@ -278,7 +234,7 @@ function pillar_part_flare_circle(info) {
   return _res;
 }
 
-function pillar_part_bstack(info) {
+function neocal_pillar_part_bstack(info) {
   info = ((typeof info === "undefined") ? {} : info);
   let seg = ((typeof info.segments === "undefined") ? 64 : info.segments);
   let h = ((typeof info.h === "undefined") ? (1/32) : info.h);
@@ -352,24 +308,7 @@ function pillar_part_bstack(info) {
 }
 
 
-//function pillar_part_
-
-//let pb = pillar_base();
-//toobj(pb);
-
-function _play() {
-
-  let h = 1/32;
-
-  let a = sconut({"center":[0,0,0], "r":0.25});
-  let b = scinut({"center":[0,0,2*h], "r": 0.18});
-  let c = sconut({"center":[0,0,4*h], "r": 0.2});
-  let _r = jscad.booleans.union( jscad.booleans.union( a, b ), c );
-  toobj(_r);
-
-}
-
-function pillar_test_top() {
+function neocal_pillar_test_top() {
 
   let cur_h = 1;
 
@@ -402,7 +341,7 @@ function pillar_test_top() {
   return _res;
 }
 
-function pillar_c_bot() {
+function neocal_pillar_c_bot() {
 
   let n = 8;
 
@@ -421,7 +360,7 @@ function pillar_c_bot() {
 
 }
 
-function pillar_shelburne_bottom() {
+function neocal_pillar_shelburne_bottom() {
 
   let seg = 64;
 
@@ -483,7 +422,7 @@ function pillar_shelburne_bottom() {
 
 }
 
-function column_mid_blasius_twist(info) {
+function neocal_column_mid_blasius_twist(info) {
   info = ((typeof info === "undefined") ? {} : info);
   let seg = ((typeof info.segments === "undefined") ? 64 : info.segments);
   let h = ((typeof info.h === "undefined") ? (1/32) : info.h);;
@@ -550,10 +489,7 @@ function column_mid_blasius_twist(info) {
   return _res;
 }
 
-function column_() {
-}
-
-function twist_sq() {
+function neocal_twist_sq() {
   let pnt = [ ];
   let fce = [];
 
@@ -716,7 +652,7 @@ function test_spiral() {
 
 }
 
-function column_end_0(_info) {
+function neocal_column_end_0(_info) {
   if (typeof _info === "undefined") { _info = {}; }
   let info = {};
 
@@ -755,11 +691,51 @@ function column_end_0(_info) {
 
 }
 
+function neocal_column_end_1(_info) {
+  if (typeof _info === "undefined") { _info = {}; }
+  let info = {};
+
+  // bound box size
+  //
+  let default_info = {
+    "size": [0.25, 0.25, 0.05],
+    "columnRadius": 0.12/2,
+    "capitalHeight": 0.05,
+    "capitalWidth": .3,
+    "segments": 32,
+    "center": [0,0,0]
+  };
+  for (let _k in default_info) {
+    info[_k] = default_info[_k];
+    if (_k in _info) { info[_k] = _info[_k]; }
+  }
+
+  let w = info.capitalWidth;
+  let h = info.size[2];
+
+  let _ch = info.capitalHeight;
+  let dx = (info.size[0]/2) - _ch + info.center[0];
+  let dy = (info.size[1]/2) - _ch + info.center[1];
+  let dz = (info.size[2]/2) - (_ch/2) + info.center[2];
+
+  let _cuboid = jscad.primitives.cuboid({"size": [ w, w,  _ch], "center": [ 0,0,dz ]});
+
+  let c_r = info.columnRadius;
+  let cy = jscad.primitives.cylinder({"radius": c_r, "height": h, "center": [ info.center[0], info.center[1], info.center[2] ]});
+
+  let _fin = jscad.booleans.union(_cuboid, cy);
+  return _fin;
+}
+
+function neocal_column_center_1(_info) {
+  return neocal_column_center_0(_info);
+}
+
 // top and bottom flange column are cylinders with
 // donuts subtrated off of them, with angle of top
 // flang intersection at pi/4.
 //
-function column_center_0(_info) {
+function neocal_column_center_0(_info) {
   if (typeof _info === "undefined") { _info = {}; }
   let info = {};
 
@@ -870,7 +846,7 @@ function column_center_0(_info) {
   return _res;
 }
 
-function marker(info) {
+function debug_marker(info) {
   info = ((typeof info === "undefined") ? {} : info);
 
   let cx = 0, cy = 0, cz = 0;
@@ -904,13 +880,15 @@ function marker(info) {
   return geom_list;
 }
 
-function column_0_b( _info ) {
+// base column 0
+//
+function neocal_column_2_b( _info ) {
   _info = ((typeof _info === "undefined") ? {} : _info);
 
   let info = Object.assign({}, _info);
   info.center = [0,0,0];
 
-  let _c = column_0( info );
+  let _c = neocal_column_2( info );
 
   _c = jscad.transforms.translate([0,0,0.5], _c);
   _c = jscad.transforms.scale([3,3,3], _c);
@@ -924,54 +902,113 @@ function column_0_b( _info ) {
   return _c;
 }
 
-function column_0_t( _info ) {
+// base column 0
+//
+function neocal_column_1_b( _info ) {
   _info = ((typeof _info === "undefined") ? {} : _info);
 
   let info = Object.assign({}, _info);
   info.center = [0,0,0];
 
-  let _c = column_0_b( info );
+  let _c = neocal_column_1( info );
+
+  _c = jscad.transforms.translate([0,0,0.5], _c);
+  _c = jscad.transforms.scale([3,3,3], _c);
+  _c = jscad.booleans.intersect( _c, jscad.primitives.cube({"size":1, "center":[0,0,0.5]}));
+  _c = jscad.transforms.translate([0,0,-0.5], _c)
+
+  if ("center" in _info) {
+    _c = jscad.transforms.translate(_info.center, _c);
+  }
+
+  return _c;
+}
+
+// base column 0
+//
+function neocal_column_0_b( _info ) {
+  _info = ((typeof _info === "undefined") ? {} : _info);
+
+  let info = Object.assign({}, _info);
+  info.center = [0,0,0];
+
+  let _c = neocal_column_0( info );
+
+  _c = jscad.transforms.translate([0,0,0.5], _c);
+  _c = jscad.transforms.scale([3,3,3], _c);
+  _c = jscad.booleans.intersect( _c, jscad.primitives.cube({"size":1, "center":[0,0,0.5]}));
+  _c = jscad.transforms.translate([0,0,-0.5], _c)
+
+  if ("center" in _info) {
+    _c = jscad.transforms.translate(_info.center, _c);
+  }
+
+  return _c;
+}
+
+// top column 0
+//
+function neocal_column_2_t( _info ) {
+  _info = ((typeof _info === "undefined") ? {} : _info);
+
+  let info = Object.assign({}, _info);
+  info.center = [0,0,0];
+
+  let _c = neocal_column_2_b( info );
   _c = jscad.transforms.rotateX( Math.PI, _c );
 
   if ("center" in _info) {
     _c = jscad.transforms.translate(_info.center, _c);
   }
   return _c;
-
-  // some reason this has artifacts
-  //
-  //let _c = column_0( info );
-
-  //  _c = jscad.transforms.translate([0,0,-0.5], _c);
-  //  _c = jscad.transforms.scale([3,3,3], _c);
-  //  _c = jscad.booleans.intersect( _c, jscad.primitives.cube({"size":1.0, "center":[0,0,-0.5]}));
-  //  _c = jscad.transforms.translate([0,0, 0.5], _c)
-  //
-  //  _c = jscad.transforms.scale([3,3,3], _c);
-  //  _c = jscad.transforms.translate([0,0,-1.0], _c);
-  //  _c = jscad.booleans.intersect( _c, jscad.primitives.cube({"size":1.0, "center":[0,0,0.5]}));
-  //  _c = jscad.transforms.translate([0,0,-0.5], _c)
-  //
-  //  if ("center" in _info) {
-  //    _c = jscad.transforms.translate(_info.center, _c);
-  //  }
-  //
-  //  return _c;
 }
 
-function column_0_m( _info ) {
+// top column 0
+//
+function neocal_column_1_t( _info ) {
   _info = ((typeof _info === "undefined") ? {} : _info);
 
   let info = Object.assign({}, _info);
   info.center = [0,0,0];
 
-  let _c = column_0( info );
+  let _c = neocal_column_1_b( info );
+  _c = jscad.transforms.rotateX( Math.PI, _c );
 
-  //_c = jscad.transforms.translate([0,0,0.5], _c);
+  if ("center" in _info) {
+    _c = jscad.transforms.translate(_info.center, _c);
+  }
+  return _c;
+}
+
+// top column 0
+//
+function neocal_column_0_t( _info ) {
+  _info = ((typeof _info === "undefined") ? {} : _info);
+
+  let info = Object.assign({}, _info);
+  info.center = [0,0,0];
+
+  let _c = neocal_column_0_b( info );
+  _c = jscad.transforms.rotateX( Math.PI, _c );
+
+  if ("center" in _info) {
+    _c = jscad.transforms.translate(_info.center, _c);
+  }
+  return _c;
+}
+
+// mid column 0
+//
+function neocal_column_2_m( _info ) {
+  _info = ((typeof _info === "undefined") ? {} : _info);
+
+  let info = Object.assign({}, _info);
+  info.center = [0,0,0];
+
+  let _c = neocal_column_2( info );
+
   _c = jscad.transforms.scale([3,3,3], _c);
-  //_c = jscad.booleans.intersect( _c, jscad.primitives.cube({"size":1, "center":[0,0,0.5]}));
   _c = jscad.booleans.intersect( _c, jscad.primitives.cube({"size":1}));
-  //_c = jscad.transforms.translate([0,0,-0.5], _c)
 
   if ("center" in _info) {
     _c = jscad.transforms.translate(_info.center, _c);
@@ -980,7 +1017,47 @@ function column_0_m( _info ) {
   return _c;
 }
 
-function column_0( _info ) {
+// mid column 0
+//
+function neocal_column_1_m( _info ) {
+  _info = ((typeof _info === "undefined") ? {} : _info);
+
+  let info = Object.assign({}, _info);
+  info.center = [0,0,0];
+
+  let _c = neocal_column_1( info );
+
+  _c = jscad.transforms.scale([3,3,3], _c);
+  _c = jscad.booleans.intersect( _c, jscad.primitives.cube({"size":1}));
+
+  if ("center" in _info) {
+    _c = jscad.transforms.translate(_info.center, _c);
+  }
+
+  return _c;
+}
+
+// mid column 0
+//
+function neocal_column_0_m( _info ) {
+  _info = ((typeof _info === "undefined") ? {} : _info);
+
+  let info = Object.assign({}, _info);
+  info.center = [0,0,0];
+
+  let _c = neocal_column_0( info );
+
+  _c = jscad.transforms.scale([3,3,3], _c);
+  _c = jscad.booleans.intersect( _c, jscad.primitives.cube({"size":1}));
+
+  if ("center" in _info) {
+    _c = jscad.transforms.translate(_info.center, _c);
+  }
+
+  return _c;
+}
+
+function neocal_column_0( _info ) {
   if (typeof _info === "undefined") { _info = {}; }
   let info = {};
 
@@ -1019,7 +1096,7 @@ function column_0( _info ) {
 
   let dz = (_mid_ch/2) + _mid_th + (_top_h/2);
 
-  let _t = column_end_0({
+  let _t = neocal_column_end_0({
     "size": [base_s, base_s, _top_h],
     "columnRadius": col_r,
     "roundRadius": _top_h/4,
@@ -1027,7 +1104,7 @@ function column_0( _info ) {
     "center": [0,0, dz]
   });
 
-  let _b = column_end_0({
+  let _b = neocal_column_end_0({
     "size": [base_s, base_s, _top_h],
     "columnRadius": col_r,
     "roundRadius": _top_h/4,
@@ -1036,16 +1113,11 @@ function column_0( _info ) {
   });
   _b = jscad.transforms.rotateX(Math.PI, _b);
 
-  let _m = column_center_0({
+  let _m = neocal_column_center_0({
     "outerRadius": col_r,
     "height_mid": _mid_ch,
     "height_end": _mid_th
   });
-
-  //DEBUG
-  //let _marker = marker();
-  //let xx = jscad.primitives.cylinder({"height":0.125, "radius": col_r, "center":[0,0,-1]});
-  //return jscad.booleans.union(_t, _m, _marker, xx);
 
   let _res = jscad.booleans.union(_t, _m, _b);
 
@@ -1054,7 +1126,76 @@ function column_0( _info ) {
 
 }
 
-function arch_half_r0(_info) {
+function neocal_column_1( _info ) {
+  if (typeof _info === "undefined") { _info = {}; }
+  let info = {};
+
+  let default_info = {
+    "height_mid": .8,
+    "height_end": 0.05,
+    //"innerRadius": 0.125,
+    "outerRadius": 0.13,
+    "segments": 32,
+
+    "center": [0,0,0],
+
+    "theta": Math.PI / 4.0,
+
+    "pill_n" : 16,
+    "pill_width_percent": 0.55,
+    //"pill_cap": "blunt",
+    "pill_cap": "sphere",
+    "pill_segments": 16
+  };
+  for (let _k in default_info) {
+    if (_k in _info) { info[_k] = _info[_k]; }
+    else { info[_k] = default_info[_k]; }
+  }
+
+  //let base_s = 0.18/2;
+  let base_s = 0.3;
+  let col_r = 0.15;
+  let _seg = 32;
+
+  let _top_h = 0.05;
+  let _mid_ch = 0.8;
+  let _mid_th = 0.05;
+
+  let dz = (_mid_ch/2) + _mid_th + (_top_h/2);
+
+  let _t = neocal_column_end_1({
+    "size": [base_s, base_s, _top_h],
+    "columnRadius": col_r,
+    "capitalHeight": 0.05,
+    "capitalWidth": 2*col_r*1.15,
+    "segments": _seg,
+    "center": [0,0, dz]
+  });
+
+  let _b = neocal_column_end_1({
+    "size": [base_s, base_s, _top_h],
+    "columnRadius": col_r,
+    "capitalHeight": 0.05,
+    "capitalWidth": 2*col_r*1.15,
+    "segments": _seg,
+    "center": [0,0, dz]
+  });
+  _b = jscad.transforms.rotateX(Math.PI, _b);
+
+  let _m = neocal_column_center_1({
+    "outerRadius": col_r,
+    "height_mid": _mid_ch,
+    "height_end": _mid_th
+  });
+
+  let _res = jscad.booleans.union(_t, _m, _b);
+
+  _res = jscad.transforms.translate( info.center, _res);
+  return _res;
+
+}
+
+function neocal_arch_half_r0(_info) {
   if (typeof _info === "undefined") { _info = {}; }
   let info = {};
 
@@ -1095,7 +1236,7 @@ function arch_half_r0(_info) {
   return _res;
 }
 
-function arch_half_l0(_info) {
+function neocal_arch_half_l0(_info) {
   if (typeof _info === "undefined") { _info = {}; }
   let info = {};
 
@@ -1136,7 +1277,7 @@ function arch_half_l0(_info) {
   return _res;
 }
 
-function arch_door_1(_info) {
+function neocal_arch_door_1(_info) {
   if (typeof _info === "undefined") { _info = {}; }
   let info = {};
 
@@ -1174,7 +1315,7 @@ function arch_door_1(_info) {
   return _res;
 }
 
-function arch_door_0(_info) {
+function neocal_arch_door_0(_info) {
   if (typeof _info === "undefined") { _info = {}; }
   let info = {};
 
@@ -1207,7 +1348,7 @@ function arch_door_0(_info) {
   return _res;
 }
 
-function stair_spiral_0(_info) {
+function neocal_stair_spiral_0(_info) {
   if (typeof _info === "undefined") { _info = {}; }
   let info = {};
 
@@ -1319,7 +1460,7 @@ function stair_spiral_0(_info) {
 }
 
 
-function stair_0(_info) {
+function neocal_stair_0(_info) {
   if (typeof _info === "undefined") { _info = {}; }
   let info = {};
 
@@ -1375,7 +1516,7 @@ function stair_0(_info) {
 
 }
 
-function block_0(_info) {
+function neocal_block_0(_info) {
   if (typeof _info === "undefined") { _info = {}; }
   let info = {};
 
@@ -1407,7 +1548,7 @@ function scene_experiment_0() {
   dy = 1.0;
 
   //let _column = column_center_0();
-  let _column = column_0();
+  let _column = neocal_column_0();
 
   let n = 2;
 
@@ -1439,15 +1580,15 @@ function scene_experiment_1() {
 
       let z = 1;
 
-      geom.push( block_0({"center": [x,y,0]}) );
+      geom.push( neocal_block_0({"center": [x,y,0]}) );
 
-      geom.push( column_0({ "center": [x,y,z] }) );
+      geom.push( neocal_column_0({ "center": [x,y,z] }) );
 
     }
   }
 
   
-  geom.push( stair_0({"center":[0,-2,0]}) );
+  geom.push( neocal_stair_0({"center":[0,-2,0]}) );
   
 
   return geom;
@@ -1463,26 +1604,34 @@ function render_grid(gr, _info) {
   let dx = 1, dy = 1, dz = 1;
 
   let geom_lib = {
-    "B": block_0(),
+    "B": neocal_block_0(),
 
-    "cb": column_0_b(),
-    "cm": column_0_m(),
-    "ct": column_0_t(),
+    "cb": neocal_column_0_b(),
+    "cm": neocal_column_0_m(),
+    "ct": neocal_column_0_t(),
 
-    "s3": stair_0(),
-    "s2": stair_0({"rotateZ":  Math.PI/2}),
-    "s1": stair_0({"rotateZ": -Math.PI/2}),
-    "s0": stair_0({"rotateZ":  Math.PI}),
+    "Cb": neocal_column_1_b(),
+    "Cm": neocal_column_1_m(),
+    "Ct": neocal_column_1_t(),
 
-    "p3": stair_spiral_0(),
-    "p2": stair_spiral_0({"rotateZ":  Math.PI/2}),
-    "p1": stair_spiral_0({"rotateZ": -Math.PI/2}),
-    "p0": stair_spiral_0({"rotateZ":  Math.PI}),
+    "Ib": neocal_column_2_b(),
+    "Im": neocal_column_2_m(),
+    "It": neocal_column_2_t(),
 
-    "h0": arch_half_l0({"rotateZ": 0, "radius":1, "height":1}),
-    "h1": arch_half_l0({"rotateZ":  Math.PI/2, "radius":1, "height":1 }),
-    "h2": arch_half_l0({"rotateZ":  Math.PI  , "radius":1, "height":1 }),
-    "h3": arch_half_l0({"rotateZ": -Math.PI/2, "radius":1, "height":1 })
+    "s0": neocal_stair_0({"rotateZ":  Math.PI}),
+    "s1": neocal_stair_0({"rotateZ":  Math.PI/2}),
+    "s2": neocal_stair_0(),
+    "s3": neocal_stair_0({"rotateZ": -Math.PI/2}),
+
+    "p3": neocal_stair_spiral_0(),
+    "p2": neocal_stair_spiral_0({"rotateZ":  Math.PI/2}),
+    "p1": neocal_stair_spiral_0({"rotateZ": -Math.PI/2}),
+    "p0": neocal_stair_spiral_0({"rotateZ":  Math.PI}),
+
+    "h0": neocal_arch_half_l0({"rotateZ": 0, "radius":1, "height":1}),
+    "h1": neocal_arch_half_l0({"rotateZ":  Math.PI/2, "radius":1, "height":1 }),
+    "h2": neocal_arch_half_l0({"rotateZ":  Math.PI  , "radius":1, "height":1 }),
+    "h3": neocal_arch_half_l0({"rotateZ": -Math.PI/2, "radius":1, "height":1 })
 
   };
 
@@ -1783,6 +1932,381 @@ function scene_experiment_3() {
 
 }
 
+function scene_experiment_4() {
+  let g = [
+
+    [
+      [  "B",  "B",  "B",  "B",  "B",  "B",  "B", "B", "B", "B", "B", "B", "B" ],
+      [  "B",  "B",  "B",  "B",  "B",  "B",  "B", "B", "B", "B", "B", "B", "B" ],
+      [  "B",  "B",  "B",  "B",  "B",  "B",  "B", "B", "B", "B", "B", "B", "B" ],
+      [  "B",  "B",  "B",  "B",  "B",  "B",  "B", "B", "B", "B", "B", "B", "B" ],
+      [  "B",  "B",  "B",  "B",  "B",  "B",  "B", "B", "B", "B", "B", "B", "B" ],
+      [  "B",  "B",  "B",  "B",  "B",  "B",  "B", "B", "B", "B", "B", "B", "B" ],
+
+      [  "B",  "B",  "B",  "B",  "B",  "B",  "B", "B", "B", "B", "B", "B", "B" ],
+      [  "B",  "B",  "B",  "B",  "B",  "B",  "B", "B", "B", "B", "B", "B", "B" ],
+      [  "B",  "B",  "B",  "B",  "B",  "B",  "B", "B", "B", "B", "B", "B", "B" ],
+      [  "B",  "B",  "B",  "B",  "B",  "B",  "B", "B", "B", "B", "B", "B", "B" ],
+      [  "B",  "B",  "B",  "B",  "B",  "B",  "B", "B", "B", "B", "B", "B", "B" ],
+      [  "B",  "B",  "B",  "B",  "B",  "B",  "B", "B", "B", "B", "B", "B", "B" ],
+      [  "B",  "B",  "B",  "B",  "B",  "B",  "B", "B", "B", "B", "B", "B", "B" ],
+      [  "s0", "s0", "s0", "s0", "s0", "s0", "s0","s0","s0","s0","s0", "s0", "s0" ]
+    ],
+
+    [
+      [  "B",  "B",  "B",  "B",  "B",  "B",  "B", "B", "B", "B", "B", "B", "B" ],
+      [  "B",  "B",  "B",  "B",  "B",  "B",  "B", "B", "B", "B", "B", "B", "B" ],
+      [  "B",  "B",  "B",  "B",  "B",  "B",  "B", "B", "B", "B", "B", "B", "B" ],
+      [  "B",  "B",  "B",  "B",  "B",  "B",  "B", "B", "B", "B", "B", "B", "B" ],
+      [  "B",  "B",  "B",  "B",  "B",  "B",  "B", "B", "B", "B", "B", "B", "B" ],
+      [  "B",  "B",  "B",  "B",  "B",  "B",  "B", "B", "B", "B", "B", "B", "B" ],
+
+      [  "B",  "B",  "B",  "B",  "B",  "B",  "B", "B", "B", "B", "B", "B", "B" ],
+      [  "B",  "B",  "B",  "B",  "B",  "B",  "B", "B", "B", "B", "B", "B", "B" ],
+      [  "B",  "B",  "B",  "B",  "B",  "B",  "B", "B", "B", "B", "B", "B", "B" ],
+      [  "B",  "B",  "B",  "B",  "B",  "B",  "B", "B", "B", "B", "B", "B", "B" ],
+      [  "B",  "B",  "B",  "B",  "B",  "B",  "B", "B", "B", "B", "B", "B", "B" ],
+      [  "s0", "s0", "s0", "s0", "s0", "s0", "s0","s0","s0","s0","s0", "s0", "s0" ],
+      [  ".",  ".",  ".",  ".",  ".",  ".",  ".", ".", ".", ".", ".", ".", "." ],
+      [  ".",  ".",  ".",  ".",  ".",  ".",  ".", ".", ".", ".", ".", ".", "." ]
+    ],
+
+    [
+      [  "B",  "B",  "B",  "B",  "B",  "B",  "B", "B", "B", "B", "B", "B", "B" ],
+      [  "B",  "B",  "B",  "B",  "B",  "B",  "s0", "B", "B", "B", "B", "B", "B" ],
+      [  "B",  "B",  "B",  "B",  "B",  "s1",  ".", "s3", "B", "B", "B", "B", "B" ],
+      [  "B",  "B",  "B",  "B",  "B",  "s1",  ".", "s3", "B", "B", "B", "B", "B" ],
+      [  "B",  "B",  "B",  "B",  "B",  "s1",  ".", "s3", "B", "B", "B", "B", "B" ],
+      [  "B",  "B",  "B",  "B",  "B",  "B",  "s2", "B", "B", "B", "B", "B", "B" ],
+
+      [  "B",  "B",  "B",  "B",  "B",  "B",  "B", "B", "B", "B", "B", "B", "B" ],
+      [  "B",  "B",  "B",  "B",  "B",  "B",  "B", "B", "B", "B", "B", "B", "B" ],
+      [  "s0", "s0", "s0", "s0", "s0", "s0", "s0","s0","s0","s0","s0", "s0", "s0" ],
+      [  ".",  ".",  ".",  ".",  ".",  ".",  ".", ".", ".", ".", ".", ".", "." ],
+      [  ".",  ".",  ".",  ".",  ".",  ".",  ".", ".", ".", ".", ".", ".", "." ],
+      [  ".",  ".",  ".",  ".",  ".",  ".",  ".", ".", ".", ".", ".", ".", "." ],
+      [  ".",  ".",  ".",  ".",  ".",  ".",  ".", ".", ".", ".", ".", ".", "." ],
+      [  ".",  ".",  ".",  ".",  ".",  ".",  ".", ".", ".", ".", ".", ".", "." ]
+    ],
+
+    [
+      [  "Ib",  "Ib",  "Ib",  "Ib", ".", ".", ".", ".", ".", "Ib", "Ib",  "Ib",  "Ib" ],
+      [  "Ib",  "Ib",  "Ib",  "Ib", ".", ".", ".", ".", ".", "Ib", "Ib",  "Ib",  "Ib" ],
+      [  "Ib",  "Ib",  "Ib",  "Ib", ".", ".", ".", ".", ".", "Ib", "Ib",  "Ib",  "Ib" ],
+      [  "Ib",  "Ib",  "Ib",  "Ib", ".", ".", ".", ".", ".", "Ib", "Ib",  "Ib",  "Ib" ],
+      [  "Ib",  "Ib",  "Ib",  "Ib", ".", ".", ".", ".", ".", "Ib", "Ib",  "Ib",  "Ib" ],
+      [  "Ib",  "Ib",  "Ib",  "Ib", ".", ".", ".", ".", ".", "Ib", "Ib",  "Ib",  "Ib" ],
+
+      [  "Ib",  "Ib",  ".",  ".", ".", ".", ".", ".", ".", ".", ".",  "Ib",  "Ib" ],
+      [  "Ib",  "Ib",  ".",  ".", ".", ".", ".", ".", ".", ".", ".",  "Ib",  "Ib" ],
+      [  ".",  ".",  ".",  ".",  ".",  ".",  ".", ".", ".", ".", ".", ".", "." ],
+      [  ".",  ".",  ".",  ".",  ".",  ".",  ".", ".", ".", ".", ".", ".", "." ],
+      [  ".",  ".",  ".",  ".",  ".",  ".",  ".", ".", ".", ".", ".", ".", "." ],
+      [  ".",  ".",  ".",  ".",  ".",  ".",  ".", ".", ".", ".", ".", ".", "." ],
+      [  ".",  ".",  ".",  ".",  ".",  ".",  ".", ".", ".", ".", ".", ".", "." ],
+      [  ".",  ".",  ".",  ".",  ".",  ".",  ".", ".", ".", ".", ".", ".", "." ]
+    ],
+
+    [
+      [  "Im",  "Im",  "Im",  "Im", ".", ".", ".", ".", ".", "Im", "Im",  "Im",  "Im" ],
+      [  "Im",  "Im",  "Im",  "Im", ".", ".", ".", ".", ".", "Im", "Im",  "Im",  "Im" ],
+      [  "Im",  "Im",  "Im",  "Im", ".", ".", ".", ".", ".", "Im", "Im",  "Im",  "Im" ],
+      [  "Im",  "Im",  "Im",  "Im", ".", ".", ".", ".", ".", "Im", "Im",  "Im",  "Im" ],
+      [  "Im",  "Im",  "Im",  "Im", ".", ".", ".", ".", ".", "Im", "Im",  "Im",  "Im" ],
+      [  "Im",  "Im",  "Im",  "Im", ".", ".", ".", ".", ".", "Im", "Im",  "Im",  "Im" ],
+
+      [  "Im",  "Im",  ".",  ".", ".", ".", ".", ".", ".", ".", ".",  "Im",  "Im" ],
+      [  "Im",  "Im",  ".",  ".", ".", ".", ".", ".", ".", ".", ".",  "Im",  "Im" ],
+      [  ".",  ".",  ".",  ".",  ".",  ".",  ".", ".", ".", ".", ".", ".", "." ],
+      [  ".",  ".",  ".",  ".",  ".",  ".",  ".", ".", ".", ".", ".", ".", "." ],
+      [  ".",  ".",  ".",  ".",  ".",  ".",  ".", ".", ".", ".", ".", ".", "." ],
+      [  ".",  ".",  ".",  ".",  ".",  ".",  ".", ".", ".", ".", ".", ".", "." ],
+      [  ".",  ".",  ".",  ".",  ".",  ".",  ".", ".", ".", ".", ".", ".", "." ],
+      [  ".",  ".",  ".",  ".",  ".",  ".",  ".", ".", ".", ".", ".", ".", "." ]
+    ],
+
+    [
+      [  "Im",  "Im",  "Im",  "Im", ".", ".", ".", ".", ".", "Im", "Im",  "Im",  "Im" ],
+      [  "Im",  "Im",  "Im",  "Im", ".", ".", ".", ".", ".", "Im", "Im",  "Im",  "Im" ],
+      [  "Im",  "Im",  "Im",  "Im", ".", ".", ".", ".", ".", "Im", "Im",  "Im",  "Im" ],
+      [  "Im",  "Im",  "Im",  "Im", ".", ".", ".", ".", ".", "Im", "Im",  "Im",  "Im" ],
+      [  "Im",  "Im",  "Im",  "Im", ".", ".", ".", ".", ".", "Im", "Im",  "Im",  "Im" ],
+      [  "Im",  "Im",  "Im",  "Im", ".", ".", ".", ".", ".", "Im", "Im",  "Im",  "Im" ],
+
+      [  "Im",  "Im",  ".",  ".", ".", ".", ".", ".", ".", ".", ".",  "Im",  "Im" ],
+      [  "Im",  "Im",  ".",  ".", ".", ".", ".", ".", ".", ".", ".",  "Im",  "Im" ],
+      [  ".",  ".",  ".",  ".",  ".",  ".",  ".", ".", ".", ".", ".", ".", "." ],
+      [  ".",  ".",  ".",  ".",  ".",  ".",  ".", ".", ".", ".", ".", ".", "." ],
+      [  ".",  ".",  ".",  ".",  ".",  ".",  ".", ".", ".", ".", ".", ".", "." ],
+      [  ".",  ".",  ".",  ".",  ".",  ".",  ".", ".", ".", ".", ".", ".", "." ],
+      [  ".",  ".",  ".",  ".",  ".",  ".",  ".", ".", ".", ".", ".", ".", "." ],
+      [  ".",  ".",  ".",  ".",  ".",  ".",  ".", ".", ".", ".", ".", ".", "." ]
+    ],
+
+    [
+      [  "Im",  "Im",  "Im",  "Im", ".", ".", ".", ".", ".", "Im", "Im",  "Im",  "Im" ],
+      [  "Im",  "Im",  "Im",  "Im", ".", ".", ".", ".", ".", "Im", "Im",  "Im",  "Im" ],
+      [  "Im",  "Im",  "Im",  "Im", ".", ".", ".", ".", ".", "Im", "Im",  "Im",  "Im" ],
+      [  "Im",  "Im",  "Im",  "Im", ".", ".", ".", ".", ".", "Im", "Im",  "Im",  "Im" ],
+      [  "Im",  "Im",  "Im",  "Im", ".", ".", ".", ".", ".", "Im", "Im",  "Im",  "Im" ],
+      [  "Im",  "Im",  "Im",  "Im", ".", ".", ".", ".", ".", "Im", "Im",  "Im",  "Im" ],
+
+      [  "Im",  "Im",  ".",  ".", ".", ".", ".", ".", ".", ".", ".",  "Im",  "Im" ],
+      [  "Im",  "Im",  ".",  ".", ".", ".", ".", ".", ".", ".", ".",  "Im",  "Im" ],
+      [  ".",  ".",  ".",  ".",  ".",  ".",  ".", ".", ".", ".", ".", ".", "." ],
+      [  ".",  ".",  ".",  ".",  ".",  ".",  ".", ".", ".", ".", ".", ".", "." ],
+      [  ".",  ".",  ".",  ".",  ".",  ".",  ".", ".", ".", ".", ".", ".", "." ],
+      [  ".",  ".",  ".",  ".",  ".",  ".",  ".", ".", ".", ".", ".", ".", "." ],
+      [  ".",  ".",  ".",  ".",  ".",  ".",  ".", ".", ".", ".", ".", ".", "." ],
+      [  ".",  ".",  ".",  ".",  ".",  ".",  ".", ".", ".", ".", ".", ".", "." ]
+    ],
+
+    [
+      [  "It",  "It",  "It",  "It", ".", ".", ".", ".", ".", "It", "It",  "It",  "It" ],
+      [  "It",  "It",  "It",  "It", ".", ".", ".", ".", ".", "It", "It",  "It",  "It" ],
+      [  "It",  "It",  "It",  "It", ".", ".", ".", ".", ".", "It", "It",  "It",  "It" ],
+      [  "It",  "It",  "It",  "It", ".", ".", ".", ".", ".", "It", "It",  "It",  "It" ],
+      [  "It",  "It",  "It",  "It", ".", ".", ".", ".", ".", "It", "It",  "It",  "It" ],
+      [  "It",  "It",  "It",  "It", ".", ".", ".", ".", ".", "It", "It",  "It",  "It" ],
+
+      [  "It",  "It",  ".",  ".", ".", ".", ".", ".", ".", ".", ".",  "It",  "It" ],
+      [  "It",  "It",  ".",  ".", ".", ".", ".", ".", ".", ".", ".",  "It",  "It" ],
+      [  ".",  ".",  ".",  ".",  ".",  ".",  ".", ".", ".", ".", ".", ".", "." ],
+      [  ".",  ".",  ".",  ".",  ".",  ".",  ".", ".", ".", ".", ".", ".", "." ],
+      [  ".",  ".",  ".",  ".",  ".",  ".",  ".", ".", ".", ".", ".", ".", "." ],
+      [  ".",  ".",  ".",  ".",  ".",  ".",  ".", ".", ".", ".", ".", ".", "." ],
+      [  ".",  ".",  ".",  ".",  ".",  ".",  ".", ".", ".", ".", ".", ".", "." ],
+      [  ".",  ".",  ".",  ".",  ".",  ".",  ".", ".", ".", ".", ".", ".", "." ]
+    ]
+
+  ];
+
+  /*
+  console.log(">>", g.length);
+  for (let i =0; i<g.length; i++) {
+    console.log(i, g[i].length);
+    for (let j=0; j<g[i].length; j++) {
+      console.log(i, j, g[i][j].length);
+    }
+  }
+  */
+
+  tostl(render_grid(g));
+
+}
+
+
+//---------------------------
+//---------------------------
+//---------------------------
+//---------------------------
+
+// bottom captial pillow
+//
+function neocal_capital_pillow(_info) {
+  if (typeof _info === "undefined") { _info = {}; }
+  let info = {};
+
+  // bound box size
+  //
+  let default_info = {
+    "height": 0.05,
+    "innerRadius": 0.125,
+    "outerRadius": 0.125/2,
+    "segments": 32,
+    "center": [0,0,0]
+  };
+  for (let _k in default_info) {
+    info[_k] = default_info[_k];
+    if (_k in _info) { info[_k] = _info[_k]; }
+  }
+
+  let center = info.center;
+
+  let bez = jscad.curves.bezier;
+
+  let w_i = info.innerRadius;
+  let w_o = info.outerRadius;
+  let h = info.height;
+  let _dx0 = w_o / 32;
+  let _dy0 = 0;
+
+  let dx = w_i;
+  let dy = 0;
+
+  let _cp = [[0,0], [_dx0/2, 0], [_dx0, 0], [w_o/2, 0], [2*w_o/3,0], [w_o,_dy0], [_dx0,h], [_dx0/2,h], [0, h]];
+  let b = bez.create( _cp );
+
+  /*
+  for (let i=0; i<_cp.length; i++) {
+    console.log(_cp[i][0], _cp[i][1]);
+  }
+  console.log("\n");
+
+  let N = 32;
+  for (let i=0; i<=N; i++) {
+    let p = bez.valueAt( (i/N), b );
+    console.log(p[0], p[1]);
+  }
+
+  return;
+  */
+  
+  let bseg = 32;
+  let pgn = [];
+  pgn.push( [0,0] );
+  for (let i=0; i<=bseg; i++) {
+    let pnt = bez.valueAt((i/bseg), b) ;
+    pnt[0] += dx;
+    pnt[1] += dy;
+
+    pgn.push( pnt );
+  }
+  pgn.push( [ 0, h ] );
+  let shape = jscad.primitives.polygon({"points": pgn});
+
+  let _s = jscad.transforms.translate( [0,0,-h/2], jscad.extrusions.extrudeRotate({"segments":64, "angle": Math.PI*2.0}, shape) );
+  let _res = jscad.transforms.translate( center, _s );
+  return _res;
+
+}
+
+function neocal_column_end_2(_info) {
+  if (typeof _info === "undefined") { _info = {}; }
+  let info = {};
+
+  // bound box size
+  //
+  let default_info = {
+    "size": [0.25, 0.25, 0.05],
+    "columnRadius": 0.11,
+    //"capitalHeight": 0.05,
+    //"capitalWidth": .3,
+    "segments": 32,
+    "center": [0,0,0]
+  };
+  for (let _k in default_info) {
+    info[_k] = default_info[_k];
+    if (_k in _info) { info[_k] = _info[_k]; }
+  }
+
+  let center = info.center;
+
+  let _seg = info.segments;
+
+  let r_p = info.columnRadius;
+  let r_c = info.columnRadius;
+
+  //let h_p = 0.05;
+  //let h_c = 0.00625;
+  //let h_b = 0.05 ;
+
+  let h_p = (6/12)*info.size[2];
+  let h_b = (5/12)*info.size[2];
+  let h_c = (1/12)*info.size[2];
+
+
+  //let w = 2 * 1.125 * r_p;
+
+  let w0 = info.size[0];
+  let w1 = info.size[1];
+
+  let _H = info.size[2];
+
+  let _block = jscad.primitives.cuboid({"size": [w0,w1,h_b], "center":[0,0,0 + h_b/2 ]});
+  let _pillow = neocal_capital_pillow({"height": h_p, "center":[0,0, h_b + h_p/2], "innerRadius":r_p, "outerRadius":r_p/4});
+  let _cyl0 = jscad.primitives.cylinder({"height": h_c, "radius": r_c, "center":[0,0,h_b + h_p + h_c/2], "segments":_seg});
+
+  let _cent = [ center[0], center[1], center[2] - info.size[2]/2 ];
+
+  let _res = jscad.transforms.translate( _cent, jscad.booleans.union( _pillow, _cyl0, _block ) );
+
+  return _res;
+}
+
+//_testbez();
+
+
+function neocal_column_2(_info) {
+  if (typeof _info === "undefined") { _info = {}; }
+  let info = {};
+
+  let default_info = {
+    "height_mid": .8,
+    "height_end": 0.05,
+    //"innerRadius": 0.125,
+    "outerRadius": 0.13,
+    "segments": 32,
+
+    "center": [0,0,0],
+
+    "theta": Math.PI / 4.0,
+
+    "pill_n" : 16,
+    "pill_width_percent": 0.55,
+    //"pill_cap": "blunt",
+    "pill_cap": "sphere",
+    "pill_segments": 16
+  };
+  for (let _k in default_info) {
+    if (_k in _info) { info[_k] = _info[_k]; }
+    else { info[_k] = default_info[_k]; }
+  }
+
+  //let base_s = 0.18/2;
+  let base_s = 0.335;
+  let col_r = 0.15;
+  let _seg = 32;
+
+  base_s = 0.2;
+  col_r = (base_s/2)*0.9;
+
+
+  let _top_h = 0.075;
+  let _mid_th = 0.05;
+  let _mid_ch = 1 - 2*_top_h - 2*_mid_th;
+
+  let dz = (_mid_ch/2) + _mid_th + (_top_h/2);
+
+
+  let bb = neocal_column_end_2({
+    "size": [base_s, base_s, _top_h],
+    "columnRadius": col_r,
+    "center": [0,0,-dz]
+  });
+
+  let bb1 = neocal_column_end_2({
+    "size": [base_s, base_s, _top_h],
+    "columnRadius": col_r,
+    "center": [0,0,-dz]
+  });
+  bb1 = jscad.transforms.rotateX( Math.PI, bb1 );
+
+  let cc = neocal_column_center_1({
+    "outerRadius": col_r,
+    "height_mid": _mid_ch,
+    "height_end": _mid_th
+  });
+
+  let _res = jscad.booleans.union( bb, cc, bb1 );
+  return _res;
+}
+
+//tostl( [neocal_column_2(), debug_marker() ]);
+
+//tostl([ debug_marker(), neocal_column_end_2() ]);
+//tostl([ jscad.trasnneocal_capital_pillow({"height":0.07}) ] );
+
+
+//tostl( [debug_marker(), neocal_column_2()] );
+//
+//
+
+//---------------------------
+//---------------------------
+//---------------------------
+//---------------------------
+
 //toobj(center_column_0());
 
 //toobj(scene_experiment_0());
@@ -1798,7 +2322,8 @@ function scene_experiment_3() {
 //tostl( [ marker(), column_0_t({"center":[0,0,2]}) ] );
 
 //scene_experiment_2();
-scene_experiment_3();
+//scene_experiment_3();
+scene_experiment_4();
 
 //tostl( [marker(), stair_spiral_0({"center":[2,3,1]}), stair_spiral_0({"center":[1,3,1], "rotateZ":Math.PI/2}) ] );
 
