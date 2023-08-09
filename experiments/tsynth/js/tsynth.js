@@ -210,10 +210,12 @@ function init2() {
   synth.triggerAttackRelease(["C4", "E4", "A4"], 1);
 }
 
+var g_info = {};
+
 function init3() {
   let _synth = new Tone.Synth({
     oscillator : {
-      volume: 5,
+      volume: 1,
       count: 3,
       spread: 90,
       type : "fatsawtooth"
@@ -226,11 +228,68 @@ function init3() {
     }
   });
 
-  const synth = new Tone.PolySynth( Tone.Synth, _synth.get() ).toDestination();
+  let synth = new Tone.PolySynth( Tone.Synth, _synth.get() ).toDestination();
   //const synth = new Tone.PolySynth( Tone.Synth ).toDestination();
-  synth.set({ detune: -1200 });
+  synth.set({ detune: -10 });
   synth.triggerAttackRelease(["C4", "E4", "A4"], 1);
+
+  g_info.synth = synth;
 }
+
+function init4() {
+  let _synth = new Tone.MonoSynth({
+    oscillator : {
+      volume: 1,
+      count: 3,
+      spread: 90,
+      type : "fatsawtooth"
+    },
+    envelope : {
+      attack: 2,
+      decay: 1,
+      sustain: 0.4,
+      release: 4
+    },
+    filterEnvelope : {
+      attack: 2,
+      decay: 1,
+      sustain: 0.4,
+      release: 4
+    }
+
+  });
+
+  let synth = new Tone.PolySynth( Tone.MonoSynth, _synth.get() ).toDestination();
+  synth.set({ detune: -10 });
+  //synth.triggerAttackRelease(["C4", "E4", "A4"], 1);
+  synth.triggerAttackRelease(["C4"], 1);
+
+  g_info.synth = synth;
+}
+
+function multiple_osc_test() {
+  let ampEnv = new Tone.AmplitudeEnvelope({
+    attack: 0.1,
+    decay: 0.2,
+    sustain: 1.0,
+    release: 0.8
+  }).toDestination();
+
+  let osc0 = new Tone.Oscillator(440, "sine");
+  let osc1 = new Tone.Oscillator(440.5, "sawtooth");
+  let osc2 = new Tone.Oscillator(439.5, "sawtooth");
+
+  // create an oscillator and connect it
+  //const osc123 = new Tone.Oscillator().connect(ampEnv).start();
+
+  osc0.connect(ampEnv).start();
+  osc1.connect(ampEnv).start();
+  osc2.connect(ampEnv).start();
+
+  ampEnv.triggerAttackRelease("8t");
+}
+
+
 
 function _x() {
 

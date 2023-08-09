@@ -19,6 +19,7 @@ Fiber Laser
 * Caleb Harrington art
   - done
 * coald earrings etc.
+  - still working on soldermask
 * bldc motor controller
 * 16 segment display
 

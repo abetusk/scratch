@@ -1,0 +1,71 @@
+#!/usr/bin/python3
+#
+# License: CC0
+#
+
+import sys
+import re
+import json
+
+DICT_FN = "./data/american-english"
+OUT_FN = "./data/scram.word"
+OUT_JSON_FN = "./data/scram_word.json"
+
+word_lookup = {}
+rword_lookup = {}
+word_list = []
+rword_list = []
+
+def letsort(w):
+  a = []
+  for idx in range(len(w)):
+    a.append( w[idx] )
+
+  a.sort()
+  return "".join(a)
+
+count = 0
+
+with open(DICT_FN) as fp:
+  for line in fp:
+    line = line.strip().lower()
+    m = re.search('[^a-zA-Z]', line)
+    if m: continue
+
+    w = line
+    sw = letsort(w)
+
+    if not (w in word_lookup):
+      word_lookup[w] = [ sw ]
+      word_list.append(w)
+    else:
+      word_lookup[w].append(sw)
+
+    if not (sw in rword_lookup):
+      rword_lookup[sw] = [ w ]
+      rword_list.append(sw)
+    else:
+      rword_lookup[sw].append(w)
+
+rword_list.sort()
+
+def dedup_lookup(_lookup):
+  for w in _lookup:
+    _lookup[w].sort()
+    _word_list = _lookup[w]
+    _dedup_word_list = []
+    for idx in range( len(_word_list) ):
+      if idx>0:
+        if _word_list[idx] == _word_list[idx-1]: continue
+      _dedup_word_list.append( _word_list[idx] )
+    _lookup[w] =  _dedup_word_list
+
+dedup_lookup(word_lookup)
+dedup_lookup(rword_lookup)
+
+with open(OUT_FN, "w") as fp:
+  for rw in rword_list:
+    fp.write( rw + " " + " ".join(rword_lookup[rw]) + "\n")
+
+with open(OUT_JSON_FN, "w") as fp:
+  fp.write( json.dumps( rword_lookup, indent=2 ) )
