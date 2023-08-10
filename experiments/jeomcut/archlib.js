@@ -1460,6 +1460,41 @@ function neocal_stair_spiral_0(_info) {
 }
 
 
+function neocal_stair_wedge_0(_info) {
+  if (typeof _info === "undefined") { _info = {}; }
+  let info = {};
+  let sub_info = {};
+
+  let default_info = {
+    "rotateZ": 0,
+    "center": [0,0,0],
+    "stair_n" : 16,
+    "width": 1
+    //"width": 0.9
+  };
+  for (let _k in default_info) {
+    if (_k in _info) {
+      info[_k] = _info[_k];
+      sub_info[_k] = _info[_k];
+    }
+    else {
+      info[_k] = default_info[_k];
+      sub_info[_k] = default_info[_k];
+    }
+  }
+
+  sub_info["rotateZ"] = 0;
+  sub_info["center"] = default_info.center;
+
+  let _s0 = neocal_stair_0(sub_info);
+  sub_info.rotateZ = Math.PI/2;
+  let _s1 = neocal_stair_0(sub_info);
+
+  let _res = jscad.transforms.translate( info.center, jscad.transforms.rotateZ( info.rotateZ, jscad.booleans.union(_s0, _s1) ) );
+
+  return _res;
+}
+
 function neocal_stair_0(_info) {
   if (typeof _info === "undefined") { _info = {}; }
   let info = {};
@@ -1622,6 +1657,11 @@ function render_grid(gr, _info) {
     "s1": neocal_stair_0({"rotateZ":  Math.PI/2}),
     "s2": neocal_stair_0(),
     "s3": neocal_stair_0({"rotateZ": -Math.PI/2}),
+
+    "w0": neocal_stair_wedge_0(),
+    "w1": neocal_stair_wedge_0({"rotateZ": Math.PI/2}),
+    "w2": neocal_stair_wedge_0({"rotateZ": Math.PI}),
+    "w3": neocal_stair_wedge_0({"rotateZ":-Math.PI/2}),
 
     "p3": neocal_stair_spiral_0(),
     "p2": neocal_stair_spiral_0({"rotateZ":  Math.PI/2}),
@@ -1973,11 +2013,11 @@ function scene_experiment_4() {
 
     [
       [  "B",  "B",  "B",  "B",  "B",  "B",  "B", "B", "B", "B", "B", "B", "B" ],
-      [  "B",  "B",  "B",  "B",  "B",  "B",  "s0", "B", "B", "B", "B", "B", "B" ],
+      [  "B",  "B",  "B",  "B",  "B",  "w1",  "s0", "w2", "B", "B", "B", "B", "B" ],
       [  "B",  "B",  "B",  "B",  "B",  "s1",  ".", "s3", "B", "B", "B", "B", "B" ],
       [  "B",  "B",  "B",  "B",  "B",  "s1",  ".", "s3", "B", "B", "B", "B", "B" ],
       [  "B",  "B",  "B",  "B",  "B",  "s1",  ".", "s3", "B", "B", "B", "B", "B" ],
-      [  "B",  "B",  "B",  "B",  "B",  "B",  "s2", "B", "B", "B", "B", "B", "B" ],
+      [  "B",  "B",  "B",  "B",  "B",  "w0",  "s2", "w3", "B", "B", "B", "B", "B" ],
 
       [  "B",  "B",  "B",  "B",  "B",  "B",  "B", "B", "B", "B", "B", "B", "B" ],
       [  "B",  "B",  "B",  "B",  "B",  "B",  "B", "B", "B", "B", "B", "B", "B" ],
@@ -2323,7 +2363,7 @@ function neocal_column_2(_info) {
 
 //scene_experiment_2();
 //scene_experiment_3();
-scene_experiment_4();
+//scene_experiment_4();
 
 //tostl( [marker(), stair_spiral_0({"center":[2,3,1]}), stair_spiral_0({"center":[1,3,1], "rotateZ":Math.PI/2}) ] );
 
@@ -2368,4 +2408,16 @@ scene_experiment_4();
 function main () {
   return cube({ size: 1 })
 }
-module.exports = { main }
+
+if (typeof module !== "undefined") {
+  module.exports["main"]  = main;
+  module.exports["neocal_stair_0"]  = neocal_stair_0;
+  module.exports["neocal_stair_wedge_0"]  = neocal_stair_wedge_0;
+  module.exports["tostl"] = tostl;
+  module.exports["toobj"] = toobj;
+  module.exports["vert_to_gnuplot"] = vert_to_gnuplot;
+
+  module.exports["scene_experiment_2"] = scene_experiment_2;
+  module.exports["scene_experiment_3"] = scene_experiment_3;
+  module.exports["scene_experiment_4"] = scene_experiment_4;
+}
