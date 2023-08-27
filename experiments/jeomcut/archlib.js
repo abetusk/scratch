@@ -1571,6 +1571,32 @@ function neocal_block_0(_info) {
   //return _res;
 }
 
+function artdeco_tile_0() {
+  if (typeof _info === "undefined") { _info = {}; }
+  let info = {};
+
+  let default_info = {
+    "size" : [1,1,1],
+    "center": [0,0,0]
+  };
+  for (let _k in default_info) {
+    if (_k in _info) { info[_k] = _info[_k]; }
+    else { info[_k] = default_info[_k]; }
+  }
+
+  let _s = 1/32;
+
+
+  let _t0 = jscad.primitives.rectangle({ "size": [0.25, 0.25] });
+  let _t1 = jscad.primitives.rectangle({ "size": [0.25 + _s, 0.25 + _s] });
+
+  let _tr0 = jscad.booleans.union( _t0, _t1 );
+
+  return _tr0;
+
+
+}
+
 //-------------------------
 //-------------------------
 //-------------------------
@@ -2420,4 +2446,6 @@ if (typeof module !== "undefined") {
   module.exports["scene_experiment_2"] = scene_experiment_2;
   module.exports["scene_experiment_3"] = scene_experiment_3;
   module.exports["scene_experiment_4"] = scene_experiment_4;
+
+  module.exports["artdeco_tile_0"] = artdeco_tile_0;
 }

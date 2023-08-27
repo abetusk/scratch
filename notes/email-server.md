@@ -222,6 +222,10 @@ spamfilter unix  -       n       n       -       -       pipe
 
 ### Using Dovecot's mdbox
 
+`mdbox` is Dovecot's "high performance" mailbox format ("multi-dbox").
+The idea is that it's a binary format that's grouped by some time window, usually 
+
+
 ---
 
 Use local mail transport protocol (`lmtp`)
@@ -395,7 +399,7 @@ Configuration
 ---
 
 ```
-# addusser arborgorge
+# adduser arborgorge
 ```
 
 ### postfix
@@ -656,7 +660,7 @@ $rcmail_config['smtp_port'] = 25;
 ```
 
 
-### user addition
+### user addition (deprecated)
 
 ```
 # groupadd -g 5000 vmail
@@ -675,7 +679,17 @@ to manage the IMAP interface.
 * `dbox` is dovecots own answer, grouping multiple messages into a single file but keeping the grouped messages in a single directory ([dbox](https://doc.dovecot.org/admin_manual/mailbox_formats/dbox/#dbox-mbox-format))
   - for what it's worth, this looks a lot like what SmarterMail is doing (even going so far as to name their files `.grp` with year, day, month file name)
 
+### user addition
 
+```
+adduser {username}
+...
+usermod {username} -s /sbin/nologin
+```
+
+
+
+---
 
 
 Glossary
@@ -704,3 +718,4 @@ References
 * [sasl](https://www.civo.com/learn/setting-up-a-postfix-mail-server-with-dovecot)
 * [spamassassin](https://cwiki.apache.org/confluence/display/spamassassin/IntegratedSpamdInPostfix)
 * [spamassassin with postfix on Ubuntu](https://www.vultr.com/docs/how-to-install-spamassassin-with-postfix-on-ubuntu/)
+* [dovecot documentation](https://doc.dovecot.org/)
