@@ -120,3 +120,4 @@ References
 * [arc consistency](https://www.sciencedirect.com/topics/computer-science/arc-consistency#:~:text=Definition%2013.2,variable%20pairs%20are%20arc%20consistent.)
 * [AC-3 on Wikipedia](https://en.wikipedia.org/wiki/AC-3_algorithm)
 * [Example-Based Model Synthesis by Paul Merrell](https://paulmerrell.org/wp-content/uploads/2022/03/model_synthesis.pdf) ([model synthesis](https://paulmerrell.org/model-synthesis/))
+* [infinite wfc](https://marian42.de/article/infinite-wfc/)
