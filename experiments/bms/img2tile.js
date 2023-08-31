@@ -62,6 +62,7 @@ function build_super_tile_lib(info) {
 
   let oob_pxl = info.oob_pxl;
 
+  let supertile_key = [];
   let supertile_lib = {};
 
   let supertile_count = 0;
@@ -86,6 +87,8 @@ function build_super_tile_lib(info) {
       let supertile_nei_buf = [ [], [], [], [] ];
       let supertile_nei_str = [ [], [], [], [] ];
 
+      let nei_key_map = {};
+
       for (let ty=_sy; ty<(_sy+_ny); ty++) {
 
         if (ty>0) { key_buf.push(";"); }
@@ -99,47 +102,38 @@ function build_super_tile_lib(info) {
 
           let _pxl;
 
+          let nei_pfx_char = [ "", "", "", "" ];
+
           // add indexes for neighbor pixel ribbons
           //
           let nei_list = [];
           for (let ii=0; ii<nei_bnd.length; ii++) {
+
+
             if ((rx < nei_bnd[ii][0][0]) ||
-                (rx > nei_bnd[ii][0][1]) ||
+                (rx >= nei_bnd[ii][0][1]) ||
                 (ry < nei_bnd[ii][1][0]) ||
-                (ry > nei_bnd[ii][1][1])) { continue; }
+                (ry >= nei_bnd[ii][1][1])) { continue; }
             nei_list.push(ii);
+
+            // we want ';' at row breaks and ',' between
+            // string representation of pixels
+            //
+            if ((rx == nei_bnd[ii][0][0]) &&
+                (ry > nei_bnd[ii][1][0])) {
+              nei_pfx_char[ii] = ";\n";
+            }
+            else if (rx > nei_bnd[ii][0][0]) { nei_pfx_char[ii] = ","; }
+            //else  { nei_pfx_char[ii] = ""; }
+
           }
 
           if ( (tx<0) || (tx>=w) ||
                (ty<0) || (ty>=h) ) {
             _pxl = [ oob_pxl[0], oob_pxl[1], oob_pxl[2], oob_pxl[3] ];
-
-            /*
-            supertile_buf.push( oob_pxl[0] );
-            supertile_buf.push( oob_pxl[1] );
-            supertile_buf.push( oob_pxl[2] );
-            supertile_buf.push( oob_pxl[3] );
-
-            supertile_buf_str.push( _hxs2(oob_pxl[0]) + ":");
-            supertile_buf_str.push( _hxs2(oob_pxl[1]) + ":");
-            supertile_buf_str.push( _hxs2(oob_pxl[2]) + ":");
-            supertile_buf_str.push( _hxs2(oob_pxl[3]) );
-            */
           }
           else {
             _pxl = [ data[idx+0], data[idx+1], data[idx+2], data[idx+3] ];
-
-            /*
-            supertile_buf.push( data[idx+0] );
-            supertile_buf.push( data[idx+1] );
-            supertile_buf.push( data[idx+2] );
-            supertile_buf.push( data[idx+3] );
-
-            supertile_buf_str.push( _hxs2(data[idx+0]) + ":" );
-            supertile_buf_str.push( _hxs2(data[idx+1]) + ":" );
-            supertile_buf_str.push( _hxs2(data[idx+2]) + ":" );
-            supertile_buf_str.push( _hxs2(data[idx+3]) );
-            */
           }
 
           for (let ii=0; ii<4; ii++) {
@@ -147,6 +141,8 @@ function build_super_tile_lib(info) {
             supertile_buf_str.push( ((ii>0) ? ":" : "" ) + _hxs2(_pxl[ii]) );
             for (let jj=0; jj<nei_list.length; jj++) {
               let nei_idx = nei_list[jj];
+              //if (ii==0) { supertile_nei_str[nei_idx].push( nei_pfx_char[ii] ); }
+              if (ii==0) { supertile_nei_str[nei_idx].push( nei_pfx_char[nei_idx] ); }
               supertile_nei_buf[nei_idx].push( _pxl[ii] );
               supertile_nei_str[nei_idx].push( ((ii>0) ? ":" : "" ) + _hxs2(_pxl[ii]) );
             }
@@ -158,12 +154,26 @@ function build_super_tile_lib(info) {
 
       let st_key = supertile_buf_str.join("");
       if (!(st_key in supertile_lib)) {
+
+        let nei_key_str = [];
+        for (let ii=0; ii<supertile_nei_str.length; ii++) {
+          nei_key_str.push( supertile_nei_str[ii].join("") );
+        }
+
+        supertile_key.push(st_key);
         supertile_lib[ st_key ] = {
+          "nei_buf": supertile_nei_buf,
+          "nei_key": nei_key_str,
           "data": supertile_buf,
           "id": supertile_count,
           "freq": 1
         };
         supertile_count++;
+
+
+        for (let ii=0; ii<nei_bnd.length; ii++) {
+          let nei_key = supertile_nei_str[ii].join("");
+        }
       }
       else {
         supertile_lib[ st_key ].freq++;
@@ -191,6 +201,24 @@ function build_super_tile_lib(info) {
 
     }
 
+  }
+
+  let supertile_adj_map = {};
+  let supertile_adj_list = [];
+  for (let st_idx=0; st_idx < supertile_count; st_idx++) {
+    let st_key = supertile_key[st_idx];
+    let st_nei_key = supertile_lib[ st_key ].nei_key;
+
+    for (let ii=0; ii<st_nei_key.length; ii++) {
+
+      if (!(st_nei_key in supertile_adj_map)) {
+        supertile_adj_map[st_nei_key] = {
+          //"to".
+        };
+      }
+
+      console.log(">>>", st_idx, " ...{", ii, "}");
+    }
   }
 
   info["supertile_lib"] = supertile_lib;
@@ -260,6 +288,14 @@ build_simple_tile_lib(g_info);
 
 console.log("# building super tile lib...");
 build_super_tile_lib(g_info);
+
+let st_lib = g_info.supertile_lib;
+for (let key in st_lib) {
+  console.log(">>>", st_lib[key].id);
+  for (let ii=0; ii<st_lib[key].nei_key.length; ii++) {
+    console.log("[", ii, "]:\n", st_lib[key].nei_key[ii]);
+  }
+}
 
 //for (let key in g_info.pxl_lib) { console.log(g_info.pxl_lib[key].id, g_info.pxl_lib[key].freq); }
 //console.log("tile_count:", g_info.pxl_lib_tile_count);
