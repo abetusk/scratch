@@ -106,9 +106,9 @@ tile sets that have longer reaching or global constraints that MMS would not be 
 Definition
 ---
 
-We concern ourselves with finding realizations a three dimensional array grid, with each grid site consisting
-of labels constrained to a discrete domain and rules for pairing neighboring labels.
-
+We concern ourselves with finding realizations of three dimensional array grids, with grid site
+values chosen from a discrete domain and a constraint function indicating which value pairs are admissible.
+ 
 A simplified Constraint Satisfaction Problem (CSP)
 can be used for our purposes by defining
 a triple $<{\bf V}, {\bf D}, f>$, where:
@@ -127,7 +127,7 @@ $$
 Where ${\bf V}$ is the set of variables, ${\bf D}$ is the domain of each variable and $f_{i,j}(\cdot,\cdot)$ is the
 constraint function.
 
-From a given grid size, $n$, a domain of admissible tile values, $D$ and the constraint function, $f_{i,j}(\cdot,\cdot)$,
+From a given grid size, $n$, a domain of admissible tile values, $D$, and the constraint function, $f_{i,j}(\cdot,\cdot)$,
 we want to find a valid realization.
 That is, find ${\bf V_s}$:
 
@@ -146,14 +146,18 @@ is only defined for neighboring grid lattice points ($(\text{pos}(i) - \text{pos
 
 An additional local potential function $g_i(\cdot)$ can be used to weight domain values at different locations.
 
+Previous Algorithms
+---
+
 -- boundary conditions discussion
 
-Max Gumin's Wave Function Collapse (WFC) has been used to solve problems in this domain.
+Paul Merrell's work on Model Synthesis, and since popularized by Max Gumin's Wave Function Collapse (WFC),
+has been used to solve problems in this domain.
 Briefly, WFC works by repeatedly choosing a variable position with minimum entropy, assigning it a value and propagating constraints.
 The process is repeated until all variables are fixed or until a contradiction is encountered.
 
 
-We present a WFC algorithm with an additional feature that it be confined to a block, which will be justified later in the paper:
+We present a WFC algorithm with an additional feature that it be confined to a block, which will be discussed later:
 
 ```
 /* GUMIN-BLOCK-WAVE-FUNCTION-COLLAPSE */
@@ -178,7 +182,65 @@ While there's a viable cell to be chosen in $B_w(p)$:
 return True
 ```
 
+WFC is limited in its ability to process large models because of its "one-shot" nature, resulting in a failure on encountering
+any contradiction.
+Various methods have been proposed to overcome this limitation, including restart and retry, stitching and backtracking.
+Each of these methods has limitations, with a failure to find realizations for large models and tile sets.
 
+The Modify in Place Model Synthesis algorithm, which we will refer to as MMS for the remainder of
+the paper,
+can be used to realize large models by breaking portions of the model into smaller blocks and running WFC on overlapping
+and new portions.
+MMS considers a block chosen from a block schedule, originally proposed to sequentially walk through the map at a stride
+that allows for block overlap to stitch blocks together.
+If the block region considered can't find a realization up to a retry limit, restore the map to its previous known good
+state and move on to the next block.
+
+---XXX
+MMS's choice of blocks overcomes the limitation of site specific Monte Carlo Markov Chain methods.
+Often constraints have a radius of influence and only altering a single site can run into the potential
+of getting trapped in a local minima without 
+---XXX
+
+A drawback of MMS is that it needs the model to be in a fully realized state for MMS to begin processing.
+This has a few implications:
+
+* A fully realized initial state must be made which might be non-obvious or labor intensive to create
+* If the block size is too small, MMS might get trapped in a solution basin, unable to sample from the
+  space of viable solutions because of its inability to breakout from the local minima it's trapped in
+* The initial state might bias the solution or cause mixing times to become long
+
+
+To overcome these limitations, we propose a new algorithm called Breakout Model Synthesis (BMS).
+
+Breakout Algorithm
+---
+
+BMS starts by creating a prefatory state by saving the model configuration after boundary conditions
+and user specified constraints have been propagated.
+BMS then attempts to realize a block, accepting the block if its a valid realization.
+If BMS's attempt at finding a block can't be done within it's block retry limit, it goes into a SOFTEN
+stage, returning a soften block window size back to its prefatory state.
+BMS keeps trying blocks and softening until it reaches a global iteration limit or until it finds a realization,
+whichever comes first.
+
+After a cell has been altered to restrict its domain, constraint propagation is run on the cell
+and its neighbors to put it into an arc consistent state.
+Many grid configurations and tile sets exhibit a finite arc consistent influence radius, with
+the constraint propagation limited to a certain spatial extent after alteration.
+Though arc consistency doesn't imply a realizable configuration, arc inconsistency
+implies a non-realizable configuration.
+
+By choosing the soften window to encompasses an arc consistent influence radius,
+there is the potential to relax an over constrained section by resetting it to its prefatory state.
+The soften step allows BMS to potentially recover from getting trapped into a cycle of processing
+a single block until the iteration limit has been exceeded.
+
+There is a balance between retry limit, block window size and soften window size.
+If the retry limit is too small or block size is too large, block WFC might have trouble
+finding a block level realization.
+If the soften size is too large or retry limit too small, BMS might not make enough
+progress to overcome the damage done by the SOFTEN stage.
 
 
 ```
@@ -201,9 +263,8 @@ Repeat $T_{mix}$ times {
 
   If no valid realization of block $B_w$ could be found from the previous step {
     /* SOFTEN phase */
-    Restore block $B_w$ to its prefatory state and restore all block neighbors, $B_{nei}$, to their prefatory state
 		Restore the grid into its previous state
-		Restore all cells within the soften window $B_s$ to its prefatory state, using $B_w$ as its center
+		Restore all cells within the soften window $B_s$ to its prefatory state
     propagate constraints throughout the grid as necessary
   }
 
@@ -219,6 +280,20 @@ Some notes:
   choice to minimize the chance of repeatedly choosing the same block
 * The grid can have hysteresis, remembering tiles that were impossible with a previous configuration that are
   potentially now possible with a newer configuration
+
+From experimentation, choosing a block schedule of maximum block entropy has worked well, focusing on regions
+that have a wholly unrealized part or portions of the grid that are undetermined.
+To further guard against cycles of choosing the same block in a constrained system, noise can be added to help randomize
+block choice.
+
+Comparison
+---
+
+| Algorithm | Small Map (Constrained Tile Set) | Large Map (Constrained Tile Set) | Required Ground State | Basin Trap | Can Fail |
+|-----------|----------------------------------|----------------------------------|-----------------------|------------|----------|
+| WFC       | yes                              | no                               | no                    | no         | yes      |
+| MMS       | yes                              | yes                              | yes                   | yes        | no       |
+| BMS       | yes                              | yes                              | no                    | no         | yes      |
 
 
 CRUFT
