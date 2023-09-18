@@ -312,6 +312,42 @@ guid: c06d92030e769a6457cb0400cba4f65e
 
 Presumably you can import with the same tool...
 
+More on import:
+
+Importing from `maildir` format:
+
+Make sure the `maildir` directory structure is set up properly:
+
+```
+$ mkdir -p /home/$user/import ; cd /home/$user/import ; mkdir new cur tmp ; ls
+cur new tmp
+```
+
+Transfer the individual email files into something like `cur` and then run:
+
+```
+doveadm -D -v import -u $user maildir:/home/$user/import/ '' all
+```
+
+It looks like `doveadm` is using the files timestamp to figure out when
+it was delivered, so that should be changed appropriately to match.
+
+
+---
+
+To mark messages as seen, the following can be used:
+
+```
+# doveadm flags add -u abetusk '\Seen' mailbox inbox
+```
+
+to mark as unseen:
+
+```
+# doveadm flags remove -u abetusk '\Seen' mailbox inbox
+```
+
+
 ---
 
 
