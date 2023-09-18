@@ -32,7 +32,7 @@ A rough overview of the algorithm is provided:
 /* BREAKOUT-MODEL-SYNTHESIS algorithm */
 Create an initial prefatory arc consistent model $M = M_0$ (if no such model exists, fail)
 
-Repeat $T_{mix}$ times {
+Repeat $T_{max}$ times {
 
   /* BLOCK-POSITION phase */
   Choose a block, $B$, of cells to modify
@@ -103,6 +103,35 @@ Taking lowest entropy with a random power law factor to add noise might work wel
 By allowing indeterminate state in the initial grid, this potentially allows BMS to find realizations from
 tile sets that have longer reaching or global constraints that MMS would not be able to realize.
 
+#### WIP
+
+Abstract
+---
+
+Tile based algorithms are a method for procedural content generation, often using
+exemplar scenes to infer placement constraints for novel output generation.
+Wave Function Collapse (WFC) and Modify in Place Model Synthesis (MMS) are both tools used for procedural
+generation but have limitations involving size and initial problem setup.
+
+In this paper we present a new algorithm called "breakout model synthesis" (BMS) used to create 2D and 3D designs from small example model inputs.
+Breakout model synthesis combines ideas from the WFC and MMS algorithms to overcome the limitations of each.
+Our solution allows for large instance sizes to be realized with minimal assumption about the initial state.
+
+BMS starts from an initial indeterminate state and progressively fixes sub-blocks until a solution is found,
+reverting the block and surrounding neighbors to an initial state if no solution can be found.
+The concept of an arc consistent influence radius is introduced with a consideration on its influence on problem difficulty and block sizing choice.
+
+We present results of large scale runs of BMS and compare them to the challenges that MMS and WFC encounter.
+
+      
+ 1. starting sentence on who/what area would use it. why.     
+ 2. abstract: refer to idea sources by name... "ideas from Wave Function Collapse (Gumin) and from modify-in-place Model Synthesis (Merrell)..." - consider not having Gumin, Merrell at all.     
+ 3. "overcome the limiations of each. Our solution allows for large instances to be realized with minimal assumption.."     
+ 4. one sentence on radius. "We introduce the concept of 'influence radius' and demonstrate how it is used to solve large instances."     
+ 5. remove "finally", and make results more prominent in abstract. "We present results of large scale runs of BMS compared to MMS and WFC, and examples of challenging tilesets that we can solve."     
+      
+
+
 Definition
 ---
 
@@ -124,8 +153,15 @@ f_{i,j} ( d_a, d_b ) = & \begin{cases}
 \end{array}
 $$
 
-Where ${\bf V}$ is the set of variables, ${\bf D}$ is the domain of each variable and $f_{i,j}(\cdot,\cdot)$ is the
+Where ${\bf V}$ is the set of variables, ${\bf D}$ is the domain of allowable values each variable can take and $f_{i,j}(\cdot,\cdot)$ is the
 constraint function.
+Each variable is considered to be able to hold an array of values, chosen from the domain $D$.
+During the coarse of the algorithms presented in this paper, the variable domains can be restricted, removing entries when
+they would lead to a contradictory state.
+
+Variable domain values can be referenced by an index into the current array list of admissible values.
+For example, if $v_3 = (d_0, d_3, d_7, d_15)$, then $v_3[2]$ would  hold the value $d_7$.
+
 
 From a given grid size, $n$, a domain of admissible tile values, $D$, and the constraint function, $f_{i,j}(\cdot,\cdot)$,
 we want to find a valid realization.
@@ -133,8 +169,8 @@ That is, find ${\bf V_s}$:
 
 $$
 \begin{array}{ll}
-{\bf V_s }  = & ( v_0 = d_{v_0}, v_1 = d_{v_1}, \cdots, v_{n-1} = d_{v_{n-1}} ) \\
-s.t. & \prod_{i,j} f_{i,j}( v_i, v_j ) > 0
+{\bf V_s }  = & ( v_0 = (d_{v_0}), v_1 = (d_{v_1}), \cdots, v_{n-1} = (d_{v_{n-1}) } ) \\
+s.t. & \prod_{i,j} f_{i,j}( v_i[0], v_j[0] ) > 0
 \end{array}
 $$
 
@@ -145,6 +181,7 @@ Since we are restricting ourselves to a three dimensional grid, the constraint f
 is only defined for neighboring grid lattice points ($(\text{pos}(i) - \text{pos}(j)) \in \{ (\pm 1, 0, 0), (0, \pm 1, 0), (0, 0, \pm 1) \}$).
 
 An additional local potential function $g_i(\cdot)$ can be used to weight domain values at different locations.
+It is assumed that $g_i(\cdot)$ will get renormalized as the variable $v_i$ has its domain values restricted.
 
 Previous Algorithms
 ---
@@ -248,7 +285,7 @@ progress to overcome the damage done by the SOFTEN stage.
 
 Create an initial prefatory arc consistent model $M = M_0$ (if no such model exists, fail)
 
-Repeat $T_{mix}$ times {
+Repeat $T_{max}$ times {
 
   /* BLOCK-POSITION phase */
   Choose a block of size $w$, at base position $p$, $B_w(p)$, of cells to modify
@@ -286,6 +323,22 @@ that have a wholly unrealized part or portions of the grid that are undetermined
 To further guard against cycles of choosing the same block in a constrained system, noise can be added to help randomize
 block choice.
 
+Arc Consistent Influence Radius
+---
+
+* For oloz
+* For pm
+* For stair
+* For end tiles
+* For mu forest
+* for train?
+
+Results
+---
+
+* oloz comparison (MMS/BMS)
+* mu forest comparison (MMS/BMS)
+
 Comparison
 ---
 
@@ -295,6 +348,7 @@ Comparison
 | MMS       | yes                              | yes                              | yes                   | yes        | no       |
 | BMS       | yes                              | yes                              | no                    | no         | yes      |
 
+#### WIP
 
 CRUFT
 ---
