@@ -110,18 +110,20 @@ Abstract
 
 Tile based algorithms are a method for procedural content generation, often using
 exemplar scenes to infer placement constraints for novel output generation.
-Wave Function Collapse (WFC) and Modify in Place Model Synthesis (MMS) are both tools used for procedural
-generation but have limitations involving size and initial problem setup.
+Wave Function Collapse (WFC) and Modify in Place Model Synthesis (MMS) are both recent tools used for procedural
+generation, creating novel output with minimal instruction, but have limitations involving size and initial problem setup.
 
 In this paper we present a new algorithm called "breakout model synthesis" (BMS) used to create 2D and 3D designs from small example model inputs.
 Breakout model synthesis combines ideas from the WFC and MMS algorithms to overcome the limitations of each.
 Our solution allows for large instance sizes to be realized with minimal assumption about the initial state.
 
-BMS starts from an initial indeterminate state and progressively fixes sub-blocks until a solution is found,
+BMS starts from an initial indeterminate state and progressively fixes sub-blocks until a configuration is realized,
 reverting the block and surrounding neighbors to an initial state if no solution can be found.
-The concept of an arc consistent influence radius is introduced with a consideration on its influence on problem difficulty and block sizing choice.
+The concept of an arc consistent influence radius is introduced with a consideration on its impact on problem difficulty and block sizing choice.
 
-We present results of large scale runs of BMS and compare them to the challenges that MMS and WFC encounter.
+We present results of large scale runs of BMS, compare them to the challenges that MMS and WFC encounter
+and focus on certain constrained models that highlight the drawbacks of MMS and WFC with a discussion of how
+BMS can overcome them..
 
       
  1. starting sentence on who/what area would use it. why.     
