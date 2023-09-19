@@ -155,13 +155,14 @@ f_{i,j} ( d_a, d_b ) = & \begin{cases}
 \end{array}
 $$
 
-Where ${\bf V}$ is the set of variables, ${\bf D}$ is the domain of allowable values each variable can take and $f_{i,j}(\cdot,\cdot)$ is the
-constraint function.
-Each variable is considered to be able to hold an array of values, chosen from the domain $D$.
-During the coarse of the algorithms presented in this paper, the variable domains can be restricted, removing entries when
-they would lead to a contradictory state.
+Where ${\bf V}$ is the set of variables, ${\bf D}$ is the domain of
+allowable values each variable can take and $f_{i,j}(\cdot,\cdot)$ is the constraint function.
+During the coarse of the algorithms presented in this paper, the variable domains can be restricted,
+removing entries when they would lead to a contradictory state.
+To represent the currently admissible domain values for variable $v_i$, $D_i$ will be used.
 
-Variable domain values can be referenced by an index into the current array list of admissible values.
+We will also use the notation $v_i[k]$ to deonte the domain value referenced by the index position
+$k$ of remaining domain values for variable $v_i$.
 For example, if $v_3 = (d_0, d_3, d_7, d_15)$, then $v_3[2]$ would  hold the value $d_7$.
 
 
@@ -176,7 +177,8 @@ s.t. & \prod_{i,j} f_{i,j}( v_i[0], v_j[0] ) > 0
 \end{array}
 $$
 
-It will be convenient for us to define a translation between the linear dimension, $n$, to three dimensional grid positions by
+It will be convenient for us to define a translation between the linear dimension,
+$n$, to three dimensional grid positions by
 defining a grid wise dependent conversion function, $\text{pos}(i) = (i_x, i_y, i_z)$.
 When clear, it will be implied that $(i_x, i_y, i_z) = \text{pos}(i)$.
 Since we are restricting ourselves to a three dimensional grid, the constraint function $f_{i,j}(\cdot, \cdot)$
@@ -184,6 +186,36 @@ is only defined for neighboring grid lattice points ($(\text{pos}(i) - \text{pos
 
 An additional local potential function $g_i(\cdot)$ can be used to weight domain values at different locations.
 It is assumed that $g_i(\cdot)$ will get renormalized as the variable $v_i$ has its domain values restricted.
+
+The concept of arc consistency is used for constraint propagation
+to help guide search for solutions.
+
+A variable $v_i$ is said to be arc consisent ($AC(\cdot,\cdot)$) with respect to $v_j$ if for every remaining value
+that $v_i$ can hold, there exists a value in $v_j$:
+
+$$
+\begin{array}{ll}
+\text{AC}(v_i, v_j) \to & \forall d \in D_i, \exists d' \in D_j  \\
+s.t. & f_{i,j}(d,d') = 1
+\end{array}
+$$
+
+We call a model arc consistent if, for every cell, it's arc consistent with it's neighbors:
+
+$$
+\text{AC}(M) \iff \text{AC}(v_i,v_j), \forall i, j \in \text{Nei}(i) \\
+$$
+
+Note that a model in an arc consistent state need not have a realizable solution
+
+The general process of constraint propagation is used to remove impossible values to limit
+search space.
+There is a balance between work done to make progress towards a solution and doing
+brute force attempts at a solution.
+Arc consistency, in particular the AC3 algorithm
+to put the model in an arc consistent state,
+which will be discussed later,
+provide a good balance between computation cost and reducing the search space.
 
 Previous Algorithms
 ---
