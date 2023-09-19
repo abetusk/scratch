@@ -190,6 +190,8 @@ It is assumed that $g_i(\cdot)$ will get renormalized as the variable $v_i$ has 
 The concept of arc consistency is used for constraint propagation
 to help guide search for solutions.
 
+---
+
 A variable $v_i$ is said to be arc consisent ($AC(\cdot,\cdot)$) with respect to $v_j$ if for every remaining value
 that $v_i$ can hold, there exists a value in $v_j$:
 
@@ -200,25 +202,54 @@ s.t. & f_{i,j}(d,d') = 1
 \end{array}
 $$
 
-We call a model arc consistent if, for every cell, it's arc consistent with it's neighbors:
+--OR--
+
+A variable $v_i$ is said to be arc consisent ($AC(\cdot)$) if, for every neighbor of $v_i$,
+there exists an admissible value that can be paired with it:
+
+$$
+\begin{array}{ll}
+\text{AC}(v_i) \to \\
+\forall d \in D_i, & \forall v_j \in \text{Nei}(v_i) \\
+\exists d' \in D_j  & s.t. \ \ f_{i,j}(d,d') = 1
+\end{array}
+$$
+
+
+---
+
+We call a model arc consistent if every neighboring cell is arc consistent:
 
 $$
 \text{AC}(M) \iff \text{AC}(v_i,v_j), \forall i, j \in \text{Nei}(i) \\
 $$
 
-Note that a model in an arc consistent state need not have a realizable solution
+Note that a model in an arc consistent state need not have a realizable solution.
+Arc consistency only provides a guarantee that there is no realizable configuration
+if arc consistency if violated.
 
 The general process of constraint propagation is used to remove impossible values to limit
 search space.
 There is a balance between work done to make progress towards a solution and doing
-brute force attempts at a solution.
-Arc consistency, in particular the AC3 algorithm
-to put the model in an arc consistent state,
+brute search.
+Arc consistency, in particular the AC3 algorithm,
 which will be discussed later,
 provide a good balance between computation cost and reducing the search space.
 
 Previous Algorithms
 ---
+
+The AC-3 algorithm can be stated as:
+
+```
+S = ( v_{i_0} )
+While |S| > 0:
+  v_i \in S
+  S = S / v_i
+  \forall v_j \in Nei(v_i):
+    remove d \in D_i if no support is found in D_j
+    if D_i changed, S = S \cup v_i
+```
 
 -- boundary conditions discussion
 
