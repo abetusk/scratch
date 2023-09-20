@@ -12,7 +12,8 @@ DISTRIB_DESCRIPTION="Ubuntu 22.04.2 LTS"
 ```
 
 ```
-# apt-get intall -y postfix dovecot-core dovecot-imapd dovecot-pop3d
+# apt-get update
+# apt-get install -y postfix dovecot-core dovecot-imapd dovecot-pop3d
 ```
 
 ---
@@ -350,6 +351,64 @@ to mark as unseen:
 
 ---
 
+
+### sieve stuff
+
+
+```
+# apt-get install dovecot-sieve dovecot-managesieved dovecot-lmtpd
+```
+
+in `/etc/dovecot/dovecot.conf`:
+
+```
+...
+protocols = imap lmtp sieve
+...
+```
+
+in `/etc/dovecot/conf.d/10-master.cf`:
+
+```
+service lmtp {
+  unix_listener /var/spool/postfix/private/dovecot-lmtp {
+   group = postfix
+   mode = 0600
+   user = postfix
+  }
+}
+```
+
+in `/etc/postfix/main.cf`:
+
+```
+...
+mailbox_transport = lmtp:unix:private/dovecot-lmtp
+smtputf8_enable = no
+...
+```
+
+in `/etc/dovecot/conf.d/15-lda.conf`:
+
+```
+...
+protocol lda {
+  mail_plugins = $mail_plugins sieve
+}
+...
+```
+
+
+in `/etc/dovecot/conf.d/20-lmtp.conf`:
+
+```
+protocol lmtp {
+  mail_plugins = $mail_plugins sieve
+  hostname = arborgorge.com
+  auth_username_format = %Ln
+}
+
+```
 
 ---
 
@@ -755,3 +814,4 @@ References
 * [spamassassin](https://cwiki.apache.org/confluence/display/spamassassin/IntegratedSpamdInPostfix)
 * [spamassassin with postfix on Ubuntu](https://www.vultr.com/docs/how-to-install-spamassassin-with-postfix-on-ubuntu/)
 * [dovecot documentation](https://doc.dovecot.org/)
+* [linuxbabe roundcube](https://www.linuxbabe.com/mail-server/install-roundcube-webmail-ubuntu-20-04-apache-nginx)
