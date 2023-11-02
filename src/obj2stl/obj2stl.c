@@ -125,13 +125,16 @@ int _load2tri(std::vector< double > &tri, std::string &inputfile) {
   return 0;
 }
 
-void tri2stl(std::vector< double > &tri) {
+void tri2stl(std::vector< double > &tri, const std::string &name = std::string("tri2stl") );
+
+//void tri2stl(std::vector< double > &tri, const std::string &name = std::string("tri2stl") ) {
+void tri2stl(std::vector< double > &tri, const std::string &name) {
   int idx;
   double x, y, z,
          nx,ny,nz,
          v[3], u[3], w[3],
          wlen;
-  std::string name = "tri2stl";
+  //std::string name = "tri2stl";
   double _eps = (1.0/(1024.0*1024.0));
 
   printf("solid %s\n", name.c_str());

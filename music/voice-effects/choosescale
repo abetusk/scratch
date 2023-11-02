@@ -1,0 +1,57 @@
+#!/usr/bin/python3
+
+
+MODE = {
+"ionian" : [0,2,4,5,7,9,11],
+"dorian" : [0,2,3,5,7,9,10],
+"phrygian" : [0,1,3,5,7,8,10],
+"lydian" : [0,2,4,6,7,9,11],
+"mixolydian" : [0,2,4,5,7,9,10],
+"mixolydian.1" : [0,2,4,5,7,9,-3,-2],
+"aeolian" : [0,2,3,5,7,8,10],
+"locrian.1" : [0,1,3,5,6,8,-4,-2],
+"locrian" : [0,1,3,5,6,8,10]
+}
+
+base_scale_bp = {
+  "C": 0,
+  "Db" : 1,
+  "D" : 2,
+  "Eb" : 3,
+  "E" : 4,
+  "F" : 5,
+  "Gb" : 6,
+  "G" : 7,
+  "Ab" : 8,
+  "A" : 9,
+  "Bb" : 10,
+  "B" : 11
+}
+
+base_scale    = [ "C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B" ]
+
+
+mode_choice = "mixolydian.1"
+note_choice  = "A"
+N = 4
+
+idx = base_scale_bp[ note_choice ]
+scale = MODE[ mode_choice ]
+
+print("#", mode_choice, note_choice)
+
+out = []
+
+for pos in scale:
+  _note = base_scale[ (pos + idx + 12) % 12 ]
+  _n = N
+  q = int( (pos+idx) / 12 )
+  _n += q
+
+  out.append( _note + str(_n) )
+  #print( _note + str(_n) )
+
+print(out)
+
+
+

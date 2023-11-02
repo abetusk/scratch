@@ -27,6 +27,9 @@ import getopt
 
 BPM=80
 
+SPEEDUP = 1.0
+SPEEDUP = 1.0/1.125
+
 def usage():
   print("...")
 
@@ -62,15 +65,42 @@ FTR = '<REST BEATS="1.0"></REST>\n</SINGING>'
 
 
 def rbeat():
+
+  dv = 1.0/8.0
+  dp = (1.0 + (1.0/8.0))
+  dn = (1.0 - (1.0/8.0))
+
   v = [ 0.33, 0.5, 0.66, 0.75, 1.0, 1.125 ]
   v = [ 0.55, 0.66, 0.75, 1.0, 1.125 ]
   v = [  0.75, 1.0, 1.125 ]
+  v = [  dn*dn*dn, dn*dn, dn, 1.0, dp, dp*dp, dp*dp*dp ]
+  #v = [  dn*dn, dn, 1.0, dp, dp*dp ]
+
+  for idx in range(len(v)):
+    v[idx] *= SPEEDUP
+
   return random.choice(v)
 
 def rpitch():
   #v = ["A2", "Bb2", "C3", "D3", "Eb3", "F2", "F3", "G2" ]
   #v = ["A3", "Bb3", "C4", "D4", "Eb4", "F3", "F4", "G3" ]
+
+  #     0      1     3     5      6     -4    8     -2  locrian?
   v = ["A4", "Bb4", "C5", "D5", "Eb5", "F4", "F5", "G4" ]
+
+  #     0      1     8     10    15(3) 17(5)  18(6) 20(8)
+  v = ["A4", "Bb4", "F4", "G4", "C5", "D5", "Eb5", "F5" ]
+
+  #      0     2     3     5     7     -4    8     -2  aeolian
+  v = ["A4", "B4", "C5", "D5", "F5", "F4", "F5", "G4" ]
+
+  #      0     2     4     5     7     -4    8     -2  mixolydian
+  v = ["A4", "B4", "Db4", "D5", "F5", "F4", "F5", "G4" ]
+
+  # mixolydian [ 0,2,4,5,7,9,10]
+  #      0     2      4     5     7      9     10    12(0)  14(2)  16(4) 17(5)
+  v = ['A4', 'B4', 'Db5', 'D5', 'E5', 'Gb5', 'Gb4', 'G4']
+
 
   # aeolian?
   #v = ['C3', 'D3', 'D#3', 'F3', 'G3', 'G#3', 'A#4']
