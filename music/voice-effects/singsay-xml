@@ -73,8 +73,9 @@ def rbeat():
   v = [ 0.33, 0.5, 0.66, 0.75, 1.0, 1.125 ]
   v = [ 0.55, 0.66, 0.75, 1.0, 1.125 ]
   v = [  0.75, 1.0, 1.125 ]
-  v = [  dn*dn*dn, dn*dn, dn, 1.0, dp, dp*dp, dp*dp*dp ]
+  #v = [  dn*dn*dn, dn*dn, dn, 1.0, dp, dp*dp, dp*dp*dp ]
   #v = [  dn*dn, dn, 1.0, dp, dp*dp ]
+  v = [ 1.0, dp, dp*dp, dp*dp*dp ]
 
   for idx in range(len(v)):
     v[idx] *= SPEEDUP
@@ -114,6 +115,9 @@ def sent2singxml(sent, info):
 
   lines = []
 
+  REST_LEN = 0.75
+  REST = '<REST BEATS="' + str(REST_LEN) + '"></REST>'
+
   for tok in toks:
     beat = [ 0.66 ]
     pitch = [ "A3" ]
@@ -139,6 +143,9 @@ def sent2singxml(sent, info):
 
     xml_line += '</PITCH></DURATION>'
     lines.append(xml_line)
+
+    if re.search( '\.', tok):
+      lines.append( REST )
 
   return "\n".join(lines)
 

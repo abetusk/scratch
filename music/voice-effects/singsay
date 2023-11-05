@@ -1,7 +1,8 @@
 #!/bin/bash
 
 txt="$1"
-bpm=120
+#bpm=120
+bpm=90
 voice="voice_us1_mbrola"
 #voice="voice_us2_mbrola"
 #voice="voice_us3_mbrola"
