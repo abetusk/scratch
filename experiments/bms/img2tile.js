@@ -627,7 +627,7 @@ function write_tiled_json(info, out_fn) {
   template.tilesets[0].tilewidth = stride[0];
   template.tilesets[0].tilecount = info.supertile_count-1;
   template.tilesets[0].columns = info.map_w;
-  template.tilesets[0].= info.map_w;
+  template.tilesets[0].rows = info.map_w;
 
 
 
