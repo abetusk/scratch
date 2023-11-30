@@ -69,7 +69,11 @@ Some music spells always work (say, summoning a boat to hop islands, or teleport
 other spells only work once (scrolls), some spells only work in a particular island or in a particular location 
 on the island.
 
+---
 
+update: consider it a roguelike except with no combat, music as the main challenge and your synthesizer as your 'weapon'
+
+Call it a bard-like.
 
 
 

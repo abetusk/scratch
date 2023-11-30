@@ -23,8 +23,10 @@ Administrative
   is out of scope of the work involved here and should be discussed as an independent project.
   I don't require or expect any interest in publishing but I want to announce my intentions
   should that be something that's interesting to the candidate.
-* I am primarily interested in help with algorithm desgin in helping overcome some hurdles
+* I am primarily interested in help with algorithm design in helping overcome some hurdles
   associated with spatial tiled constraint programming problems that have weak global constraints
+* Secondarily, I am interested in understanding some theoretical considerations, such as insight
+  into it's relation to statistical mechanics, local entropy, SAM, etc.
 
 > Questions/comments before moving on to technical discussion?
 
@@ -73,7 +75,7 @@ Technical
   - AC3, AC4 algorithms to create arc consistent grid ($O(N \cdot M^3)$, $O(N \cdot M^2)$ resp.)
   - arc consistency doesn't imply non-contradictory or solvable. AC is purely a local property
     without any statement about the global system
-* General problem is NP-Copmlete but these algorithms work because we're in the easy region of the NP-Complete space
+* General problem is NP-Complete but these algorithms work because we're in the easy region of the NP-Complete space
 * Describe Breakout Model Synthesis (BMS):
   - proceed as in WFC
   - if reach a contradiction, reject choice, backtrack one level and try again

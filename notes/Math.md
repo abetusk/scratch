@@ -103,3 +103,25 @@ Now we can map back to the original domain and do the modular summation with $f 
 Again, all this is a complicated way to do modular arithmetic under the language of MRF with these pairwise functions between random variables.
 
 In other words, $f _ {\alpha}$ and $f _ {\beta}$ take the inputs and convert them to a Cartesian product, $(w,z)$ which then gets transferred to $t$ via $f _ {\gamma} = ( w + z ) \\% p$.
+
+
+---
+
+
+### Glossary
+
+> Glassy Phase
+
+A state of matter where it's in a solid phase but looks much like the liquid phase.
+Named for glass as solid glass looks much like the liquid phase in contrast to
+water and ice, where water is disordered and ice is highly structured in a lattice.
+
+I think this glassy phase is also related to the 'random energy model' and others.
+One statement is that answers in this phase are $O(n)$ away from each other
+so it looks like an error correcting code and doesn't lend itself well to local
+Monte Carlo-like like searches.
+
+
+* [Mode-Coupling Theory of the Glass Transition: A Primer](https://www.frontiersin.org/articles/10.3389/fphy.2018.00097/full)
+* [Learning by Local Entropy Maximization](https://www.youtube.com/watch?v=_QZmnQKjzaE)
+
