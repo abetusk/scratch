@@ -1,9 +1,20 @@
 Research Scope
 ===
 
+###### 2023-12-01
+
 A document to outline the expectations of hiring a research consultant for POMS.
 
 ---
+
+Meta
+---
+
+* Any questions/comments before we start?
+* Spend a few minutes on administrative items, including expectations,
+  scope, etc.
+* Spend a few minutes on getting some technical knowledge orientation
+* Spend remaining time talking about technical aspects of research
 
 Administrative
 ---
