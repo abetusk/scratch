@@ -19,6 +19,10 @@ Meta
 Administrative
 ---
 
+* I am primarily interested in help with algorithm design in helping overcome some hurdles
+  associated with spatial tiled constraint programming problems that have weak global constraints
+* Secondarily, I am interested in understanding some theoretical considerations, such as insight
+  into it's relation to statistical mechanics, local entropy, SAM, etc.
 * Understanding of research in the area or other mathematical concepts is desirable
   but, in many cases, not necessary, as there are many issues that are highly
   context dependent
@@ -34,10 +38,6 @@ Administrative
   is out of scope of the work involved here and should be discussed as an independent project.
   I don't require or expect any interest in publishing but I want to announce my intentions
   should that be something that's interesting to the candidate.
-* I am primarily interested in help with algorithm design in helping overcome some hurdles
-  associated with spatial tiled constraint programming problems that have weak global constraints
-* Secondarily, I am interested in understanding some theoretical considerations, such as insight
-  into it's relation to statistical mechanics, local entropy, SAM, etc.
 
 > Questions/comments before moving on to technical discussion?
 
@@ -69,8 +69,11 @@ Technical
 
 ### Description of Problem
 
+* Motivation is creating generative textures/tiled game maps/3d art models from exemplar models or simple tile rules
 * 3D grid, with each grid cell location holding many potential tile vales ($N = X \cdot Y \cdot Z$, $M$ tile values)
-* Tile values have binary constraints on all $L^1$ distance neighbors ($f(\cdot,\cdot)$)
+  - `tilemap` is the configuration
+  - `tileset` is the set of tiles allowed at each cell
+* Tile values have binary constraints on all $L^1$ distance neighbors ( $f(\cdot,\cdot)$ )
 * Goal is to find a realization that has no contradictions
   - For all adjacent tiles, $u, v$, $f(u,v)>0$
   - $\forall w \in G, |w|=1$, that is all cells only have one tile value
