@@ -8,8 +8,6 @@ reference.
 
 ---
 
----
-
 A modification to Merrell's Model Synthesis (MMS) algorithm, called Breakout Model Synthesis (BMS).
 
 Some terms:
@@ -192,7 +190,7 @@ to help guide search for solutions.
 
 ---
 
-A variable $v_i$ is said to be arc consisent ($AC(\cdot,\cdot)$) with respect to $v_j$ if for every remaining value
+A variable $v_i$ is said to be arc consisent ( $AC(\cdot,\cdot)$ ) with respect to $v_j$ if for every remaining value
 that $v_i$ can hold, there exists a value in $v_j$:
 
 $$
@@ -204,7 +202,7 @@ $$
 
 --OR--
 
-A variable $v_i$ is said to be arc consisent ($AC(\cdot)$) if, for every neighbor of $v_i$,
+A variable $v_i$ is said to be arc consisent ( $AC(\cdot)$ ) if, for every neighbor of $v_i$,
 there exists an admissible value that can be paired with it:
 
 $$
