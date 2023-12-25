@@ -1,6 +1,28 @@
 Roadmap
 ===
 
+###### 2023-12-25
+
+* Math
+  - Grid based tile constraint
+  - Littlewood-like polynomial (scaling of dead-zones)
+  - micrograd investigation
+* Electronics
+  - Fiber laser
+  - 6-10 projects
+    + led earring (cat eyes, monser eyes, leaf veins)
+    + moving earring (rib cage, heart, crystal)
+    + cat ears (encoder, bldc motor+driver)
+  - solar project
+    + install solar panel
+    + figure out battery management
+* Misc
+  - Maslow setup for sign making
+    + old school
+    + arcade cabinet
+  - music game (cubsmoxi)
+  
+
 ###### 2021-02-22
 
 * DIY Bio
