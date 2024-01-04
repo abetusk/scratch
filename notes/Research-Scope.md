@@ -1,11 +1,58 @@
 Research Scope
 ===
 
-###### 2023-12-01
-
 A document to outline the expectations of hiring a research consultant for POMS.
 
 ---
+
+###### 2023-12-09
+
+Meta
+---
+
+* Any questions/comments before we start?
+* Spend 5 minutes on Administrative issues
+* Spend 5-10 minutes on review of last weeks material
+  - go over any questions or difficulties with material
+* Spend 5 minutes on discussing automated tile rule inference
+  - (trh)
+* Spend 15-20 minutes on algorithmic visualizations
+  - (pm mcmc)
+  - (rrti bms)
+* Spend 15 minutes on current state and potential extensions
+  - (rrti elastic)
+  - (elastic idea, topological idea)
+* Spend 15 minutes discussing potentially adjacent areas
+  - (local entropy?)
+
+Administrative
+---
+
+* Confirm payment receipt
+* Discuss expectations and timeline
+
+Technical Discussion
+---
+
+* Review automated tile rule creation:
+  - show tile rule highlighter demo (rrti/pm/smb)
+* Review WFC, BMS and MMS, if appropriate
+  - show WFC and BMS visualization (normal run)
+* Canonical examples of failure:
+  - show pill mortal getting trapped with vanilla MCMC method
+  - show BMS rrti failure (2 to 1 river local minima)
+* POMS heuristics:
+  - Discuss topological neighbors (motivation for scale-up)
+  - show scale up 
+* Discuss topological shrinking
+  - non-uniform grid shrinking
+* Discuss potentially adjacent ideas
+  - spin glasses, random energy model, spiky energy landscape
+  - replica method, local entropy, SAM
+
+---
+
+###### 2023-12-01
 
 Meta
 ---

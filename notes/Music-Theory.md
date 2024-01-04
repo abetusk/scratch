@@ -45,7 +45,9 @@ each of which can be combined in different ways and at different tempos.
 To give a cartoon of the hierarchy, a "Musical Hierarchy of Importance",
 reminiscent of Maslow's "Hierarchy of Need" can be drawn:
 
-![Musical Hierarchy of Importance](img/music_theory_hierarchy_s.svg)
+| |
+|---|
+| ![Musical Hierarchy of Importance](img/music_theory_hierarchy_s.svg) |
 
 Here, the "timbre" is meant to describe the "sound" of a particular
 instrument, an oboe versus a flute, say.
@@ -87,7 +89,9 @@ When unfurled, it can more easily understood to be a cavity that accepts
 different resonate frequencies to then convert to electrical signals for
 the brain to interpret.
 
-![Uncoiled cochlea with basilar membrane](img/Uncoiled_cochlea_with_basilar_membrane_s.png)
+| |
+|---|
+| ![Uncoiled cochlea with basilar membrane](img/Uncoiled_cochlea_with_basilar_membrane_s.png) |
 
 The sound frequencies perceived by the human ear are not linear.
 The human ear has a range of approximately 20Hz (vibrations per second)
