@@ -6,15 +6,19 @@
 # Rebuilds everything using dmalloc and does memory testing.
 # Only works if you have dmalloc installed (see http://dmalloc.com).
 
-SRCS = test_red_black_tree.c red_black_tree.c stack.c misc.c
+#SRCS = test_red_black_tree.c red_black_tree.c stack.c misc.c
+SRCS = test_red_black_tree.c emin_rbt.h
 
-HDRS = red_black_tree.h stack.h misc.h
+#HDRS = red_black_tree.h stack.h misc.h
+HDRS = emin_rbt.h
 
-OBJS = red_black_tree.o stack.o test_red_black_tree.o misc.o
+#OBJS = red_black_tree.o stack.o test_red_black_tree.o misc.o
+OBJS = emin_rbt.o  test_red_black_tree.o
 
 CC = gcc
 
-CFLAGS = -g -Wall -pedantic
+#CFLAGS = -g -Wall -pedantic
+CFLAGS = -O3
 
 PROGRAM = test_rb
 
@@ -48,11 +52,13 @@ mem_check:
 		fi
 
 
-test_red_black_tree.o:	test_red_black_tree.c red_black_tree.c stack.c stack.h red_black_tree.h misc.h
+#test_red_black_tree.o:	test_red_black_tree.c red_black_tree.c stack.c stack.h red_black_tree.h misc.h
+test_red_black_tree.o:	test_red_black_tree.c emin_rbt.h emin_rbt.c
 
-red_black_tree.o:	red_black_tree.h stack.h red_black_tree.c stack.c misc.h misc.c
+#red_black_tree.o:	red_black_tree.h stack.h red_black_tree.c stack.c misc.h misc.c
+red_black_tree.o:	emin_rbt.h emin_rbt.c
 
-stack.o:		stack.c stack.h misc.h misc.c
+#stack.o:		stack.c stack.h misc.h misc.c
 
 clean:			
 	rm -f *.o *~ $(PROGRAM)

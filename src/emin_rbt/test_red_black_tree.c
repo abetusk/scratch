@@ -1,7 +1,8 @@
-#include"red_black_tree.h"
+//#include"red_black_tree.h"
 #include<stdio.h>
 #include<ctype.h>
 
+#include "emin_rbt.h"
 
 /*  this file has functions to test a red-black tree of integers */
 
@@ -50,7 +51,10 @@ int main() {
       case 1:
 	{
 	  printf("type key for new node\n");
-	  scanf("%i",&newKey);
+	  if (scanf("%i",&newKey) != 1) {
+      fprintf(stderr, "bad scanf read\n");
+      exit(-1);
+    }
 	  newInt=(int*) malloc(sizeof(int));
 	  *newInt=newKey;
 	  RBTreeInsert(tree,newInt,0);
@@ -60,7 +64,10 @@ int main() {
       case 2:
 	{
 	  printf("type key of node to remove\n");
-	  scanf("%i",&newKey);
+	  if (scanf("%i",&newKey) != 1) {
+      fprintf(stderr, "bad scanf read\n");
+      exit(-1);
+    }
 	  if ( ( newNode=RBExactQuery(tree,&newKey ) ) ) RBDelete(tree,newNode);/*assignment*/
 	  else printf("key not found in tree, no action taken\n");
 	}
@@ -69,9 +76,13 @@ int main() {
       case 3:
 	{
 	  printf("type key of node to query for\n");
-	  scanf("%i",&newKey);
+	  if (scanf("%i",&newKey)!=1) {
+      fprintf(stderr, "bad scanf read\n");
+      exit(-1);
+    }
 	  if ( ( newNode = RBExactQuery(tree,&newKey) ) ) {/*assignment*/
-	    printf("data found in tree at location %i\n",(int)newNode);
+	    //printf("data found in tree at location %i\n",(int)newNode);
+	    printf("data found in tree at location %p\n",newNode);
 	  } else {
 	    printf("data not in tree\n");
 	  }
@@ -80,7 +91,10 @@ int main() {
       case 4:
 	{
 	  printf("type key of node to find predecessor of\n");
-	  scanf("%i",&newKey);
+	  if (scanf("%i",&newKey)!=1) {
+      fprintf(stderr, "bad scanf read\n");
+      exit(-1);
+    }
 	  if ( ( newNode = RBExactQuery(tree,&newKey) ) ) {/*assignment*/
 	    newNode=TreePredecessor(tree,newNode);
 	    if(tree->nil == newNode) {
@@ -96,7 +110,10 @@ int main() {
       case 5:
 	{
 	  printf("type key of node to find successor of\n");
-	  scanf("%i",&newKey);
+	  if (scanf("%i",&newKey)!=1) {
+      fprintf(stderr, "bad scanf read\n");
+      exit(-1);
+    }
 	  if ( (newNode = RBExactQuery(tree,&newKey) ) ) {
 	    newNode=TreeSuccessor(tree,newNode);
 	    if(tree->nil == newNode) {
@@ -112,7 +129,10 @@ int main() {
       case 6:
 	{
 	  printf("type low and high keys to see all keys between them\n");
-	  scanf("%i %i",&newKey,&newKey2);
+	  if (scanf("%i %i",&newKey,&newKey2)!=2) {
+      fprintf(stderr, "bad scanf read\n");
+      exit(-1);
+    }
 	  enumResult=RBEnumerate(tree,&newKey,&newKey2);	  
 	  while ( (newNode = StackPop(enumResult)) ) {
 	    tree->PrintKey(newNode->key);
