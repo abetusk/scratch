@@ -84,10 +84,27 @@ function rem_item(reminder_json, item_info) {
 
 function reminder_kw(op, data) {
 
+  let candidate = "";
+  let candidate_key = "";
+  let candidate_count = 0;
+
   for (let key in data) {
     if (op == key) {
       console.log(data[op].description);
+      return;
     }
+
+    else if (key.slice(0,op.length) == op) {
+      candidate_key = key;
+      candidate_count++;
+      candidate = data[key].description;
+    }
+  }
+
+  if (candidate_count==1) {
+
+    console.log("#", candidate_key);
+    console.log(candidate);
   }
 }
 
@@ -102,20 +119,15 @@ let op = argv[0];
 
 let idx=0;
 for (idx=0; idx<item.length; idx++) {
-  //console.log(item[idx]);
+
   if (item[idx].op == op) {
     item[idx].action( raw_data, argv.slice(1) );
     break;
   }
+
 }
 
 if (idx == item.length) {
   reminder_kw(op, raw_data);
 }
-
-//if (op == "help") { show_help(); }
-
-
-
-
 
