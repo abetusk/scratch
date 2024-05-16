@@ -93,17 +93,80 @@ function _main() {
   make_arch(2);
 }
 
-function stair() {
+function jscad_f() {
+  let f = {
+    "sub":jscad.booleans.subtract,
+    "and":jscad.booleans.intersect,
+    "add":jscad.booleans.union,
+    "mov":jscad.transforms.translate,
+    "rot":jscad.transforms.rotate,
+    "lif":jscad.extrusions.extrudeLinear,
+    "cub":jscad.primitives.cuboid,
+    "cir":jscad.primitives.circle
+  }
+
+  return f;
+}
+
+function wedge_u() {
+  let f = jscad_f();
+}
+
+function stair(n) {
+  n = ((typeof n === "undefined") ? 3 : n);
+  let f = jscad_f();
+
+
+  /*
+  let geom = f.add(
+    f.cub({"size":[1,3/4,1/4], "center":[1/2, 1/2+1/8, 1/2-1/4-1/8]}),
+    f.cub({"size":[1,2/4,1/4], "center":[1/2, 1/2+2/8, 1/2-0/4-1/8]}),
+    f.cub({"size":[1,1/4,1/4], "center":[1/2, 1/2+3/8, 1/2+1/4-1/8]})
+  );
+  */
+
+  let geom = {};
+
+  let N = n+1;
+  for (let i=0; i<n; i++) {
+    let yi = i - ((n-1)/2);
+
+    let sx = 1,
+        sy = (n-i)/N,
+        sz = 1/N;
+
+    let cx = 1/2,
+        cy = (1/2) + ((i+1)/(2*N)),
+        cz = (1/2) - (1/(2*N)) + (yi/N);
+    let s = f.cub({"size":[sx,sy,sz], "center":[cx,cy,cz]});
+
+
+    if (i==0) {
+      geom = s;
+    }
+    else {
+      geom = f.add(geom, s);
+    }
+
+  }
+
+  return [
+    {"ds":[0,0,0], "geom":geom, "id":"b", "nei":["s,e","s,e", "b",".", ".","b"]}
+  ];
 }
 
 //WIP!!!
 function block() {
+  let f = jscad_f();
+  let geom = f.mov([0.5,0.5,0.5], f.cub({"size":[1,1,1]}));
   return [
-    {"ds":[0,0,0], "geom":geom, "id":"b", "nei":["b","b",".",".","b","."]}
+    {"ds":[0,0,0], "geom":geom, "id":"b", "nei":["b","b", ".",".", "b,e","b"]}
   ];
 }
 
 function arch1() {
+  let f = jscad_f();
+  /*
   let sub = jscad.booleans.subtract;
   let and = jscad.booleans.intersection;
   let add = jscad.booleans.union;
@@ -113,14 +176,15 @@ function arch1() {
   let lif = jscad.extrusions.extrudeLinear;
   let cub = jscad.primitives.cuboid;
   let cir = jscad.primitives.circle;
+  */
 
   let geom = 
-    mov([0.5,1.0,0.5],
-      rot([Math.PI/2,0,0],
-        sub(
-          mov([0,0,0.5], cub({"size":[1,1,1]})),
-          lif( {height:1}, cir({"radius":0.5})),
-          mov([0,-0.5,0.5], cub({"size":[1,1,1]}))
+    f.mov([0.5,1.0,0.5],
+      f.rot([Math.PI/2,0,0],
+        f.sub(
+          f.mov([0,0,0.5], f.cub({"size":[1,1,1]})),
+          f.lif( {height:1}, f.cir({"radius":0.5})),
+          f.mov([0,-0.5,0.5], f.cub({"size":[1,1,1]}))
         )
       )
     );
@@ -131,6 +195,9 @@ function arch1() {
 }
 
 function arch2() {
+  let f = jscad_f();
+
+  /*
   let sub = jscad.booleans.subtract;
   let and = jscad.booleans.intersect;
   let add = jscad.booleans.union;
@@ -140,20 +207,21 @@ function arch2() {
   let lif = jscad.extrusions.extrudeLinear;
   let cub = jscad.primitives.cuboid;
   let cir = jscad.primitives.circle;
+  */
 
   let geom = 
-    mov([0,1,0],
-      rot([Math.PI/2,0,0],
-        sub(
-          mov([0,0,0.5], cub({"size":[2,2,1]})),
-          mov([0,0,0], lif( {height:1}, cir({"radius":1.0}))),
-          mov([0,-1.0,0.5], cub({"size":[2,2,1]}))
+    f.mov([0,1,0],
+      f.rot([Math.PI/2,0,0],
+        f.sub(
+          f.mov([0,0,0.5], f.cub({"size":[2,2,1]})),
+          f.mov([0,0,0], f.lif( {height:1}, f.cir({"radius":1.0}))),
+          f.mov([0,-1.0,0.5], f.cub({"size":[2,2,1]}))
         )
       )
     );
 
-  let rgeom = and(mov([0,0,0],geom), mov([0.5,0.5,0.5], cub({"size":[1,1,1]})));
-  let lgeom = and(mov([1,0,0],geom), mov([0.5,0.5,0.5], cub({"size":[1,1,1]})));
+  let rgeom = f.and(f.mov([0,0,0],geom), f.mov([0.5,0.5,0.5], f.cub({"size":[1,1,1]})));
+  let lgeom = f.and(f.mov([1,0,0],geom), f.mov([0.5,0.5,0.5], f.cub({"size":[1,1,1]})));
 
   return [
     {"ds":[ 0,0,0], "geom":rgeom, "id":"a2_0", "nei":[   "b","a2_1",".",".","b","."]},
@@ -162,6 +230,10 @@ function arch2() {
 }
 
 function arch3() {
+
+  let f = jscad_f();
+
+  /*
   let sub = jscad.booleans.subtract;
   let and = jscad.booleans.intersect;
   let add = jscad.booleans.union;
@@ -171,14 +243,15 @@ function arch3() {
   let lif = jscad.extrusions.extrudeLinear;
   let cub = jscad.primitives.cuboid;
   let cir = jscad.primitives.circle;
+  */
 
   let geom = 
-    mov([-0.5,1,0.5],
-      rot([Math.PI/2,0,0],
-        sub(
-          mov([0,0,0.5], cub({"size":[3,3,1]})),
-          mov([0,0,0], lif( {height:1}, cir({"radius":1.5}))),
-          mov([0,-1.5,0.5], cub({"size":[3,3,1]}))
+    f.mov([-0.5,1,0.5],
+      f.rot([Math.PI/2,0,0],
+        f.sub(
+          f.mov([0,0,0.5], f.cub({"size":[3,3,1]})),
+          f.mov([0,0,0], f.lif( {height:1}, f.cir({"radius":1.5}))),
+          f.mov([0,-1.5,0.5], f.cub({"size":[3,3,1]}))
         )
       )
     );
@@ -194,11 +267,11 @@ function arch3() {
 
   let info = [];
 
-  info.push({"ds":[ 0,0,0], "geom": and(mov([ 0, 0, 0],geom), mov([0.5,0.5,0.5], cub({"size":[1,1,1]}))) });
-  info.push({"ds":[ 0,0,1], "geom": and(mov([ 0, 0,-1],geom), mov([0.5,0.5,0.5], cub({"size":[1,1,1]}))) });
-  info.push({"ds":[-1,0,1], "geom": and(mov([ 1, 0,-1],geom), mov([0.5,0.5,0.5], cub({"size":[1,1,1]}))) });
-  info.push({"ds":[-2,0,1], "geom": and(mov([ 2, 0,-1],geom), mov([0.5,0.5,0.5], cub({"size":[1,1,1]}))) });
-  info.push({"ds":[-2,0,0], "geom": and(mov([ 2, 0, 0],geom), mov([0.5,0.5,0.5], cub({"size":[1,1,1]}))) });
+  info.push({"ds":[ 0,0,0], "geom": f.and(f.mov([ 0, 0, 0],geom), f.mov([0.5,0.5,0.5], f.cub({"size":[1,1,1]}))) });
+  info.push({"ds":[ 0,0,1], "geom": f.and(f.mov([ 0, 0,-1],geom), f.mov([0.5,0.5,0.5], f.cub({"size":[1,1,1]}))) });
+  info.push({"ds":[-1,0,1], "geom": f.and(f.mov([ 1, 0,-1],geom), f.mov([0.5,0.5,0.5], f.cub({"size":[1,1,1]}))) });
+  info.push({"ds":[-2,0,1], "geom": f.and(f.mov([ 2, 0,-1],geom), f.mov([0.5,0.5,0.5], f.cub({"size":[1,1,1]}))) });
+  info.push({"ds":[-2,0,0], "geom": f.and(f.mov([ 2, 0, 0],geom), f.mov([0.5,0.5,0.5], f.cub({"size":[1,1,1]}))) });
 
   info[0]["id"] = "a3_0";
   info[1]["id"] = "a3_1";
@@ -217,6 +290,7 @@ function arch3() {
 
 function main() {
 
+  /*
   let sub = jscad.booleans.subtract;
   let and = jscad.booleans.intersection;
   let add = jscad.booleans.union;
@@ -226,37 +300,43 @@ function main() {
   let lif = jscad.extrusions.extrudeLinear;
   let cub = jscad.primitives.cuboid;
   let cir = jscad.primitives.circle;
+  */
 
   let ds = 1/32;
 
+  let f = jscad_f();
 
   let refcubes =
-    add(
-      mov([0,0,0], cub({"size":[ds,ds,ds]})),
-      mov([1,0,0], cub({"size":[ds,ds,ds]})),
-      mov([0,1,0], cub({"size":[ds,ds,ds]})),
-      mov([0,0,1], cub({"size":[ds,ds,ds]})),
+    f.add(
+      f.mov([0,0,0], f.cub({"size":[ds,ds,ds]})),
+      f.mov([1,0,0], f.cub({"size":[ds,ds,ds]})),
+      f.mov([0,1,0], f.cub({"size":[ds,ds,ds]})),
+      f.mov([0,0,1], f.cub({"size":[ds,ds,ds]})),
 
-      mov([1,1,0], cub({"size":[ds,ds,ds]})),
-      mov([0,1,1], cub({"size":[ds,ds,ds]})),
-      mov([1,0,1], cub({"size":[ds,ds,ds]})),
+      f.mov([1,1,0], f.cub({"size":[ds,ds,ds]})),
+      f.mov([0,1,1], f.cub({"size":[ds,ds,ds]})),
+      f.mov([1,0,1], f.cub({"size":[ds,ds,ds]})),
 
-      mov([1,1,1], cub({"size":[ds,ds,ds]}))
+      f.mov([1,1,1], f.cub({"size":[ds,ds,ds]}))
     );
 
 
 
-  //let geom = arch1();
+  //let info = arch1();
   //let fin = add(refcubes, geom);
 
-  //let geom = arch2();
+  //let info = arch2();
   //let fin = add(refcubes, geom[0], geom[1]);
 
-  let info = arch3();
+
+  //let info = arch3();
+  //let info = block();
+  let info = stair();
+  //let info = stair(5);
 
   let geom = refcubes;
   for (let ii=0; ii<info.length; ii++) {
-    geom = add(geom, mov(info[ii].ds, info[ii].geom));
+    geom = f.add(geom, f.mov(info[ii].ds, info[ii].geom));
   }
   let fin = geom;
 
