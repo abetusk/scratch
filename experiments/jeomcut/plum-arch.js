@@ -110,6 +110,28 @@ function jscad_f() {
 
 function wedge_u() {
   let f = jscad_f();
+
+  let geom = f.sub(
+    f.cub({"size":[1,1,1], "center":[0.5, 0.5, 0.5]}),
+    f.rot([Math.PI/4,0,0], f.cub({"size":[2,2,2], "center":[0,1,-1]}))
+  );
+
+  return [
+    {"ds":[0,0,0], "geom":geom, "id":"w", "nei":["w,.","w,.", ".", "b", "b","."]}
+  ];
+}
+
+function wedge_d() {
+  let f = jscad_f();
+
+  let geom = f.sub(
+    f.cub({"size":[1,1,1], "center":[0.5, 0.5, 0.5]}),
+    f.rot([Math.PI/4,0,0], f.cub({"size":[2,2,2], "center":[0,1,1]}))
+  );
+
+  return [
+    {"ds":[0,0,0], "geom":geom, "id":"m", "nei":["m,.","m,.", "b",".", ".","b"]}
+  ];
 }
 
 function stair(n) {
@@ -151,7 +173,7 @@ function stair(n) {
   }
 
   return [
-    {"ds":[0,0,0], "geom":geom, "id":"b", "nei":["s,e","s,e", "b",".", ".","b"]}
+    {"ds":[0,0,0], "geom":geom, "id":"b", "nei":["s,.","s,.", "b",".", ".","b"]}
   ];
 }
 
@@ -160,7 +182,7 @@ function block() {
   let f = jscad_f();
   let geom = f.mov([0.5,0.5,0.5], f.cub({"size":[1,1,1]}));
   return [
-    {"ds":[0,0,0], "geom":geom, "id":"b", "nei":["b","b", ".",".", "b,e","b"]}
+    {"ds":[0,0,0], "geom":geom, "id":"b", "nei":["b","b", ".",".", "b,.","b"]}
   ];
 }
 
@@ -288,6 +310,34 @@ function arch3() {
   return info;
 }
 
+function construct_voxel_dock(info, rot_info) {
+
+  let f = jscad_f();
+
+  let irot = 1;
+
+  for (let idx=0; idx<info.length; idx++) {
+    let ele = info[idx];
+
+    let theta = irot*Math.PI/2;
+
+    let inst = { "id":"", "ds":[ele.ds[0],ele.ds[1],ele.ds[2]], "geom":{}, "nei":[] };
+
+    inst.id = ele.id + "_00" +  irot.toString();
+
+    // lazy rot
+    //
+    for (let ii=0; ii<irot; ii++) {
+      let ts = [ inst.ds[1], -inst.ds[0], inst.ds[2] ];
+      inst.ds = ts;
+    }
+    inst.geom = f.rot( [0,0,theta], ele.geom );
+
+
+
+  }
+}
+
 function main() {
 
   /*
@@ -331,8 +381,10 @@ function main() {
 
   //let info = arch3();
   //let info = block();
-  let info = stair();
+  //let info = stair();
   //let info = stair(5);
+  //let info = wedge_u();
+  let info = wedge_d();
 
   let geom = refcubes;
   for (let ii=0; ii<info.length; ii++) {
