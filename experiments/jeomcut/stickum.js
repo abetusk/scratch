@@ -6,7 +6,7 @@
 //
 
 
-var m4 = require("./m4.js");
+var m4 = require("./m4.js").m4;
 
 let VDIR = [
   [1,0,0], [-1,0,0],
@@ -172,12 +172,75 @@ function stickum_askew(idir, w, h0, h1) {
   return p;
 }
 
+//---
+
+function dig_incr(dig) {
+  let pos = 0;
+
+  while (pos < dig.length) {
+    dig[pos].v++;
+    if (dig[pos].v < dig[pos].n) { break; }
+    dig[pos].v=0;
+    pos++;
+  }
+
+  return dig;
+}
+
+function dig_zero(dig) {
+  for (let ii=0; ii<dig.length; ii++) {
+    if (dig[ii].v != 0) { return false; }
+  }
+  return true;
+}
+
+// WIP!!!
+function stickum_dock_rotate(dock_list, M) {
+}
+
+
+// WIP!!!
+function pnt_eq(a,b, _eps) {
+  _eps = ((typeof _eps === "undefined") ? (1.0/(1024.0*1024.0)) : _eps);
+  for (let xyz=0; xyz<3; xyz++) {
+    if (Math.abs(a[xyz] - b[xyz]) > _eps) { return false; }
+  }
+  return true;
+}
+
+// WIP!!!
+function stickum_dock_eq(dock_a, dock_b) {
+  for (let a_idx; a_idx < dock_a.length; a_idx++) {
+    let found = false;
+    let a_list = dock_a[a_idx];
+    for (let b_idx; b_idx < dock_b.length; b_idx++) {
+      let b_list = dock_b[b_idx];
+      if (a_list.length != b_list.length) { continue; }
+
+      let eq_count=0;
+      for (let ii=0; ii<a_list.length; ii++) {
+        for (let jj=0; jj<b_list.length; jj++) {
+          if (pnt_eq(a_list[ii], b_list[jj])) { eq_count++; break; }
+        }
+      }
+      if (eq_count == a_list.length) { found = true; }
+      break;
+
+    }
+    if (!found) { return false; }
+  }
+  return true;
+}
+
+// WIP!!!
 // dock_list is an array of point docks,
 // with each point dock an array of points
 //
 //
 function stickum_create_rep(dock_list, sym) {
   sym = ((typeof sym === "undefined") ? '*' : sym);
+
+  let dig = [];
 
   let sym_code = [];
   let sym_code_m = {};
@@ -193,19 +256,24 @@ function stickum_create_rep(dock_list, sym) {
     else if (sym[ii] == 'z') { sym_code_m['z'] = 1; }
   }
 
-  if ('x' in sym_cod_m) { sym_code.push('x'); }
-  if ('y' in sym_cod_m) { sym_code.push('y'); }
-  if ('z' in sym_cod_m) { sym_code.push('z'); }
+  if ('x' in sym_code_m) { dig.push({"v":0, "n":4, "t":"x", "d": [1,0,0] }); }
+  if ('y' in sym_code_m) { dig.push({"v":0, "n":4, "t":"y", "d": [0,1,0] }); }
+  if ('z' in sym_code_m) { dig.push({"v":0, "n":4, "t":"z", "d": [0,0,1] }); }
 
-  for (let sc in sym_code) {
-    let axis = [0,0,1];
-    if (sc == 'x') { axis = [1,0,0]; }
-    if (sc == 'y') { axis = [0,1,0]; }
-    if (sc == 'z') { axis = [0,0,1]; }
+  do {
+    let M = m4.identity();
+    let T = new Float32Array(16);
 
-    for (let ang_idx=0; ang_idx<4; ang_idx++) {
-    let m = m4.axisRotation(
-  }
+    for (let ii=0; ii<dig.length; ii++) {
+      m4.axisRotation(dig[ii].d, dig[ii].v*Math.PI/2, T);
+      M = m4.multiply(M,T);
+    }
+
+    console.log(JSON.stringify(dig), M);
+
+    dig_incr(dig);
+  } while (!dig_zero(dig));
+
 
 }
 
@@ -227,6 +295,9 @@ function main() {
     console.log(p[0][0], p[0][1], p[0][2]);
     console.log("\n");
   }
+
+  stickum_create_rep();
+
 
 
 }
