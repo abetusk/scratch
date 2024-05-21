@@ -210,11 +210,14 @@ function pnt_eq(a,b, _eps) {
 
 // WIP!!!
 function stickum_dock_eq(dock_a, dock_b) {
-  for (let a_idx; a_idx < dock_a.length; a_idx++) {
+
+  for (let a_idx=0; a_idx < dock_a.length; a_idx++) {
     let found = false;
     let a_list = dock_a[a_idx];
-    for (let b_idx; b_idx < dock_b.length; b_idx++) {
+
+    for (let b_idx=0; b_idx < dock_b.length; b_idx++) {
       let b_list = dock_b[b_idx];
+
       if (a_list.length != b_list.length) { continue; }
 
       let eq_count=0;
@@ -223,6 +226,9 @@ function stickum_dock_eq(dock_a, dock_b) {
           if (pnt_eq(a_list[ii], b_list[jj])) { eq_count++; break; }
         }
       }
+
+      console.log("a_idx:", a_idx, "b_idx:", b_idx, "eq_count:", eq_count);
+
       if (eq_count == a_list.length) { found = true; }
       break;
 
@@ -277,7 +283,69 @@ function stickum_create_rep(dock_list, sym) {
 
 }
 
+function stickum_dock_rot(dock, M) {
+  let _d = [];
+  for (let idx=0; idx<dock.length; idx++) {
+    let pnt_list = [];
+    for (let ii=0; ii<dock[idx].length; ii++) {
+      pnt_list.push( m4.mulp(M, dock[idx][ii]) );
+    }
+    _d.push(pnt_list);
+  }
+  return _d;
+}
+
+
 function main() {
+  let d = 1/8;
+  let XX = [ stickum_square(0, d), stickum_square(1,d) ];
+  let YY = [ stickum_square(2, d), stickum_square(3,d) ];
+
+  let M = m4.axisRotation([0,0,1], Math.PI);
+
+  let XXr = stickum_dock_rot(XX, M);
+
+  console.log("XXr,XX", stickum_dock_eq(XXr, XX));
+  console.log("XXr,YY", stickum_dock_eq(XXr, YY));
+  console.log("XX,YY", stickum_dock_eq(XX, YY));
+
+  console.log("XX,XX", stickum_dock_eq(XX, XX));
+  console.log("YY,YY", stickum_dock_eq(YY, YY));
+  console.log("XXr,XXr", stickum_dock_eq(XXr, XXr));
+
+}
+
+
+function main0() {
+  let d = 1/8;
+  let s0 = [ stickum_square(0, d) ];
+  let s1 = [ stickum_square(1, d) ];
+
+  let M = m4.axisRotation([0,0,1], Math.PI);
+
+  let X = stickum_dock_rot(s0, M);
+
+  //console.log(X);
+  for (let ii=0; ii<s0[0].length; ii++) {
+    console.log( s0[0][ii][0], s0[0][ii][1], s0[0][ii][2]);
+  }
+  console.log( s0[0][0][0], s0[0][0][1], s0[0][0][2]);
+  console.log("\n");
+
+  for (let ii=0; ii<X[0].length; ii++) {
+    console.log( X[0][ii][0], X[0][ii][1], X[0][ii][2]);
+  }
+  console.log( X[0][0][0], X[0][0][1], X[0][0][2]);
+  console.log("\n");
+
+  console.log(">>>", stickum_dock_eq(X, s1));
+  console.log(">>>", stickum_dock_eq(X, s0));
+  console.log(">>>", stickum_dock_eq(s0, s1));
+
+  //console.log(s0, s1);
+}
+
+function _main() {
 
   let s = rand(0.25,0.75);
   let s1 = rand(0.25,0.75);
