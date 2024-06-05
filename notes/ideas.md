@@ -15,6 +15,14 @@
 * Vegan Metal Vampire Bat
 * Vegan Witch
 
+---
+
+* an ancient relic grants a wish but the grantee unravels thinking there's
+  a cost that never comes
+* a victim of a malevolent ghost (serial murdere, etc.) herself becomes a ghost
+  and starts stalking the malevolent ghost
+
+
 
 ---
 

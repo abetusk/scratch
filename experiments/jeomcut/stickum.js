@@ -227,10 +227,10 @@ function stickum_dock_eq(dock_a, dock_b) {
         }
       }
 
-      console.log("a_idx:", a_idx, "b_idx:", b_idx, "eq_count:", eq_count);
-
-      if (eq_count == a_list.length) { found = true; }
-      break;
+      if (eq_count == a_list.length) {
+        found = true;
+        break;
+      }
 
     }
     if (!found) { return false; }
@@ -266,20 +266,56 @@ function stickum_create_rep(dock_list, sym) {
   if ('y' in sym_code_m) { dig.push({"v":0, "n":4, "t":"y", "d": [0,1,0] }); }
   if ('z' in sym_code_m) { dig.push({"v":0, "n":4, "t":"z", "d": [0,0,1] }); }
 
+  let raw_list = [];
+
+
   do {
+
+  console.log(dig);
+
     let M = m4.identity();
     let T = new Float32Array(16);
+
+    let code_a = [];
 
     for (let ii=0; ii<dig.length; ii++) {
       m4.axisRotation(dig[ii].d, dig[ii].v*Math.PI/2, T);
       M = m4.multiply(M,T);
+
+      code_a.push(dig[ii].v.toString());
     }
 
-    console.log(JSON.stringify(dig), M);
+
+    raw_list.push( {"dock":stickum_dock_rot(dock_list, M) , "code": code_a.join(""), "M": M });
+
+
+    //console.log(JSON.stringify(dig), M);
 
     dig_incr(dig);
   } while (!dig_zero(dig));
 
+  let dedup_list = [];
+  let is_dup = [];
+  for (let i=0; i<raw_list.length; i++) {
+    is_dup.push(0);
+  }
+
+  for (let i=0; i<raw_list.length; i++) {
+    if (is_dup[i]) { continue; }
+    let found = false;
+    for (let j=(i+1); j<raw_list.length; j++) {
+      if (stickum_dock_eq(raw_list[i].dock, raw_list[j].dock)) {
+        found = true;
+        is_dup[j] = 1;
+      }
+    }
+    if (found) {
+      dedup_list.push(raw_list[i]);
+    }
+  }
+
+  console.log(dedup_list.length);
+  console.log(dedup_list);
 
 }
 
@@ -299,11 +335,24 @@ function stickum_dock_rot(dock, M) {
 function main() {
   let d = 1/8;
   let XX = [ stickum_square(0, d), stickum_square(1,d) ];
+
+  let r = stickum_create_rep(XX, "xyz");
+
+  console.log(r);
+
+}
+
+function main_eqtest() {
+  let d = 1/8;
+  let XX = [ stickum_square(0, d), stickum_square(1,d) ];
   let YY = [ stickum_square(2, d), stickum_square(3,d) ];
+  let ZZ = [ stickum_square(2, d), stickum_square(3,d) ];
 
   let M = m4.axisRotation([0,0,1], Math.PI);
+  let M2 = m4.axisRotation([0,0,1], Math.PI/2);
 
   let XXr = stickum_dock_rot(XX, M);
+  let XXr2 = stickum_dock_rot(XX, M2);
 
   console.log("XXr,XX", stickum_dock_eq(XXr, XX));
   console.log("XXr,YY", stickum_dock_eq(XXr, YY));
@@ -312,6 +361,10 @@ function main() {
   console.log("XX,XX", stickum_dock_eq(XX, XX));
   console.log("YY,YY", stickum_dock_eq(YY, YY));
   console.log("XXr,XXr", stickum_dock_eq(XXr, XXr));
+
+  console.log("XXr2,XX", stickum_dock_eq(XXr2, XX));
+  console.log("XXr2,YY", stickum_dock_eq(XXr2, YY));
+  console.log("XXr2,XXr", stickum_dock_eq(XXr2, XXr));
 
 }
 
