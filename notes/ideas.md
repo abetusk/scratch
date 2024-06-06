@@ -22,6 +22,9 @@
 * a victim of a malevolent ghost (serial murdere, etc.) herself becomes a ghost
   and starts stalking the malevolent ghost
 
+---
+
+* washed out T1000 like robot just hanging out, getting high, spare changing, etc.
 
 
 ---
