@@ -268,25 +268,34 @@ function stickum_create_rep(dock_list, sym) {
 
   let raw_list = [];
 
-
+  // dig holds the rotation amount (integral elements that represent pi/2 rotations
+  // around each axis).
+  //
   do {
 
-  console.log(dig);
+    console.log(raw_list.length, "dig:", dig);
 
     let M = m4.identity();
     let T = new Float32Array(16);
 
     let code_a = [];
+    let dig_order = [];
 
     for (let ii=0; ii<dig.length; ii++) {
       m4.axisRotation(dig[ii].d, dig[ii].v*Math.PI/2, T);
       M = m4.multiply(M,T);
 
       code_a.push(dig[ii].v.toString());
+
+      dig_order.push(dig[ii].t);
     }
 
-
-    raw_list.push( {"dock":stickum_dock_rot(dock_list, M) , "code": code_a.join(""), "M": M });
+    raw_list.push({
+      "dock":stickum_dock_rot(dock_list, M),
+      "code": code_a.join(""),
+      "axis_order": dig_order.join(""),
+      "M": M
+    });
 
 
     //console.log(JSON.stringify(dig), M);
@@ -294,28 +303,49 @@ function stickum_create_rep(dock_list, sym) {
     dig_incr(dig);
   } while (!dig_zero(dig));
 
+  //DEBUG
+  //
+  for (let ii=0; ii<raw_list.length; ii++) {
+    console.log(ii, raw_list[ii].code, raw_list[ii].axis_order);
+  }
+  //
+  //DEBUG
+
   let dedup_list = [];
   let is_dup = [];
   for (let i=0; i<raw_list.length; i++) {
     is_dup.push(0);
   }
 
+  console.log("raw_list.length", raw_list.length);
+
   for (let i=0; i<raw_list.length; i++) {
     if (is_dup[i]) { continue; }
     let found = false;
     for (let j=(i+1); j<raw_list.length; j++) {
+
+      if (is_dup[j]) { continue; }
+
+      console.log( i, raw_list[i].code, "==?", j, raw_list[j].code, ":",
+        stickum_dock_eq(raw_list[i].dock, raw_list[j].dock));
+
+
       if (stickum_dock_eq(raw_list[i].dock, raw_list[j].dock)) {
         found = true;
         is_dup[j] = 1;
       }
     }
     if (found) {
+
+      console.log("FOUND", i);
+
       dedup_list.push(raw_list[i]);
     }
   }
 
-  console.log(dedup_list.length);
-  console.log(dedup_list);
+  console.log("dedup_list.length", dedup_list.length);
+  console.log("dedup_list:", dedup_list);
+  console.log("----");
 
 }
 
@@ -339,6 +369,8 @@ function main() {
   let r = stickum_create_rep(XX, "xyz");
 
   console.log(r);
+
+  console.log("...");
 
 }
 
