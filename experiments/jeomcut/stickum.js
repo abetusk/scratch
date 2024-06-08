@@ -14,11 +14,16 @@ let VDIR = [
   [0,0,1], [0,0,-1]
 ];
 
+// first two are in plane directions expected to be modified by
+// the parameter.
+//
+// last (3rd) element is which plane it sits in.
+//
 let BASIS = [
-  [ [ 1, 0,0], [0,0,1], [  0, 1/2,   0] ],
-  [ [-1, 0,0], [0,0,1], [  0,-1/2,   0] ],
   [ [ 0, 1,0], [0,0,1], [ 1/2,  0,   0] ],
   [ [ 0,-1,0], [0,0,1], [-1/2,  0,   0] ],
+  [ [ 1, 0,0], [0,0,1], [  0, 1/2,   0] ],
+  [ [-1, 0,0], [0,0,1], [  0,-1/2,   0] ],
   [ [ 1, 0,0], [0,1,0], [   0,  0, 1/2] ],
   [ [-1, 0,0], [0,1,0], [   0,  0,-1/2] ]
 ];
@@ -262,9 +267,16 @@ function stickum_create_rep(dock_list, sym) {
     else if (sym[ii] == 'z') { sym_code_m['z'] = 1; }
   }
 
-  if ('x' in sym_code_m) { dig.push({"v":0, "n":4, "t":"x", "d": [1,0,0] }); }
-  if ('y' in sym_code_m) { dig.push({"v":0, "n":4, "t":"y", "d": [0,1,0] }); }
-  if ('z' in sym_code_m) { dig.push({"v":0, "n":4, "t":"z", "d": [0,0,1] }); }
+  for (let ii=(sym.length-1); ii>=0; ii--) {
+
+    if (sym[ii] == 'z') { dig.push({"v":0, "n":4, "t":"z", "d": [0,0,1] }); }
+    if (sym[ii] == 'y') { dig.push({"v":0, "n":4, "t":"y", "d": [0,1,0] }); }
+    if (sym[ii] == 'x') { dig.push({"v":0, "n":4, "t":"x", "d": [1,0,0] }); }
+
+    //if ('z' in sym_code_m) { dig.push({"v":0, "n":4, "t":"z", "d": [0,0,1] }); }
+    //if ('y' in sym_code_m) { dig.push({"v":0, "n":4, "t":"y", "d": [0,1,0] }); }
+    //if ('x' in sym_code_m) { dig.push({"v":0, "n":4, "t":"x", "d": [1,0,0] }); }
+  }
 
   let raw_list = [];
 
@@ -273,7 +285,7 @@ function stickum_create_rep(dock_list, sym) {
   //
   do {
 
-    console.log(raw_list.length, "dig:", dig);
+    //console.log(raw_list.length, "dig:", dig);
 
     let M = m4.identity();
     let T = new Float32Array(16);
@@ -290,9 +302,18 @@ function stickum_create_rep(dock_list, sym) {
       dig_order.push(dig[ii].t);
     }
 
+    // dig is lsb first (to the left) as is the code_a.
+    // We interept the ascii code (\d\d\d) as an `XYZ` rotation,
+    // but the actual matrix is $M_z \cdot M_y \cdot M_x$, meaning
+    // the 'code' is reversed from what it's actually doing.
+    // Its confusing but this keeps with the convention I've been using
+    // (I think), so that's why its reversed below.
+    //
+
     raw_list.push({
       "dock":stickum_dock_rot(dock_list, M),
-      "code": code_a.join(""),
+      "raw_code": code_a.join(""),
+      "code": code_a.reverse().join(""),
       "axis_order": dig_order.join(""),
       "M": M
     });
@@ -305,9 +326,9 @@ function stickum_create_rep(dock_list, sym) {
 
   //DEBUG
   //
-  for (let ii=0; ii<raw_list.length; ii++) {
-    console.log(ii, raw_list[ii].code, raw_list[ii].axis_order);
-  }
+  //for (let ii=0; ii<raw_list.length; ii++) {
+  //  console.log(ii, raw_list[ii].code, raw_list[ii].axis_order);
+  //}
   //
   //DEBUG
 
@@ -317,7 +338,7 @@ function stickum_create_rep(dock_list, sym) {
     is_dup.push(0);
   }
 
-  console.log("raw_list.length", raw_list.length);
+  //console.log("raw_list.length", raw_list.length);
 
   for (let i=0; i<raw_list.length; i++) {
     if (is_dup[i]) { continue; }
@@ -326,8 +347,8 @@ function stickum_create_rep(dock_list, sym) {
 
       if (is_dup[j]) { continue; }
 
-      console.log( i, raw_list[i].code, "==?", j, raw_list[j].code, ":",
-        stickum_dock_eq(raw_list[i].dock, raw_list[j].dock));
+      //console.log( i, raw_list[i].code, "==?", j, raw_list[j].code, ":",
+      //  stickum_dock_eq(raw_list[i].dock, raw_list[j].dock));
 
 
       if (stickum_dock_eq(raw_list[i].dock, raw_list[j].dock)) {
@@ -337,16 +358,18 @@ function stickum_create_rep(dock_list, sym) {
     }
     if (found) {
 
-      console.log("FOUND", i);
+      //console.log("FOUND", i);
 
       dedup_list.push(raw_list[i]);
     }
   }
 
-  console.log("dedup_list.length", dedup_list.length);
-  console.log("dedup_list:", dedup_list);
-  console.log("----");
+  //console.log("dedup_list.length", dedup_list.length);
+  //console.log("dedup_list:", dedup_list);
+  //console.log("----");
 
+
+  return dedup_list;
 }
 
 function stickum_dock_rot(dock, M) {
@@ -364,13 +387,76 @@ function stickum_dock_rot(dock, M) {
 
 function main() {
   let d = 1/8;
+
+  let rot_order = "xyz";
+
+  let _test = {
+    "XX" : {
+      "dock": [ stickum_square(0, d), stickum_square(1,d) ],
+      "expect": { "000":1, "001":1, "010":1 }
+    },
+    "X" : {
+      "dock": [ stickum_square(0, d) ],
+      "expect": { "000":1, "001":1, "002":1, "003":1, "010":1, "030":1 }
+    },
+    "XXX" : {
+      "dock": [ stickum_square(0, d), stickum_square(1,d), stickum_square(4,d) ],
+      "expect": {
+        "000":1,
+        "001":1,
+        "010":1, "011":1, "012":1, "013":1,
+        "020":1, "021":1,
+        "100":1, "101":1, "102":1, "103":1 }
+    },
+
+    "XXXX" : {
+      "dock": [ stickum_square(0, d), stickum_square(1,d), stickum_square(4,d), stickum_square(5,d) ],
+      "expect": { "000":1, "001":1, "100":1 }
+    }
+
+  };
+
+  console.log("rot_order:", rot_order);
+
+  for (let t in _test) {
+    let r = stickum_create_rep(_test[t].dock, rot_order);
+
+    let pass = true;
+    for (let ii=0; ii<r.length; ii++) {
+      let code = r[ii].code;
+
+      console.log(t, ii, code);
+
+      if (!(code in _test[t].expect)) {
+
+        console.log("code:", code, "not in expect", _test[t].expect);
+
+        pass = false;
+        break;
+      }
+    }
+
+    if (pass) { console.log(t, "pass"); }
+    else { console.log(t, "FAIL"); }
+
+
+  }
+
+  return;
+
+  console.log("---");
+
   let XX = [ stickum_square(0, d), stickum_square(1,d) ];
-
   let r = stickum_create_rep(XX, "xyz");
+  console.log("XX:\n", r);
 
-  console.log(r);
+  console.log("---");
 
-  console.log("...");
+  let X = [ stickum_square(0, d) ];
+  r = stickum_create_rep(X, "xyz");
+  console.log("X:\n", r);
+
+  console.log("---");
 
 }
 
