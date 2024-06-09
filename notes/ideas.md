@@ -14,6 +14,7 @@
 * Through a Pixel, Darkly
 * Vegan Metal Vampire Bat
 * Vegan Witch
+* psionically programmable gate arrays ([mary@icosahedron.website](https://mastodon.social/@mary@icosahedron.website/112587948216811466))
 
 ---
 
