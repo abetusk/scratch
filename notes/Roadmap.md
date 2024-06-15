@@ -13,6 +13,7 @@ Roadmap
     + led earring (cat eyes, monser eyes, leaf veins)
     + moving earring (rib cage, heart, crystal)
     + cat ears (encoder, bldc motor+driver)
+    + e-ink paper semaphore (dishes ready, coffee brewed, laundry time, etc.)
   - solar project
     + install solar panel
     + figure out battery management
@@ -21,6 +22,7 @@ Roadmap
     + old school
     + arcade cabinet
   - music game (cubsmoxi)
+  - high end art printer (6-10 art projects)
   
 
 ###### 2021-02-22
