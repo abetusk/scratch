@@ -1,0 +1,30 @@
+#!/bin/bash
+
+
+apiurl="https://colorhunt.co/php"
+
+apifeed=${apiurl}"/feed.php"
+apisingle=${apiurl}"/single.php"
+
+s=0
+tags=""
+
+sort_type="new"
+sort_type="popular"
+
+tf=30
+tf=4000
+
+pal="b8ffd0ecffc1ffe6ccdfbaf7"
+
+querysingle='single='${pal}
+
+rm -f colorhunt.ajson
+
+for s in `seq 0 86` ; do
+  echo $s
+  queryfeed='step='${s}'&sort='${sort_type}'&tags='${tags}'&timeframe='${tf}
+  curl -s -X POST -d "${queryfeed}" ${apifeed} | jq -c '.[]' >> colorhunt.ajson
+done
+
+

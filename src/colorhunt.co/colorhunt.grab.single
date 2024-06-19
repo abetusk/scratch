@@ -1,0 +1,22 @@
+#!/bin/bash
+
+
+apiurl="https://colorhunt.co/php"
+apisingle=${apiurl}"/single.php"
+
+pal="xxxx" #"b8ffd0ecffc1ffe6ccdfbaf7"
+
+n=`jq '.[].code' colorhunt.json | wc -l`
+count=0
+
+rm -f colorhunt_p.ajson
+for pal in `jq -r '.[].code' colorhunt.json` ; do
+  echo "$pal ($count / $n)"
+  querysingle='single='${pal}
+  curl -s -X POST -d "${querysingle}" ${apisingle}  | \
+    jq -c '.[0] += {"code":"'${pal}'"} | .[0]' >> colorhunt_p.ajson
+
+  count=`echo "$count + 1" | bc`
+done
+
+
