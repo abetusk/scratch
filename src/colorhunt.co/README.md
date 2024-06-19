@@ -48,9 +48,6 @@ $ curl -s -X POST -d 'single=b8ffd0ecffc1ffe6ccdfbaf7' https://colorhunt.co/php/
 ```
 
 ```
-$Here are two example `curl` requests:
-
-```
 $ curl -s -X POST -d 'step=0&sort=&tags=&timeframe=4000' https://colorhunt.co/php/feed.php 
 [{"code":"222831393e4600adb5eeeeee","likes":"73544","date":"8 years"},
 {"code":"e3fdfdcbf1f5a6e3e971c9ce","likes":"37336","date":"7 years"},
