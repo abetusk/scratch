@@ -1,0 +1,19 @@
+#!/bin/bash
+
+for datfn in `ls ../*.dat` ; do
+
+  b=`basename $datfn .dat`;
+  fn="$b.json"
+
+  echo $datfn $b $fn
+
+  echo '[' > $fn
+  cat $datfn | \
+    sed 's/^\([a-z_]*\){/{"\1":{/' | \
+    sed 's/^ *\([^ =]*\) *=/  "\1" : /' | \
+    sed 's/}/  "_":""\n}},/g' >> $fn
+  echo '{"EOL":"EOL"}' >> $fn
+  echo ']' >> $fn
+
+done
+
