@@ -212,9 +212,7 @@ async function _main() {
     g_suralos_info.tileset_img[name] = await jimp.read(INFO.tileset[name].png);
     g_suralos_info.tileset_data[name] = load_lua_dat(INFO.tileset[name].data);
 
-
-    console.log("cp....", name);
-
+    fs.writeFileSync( "data/" + name + ".json", JSON.stringify(g_suralos_info.tileset_data[name], undefined, 2));
   }
 
   for (let name in INFO.map) {
@@ -228,13 +226,10 @@ async function _main() {
 
     //let map_name = "a1";
     let _map = g_suralos_info.map[map_name];
-    console.log("map:", map_name, _map.properties[0]);
 
     let map_w = _map.properties[0].width;
     let map_h = _map.properties[0].height;
     let map_default_tileset = _map.properties[0].tileset;
-
-    console.log(map_w, map_h);
 
     let out_img = new jimp(map_w, map_h);
     out_img_map[map_name] = out_img;
@@ -277,7 +272,7 @@ async function _main() {
     }
 
     console.log("writing:", map_name + ".png");
-    out_img.write(map_name + ".png");
+    out_img.write("img/" + map_name + ".png");
 
   }
 
@@ -298,7 +293,7 @@ async function _main() {
   fin_img.blit( out_img_map['a4'], 0,     720+(2*960) );
   fin_img.blit( out_img_map['b4'], 1280,  720+(2*960) );
 
-  fin_img.write("fin.png");
+  fin_img.write("img/fin.png");
 
   /*
   console.log("done loading");
