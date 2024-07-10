@@ -105,13 +105,13 @@ function load_lua_dat(lua_dat_fn) {
 
     // field number value
     //
-    else if (_m=line.match( '^(\\w+) *= *(\\d+) *,')) {
+    else if (_m=line.match( '^(\\w+) *= *(-?\\d+) *,')) {
       cur_field_obj[ _m[1] ] = parseFloat( _m[2] );
     }
 
     // hacky field number value
     //
-    else if (_m=line.match( '^(\\w+) *= *{ *(\\d+) *,')) {
+    else if (_m=line.match( '^(\\w+) *= *{ *(-?\\d+) *,')) {
       cur_field_obj[ _m[1] ] = parseFloat( _m[2] );
     }
 
@@ -161,11 +161,60 @@ function process_map(dat) {
   }
 }
 
+function blit_rep(img, src,
+                  dst_x, dst_y, dst_w, dst_h,
+                  src_x, src_y, src_w, src_h) {
+
+
+  let end_x = dst_x + dst_w;
+  let end_y = dst_y + dst_h;
+
+  for (let _ix = dst_x; _ix < (dst_x+dst_w); _ix += src_w) {
+    for (let _iy = dst_y; _iy < (dst_y+dst_h); _iy += src_h) {
+
+      let _x = _ix;
+      let _y = _iy;
+
+      if (_x < 0) { _x = 0; }
+      if (_y < 0) { _y = 0; }
+
+      let _rel_x = _x - dst_x;
+      let _rel_y = _y - dst_y;
+
+      let _rem_x = _rel_x % src_w;
+      let _rem_y = _rel_y % src_h;
+
+      let _rel_sx = _rem_x;
+      let _rel_sy = _rem_y;
+
+      let _w = src_w - _rel_sx;
+      let _h = src_h - _rel_sy;
+
+      let _sx = src_x + _rel_sx;
+      let _sy = src_y + _rel_sy;
+
+      // if dst blit would fall of end, truncate (w,h)
+      //
+      if ( (_x+_w) > (dst_x+dst_w) ) { _w = (dst_x+dst_w-_x); }
+      if ( (_y+_h) > (dst_y+dst_h) ) { _h = (dst_y+dst_h-_y); }
+
+      if ((_w <= 0) || (_h <= 0)) { continue; }
+
+      img.blit( src, _x, _y, _sx, _sy, _w, _h );
+    }
+  }
+}
+
+
 async function _main() {
 
   for (let name in INFO.tileset) {
     g_suralos_info.tileset_img[name] = await jimp.read(INFO.tileset[name].png);
     g_suralos_info.tileset_data[name] = load_lua_dat(INFO.tileset[name].data);
+
+
+    console.log("cp....", name);
+
   }
 
   for (let name in INFO.map) {
@@ -173,12 +222,68 @@ async function _main() {
   }
 
 
-  console.log("done loading");
+  for (map_name in g_suralos_info.map) {
 
+    //let map_name = "a1";
+    let _map = g_suralos_info.map[map_name];
+    console.log("map:", map_name, _map.properties[0]);
+
+    let map_w = _map.properties[0].width;
+    let map_h = _map.properties[0].height;
+    let map_default_tileset = _map.properties[0].tileset;
+
+    console.log(map_w, map_h);
+
+    let out_img = new jimp(map_w, map_h);
+
+    for (let tile_info_idx=0; tile_info_idx<_map.tile.length; tile_info_idx++) {
+
+      let tileset_name = map_default_tileset;
+
+      let tile_info = _map.tile[tile_info_idx];
+      if ("tileset" in tile_info) { tileset_name = tile_info.tileset; }
+
+      let tile_pattern = g_suralos_info.get( tileset_name, "tile_pattern", tile_info.pattern );
+
+
+      if (tile_pattern === null) { console.log("!!!!", tile_info); }
+
+      let _srcimg = g_suralos_info.tileset_img[ tileset_name ];
+
+
+      let dst_x = tile_info.x;
+      let dst_y = tile_info.y;
+      let dst_w = tile_info.width;
+      let dst_h = tile_info.height;
+
+      if (!("x" in tile_pattern)) {
+        console.log("!!!!", "idx:", tile_info_idx, "...", tile_pattern);
+      }
+
+      let src_x = tile_pattern.x;
+      let src_y = tile_pattern.y;
+      let src_w = tile_pattern.width;
+      let src_h = tile_pattern.height;
+
+      blit_rep( out_img, _srcimg, dst_x, dst_y, dst_w, dst_h, src_x, src_y, src_w, src_h );
+
+      //out_img.blit( _srcimg, dst_x, dst_y, src_x, src_y, src_w, src_h );
+
+      //console.log(tile_info_idx, tile_info, tile_pattern);
+      //break;
+    }
+
+    console.log("writing:", map_name + ".png");
+    out_img.write(map_name + ".png");
+
+  }
+
+  /*
+  console.log("done loading");
   let tileset_name = "oceanset_outside";
   console.log(">>>", g_suralos_info.tileset_data[tileset_name].get("tile_pattern", "106_2"));
-
   console.log(">>>>", g_suralos_info.get(tileset_name, "tile_pattern", "106_2"));
+  */
 }
 
 _main();
