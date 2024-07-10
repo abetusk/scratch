@@ -222,6 +222,8 @@ async function _main() {
   }
 
 
+  let out_img_map = {};
+
   for (map_name in g_suralos_info.map) {
 
     //let map_name = "a1";
@@ -235,6 +237,7 @@ async function _main() {
     console.log(map_w, map_h);
 
     let out_img = new jimp(map_w, map_h);
+    out_img_map[map_name] = out_img;
 
     for (let tile_info_idx=0; tile_info_idx<_map.tile.length; tile_info_idx++) {
 
@@ -277,6 +280,25 @@ async function _main() {
     out_img.write(map_name + ".png");
 
   }
+
+  let fin_w = 1280*2;
+  let fin_h = 720 + (3*960);
+  let fin_img = new jimp( fin_w, fin_h );
+
+
+  fin_img.blit( out_img_map['a1'], 0,     0 );
+  fin_img.blit( out_img_map['b1'], 1280,  0 );
+
+  fin_img.blit( out_img_map['a2'], 0,     720 );
+  fin_img.blit( out_img_map['b2'], 1280,  720 );
+
+  fin_img.blit( out_img_map['a3'], 0,     720+960 );
+  fin_img.blit( out_img_map['b3'], 1280,  720+960 );
+
+  fin_img.blit( out_img_map['a4'], 0,     720+(2*960) );
+  fin_img.blit( out_img_map['b4'], 1280,  720+(2*960) );
+
+  fin_img.write("fin.png");
 
   /*
   console.log("done loading");
