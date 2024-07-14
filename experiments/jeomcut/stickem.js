@@ -238,6 +238,10 @@ function __sandbox() {
 
 function _main() {
 
+  var cfg = JSON.parse( fs.readFileSync("./data/minigolf_stickem.json") );
+
+  console.log(cfg);
+
   var src_obj_list = fs.readFileSync("./data/source.list").toString().split("\n");
   for (let ii=0; ii<src_obj_list.length; ii++) {
     let fn = src_obj_list[ii].trim();
