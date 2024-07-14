@@ -9,6 +9,8 @@ var op = {
 
   "objload": objectDeserializer.deserialize,
 
+  "clone": jscad.geometries.geom3.clone,
+
   "add" : jscad.booleans.union,
   "sub" : jscad.booleans.subtract,
   "and" : jscad.booleans.intersect,
@@ -236,11 +238,77 @@ function __sandbox() {
 
 }
 
+// representative creation
+//
+function create_rep(cfg, geom, base_name) {
+
+  let base = op.clone(geom);
+
+  let rep_info = [
+    { "name": base_name + "_000", "irot": [0,0,0], "rot":[0,0,0], "geom": base }
+  ];
+
+  let rot_v = [0,0,0];
+
+  let vol_thresh = 1.0 - cfg.eps;
+
+  do {
+
+    // TODO: make sure to cycle through integer index rotations based on symmetry
+    // in cfg (currently only 'y', so incrementing only y index component)
+    //
+    rot_v[1]++;
+    rot_v[1] %= 4;
+
+    let tgeom = op.clone(base);
+
+    if (rot_v[0] > 0) { tgeom = op.rotX( rot_v[0]*Math.PI/2, tgeom ); }
+    if (rot_v[1] > 0) { tgeom = op.rotY( rot_v[1]*Math.PI/2, tgeom ); }
+    if (rot_v[2] > 0) { tgeom = op.rotZ( rot_v[2]*Math.PI/2, tgeom ); }
+
+    let found = false;
+    for (let rep_idx=0; rep_idx<rep_info.length; rep_idx++) {
+
+      let rep_vol = op.vol(rep_info[rep_idx].geom);
+      let and_vol = op.vol( op.and(tgeom, rep_info[rep_idx].geom) );
+
+      let p_vol = and_vol / rep_vol;
+
+      if (p_vol > vol_thresh) { found = true; break; }
+    }
+
+
+    if (!found) {
+
+      rep_info.push({
+        "name": base_name + "_" + rot_v.join(""),
+        "irot": [ rot_v[0], rot_v[1], rot_v[2] ],
+        "rot": [ rot_v[0]*Math.PI/2, rot_v[1]*Math.PI/2, rot_v[2]*Math.PI/2 ],
+        "geom": tgeom
+      });
+
+    }
+
+  } while( (rot_v[0] != 0) || (rot_v[1] != 0) || (rot_v[2] != 0) );
+
+  return rep_info;
+}
+
 function _main() {
 
-  var cfg = JSON.parse( fs.readFileSync("./data/minigolf_stickem.json") );
+  var cfg = JSON.parse( fs.readFileSync("./data/stickem_minigolf.conf") );
 
-  console.log(cfg);
+  let gap = obj2geom("./data/minigolf.obj/gap.obj")[0];
+  let gap_rep = create_rep(cfg, gap, "gap");
+
+  let ramp = obj2geom("./data/minigolf.obj/ramp.obj")[0];
+  let ramp_rep = create_rep(cfg, ramp, "ramp");
+
+  console.log(gap_rep);
+  console.log(ramp_rep);
+
+
+  return;
 
   var src_obj_list = fs.readFileSync("./data/source.list").toString().split("\n");
   for (let ii=0; ii<src_obj_list.length; ii++) {
