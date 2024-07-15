@@ -4,16 +4,30 @@
 var fs = require("fs");
 var jscad = require("@jscad/modeling");
 var objectDeserializer = require('@jscad/obj-deserializer')
+var stlSerializer = require('@jscad/stl-serializer')
+var array_utils = require('@jscad/array-utils')
 
 var op = {
 
   "objload": objectDeserializer.deserialize,
 
+  "stldumps": stlSerializer.serialize,
+
+  "flatten": array_utils.flatten,
+
   "clone": jscad.geometries.geom3.clone,
+  "points": jscad.geometries.geom3.toPoints,
+  "polygons": jscad.geometries.geom3.toPolygons,
+  "validate": jscad.geometries.geom3.validate,
 
   "add" : jscad.booleans.union,
   "sub" : jscad.booleans.subtract,
+  "or" : jscad.booleans.union,
   "and" : jscad.booleans.intersect,
+  "scission": jscad.booleans.scission,
+
+  "expand": jscad.expansions.expand,
+  "offset": jscad.expansions.offset,
 
   "cube": jscad.primitives.cube,
   "cuboid": jscad.primitives.cuboid,
@@ -65,6 +79,90 @@ function _simple_print(geom) {
     console.log("\n");
   }
 
+}
+
+function _vcmp(a,b) {
+  let m = Math.floor( 1 / (1/1024) );
+
+  if (Math.round(m*a[0]) < Math.round(m*b[0])) { return -1; }
+  if (Math.round(m*a[0]) > Math.round(m*b[0])) { return  1; }
+  if (Math.round(m*a[1]) < Math.round(m*b[1])) { return -1; }
+  if (Math.round(m*a[1]) > Math.round(m*b[1])) { return  1; }
+  if (Math.round(m*a[2]) < Math.round(m*b[2])) { return -1; }
+  if (Math.round(m*a[2]) > Math.round(m*b[2])) { return  1; }
+  return 0;
+}
+
+function _point_sim(geom_a, geom_b, _eps) {
+  _eps = ((typeof _eps === "undefined") ? (1/1024) : _eps);
+  _eps = 1/128;
+
+  let _ta = op.points( geom_a );
+  let _tb = op.points( geom_b );
+
+  let pnt_a = [];
+  let pnt_b = [];
+
+  for (let ii=0; ii<_ta.length; ii++) {
+    for (let jj=0; jj<_ta[ii].length; jj++) {
+      pnt_a.push( [ _ta[ii][jj][0], _ta[ii][jj][1], _ta[ii][jj][2] ] );
+    }
+  }
+
+  for (let ii=0; ii<_tb.length; ii++) {
+    for (let jj=0; jj<_tb[ii].length; jj++) {
+      pnt_b.push( [ _tb[ii][jj][0], _tb[ii][jj][1], _tb[ii][jj][2] ] );
+    }
+  }
+
+  pnt_a.sort( _vcmp );
+  pnt_b.sort( _vcmp );
+
+  let m = Math.floor( 1 / _eps );
+
+  // deduplicate
+  //
+  let _tp = [ [ pnt_a[0][0], pnt_a[0][1], pnt_a[0][2] ] ];
+  for (let ii=1; ii<pnt_a.length; ii++) {
+    let j = _tp.length-1;
+    let dx = Math.abs(Math.round( m * (pnt_a[ii][0] - _tp[j][0]) ));
+    let dy = Math.abs(Math.round( m * (pnt_a[ii][1] - _tp[j][1]) ));
+    let dz = Math.abs(Math.round( m * (pnt_a[ii][2] - _tp[j][2]) ));
+
+    if ((dx < _eps) &&(dy < _eps) && (dz < _eps)) { continue; }
+
+    _tp.push( [ pnt_a[ii][0], pnt_a[ii][1], pnt_a[ii][2] ] );
+  }
+  pnt_a = _tp;
+
+  _tp = [ [ pnt_b[0][0], pnt_b[0][1], pnt_b[0][2] ] ];
+  for (let ii=1; ii<pnt_b.length; ii++) {
+    let j = _tp.length-1;
+    let dx = Math.abs(Math.round( m * (pnt_b[ii][0] - _tp[j][0]) ));
+    let dy = Math.abs(Math.round( m * (pnt_b[ii][1] - _tp[j][1]) ));
+    let dz = Math.abs(Math.round( m * (pnt_b[ii][2] - _tp[j][2]) ));
+
+    if ((dx < _eps) &&(dy < _eps) && (dz < _eps)) { continue; }
+
+    _tp.push( [ pnt_b[ii][0], pnt_b[ii][1], pnt_b[ii][2] ] );
+  }
+  pnt_b = _tp;
+
+  let n = ((pnt_a.length < pnt_b.length) ? pnt_a.length : pnt_b.length );
+
+  let count = 0;
+  for (let ii=0; ii<n; ii++) {
+    let dx = Math.abs(Math.round( m * (pnt_a[ii][0] - pnt_b[ii][0]) ));
+    let dy = Math.abs(Math.round( m * (pnt_a[ii][1] - pnt_b[ii][1]) ));
+    let dz = Math.abs(Math.round( m * (pnt_a[ii][2] - pnt_b[ii][2]) ));
+
+    if ((dx > _eps) || (dy > _eps) || (dz > _eps)) { continue; }
+
+    count++;
+
+  }
+
+  return (count / n);
 }
 
 var UNIT = {
@@ -238,27 +336,43 @@ function __sandbox() {
 
 }
 
+function _incr_rot_idx(rot_v, symmetry) {
+
+  let tok = symmetry.split(",");
+
+  for (let tok_idx=0; tok_idx<tok.length; tok_idx++) {
+
+    let sub_tok = tok[tok_idx].split("");
+
+    let _carry = 0;
+    for (let sub_tok_idx=0; sub_tok_idx<sub_tok.length; sub_tok_idx++) {
+
+      let _axis = sub_tok[sub_tok_idx];
+
+      if (_axis == "x") { rot_v[0] = (rot_v[0] + 1) % 4; _carry = ((rot_v[0]==0) ? 1 : _carry); }
+      if (_axis == "y") { rot_v[1] = (rot_v[1] + 1) % 4; _carry = ((rot_v[1]==0) ? 1 : _carry); }
+      if (_axis == "z") { rot_v[2] = (rot_v[2] + 1) % 4; _carry = ((rot_v[2]==0) ? 1 : _carry); }
+
+    }
+
+    if (_carry==0) { break; }
+  }
+
+}
+
 // representative creation
 //
 function create_rep(cfg, geom, base_name) {
 
   let base = op.clone(geom);
 
-  let rep_info = [
-    { "name": base_name + "_000", "irot": [0,0,0], "rot":[0,0,0], "geom": base }
-  ];
+  let rep_info = [];
 
   let rot_v = [0,0,0];
 
   let vol_thresh = 1.0 - cfg.eps;
 
   do {
-
-    // TODO: make sure to cycle through integer index rotations based on symmetry
-    // in cfg (currently only 'y', so incrementing only y index component)
-    //
-    rot_v[1]++;
-    rot_v[1] %= 4;
 
     let tgeom = op.clone(base);
 
@@ -268,15 +382,11 @@ function create_rep(cfg, geom, base_name) {
 
     let found = false;
     for (let rep_idx=0; rep_idx<rep_info.length; rep_idx++) {
-
-      let rep_vol = op.vol(rep_info[rep_idx].geom);
-      let and_vol = op.vol( op.and(tgeom, rep_info[rep_idx].geom) );
-
-      let p_vol = and_vol / rep_vol;
-
-      if (p_vol > vol_thresh) { found = true; break; }
+      if (_point_sim( rep_info[rep_idx].geom, tgeom ) > cfg.point_similarity_threshold) {
+        found = true;
+        break;
+      }
     }
-
 
     if (!found) {
 
@@ -289,6 +399,8 @@ function create_rep(cfg, geom, base_name) {
 
     }
 
+    _incr_rot_idx(rot_v, cfg.symmetry);
+
   } while( (rot_v[0] != 0) || (rot_v[1] != 0) || (rot_v[2] != 0) );
 
   return rep_info;
@@ -297,6 +409,88 @@ function create_rep(cfg, geom, base_name) {
 function _main() {
 
   var cfg = JSON.parse( fs.readFileSync("./data/stickem_minigolf.conf") );
+  let base_dir = "./data/minigolf.obj";
+
+  /*
+  //DEBUG
+  let _castle = obj2geom( base_dir + "/castle.obj")[0];
+
+  let _castle_rot1 = op.rotY( Math.PI/2, _castle );
+  let _castle_rot2 = op.rotY( Math.PI, _castle );
+
+  console.log( _point_sim(_castle, _castle) );
+  console.log( _point_sim(_castle, _castle_rot1) );
+  console.log( _point_sim(_castle, _castle_rot2) );
+  return;
+
+
+  //let _castle_rot = op.rotY( r*Math.PI/2.0, _castle );
+
+  console.log( _point_sim(_castle, _castle) );
+  console.log( _point_sim(_castle, _castle_rot) );
+  //console.log(_castle);
+  return;
+
+  let _castle_scis = op.scission(_castle);
+
+  console.log(_castle_scis);
+  for (let ii=0; ii<_castle_scis.length; ii++) {
+    console.log( op.validate(_castle_scis[ii]) );
+  }
+  return;
+
+
+  console.log(">>>", op.validate(_castle));
+  console.log(">>>", op.validate(_castle_rot));
+
+  console.log(_castle);
+
+  console.log( op.stldumps( {"binary":false}, op.or(_castle, _castle_rot) ).join("") );
+  return;
+
+  console.log( op.stldumps( {"binary":false}, _castle_rot).join("") );
+  return;
+
+
+  console.log( "vol:", op.vol(_castle), "rotvol:", op.vol(_castle_rot), "orvol:", op.vol( op.or( _castle, _castle_rot ) ) );
+  return;
+
+
+  let _c_or = op.or( _castle, _castle );
+  let _c_and = op.and( _c_or, _c_or );
+  _simple_print(_c_and);
+  return;
+
+  let _vol_c = op.vol(_castle);
+  let _vol_cr = op.vol(_castle_rot);
+
+  let _vol_and = op.vol( op.and( _castle, _castle_rot) );
+
+  let xxx = op.and( _castle, _castle_rot );
+
+  let yyy = op.and( _castle, _castle );
+
+  _simple_print(yyy);
+
+  //console.log(">>>", _vol_c, _vol_cr, _vol_and, _vol_and / _vol_c );
+  //_simple_print(_castle);
+
+  return;
+  //DEBUG
+  */
+
+
+  for (let idx=0; idx<cfg.source.length; idx++) {
+    let name = cfg.source[idx];
+
+    let geom = obj2geom( base_dir + "/" + name + ".obj" )[0];
+    let geom_rep = create_rep(cfg, geom, name);
+
+    //console.log(name, geom, geom_rep);
+    console.log(name, geom_rep);
+  }
+
+  return;
 
   let gap = obj2geom("./data/minigolf.obj/gap.obj")[0];
   let gap_rep = create_rep(cfg, gap, "gap");
