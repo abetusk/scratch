@@ -165,6 +165,45 @@ function _point_sim(geom_a, geom_b, _eps) {
   return (count / n);
 }
 
+function slice_idir(cfg, idir, _center) {
+  _center = ((typeof _center === "undefined") ? [0,0,0] : _center);
+
+  let dx = cfg.unit[0],
+      dy = cfg.unit[1],
+      dz = cfg.unit[2];
+  let s = cfg.dock_slice;
+  let _eps = cfg.eps;
+  
+  if (idir == 0) {
+    _center[0] += (dx-s)/2;
+    return op.cuboid({"size": [ s, dy, dz ], "center": _center });
+  }
+  else if (idir == 1) {
+    _center[0] -= (dx-s)/2;
+    return op.cuboid({"size": [ s, dy, dz ], "center": _center });
+  }
+
+  else if (idir == 2) {
+    _center[1] += (dy-s)/2;
+    return op.cuboid({"size": [ dx, s, dz ], "center": _center });
+  }
+  else if (idir == 3) {
+    _center[1] -= (dy-s)/2;
+    return op.cuboid({"size": [ dx, s, dz ], "center": _center });
+  }
+
+  else if (idir == 4) {
+    _center[2] += (dz-s)/2;
+    return op.cuboid({"size": [ dx, dy, s ], "center": _center });
+  }
+  else if (idir == 5) {
+    _center[2] -= (dz-s)/2;
+    return op.cuboid({"size": [ dx, dz, s], "center": _center });
+  }
+
+  return null;
+}
+
 var UNIT = {
   "size": [1,1/6,1],
   "center": [0,1/12,0]
@@ -372,6 +411,9 @@ function create_rep(cfg, geom, base_name) {
 
   let vol_thresh = 1.0 - cfg.eps;
 
+  // rotate through each of the provided symmetries
+  // and take only the unique representative
+  //
   do {
 
     let tgeom = op.clone(base);
@@ -411,74 +453,12 @@ function _main() {
   var cfg = JSON.parse( fs.readFileSync("./data/stickem_minigolf.conf") );
   let base_dir = "./data/minigolf.obj";
 
-  /*
-  //DEBUG
-  let _castle = obj2geom( base_dir + "/castle.obj")[0];
-
-  let _castle_rot1 = op.rotY( Math.PI/2, _castle );
-  let _castle_rot2 = op.rotY( Math.PI, _castle );
-
-  console.log( _point_sim(_castle, _castle) );
-  console.log( _point_sim(_castle, _castle_rot1) );
-  console.log( _point_sim(_castle, _castle_rot2) );
-  return;
-
-
-  //let _castle_rot = op.rotY( r*Math.PI/2.0, _castle );
-
-  console.log( _point_sim(_castle, _castle) );
-  console.log( _point_sim(_castle, _castle_rot) );
-  //console.log(_castle);
-  return;
-
-  let _castle_scis = op.scission(_castle);
-
-  console.log(_castle_scis);
-  for (let ii=0; ii<_castle_scis.length; ii++) {
-    console.log( op.validate(_castle_scis[ii]) );
-  }
-  return;
-
-
-  console.log(">>>", op.validate(_castle));
-  console.log(">>>", op.validate(_castle_rot));
-
-  console.log(_castle);
-
-  console.log( op.stldumps( {"binary":false}, op.or(_castle, _castle_rot) ).join("") );
-  return;
-
-  console.log( op.stldumps( {"binary":false}, _castle_rot).join("") );
-  return;
-
-
-  console.log( "vol:", op.vol(_castle), "rotvol:", op.vol(_castle_rot), "orvol:", op.vol( op.or( _castle, _castle_rot ) ) );
-  return;
-
-
-  let _c_or = op.or( _castle, _castle );
-  let _c_and = op.and( _c_or, _c_or );
-  _simple_print(_c_and);
-  return;
-
-  let _vol_c = op.vol(_castle);
-  let _vol_cr = op.vol(_castle_rot);
-
-  let _vol_and = op.vol( op.and( _castle, _castle_rot) );
-
-  let xxx = op.and( _castle, _castle_rot );
-
-  let yyy = op.and( _castle, _castle );
-
-  _simple_print(yyy);
-
-  //console.log(">>>", _vol_c, _vol_cr, _vol_and, _vol_and / _vol_c );
-  //_simple_print(_castle);
-
-  return;
-  //DEBUG
-  */
-
+  let stickem_info = {
+    "basename": [],
+    "rep" : [],
+    "basename_rep_idx" : {
+    }
+  };
 
   for (let idx=0; idx<cfg.source.length; idx++) {
     let name = cfg.source[idx];
@@ -486,29 +466,66 @@ function _main() {
     let geom = obj2geom( base_dir + "/" + name + ".obj" )[0];
     let geom_rep = create_rep(cfg, geom, name);
 
+    stickem_info.basename.push( name );
+    stickem_info.basename_rep_idx[name] = [];
+
+    for (let ii=0; ii<geom_rep.length; ii++) {
+      stickem_info.basename_rep_idx[name].push( stickem_info.rep.length );
+      stickem_info.rep.push( geom_rep[ii] );
+    }
+
     //console.log(name, geom, geom_rep);
-    console.log(name, geom_rep);
+    //console.log(name, geom_rep);
   }
 
-  return;
+  //console.log(stickem_info);
 
-  let gap = obj2geom("./data/minigolf.obj/gap.obj")[0];
-  let gap_rep = create_rep(cfg, gap, "gap");
+  let rdir = [ 1,0, 3,2, 5,4 ];
 
-  let ramp = obj2geom("./data/minigolf.obj/ramp.obj")[0];
-  let ramp_rep = create_rep(cfg, ramp, "ramp");
+  let idir_v = [
+    [ 1, 0, 0 ], [ -1,  0,  0 ],
+    [ 0, 1, 0 ], [  0, -1,  0 ],
+    [ 0, 0, 1 ], [  0,  0, -1 ]
+  ];
 
-  console.log(gap_rep);
-  console.log(ramp_rep);
+  for (let ii=0; ii<idir_v.length; ii++) {
+    for (let jj=0; jj<3; jj++) {
+      idir_v[ii][jj] *= cfg.unit[jj];
+    }
+  }
+
+  for (let exemplar_idx=0; exemplar_idx<cfg.dock_exemplar.length; exemplar_idx++) {
+
+    let src_basename = cfg.dock_exemplar[exemplar_idx][0];
+    let dst_basename = cfg.dock_exemplar[exemplar_idx][1];
+    let idir = cfg.dock_exemplar[exemplar_idx][2];
+
+    for (let ii=0; ii<stickem_info.basename_rep_idx[src_basename].length; ii++) {
+      let rep_idx = stickem_info.basename_rep_idx[src_basename][ii];
+
+      //console.log(src_basename, dst_basename, idir, rep_idx);
+
+      let _c_a = [ cfg.unit_center[0], cfg.unit_center[1], cfg.unit_center[2] ];
+      let _c_b = [ cfg.unit_center[0], cfg.unit_center[1], cfg.unit_center[2] ];
+
+      _c_b[0] += idir_v[idir][0];
+      _c_b[1] += idir_v[idir][1];
+      _c_b[2] += idir_v[idir][2];
+
+      let a = slice_idir(cfg, idir, _c_a);
+      let b = slice_idir(cfg, rdir[idir], _c_b);
+
+      _simple_print(a);
+      console.log("\n\n");
+      _simple_print(b);
+
+      //console.log(a,b);
 
 
-  return;
 
-  var src_obj_list = fs.readFileSync("./data/source.list").toString().split("\n");
-  for (let ii=0; ii<src_obj_list.length; ii++) {
-    let fn = src_obj_list[ii].trim();
-    if (fn.length == 0) { continue; }
-    console.log(fn);
+    }
+
+    break;
   }
 
 }
