@@ -19,6 +19,7 @@ var op = {
   "points": jscad.geometries.geom3.toPoints,
   "polygons": jscad.geometries.geom3.toPolygons,
   "validate": jscad.geometries.geom3.validate,
+  "create": jscad.geometries.geom3.create,
 
   "add" : jscad.booleans.union,
   "sub" : jscad.booleans.subtract,
@@ -99,6 +100,8 @@ function _point_sim(geom_a, geom_b, _eps) {
 
   let _ta = op.points( geom_a );
   let _tb = op.points( geom_b );
+
+  if ((_ta.length==0) || (_tb.length==0)) { return 0; }
 
   let pnt_a = [];
   let pnt_b = [];
@@ -478,9 +481,19 @@ function _main() {
     //console.log(name, geom_rep);
   }
 
+  // add 'empty' tile representative
+  //
+  stickem_info.basename_rep_idx['.'] = [ stickem_info.rep.length ];
+  stickem_info.rep.push({
+    "name": "._000",
+    "irot": [0,0,0],
+    "rot": [0,0,0],
+    "geom": op.create()
+  });
+
   //console.log(stickem_info);
 
-  let rdir = [ 1,0, 3,2, 5,4 ];
+  let oppo_dir = [ 1,0, 3,2, 5,4 ];
 
   let idir_v = [
     [ 1, 0, 0 ], [ -1,  0,  0 ],
@@ -494,6 +507,8 @@ function _main() {
     }
   }
 
+  console.log("#tilecount:", stickem_info.rep.length);
+
   let dock_lib = [];
 
   for (let exemplar_idx=0; exemplar_idx<cfg.dock_exemplar.length; exemplar_idx++) {
@@ -501,6 +516,13 @@ function _main() {
     let src_basename = cfg.dock_exemplar[exemplar_idx][0];
     let dst_basename = cfg.dock_exemplar[exemplar_idx][1];
     let idir = cfg.dock_exemplar[exemplar_idx][2];
+
+    // The dock exemplar is assumed to be the 000 representative.
+    // For each rotated representative, we need to rotate the dock information
+    // appropriately and then test.
+    //
+    // DEBUG: just use the 000 to test
+    //
 
     for (let ii=0; ii<stickem_info.basename_rep_idx[src_basename].length; ii++) {
       let rep_idx = stickem_info.basename_rep_idx[src_basename][ii];
@@ -521,7 +543,7 @@ function _main() {
       // create docking slices
       //
       let a_slice = slice_idir(cfg, idir, _c_a);
-      let b_slice = slice_idir(cfg, rdir[idir], _c_b);
+      let b_slice = slice_idir(cfg, oppo_dir[idir], _c_b);
 
       //_simple_print(a_slice);
       //console.log("\n\n");
@@ -530,13 +552,23 @@ function _main() {
       let dock_ele = {
         "idir": idir,
         "vdir": idir_v,
-        "src": {},
-        "dst": {}
+        "src_slice": a_slice,
+        "dst_slice": b_slice,
+        "src_neg": {},
+        "src_pos": {},
+        "dst_neg": {},
+        "dst_pos": {}
       };
 
-      let _src_idx = stickem_info.basename_rep_idx[ src_basename ];
-      let _dst_idx = stickem_info.basename_rep_idx[ dst_basename ];
+      console.log(dst_basename);
+      if (dst_basename.match( '\\|')) { console.log("..."); continue; }
 
+      console.log("  ", dst_basename, stickem_info.basename_rep_idx[ dst_basename ]);
+
+      let _src_idx = stickem_info.basename_rep_idx[ src_basename ][0];
+      let _dst_idx = stickem_info.basename_rep_idx[ dst_basename ][0];
+
+      console.log(src_basename, _src_idx, dst_basename, _dst_idx);
 
       let src_geom = stickem_info.rep[ _src_idx ].geom;
       let dst_geom = stickem_info.rep[ _dst_idx ].geom;
@@ -544,8 +576,16 @@ function _main() {
       //console.log(src_geom, dst_geom);
 
 
-      dock_ele.src = op.and( a_slice, src_geom );
-      dock_ele.dst = op.and( b_slice, op.mov( idir_v[idir], dst_geom ) );
+      dock_ele.src_pos = op.and( a_slice, src_geom );
+      dock_ele.dst_pos = op.and( b_slice, op.mov( idir_v[idir], dst_geom ) );
+
+      dock_ele.src_neg = op.sub( a_slice, src_geom );
+      dock_ele.dst_neg = op.sub( b_slice, dst_geom );
+
+      dock_lib.push( dock_ele );
+
+      //DEBUG
+      break;
 
       //_simple_print( src_geom);
       //console.log("\n\n");
@@ -566,8 +606,71 @@ function _main() {
 
     }
 
-    break;
+    //DEBUG
+    //break;
   }
+
+  console.log(dock_lib);
+  return;
+
+  for (let src_rep_idx=0; src_rep_idx<stickem_info.rep.length; src_rep_idx++) {
+    for (let dst_rep_idx=0; dst_rep_idx<stickem_info.rep.length; dst_rep_idx++) {
+
+      let src_geom = stickem_info.rep[src_rep_idx].geom;
+      let dst_geom = stickem_info.rep[dst_rep_idx].geom;
+
+      let _src = stickem_info.rep[src_rep_idx];
+      let _dst = stickem_info.rep[dst_rep_idx];
+
+      for (let dock_idx=0; dock_idx<dock_lib.length; dock_idx++) {
+
+        let idir = dock_lib[dock_idx].idir;
+
+        let dock_a = op.clone( dock_lib[dockidx].src );
+        let dock_b = op.mov( idir_v[idir], dock_lib[dockidx].dst );
+
+        let geom_a = op.clone( src_geom );
+        let geom_b = op.mov( idir_v[idir], dst_geom );
+
+        let pos_dock_a = op.and( geom_a, src_dock_geom );
+        let pos_dock_b = op.and( geom_b, dst_dock_geom );
+
+        let slice_a = dock_lib[dock_idx].src_slice;
+        let slice_b = dock_lib[dock_idx].dst_slice;
+
+        let vol_a = op.vol( test_dock_a );
+        let vol_b = op.vol( test_dock_b );
+
+
+        let vol_a_den = op.vol( src_dock_geom );
+        let vol_b_den = op.vol( dst_dock_geom );
+
+        if ((vol_a_den < _eps) || (vol_b_den < _eps)) { continue; }
+
+        let p_a_vol = vol_a / vol_a_den;
+        let p_b_vol = vol_b / vol_b_den;
+
+        if ((p_a_vol > 0.95) &&
+            (p_b_vol > 0.95)) {
+
+          let rdir = oppo_dir[idir];
+          console.log( _src.name, "--(", idir, ")-->", _dst.name );
+          console.log( _dst.name, "--(", rdir, ")-->", _src.name );
+
+          /*
+          console.log("src:", _src.name, "dst:", _dst.name,
+            "vol_ab(", vol_a / vol_a_den, vol_b / vol_b_den, ")",
+            "pnt_sim_ab(",
+              _point_sim(test_dock_a, src_dock_geom),
+              _point_sim(test_dock_b, dst_dock_geom),
+            ")");
+            */
+        }
+
+      }
+    }
+  }
+
 
 }
 
