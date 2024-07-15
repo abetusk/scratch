@@ -494,6 +494,8 @@ function _main() {
     }
   }
 
+  let dock_lib = [];
+
   for (let exemplar_idx=0; exemplar_idx<cfg.dock_exemplar.length; exemplar_idx++) {
 
     let src_basename = cfg.dock_exemplar[exemplar_idx][0];
@@ -505,19 +507,58 @@ function _main() {
 
       //console.log(src_basename, dst_basename, idir, rep_idx);
 
+      // centers of src and dst
+      //
       let _c_a = [ cfg.unit_center[0], cfg.unit_center[1], cfg.unit_center[2] ];
       let _c_b = [ cfg.unit_center[0], cfg.unit_center[1], cfg.unit_center[2] ];
 
+      // move dst to neighboring position
+      //
       _c_b[0] += idir_v[idir][0];
       _c_b[1] += idir_v[idir][1];
       _c_b[2] += idir_v[idir][2];
 
-      let a = slice_idir(cfg, idir, _c_a);
-      let b = slice_idir(cfg, rdir[idir], _c_b);
+      // create docking slices
+      //
+      let a_slice = slice_idir(cfg, idir, _c_a);
+      let b_slice = slice_idir(cfg, rdir[idir], _c_b);
 
-      _simple_print(a);
+      //_simple_print(a_slice);
+      //console.log("\n\n");
+      //_simple_print(b_slice);
+
+      let dock_ele = {
+        "idir": idir,
+        "vdir": idir_v,
+        "src": {},
+        "dst": {}
+      };
+
+      let _src_idx = stickem_info.basename_rep_idx[ src_basename ];
+      let _dst_idx = stickem_info.basename_rep_idx[ dst_basename ];
+
+
+      let src_geom = stickem_info.rep[ _src_idx ].geom;
+      let dst_geom = stickem_info.rep[ _dst_idx ].geom;
+
+      //console.log(src_geom, dst_geom);
+
+
+      dock_ele.src = op.and( a_slice, src_geom );
+      dock_ele.dst = op.and( b_slice, op.mov( idir_v[idir], dst_geom ) );
+
+      //_simple_print( src_geom);
+      //console.log("\n\n");
+      //_simple_print( dst_geom);
+      //console.log("\n\n");
+
+      _simple_print( dock_ele.src );
       console.log("\n\n");
-      _simple_print(b);
+      _simple_print( dock_ele.dst );
+
+      //console.log(dock_ele);
+      return;
+
 
       //console.log(a,b);
 
