@@ -182,7 +182,7 @@ function _point_sim(geom_a, geom_b, _eps) {
 }
 
 function slice_idir(cfg, idir, _center) {
-  _center = ((typeof _center === "undefined") ? [0,0,0] : _center);
+  _center = ((typeof _center === "undefined") ? [cfg.unit_center[0],cfg.unit_center[1],cfg.unit_center[2]] : _center);
 
   let _eps = cfg.eps;
   let dx = cfg.unit[0],
@@ -219,7 +219,7 @@ function slice_idir(cfg, idir, _center) {
   }
   else if (idir == 5) {
     _center[2] -= (dz-s)/2;
-    return op.cuboid({"size": [ dx, dz, s], "center": _center });
+    return op.cuboid({"size": [ dx, dy, s], "center": _center });
   }
 
   return null;
@@ -509,6 +509,8 @@ function _main() {
     "geom": op.create()
   });
 
+  // needs some thinking....
+  //
   stickem_info.basename_rep_idx['_'] = [ stickem_info.rep.length ];
   stickem_info.rep.push({
     "name": "__000",
@@ -665,7 +667,15 @@ function _main() {
     _simple_print(_pgn);
     console.log("\n\n");
 
+    // slices...
+    //
+    //_pgn = op.mov( [i*dx,0,dz*2], dock_lib[i].src_slice);
+    //_simple_print(_pgn);
+    //console.log("\n\n");
 
+    //_pgn = op.mov( [i*dx,0,dz*2], dock_lib[i].dst_slice);
+    //_simple_print(_pgn);
+    //console.log("\n\n");
 
   }
   return;
