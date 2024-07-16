@@ -426,7 +426,12 @@ function create_rep(cfg, geom, base_name) {
 
   let base = op.clone(geom);
 
-  let rep_info = [];
+  let rep_info = {
+    "list": [],
+    "repr_idx": {},
+    "name_repr_map": {}
+  };
+  let rep_list = [];
 
   let rot_v = [0,0,0];
 
@@ -443,30 +448,45 @@ function create_rep(cfg, geom, base_name) {
     if (rot_v[1] > 0) { tgeom = op.rotY( rot_v[1]*Math.PI/2, tgeom ); }
     if (rot_v[2] > 0) { tgeom = op.rotZ( rot_v[2]*Math.PI/2, tgeom ); }
 
+    let name = base_name + "_" + rot_v.join("");
+
     let found = false;
-    for (let rep_idx=0; rep_idx<rep_info.length; rep_idx++) {
-      if (_point_sim( rep_info[rep_idx].geom, tgeom ) > cfg.point_similarity_threshold) {
+    for (let rep_idx=0; rep_idx<rep_list.length; rep_idx++) {
+      if (_point_sim( rep_list[rep_idx].geom, tgeom ) > cfg.point_similarity_threshold) {
         found = true;
+
+        rep_info.repr_idx[name] = rep_idx;
+        rep_info.name_repr_map[name] = rep_list[rep_idx].name;
         break;
       }
     }
 
     if (!found) {
 
-      rep_info.push({
-        "name": base_name + "_" + rot_v.join(""),
+      rep_info.repr_idx[name] = rep_list.length;
+
+      rep_list.push({
+        //"name": base_name + "_" + rot_v.join(""),
+        "name": name,
         "irot": [ rot_v[0], rot_v[1], rot_v[2] ],
         "rot": [ rot_v[0]*Math.PI/2, rot_v[1]*Math.PI/2, rot_v[2]*Math.PI/2 ],
         "geom": tgeom
       });
 
+      rep_info.name_repr_map[name] = rep_list[rep_list.length-1].name;
+
     }
 
     _incr_rot_idx(rot_v, cfg.symmetry);
 
-  } while( (rot_v[0] != 0) || (rot_v[1] != 0) || (rot_v[2] != 0) );
+  } while( (rot_v[0] != 0) ||
+           (rot_v[1] != 0) ||
+           (rot_v[2] != 0) );
+
+  rep_info.list = rep_list;
 
   return rep_info;
+  //return rep_list;
 }
 
 function _main() {
@@ -477,8 +497,11 @@ function _main() {
   let stickem_info = {
     "basename": [],
     "rep" : [],
-    "basename_rep_idx" : {
-    }
+
+    "repr_idx_map": {},
+    "name_repr_map": {},
+
+    "basename_rep_idx" : {}
   };
 
   for (let idx=0; idx<cfg.source.length; idx++) {
@@ -490,14 +513,21 @@ function _main() {
     stickem_info.basename.push( name );
     stickem_info.basename_rep_idx[name] = [];
 
-    for (let ii=0; ii<geom_rep.length; ii++) {
+    for (let ii=0; ii<geom_rep.list.length; ii++) {
       stickem_info.basename_rep_idx[name].push( stickem_info.rep.length );
-      stickem_info.rep.push( geom_rep[ii] );
+      stickem_info.repr_idx_map[ geom_rep.list[ii].name ] = stickem_info.rep.length;
+      stickem_info.rep.push( geom_rep.list[ii] );
     }
 
-    //console.log(name, geom, geom_rep);
-    //console.log(name, geom_rep);
+    for (let _name in geom_rep.name_repr_map) {
+      stickem_info.name_repr_map[_name] = geom_rep.name_repr_map[_name];
+
+      console.log("##>>", _name, "->", geom_rep.name_repr_map[_name]);
+
+    }
+
   }
+
 
   // add 'empty' tile representative
   //
@@ -508,6 +538,11 @@ function _main() {
     "rot": [0,0,0],
     "geom": op.create()
   });
+  stickem_info.rep_idx["._000"] = stickem_info.rep.length-1;
+  stickem_info.name_repr_map["._000"] = "._000";
+  stickem_info.name_repr_map["._010"] = "._000";
+  stickem_info.name_repr_map["._020"] = "._000";
+  stickem_info.name_repr_map["._030"] = "._000";
 
   // needs some thinking....
   //
@@ -518,6 +553,11 @@ function _main() {
     "rot": [0,0,0],
     "geom": op.create()
   });
+  stickem_info.rep_idx["._000"] = stickem_info.rep.length-1;
+  stickem_info.name_repr_map["__000"] = "__000";
+  stickem_info.name_repr_map["__010"] = "__000";
+  stickem_info.name_repr_map["__020"] = "__000";
+  stickem_info.name_repr_map["__030"] = "__000";
 
   //console.log(stickem_info);
 
@@ -538,6 +578,41 @@ function _main() {
   console.log("#tilecount:", stickem_info.rep.length);
 
   let dock_lib = [];
+
+  for (let exemplar_idx=0; exemplar_idx<cfg.dock_exemplar.length; exemplar_idx++) {
+
+    let _src_list = cfg.dock_exemplar[exemplar_idx][0].split("|");
+    let _dst_list = cfg.dock_exemplar[exemplar_idx][1].split("|");
+    let idir = cfg.dock_exemplar[exemplar_idx][2];
+
+    //let src_basename = cfg.dock_exemplar[exemplar_idx][0];
+    //let dst_basename = cfg.dock_exemplar[exemplar_idx][1];
+
+
+    for (let _src_list_idx=0; _src_list_idx<_src_list.length; _src_list_idx++) {
+    for (let _dst_list_idx=0; _dst_list_idx<_dst_list.length; _dst_list_idx++) {
+
+    let src_basename = _src_list[_src_list_idx];
+    let dst_basename = _dst_list[_dst_list_idx];
+
+    let exemplar_irot = [0,0,0];
+    do {
+
+      let sfx = "_" + exemplar_irot.join("");
+
+      let src_name = stickem_info.name_repr_map[ src_basename + sfx ];
+      let dst_name = stickem_info.name_repr_map[ dst_basename + sfx ];
+
+      console.log("TT::", src_basename, dst_basename, sfx, "...",
+        src_name, dst_name, "(", exemplar_irot, ")");
+
+      _incr_rot_idx(exemplar_irot, cfg.symmetry);
+    } while ((exemplar_irot[0] != 0) ||
+             (exemplar_irot[1] != 0) ||
+             (exemplar_irot[2] != 0));
+    }
+    }
+  }
 
   for (let exemplar_idx=0; exemplar_idx<cfg.dock_exemplar.length; exemplar_idx++) {
 
