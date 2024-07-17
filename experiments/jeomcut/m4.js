@@ -40,7 +40,15 @@
     define([], factory);
   } else {
     // Browser globals
-    root.m4 = factory();
+    //root.m4 = factory();
+
+    let _o = factory();
+
+    //global.m4 = _o;
+
+    if (typeof module !== "undefined") {
+      module.exports = _o;
+    }
   }
 }(this, function() {
   "use strict";
@@ -76,6 +84,7 @@
     MatType = Ctor;
     return OldType;
   }
+
 
   /**
    * Takes two 4-by-4 matrices, a and b, and computes the product in the order
@@ -601,6 +610,7 @@
    * @memberOf module:webgl-3d-math
    */
   function xRotation(angleInRadians, dst) {
+    angleInRadians = ((typeof angleInRadians === "undefined") ? 0.0 : angleInRadians);
     dst = dst || new MatType(16);
     var c = Math.cos(angleInRadians);
     var s = Math.sin(angleInRadians);
@@ -680,6 +690,7 @@
    * @memberOf module:webgl-3d-math
    */
   function yRotation(angleInRadians, dst) {
+    angleInRadians = ((typeof angleInRadians === "undefined") ? 0.0 : angleInRadians);
     dst = dst || new MatType(16);
     var c = Math.cos(angleInRadians);
     var s = Math.sin(angleInRadians);
@@ -759,6 +770,7 @@
    * @memberOf module:webgl-3d-math
    */
   function zRotation(angleInRadians, dst) {
+    angleInRadians = ((typeof angleInRadians === "undefined") ? 0.0 : angleInRadians);
     dst = dst || new MatType(16);
     var c = Math.cos(angleInRadians);
     var s = Math.sin(angleInRadians);
@@ -839,6 +851,7 @@
    * @memberOf module:webgl-3d-math
    */
   function axisRotation(axis, angleInRadians, dst) {
+    angleInRadians = ((typeof angleInRadians === "undefined") ? 0.0 : angleInRadians);
     dst = dst || new MatType(16);
 
     var x = axis[0];

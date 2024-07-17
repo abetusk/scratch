@@ -6,6 +6,7 @@ var jscad = require("@jscad/modeling");
 var objectDeserializer = require('@jscad/obj-deserializer')
 var stlSerializer = require('@jscad/stl-serializer')
 var array_utils = require('@jscad/array-utils')
+var m4 = require("./m4.js");
 
 var op = {
 
@@ -181,6 +182,13 @@ function _point_sim(geom_a, geom_b, _eps) {
   return (count / n);
 }
 
+// create slice gemoetry to find docking information.
+// This should create a thin cuboid that is thin in the plane
+// perpendicular to the ddocking direction normal and unit cube dimensions
+// elsewhere.
+// The idea is that this thin slice can be used to find an effective profile
+// of the docking geometry to use to compare against other tiles.
+//
 function slice_idir(cfg, idir, _center) {
   _center = ((typeof _center === "undefined") ? [cfg.unit_center[0],cfg.unit_center[1],cfg.unit_center[2]] : _center);
 
@@ -420,6 +428,39 @@ function _incr_rot_idx(rot_v, symmetry) {
 
 }
 
+// takes in idir and irot (3vec) and
+// return idir of resulting direction.
+//
+function idir_irot(idir, irot) {
+  let v = [ 0, 0, 0, 1 ];
+
+  if      (idir == 0) { v[0] =  1; }
+  else if (idir == 1) { v[0] = -1; }
+  else if (idir == 2) { v[1] =  1; }
+  else if (idir == 3) { v[1] = -1; }
+  else if (idir == 4) { v[2] =  1; }
+  else if (idir == 5) { v[2] = -1; }
+  else { return -1; }
+
+  let Mx = m4.xRotation( irot[0]*Math.PI/2 );
+  let My = m4.yRotation( irot[1]*Math.PI/2 );
+  let Mz = m4.zRotation( irot[2]*Math.PI/2 );
+
+  let M = m4.mul( Mz, m4.mul( My, Mx ) );
+
+  let v_r = m4.mulp(M, v);
+
+  if      (v_r[0] >  0.5) { return 0; }
+  else if (v_r[0] < -0.5) { return 1; }
+  else if (v_r[1] >  0.5) { return 2; }
+  else if (v_r[1] < -0.5) { return 3; }
+  else if (v_r[2] >  0.5) { return 4; }
+  else if (v_r[2] < -0.5) { return 5; }
+
+  return -1;
+}
+
+
 // representative creation
 //
 function create_rep(cfg, geom, base_name) {
@@ -489,6 +530,18 @@ function create_rep(cfg, geom, base_name) {
   //return rep_list;
 }
 
+// The recipe is as follows:
+//
+// * Read cfg file
+// * From cfg, read in each of the base obj geometries
+// * find the representative of each geometry, rotated around
+//   with the mappings to the representative from other 'raw' names
+// * take cfg.dock_exemplar to find docking geometry, both positive and negative,
+//   rotating each exemplar pair (by the same rotation) for all cfg.symmetry
+//   to find all directions
+// * go through all representative pairings to see if there's a dock match
+//   (must match both positive and negative) to construct rules
+
 function _main() {
 
   var cfg = JSON.parse( fs.readFileSync("./data/stickem_minigolf.conf") );
@@ -538,12 +591,15 @@ function _main() {
     "rot": [0,0,0],
     "geom": op.create()
   });
-  stickem_info.rep_idx["._000"] = stickem_info.rep.length-1;
+  stickem_info.repr_idx_map["._000"] = stickem_info.rep.length-1;
   stickem_info.name_repr_map["._000"] = "._000";
   stickem_info.name_repr_map["._010"] = "._000";
   stickem_info.name_repr_map["._020"] = "._000";
   stickem_info.name_repr_map["._030"] = "._000";
 
+  // 'underground' tile, so we have something for the base supports
+  // to build on top of, or other tiles...
+  //
   // needs some thinking....
   //
   stickem_info.basename_rep_idx['_'] = [ stickem_info.rep.length ];
@@ -553,7 +609,7 @@ function _main() {
     "rot": [0,0,0],
     "geom": op.create()
   });
-  stickem_info.rep_idx["._000"] = stickem_info.rep.length-1;
+  stickem_info.repr_idx_map["__000"] = stickem_info.rep.length-1;
   stickem_info.name_repr_map["__000"] = "__000";
   stickem_info.name_repr_map["__010"] = "__000";
   stickem_info.name_repr_map["__020"] = "__000";
@@ -577,144 +633,133 @@ function _main() {
 
   console.log("#tilecount:", stickem_info.rep.length);
 
+  let dock_seen = {};
   let dock_lib = [];
 
+  // construct docking information/list from cfg.dock_exemplar
+  //
   for (let exemplar_idx=0; exemplar_idx<cfg.dock_exemplar.length; exemplar_idx++) {
 
+    // exemplar src/dst are themselves lists, with '|' as the string separator.
+    //
     let _src_list = cfg.dock_exemplar[exemplar_idx][0].split("|");
     let _dst_list = cfg.dock_exemplar[exemplar_idx][1].split("|");
-    let idir = cfg.dock_exemplar[exemplar_idx][2];
+    let exemplar_idir = cfg.dock_exemplar[exemplar_idx][2];
 
-    //let src_basename = cfg.dock_exemplar[exemplar_idx][0];
-    //let dst_basename = cfg.dock_exemplar[exemplar_idx][1];
-
-
+    // we want to rotate each of the exemplars by the symmetry specified in the configuration
+    // but we need to make sure we're taking the representative. So the idea is to rotate
+    // each exemplar pair by the same rotation, map each to their representative and worry
+    // about deduplicating the rules later, after we've collected all relevant pairings.
+    //
+    // Though not strictly necessary, we try and limit the number of redundnat docking structures
+    // by noticing when there's an identical mapping (src,dst,irot). Hopefully redundant docking
+    // information won't be an error as we'll need to deduplicate the rules at the end anyway
+    // but it should cut down on the noise by only having docking information that's needed.
+    // This is all the `dock_seen` stuff below.
+    //
     for (let _src_list_idx=0; _src_list_idx<_src_list.length; _src_list_idx++) {
-    for (let _dst_list_idx=0; _dst_list_idx<_dst_list.length; _dst_list_idx++) {
+      for (let _dst_list_idx=0; _dst_list_idx<_dst_list.length; _dst_list_idx++) {
 
-    let src_basename = _src_list[_src_list_idx];
-    let dst_basename = _dst_list[_dst_list_idx];
+      let src_basename = _src_list[_src_list_idx];
+      let dst_basename = _dst_list[_dst_list_idx];
 
-    let exemplar_irot = [0,0,0];
-    do {
+      let exemplar_irot = [0,0,0];
+      do {
 
-      let sfx = "_" + exemplar_irot.join("");
+        let sfx = "_" + exemplar_irot.join("");
 
-      let src_name = stickem_info.name_repr_map[ src_basename + sfx ];
-      let dst_name = stickem_info.name_repr_map[ dst_basename + sfx ];
+        let src_name = stickem_info.name_repr_map[ src_basename + sfx ];
+        let dst_name = stickem_info.name_repr_map[ dst_basename + sfx ];
 
-      console.log("TT::", src_basename, dst_basename, sfx, "...",
-        src_name, dst_name, "(", exemplar_irot, ")");
+        let idir = idir_irot(exemplar_idir, exemplar_irot);
+        _incr_rot_idx(exemplar_irot, cfg.symmetry);
 
-      _incr_rot_idx(exemplar_irot, cfg.symmetry);
-    } while ((exemplar_irot[0] != 0) ||
-             (exemplar_irot[1] != 0) ||
-             (exemplar_irot[2] != 0));
-    }
+        let seen_key = src_name + ":" + dst_name + ":" + idir.toString();
+        if (seen_key in dock_seen) {
+
+          console.log("#SKIPPING", seen_key);
+          continue;
+
+        }
+
+        //----------
+        //----------
+        //----------
+        // create new dock
+        //
+
+        dock_seen[seen_key] = true;
+
+        console.log("#TT::", src_basename, dst_basename, sfx, "...",
+          src_name, dst_name, "(", exemplar_irot, ")", "(idir:", exemplar_idir, "-->", idir, ")");
+
+        //let rep_idx = stickem_info.basename_rep_idx[src_name][ii];
+
+        // centers of src and dst
+        //
+        let _c_a = [ cfg.unit_center[0], cfg.unit_center[1], cfg.unit_center[2] ];
+        let _c_b = [ cfg.unit_center[0], cfg.unit_center[1], cfg.unit_center[2] ];
+
+        // move dst to neighboring position
+        //
+        _c_b[0] += idir_v[idir][0];
+        _c_b[1] += idir_v[idir][1];
+        _c_b[2] += idir_v[idir][2];
+
+        // create docking slices
+        //
+        let a_slice = slice_idir(cfg, idir, _c_a);
+        let b_slice = slice_idir(cfg, oppo_dir[idir], _c_b);
+
+        //_simple_print(a_slice);
+        //console.log("\n\n");
+        //_simple_print(b_slice);
+
+        let dock_ele = {
+          "exemplar":[ src_basename, dst_basename],
+          "exemplar_realized": [ src_name, dst_name ],
+
+          "idir": idir,
+          "vdir": idir_v,
+
+          "src_slice": a_slice,
+          "dst_slice": b_slice,
+
+          "src_pos": {},
+          "src_neg": {},
+
+          "dst_pos": {},
+          "dst_neg": {}
+        };
+
+        let _src_idx = stickem_info.repr_idx_map[ src_name ];
+        let _dst_idx = stickem_info.repr_idx_map[ dst_name ];
+
+        console.log("##", src_name, _src_idx, ",", dst_name, _dst_idx);
+
+        let src_geom = stickem_info.rep[ _src_idx ].geom;
+        let dst_geom = stickem_info.rep[ _dst_idx ].geom;
+
+        dock_ele.src_pos = op.and( a_slice, src_geom );
+        dock_ele.dst_pos = op.and( b_slice, op.mov( idir_v[idir], dst_geom ) );
+
+        dock_ele.src_neg = op.sub( a_slice, src_geom );
+        dock_ele.dst_neg = op.sub( b_slice, op.mov( idir_v[idir], dst_geom ) );
+
+        dock_lib.push( dock_ele );
+
+        //
+        //----------
+        //----------
+        //----------
+
+        //_incr_rot_idx(exemplar_irot, cfg.symmetry);
+      } while ((exemplar_irot[0] != 0) ||
+               (exemplar_irot[1] != 0) ||
+               (exemplar_irot[2] != 0));
+      }
     }
   }
-
-  for (let exemplar_idx=0; exemplar_idx<cfg.dock_exemplar.length; exemplar_idx++) {
-
-    let src_basename = cfg.dock_exemplar[exemplar_idx][0];
-    let dst_basename = cfg.dock_exemplar[exemplar_idx][1];
-    let idir = cfg.dock_exemplar[exemplar_idx][2];
-
-    // The dock exemplar is assumed to be the 000 representative.
-    // For each rotated representative, we need to rotate the dock information
-    // appropriately and then test.
-    //
-    // DEBUG: just use the 000 to test
-    //
-
-    for (let ii=0; ii<stickem_info.basename_rep_idx[src_basename].length; ii++) {
-      let rep_idx = stickem_info.basename_rep_idx[src_basename][ii];
-
-      //console.log(src_basename, dst_basename, idir, rep_idx);
-
-      // centers of src and dst
-      //
-      let _c_a = [ cfg.unit_center[0], cfg.unit_center[1], cfg.unit_center[2] ];
-      let _c_b = [ cfg.unit_center[0], cfg.unit_center[1], cfg.unit_center[2] ];
-
-      // move dst to neighboring position
-      //
-      _c_b[0] += idir_v[idir][0];
-      _c_b[1] += idir_v[idir][1];
-      _c_b[2] += idir_v[idir][2];
-
-      // create docking slices
-      //
-      let a_slice = slice_idir(cfg, idir, _c_a);
-      let b_slice = slice_idir(cfg, oppo_dir[idir], _c_b);
-
-      //_simple_print(a_slice);
-      //console.log("\n\n");
-      //_simple_print(b_slice);
-
-      let dock_ele = {
-        "exemplar":[ src_basename, dst_basename],
-        "idir": idir,
-        "vdir": idir_v,
-        "src_slice": a_slice,
-        "dst_slice": b_slice,
-        "src_neg": {},
-        "src_pos": {},
-        "dst_neg": {},
-        "dst_pos": {}
-      };
-
-      console.log("##", dst_basename);
-      if (dst_basename.match( '\\|')) { console.log("## ..."); continue; }
-
-      console.log("##  ", dst_basename, stickem_info.basename_rep_idx[ dst_basename ]);
-
-      let _src_idx = stickem_info.basename_rep_idx[ src_basename ][0];
-      let _dst_idx = stickem_info.basename_rep_idx[ dst_basename ][0];
-
-      console.log("##", src_basename, _src_idx, dst_basename, _dst_idx);
-
-      let src_geom = stickem_info.rep[ _src_idx ].geom;
-      let dst_geom = stickem_info.rep[ _dst_idx ].geom;
-
-      //console.log(src_geom, dst_geom);
-
-
-      dock_ele.src_pos = op.and( a_slice, src_geom );
-      dock_ele.dst_pos = op.and( b_slice, op.mov( idir_v[idir], dst_geom ) );
-
-      dock_ele.src_neg = op.sub( a_slice, src_geom );
-      dock_ele.dst_neg = op.sub( b_slice, op.mov( idir_v[idir], dst_geom ) );
-
-      dock_lib.push( dock_ele );
-
-      //DEBUG
-      break;
-
-      //_simple_print( src_geom);
-      //console.log("\n\n");
-      //_simple_print( dst_geom);
-      //console.log("\n\n");
-
-      _simple_print( dock_ele.src );
-      console.log("\n\n");
-      _simple_print( dock_ele.dst );
-
-      //console.log(dock_ele);
-      return;
-
-
-      //console.log(a,b);
-
-
-
-    }
-
-    //DEBUG
-    //break;
-  }
-
-  //console.log(dock_lib);
 
   // debug...
   //
