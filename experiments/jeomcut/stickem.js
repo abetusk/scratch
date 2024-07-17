@@ -249,10 +249,10 @@ var UNIT = {
 
 let vox_info = {
   "size": [5,11,5],
-  "center": [0,1/12,0],
+  "center": [0,1/4,0],
   "ds": [
     [1,0,0],
-    [0,1/2,1],
+    [0,1/2,0],
     [0,0,1]
   ],
   "grid": []
@@ -281,6 +281,121 @@ function obj2geom(fn_name) {
   let rawData = fs.readFileSync(fn_name);
   var geom = op.objload({"output":"geometry"}, rawData.toString());
   return geom;
+}
+
+function block_occupancy(cfg, geom) {
+  let S = [
+    cfg.unit[0],
+    cfg.unit[1],
+    cfg.unit[2]
+  ];
+
+  let B = [ 7,13,7 ];
+  let C = [ 3, 6, 3 ];
+
+  let _opt = {
+    "size": [ S[0] - _eps, S[1] - _eps, S[2] - _eps ],
+    "center": cfg.unit_center
+  };
+
+  let tri_pnt = op.points(geom);
+  let pnt = [];
+
+  for (let tri_idx=0; tri_idx < tri_pnt.length; tri_idx++) {
+    for (let ii=0; ii < tri_pnt[tri_idx].length; ii++) {
+      pnt.push( [ tri_pnt[tri_idx][ii][0], tri_pnt[tri_idx][ii][1], tri_pnt[tri_idx][ii][2] ] );
+
+      // pathetic attempt at subdivision...
+      //
+      if (ii>0) {
+        let axyz = [
+          (tri_pnt[tri_idx][ii][0] + tri_pnt[tri_idx][ii-1][0])/2,
+          (tri_pnt[tri_idx][ii][1] + tri_pnt[tri_idx][ii-1][1])/2,
+          (tri_pnt[tri_idx][ii][2] + tri_pnt[tri_idx][ii-1][2])/2
+        ];
+        pnt.push(axyz);
+      }
+    }
+  }
+
+  let block_list = [];
+
+  for (let iz=0; iz<B[2]; iz++) {
+    for (let iy=0; iy<B[1]; iy++) {
+      for (let ix=0; ix<B[0]; ix++) {
+        //let dx = (ix*S[0]) + C[0];
+        //let dy = (iy*S[1]) + C[1];
+        //let dz = (iz*S[2]) + C[2];
+
+        let dx = ((ix - C[0])*S[0]) + cfg.unit_center[0];
+        let dy = ((iy - C[1])*S[1]) + cfg.unit_center[1];
+        let dz = ((iz - C[2])*S[2]) + cfg.unit_center[2];
+
+
+        let sx = ((ix - C[0])*S[0]) + cfg.unit_center[0] - cfg.unit[0]/2 + _eps;
+        let sy = ((iy - C[1])*S[1]) + cfg.unit_center[1] - cfg.unit[1]/2 + _eps;
+        let sz = ((iz - C[2])*S[2]) + cfg.unit_center[2] - cfg.unit[2]/2 + _eps;
+
+        let ex = ((ix - C[0])*S[0]) + cfg.unit_center[0] + cfg.unit[0]/2 - _eps;
+        let ey = ((iy - C[1])*S[1]) + cfg.unit_center[1] + cfg.unit[1]/2 - _eps;
+        let ez = ((iz - C[2])*S[2]) + cfg.unit_center[2] + cfg.unit[2]/2 - _eps;
+
+        //console.log(ix, iy, iz, "::", dx, dy, dz, "s:", sx,sy,sz, "e:", ex,ey,ez);
+
+        found = false;
+        for (let ii=0; ii<pnt.length; ii++) {
+          if ((pnt[ii][0] < sx) ||
+              (pnt[ii][0] > ex) ||
+              (pnt[ii][1] < sy) ||
+              (pnt[ii][1] > ey) ||
+              (pnt[ii][2] < sz) ||
+              (pnt[ii][2] > ez)) { continue; }
+          block_list.push({ "ds": [dx,dy,dz] });
+
+          //console.log("   !!!", dx, dy, dz, "(pnt:", pnt[ii][0], pnt[ii][1], pnt[ii][2], ")");
+
+          found=true;
+          break;
+        }
+
+        if (found) { break; }
+
+      }
+    }
+  }
+
+
+  return block_list;
+  console.log(block_list);
+  process.exit();
+
+  console.log("#unit_block:", JSON.stringify(_opt));
+
+  let _unit_block = op.cuboid(_opt);
+  for (let iz=0; iz<B[2]; iz++) {
+    for (let iy=0; iy<B[1]; iy++) {
+      for (let ix=0; ix<B[0]; ix++) {
+        let dx = (ix*S[0]) - C[0];
+        let dy = (iy*S[1]) - C[1];
+        let dz = (iz*S[2]) - C[2];
+
+        let _r = op.vol( op.and( op.mov( [dx,dy,dz], _unit_block), geom ) )
+
+        //console.log("#dxyz:", dx, dy, dz, ", vol:", _r);
+
+        if (_r>_eps) {
+          block_list.push({ "ds": [dx,dy,dz] });
+          console.log(dx,dy,dz, _r);
+        }
+        else {
+          //console.log("#", ix, iy, iz);
+        }
+
+      }
+    }
+  }
+
+  return block_list;
 }
 
 function bvox_occupancy(fn_name) {
@@ -559,13 +674,18 @@ function create_rep(cfg, geom, base_name) {
 
       rep_info.repr_idx[name] = rep_list.length;
 
+      console.log("\n##", name);
+
       rep_list.push({
         //"name": base_name + "_" + rot_v.join(""),
         "name": name,
         "irot": [ rot_v[0], rot_v[1], rot_v[2] ],
         "rot": [ rot_v[0]*Math.PI/2, rot_v[1]*Math.PI/2, rot_v[2]*Math.PI/2 ],
+        "block": block_occupancy(cfg, tgeom, name),
         "geom": tgeom
       });
+
+      console.log("#>>>", name, rep_list[ rep_list.length-1 ].block);
 
       rep_info.name_repr_map[name] = rep_list[rep_list.length-1].name;
 
@@ -633,6 +753,10 @@ function _main() {
     }
 
   }
+
+  //DEBUG
+  console.log(">>>");
+  return;
 
 
   // add 'empty' tile representative
@@ -875,8 +999,14 @@ function _main() {
       let _src = stickem_info.rep[src_rep_idx];
       let _dst = stickem_info.rep[dst_rep_idx];
 
-      let src_geom = _src.geom;
-      let dst_geom = _dst.geom;
+      for (let src_block_idx=0; src_block_idx < _src.block.length; src_block_idx++) {
+      for (let dst_blcok_idx=0; dst_block_idx < _dst.block.length; dst_block_idx++) {
+
+      //let src_geom = _src.geom;
+      //let dst_geom = _dst.geom;
+
+      let src_geom = op.mov( _src.block.dv, _src.geom );
+      let dst_geom = op.mov( _dst.block.dv, _dst.geom );
 
       for (let dock_idx=0; dock_idx<dock_lib.length; dock_idx++) {
 
@@ -944,7 +1074,8 @@ function _main() {
 
         let _xx = ((nmatch==4) ? "match!!" : "nomatch");
 
-        console.log("###", _xx, ">>>", _src.name, _dst.name, dir_descr[idir], "(", idir, ")", "dock(idx:", dock_idx, "):", JSON.stringify(dock_res), JSON.stringify( [ sdv_p, ddv_p, sdv_n, ddv_n ] ) );
+        console.log("###", _xx, ">>>", _src.name, _dst.name, dir_descr[idir],
+          "(", idir, ")", "dock(idx:", dock_idx, "):",JSON.stringify(dock_res), JSON.stringify( [ sdv_p, ddv_p, sdv_n, ddv_n ] ) );
         continue;
 
         let dock_src_pos = op.and( dock_lib[dock_idx].src_pos, src_geom );
@@ -992,6 +1123,10 @@ function _main() {
         }
 
       }
+
+      }
+      }
+
     }
   }
 
