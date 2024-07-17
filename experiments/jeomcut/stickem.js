@@ -67,6 +67,15 @@ var op = {
 
 };
 
+function _simple_point_count(geom) {
+  let pnts = op.points(geom);
+  let n = 0;
+  for (let ii=0; ii<pnts.length; ii++) {
+    n += pnts[ii].length;
+  }
+  return n;
+}
+
 function _simple_print(geom) {
 
   let pnts = op.points(geom);
@@ -321,6 +330,50 @@ function bvox_occupancy(fn_name) {
   }
 
 }
+
+function _debug_print_dock_lib(dock_lib) {
+
+  // debug...
+  //
+  for (i=0; i<dock_lib.length; i++)  {
+
+    let dx = 4;
+    let dy = 6;
+    let dz = 6;
+
+    console.log("##\n##", dock_lib[i].exemplar);
+
+    let _pgn = op.mov( [i*dx,0,0], dock_lib[i].src_pos );
+    _simple_print(_pgn);
+    console.log("\n\n");
+
+    _pgn = op.mov( [i*dx,0,0], dock_lib[i].dst_pos );
+    _simple_print(_pgn);
+    console.log("\n\n");
+
+    _pgn = op.mov( [i*dx,0,dz], dock_lib[i].src_neg );
+    _simple_print(_pgn);
+    console.log("\n\n");
+
+    _pgn = op.mov( [i*dx,0,dz], dock_lib[i].dst_neg);
+    _simple_print(_pgn);
+    console.log("\n\n");
+
+    // slices...
+    //
+    //_pgn = op.mov( [i*dx,0,dz*2], dock_lib[i].src_slice);
+    //_simple_print(_pgn);
+    //console.log("\n\n");
+
+    //_pgn = op.mov( [i*dx,0,dz*2], dock_lib[i].dst_slice);
+    //_simple_print(_pgn);
+    //console.log("\n\n");
+
+  }
+
+}
+
+
 
 function __sandbox() {
   let _slice = 1/32;
@@ -618,6 +671,7 @@ function _main() {
   //console.log(stickem_info);
 
   let oppo_dir = [ 1,0, 3,2, 5,4 ];
+  let dir_descr = [ "x+", "x-", "y+", "y-", "z+", "z-" ];
 
   let idir_v = [
     [ 1, 0, 0 ], [ -1,  0,  0 ],
@@ -720,7 +774,7 @@ function _main() {
           "exemplar_realized": [ src_name, dst_name ],
 
           "idir": idir,
-          "vdir": idir_v,
+          "vdir": idir_v[idir],
 
           "src_slice": a_slice,
           "dst_slice": b_slice,
@@ -729,13 +783,18 @@ function _main() {
           "src_neg": {},
 
           "dst_pos": {},
-          "dst_neg": {}
+          "dst_neg": {},
+
+          "src_dock_pos_vol": 0.0,
+          "src_dock_neg_vol": 0.0,
+
+          "dst_dock_pos_vol": 0.0,
+          "dst_dock_neg_vol": 0.0
         };
 
         let _src_idx = stickem_info.repr_idx_map[ src_name ];
         let _dst_idx = stickem_info.repr_idx_map[ dst_name ];
 
-        console.log("##", src_name, _src_idx, ",", dst_name, _dst_idx);
 
         let src_geom = stickem_info.rep[ _src_idx ].geom;
         let dst_geom = stickem_info.rep[ _dst_idx ].geom;
@@ -746,7 +805,38 @@ function _main() {
         dock_ele.src_neg = op.sub( a_slice, src_geom );
         dock_ele.dst_neg = op.sub( b_slice, op.mov( idir_v[idir], dst_geom ) );
 
+        dock_ele.src_dock_pos_vol = op.vol( dock_ele.src_pos );
+        dock_ele.dst_dock_pos_vol = op.vol( dock_ele.dst_pos );
+
+        dock_ele.src_dock_neg_vol = op.vol( dock_ele.src_neg );
+        dock_ele.dst_dock_neg_vol = op.vol( dock_ele.dst_neg );
+
+        let __idx  = dock_lib.length;
+
         dock_lib.push( dock_ele );
+
+        console.log("##", __idx, src_name, _src_idx, ",", dst_name, _dst_idx, "(vol:",
+
+            "src+/dst+:",
+          dock_ele.src_dock_pos_vol,
+          dock_ele.dst_dock_pos_vol,
+
+            "src-/dst-:",
+          dock_ele.src_dock_neg_vol,
+          dock_ele.dst_dock_neg_vol,
+
+          ")",
+          "(pntsim:",
+          ")",
+          "(pnts:",
+            "src+/dst+:",
+          _simple_point_count( dock_ele.src_pos ),
+          _simple_point_count( dock_ele.dst_pos ),
+            "src-/dst-:",
+          _simple_point_count( dock_ele.src_neg ),
+          _simple_point_count( dock_ele.dst_neg ),
+          ")"
+        );
 
         //
         //----------
@@ -761,57 +851,104 @@ function _main() {
     }
   }
 
-  // debug...
-  //
-  for (i=0; i<dock_lib.length; i++)  {
-
-    let dx = 4;
-    let dy = 6;
-    let dz = 6;
-
-    console.log("##\n##", dock_lib[i].exemplar);
-
-    let _pgn = op.mov( [i*dx,0,0], dock_lib[i].src_pos );
-    _simple_print(_pgn);
-    console.log("\n\n");
-
-    _pgn = op.mov( [i*dx,0,0], dock_lib[i].dst_pos );
-    _simple_print(_pgn);
-    console.log("\n\n");
-
-    _pgn = op.mov( [i*dx,0,dz], dock_lib[i].src_neg );
-    _simple_print(_pgn);
-    console.log("\n\n");
-
-    _pgn = op.mov( [i*dx,0,dz], dock_lib[i].dst_neg);
-    _simple_print(_pgn);
-    console.log("\n\n");
-
-    // slices...
-    //
-    //_pgn = op.mov( [i*dx,0,dz*2], dock_lib[i].src_slice);
-    //_simple_print(_pgn);
-    //console.log("\n\n");
-
-    //_pgn = op.mov( [i*dx,0,dz*2], dock_lib[i].dst_slice);
-    //_simple_print(_pgn);
-    //console.log("\n\n");
-
+  
+  console.log("###================");
+  for (let ii=0; ii<dock_lib.length; ii++) {
+    console.log("#dock[", ii, "]",
+      JSON.stringify( dock_lib[ii].exemplar_realized ),
+      "idir:", dock_lib[ii].idir,
+      dock_lib[ii].vdir,
+      "srcvol+-(", dock_lib[ii].src_dock_pos_vol, dock_lib[ii].src_dock_neg_vol, ")",
+      "dstvol+-(", dock_lib[ii].dst_dock_pos_vol, dock_lib[ii].dst_dock_neg_vol, ")",
+      "srcpnt+-(", _simple_point_count(dock_lib[ii].src_pos), _simple_point_count(dock_lib[ii].src_neg), ")",
+      "dstpnt+-(", _simple_point_count(dock_lib[ii].dst_pos), _simple_point_count(dock_lib[ii].dst_neg), ")"
+    );
   }
-  return;
+  console.log("###================");
+
+  //_debug_print_dock_lib(dock_lib);
+  //return;
 
   for (let src_rep_idx=0; src_rep_idx<stickem_info.rep.length; src_rep_idx++) {
     for (let dst_rep_idx=0; dst_rep_idx<stickem_info.rep.length; dst_rep_idx++) {
 
-      let src_geom = stickem_info.rep[src_rep_idx].geom;
-      let dst_geom = stickem_info.rep[dst_rep_idx].geom;
-
       let _src = stickem_info.rep[src_rep_idx];
       let _dst = stickem_info.rep[dst_rep_idx];
+
+      let src_geom = _src.geom;
+      let dst_geom = _dst.geom;
 
       for (let dock_idx=0; dock_idx<dock_lib.length; dock_idx++) {
 
         let idir = dock_lib[dock_idx].idir;
+
+        let sdv_p = dock_lib[dock_idx].src_dock_pos_vol;
+        let ddv_p = dock_lib[dock_idx].dst_dock_pos_vol;
+
+        let sdv_n = dock_lib[dock_idx].src_dock_neg_vol;
+        let ddv_n = dock_lib[dock_idx].dst_dock_neg_vol;
+
+        let _sdv_p = ((sdv_p < _eps) ? 1.0 : sdv_p);
+        let _ddv_n = ((ddv_n < _eps) ? 1.0 : ddv_n);
+
+        let _ddv_p = ((ddv_p < _eps) ? 1.0 : ddv_p);
+        let _sdv_n = ((sdv_n < _eps) ? 1.0 : sdv_n);
+
+        let _dock_res = {
+          "s+": op.vol( op.and( dock_lib[dock_idx].src_pos, src_geom ) ) / _sdv_p,
+          "d+": op.vol( op.and( dock_lib[dock_idx].dst_pos, op.mov( dock_lib[dock_idx].vdir, dst_geom ) ) ) / _ddv_p,
+
+          "s-": op.vol( op.and( dock_lib[dock_idx].src_neg, op.sub( dock_lib[dock_idx].src_slice, src_geom ) ) ) / _sdv_n,
+          "d-": op.vol( op.and( dock_lib[dock_idx].dst_neg, op.sub( dock_lib[dock_idx].dst_slice, op.mov( dock_lib[dock_idx].vdir, dst_geom ) ) ) ) / _ddv_n
+        };
+
+        let _nmatch = 0;
+        if ((_dock_res["s+"] > 0.95) ||
+            ((_dock_res["s+"] < _eps) && (sdv_p < _eps))) { _nmatch++; }
+        if ((_dock_res["s-"] > 0.95) ||
+            ((_dock_res["s-"] < _eps) && (sdv_n < _eps))) { _nmatch++; }
+
+        if ((_dock_res["d+"] > 0.95) ||
+            ((_dock_res["d+"] < _eps) && (ddv_p < _eps))) { _nmatch++; }
+        if ((_dock_res["d-"] > 0.95) ||
+            ((_dock_res["d-"] < _eps) && (ddv_n < _eps))) { _nmatch++; }
+
+
+        let dock_res = {
+          "s+": _point_sim( dock_lib[dock_idx].src_pos, op.and( dock_lib[dock_idx].src_slice, src_geom ) ),
+          "d+": _point_sim( dock_lib[dock_idx].dst_pos, op.and( dock_lib[dock_idx].dst_slice, op.mov( dock_lib[dock_idx].vdir, dst_geom ) ) ),
+
+          "s-": _point_sim( dock_lib[dock_idx].src_neg, op.and( op.sub( dock_lib[dock_idx].src_slice, src_geom ) ) ),
+          "d-": _point_sim( dock_lib[dock_idx].dst_neg, op.and( op.sub( dock_lib[dock_idx].dst_slice, op.mov( dock_lib[dock_idx].vdir, dst_geom ) ) ) )
+        };
+
+
+        let nmatch=0;
+        if ((dock_res["s+"] > 0.95) ||
+            ((dock_res["s+"] < _eps) && (_simple_point_count( dock_lib[dock_idx].src_pos ) == 0))) { nmatch++; }
+        if ((dock_res["s-"] > 0.95) ||
+            ((dock_res["s-"] < _eps) && (_simple_point_count( dock_lib[dock_idx].src_neg ) == 0))) { nmatch++; }
+
+        if ((dock_res["d+"] > 0.95) ||
+            ((dock_res["d+"] < _eps) && (_simple_point_count( dock_lib[dock_idx].dst_pos ) == 0))) { nmatch++; }
+        if ((dock_res["d-"] > 0.95) ||
+            ((dock_res["d-"] < _eps) && (_simple_point_count( dock_lib[dock_idx].dst_neg ) == 0))) { nmatch++; }
+
+        /*
+        let _xx = "nomatch";
+        if ( (dock_res["s+"] > 0.95) &&
+             (dock_res["d+"] > 0.95) &&
+             (dock_res["s-"] > 0.95) &&
+             (dock_res["d-"] > 0.95) ) { _xx = "match!!"; }
+             */
+
+        let _xx = ((nmatch==4) ? "match!!" : "nomatch");
+
+        console.log("###", _xx, ">>>", _src.name, _dst.name, dir_descr[idir], "(", idir, ")", "dock(idx:", dock_idx, "):", JSON.stringify(dock_res), JSON.stringify( [ sdv_p, ddv_p, sdv_n, ddv_n ] ) );
+        continue;
+
+        let dock_src_pos = op.and( dock_lib[dock_idx].src_pos, src_geom );
+        //let dock_dst_pos = 
 
         let dock_a = op.clone( dock_lib[dockidx].src );
         let dock_b = op.mov( idir_v[idir], dock_lib[dockidx].dst );
