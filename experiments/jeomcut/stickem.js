@@ -284,6 +284,7 @@ function obj2geom(fn_name) {
 }
 
 function block_occupancy(cfg, geom) {
+
   let S = [
     cfg.unit[0],
     cfg.unit[1],
@@ -308,15 +309,21 @@ function block_occupancy(cfg, geom) {
       // pathetic attempt at subdivision...
       //
       if (ii>0) {
-        let axyz = [
-          (tri_pnt[tri_idx][ii][0] + tri_pnt[tri_idx][ii-1][0])/2,
-          (tri_pnt[tri_idx][ii][1] + tri_pnt[tri_idx][ii-1][1])/2,
-          (tri_pnt[tri_idx][ii][2] + tri_pnt[tri_idx][ii-1][2])/2
-        ];
-        pnt.push(axyz);
+        let _nterp=4;
+        for (let _ii=1; _ii<_nterp; _ii++) {
+          let p = _ii / _nterp;
+          let axyz = [
+            tri_pnt[tri_idx][ii-1][0] + (p*(tri_pnt[tri_idx][ii][0] - tri_pnt[tri_idx][ii-1][0])),
+            tri_pnt[tri_idx][ii-1][1] + (p*(tri_pnt[tri_idx][ii][1] - tri_pnt[tri_idx][ii-1][1])),
+            tri_pnt[tri_idx][ii-1][2] + (p*(tri_pnt[tri_idx][ii][2] - tri_pnt[tri_idx][ii-1][2]))
+          ];
+          pnt.push(axyz);
+        }
       }
     }
   }
+
+  //console.log(pnt);
 
   let block_list = [];
 
@@ -364,10 +371,12 @@ function block_occupancy(cfg, geom) {
     }
   }
 
+  //console.log(block_list);
 
   return block_list;
-  console.log(block_list);
-  process.exit();
+
+  // volume calculations have problems with the arbitrary geometry of the objs...
+  //
 
   console.log("#unit_block:", JSON.stringify(_opt));
 
@@ -754,10 +763,6 @@ function _main() {
 
   }
 
-  //DEBUG
-  console.log(">>>");
-  return;
-
 
   // add 'empty' tile representative
   //
@@ -766,6 +771,7 @@ function _main() {
     "name": "._000",
     "irot": [0,0,0],
     "rot": [0,0,0],
+    "block": [ {"ds":[0, 0.25, 0]} ],
     "geom": op.create()
   });
   stickem_info.repr_idx_map["._000"] = stickem_info.rep.length-1;
@@ -784,6 +790,7 @@ function _main() {
     "name": "__000",
     "irot": [0,0,0],
     "rot": [0,0,0],
+    "block": [ { "ds": [0, 0.25, 0] } ],
     "geom": op.create()
   });
   stickem_info.repr_idx_map["__000"] = stickem_info.rep.length-1;
@@ -990,6 +997,10 @@ function _main() {
   }
   console.log("###================");
 
+  //DEBUG
+  //console.log("DEBUG!!!");
+  //return;
+
   //_debug_print_dock_lib(dock_lib);
   //return;
 
@@ -999,132 +1010,165 @@ function _main() {
       let _src = stickem_info.rep[src_rep_idx];
       let _dst = stickem_info.rep[dst_rep_idx];
 
+      //console.log("src:", _src);
+      //console.log("dst:", _dst);
+
       for (let src_block_idx=0; src_block_idx < _src.block.length; src_block_idx++) {
-      for (let dst_blcok_idx=0; dst_block_idx < _dst.block.length; dst_block_idx++) {
+        for (let dst_block_idx=0; dst_block_idx < _dst.block.length; dst_block_idx++) {
 
-      //let src_geom = _src.geom;
-      //let dst_geom = _dst.geom;
+          let _src_block = _src.block[src_block_idx];
+          let _dst_block = _dst.block[dst_block_idx];
 
-      let src_geom = op.mov( _src.block.dv, _src.geom );
-      let dst_geom = op.mov( _dst.block.dv, _dst.geom );
+          //let src_geom = _src.geom;
+          //let dst_geom = _dst.geom;
 
-      for (let dock_idx=0; dock_idx<dock_lib.length; dock_idx++) {
+          let _src_ds = [
+            -(_src_block.ds[0] - cfg.unit_center[0]),
+            -(_src_block.ds[1] - cfg.unit_center[1]),
+            -(_src_block.ds[2] - cfg.unit_center[2])
+          ];
 
-        let idir = dock_lib[dock_idx].idir;
+          let _dst_ds = [
+            -(_dst_block.ds[0] - cfg.unit_center[0]),
+            -(_dst_block.ds[1] - cfg.unit_center[1]),
+            -(_dst_block.ds[2] - cfg.unit_center[2])
+          ];
 
-        let sdv_p = dock_lib[dock_idx].src_dock_pos_vol;
-        let ddv_p = dock_lib[dock_idx].dst_dock_pos_vol;
+          console.log("##_src_ds:", _src_ds, "_dst_ds:", _dst_ds);
 
-        let sdv_n = dock_lib[dock_idx].src_dock_neg_vol;
-        let ddv_n = dock_lib[dock_idx].dst_dock_neg_vol;
+          let src_geom = op.mov( _src_ds, _src.geom );
+          let dst_geom = op.mov( _dst_ds, _dst.geom );
 
-        let _sdv_p = ((sdv_p < _eps) ? 1.0 : sdv_p);
-        let _ddv_n = ((ddv_n < _eps) ? 1.0 : ddv_n);
+          for (let dock_idx=0; dock_idx<dock_lib.length; dock_idx++) {
 
-        let _ddv_p = ((ddv_p < _eps) ? 1.0 : ddv_p);
-        let _sdv_n = ((sdv_n < _eps) ? 1.0 : sdv_n);
+            let idir = dock_lib[dock_idx].idir;
 
-        let _dock_res = {
-          "s+": op.vol( op.and( dock_lib[dock_idx].src_pos, src_geom ) ) / _sdv_p,
-          "d+": op.vol( op.and( dock_lib[dock_idx].dst_pos, op.mov( dock_lib[dock_idx].vdir, dst_geom ) ) ) / _ddv_p,
+            let sdv_p = dock_lib[dock_idx].src_dock_pos_vol;
+            let ddv_p = dock_lib[dock_idx].dst_dock_pos_vol;
 
-          "s-": op.vol( op.and( dock_lib[dock_idx].src_neg, op.sub( dock_lib[dock_idx].src_slice, src_geom ) ) ) / _sdv_n,
-          "d-": op.vol( op.and( dock_lib[dock_idx].dst_neg, op.sub( dock_lib[dock_idx].dst_slice, op.mov( dock_lib[dock_idx].vdir, dst_geom ) ) ) ) / _ddv_n
-        };
+            let sdv_n = dock_lib[dock_idx].src_dock_neg_vol;
+            let ddv_n = dock_lib[dock_idx].dst_dock_neg_vol;
 
-        let _nmatch = 0;
-        if ((_dock_res["s+"] > 0.95) ||
-            ((_dock_res["s+"] < _eps) && (sdv_p < _eps))) { _nmatch++; }
-        if ((_dock_res["s-"] > 0.95) ||
-            ((_dock_res["s-"] < _eps) && (sdv_n < _eps))) { _nmatch++; }
+            let _sdv_p = ((sdv_p < _eps) ? 1.0 : sdv_p);
+            let _ddv_n = ((ddv_n < _eps) ? 1.0 : ddv_n);
 
-        if ((_dock_res["d+"] > 0.95) ||
-            ((_dock_res["d+"] < _eps) && (ddv_p < _eps))) { _nmatch++; }
-        if ((_dock_res["d-"] > 0.95) ||
-            ((_dock_res["d-"] < _eps) && (ddv_n < _eps))) { _nmatch++; }
+            let _ddv_p = ((ddv_p < _eps) ? 1.0 : ddv_p);
+            let _sdv_n = ((sdv_n < _eps) ? 1.0 : sdv_n);
 
+            let vol_dock_res = {
+              "s+": op.vol( op.and( dock_lib[dock_idx].src_pos, src_geom ) ) / _sdv_p,
+              "d+": op.vol( op.and( dock_lib[dock_idx].dst_pos, op.mov( dock_lib[dock_idx].vdir, dst_geom ) ) ) / _ddv_p,
 
-        let dock_res = {
-          "s+": _point_sim( dock_lib[dock_idx].src_pos, op.and( dock_lib[dock_idx].src_slice, src_geom ) ),
-          "d+": _point_sim( dock_lib[dock_idx].dst_pos, op.and( dock_lib[dock_idx].dst_slice, op.mov( dock_lib[dock_idx].vdir, dst_geom ) ) ),
+              "s-": op.vol( op.and( dock_lib[dock_idx].src_neg, op.sub( dock_lib[dock_idx].src_slice, src_geom ) ) ) / _sdv_n,
+              "d-": op.vol( op.and( dock_lib[dock_idx].dst_neg, op.sub( dock_lib[dock_idx].dst_slice, op.mov( dock_lib[dock_idx].vdir, dst_geom ) ) ) ) / _ddv_n
+            };
 
-          "s-": _point_sim( dock_lib[dock_idx].src_neg, op.and( op.sub( dock_lib[dock_idx].src_slice, src_geom ) ) ),
-          "d-": _point_sim( dock_lib[dock_idx].dst_neg, op.and( op.sub( dock_lib[dock_idx].dst_slice, op.mov( dock_lib[dock_idx].vdir, dst_geom ) ) ) )
-        };
+            /*
+            let _nmatch = 0;
+            if ((_dock_res["s+"] > 0.95) ||
+                ((_dock_res["s+"] < _eps) && (sdv_p < _eps))) { _nmatch++; }
+            if ((_dock_res["s-"] > 0.95) ||
+                ((_dock_res["s-"] < _eps) && (sdv_n < _eps))) { _nmatch++; }
 
-
-        let nmatch=0;
-        if ((dock_res["s+"] > 0.95) ||
-            ((dock_res["s+"] < _eps) && (_simple_point_count( dock_lib[dock_idx].src_pos ) == 0))) { nmatch++; }
-        if ((dock_res["s-"] > 0.95) ||
-            ((dock_res["s-"] < _eps) && (_simple_point_count( dock_lib[dock_idx].src_neg ) == 0))) { nmatch++; }
-
-        if ((dock_res["d+"] > 0.95) ||
-            ((dock_res["d+"] < _eps) && (_simple_point_count( dock_lib[dock_idx].dst_pos ) == 0))) { nmatch++; }
-        if ((dock_res["d-"] > 0.95) ||
-            ((dock_res["d-"] < _eps) && (_simple_point_count( dock_lib[dock_idx].dst_neg ) == 0))) { nmatch++; }
-
-        /*
-        let _xx = "nomatch";
-        if ( (dock_res["s+"] > 0.95) &&
-             (dock_res["d+"] > 0.95) &&
-             (dock_res["s-"] > 0.95) &&
-             (dock_res["d-"] > 0.95) ) { _xx = "match!!"; }
-             */
-
-        let _xx = ((nmatch==4) ? "match!!" : "nomatch");
-
-        console.log("###", _xx, ">>>", _src.name, _dst.name, dir_descr[idir],
-          "(", idir, ")", "dock(idx:", dock_idx, "):",JSON.stringify(dock_res), JSON.stringify( [ sdv_p, ddv_p, sdv_n, ddv_n ] ) );
-        continue;
-
-        let dock_src_pos = op.and( dock_lib[dock_idx].src_pos, src_geom );
-        //let dock_dst_pos = 
-
-        let dock_a = op.clone( dock_lib[dockidx].src );
-        let dock_b = op.mov( idir_v[idir], dock_lib[dockidx].dst );
-
-        let geom_a = op.clone( src_geom );
-        let geom_b = op.mov( idir_v[idir], dst_geom );
-
-        let pos_dock_a = op.and( geom_a, src_dock_geom );
-        let pos_dock_b = op.and( geom_b, dst_dock_geom );
-
-        let slice_a = dock_lib[dock_idx].src_slice;
-        let slice_b = dock_lib[dock_idx].dst_slice;
-
-        let vol_a = op.vol( test_dock_a );
-        let vol_b = op.vol( test_dock_b );
-
-
-        let vol_a_den = op.vol( src_dock_geom );
-        let vol_b_den = op.vol( dst_dock_geom );
-
-        if ((vol_a_den < _eps) || (vol_b_den < _eps)) { continue; }
-
-        let p_a_vol = vol_a / vol_a_den;
-        let p_b_vol = vol_b / vol_b_den;
-
-        if ((p_a_vol > 0.95) &&
-            (p_b_vol > 0.95)) {
-
-          let rdir = oppo_dir[idir];
-          console.log( _src.name, "--(", idir, ")-->", _dst.name );
-          console.log( _dst.name, "--(", rdir, ")-->", _src.name );
-
-          /*
-          console.log("src:", _src.name, "dst:", _dst.name,
-            "vol_ab(", vol_a / vol_a_den, vol_b / vol_b_den, ")",
-            "pnt_sim_ab(",
-              _point_sim(test_dock_a, src_dock_geom),
-              _point_sim(test_dock_b, dst_dock_geom),
-            ")");
+            if ((_dock_res["d+"] > 0.95) ||
+                ((_dock_res["d+"] < _eps) && (ddv_p < _eps))) { _nmatch++; }
+            if ((_dock_res["d-"] > 0.95) ||
+                ((_dock_res["d-"] < _eps) && (ddv_n < _eps))) { _nmatch++; }
             */
+
+
+            let pnt_dock_res = {
+              "s+": _point_sim( dock_lib[dock_idx].src_pos, op.and( dock_lib[dock_idx].src_slice, src_geom ) ),
+              "d+": _point_sim( dock_lib[dock_idx].dst_pos, op.and( dock_lib[dock_idx].dst_slice, op.mov( dock_lib[dock_idx].vdir, dst_geom ) ) ),
+
+              "s-": _point_sim( dock_lib[dock_idx].src_neg, op.and( op.sub( dock_lib[dock_idx].src_slice, src_geom ) ) ),
+              "d-": _point_sim( dock_lib[dock_idx].dst_neg, op.and( op.sub( dock_lib[dock_idx].dst_slice, op.mov( dock_lib[dock_idx].vdir, dst_geom ) ) ) )
+            };
+
+
+
+            let nmatch=0;
+            if ((pnt_dock_res["s+"] > 0.95) ||
+                ((pnt_dock_res["s+"] < _eps) && (_simple_point_count( dock_lib[dock_idx].src_pos ) == 0))) { nmatch++; }
+            if ((pnt_dock_res["s-"] > 0.95) ||
+                ((pnt_dock_res["s-"] < _eps) && (_simple_point_count( dock_lib[dock_idx].src_neg ) == 0))) { nmatch++; }
+
+            if ((pnt_dock_res["d+"] > 0.95) ||
+                ((pnt_dock_res["d+"] < _eps) && (_simple_point_count( dock_lib[dock_idx].dst_pos ) == 0))) { nmatch++; }
+            if ((pnt_dock_res["d-"] > 0.95) ||
+                ((pnt_dock_res["d-"] < _eps) && (_simple_point_count( dock_lib[dock_idx].dst_neg ) == 0))) { nmatch++; }
+
+            let vol_match = false;
+            if ( (vol_dock_res["s+"] > 0.95) &&
+                 (vol_dock_res["d+"] > 0.95) &&
+                 (vol_dock_res["s-"] > 0.95) &&
+                 (vol_dock_res["d-"] > 0.95) ) { vol_match=true; }
+
+            let pnt_match = false;
+            if (nmatch==4) { pnt_match = true; }
+
+            let _xx = ((pnt_match || vol_match) ? "match!!" : "nomatch");
+
+            console.log("###", _xx, "(#match:", nmatch, ")", "(block:", src_block_idx, dst_block_idx, ") >>>", _src.name, _dst.name, dir_descr[idir],
+              "(", idir, ")", "dock(idx:", dock_idx, "):",JSON.stringify(pnt_dock_res), JSON.stringify( [ sdv_p, ddv_p, sdv_n, ddv_n ] ), JSON.stringify(vol_dock_res) );
+
+            //console.log("##  dock vdir:", dock_lib[dock_idx].vdir);
+
+            //_simple_print( op.and( dock_lib[dock_idx].dst_slice, op.mov( dock_lib[dock_idx].vdir, dst_geom )  ) );
+            //console.log("\n\n");
+            //_simple_print( op.and( dock_lib[dock_idx].src_slice, src_geom ) );
+            //return;
+
+
+            continue;
+
+            let dock_src_pos = op.and( dock_lib[dock_idx].src_pos, src_geom );
+            //let dock_dst_pos = 
+
+            let dock_a = op.clone( dock_lib[dockidx].src );
+            let dock_b = op.mov( idir_v[idir], dock_lib[dockidx].dst );
+
+            let geom_a = op.clone( src_geom );
+            let geom_b = op.mov( idir_v[idir], dst_geom );
+
+            let pos_dock_a = op.and( geom_a, src_dock_geom );
+            let pos_dock_b = op.and( geom_b, dst_dock_geom );
+
+            let slice_a = dock_lib[dock_idx].src_slice;
+            let slice_b = dock_lib[dock_idx].dst_slice;
+
+            let vol_a = op.vol( test_dock_a );
+            let vol_b = op.vol( test_dock_b );
+
+
+            let vol_a_den = op.vol( src_dock_geom );
+            let vol_b_den = op.vol( dst_dock_geom );
+
+            if ((vol_a_den < _eps) || (vol_b_den < _eps)) { continue; }
+
+            let p_a_vol = vol_a / vol_a_den;
+            let p_b_vol = vol_b / vol_b_den;
+
+            if ((p_a_vol > 0.95) &&
+                (p_b_vol > 0.95)) {
+
+              let rdir = oppo_dir[idir];
+              console.log( _src.name, "--(", idir, ")-->", _dst.name );
+              console.log( _dst.name, "--(", rdir, ")-->", _src.name );
+
+              /*
+              console.log("src:", _src.name, "dst:", _dst.name,
+                "vol_ab(", vol_a / vol_a_den, vol_b / vol_b_den, ")",
+                "pnt_sim_ab(",
+                  _point_sim(test_dock_a, src_dock_geom),
+                  _point_sim(test_dock_b, dst_dock_geom),
+                ")");
+                */
+            }
+
+          }
+
         }
-
-      }
-
-      }
       }
 
     }
