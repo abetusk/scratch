@@ -382,7 +382,7 @@ function block_occupancy(cfg, geom, name) {
               (pnt[ii][2] > ez)) { continue; }
           block_list.push({ "ds": [dx,dy,dz] });
 
-          console.log("   !!!", name, dx, dy, dz, "(pnt:", pnt[ii][0], pnt[ii][1], pnt[ii][2], ")");
+          //console.log("   !!!", name, dx, dy, dz, "(pnt:", pnt[ii][0], pnt[ii][1], pnt[ii][2], ")");
 
           found=true;
           break;
