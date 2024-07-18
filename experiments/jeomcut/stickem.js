@@ -660,6 +660,54 @@ function idir_irot(idir, irot) {
   return -1;
 }
 
+// src/dst_block are arrays of structures, currently each element is object
+// with 'ds' element that holds center position.
+//
+function block_collision( src_block, dst_block, src_ds, dst_ds ) {
+  let _eps = 1/1024;
+
+  let _s = [];
+  let _d = [];
+
+  for (let s_i=0; s_i<src_block.length; s_i++) {
+    _s.push({
+      "ds": [ src_block[s_i].ds[0] + src_ds[0],
+              src_block[s_i].ds[1] + src_ds[1],
+              src_block[s_i].ds[2] + src_ds[2]
+      ]
+    });
+  }
+
+  for (let d_i=0; d_i<dst_block.length; d_i++) {
+    _d.push({
+      "ds": [ dst_block[d_i].ds[0] + dst_ds[0],
+              dst_block[d_i].ds[1] + dst_ds[1],
+              dst_block[d_i].ds[2] + dst_ds[2]
+      ]
+    });
+  }
+
+  //console.log("##??", src_block, dst_block, src_ds, dst_ds, _s.length, _d.length);
+  //console.log("##?? src_ds:", JSON.stringify(src_ds), "dst_ds:", JSON.stringify(dst_ds));
+  //console.log("##???? _s:", JSON.stringify(_s));
+  //console.log("##???? _d:", JSON.stringify(_d));
+
+  for (let s_i=0; s_i<_s.length; s_i++) {
+    for (let d_i=0; d_i<_d.length; d_i++) {
+      let dist1 = 0;
+      for (let ii=0; ii<3; ii++) {
+        dist1 += Math.abs( _s[s_i].ds[ii] - _d[d_i].ds[ii] );
+      }
+
+      //console.log("#####", JSON.stringify(_s[s_i]), "-", JSON.stringify(_d[d_i]), "==>", dist1, "(?", 3*_eps, ")");
+
+      if (dist1 < 3*_eps) { return true; }
+    }
+  }
+
+
+  return false;
+}
 
 // representative creation
 //
@@ -1093,6 +1141,18 @@ function _main() {
 
             let idir = dock_lib[dock_idx].idir;
 
+            let _block_src_ds = [ _src_ds[0], _src_ds[1], _src_ds[2] ];
+            let _block_dst_ds = [
+              _dst_ds[0] + dock_lib[dock_idx].vdir[0],
+              _dst_ds[1] + dock_lib[dock_idx].vdir[1],
+              _dst_ds[2] + dock_lib[dock_idx].vdir[2]
+            ];
+
+            if (block_collision( _src.block, _dst.block, _block_src_ds, _block_dst_ds )) {
+              console.log("## COLLISION (should skip)");
+              continue;
+            }
+
             let sdv_p = dock_lib[dock_idx].src_dock_pos_vol;
             let ddv_p = dock_lib[dock_idx].dst_dock_pos_vol;
 
@@ -1112,6 +1172,19 @@ function _main() {
               "s-": op.vol( op.and( dock_lib[dock_idx].src_neg, op.sub( dock_lib[dock_idx].src_slice, src_geom ) ) ) / _sdv_n,
               "d-": op.vol( op.and( dock_lib[dock_idx].dst_neg, op.sub( dock_lib[dock_idx].dst_slice, op.mov( dock_lib[dock_idx].vdir, dst_geom ) ) ) ) / _ddv_n
             };
+
+            if ((dock_idx == 13) && (debug_counter == 1)) {
+              console.log("#!!! dock_idx:", dock_idx, "debug_counter:", debug_counter);
+              _simple_print( op.and( dock_lib[dock_idx].src_pos, src_geom ) );
+              console.log("\n\n");
+              _simple_print(op.and( dock_lib[dock_idx].dst_pos, op.mov( dock_lib[dock_idx].vdir, dst_geom ) ) );
+              console.log("\n\n");
+
+              _simple_print( op.and( dock_lib[dock_idx].src_neg, op.sub( dock_lib[dock_idx].src_slice, src_geom ) ) );
+              console.log("\n\n");
+              _simple_print( op.and( dock_lib[dock_idx].dst_neg, op.sub( dock_lib[dock_idx].dst_slice, op.mov( dock_lib[dock_idx].vdir, dst_geom ) ) ) );
+              return;
+            }
 
             /*
             let _nmatch = 0;
