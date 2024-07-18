@@ -1,16 +1,17 @@
-// LICENSE: cc0
+// LICENSE: CC0
 //
 // To the extent possible under law, the person who associated CC0 with
 // this project has waived all copyright and related or neighboring rights
 // to this project.
 //
 
-var JEOM_VERSION = "0.2.0";
+var JEOM_VERSION = "0.3.0";
 var JEOM_EPS = (1.0/(1024.0*1024.0));
 //var JEOM_EPS = (1.0/(1024.0*512.0));
 
 if (typeof module !== "undefined") {
-  var numeric = require("./numeric.js");
+  //var numeric = require("./numeric.js");
+  var numeric = require("numeric");
 }
 
 var jeom_info = {
@@ -1156,6 +1157,17 @@ function jeom_dup(tri) {
   return v;
 }
 
+function jeom_dup_tri(tri) {
+  let v = Array(tri.length);
+  for (let i=0; i<tri.length; i++) {
+    v[i] = Array(tri[i].length);
+    for (let j=0; j<tri[i].length; j++) {
+      v[i][j] = tri[i][j];
+    }
+  }
+  return v;
+}
+
 function jeom_csg2tri(_csg) {
   let _debug = false;
   let tri = [];
@@ -1200,6 +1212,55 @@ function jeom_csg2tri(_csg) {
   return tri;
 }
 
+function jeom_stl_stringify(tri) {
+  let x = 0, y = 0, z = 0;
+  let d = 1;
+  let _eps = JEOM_EPS;
+
+  let lines = [];
+
+  lines.push("solid\n");
+  for (let i=0; i<tri.length; i+=9) {
+    let ax = x + tri[i + 0]*d ;
+    let ay = y + tri[i + 1]*d ;
+    let az = z + tri[i + 2]*d ;
+
+    let bx = x + tri[i + 3]*d ;
+    let by = y + tri[i + 4]*d ;
+    let bz = z + tri[i + 5]*d ;
+
+    let cx = x + tri[i + 6]*d ;
+    let cy = y + tri[i + 7]*d ;
+    let cz = z + tri[i + 8]*d ;
+
+    let pA = [ ax, ay, az ];
+    let pB = [ bx, by, bz ];
+    let pC = [ cx, cy, cz ];
+
+    let cb = numeric.sub( pC, pB );
+    let ab = numeric.sub( pA, pB );
+    let _n = _cross(cb, ab);
+
+    let _nn = numeric.norm2(_n);
+    if (Math.abs(_nn) > _eps) {
+      _n = numeric.mul(_n, 1.0/_nn);
+    }
+
+    lines.push("facet normal " +  _n[0].toString() + " " +  _n[1].toString() + " " + _n[2].toString() + "\n");
+    lines.push("  outer loop\n");
+    lines.push("    vertex " + ax.toString() + " " +  ay.toString() + " " +  az.toString() + "\n" );
+    lines.push("    vertex " + bx.toString() + " " +  by.toString() + " " +  bz.toString() + "\n" );
+    lines.push("    vertex " + cx.toString() + " " +  cy.toString() + " " +  cz.toString() + "\n" );
+    lines.push("  endloop\n");
+    lines.push("endfacet\n");
+
+  }
+
+  lines.push("endsolid\n");
+
+  return lines.join("");
+}
+
 function jeom_stl_print(fp, tri) {
 
   let x = 0, y = 0, z = 0;
@@ -1234,14 +1295,6 @@ function jeom_stl_print(fp, tri) {
       _n = numeric.mul(_n, 1.0/_nn);
     }
 
-    //console.log("facet normal", _n[0], _n[1], _n[2]);
-    //console.log("  outer loop");
-    //console.log("    vertex", ax, ay, az);
-    //console.log("    vertex", bx, by, bz);
-    //console.log("    vertex", cx, cy, cz);
-    //console.log("  endloop");
-    //console.log("endfacet");
-
     fp.write("facet normal " +  _n[0].toString() + " " +  _n[1].toString() + " " + _n[2].toString() + "\n");
     fp.write("  outer loop\n");
     fp.write("    vertex " + ax.toString() + " " +  ay.toString() + " " +  az.toString() + "\n" );
@@ -1251,9 +1304,8 @@ function jeom_stl_print(fp, tri) {
     fp.write("endfacet\n");
 
   }
-  //console.log("endsolid");
-  fp.write("endsolid\n");
 
+  fp.write("endsolid\n");
 }
 
 function jeom_gnuplot_print(fp, tri) {
@@ -1312,6 +1364,8 @@ function jeom_off_print(fp, tri, face) {
 
 function jeom_obj_print(fp, tri) {
   for (let i=0; i<tri.length; i+=3) {
+
+    //console.log("v", tri[i+0], tri[i+1], tri[i+2]);
     fp.write("v " + tri[i+0].toString() + " " + tri[i+1].toString() + " " + tri[i+2].toString() + "\n");
   }
 
@@ -1321,8 +1375,28 @@ function jeom_obj_print(fp, tri) {
     v1 = Math.floor((i+3)/3);
     v2 = Math.floor((i+6)/3);
 
+    //console.log("f", v0+1, v1+1, v2+1);
     fp.write("f " + (v0+1).toString() + " "  + (v1+1).toString() + " " + (v2+1).toString() + "\n" );
   }
+}
+
+function jeom_obj_stringify(tri) {
+  let lines = [];
+  for (let i=0; i<tri.length; i+=3) {
+
+    lines.push("v " + tri[i+0].toString() + " " + tri[i+1].toString() + " " + tri[i+2].toString() + "\n");
+  }
+
+  let v0=0, v1=0, v2=0;
+  for (let i=0; i<tri.length; i+=9) {
+    v0 = Math.floor((i+0)/3);
+    v1 = Math.floor((i+3)/3);
+    v2 = Math.floor((i+6)/3);
+
+    lines.push("f " + (v0+1).toString() + " "  + (v1+1).toString() + " " + (v2+1).toString() + "\n" );
+  }
+
+  return lines.join("");
 }
 
 function _vkey(v, _eps) {
@@ -1382,7 +1456,639 @@ function jeom_stitch(tri, _eps) {
   return { "v": vtx, "f": face };
 }
 
-if (typeof module !== "undefined") {
+// throw out information to get list of traingles
+//
+function jeom_obj2tri(o) {
+
+  let flat_obj = jeom_obj2flat(o);
+  let flat_tri = [];
+
+  let model = flat_obj.model;
+  for (let m_idx=0; m_idx<model.length; m_idx++) {
+    let group = model[m_idx].g;
+    for (let g_idx=0; g_idx<group.length; g_idx++) {
+      let face = group[g_idx].f;
+      for (let f_idx=0; f_idx<face.length; f_idx++) {
+        if (face[f_idx].length != 3) { continue; }
+        flat_tri.push( face[f_idx][0].x, face[f_idx][0].y, face[f_idx][0].z );
+        flat_tri.push( face[f_idx][1].x, face[f_idx][1].y, face[f_idx][1].z );
+        flat_tri.push( face[f_idx][2].x, face[f_idx][2].y, face[f_idx][2].z );
+      }
+    }
+  }
+
+  return flat_tri;
+}
+
+// "flatten" the OBJ data from the jeom_obj_split_loads
+// function.
+//
+// returns:
+//
+// data{
+//   model[]
+//   m{}
+// }
+//
+// Where model is an array of flattened OBJ data and
+// m is a dict whose entries are references to
+// the same data but has the name as key.
+//
+// Each model entry has an array of groups with array
+// of faces with coordinates (not indices).
+//
+// model{
+//   name
+//   mtl[]
+//   g[
+//     {s, mtl, 
+//       f [
+//         [ {x,y,z,tx,ty,nx,ny,nz}, ... ],
+//         [ {x,y,z,tx,ty,nx,ny,nz}, ... ],
+//         ...
+//         ],
+//         ...
+//       ]
+//     },
+//     ...
+//   ]
+// }
+//
+//
+function jeom_obj2flat(o) {
+  let model = o.model;
+
+  let dst_data = {
+    "model": [],
+    "m": {}
+  };
+
+  //DEBUG
+  //console.log(">>>>");
+  //console.log( JSON.stringify(model, undefined, 2) );
+  //console.log("<<<<");
+
+
+  for (let m_idx=0; m_idx<model.length; m_idx++) {
+    let m = model[m_idx];
+    let v = model[m_idx].v;
+    let vt = model[m_idx].vt;
+    let vn = model[m_idx].vn;
+
+    let name = m.name;
+    let mtllib = m.mtllib;
+
+    let dst_model = { "g": [], "name":name, "mtl":mtllib };
+
+    let group_list = m.g;
+    for (let g_idx=0; g_idx<group_list.length; g_idx++) {
+      let g = group_list[g_idx];
+
+      let dst_group = { "mtl":g.mtl, "s": g.s, "f": [] };
+
+      let face_list = group_list[g_idx].f;
+      for (let f_idx=0; f_idx<face_list.length; f_idx++) {
+
+        let dst_face = [];
+
+        for (let _i=0; _i<face_list[f_idx].length; _i++) {
+          let face_ele = face_list[f_idx][_i];
+
+          let v_idx = face_ele[0];
+          let vt_idx = -1;
+          let vn_idx = -1;
+
+          if (face_ele.length >= 1) { vt_idx = face_ele[1]; }
+          if (face_ele.length >= 2) { vn_idx = face_ele[2]; }
+
+          //let vt_idx = face_ele[1];
+          //let vn_idx = face_ele[2];
+
+          let pnt = {
+            "x": v[v_idx][0],
+            "y": v[v_idx][1],
+            "z": v[v_idx][2]
+          };
+
+          if (vt_idx >= 0) {
+            pnt["tx"] = vt[vt_idx][0];
+            pnt["ty"] = vt[vt_idx][1];
+          }
+
+          if (vn_idx >= 0) {
+            pnt["nx"] = vn[vn_idx][0];
+            pnt["ny"] = vn[vn_idx][1];
+            pnt["nz"] = vn[vn_idx][2];
+          }
+
+          dst_face.push(pnt);
+
+        }
+
+        dst_group.f.push(dst_face);
+      }
+
+      dst_model.g.push(dst_group);
+
+    }
+
+    dst_data.model.push(dst_model);
+
+  }
+
+  for (let ii=0; ii<dst_data.model.length; ii++) {
+    let name = dst_data.model[ii].name;
+    dst_data.m[name] = dst_data.model[ii];
+  }
+
+  return dst_data;
+}
+
+function jeom_json2obj(obj_json) {
+  let lines = [];
+
+  for (let idx=0; idx<obj_json.length; idx++) {
+    let ele = obj_json[idx];
+    if (ele.type == "#") { lines.push( ele.c ); }
+    else if (ele.type == "mtllib") { lines.push( "mtllib " + ele.mtllib.join(" ") ); }
+    else if (ele.type == "usemtl") { lines.push( "usemtl " + ele.usemtl.join(" ") ); }
+    else if (ele.type == "g") { lines.push( "g " + ele.g.join(" ") ); }
+    else if (ele.type == "v") { lines.push( "v " + ele.v.join(" ") ); }
+    else if (ele.type == "vn") { lines.push( "vn " + ele.vn.join(" ") ); }
+    else if (ele.type == "vt") { lines.push( "vt " + ele.vt.join(" ") ); }
+    else if (ele.type == "f") {
+      let _a = [];
+      for (let ii=0; ii<ele.f.length; ii++) {
+        if (ele.f[ii].length == 1) { a.push( ele.f[ii][0].toString() ); }
+        else { _a.push( ele.f[ii].join("/") ); }
+      }
+      lines.push( "f " + _a.join(" ") );
+    }
+  }
+
+  return lines.join("\n");
+}
+
+function jeom_obj2json(s) {
+
+  let obj_json = [];
+
+  let lines = s.toString().split("\n");
+  for (let line_no=0; line_no<lines.length; line_no++) {
+    let line = lines[line_no].trim();
+    if (line.length==0) { continue; }
+    if (line[0] == '#') {
+      obj_json.push({ "type": "#", "c": line });
+      continue;
+    }
+
+    line = line.replace( /  */g, ' ');
+    let tok = line.split(" ");
+    let _op = tok[0].toLowerCase();
+
+    if (_op == "mtllib") {
+      obj_json.push({"type":"mtllib", "mtllib": tok.slice(1) });
+    }
+
+    else if (_op == "mtllib") {
+      obj_json.push({"type":"mtllib", "mtllib": tok.slice(1) });
+    }
+
+    else if (_op == "usemtl") {
+      obj_json.push({"type":"usemtl", "usemtl": tok.slice(1) });
+    }
+
+    else if (_op == "g") {
+      obj_json.push({"type":"g", "g": tok.slice(1) });
+    }
+
+    else if (_op == "v") {
+      obj_json.push({"type":"v", "v": tok.slice(1).map( function(_v) { return parseFloat(_v); } )});
+    }
+
+    else if (_op == "vn") {
+      obj_json.push({"type":"vn", "vn": tok.slice(1).map( function(_v) { return parseFloat(_v); } )});
+    }
+
+    else if (_op == "vt") {
+      obj_json.push({"type":"vt", "vt": tok.slice(1).map( function(_v) { return parseFloat(_v); } )});
+    }
+
+    else if (_op == "f") {
+      let _f = tok.slice(1).map( function(_v) {
+        let _t = _v.split("/");
+        let _iii = _t.map( function(_u) { return parseInt(_u); } );
+        return _iii;
+      });
+      obj_json.push({"type":"f", "f": _f});
+    }
+
+  }
+
+  return obj_json;
+
+}
+
+// This will split an OBJ file into
+// individual OBJ like data structures.
+//
+// The data structures are chosen to as
+// closely resemble the Wavefront OBJ file
+// format as possible.
+//
+// a `jeom_obj` will be returned:
+//
+// code     - return code, 0 on success, non-zero otherwise
+// message  - return message
+// model[]  - array of models
+// m{}      - dict of models with the name as their key
+//
+//
+// Each model in the `model` array has vertex indicies
+// relative to the start of it's local vertex list.
+// That is, vertex indicies along with texxture and normal
+// indices, are 0-indexed and reference the local v/vt/vn
+// array respectively.
+//
+// A `model` entry is roughly as follows:
+//
+// model: {
+//   material[]
+//   name[]
+//   v[], vt[], vn[]
+//   g[ {s, mtl[], f[] ]
+//   first_index{ v, vt, vn }
+// }
+//
+// Where v/vt/vn are the vertices, texture coords and normals
+// respectively.
+// g is the group, with each entry having an s flag, mtl (material) list
+// and an array of faces.
+// The faces array (`model.g[].f[]`) is an array of arrays with each
+// entry being a face and each entry within being an array of v/vt/vn indices,
+// 0-indexed and relative to the local model.
+//
+// first_index is saved to reference the original index of where the face
+// indices came from in the original OBJ file.
+//
+function jeom_obj_split_loads(s) {
+  let jeom_obj = {
+    "code": 0,
+    "message": "",
+    "model" : [],
+  };
+
+  let state_info = {
+    "material_lib": [],
+    "idx": {
+      "f": 0,
+      "v": 1,
+      "vt": 1,
+      "vn": 1
+    },
+    "obj_name" : "",
+    "group_name": "",
+    "material": "",
+    "s":""
+  };
+
+  let cur_model = {
+    "name":"",
+    "mtllib": [],
+    "v": [], "vn": [], "vt": [],
+    "first_index": { "v": 1, "vt": 1, "vn": 1 },
+    "g": []
+  };
+
+  let cur_mtl_group = {
+    "s": "",
+    "mtl" : [],
+    "f": [],
+    "tri": []
+  };
+  let have_data = false;
+  let have_all_points = false;
+
+  let _V = [], _VN = [], _VT = [];
+
+  let lines = s.toString().split("\n");
+  for (let line_no=0; line_no<lines.length; line_no++) {
+    let line = lines[line_no].trim();
+    if (line.length==0) { continue; }
+    if (line[0] == '#') { continue; }
+
+    line = line.replace( /  */g, ' ');
+    let tok = line.split(" ");
+
+    //if (tok.length < 2) { continue; }
+
+    let _op = tok[0].toLowerCase();
+
+    //---
+
+    if ((_op == 'o') ||
+        (_op == 'g')) {
+      if (have_data) {
+        if (cur_mtl_group.f.length > 0) {
+          cur_model.g.push( cur_mtl_group );
+        }
+        cur_mtl_group = {
+          "s": state_info.s,
+          "mtl": [],
+          "f": []
+        }
+        jeom_obj.model.push(cur_model);
+        have_data = false;
+      }
+
+      cur_model = {
+        "name": tok[1],
+        "mtllib": state_info.material_lib,
+        //"v": [],
+        //"vn": [],
+        //"vt": [],
+        "v": _V,
+        "vn": _VN,
+        "vt": _VT,
+        "first_index": {
+          //"v" : state_info.idx.v,
+          //"vt" : state_info.idx.vt,
+          //"vn" : state_info.idx.vn
+          "v" : 1,
+          "vt" : 1,
+          "vn" : 1
+        },
+        "g": []
+      }
+
+      if (have_all_points) {
+        cur_model.v  = _V;
+        cur_model.vn = _VN;
+        cur_model.vt = _VT;
+
+        //cur_model.first_index.v  = _STATE_INFO.idx.v;
+        //cur_model.first_index.vt = _STATE_INFO.idx.vt;
+        //cur_model.first_index.vn = _STATE_INFO.idx.vn;
+      }
+
+      if      (_op == 'o') { state_info.obj_name   = tok[1]; }
+      else if (_op == 'g') { state_info.group_name = tok[1]; }
+    }
+
+    else if (_op == "s") {
+      state_info.s = line;
+    }
+
+    else if (_op == "mtllib") {
+      state_info.material_lib = tok.slice(1);
+    }
+
+    else if (_op == "usemtl") {
+
+      if (cur_mtl_group.f.length > 0) {
+
+        cur_model.g.push( cur_mtl_group );
+        cur_mtl_group = {
+          "s": state_info.s,
+          "mtl": [],
+          "f": []
+        }
+
+        //cur_mtl_group.mtl = tok.slice(1);
+      }
+
+      cur_mtl_group.s = state_info.s.split(" ").slice(1).join(" ");
+      for (let ii=1; ii<tok.length; ii++) {
+        cur_mtl_group.mtl.push(tok[ii]);
+      }
+
+    }
+
+    else if (_op == "v") {
+      have_data = true;
+
+      if (tok.length < 4) {
+        jeom_obj.message= "ERROR: invalid v on line (" + line_no.toString() + ")";
+        jeom_obj.code = -1;
+        return jeom_obj;
+      }
+
+      state_info.idx.v++;
+      let _v = [ parseFloat(tok[1]), parseFloat(tok[2]), parseFloat(tok[3]) ];
+      cur_model.v.push( _v );
+    }
+
+    else if (_op == "vt") {
+      have_data = true;
+
+      if (tok.length < 3) {
+        jeom_obj.message= "ERROR: invalid vt on line (" + line_no.toString() + ")";
+        jeom_obj.code = -1;
+        return jeom_obj;
+      }
+
+      state_info.idx.vt++;
+      let _vt = [ parseFloat(tok[1]), parseFloat(tok[2]) ];
+      cur_model.vt.push( _vt );
+    }
+
+    else if (_op == "vn") {
+      have_data = true;
+
+      if (tok.length < 4) {
+        jeom_obj.message= "ERROR: invalid vn on line (" + line_no.toString() + ")";
+        jeom_obj.code = -1;
+        return jeom_obj;
+      }
+
+      state_info.idx.vn++;
+      let _vn = [ parseFloat(tok[1]), parseFloat(tok[2]), parseFloat(tok[3]) ];
+      cur_model.vn.push( _vn );
+    }
+
+    else if (_op == "f") {
+      have_data = true;
+
+      state_info.idx.f++;
+
+      let _face = [];
+      for (let ii=1; ii<tok.length; ii++) {
+        let ele_tok = tok[ii].split("/");
+
+        if ((ele_tok.length < 1)  ||
+            (ele_tok.length > 3)) {
+          jeom_obj.message= "ERROR: invalid f on line (" + line_no.toString() + "), token " + ii.toString();
+          jeom_obj.code = -1;
+          return jeom_obj;
+        }
+
+        let _tf = [];
+
+        _tf.push( parseInt(ele_tok[0]) - cur_model.first_index.v );
+        if (ele_tok.length >= 2) {
+          _tf.push( parseInt(ele_tok[1]) - cur_model.first_index.vt );
+        }
+        if (ele_tok.length >= 3) {
+          _tf.push( parseInt(ele_tok[2]) - cur_model.first_index.vn );
+        }
+
+        _face.push(_tf);
+
+
+        /*
+        let v_idx  = parseInt(ele_tok[0]) - cur_model.first_index.v;
+        let vt_idx = parseInt(ele_tok[1]) - cur_model.first_index.vt;
+        let vn_idx = parseInt(ele_tok[2]) - cur_model.first_index.vn;
+
+        //let v_idx  = parseInt(ele_tok[0]) ;
+        //let vt_idx = parseInt(ele_tok[1]) ;
+        //let vn_idx = parseInt(ele_tok[2]) ;
+
+        _face.push( [v_idx, vt_idx, vn_idx] );
+        */
+      }
+
+      cur_mtl_group.f.push(_face);
+    }
+
+    
+  }
+
+  if (have_data) {
+    if (cur_mtl_group.f.length > 0) {
+      cur_model.g.push( cur_mtl_group );
+      cur_mtl_group = {
+        "s": state_info.s,
+        "mtl": [],
+        "f": []
+      }
+    }
+    jeom_obj.model.push(cur_model);
+  }
+
+  jeom_obj.m = {};
+  for (let ii=0; ii<jeom_obj.model.length; ii++) {
+    jeom_obj.m[ jeom_obj.model[ii].name ] = jeom_obj.model[ii];
+  }
+
+  return jeom_obj;
+}
+
+//----
+
+function jeom_bounding_box(tri) {
+  let first = false;
+  let bb = { "x":0, "X":0, "y":0, "Y":0, "z":0, "Z":0 };
+
+  for (let ii=0; ii<tri.length; ii+=3) {
+    if (ii==0) {
+      bb.x = tri[ii+0]; bb.X = tri[ii+0];
+      bb.y = tri[ii+1]; bb.Y = tri[ii+1];
+      bb.z = tri[ii+2]; bb.Z = tri[ii+2];
+    }
+
+    if (bb.x > tri[ii+0]) { bb.x = tri[ii+0]; }
+    if (bb.X < tri[ii+0]) { bb.X = tri[ii+0]; }
+
+    if (bb.y > tri[ii+1]) { bb.y = tri[ii+1]; }
+    if (bb.Y < tri[ii+1]) { bb.Y = tri[ii+1]; }
+
+    if (bb.z > tri[ii+2]) { bb.z = tri[ii+2]; }
+    if (bb.Z < tri[ii+2]) { bb.Z = tri[ii+2]; }
+  }
+
+  return bb;
+}
+
+// Create a dictionary with key entries for
+// codes of which 1x1x1 blocks points occupy.
+//
+// This is pretty hacky as it only considers
+// points and only points that are _eps away
+// from 1x1x1 lattice walls.
+//
+function jeom_occupancy_block(pnt_a, sxyz, offset, _eps) {
+  _eps = ((typeof _eps === "undefined") ? JEOM_EPS : _eps);
+
+  sxyz = ((typeof sxyz === "undefined") ? [0.5,0.5,0.5] : sxyz);
+  offset = ((typeof offset === "undefined") ? [0,0,0] : offset);
+
+  let dblock = {};
+  for (let ii=0; ii<pnt_a.length; ii+=3) {
+
+    let _x = pnt_a[ii+0] + offset[0];
+    let _y = pnt_a[ii+1] + offset[1];
+    let _z = pnt_a[ii+2] + offset[2];
+
+    let sx = _x / sxyz[0];
+    let sy = _y / sxyz[1];
+    let sz = _z / sxyz[2];
+
+    let qx = Math.round(sx);
+    let qy = Math.round(sy);
+    let qz = Math.round(sz);
+
+    if (Math.abs( qx - sx ) < _eps) { continue; }
+    if (Math.abs( qy - sy ) < _eps) { continue; }
+    if (Math.abs( qz - sz ) < _eps) { continue; }
+
+    let fx = Math.floor(sx + _eps);
+    let fy = Math.floor(sy + _eps);
+    let fz = Math.floor(sz + _eps);
+
+    let key = fx.toString() + ":" + fy.toString() + ":" + fz.toString();
+    if (!(key in dblock)) { dblock[key] = 0; }
+    dblock[key]++;
+  }
+
+  return dblock;
+}
+
+function jeom_tri_subdivide(tri) {
+  let stri = [];
+  let v0 = [0,0,0], v1 = [0,0,0], v2 = [0,0,0];
+  let m = [0,0,0];
+  for (let idx=0; idx<tri.length; idx+=9) {
+    v0[0] = tri[idx+0];
+    v0[1] = tri[idx+1];
+    v0[2] = tri[idx+2];
+
+    v1[0] = tri[idx+3];
+    v1[1] = tri[idx+4];
+    v1[2] = tri[idx+5];
+
+    v2[0] = tri[idx+6];
+    v2[1] = tri[idx+7];
+    v2[2] = tri[idx+8];
+
+    m[0] = (v0[0] + v1[0] + v2[0])/3;
+    m[1] = (v0[1] + v1[1] + v2[1])/3;
+    m[2] = (v0[2] + v1[2] + v2[2])/3;
+
+    stri.push(v0[0], v0[1], v0[2]);
+    stri.push(v1[0], v1[1], v1[2]);
+    stri.push(m[0], m[1], m[2]);
+
+    stri.push(v1[0], v1[1], v1[2]);
+    stri.push(v2[0], v2[1], v2[2]);
+    stri.push(m[0], m[1], m[2]);
+
+    stri.push(v2[0], v2[1], v2[2]);
+    stri.push(v0[0], v0[1], v0[2]);
+    stri.push(m[0], m[1], m[2]);
+  }
+
+  return stri;
+}
+
+
+//----
+//----
+//----
+//----
+
+if ((typeof module !== "undefined") &&
+    ("exports" in module)) {
   module.exports["extrude_angle"] = jeom_extrude_angle;
   module.exports["extrude"] = jeom_extrude;
   module.exports["flatten"] = jeom_flatten;
@@ -1403,12 +2109,28 @@ if (typeof module !== "undefined") {
   module.exports["roty"] = jeom_roty;
   module.exports["rotz"] = jeom_rotz;
   module.exports["dup"] = jeom_dup;
+  module.exports["dup_tri"] = jeom_dup_tri;
+  module.exports["tri_subdivide"] = jeom_tri_subdivide;
   module.exports["csg2tri"] = jeom_csg2tri;
+
+  module.exports["obj2json"] = jeom_obj2json;
+  module.exports["json2obj"] = jeom_json2obj;
+
   module.exports["stl_print"] = jeom_stl_print;
+  module.exports["stl_stringify"] = jeom_stl_stringify;
+
   module.exports["gnuplot_print"] = jeom_gnuplot_print;
   module.exports["off_print"] = jeom_off_print;
   module.exports["obj_print"] = jeom_obj_print;
+  module.exports["obj_stringify"] = jeom_obj_stringify;
   module.exports["stitch"] = jeom_stitch;
+
+  module.exports["obj_split_loads"] = jeom_obj_split_loads;
+  module.exports["obj2flat"] = jeom_obj2flat;
+  module.exports["obj2tri"] = jeom_obj2tri;
+
+  module.exports["occupancy_block_map"] = jeom_occupancy_block;
+  module.exports["bounding_box"] = jeom_bounding_box;
 
   module.exports["precision"] = function(_e) {
     if (typeof _e === "undefined") { return JEOM_EPS; }

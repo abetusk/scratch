@@ -283,7 +283,8 @@ function obj2geom(fn_name) {
   return geom;
 }
 
-function block_occupancy(cfg, geom) {
+function block_occupancy(cfg, geom, name) {
+  name = ((typeof name === "undefined") ? "" : name);
 
   let S = [
     cfg.unit[0],
@@ -291,8 +292,8 @@ function block_occupancy(cfg, geom) {
     cfg.unit[2]
   ];
 
-  let B = [ 7,13,7 ];
-  let C = [ 3, 6, 3 ];
+  let B = [ 5,5,5 ];
+  let C = [ 2, 2, 2 ];
 
   let _opt = {
     "size": [ S[0] - _eps, S[1] - _eps, S[2] - _eps ],
@@ -301,6 +302,10 @@ function block_occupancy(cfg, geom) {
 
   let tri_pnt = op.points(geom);
   let pnt = [];
+
+  let _bbox_init = false;
+  let _bbox = [[0,0,0], [0,0,0]];
+
 
   for (let tri_idx=0; tri_idx < tri_pnt.length; tri_idx++) {
     for (let ii=0; ii < tri_pnt[tri_idx].length; ii++) {
@@ -318,10 +323,28 @@ function block_occupancy(cfg, geom) {
             tri_pnt[tri_idx][ii-1][2] + (p*(tri_pnt[tri_idx][ii][2] - tri_pnt[tri_idx][ii-1][2]))
           ];
           pnt.push(axyz);
+
+          if (!_bbox_init) {
+            _bbox[0][0] = axyz[0]; _bbox[0][1] = axyz[1]; _bbox[0][2] = axyz[2];
+            _bbox[1][0] = axyz[0]; _bbox[1][1] = axyz[1]; _bbox[1][2] = axyz[2];
+          }
+          _bbox_init=true;
+
+          if (_bbox[0][0] > axyz[0]) { _bbox[0][0] = axyz[0]; }
+          if (_bbox[1][0] < axyz[0]) { _bbox[1][0] = axyz[0]; }
+
+          if (_bbox[0][1] > axyz[1]) { _bbox[0][1] = axyz[1]; }
+          if (_bbox[1][1] < axyz[1]) { _bbox[1][1] = axyz[1]; }
+
+          if (_bbox[0][2] > axyz[2]) { _bbox[0][2] = axyz[2]; }
+          if (_bbox[1][2] < axyz[2]) { _bbox[1][2] = axyz[2]; }
+
         }
       }
     }
   }
+
+  console.log("##", name, "bbox:", JSON.stringify(_bbox));
 
   //console.log(pnt);
 
@@ -347,7 +370,7 @@ function block_occupancy(cfg, geom) {
         let ey = ((iy - C[1])*S[1]) + cfg.unit_center[1] + cfg.unit[1]/2 - _eps;
         let ez = ((iz - C[2])*S[2]) + cfg.unit_center[2] + cfg.unit[2]/2 - _eps;
 
-        //console.log(ix, iy, iz, "::", dx, dy, dz, "s:", sx,sy,sz, "e:", ex,ey,ez);
+        //if (name == "skew-large-corner_000") { console.log("##", name, ix, iy, iz, "::", dx, dy, dz, "s:", sx,sy,sz, "e:", ex,ey,ez); }
 
         found = false;
         for (let ii=0; ii<pnt.length; ii++) {
@@ -359,13 +382,13 @@ function block_occupancy(cfg, geom) {
               (pnt[ii][2] > ez)) { continue; }
           block_list.push({ "ds": [dx,dy,dz] });
 
-          //console.log("   !!!", dx, dy, dz, "(pnt:", pnt[ii][0], pnt[ii][1], pnt[ii][2], ")");
+          console.log("   !!!", name, dx, dy, dz, "(pnt:", pnt[ii][0], pnt[ii][1], pnt[ii][2], ")");
 
           found=true;
           break;
         }
 
-        if (found) { break; }
+        //if (found) { break; }
 
       }
     }
@@ -694,7 +717,7 @@ function create_rep(cfg, geom, base_name) {
         "geom": tgeom
       });
 
-      console.log("#>>>", name, rep_list[ rep_list.length-1 ].block);
+      console.log("#>>>", name, JSON.stringify(rep_list[ rep_list.length-1 ].block));
 
       rep_info.name_repr_map[name] = rep_list[rep_list.length-1].name;
 
@@ -743,6 +766,14 @@ function _main() {
     let name = cfg.source[idx];
 
     let geom = obj2geom( base_dir + "/" + name + ".obj" )[0];
+
+    if (name in cfg.source_info) {
+      if ("offset" in cfg.source_info[name]) {
+        console.log("## MOV", name, cfg.source_info[name].offset);
+        geom = op.mov(cfg.source_info[name].offset, geom);
+      }
+    }
+
     let geom_rep = create_rep(cfg, geom, name);
 
     stickem_info.basename.push( name );
@@ -841,6 +872,14 @@ function _main() {
     // information won't be an error as we'll need to deduplicate the rules at the end anyway
     // but it should cut down on the noise by only having docking information that's needed.
     // This is all the `dock_seen` stuff below.
+    //
+    // The exemplars are used to create "template" docking information, so the docking information
+    // will be used later on to find matches between other tile pairings.
+    // The src tile is take at the origin cell with the dst shifted in the appropriate idir.
+    // Right now, multi block tiles aren't supported, so it's assumed that the the dock happens
+    // from 1 manhatten distance to the source block.
+    // When doing docking pairing below, the blocks are considered, so it can test all relevant
+    // blocks for a multi-block tile.
     //
     for (let _src_list_idx=0; _src_list_idx<_src_list.length; _src_list_idx++) {
       for (let _dst_list_idx=0; _dst_list_idx<_dst_list.length; _dst_list_idx++) {
@@ -946,6 +985,7 @@ function _main() {
 
         dock_lib.push( dock_ele );
 
+        /*
         console.log("##", __idx, src_name, _src_idx, ",", dst_name, _dst_idx, "(vol:",
 
             "src+/dst+:",
@@ -968,6 +1008,7 @@ function _main() {
           _simple_point_count( dock_ele.dst_neg ),
           ")"
         );
+        */
 
         //
         //----------
@@ -1004,6 +1045,8 @@ function _main() {
   //_debug_print_dock_lib(dock_lib);
   //return;
 
+  let debug_counter = 0;
+
   for (let src_rep_idx=0; src_rep_idx<stickem_info.rep.length; src_rep_idx++) {
     for (let dst_rep_idx=0; dst_rep_idx<stickem_info.rep.length; dst_rep_idx++) {
 
@@ -1034,10 +1077,17 @@ function _main() {
             -(_dst_block.ds[2] - cfg.unit_center[2])
           ];
 
-          console.log("##_src_ds:", _src_ds, "_dst_ds:", _dst_ds);
-
           let src_geom = op.mov( _src_ds, _src.geom );
           let dst_geom = op.mov( _dst_ds, _dst.geom );
+
+          console.log("##_src_ds:", _src_ds, "_dst_ds:", _dst_ds, "(counter:", debug_counter, ")");
+          if (debug_counter==-1) {
+            _simple_print(src_geom);
+            console.log("\n\n");
+            _simple_print(dst_geom);
+            return;
+          }
+          debug_counter++;
 
           for (let dock_idx=0; dock_idx<dock_lib.length; dock_idx++) {
 
@@ -1076,7 +1126,6 @@ function _main() {
                 ((_dock_res["d-"] < _eps) && (ddv_n < _eps))) { _nmatch++; }
             */
 
-
             let pnt_dock_res = {
               "s+": _point_sim( dock_lib[dock_idx].src_pos, op.and( dock_lib[dock_idx].src_slice, src_geom ) ),
               "d+": _point_sim( dock_lib[dock_idx].dst_pos, op.and( dock_lib[dock_idx].dst_slice, op.mov( dock_lib[dock_idx].vdir, dst_geom ) ) ),
@@ -1084,8 +1133,6 @@ function _main() {
               "s-": _point_sim( dock_lib[dock_idx].src_neg, op.and( op.sub( dock_lib[dock_idx].src_slice, src_geom ) ) ),
               "d-": _point_sim( dock_lib[dock_idx].dst_neg, op.and( op.sub( dock_lib[dock_idx].dst_slice, op.mov( dock_lib[dock_idx].vdir, dst_geom ) ) ) )
             };
-
-
 
             let nmatch=0;
             if ((pnt_dock_res["s+"] > 0.95) ||
