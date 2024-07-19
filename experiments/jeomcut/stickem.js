@@ -795,7 +795,7 @@ function create_rep(cfg, geom, base_name) {
 // * go through all representative pairings to see if there's a dock match
 //   (must match both positive and negative) to construct rules
 
-function _main() {
+function _main_blech() {
 
   var cfg = JSON.parse( fs.readFileSync("./data/stickem_minigolf.conf") );
   let base_dir = "./data/minigolf.obj";
@@ -1292,6 +1292,57 @@ function _main() {
       }
 
     }
+  }
+
+
+}
+
+function _main() {
+
+  var cfg = JSON.parse( fs.readFileSync("./data/stickem_minigolf.conf") );
+  let base_dir = "./data/minigolf.obj";
+
+  let stickem_info = {
+    "basename": [],
+    "rep" : [],
+
+    "repr_idx_map": {},
+    "name_repr_map": {},
+
+    "basename_rep_idx" : {}
+  };
+
+
+  for (let idx=0; idx<cfg.source.length; idx++) {
+    let name = cfg.source[idx];
+
+    let geom = obj2geom( base_dir + "/" + name + ".obj" )[0];
+
+    if (name in cfg.source_info) {
+      if ("offset" in cfg.source_info[name]) {
+        console.log("## MOV", name, cfg.source_info[name].offset);
+        geom = op.mov(cfg.source_info[name].offset, geom);
+      }
+    }
+
+    let geom_rep = create_rep(cfg, geom, name);
+
+    stickem_info.basename.push( name );
+    stickem_info.basename_rep_idx[name] = [];
+
+    for (let ii=0; ii<geom_rep.list.length; ii++) {
+      stickem_info.basename_rep_idx[name].push( stickem_info.rep.length );
+      stickem_info.repr_idx_map[ geom_rep.list[ii].name ] = stickem_info.rep.length;
+      stickem_info.rep.push( geom_rep.list[ii] );
+    }
+
+    for (let _name in geom_rep.name_repr_map) {
+      stickem_info.name_repr_map[_name] = geom_rep.name_repr_map[_name];
+
+      console.log("##>>", _name, "->", geom_rep.name_repr_map[_name]);
+
+    }
+
   }
 
 
