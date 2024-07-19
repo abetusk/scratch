@@ -1294,6 +1294,71 @@ function _main_blech() {
     }
   }
 
+}
+
+//            2 (y+)
+//            ^
+//            |   5 (z-)
+//            |  / 
+// 1 (x-) ____. /___> 0 (x+)
+//           /|
+//          / |
+//         /  |
+//        L   |
+//    4 (z+)  3 (y-)
+
+function dock_permutation(sym, dock) {
+  let perm_dock = [ dock[0], dock[1], dock[2], dock[3], dock[4], dock[5] ];
+  if (sym == 'y') {
+    perm_dock[4] = dock[0];
+    perm_dock[1] = dock[4];
+    perm_dock[5] = dock[1];
+    perm_dock[0] = dock[0];
+  }
+
+  if (sym == 'x') {
+    perm_dock[3] = dock[5];
+    perm_dock[4] = dock[3];
+    perm_dock[2] = dock[4];
+    perm_dock[5] = dock[2];
+  }
+
+  if (sym == 'z') {
+    perm_dock[0] = dock[2];
+    perm_dock[3] = dock[0];
+    perm_dock[1] = dock[3];
+    perm_dock[2] = dock[1];
+  }
+
+  return perm_dock;
+}
+
+function createRepresentative(cfg, geom, info) {
+
+  let name = info.name;
+  let dock_block_list = info.dock;
+  let d_cell = (("d_cell" in info) ? info.d_cell : [[0,0,0]]);
+
+  let sym = [];
+  let _syms_ = cfg.symmetry.split(",");
+  for (let ii=0; ii<_syms_.length; ii++) {
+    sym.push( _syms_[ii].split("") );
+  }
+
+  let irot=[0,0,0];
+
+  let cur_dock = info.dock[0];
+
+  do {
+
+    console.log(cur_dock, irot);
+
+    cur_dock = dock_permutation(cfg.symmetry, cur_dock);
+    _incr_rot_idx(irot, cfg.symmetry);
+  } while ((irot[0] != 0) ||
+           (irot[1] != 0) ||
+           (irot[2] != 0));
+
 
 }
 
@@ -1317,6 +1382,11 @@ function _main() {
     let name = cfg.source[idx].name;
 
     let geom = obj2geom( base_dir + "/" + name + ".obj" )[0];
+
+    createRepresentative(cfg, geom, cfg.source[idx]);
+    console.log("\n\n");
+
+
 
   }
 
