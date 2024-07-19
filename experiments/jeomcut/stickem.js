@@ -1313,7 +1313,7 @@ function dock_permutation(sym, dock) {
     perm_dock[4] = dock[0];
     perm_dock[1] = dock[4];
     perm_dock[5] = dock[1];
-    perm_dock[0] = dock[0];
+    perm_dock[0] = dock[5];
   }
 
   if (sym == 'x') {
@@ -1333,11 +1333,26 @@ function dock_permutation(sym, dock) {
   return perm_dock;
 }
 
+function blockRotate(cell, rot) {
+
+  let rcell = [0,0,0];
+
+  Mz = m4.zRotation(rot[2]);
+  My = m4.yRotation(rot[1]);
+  Mx = m4.xRotation(rot[0]);
+
+  rcell = m4.mulp( Mz, m4.mulp( My, m4.mulp( Mx, cell ) ) );
+
+  return rcell;
+}
+
 function createRepresentative(cfg, geom, info) {
 
   let name = info.name;
   let dock_block_list = info.dock;
   let d_cell = (("d_cell" in info) ? info.d_cell : [[0,0,0]]);
+
+  let rot_lib = {};
 
   let sym = [];
   let _syms_ = cfg.symmetry.split(",");
@@ -1349,9 +1364,45 @@ function createRepresentative(cfg, geom, info) {
 
   let cur_dock = info.dock[0];
 
+  let rot_sfx = '';
+
+  let rep_list = [];
+
   do {
 
-    console.log(cur_dock, irot);
+    let dock_key = cur_dock.join("");
+    if (!(dock_key in rot_lib)) {
+
+      rot_sfx = irot.join("");
+
+      let tile_name = name + "_" + rot_sfx;
+      let tile_irot = [ irot[0], irot[1], irot[2] ];
+      let tile_rad_rot = [ Math.PI*irot[0]/2, Math.PI*irot[1]/2, Math.PI*irot[2]/2 ];
+
+      let tile_geom = op.rotZ( tile_rad_rot[2],
+                      op.rotY( tile_rad_rot[1],
+                      op.rotX( tile_rad_rot[0], geom ) ) );
+
+      let tile_block = [[0,0,0]];
+
+      for (let cidx=1; cidx<d_cell.length; cidx++) {
+        tile_block.push( blockRotate( d_cell[cidx], tile_rad_rot ) );
+      }
+
+
+
+      console.log("  found", cur_dock, rot_sfx, dock_key, irot);
+
+      rep_list.push({
+        "name": tile_name,
+        "irot": tile_irot,
+        "rot": tile_rad_rot,
+        "block" : tile_block,
+        "geom": tile_geom
+      });
+
+      rot_lib[dock_key] = true;
+    }
 
     cur_dock = dock_permutation(cfg.symmetry, cur_dock);
     _incr_rot_idx(irot, cfg.symmetry);
@@ -1360,6 +1411,7 @@ function createRepresentative(cfg, geom, info) {
            (irot[2] != 0));
 
 
+  return rep_list;
 }
 
 function _main() {
@@ -1383,8 +1435,13 @@ function _main() {
 
     let geom = obj2geom( base_dir + "/" + name + ".obj" )[0];
 
-    createRepresentative(cfg, geom, cfg.source[idx]);
+    console.log(name);
+    let rl = createRepresentative(cfg, geom, cfg.source[idx]);
     console.log("\n\n");
+
+    for (let ii=0; ii<rl.length; ii++) {
+      console.log(">>", rl[ii].name, JSON.stringify(rl[ii].block));
+    }
 
 
 
