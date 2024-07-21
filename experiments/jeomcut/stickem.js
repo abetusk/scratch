@@ -1333,6 +1333,19 @@ function dock_permutation(sym, dock) {
   return perm_dock;
 }
 
+function _mprint(m) {
+  let count = 0;
+  for (let ii=0; ii<4; ii++) {
+
+    let t = [];
+    for (let jj=0; jj<4; jj++) {
+      t.push(m[count]);
+      count++;
+    }
+    console.log("  " + t.join(" "));
+  }
+}
+
 function blockRotate(cell, rot) {
 
   let rcell = [0,0,0];
@@ -1341,9 +1354,28 @@ function blockRotate(cell, rot) {
   My = m4.yRotation(rot[1]);
   Mx = m4.xRotation(rot[0]);
 
+  var _v = Array.from(m4.mulp( My, cell ));
+
+  /*
+  console.log("\n");
+  console.log("  ::", rot);
+  console.log("  ymul:", JSON.stringify(_v), m4.mulp( My, cell ));
+  console.log("  My:", rot[1]);
+  _mprint(My);
+  */
+  //console.log("  rcell:", rcell, "cell:", cell);
+
   rcell = m4.mulp( Mz, m4.mulp( My, m4.mulp( Mx, cell ) ) );
 
-  return rcell;
+  //console.log("    cell:", cell, "rcell:", rcell);
+
+  for (let ii=0; ii<rcell.length; ii++) {
+    rcell[ii] = Math.round(rcell[ii]);
+  }
+
+  //console.log("    ---> rcell:", rcell);
+
+  return Array.from(rcell);
 }
 
 function createRepresentative(cfg, geom, info) {
@@ -1388,8 +1420,6 @@ function createRepresentative(cfg, geom, info) {
       for (let cidx=1; cidx<d_cell.length; cidx++) {
         tile_block.push( blockRotate( d_cell[cidx], tile_rad_rot ) );
       }
-
-
 
       console.log("  found", cur_dock, rot_sfx, dock_key, irot);
 
