@@ -1488,11 +1488,11 @@ function _main() {
 
   let tile_name = [];
   tile_name.push("._000_0");
-  tile_name.push("__000_0");
+  tile_name.push("#_000_0");
 
   let tile_name_to_id = {};
   tile_name_to_id['._000_0'] = 0;
-  tile_name_to_id['__000_0'] = 1;
+  tile_name_to_id['#_000_0'] = 1;
 
   // assign ids to representatives
   //
@@ -1567,10 +1567,32 @@ function _main() {
           rule_list.push( [0, _repr.id, rdir, 1 ] );
           continue;
         }
+
         if (tok == '_') {
+          rule_list.push( [_repr.id,  0, idir, 1 ] );
+          rule_list.push( [ 0, _repr.id, rdir, 1 ] );
+
+          rule_list.push( [_repr.id,  1, idir, 1 ] );
+          rule_list.push( [ 1, _repr.id, rdir, 1 ] );
+
+          continue;
+        }
+
+        if (tok == '#') {
           rule_list.push( [_repr.id,  1, idir, 1 ] );
           rule_list.push( [ 1, _repr.id, rdir, 1 ] );
           continue;
+        }
+
+        // let this drop through so we can catch the other
+        // ':' docks
+        //
+        if (tok == ':') {
+          rule_list.push( [_repr.id,  0, idir, 1 ] );
+          rule_list.push( [ 0, _repr.id, rdir, 1 ] );
+
+          rule_list.push( [_repr.id,  1, idir, 1 ] );
+          rule_list.push( [ 1, _repr.id, rdir, 1 ] );
         }
 
         let tok_r = tok.match( '^\\$(\\d+)' );
