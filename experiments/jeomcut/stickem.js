@@ -1392,54 +1392,60 @@ function createRepresentative(cfg, geom, info) {
     sym.push( _syms_[ii].split("") );
   }
 
-  let irot=[0,0,0];
-
-  let cur_dock = info.dock[0];
-
-  let rot_sfx = '';
-
   let rep_list = [];
 
-  do {
+  for (let dock_idx=0; dock_idx<info.dock.length; dock_idx++) {
 
-    let dock_key = cur_dock.join("");
-    if (!(dock_key in rot_lib)) {
+    let cur_dock = info.dock[dock_idx];
 
-      rot_sfx = irot.join("");
+    let irot=[0,0,0];
+    let rot_sfx = '';
 
-      let tile_name = name + "_" + rot_sfx;
-      let tile_irot = [ irot[0], irot[1], irot[2] ];
-      let tile_rad_rot = [ Math.PI*irot[0]/2, Math.PI*irot[1]/2, Math.PI*irot[2]/2 ];
+    console.log(info.name, "[", dock_idx, "]");
 
-      let tile_geom = op.rotZ( tile_rad_rot[2],
-                      op.rotY( tile_rad_rot[1],
-                      op.rotX( tile_rad_rot[0], geom ) ) );
+    do {
 
-      let tile_block = [[0,0,0]];
+      let dock_key = cur_dock.join("");
+      if (!(dock_key in rot_lib)) {
 
-      for (let cidx=1; cidx<d_cell.length; cidx++) {
-        tile_block.push( blockRotate( d_cell[cidx], tile_rad_rot ) );
+        rot_sfx = "_" + irot.join("") + "_" + dock_idx.toString();
+
+        let tile_name = name + rot_sfx;
+        let tile_irot = [ irot[0], irot[1], irot[2] ];
+        let tile_rad_rot = [ Math.PI*irot[0]/2, Math.PI*irot[1]/2, Math.PI*irot[2]/2 ];
+
+        let tile_geom = op.rotZ( tile_rad_rot[2],
+                        op.rotY( tile_rad_rot[1],
+                        op.rotX( tile_rad_rot[0], geom ) ) );
+
+        let tile_block = [[0,0,0]];
+
+        for (let cidx=1; cidx<d_cell.length; cidx++) {
+          tile_block.push( blockRotate( d_cell[cidx], tile_rad_rot ) );
+        }
+
+        //DEBUG
+        console.log("  found", cur_dock, rot_sfx, dock_key, irot);
+
+        rep_list.push({
+          "name": tile_name,
+          "irot": tile_irot,
+          "rot": tile_rad_rot,
+          "block" : tile_block,
+          "dock": cur_dock,
+          "geom": tile_geom
+        });
+
+        rot_lib[dock_key] = true;
       }
 
-      console.log("  found", cur_dock, rot_sfx, dock_key, irot);
+      cur_dock = dock_permutation(cfg.symmetry, cur_dock);
+      _incr_rot_idx(irot, cfg.symmetry);
+    } while ((irot[0] != 0) ||
+             (irot[1] != 0) ||
+             (irot[2] != 0));
 
-      rep_list.push({
-        "name": tile_name,
-        "irot": tile_irot,
-        "rot": tile_rad_rot,
-        "block" : tile_block,
-        "geom": tile_geom
-      });
-
-      rot_lib[dock_key] = true;
-    }
-
-    cur_dock = dock_permutation(cfg.symmetry, cur_dock);
-    _incr_rot_idx(irot, cfg.symmetry);
-  } while ((irot[0] != 0) ||
-           (irot[1] != 0) ||
-           (irot[2] != 0));
-
+  }
 
   return rep_list;
 }
@@ -1451,7 +1457,7 @@ function _main() {
 
   let stickem_info = {
     "basename": [],
-    "rep" : [],
+    "repr" : [],
 
     "repr_idx_map": {},
     "name_repr_map": {},
@@ -1460,6 +1466,9 @@ function _main() {
   };
 
 
+  // create representative list, deduplicating identical docking patterns
+  // depending on rotation from symmetry
+  //
   for (let idx=0; idx<cfg.source.length; idx++) {
     let name = cfg.source[idx].name;
 
@@ -1467,15 +1476,111 @@ function _main() {
 
     console.log(name);
     let rl = createRepresentative(cfg, geom, cfg.source[idx]);
-    console.log("\n\n");
 
     for (let ii=0; ii<rl.length; ii++) {
       console.log(">>", rl[ii].name, JSON.stringify(rl[ii].block));
+
+      stickem_info.repr.push(rl[ii]);
     }
 
+    console.log("\n\n");
+  }
 
+  let tile_name = [];
+
+  // assign ids to representatives
+  //
+  let cur_id = 2;
+
+  for (let ii=0; ii<cur_id; ii++) { tile_name.push("."); }
+
+  let _rep_list = stickem_info.repr;
+  for (let ii=0; ii<_rep_list.length; ii++) {
+
+    _rep_list[ii]["id"] = cur_id;
+    cur_id++;
+
+    tile_name.push( _rep_list[ii].name );
+
+    console.log( "##", _rep_list[ii].name, "id:", _rep_list[ii].id, JSON.stringify(_rep_list[ii].dock) );
+  }
+
+  // create rules
+  //
+  let rule_list = [];
+  let rule_map = {};
+  let dock_tok_to_id = {};
+
+  let docktok_to_id = [ {}, {}, {}, {}, {}, {} ];
+
+  // build structure for easy lookup
+  //
+  for (let repr_idx=0; repr_idx<_rep_list.length; repr_idx++) {
+    let _repr = _rep_list[repr_idx];
+    let _dock = _repr.dock;
+
+    for (let idir=0; idir<_dock.length; idir++) {
+      let toks = _dock[idir].split(" ");
+      for (let tok_idx=0; tok_idx<toks.length; tok_idx++) {
+        let tok = toks[tok_idx];
+
+        if (!(tok in dock_tok_to_id)) { dock_tok_to_id[tok] = [ [], [], [], [], [], [] ]; }
+        dock_tok_to_id[tok][idir].push( {"id": _repr.id, "idir": idir } );
+
+        //docktok_to_id[idir][tok][_repr.id] = 1;
+      }
+    }
+  }
+
+  let opp_idir = [ 1,0, 3,2, 5,4 ];
+
+  // now use it to build rule list
+  //
+  for (let repr_idx=0; repr_idx<_rep_list.length; repr_idx++) {
+
+    let _repr = _rep_list[repr_idx];
+    let _dock = _repr.dock;
+
+    let src_tile_id = _repr.id;
+
+    for (let idir=0; idir<_dock.length; idir++) {
+      let toks = _dock[idir].split(" ");
+
+      let rdir = opp_idir[idir];
+
+      for (let tok_idx=0; tok_idx<toks.length; tok_idx++) {
+        let tok = toks[tok_idx];
+
+        let nei_list = dock_tok_to_id[tok][rdir];
+        for (let nei_idx=0; nei_idx < nei_list.length; nei_idx++) {
+          rule_list.push( [src_tile_id, nei_list[nei_idx].id, idir, 1] );
+        }
+
+      }
+    }
 
   }
+
+  // CEHCKPOINT!!!
+  //  '.' docks to everything, need special consideration to only dock to
+  //  empty tile.
+  //
+
+  let idir_name = [ "x+", "x-", "y+", "y-", "z+", "z-" ];
+
+  console.log("#rule_list[", rule_list.length, "]");
+  for (let ii=0; ii<rule_list.length; ii++) {
+
+    let src_tile_id = rule_list[ii][0];
+    let dst_tile_id = rule_list[ii][1];
+    let idir = rule_list[ii][2];
+
+    console.log(JSON.stringify(rule_list[ii]), "#", tile_name[src_tile_id], "--(", idir, idir_name[idir], ")-->", tile_name[dst_tile_id]);
+
+  }
+
+  //console.log( JSON.stringify(dock_tok_to_id, undefined, 2));
+
 
 
 }
