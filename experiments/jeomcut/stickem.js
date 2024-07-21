@@ -1487,20 +1487,27 @@ function _main() {
   }
 
   let tile_name = [];
+  tile_name.push("._000_0");
+  tile_name.push("__000_0");
+
+  let tile_name_to_id = {};
+  tile_name_to_id['._000_0'] = 0;
+  tile_name_to_id['__000_0'] = 1;
 
   // assign ids to representatives
   //
   let cur_id = 2;
 
-  for (let ii=0; ii<cur_id; ii++) { tile_name.push("."); }
+  //for (let ii=0; ii<cur_id; ii++) { tile_name.push("."); }
 
   let _rep_list = stickem_info.repr;
   for (let ii=0; ii<_rep_list.length; ii++) {
 
+    tile_name.push( _rep_list[ii].name );
+    tile_name_to_id[ _rep_list[ii].name ] = cur_id;
     _rep_list[ii]["id"] = cur_id;
     cur_id++;
 
-    tile_name.push( _rep_list[ii].name );
 
     console.log( "##", _rep_list[ii].name, "id:", _rep_list[ii].id, JSON.stringify(_rep_list[ii].dock) );
   }
@@ -1510,6 +1517,7 @@ function _main() {
   let rule_list = [];
   let rule_map = {};
   let dock_tok_to_id = {};
+
 
   let opp_idir = [ 1,0, 3,2, 5,4 ];
 
@@ -1559,6 +1567,26 @@ function _main() {
           rule_list.push( [0, _repr.id, rdir, 1 ] );
           continue;
         }
+        if (tok == '_') {
+          rule_list.push( [_repr.id,  1, idir, 1 ] );
+          rule_list.push( [ 1, _repr.id, rdir, 1 ] );
+          continue;
+        }
+
+        let tok_r = tok.match( '^\\$(\\d+)' );
+        if (tok_r) {
+
+          let nei_tile_name = _repr.name.split("_").slice(0,-1).join("_") + "_" + tok_r[1];
+
+          let nei_tile_id = tile_name_to_id[ nei_tile_name ];
+          rule_list.push( [src_tile_id, nei_tile_id, idir, 1] );
+          rule_list.push( [nei_tile_id, src_tile_id, rdir, 1] );
+
+          //console.log(">>", tok_r[1], "(", _repr.name, "=>", nei_tile_name, ")");
+
+          continue;
+        }
+
 
 
         let nei_list = dock_tok_to_id[tok][rdir];
