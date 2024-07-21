@@ -1511,6 +1511,8 @@ function _main() {
   let rule_map = {};
   let dock_tok_to_id = {};
 
+  let opp_idir = [ 1,0, 3,2, 5,4 ];
+
   let docktok_to_id = [ {}, {}, {}, {}, {}, {} ];
 
   // build structure for easy lookup
@@ -1524,15 +1526,16 @@ function _main() {
       for (let tok_idx=0; tok_idx<toks.length; tok_idx++) {
         let tok = toks[tok_idx];
 
+        if (tok == '.') { continue; }
+
         if (!(tok in dock_tok_to_id)) { dock_tok_to_id[tok] = [ [], [], [], [], [], [] ]; }
+
         dock_tok_to_id[tok][idir].push( {"id": _repr.id, "idir": idir } );
 
         //docktok_to_id[idir][tok][_repr.id] = 1;
       }
     }
   }
-
-  let opp_idir = [ 1,0, 3,2, 5,4 ];
 
   // now use it to build rule list
   //
@@ -1551,6 +1554,13 @@ function _main() {
       for (let tok_idx=0; tok_idx<toks.length; tok_idx++) {
         let tok = toks[tok_idx];
 
+        if (tok == '.') {
+          rule_list.push( [_repr.id, 0, idir, 1 ] );
+          rule_list.push( [0, _repr.id, rdir, 1 ] );
+          continue;
+        }
+
+
         let nei_list = dock_tok_to_id[tok][rdir];
         for (let nei_idx=0; nei_idx < nei_list.length; nei_idx++) {
           rule_list.push( [src_tile_id, nei_list[nei_idx].id, idir, 1] );
@@ -1564,6 +1574,7 @@ function _main() {
   // CEHCKPOINT!!!
   //  '.' docks to everything, need special consideration to only dock to
   //  empty tile.
+  //  '_' might need special consideration as well
   //
 
   let idir_name = [ "x+", "x-", "y+", "y-", "z+", "z-" ];
