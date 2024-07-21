@@ -344,7 +344,7 @@ function block_occupancy(cfg, geom, name) {
     }
   }
 
-  console.log("##", name, "bbox:", JSON.stringify(_bbox));
+  //console.log("##", name, "bbox:", JSON.stringify(_bbox));
 
   //console.log(pnt);
 
@@ -1401,8 +1401,6 @@ function createRepresentative(cfg, geom, info) {
     let irot=[0,0,0];
     let rot_sfx = '';
 
-    console.log(info.name, "[", dock_idx, "]");
-
     do {
 
       let dock_key = cur_dock.join("");
@@ -1423,9 +1421,6 @@ function createRepresentative(cfg, geom, info) {
         for (let cidx=1; cidx<d_cell.length; cidx++) {
           tile_block.push( blockRotate( d_cell[cidx], tile_rad_rot ) );
         }
-
-        //DEBUG
-        console.log("  found", cur_dock, rot_sfx, dock_key, irot);
 
         rep_list.push({
           "name": tile_name,
@@ -1474,16 +1469,16 @@ function _main() {
 
     let geom = obj2geom( base_dir + "/" + name + ".obj" )[0];
 
-    console.log(name);
+    //console.log(name);
     let rl = createRepresentative(cfg, geom, cfg.source[idx]);
 
     for (let ii=0; ii<rl.length; ii++) {
-      console.log(">>", rl[ii].name, JSON.stringify(rl[ii].block));
+      //console.log(">>", rl[ii].name, JSON.stringify(rl[ii].block));
 
       stickem_info.repr.push(rl[ii]);
     }
 
-    console.log("\n\n");
+    //console.log("\n\n");
   }
 
   let tile_name = [];
@@ -1509,7 +1504,7 @@ function _main() {
     cur_id++;
 
 
-    console.log( "##", _rep_list[ii].name, "id:", _rep_list[ii].id, JSON.stringify(_rep_list[ii].dock) );
+    //console.log( "##", _rep_list[ii].name, "id:", _rep_list[ii].id, JSON.stringify(_rep_list[ii].dock) );
   }
 
   // create rules
@@ -1562,6 +1557,8 @@ function _main() {
       for (let tok_idx=0; tok_idx<toks.length; tok_idx++) {
         let tok = toks[tok_idx];
 
+        // special cases for '.', '_', '#' and ':'
+        //
         if (tok == '.') {
           rule_list.push( [_repr.id, 0, idir, 1 ] );
           rule_list.push( [0, _repr.id, rdir, 1 ] );
@@ -1595,6 +1592,9 @@ function _main() {
           rule_list.push( [ 1, _repr.id, rdir, 1 ] );
         }
 
+        // If we've matched an internal link, add the rule and
+        // move on.
+        //
         let tok_r = tok.match( '^\\$(\\d+)' );
         if (tok_r) {
 
@@ -1604,13 +1604,13 @@ function _main() {
           rule_list.push( [src_tile_id, nei_tile_id, idir, 1] );
           rule_list.push( [nei_tile_id, src_tile_id, rdir, 1] );
 
-          //console.log(">>", tok_r[1], "(", _repr.name, "=>", nei_tile_name, ")");
-
           continue;
         }
 
 
-
+        // Otherwise pair up all other tiles with the same docking token
+        // in the relevant direction.
+        //
         let nei_list = dock_tok_to_id[tok][rdir];
         for (let nei_idx=0; nei_idx < nei_list.length; nei_idx++) {
           rule_list.push( [src_tile_id, nei_list[nei_idx].id, idir, 1] );
@@ -1629,18 +1629,37 @@ function _main() {
 
   let idir_name = [ "x+", "x-", "y+", "y-", "z+", "z-" ];
 
-  console.log("#rule_list[", rule_list.length, "]");
-  for (let ii=0; ii<rule_list.length; ii++) {
+  let poms_data = {
+    "rule": [],
+    "name": [],
+    "weight": [],
+    "objMap": [],
+    "constraint": [],
+    "boundaryCondition":{
+      "x+":{"type":"tile","value":0},
+      "x-":{"type":"tile","value":0},
+      "y+":{"type":"tile","value":0},
+      "y-":{"type":"tile","value":0},
+      "z+":{"type":"tile","value":0},
+      "z-":{"type":"tile","value":0}
+    },
+    "size": [8,8,8],
+    "quiltSize": [8,8,8]
+  };
 
-    let src_tile_id = rule_list[ii][0];
-    let dst_tile_id = rule_list[ii][1];
-    let idir = rule_list[ii][2];
 
-    console.log(JSON.stringify(rule_list[ii]), "#", tile_name[src_tile_id], "--(", idir, idir_name[idir], ")-->", tile_name[dst_tile_id]);
+  let out_base_dir = base_dir;
 
+  poms_data.rule = rule_list;
+  poms_data.name = tile_name;
+  for (let ii=0; ii<poms_data.name.length; ii++) {
+    poms_data.weight.push(1);
+  }
+  for (let ii=0; ii<poms_data.name.length; ii++) {
+    poms_data.objMap.push( out_base_dir + "/" + poms_data.name[ii] + ".obj" );
   }
 
-  //console.log( JSON.stringify(dock_tok_to_id, undefined, 2));
+  console.log(JSON.stringify(poms_data, undefined, 2));
 
 
 
