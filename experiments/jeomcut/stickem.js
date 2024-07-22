@@ -7,6 +7,7 @@ var objectDeserializer = require('@jscad/obj-deserializer')
 var stlSerializer = require('@jscad/stl-serializer')
 var array_utils = require('@jscad/array-utils')
 var m4 = require("./m4.js");
+var jeom = require("./jeom.js");
 
 var op = {
 
@@ -66,6 +67,56 @@ var op = {
   "vol" : jscad.measurements.measureVolume
 
 };
+
+function _obj_simple_transform(raw_s, mov, axis, theta) {
+  mov = ((typeof mov === "undefined") ? [0,0,0] : mov);
+  axis = ((typeof axis === "undefined") ? "" : axis);
+  theta = ((typeof theta === "undefined") ? 0 : theta);
+
+  let json_obj = jeom.obj2json( raw_s );
+
+  let tv = [ mov[0], mov[1], mov[2] ];
+
+  for (let ii=0; ii<json_obj.length; ii++) {
+    let ele = json_obj[ii];
+    if ((ele.type != "v") && (ele.type != "vn")) { continue; }
+
+    let _tri = [ 0, 0, 0 ];
+    if (ele.type == "v") {
+      _tri[0] = ele.v[0];
+      _tri[1] = ele.v[1];
+      if (ele.v.length > 2) { _tri[2] = ele.v[2]; }
+    }
+    else if (ele.type == "vn") {
+      _tri[0] = ele.vn[0];
+      _tri[1] = ele.vn[1];
+      if (ele.vn.length > 2) { _tri[2] = ele.vn[2]; }
+    }
+
+    if (axis.length > 0) {
+      if (axis == 'x') { jeom.rotx(_tri, theta); }
+      if (axis == 'y') { jeom.roty(_tri, theta); }
+      if (axis == 'z') { jeom.rotz(_tri, theta); }
+    }
+
+    jeom.mov(_tri, tv);
+
+    if (ele.type == "v") {
+      ele.v[0] = _tri[0];
+      ele.v[1] = _tri[1];
+      if (ele.v.length > 2) { ele.v[2] = _tri[2]; }
+    }
+    else if (ele.type == "vn") {
+      ele.vn[0] = _tri[0];
+      ele.vn[1] = _tri[1];
+      if (ele.vn.length > 2) { ele.vn[2] = _tri[2]; }
+    }
+
+  }
+
+  return jeom.json2obj(json_obj);
+}
+
 
 function _simple_point_count(geom) {
   let pnts = op.points(geom);
@@ -1513,6 +1564,29 @@ function _main() {
   let rule_map = {};
   let dock_tok_to_id = {};
 
+  // rules for empty-empty, empty-ground and ground-ground connections
+  let _empty_tile = 0,
+      _ground_tile = 1;
+  for (let idir=0; idir<6; idir++) { rule_list.push( [_empty_tile,_empty_tile, idir, 1] ); }
+  rule_list.push([_empty_tile, _ground_tile, 0, 1]);
+  rule_list.push([_empty_tile, _ground_tile, 1, 1]);
+  rule_list.push([_empty_tile, _ground_tile, 4, 1]);
+  rule_list.push([_empty_tile, _ground_tile, 5, 1]);
+  rule_list.push([_empty_tile, _ground_tile, 3, 1]);
+
+  rule_list.push([_ground_tile, _empty_tile, 0, 1]);
+  rule_list.push([_ground_tile, _empty_tile, 1, 1]);
+  rule_list.push([_ground_tile, _empty_tile, 4, 1]);
+  rule_list.push([_ground_tile, _empty_tile, 5, 1]);
+  rule_list.push([_ground_tile, _empty_tile, 2, 1]);
+
+  rule_list.push([_ground_tile, _ground_tile, 0, 1]);
+  rule_list.push([_ground_tile, _ground_tile, 1, 1]);
+  rule_list.push([_ground_tile, _ground_tile, 2, 1]);
+  rule_list.push([_ground_tile, _ground_tile, 3, 1]);
+  rule_list.push([_ground_tile, _ground_tile, 4, 1]);
+  rule_list.push([_ground_tile, _ground_tile, 5, 1]);
+
 
   let opp_idir = [ 1,0, 3,2, 5,4 ];
 
@@ -1634,7 +1708,10 @@ function _main() {
     "name": [],
     "weight": [],
     "objMap": [],
-    "constraint": [],
+    "constraint": [
+      {"type":"quiltForce", "range": {"tile":[1,2], "x":[], "y":[0,1], "z":[], "note": "force ground tile on bottom xz plane, y+ up"} },
+      {"type":"quiltPin", "range": {"tile":[1,2], "x":[], "y":[0,1], "z":[], "note": "pin previously forced operation"} }
+    ],
     "boundaryCondition":{
       "x+":{"type":"tile","value":0},
       "x-":{"type":"tile","value":0},
@@ -1648,7 +1725,7 @@ function _main() {
   };
 
 
-  let out_base_dir = base_dir;
+  let out_base_dir = ".minigolf_tile";
 
   poms_data.rule = rule_list;
   poms_data.name = tile_name;
@@ -1657,6 +1734,47 @@ function _main() {
   }
   for (let ii=0; ii<poms_data.name.length; ii++) {
     poms_data.objMap.push( out_base_dir + "/" + poms_data.name[ii] + ".obj" );
+
+    console.log(poms_data.name[ii]);
+
+    let tok = poms_data.name[ii].split("_");
+    let subtile_id = tok.slice(-1);
+    let rotcode = tok.slice(-2).slice(0,1).join("");
+
+    let source_name = tok.slice(0, tok.length-2).join("_") ;
+
+    console.log(">>>", source_name, rotcode);
+
+    if ((source_name == '.') ||
+        (source_name == '#')) { continue; }
+
+    let obj_text = fs.readFileSync(base_dir + "/" + source_name + ".obj");
+
+    let axis = '';
+    let theta = 0;
+    let _rc = rotcode.split("");
+    if (_rc[2] != '0') {
+      axis = 'z';
+      theta = parseFloat(_rc[2])*Math.PI/2.0;
+      obj_text = _obj_simple_transform(obj_text, [0,0,0], axis, theta);
+    }
+
+    if (_rc[1] != '0') {
+      axis = 'y';
+      theta = parseFloat(_rc[1])*Math.PI/2.0;
+
+      obj_text = _obj_simple_transform(obj_text, [0,0,0], axis, theta);
+    }
+
+    if (_rc[0] != '0') {
+      axis = 'x';
+      theta = parseFloat(_rc[0])*Math.PI/2.0;
+      obj_text = _obj_simple_transform(obj_text, [0,0,0], axis, theta);
+    }
+
+    fs.writeFileSync( out_base_dir + "/" + poms_data.name[ii] + ".obj", obj_text );
+    fs.writeFileSync( out_base_dir + "/" + poms_data.name[ii] + ".mtl", fs.readFileSync( base_dir + "/" + source_name + ".mtl" ));
+
   }
 
   console.log(JSON.stringify(poms_data, undefined, 2));
