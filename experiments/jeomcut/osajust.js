@@ -17,6 +17,10 @@ var OSAJUST_VERSION = "0.2.0";
 
 var parser, opt;
 
+_play();
+process.exit();
+
+
 function main_nop() {
 }
 
@@ -335,15 +339,18 @@ function main_json() {
   console.log( JSON.stringify(json_obj, undefined, 2) );
 }
 
-function main_obj_simple_transform() {
-  let raw_s = fs.readFileSync( g_ctx.opt.fn ).toString();
+function _obj_simple_transform(raw_s, mov, theta, axis) {
+  //let raw_s = fs.readFileSync( g_ctx.opt.fn ).toString();
   let json_obj = jeom.obj2json( raw_s );
 
-  let theta = g_ctx.opt.rot;
+  //let theta = g_ctx.opt.rot;
   let tv = [
-    g_ctx.opt.mov[0],
-    g_ctx.opt.mov[1],
-    g_ctx.opt.mov[2]
+    //g_ctx.opt.mov[0],
+    //g_ctx.opt.mov[1],
+    //g_ctx.opt.mov[2]
+    mov[0],
+    mov[1],
+    mov[2]
   ];
 
   for (let ii=0; ii<json_obj.length; ii++) {
@@ -362,13 +369,14 @@ function main_obj_simple_transform() {
       if (ele.vn.length > 2) { _tri[2] = ele.vn[2]; }
     }
 
-    //console.log(g_ctx.opt.axis, theta, tv);
-    //console.log("bef:", _tri);
-
-    if (g_ctx.opt.axis.length > 0) {
-      if (g_ctx.opt.axis == 'x') { jeom.rotx(_tri, theta); }
-      if (g_ctx.opt.axis == 'y') { jeom.roty(_tri, theta); }
-      if (g_ctx.opt.axis == 'z') { jeom.rotz(_tri, theta); }
+    //if (g_ctx.opt.axis.length > 0) {
+    if (axis.length > 0) {
+      //if (g_ctx.opt.axis == 'x') { jeom.rotx(_tri, theta); }
+      //if (g_ctx.opt.axis == 'y') { jeom.roty(_tri, theta); }
+      //if (g_ctx.opt.axis == 'z') { jeom.rotz(_tri, theta); }
+      if (axis == 'x') { jeom.rotx(_tri, theta); }
+      if (axis == 'y') { jeom.roty(_tri, theta); }
+      if (axis == 'z') { jeom.rotz(_tri, theta); }
     }
 
     jeom.mov(_tri, tv);
@@ -384,13 +392,97 @@ function main_obj_simple_transform() {
       if (ele.vn.length > 2) { ele.vn[2] = _tri[2]; }
     }
 
-    //console.log("aft:", _tri);
-    //console.log("");
+  }
 
+  return json_obj;
+}
+
+function main_obj_simple_transform() {
+  let raw_s = fs.readFileSync( g_ctx.opt.fn ).toString();
+  let json_obj = _obj_simple_transform(raw_s,
+                                       g_ctx.opt.mov,
+                                       g_ctx.opt.rot,
+                                       g_ctx.opt.axis);
+  console.log( jeom.json2obj( json_obj ) );
+}
+
+function _obj_merge( _json_objs ) {
+
+  let _info = [
+    { "v_n":0, "vn_n":0, "vt_n":0, "f_n":0 },
+    { "v_n":0, "vn_n":0, "vt_n":0, "f_n":0 }
+  ];
+
+  let info = [];
+
+  for (let idx=0; idx<_json_objs.length; idx++) {
+    info.push({
+      "v_n":0, "vn_n":0, "vt_n":0, "f_n": 0,
+      "v_s":0, "vn_s":0, "vt_s":0, "f_s": 0
+    });
+
+    for (let ii=0; ii<_json_objs[idx].length; ii++) {
+      let ele = _json_objs[idx][ii];
+      if      (ele.type == 'v')  { info[idx].v_n++; }
+      else if (ele.type == 'vn') { info[idx].vn_n++; }
+      else if (ele.type == 'vt') { info[idx].vt_n++; }
+      else if (ele.type == 'f')  { info[idx].f_n++; }
+    }
+
+    if (idx>0) {
+      info[idx].v_s = info[idx-1].v_n + info[idx-1].v_s;
+      info[idx].vn_s = info[idx-1].vn_n + info[idx-1].vn_s;
+      info[idx].vt_s = info[idx-1].vt_n + info[idx-1].vt_s;
+      info[idx].f_s = info[idx-1].f_n + info[idx-1].f_s;
+    }
 
   }
 
-  console.log( jeom.json2obj( json_obj ) );
+  let res_json_obj = [];
+
+  // SHALLOW COPY!!! BEWARE!!!
+  //
+  for (let idx=0; idx<_json_objs.length; idx++) {
+
+    for (let jj=0; jj<_json_objs[idx].length; jj++) {
+      let ele = _json_objs[idx][jj]
+
+      if (ele.type == 'f') {
+
+        for (let v_idx=0; v_idx<ele.f.length; v_idx++) {
+          ele.f[v_idx][0] += info[idx].v_s;
+          ele.f[v_idx][1] += info[idx].vn_s;
+          ele.f[v_idx][2] += info[idx].vt_s;
+        }
+        res_json_obj.push(ele);
+
+        continue;
+      }
+
+      res_json_obj.push(ele);
+    }
+
+  }
+
+
+  console.log( jeom.json2obj(res_json_obj) );
+}
+
+function _obj_dup(raw_s) {
+  return _obj_simple_transform(raw_s, [0,0,0], 0, '');
+}
+
+function _play() {
+  let raw_s0 = fs.readFileSync( "./data/minigolf.obj/gap.obj" ).toString();
+  let raw_s1 = fs.readFileSync( "./data/minigolf.obj/straight.obj" ).toString();
+
+  let json_obj0 = _obj_simple_transform(raw_s0, [0,0,0], 0, '');
+  let json_obj1 = _obj_simple_transform(raw_s1, [1,0,0], 0, '');
+
+  let json_obj_m = _obj_merge([json_obj0, json_obj1]);
+
+  return;
+  console.log( jeom.json2obj( json_obj_m ) );
 }
 
 for (let ii=0; ii<g_ctx.op_list.length; ii++) {
