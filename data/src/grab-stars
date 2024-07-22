@@ -1,6 +1,6 @@
 #!/bin/bash
 
-for p in `seq 25` ; do
+for p in `seq 26` ; do
   echo $p
   curl -s 'https://api.github.com/users/abetusk/starred?per_page=100&page='$p | \
     jq -c '.[] | [ .name, .description, .html_url ]' | \
