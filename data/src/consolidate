@@ -1,6 +1,6 @@
 #!/bin/bash
 
 rm -f abetusk.starred.list
-for p in `seq 16` ; do
-  cat abetusk.starred.$p >> abetusk.starred.list
+for p in `ls -v abetusk.starred.[0-9]*` ; do
+  cat $p >> abetusk.starred.list
 done
