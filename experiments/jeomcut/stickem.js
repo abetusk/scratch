@@ -1778,10 +1778,13 @@ function _main() {
   //----
   // reweight
   //
-  poms_data.weight[0] = 100;
+  poms_data.weight[0] = 600;
   for (let ii=0; ii<poms_data.name.length; ii++) {
     if (poms_data.name[ii].match( 'ramp' )) {
-      poms_data.weight[ii] *= 10;
+      poms_data.weight[ii] *= 50;
+    }
+    if (poms_data.name[ii].match( '^(end|hole-round|hole-square)_')) {
+      poms_data.weight[ii] *= 1/1000;
     }
   }
 
