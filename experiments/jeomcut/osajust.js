@@ -13,13 +13,9 @@ var fs = require("fs");
 var getopt = require("posix-getopt");
 var jeom = require("./jeom.js");
 
-var OSAJUST_VERSION = "0.2.0";
+var OSAJUST_VERSION = "0.3.0";
 
 var parser, opt;
-
-_play();
-process.exit();
-
 
 function main_nop() {
 }
@@ -40,6 +36,7 @@ var g_ctx = {
   "opt": {
     "op": "obj",
     "fn":"",
+    "patch_fn": "",
     "merge_fn":"",
     "axis": "",
     "r": 1/8,
@@ -53,6 +50,7 @@ var g_ctx = {
     [ "obj", main_transform ],
     [ "json", main_json ],
     [ "obj-st", main_obj_simple_transform ],
+    [ "obj-patch", main_obj_patch],
     [ "transform", main_transform ],
     [ "highlight", main_highlight ],
     [ "occupancy", main_block_occupancy],
@@ -65,13 +63,13 @@ var g_ctx = {
 };
 
 
-parser = new getopt.BasicParser("hvVR:(rotate)T:(translate)m:(merge)A:(op)c:(com)r:(radius)S:(shape)", process.argv);
+parser = new getopt.BasicParser("hvVR:(rotate)T:(translate)m:(merge)A:(op)c:(com)r:(radius)S:(shape)C:(patch-file)", process.argv);
 
 
 function show_help() {
   console.log("\nusage:");
   console.log("");
-  console.log("  osajust [-h] [-v] [-V] [-R axis,angle] [-T x,y,z] [-m merge_fn] [-c x,y,z] [-r r] [-A op] [-S shape] fn");
+  console.log("  osajust [-h] [-v] [-V] [-R axis,angle] [-T x,y,z] [-m merge_fn] [-c x,y,z] [-r r] [-A op] [-S shape] [-C patch_fn] fn");
   console.log("");
   console.log("  op list:");
   for (let ii=0; ii<g_ctx.op_list.length; ii++) {
@@ -159,6 +157,10 @@ while ((opt = parser.getopt()) !== undefined) {
       g_ctx.opt.merge_fn = opt.optarg;
       break;
 
+    case 'C':
+      g_ctx.opt.patch_fn = opt.optarg;
+      break;
+
     default:
       console.log("nope");
       show_help();
@@ -168,12 +170,29 @@ while ((opt = parser.getopt()) !== undefined) {
 }
 
 if (parser.optind() >= process.argv.length) {
-  console.log("provide input obj file");
-  show_help();
-  process.exit();
-}
 
-g_ctx.opt.fn = process.argv[ parser.optind() ];
+  if (g_ctx.opt.op == "obj-patch") {
+    if (g_ctx.opt.patch_fn == "") {
+      console.log("provide obj patch file");
+      show_help();
+      process.exit();
+    }
+  }
+  else {
+    console.log("provide input obj file");
+    show_help();
+    process.exit();
+  }
+
+}
+else {
+  if (g_ctx.opt.op == "obj-patch") {
+    g_ctx.opt.patch_fn = process.argv[ parser.optind() ];
+  }
+  else {
+    g_ctx.opt.fn = process.argv[ parser.optind() ];
+  }
+}
 
 
 function load_obj(fn) {
@@ -339,9 +358,11 @@ function main_json() {
   console.log( JSON.stringify(json_obj, undefined, 2) );
 }
 
-function _obj_simple_transform(raw_s, mov, theta, axis) {
+function _obj_simple_transform(_json_obj, mov, theta, axis) {
   //let raw_s = fs.readFileSync( g_ctx.opt.fn ).toString();
-  let json_obj = jeom.obj2json( raw_s );
+  //let json_obj = jeom.obj2json( raw_s );
+
+  let json_obj = JSON.parse(JSON.stringify(_json_obj));
 
   //let theta = g_ctx.opt.rot;
   let tv = [
@@ -399,10 +420,12 @@ function _obj_simple_transform(raw_s, mov, theta, axis) {
 
 function main_obj_simple_transform() {
   let raw_s = fs.readFileSync( g_ctx.opt.fn ).toString();
-  let json_obj = _obj_simple_transform(raw_s,
-                                       g_ctx.opt.mov,
-                                       g_ctx.opt.rot,
-                                       g_ctx.opt.axis);
+  let in_json_obj = jeom.obj2json(raw_s);
+  //let json_obj = _obj_simple_transform(in_json_obj,
+  let json_obj = jeom.json_obj_transform(in_json_obj,
+                                         g_ctx.opt.mov,
+                                         g_ctx.opt.rot,
+                                         g_ctx.opt.axis);
   console.log( jeom.json2obj( json_obj ) );
 }
 
@@ -438,14 +461,20 @@ function _obj_merge( _json_objs ) {
 
   }
 
+  let _tmp_json_objs = [];
+  for (let idx=0; idx<_json_objs.length; idx++) {
+    _tmp_json_objs.push( JSON.parse( JSON.stringify(_json_objs[idx]) ) );
+  }
+
   let res_json_obj = [];
 
-  // SHALLOW COPY!!! BEWARE!!!
-  //
-  for (let idx=0; idx<_json_objs.length; idx++) {
+  //for (let idx=0; idx<_json_objs.length; idx++) {
+  for (let idx=0; idx<_tmp_json_objs.length; idx++) {
 
-    for (let jj=0; jj<_json_objs[idx].length; jj++) {
-      let ele = _json_objs[idx][jj]
+    //for (let jj=0; jj<_json_objs[idx].length; jj++) {
+    for (let jj=0; jj<_tmp_json_objs[idx].length; jj++) {
+      //let ele = _json_objs[idx][jj]
+      let ele = _tmp_json_objs[idx][jj]
 
       if (ele.type == 'f') {
 
@@ -465,13 +494,11 @@ function _obj_merge( _json_objs ) {
   }
 
 
-  console.log( jeom.json2obj(res_json_obj) );
+  return res_json_obj;
+  //console.log( jeom.json2obj(res_json_obj) );
 }
 
-function _obj_dup(raw_s) {
-  return _obj_simple_transform(raw_s, [0,0,0], 0, '');
-}
-
+/*
 function _play() {
   let raw_s0 = fs.readFileSync( "./data/minigolf.obj/gap.obj" ).toString();
   let raw_s1 = fs.readFileSync( "./data/minigolf.obj/straight.obj" ).toString();
@@ -483,6 +510,59 @@ function _play() {
 
   return;
   console.log( jeom.json2obj( json_obj_m ) );
+}
+*/
+
+function main_obj_patch() {
+
+  var patch_data = JSON.parse(fs.readFileSync( g_ctx.opt.patch_fn ));
+  //console.log(patch_data);
+
+  let obj_lib = [];
+
+  for (let ii=0; ii<patch_data.objMap.length; ii++) {
+
+    console.log("# loading", patch_data.objMap[ii]);
+
+    let json_obj = jeom.obj2json( fs.readFileSync( patch_data.objMap[ii] ).toString() );
+    obj_lib.push({"name": patch_data.name[ii], "fn":patch_data.objMap[ii], "json_obj": json_obj});
+
+  }
+
+  let grid_json_obj = [];
+
+  let grid_size = patch_data.quiltSize;
+
+  let dx = 1,
+      dy = 0.5,
+      dz = 1;
+
+  for (let z=0; z<grid_size[2]; z++) {
+    for (let y=0; y<grid_size[1]; y++) {
+      for (let x=0; x<grid_size[0]; x++) {
+        let idx = x + (y*grid_size[0]) + (z*grid_size[0]*grid_size[1]);
+        let tile_id = patch_data.patch[idx];
+
+        let _mov = [x*dx, y*dy, z*dz];
+
+        //let _o = _obj_simple_transform( obj_lib[tile_id].json_obj, _mov, 0, '' )
+        let _o = jeom.json_obj_transform( obj_lib[tile_id].json_obj, _mov, 0, '' )
+
+        grid_json_obj.push(  _o );
+
+
+
+      }
+    }
+  }
+
+  let _m = jeom.json_obj_merge(grid_json_obj);
+
+  //console.log(_m);
+
+  console.log(jeom.json2obj( jeom.json_obj_merge( grid_json_obj ) ) );
+
+  return;
 }
 
 for (let ii=0; ii<g_ctx.op_list.length; ii++) {

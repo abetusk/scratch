@@ -1689,6 +1689,113 @@ function jeom_obj2json(s) {
 
 }
 
+function jeom_json_obj_simple_transform(_json_obj, mov, theta, axis) {
+  let json_obj = JSON.parse(JSON.stringify(_json_obj));
+  let tv = [ mov[0], mov[1], mov[2] ];
+
+  for (let ii=0; ii<json_obj.length; ii++) {
+    let ele = json_obj[ii];
+    if ((ele.type != "v") && (ele.type != "vn")) { continue; }
+
+    let _tri = [ 0, 0, 0 ];
+    if (ele.type == "v") {
+      _tri[0] = ele.v[0];
+      _tri[1] = ele.v[1];
+      if (ele.v.length > 2) { _tri[2] = ele.v[2]; }
+    }
+    else if (ele.type == "vn") {
+      _tri[0] = ele.vn[0];
+      _tri[1] = ele.vn[1];
+      if (ele.vn.length > 2) { _tri[2] = ele.vn[2]; }
+    }
+
+    if (axis.length > 0) {
+      if (axis == 'x') { jeom_rotx(_tri, theta); }
+      if (axis == 'y') { jeom_roty(_tri, theta); }
+      if (axis == 'z') { jeom_rotz(_tri, theta); }
+    }
+
+    if (ele.type == "v") {
+      jeom_mov(_tri, tv);
+    }
+
+    if (ele.type == "v") {
+      ele.v[0] = _tri[0];
+      ele.v[1] = _tri[1];
+      if (ele.v.length > 2) { ele.v[2] = _tri[2]; }
+    }
+    else if (ele.type == "vn") {
+      ele.vn[0] = _tri[0];
+      ele.vn[1] = _tri[1];
+      if (ele.vn.length > 2) { ele.vn[2] = _tri[2]; }
+    }
+
+  }
+
+  return json_obj;
+}
+
+function jeom_json_obj_merge( _json_objs ) {
+  let info = [];
+
+  for (let idx=0; idx<_json_objs.length; idx++) {
+    info.push({
+      "v_n":0, "vt_n":0, "vn_n":0, "f_n": 0,
+      "v_s":0, "vt_s":0, "vn_s":0, "f_s": 0
+    });
+
+    for (let ii=0; ii<_json_objs[idx].length; ii++) {
+      let ele = _json_objs[idx][ii];
+      if      (ele.type == 'v')  { info[idx].v_n++; }
+      else if (ele.type == 'vt') { info[idx].vt_n++; }
+      else if (ele.type == 'vn') { info[idx].vn_n++; }
+      else if (ele.type == 'f')  { info[idx].f_n++; }
+    }
+
+    if (idx>0) {
+      info[idx].v_s   = info[idx-1].v_n   + info[idx-1].v_s;
+      info[idx].vt_s  = info[idx-1].vt_n  + info[idx-1].vt_s;
+      info[idx].vn_s  = info[idx-1].vn_n  + info[idx-1].vn_s;
+      info[idx].f_s   = info[idx-1].f_n   + info[idx-1].f_s;
+    }
+
+  }
+
+  let _tmp_json_objs = [];
+  for (let idx=0; idx<_json_objs.length; idx++) {
+    _tmp_json_objs.push( JSON.parse( JSON.stringify(_json_objs[idx]) ) );
+  }
+
+  let res_json_obj = [];
+
+  for (let idx=0; idx<_tmp_json_objs.length; idx++) {
+
+    for (let jj=0; jj<_tmp_json_objs[idx].length; jj++) {
+      let ele = _tmp_json_objs[idx][jj]
+
+      if (ele.type == 'f') {
+
+        for (let v_idx=0; v_idx<ele.f.length; v_idx++) {
+          ele.f[v_idx][0] += info[idx].v_s;
+          ele.f[v_idx][1] += info[idx].vt_s;
+          ele.f[v_idx][2] += info[idx].vn_s;
+        }
+        res_json_obj.push(ele);
+
+        continue;
+      }
+
+      res_json_obj.push(ele);
+    }
+
+  }
+
+  return res_json_obj;
+}
+
+
+
+
 // This will split an OBJ file into
 // individual OBJ like data structures.
 //
@@ -2115,6 +2222,9 @@ if ((typeof module !== "undefined") &&
 
   module.exports["obj2json"] = jeom_obj2json;
   module.exports["json2obj"] = jeom_json2obj;
+
+  module.exports["json_obj_transform"] = jeom_json_obj_simple_transform;
+  module.exports["json_obj_merge"] = jeom_json_obj_merge;
 
   module.exports["stl_print"] = jeom_stl_print;
   module.exports["stl_stringify"] = jeom_stl_stringify;

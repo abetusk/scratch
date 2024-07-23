@@ -68,6 +68,7 @@ var op = {
 
 };
 
+/*
 function _obj_simple_transform(raw_s, mov, axis, theta) {
   mov = ((typeof mov === "undefined") ? [0,0,0] : mov);
   axis = ((typeof axis === "undefined") ? "" : axis);
@@ -116,6 +117,7 @@ function _obj_simple_transform(raw_s, mov, axis, theta) {
 
   return jeom.json2obj(json_obj);
 }
+*/
 
 
 function _simple_point_count(geom) {
@@ -1748,31 +1750,36 @@ function _main() {
     if ((source_name == '.') ||
         (source_name == '#')) { continue; }
 
-    let obj_text = fs.readFileSync(base_dir + "/" + source_name + ".obj");
+    //let obj_text = fs.readFileSync(base_dir + "/" + source_name + ".obj");
+    let json_obj = jeom.obj2json( fs.readFileSync(base_dir + "/" + source_name + ".obj") );
 
     let axis = '';
     let theta = 0;
     let _rc = rotcode.split("");
     if (_rc[2] != '0') {
       axis = 'z';
-      theta = parseFloat(_rc[2])*Math.PI/2.0;
-      obj_text = _obj_simple_transform(obj_text, [0,0,0], axis, theta);
+      theta = -parseFloat(_rc[2])*Math.PI/2.0;
+      //obj_text = _obj_simple_transform(obj_text, [0,0,0], axis, theta);
+      json_obj = jeom.json_obj_transform(json_obj, [0,0,0], theta, axis);
     }
 
     if (_rc[1] != '0') {
       axis = 'y';
-      theta = parseFloat(_rc[1])*Math.PI/2.0;
+      theta = -parseFloat(_rc[1])*Math.PI/2.0;
 
-      obj_text = _obj_simple_transform(obj_text, [0,0,0], axis, theta);
+      //obj_text = _obj_simple_transform(obj_text, [0,0,0], axis, theta);
+      json_obj = jeom.json_obj_transform(json_obj, [0,0,0], theta, axis);
     }
 
     if (_rc[0] != '0') {
       axis = 'x';
-      theta = parseFloat(_rc[0])*Math.PI/2.0;
-      obj_text = _obj_simple_transform(obj_text, [0,0,0], axis, theta);
+      theta = -parseFloat(_rc[0])*Math.PI/2.0;
+      //obj_text = _obj_simple_transform(obj_text, [0,0,0], axis, theta);
+      json_obj = jeom.json_obj_transform(json_obj, [0,0,0], theta, axis);
     }
 
-    fs.writeFileSync( out_base_dir + "/" + poms_data.name[ii] + ".obj", obj_text );
+    //fs.writeFileSync( out_base_dir + "/" + poms_data.name[ii] + ".obj", obj_text );
+    fs.writeFileSync( out_base_dir + "/" + poms_data.name[ii] + ".obj", jeom.json2obj(json_obj) );
     fs.writeFileSync( out_base_dir + "/" + poms_data.name[ii] + ".mtl", fs.readFileSync( base_dir + "/" + source_name + ".mtl" ));
 
   }
