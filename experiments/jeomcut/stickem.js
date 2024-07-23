@@ -1800,6 +1800,8 @@ function _main() {
   for (let ii=0; ii<poms_data.name.length; ii++) {
     poms_data.weight.push(1);
   }
+  poms_data.weight[0] = 300;
+
   for (let ii=0; ii<poms_data.name.length; ii++) {
     poms_data.objMap.push( out_base_dir + "/" + poms_data.name[ii] + ".obj" );
 
