@@ -1556,6 +1556,7 @@ function _main() {
 
   let = dock_info = {
     "force_token" : {},
+    "pair_token": {},
     "expand_token" : {},
     "simple_token": {}
   };
@@ -1571,6 +1572,9 @@ function _main() {
     }
     else if (dock_ele.type == '@') {
       dock_info.simple_token[dock_tok] = dock_tok;
+    }
+    else if (dock_ele.type == '&') {
+      dock_info.pair_token[dock_tok] = dock_ele.dock;
     }
   }
 
@@ -1694,6 +1698,8 @@ function _main() {
       for (let tok_idx=0; tok_idx<toks.length; tok_idx++) {
         let tok = toks[tok_idx];
 
+        // '!' docking token
+        //
         if (tok in dock_info.force_token) {
           for (let tile_idx=0; tile_idx<dock_info.force_token[tok].length; tile_idx++) {
             rule_list.push( [_repr.id, dock_info.force_token[tok][tile_idx], idir, 1 ] );
@@ -1701,44 +1707,6 @@ function _main() {
           }
           continue;
         }
-
-        /*
-        // special cases for '.', '_', '#' and ':'
-        //
-
-        if (tok == '.') {
-          rule_list.push( [_repr.id, 0, idir, 1 ] );
-          rule_list.push( [0, _repr.id, rdir, 1 ] );
-          continue;
-        }
-
-        if (tok == '_') {
-          rule_list.push( [_repr.id,  0, idir, 1 ] );
-          rule_list.push( [ 0, _repr.id, rdir, 1 ] );
-
-          rule_list.push( [_repr.id,  1, idir, 1 ] );
-          rule_list.push( [ 1, _repr.id, rdir, 1 ] );
-
-          continue;
-        }
-
-        if (tok == '#') {
-          rule_list.push( [_repr.id,  1, idir, 1 ] );
-          rule_list.push( [ 1, _repr.id, rdir, 1 ] );
-          continue;
-        }
-
-        // let this drop through so we can catch the other
-        // ':' docks
-        //
-        if (tok == ':') {
-          rule_list.push( [_repr.id,  0, idir, 1 ] );
-          rule_list.push( [ 0, _repr.id, rdir, 1 ] );
-
-          rule_list.push( [_repr.id,  1, idir, 1 ] );
-          rule_list.push( [ 1, _repr.id, rdir, 1 ] );
-        }
-        */
 
         // If we've matched an internal link, add the rule and
         // move on.
@@ -1753,6 +1721,12 @@ function _main() {
           rule_list.push( [nei_tile_id, src_tile_id, rdir, 1] );
 
           continue;
+        }
+
+        // change destination docking token if it's a pair token
+        //
+        if (tok in dock_info.pair_token) {
+          tok = dock_info.pair_token[tok];
         }
 
 
@@ -1800,7 +1774,19 @@ function _main() {
   for (let ii=0; ii<poms_data.name.length; ii++) {
     poms_data.weight.push(1);
   }
-  poms_data.weight[0] = 300;
+
+  //----
+  // reweight
+  //
+  poms_data.weight[0] = 100;
+  for (let ii=0; ii<poms_data.name.length; ii++) {
+    if (poms_data.name[ii].match( 'ramp' )) {
+      poms_data.weight[ii] *= 10;
+    }
+  }
+
+  //
+  //----
 
   let empty_obj = out_base_dir + "/" + "._000_0.obj";
   //let empty_mtl = out_base_dir + "/" + "._000_0.mtl";
