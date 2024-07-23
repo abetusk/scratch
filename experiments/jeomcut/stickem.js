@@ -1802,6 +1802,9 @@ function _main() {
   }
   poms_data.weight[0] = 300;
 
+  let empty_obj = out_base_dir + "/" + "._000_0.obj";
+  //let empty_mtl = out_base_dir + "/" + "._000_0.mtl";
+
   for (let ii=0; ii<poms_data.name.length; ii++) {
     poms_data.objMap.push( out_base_dir + "/" + poms_data.name[ii] + ".obj" );
 
@@ -1839,8 +1842,15 @@ function _main() {
       json_obj = jeom.json_obj_transform(json_obj, [0,0,0], theta, 'x');
     }
 
-    fs.writeFileSync( out_base_dir + "/" + poms_data.name[ii] + ".obj", jeom.json2obj(json_obj) );
-    fs.writeFileSync( out_base_dir + "/" + poms_data.name[ii] + ".mtl", fs.readFileSync( base_dir + "/" + source_name + ".mtl" ));
+    let sfx = poms_data.name[ii].split("_").slice(-1).join("");
+    if (sfx == "0") {
+      fs.writeFileSync( out_base_dir + "/" + poms_data.name[ii] + ".obj", jeom.json2obj(json_obj) );
+      fs.writeFileSync( out_base_dir + "/" + poms_data.name[ii] + ".mtl", fs.readFileSync( base_dir + "/" + source_name + ".mtl" ));
+    }
+    else {
+      fs.writeFileSync( out_base_dir + "/" + poms_data.name[ii] + ".obj", "" );
+      fs.writeFileSync( out_base_dir + "/" + poms_data.name[ii] + ".mtl", "" );
+    }
 
   }
 
