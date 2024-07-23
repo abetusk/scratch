@@ -1498,6 +1498,47 @@ function createRepresentative(cfg, geom, info) {
   return rep_list;
 }
 
+// still some hardcoded values but getting closer to being finished.
+//
+// stickem...conf file has a character (string) with space seperator
+// to denote which other valid tiles it can dock with.
+// There are special codes beginning with a dollar sign that represent
+// internal neighbors, for geometries that would span multiple unit tiles.
+//
+// Here y+ is considered 'up'
+//
+// * Create representatives
+//   - rotate each base `.obj` around the axies of symmetry and deduplicate
+//   - keep mappings of deduplicated names to representative
+//   - special consideration for empty tile '.' (tile id 0)
+//     and ground tile '#' (tile id 1)
+//   - naming conviention is `<basename>_<rotcode>_<ele>` with
+//     ele increasing for geometries that span multiple unit blocks
+// * assign ids to represntatives
+//   - again, special consideration for empty tile '.' (tile id 0) and
+//     ground tile '#' (tile id 1)
+// * create rules
+//   - hard code empty and ground tile rules, with empty-empty in all directions,
+//     ground-ground in all directions, and ground-empty in all directions except
+//     ground-empty in the downward direction (empty can't be below ground)
+//   - create map from dock token and idir to array of representatives for
+//     easy lookup
+//   - match up all representatives to each other if they share a docking token
+//     in the appropriate direction (src idir to dst, dst rdir to src)
+//   - special considering for empty ('.'), 'underneath' ('_'), ground ('#') and
+//     pylon (':') docking tokens is taken
+//     + empty docking token forces empty tile neighboring (so don't connect
+//       representatives that both have a '.' docking token and only allow them
+//       to connect to the empty tile)
+//     + same with ground docking token ('#')
+//     + underneath docking token ('_') forces either an empty or ground
+//     + pylon docking token (':') allows empty or ground but still allows other
+//       tiles to connect to it
+//
+// That last one with the pylon can be taken care of by adding a '_' to the pylon docking
+// token.
+//
+//
 function _main() {
 
   var cfg = JSON.parse( fs.readFileSync("./data/stickem_minigolf.conf") );
@@ -1513,25 +1554,52 @@ function _main() {
     "basename_rep_idx" : {}
   };
 
+  let = dock_info = {
+    "force_token" : {},
+    "expand_token" : {},
+    "simple_token": {}
+  };
+
+  for (let dock_tok in cfg.dock) {
+    let dock_ele = cfg.dock[dock_tok];
+
+    if (dock_ele.type == '!') {
+      dock_info.force_token[dock_tok] = dock_ele.tile;
+    }
+    else if (dock_ele.type == '%') {
+      dock_info.expand_token[dock_tok] = dock_ele.dock;
+    }
+    else if (dock_ele.type == '@') {
+      dock_info.simple_token[dock_tok] = dock_tok;
+    }
+  }
+
+  for (let idx=0; idx<cfg.source.length; idx++) {
+    let src_ele = cfg.source[idx];
+
+    for (let dock_idx=0; dock_idx<src_ele.dock.length; dock_idx++) {
+      for (let idir=0; idir<src_ele.dock[dock_idx].length; idir++) {
+
+        for (let expand_tok in dock_info.expand_token) {
+          src_ele.dock[dock_idx][idir] = src_ele.dock[dock_idx][idir].replace( expand_tok, dock_info.expand_token[expand_tok]);
+        }
+
+      }
+    }
+
+  }
+
 
   // create representative list, deduplicating identical docking patterns
   // depending on rotation from symmetry
   //
   for (let idx=0; idx<cfg.source.length; idx++) {
     let name = cfg.source[idx].name;
-
     let geom = obj2geom( base_dir + "/" + name + ".obj" )[0];
-
-    //console.log(name);
     let rl = createRepresentative(cfg, geom, cfg.source[idx]);
-
     for (let ii=0; ii<rl.length; ii++) {
-      //console.log(">>", rl[ii].name, JSON.stringify(rl[ii].block));
-
       stickem_info.repr.push(rl[ii]);
     }
-
-    //console.log("\n\n");
   }
 
   let tile_name = [];
@@ -1544,9 +1612,7 @@ function _main() {
 
   // assign ids to representatives
   //
-  let cur_id = 2;
-
-  //for (let ii=0; ii<cur_id; ii++) { tile_name.push("."); }
+  let cur_id = tile_name.length;
 
   let _rep_list = stickem_info.repr;
   for (let ii=0; ii<_rep_list.length; ii++) {
@@ -1555,9 +1621,6 @@ function _main() {
     tile_name_to_id[ _rep_list[ii].name ] = cur_id;
     _rep_list[ii]["id"] = cur_id;
     cur_id++;
-
-
-    //console.log( "##", _rep_list[ii].name, "id:", _rep_list[ii].id, JSON.stringify(_rep_list[ii].dock) );
   }
 
   // create rules
@@ -1610,8 +1673,6 @@ function _main() {
         if (!(tok in dock_tok_to_id)) { dock_tok_to_id[tok] = [ [], [], [], [], [], [] ]; }
 
         dock_tok_to_id[tok][idir].push( {"id": _repr.id, "idir": idir } );
-
-        //docktok_to_id[idir][tok][_repr.id] = 1;
       }
     }
   }
@@ -1633,8 +1694,18 @@ function _main() {
       for (let tok_idx=0; tok_idx<toks.length; tok_idx++) {
         let tok = toks[tok_idx];
 
+        if (tok in dock_info.force_token) {
+          for (let tile_idx=0; tile_idx<dock_info.force_token[tok].length; tile_idx++) {
+            rule_list.push( [_repr.id, dock_info.force_token[tok][tile_idx], idir, 1 ] );
+            rule_list.push( [dock_info.force_token[tok][tile_idx], _repr.id, rdir, 1 ] );
+          }
+          continue;
+        }
+
+        /*
         // special cases for '.', '_', '#' and ':'
         //
+
         if (tok == '.') {
           rule_list.push( [_repr.id, 0, idir, 1 ] );
           rule_list.push( [0, _repr.id, rdir, 1 ] );
@@ -1667,6 +1738,7 @@ function _main() {
           rule_list.push( [_repr.id,  1, idir, 1 ] );
           rule_list.push( [ 1, _repr.id, rdir, 1 ] );
         }
+        */
 
         // If we've matched an internal link, add the rule and
         // move on.
@@ -1697,12 +1769,6 @@ function _main() {
 
   }
 
-  // CEHCKPOINT!!!
-  //  '.' docks to everything, need special consideration to only dock to
-  //  empty tile.
-  //  '_' might need special consideration as well
-  //
-
   let idir_name = [ "x+", "x-", "y+", "y-", "z+", "z-" ];
 
   let poms_data = {
@@ -1712,7 +1778,7 @@ function _main() {
     "objMap": [],
     "constraint": [
       {"type":"quiltForce", "range": {"tile":[1,2], "x":[], "y":[0,1], "z":[], "note": "force ground tile on bottom xz plane, y+ up"} },
-      {"type":"quiltPin", "range": {"tile":[1,2], "x":[], "y":[0,1], "z":[], "note": "pin previously forced operation"} }
+      {"type":  "quiltPin", "range": {"tile":[1,2], "x":[], "y":[0,1], "z":[], "note": "pin previously forced operation"} }
     ],
     "boundaryCondition":{
       "x+":{"type":"tile","value":0},
@@ -1737,7 +1803,7 @@ function _main() {
   for (let ii=0; ii<poms_data.name.length; ii++) {
     poms_data.objMap.push( out_base_dir + "/" + poms_data.name[ii] + ".obj" );
 
-    console.log(poms_data.name[ii]);
+    //console.log(poms_data.name[ii]);
 
     let tok = poms_data.name[ii].split("_");
     let subtile_id = tok.slice(-1);
@@ -1745,48 +1811,38 @@ function _main() {
 
     let source_name = tok.slice(0, tok.length-2).join("_") ;
 
-    console.log(">>>", source_name, rotcode);
+    //console.log(">>>", source_name, rotcode);
 
     if ((source_name == '.') ||
         (source_name == '#')) { continue; }
 
-    //let obj_text = fs.readFileSync(base_dir + "/" + source_name + ".obj");
     let json_obj = jeom.obj2json( fs.readFileSync(base_dir + "/" + source_name + ".obj") );
 
     let axis = '';
     let theta = 0;
     let _rc = rotcode.split("");
     if (_rc[2] != '0') {
-      axis = 'z';
       theta = -parseFloat(_rc[2])*Math.PI/2.0;
-      //obj_text = _obj_simple_transform(obj_text, [0,0,0], axis, theta);
-      json_obj = jeom.json_obj_transform(json_obj, [0,0,0], theta, axis);
+      json_obj = jeom.json_obj_transform(json_obj, [0,0,0], theta, 'z');
     }
 
     if (_rc[1] != '0') {
-      axis = 'y';
       theta = -parseFloat(_rc[1])*Math.PI/2.0;
 
-      //obj_text = _obj_simple_transform(obj_text, [0,0,0], axis, theta);
-      json_obj = jeom.json_obj_transform(json_obj, [0,0,0], theta, axis);
+      json_obj = jeom.json_obj_transform(json_obj, [0,0,0], theta, 'y');
     }
 
     if (_rc[0] != '0') {
-      axis = 'x';
       theta = -parseFloat(_rc[0])*Math.PI/2.0;
-      //obj_text = _obj_simple_transform(obj_text, [0,0,0], axis, theta);
-      json_obj = jeom.json_obj_transform(json_obj, [0,0,0], theta, axis);
+      json_obj = jeom.json_obj_transform(json_obj, [0,0,0], theta, 'x');
     }
 
-    //fs.writeFileSync( out_base_dir + "/" + poms_data.name[ii] + ".obj", obj_text );
     fs.writeFileSync( out_base_dir + "/" + poms_data.name[ii] + ".obj", jeom.json2obj(json_obj) );
     fs.writeFileSync( out_base_dir + "/" + poms_data.name[ii] + ".mtl", fs.readFileSync( base_dir + "/" + source_name + ".mtl" ));
 
   }
 
   console.log(JSON.stringify(poms_data, undefined, 2));
-
-
 
 }
 
