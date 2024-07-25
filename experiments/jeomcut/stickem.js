@@ -1790,7 +1790,8 @@ function _main(conf_fn, base_dir, out_base_dir, _out_type) {
   //----
   // reweight
   //
-  poms_data.weight[0] = 600;
+  //poms_data.weight[0] = 600;
+  poms_data.weight[0] = 10;
   for (let ii=0; ii<poms_data.name.length; ii++) {
     if (poms_data.name[ii].match( 'ramp' )) {
       poms_data.weight[ii] *= 50;
@@ -1858,6 +1859,9 @@ function _main(conf_fn, base_dir, out_base_dir, _out_type) {
     let empty_stl = out_base_dir + "/" + "._000_0.stl";
     let ground_stl = out_base_dir + "/" + "#_000_0.stl";
 
+    fs.writeFileSync( empty_stl, "solid EMPTY\nendsolid EMPTY\n" );
+    fs.writeFileSync( ground_stl, "solid EMPTY\nendsolid EMPTY\n" );
+
     for (let ii=0; ii<poms_data.name.length; ii++) {
       poms_data.objMap.push( out_base_dir + "/" + poms_data.name[ii] + ".stl" );
 
@@ -1892,9 +1896,6 @@ function _main(conf_fn, base_dir, out_base_dir, _out_type) {
 
       let sfx = poms_data.name[ii].split("_").slice(-1).join("");
       if (sfx == "0") {
-
-        console.log(">>", out_base_dir, poms_data.name[ii]);
-
         fs.writeFileSync( out_base_dir + "/" + poms_data.name[ii] + ".stl", op.stl_dumps({"binary":false},geom).join("").toString() );
       }
       else {

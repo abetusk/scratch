@@ -191,7 +191,7 @@ function wedge_up() {
   );
 
   return [
-    {"ds":[0,0,0], "geom":geom, "id":"w", "dock":["w .","W .", ".", "b", "b", "."], "anchor":geom}
+    {"ds":[0,0,0], "geom":geom, "id":"w", "dock":[":",":", ".", "b", "b", "."], "anchor":geom}
   ];
 }
 
@@ -202,7 +202,7 @@ function wedge_down() {
   );
 
   return [
-    {"ds":[0,0,0], "geom":geom, "id":"m", "dock":["m .","M .", "b",".", ".","b"], "anchor":geom}
+    {"ds":[0,0,0], "geom":geom, "id":"m", "dock":[":",":", "b",".", ".","b"], "anchor":geom}
   ];
 }
 
@@ -243,7 +243,7 @@ function stair(n, _debug) {
   }
 
   return [
-    {"ds":[0,0,0], "geom":geom, "id":"b", "dock":["s .","S .", ".","b", "b","."], "anchor":geom}
+    {"ds":[0,0,0], "geom":geom, "id":"b", "dock":[":",":", ".","_", "b","."], "anchor":geom}
   ];
 }
 
@@ -251,7 +251,7 @@ function block() {
 
   let geom = op.mov([0,0,0], op.cub({"size":[1,1,1]}));
   return [
-    {"ds":[0,0,0], "geom":geom, "id":"b", "dock":["b a .","b a .", "b .","b A", "b a .","b a ."], "anchor":geom}
+    {"ds":[0,0,0], "geom":geom, "id":"b", "dock":[":",":", "b .","_", ":",":"], "anchor":geom}
   ];
 }
 
@@ -279,7 +279,7 @@ function doorway(opt, _debug) {
   }
 
   return [
-    {"ds":[0,0,0], "geom":geom, "id":"a1", "dock":["b .","b .","b","b",".","."], "anchor":geom}
+    {"ds":[0,0,0], "geom":geom, "id":"a1", "dock":["b .", "b .",  "b", "_", ".", "."], "anchor":geom}
   ];
 }
 
@@ -309,7 +309,7 @@ function double_doorway(opt, _debug) {
   }
 
   return [
-    {"ds":[0,0,0], "geom":geom, "id":"a1", "dock":[ ".", ".", "b","b 4",  ".", "."], "anchor":geom}
+    {"ds":[0,0,0], "geom":geom, "id":"a1", "dock":[ ".", ".", "b","_ 4",  ".", "."], "anchor":geom}
   ];
 }
 
@@ -331,7 +331,7 @@ function block_2x2(opt, _debug) {
   }
 
   return [
-    {"ds":[0,0,0], "geom":geom, "id":"a1", "dock":[ ".", ".",  "4","4 b", ".", "."], "anchor":geom}
+    {"ds":[0,0,0], "geom":geom, "id":"a1", "dock":[ ":", ":",  "4","_ 4", ":", ":"], "anchor":geom}
   ];
 
 }
@@ -439,6 +439,61 @@ function arch2(opt, _debug) {
   return info;
 }
 
+function _print_stickem_conf(info) {
+
+  console.log("{");
+
+  console.log("  \"unit\": ", JSON.stringify(info.unit) + ",");
+  console.log("  \"unit_center\": ", JSON.stringify(info.unit_center) + ",");
+  console.log("  \"up\": ", JSON.stringify(info.up) + ",");
+  console.log("  \"symmetry\": ", JSON.stringify(info.symmetry) + ",");
+
+  console.log("  \"dock\": {");
+  let dock_key_a = [];
+  for (let dock_key in info.dock) {
+    dock_key_a.push(dock_key);
+  }
+
+  for (let dock_key_idx=0; dock_key_idx<dock_key_a.length; dock_key_idx++) {
+    let dock_key = dock_key_a[dock_key_idx];
+    let sfx = ",";
+    if (dock_key_idx == (dock_key_a.length-1)) { sfx = ""; }
+    console.log("    \"" + dock_key.toString() + "\" :", JSON.stringify(info.dock[dock_key]) + sfx);
+  }
+  console.log("  },");
+
+  console.log("  \"tile\": {");
+  let tile_key_a = [];
+  for (let tile_key in info.tile) {
+    tile_key_a.push(tile_key);
+  }
+
+  for (let tile_key_idx=0; tile_key_idx<tile_key_a.length; tile_key_idx++) {
+    let tile_key = tile_key_a[tile_key_idx];
+    let sfx = ",";
+    if (tile_key_idx == (tile_key_a.length-1)) { sfx = ""; }
+    console.log("    \"" + tile_key.toString() + "\" :", JSON.stringify(info.tile[tile_key]) + sfx);
+  }
+  console.log("  },");
+
+  console.log("  \"source\": [");
+  for (let idx=0; idx<info.source.length; idx++) {
+    let sfx = ",";
+    if (idx == (info.source.length-1)) { sfx = ""; }
+
+    console.log("    " + JSON.stringify(info.source[idx]) + sfx);
+
+    //console.log("  {");
+    //console.log("  { \"name\":", JSON.stringify(info.source[idx].name) + ",")
+    //console.log("    \"dock\":", JSON.stringify(info.source[idx].dock) + "}" + sfx)
+
+    //console.log("  }" + sfx);
+  }
+  console.log("  ]");
+
+  console.log("}");
+}
+
 function main() {
 
   let stickem_info = {
@@ -450,18 +505,21 @@ function main() {
       "." : { "type":"!", "tile":[0], "description":"empty space (.)" },
       "#" : { "type":"!", "tile":[1], "description":"ground (#)" },
 
-      "w" : { "type":"&", "dock":"W", "description":"wedge (down) side dock" },
-      "W" : { "type":"&", "dock":"w", "description":"wedge (down) side dock" },
+      "_" : { "type":"%", "dock":"b #", "description":"general wildcard like dock" },
+      ":" : { "type":"@", "description":"general wildcard like dock" },
 
-      "m" : { "type":"&", "dock":"M", "description":"wedge (up) side dock" },
-      "M" : { "type":"&", "dock":"m", "description":"wedge (up) side dock" },
+      //"w" : { "type":"&", "dock":"W", "description":"wedge (down) side dock" },
+      //"W" : { "type":"&", "dock":"w", "description":"wedge (down) side dock" },
 
-      "s" : { "type":"&", "dock":"S", "description":"stair side dock" },
-      "S" : { "type":"&", "dock":"s", "description":"stair side dock" },
+      //"m" : { "type":"&", "dock":"M", "description":"wedge (up) side dock" },
+      //"M" : { "type":"&", "dock":"m", "description":"wedge (up) side dock" },
+
+      //"s" : { "type":"&", "dock":"S", "description":"stair side dock" },
+      //"S" : { "type":"&", "dock":"s", "description":"stair side dock" },
 
       "b" : { "type":"@", "description":"block" },
-      "4" : { "type":"@", "description":"2x2 blocks (for under double doorway)" },
-      "a" : { "type":"@", "description":"xz dock for arch (side arch)" },
+      "4" : { "type":"@", "description":"2x2 blocks (y+-) (for under double doorway)" },
+      //"a" : { "type":"@", "description":"xz dock for arch (side arch)" },
 
       "A" : { "type":"@", "description":"top arch (y+-) dock connector" }
     },
@@ -504,7 +562,8 @@ function main() {
 
   }
 
-  console.log(JSON.stringify(stickem_info, undefined, 2));
+  _print_stickem_conf(stickem_info);
+  //console.log(JSON.stringify(stickem_info, undefined, 2));
 
   return;
 }
