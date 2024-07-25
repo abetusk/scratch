@@ -122,35 +122,8 @@ function debug_geom_f(size, center, opt) {
 //var DEBUG_GEOM = debug_geom_f([1,1,1], [0.5,0.5,0.5]);
 var DEBUG_GEOM = debug_geom_f([1,1,1], [0,0,0]);
 
-
-function pnt_eq( p0, p1, _eps) {
-  _eps = ((typeof _eps === "undefined") ? (1/(1024.0*1024.0)) : _eps);
-
-  let x0 = p0[0];
-  let y0 = p0[1];
-
-  let x1 = p1[0];
-  let y1 = p1[1];
-
-  let dx = (x0-x1),
-      dy = (y0-y1);
-
-  if (Math.abs(dx) > _eps) { return false; }
-  if (Math.abs(dy) > _eps) { return false; }
-
-  return true;
-}
-
-function pnt_cmp(a,b) {
-  if (a[0] < b[0]) { return -1; }
-  if (a[0] > b[0]) { return  1; }
-
-  if (a[1] < b[1]) { return -1; }
-  if (a[1] > b[1]) { return  1; }
-
-  return 0;
-}
-
+// untested, abandonded?
+//
 function make_arch(r) {
   r = ( ((typeof r) === "undefined") ? 1 : r);
 
@@ -218,7 +191,7 @@ function wedge_up() {
   );
 
   return [
-    {"ds":[0,0,0], "geom":geom, "id":"w", "nei":["w,.","w,.", ".", "b", "b","."]}
+    {"ds":[0,0,0], "geom":geom, "id":"w", "dock":["w .","W .", ".", "b", "b", "."], "anchor":geom}
   ];
 }
 
@@ -229,7 +202,7 @@ function wedge_down() {
   );
 
   return [
-    {"ds":[0,0,0], "geom":geom, "id":"m", "nei":["m,.","m,.", "b",".", ".","b"]}
+    {"ds":[0,0,0], "geom":geom, "id":"m", "dock":["m .","M .", "b",".", ".","b"], "anchor":geom}
   ];
 }
 
@@ -270,7 +243,7 @@ function stair(n, _debug) {
   }
 
   return [
-    {"ds":[0,0,0], "geom":geom, "id":"b", "nei":["s,.","s,.", "b",".", ".","b"]}
+    {"ds":[0,0,0], "geom":geom, "id":"b", "dock":["s .","S .", ".","b", "b","."], "anchor":geom}
   ];
 }
 
@@ -278,10 +251,12 @@ function block() {
 
   let geom = op.mov([0,0,0], op.cub({"size":[1,1,1]}));
   return [
-    {"ds":[0,0,0], "geom":geom, "id":"b", "nei":["b","b", ".",".", "b,.","b"]}
+    {"ds":[0,0,0], "geom":geom, "id":"b", "dock":["b a .","b a .", "b .","b A", "b a .","b a ."], "anchor":geom}
   ];
 }
 
+// smaller arch taken out of block
+//
 function doorway(opt, _debug) {
 
   opt = ((typeof opt === "undefined") ? {"r":0.25, "h":0.75}:opt);
@@ -304,10 +279,66 @@ function doorway(opt, _debug) {
   }
 
   return [
-    {"ds":[0,0,0], "geom":geom, "id":"a1", "nei":["b","b",".",".","b","."]}
+    {"ds":[0,0,0], "geom":geom, "id":"a1", "dock":["b .","b .","b","b",".","."], "anchor":geom}
   ];
 }
 
+// smaller arch taken out of block
+//
+function double_doorway(opt, _debug) {
+
+  opt = ((typeof opt === "undefined") ? {"r":0.25, "h":0.75}:opt);
+
+  let r = (("r" in opt) ? opt.r : 0.25);
+  let h = (("h" in opt) ? opt.h : 0.75);
+  
+  let _h = (h-r)/2;
+  let _c = h-r-0.5;
+
+  let geom = 
+    op.sub(
+      op.mov([0,0,0], op.cub({"size":[1,1,1]})),
+      op.mov([0,_c,-0.6], op.lif( {height:1.2}, op.cir({"radius":r})) ),
+      op.rot([0,Math.PI/2,0], op.mov([0,_c,-0.6], op.lif( {height:1.2}, op.cir({"radius":r})) ) ),
+      op.mov([0,-_h,0], op.cub({"size":[2*r,2*_h,1.2]})),
+      op.mov([0,-_h,0], op.cub({"size":[1.2,2*_h,2*r]})),
+    );
+
+  if (_debug) {
+    geom = op.add(geom, DEBUG_GEOM);
+  }
+
+  return [
+    {"ds":[0,0,0], "geom":geom, "id":"a1", "dock":[".",".","b","b 4",".","."], "anchor":geom}
+  ];
+}
+
+function block_2x2(opt, _debug) {
+
+  opt = ((typeof opt === "undefined") ? {"r":0.25, "h":0.75}:opt);
+
+  let r = (("r" in opt) ? opt.r : 0.25);
+
+  let geom = 
+    op.sub(
+      op.mov([0,0,0], op.cub({"size":[1,1,1]})),
+      op.cub({"size":[2*r,1.2,1.2]}),
+      op.cub({"size":[1.2,1.2,2*r]})
+    );
+
+  if (_debug) {
+    geom = op.add(geom, DEBUG_GEOM);
+  }
+
+  return [
+    {"ds":[0,0,0], "geom":geom, "id":"a1", "dock":[".",".","4.","4 b",".","."], "anchor":geom}
+  ];
+
+}
+
+// one cell occupancy.
+// Half height up arch
+//
 function arch0(opt, _debug) {
   let geom = 
     op.sub(
@@ -321,10 +352,12 @@ function arch0(opt, _debug) {
   }
 
   return [
-    {"ds":[0,0,0], "geom":geom, "id":"a1", "nei":["b","b",".",".","b","."]}
+    {"ds":[0,0,0], "geom":geom, "id":"a1", "dock":["b","b","b",".","$0 .","$0 ."], "anchor":geom}
   ];
 }
 
+// 2x1 top portion of arch
+//
 function arch1(opt, _debug) {
 
   // left geom centered at (0,0,0)
@@ -347,12 +380,16 @@ function arch1(opt, _debug) {
   }
 
   return [
-    {"ds":[ 0,0,0], "geom":lgeom, "id":"a2_1", "nei":["a2_0",   "b",".",".","b","."]},
-    {"ds":[ 1,0,0], "geom":rgeom, "id":"a2_0", "nei":[   "b","a2_1",".",".","b","."]}
+    {"ds":[ 0,0,0], "geom":lgeom, "id":"a2_1", "dock":[  "$1",  "b", "b",".","$0 .","$0 ."], "anchor": geom},
+    {"ds":[ 1,0,0], "geom":rgeom, "id":"a2_0", "dock":[   "b", "$0", "b",".","$1 .","$1 ."]}
   ];
 }
 
+// 3x2 top portion of arch
+// middle empty region not returned, so only 5 blocks
+//
 function arch2(opt, _debug) {
+
   let geom = 
     op.mov([1,-0.0,0],
         op.sub(
@@ -361,9 +398,6 @@ function arch2(opt, _debug) {
           op.cub({"size":[3,3,1], "center":[0,-1.5,0]})
         )
       );
-
-  //DEBUG
-  //return [ {"geom":op.add(geom, DEBUG_GEOM) }];
 
   //    y
   //    |
@@ -377,7 +411,7 @@ function arch2(opt, _debug) {
 
   let info = [];
 
-  info.push({"ds":[ 0,0,0], "geom": op.and(op.cub({"size":[1,1,1],"center":[0,0,0]}), op.mov([0,0,0], geom)) });
+  info.push({"ds":[ 0,0,0], "geom": op.and(op.cub({"size":[1,1,1],"center":[0,0,0]}), op.mov([0,0,0], geom)), "anchor": geom  });
   info.push({"ds":[ 0,0,0], "geom": op.and(op.cub({"size":[1,1,1],"center":[0,0,0]}), op.mov([0,-1,0], geom)) });
   //info.push({"ds":[ 0,0,0], "geom": op.and(op.cub({"size":[1,1,1],"center":[0,0,0]}), op.mov([-1,0,0], geom)) });
   info.push({"ds":[ 0,0,0], "geom": op.and(op.cub({"size":[1,1,1],"center":[0,0,0]}), op.mov([-1,-1,0], geom)) });
@@ -390,72 +424,62 @@ function arch2(opt, _debug) {
     }
   }
 
-  /*
-  info.push({"ds":[ 0,0,0], "geom": op.and(op.mov([ 0, 0, 0],geom), op.mov([0.5,0.5,0.5], op.cub({"size":[1,1,1]}))) });
-  info.push({"ds":[ 0,0,1], "geom": op.and(op.mov([ 0, 0,-1],geom), op.mov([0.5,0.5,0.5], op.cub({"size":[1,1,1]}))) });
-  info.push({"ds":[-1,0,1], "geom": op.and(op.mov([ 1, 0,-1],geom), op.mov([0.5,0.5,0.5], op.cub({"size":[1,1,1]}))) });
-  info.push({"ds":[-2,0,1], "geom": op.and(op.mov([ 2, 0,-1],geom), op.mov([0.5,0.5,0.5], op.cub({"size":[1,1,1]}))) });
-  info.push({"ds":[-2,0,0], "geom": op.and(op.mov([ 2, 0, 0],geom), op.mov([0.5,0.5,0.5], op.cub({"size":[1,1,1]}))) });
-  */
-
   info[0]["id"] = "a3_0";
   info[1]["id"] = "a3_1";
   info[2]["id"] = "a3_2";
   info[3]["id"] = "a3_3";
   info[4]["id"] = "a3_4";
 
-  info[0]["nei"] = [    ".",    "b", "$1",  ".",    "*",    "*" ];
-  info[1]["nei"] = [   "$2",    "b",  "b", "$1",    "*",    "*" ];
-  info[2]["nei"] = [   "$4",   "$2",  "b",  ".",    "*",    "*" ];
-  info[3]["nei"] = [    "b",    ".", "$4",  ".",    "*",    "*" ];
-  info[4]["nei"] = [    "b",   "$2",  "b",  ".",    "*",    "*" ];
+  info[0]["dock"] = [    ".",    "b", "$1",  ".",    "$0 .",    "$0 ." ];
+  info[1]["dock"] = [   "$2",    "b",  "b", "$1",    "$1 .",    "$1 ." ];
+  info[2]["dock"] = [   "$4",   "$2",  "b",  ".",    "$2 .",    "$2 ." ];
+  info[3]["dock"] = [    "b",    ".", "$4",  ".",    "$3 .",    "$3 ." ];
+  info[4]["dock"] = [    "b",   "$2",  "b",  ".",    "$4 .",    "$4 ." ];
 
   return info;
 }
 
-function construct_voxel_dock(info, rot_info) {
-  //let f = jscad_f();
-  let f = op;
-
-  let irot = 1;
-
-  for (let idx=0; idx<info.length; idx++) {
-    let ele = info[idx];
-
-    let theta = irot*Math.PI/2;
-
-    let inst = { "id":"", "ds":[ele.ds[0],ele.ds[1],ele.ds[2]], "geom":{}, "nei":[] };
-
-    inst.id = ele.id + "_00" +  irot.toString();
-
-    // lazy rot
-    //
-    for (let ii=0; ii<irot; ii++) {
-      let ts = [ inst.ds[1], -inst.ds[0], inst.ds[2] ];
-      inst.ds = ts;
-    }
-    inst.geom = f.rot( [0,0,theta], ele.geom );
-
-
-
-  }
-}
-
 function main() {
 
-  let _lib_info = [
-    { "name": "stair", "f": stair },
-    { "name": "block", "f": block },
-    { "name": "wedge_up", "f": wedge_up },
-    { "name": "wedge_down", "f": wedge_down },
-    { "name": "arch", "f": null }
-  ];
+  let stickem_info = {
+    "unit": [1,1,1],
+    "unit_center":[0,0,0],
+    "up":[0,1,0],
+    "symmetry":"y",
+    "dock": {
+      "." : { "type":"!", "tile":[0], "description":"empty space (.)" },
+      "#" : { "type":"!", "tile":[1], "description":"ground (#)" },
+
+      "w" : { "type":"&", "dock":"W", "description":"wedge (down) side dock" },
+      "W" : { "type":"&", "dock":"w", "description":"wedge (down) side dock" },
+
+      "m" : { "type":"&", "dock":"M", "description":"wedge (up) side dock" },
+      "M" : { "type":"&", "dock":"m", "description":"wedge (up) side dock" },
+
+      "s" : { "type":"&", "dock":"S", "description":"stair side dock" },
+      "S" : { "type":"&", "dock":"s", "description":"stair side dock" },
+
+      "b" : { "type":"@", "description":"block" },
+      "4" : { "type":"@", "description":"2x2 blocks (for under double doorway)" },
+      "a" : { "type":"@", "description":"xz dock for arch (side arch)" },
+
+      "A" : { "type":"@", "description":"top arch (y+-) dock connector" }
+    },
+    "tile": {
+      "0": {"name":"0", "description":"empty" },
+      "1": {"name":"1", "description":"ground" }
+    },
+    "source": [
+    ]
+  };
 
   let lib_info = [
     { "name": "block",        "f": function() { return block(); } },
     { "name": "wedge_up",     "f": function() { return wedge_up(); } },
     { "name": "wedge_down",   "f": function() { return wedge_down(); } },
     { "name": "doorway",      "f": function() { return doorway(); } },
+    { "name": "double-doorway",      "f": function() { return double_doorway(); } },
+    { "name": "block-2x2",      "f": function() { return block_2x2(); } },
     { "name": "arch0",        "f": function() { return arch0(); } },
     { "name": "arch1",        "f": function() { return arch1(); } },
     { "name": "arch2",        "f": function() { return arch2(); } },
@@ -463,108 +487,26 @@ function main() {
   ];
 
 
+
   for (let li_idx=0; li_idx<lib_info.length; li_idx++) {
     let li = lib_info[li_idx];
 
-    console.log(">>", li.name);
-
     let shape_info = li.f();
 
-    if (shape_info.length == 1) {
-      let stl_data = stlser.serialize({"binary":false}, shape_info[0].geom).join("");
-      fs.writeFileSync(".plum_stl/" + li.name + ".stl", stl_data);
+    let stl_data = stlser.serialize({"binary":false}, shape_info[0].anchor).join("");
+    fs.writeFileSync(".plum_stl/" + li.name + ".stl", stl_data);
+
+    let src_idx = stickem_info.source.length;
+    stickem_info.source.push({"name":li.name, "dock":[ shape_info[0].dock ]});
+    for (let ii=1; ii<shape_info.length; ii++) {
+      stickem_info.source[src_idx].dock.push( shape_info[ii].dock );
     }
-    else {
-      for (let ii=0; ii<shape_info.length; ii++) {
-        let stl_data = stlser.serialize({"binary":false}, shape_info[ii].geom).join("");
-        fs.writeFileSync(".plum_stl/" + li.name + "_" + ii.toString() + ".stl", stl_data);
-      }
-    }
+
   }
+
+  console.log(JSON.stringify(stickem_info, undefined, 2));
 
   return;
-
-  /*
-  let sub = jscad.booleans.subtract;
-  let and = jscad.booleans.intersection;
-  let add = jscad.booleans.union;
-
-  let mov = jscad.transforms.translate;
-  let rot = jscad.transforms.rotate;
-  let lif = jscad.extrusions.extrudeLinear;
-  let cub = jscad.primitives.cuboid;
-  let cir = jscad.primitives.circle;
-  */
-
-  let ds = 1/32;
-
-  //let f = jscad_f();
-  let f = op;
-
-  let refcubes =
-    f.add(
-      f.mov([0,0,0], f.cub({"size":[ds,ds,ds]})),
-      f.mov([1,0,0], f.cub({"size":[ds,ds,ds]})),
-      f.mov([0,1,0], f.cub({"size":[ds,ds,ds]})),
-      f.mov([0,0,1], f.cub({"size":[ds,ds,ds]})),
-
-      f.mov([1,1,0], f.cub({"size":[ds,ds,ds]})),
-      f.mov([0,1,1], f.cub({"size":[ds,ds,ds]})),
-      f.mov([1,0,1], f.cub({"size":[ds,ds,ds]})),
-
-      f.mov([1,1,1], f.cub({"size":[ds,ds,ds]}))
-    );
-
-
-
-  //let info = arch1();
-  //let fin = add(refcubes, geom);
-
-  //let info = arch2();
-  //let fin = add(refcubes, geom[0], geom[1]);
-
-
-  //let info = arch3();
-  //let info = block();
-  //let info = stair();
-  //let info = stair(5);
-  //let info = wedge_u();
-  let info = wedge_d();
-
-  let geom = refcubes;
-  for (let ii=0; ii<info.length; ii++) {
-    geom = f.add(geom, f.mov(info[ii].ds, info[ii].geom));
-  }
-  let fin = geom;
-
-
-
-  /*
-  let geom = 
-    mov([0.5,1.0,0.5],
-      rot([Math.PI/2,0,0],
-        sub(
-          mov([0,0,0.5], cub({"size":[1,1,1]})),
-          lif( {height:1}, cir({"radius":0.5})),
-          mov([0,-0.5,0.5], cub({"size":[1,1,1]}))
-        )
-      )
-    );
-    */
-
-
-  /*
-  let geom = jscad.primitives.cuboid({"size": [4,1,4]});
-
-  jscad.booleans.subtract(
-    jscad.primitives.cuboid({"size": [4,1,4]}),
-    jscad.extrusions.extrudeLinear({"height":1}, jscad.primitives.circle({"radius":0.5}))
-  );
-  */
-
-  let dat = stlser.serialize({"binary": false}, fin);
-  console.log(dat[0]);
-
 }
 
 main();
