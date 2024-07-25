@@ -1898,7 +1898,7 @@ function _main(conf_fn, base_dir, out_base_dir, _out_type) {
         fs.writeFileSync( out_base_dir + "/" + poms_data.name[ii] + ".stl", op.stl_dumps({"binary":false},geom).join("").toString() );
       }
       else {
-        fs.writeFileSync( out_base_dir + "/" + poms_data.name[ii] + ".stl", "" );
+        fs.writeFileSync( out_base_dir + "/" + poms_data.name[ii] + ".stl", "solid EMPTY\nendsolid EMPTY\n" );
       }
 
     }

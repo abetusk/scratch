@@ -309,7 +309,7 @@ function double_doorway(opt, _debug) {
   }
 
   return [
-    {"ds":[0,0,0], "geom":geom, "id":"a1", "dock":[".",".","b","b 4",".","."], "anchor":geom}
+    {"ds":[0,0,0], "geom":geom, "id":"a1", "dock":[ ".", ".", "b","b 4",  ".", "."], "anchor":geom}
   ];
 }
 
@@ -331,7 +331,7 @@ function block_2x2(opt, _debug) {
   }
 
   return [
-    {"ds":[0,0,0], "geom":geom, "id":"a1", "dock":[".",".","4.","4 b",".","."], "anchor":geom}
+    {"ds":[0,0,0], "geom":geom, "id":"a1", "dock":[ ".", ".",  "4","4 b", ".", "."], "anchor":geom}
   ];
 
 }
@@ -352,7 +352,7 @@ function arch0(opt, _debug) {
   }
 
   return [
-    {"ds":[0,0,0], "geom":geom, "id":"a1", "dock":["b","b","b",".","$0 .","$0 ."], "anchor":geom}
+    {"ds":[0,0,0], "geom":geom, "id":"a1", "dock":[ "b", "b",  "b", ".",  ":", ":"], "anchor":geom}
   ];
 }
 
@@ -380,8 +380,8 @@ function arch1(opt, _debug) {
   }
 
   return [
-    {"ds":[ 0,0,0], "geom":lgeom, "id":"a2_1", "dock":[  "$1",  "b", "b",".","$0 .","$0 ."], "anchor": geom},
-    {"ds":[ 1,0,0], "geom":rgeom, "id":"a2_0", "dock":[   "b", "$0", "b",".","$1 .","$1 ."]}
+    {"ds":[ 0,0,0], "geom":lgeom, "id":"a1_0", "dock":[  "$1",  "b", "b", ".",  ":", ":"], "anchor": geom},
+    {"ds":[ 1,0,0], "geom":rgeom, "id":"a1_1", "dock":[   "b", "$0", "b", ".",  ":", ":"]}
   ];
 }
 
@@ -430,11 +430,11 @@ function arch2(opt, _debug) {
   info[3]["id"] = "a3_3";
   info[4]["id"] = "a3_4";
 
-  info[0]["dock"] = [    ".",    "b", "$1",  ".",    "$0 .",    "$0 ." ];
-  info[1]["dock"] = [   "$2",    "b",  "b", "$1",    "$1 .",    "$1 ." ];
-  info[2]["dock"] = [   "$4",   "$2",  "b",  ".",    "$2 .",    "$2 ." ];
-  info[3]["dock"] = [    "b",    ".", "$4",  ".",    "$3 .",    "$3 ." ];
-  info[4]["dock"] = [    "b",   "$2",  "b",  ".",    "$4 .",    "$4 ." ];
+  info[0]["dock"] = [    ".",    "b", "$1",  ".",    ":",    ":" ];
+  info[1]["dock"] = [   "$2",    "b",  "b", "$1",    ":",    ":" ];
+  info[2]["dock"] = [   "$4",   "$2",  "b",  ".",    ":",    ":" ];
+  info[3]["dock"] = [    "b",    ".", "$4",  ".",    ":",    ":" ];
+  info[4]["dock"] = [    "b",   "$2",  "b",  ".",    ":",    ":" ];
 
   return info;
 }
