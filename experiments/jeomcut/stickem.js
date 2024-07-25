@@ -2,18 +2,26 @@
 //
 
 var fs = require("fs");
+
 var jscad = require("@jscad/modeling");
-var objectDeserializer = require('@jscad/obj-deserializer')
-var stlSerializer = require('@jscad/stl-serializer')
 var array_utils = require('@jscad/array-utils')
+
+var objectDeserializer = require('@jscad/obj-deserializer')
+var objectSerializer = require('@jscad/obj-serializer')
+
+var stlSerializer = require('@jscad/stl-serializer')
+var stlDeserializer = require('@jscad/stl-deserializer')
+
 var m4 = require("./m4.js");
 var jeom = require("./jeom.js");
 
 var op = {
 
-  "objload": objectDeserializer.deserialize,
+  "obj_loads": objectDeserializer.deserialize,
+  "obj_dumps": objectSerializer.serialize,
 
-  "stldumps": stlSerializer.serialize,
+  "stl_loads": stlDeserializer.deserialize,
+  "stl_dumps": stlSerializer.serialize,
 
   "flatten": array_utils.flatten,
 
@@ -332,7 +340,7 @@ var unitc = op.cuboid(_opt);
 
 function obj2geom(fn_name) {
   let rawData = fs.readFileSync(fn_name);
-  var geom = op.objload({"output":"geometry"}, rawData.toString());
+  var geom = op.obj_loads({"output":"geometry"}, rawData.toString());
   return geom;
 }
 
@@ -495,7 +503,7 @@ function bvox_occupancy(fn_name) {
   //var rawData = fs.readFileSync('src/ramp.obj')
   //var rawData = fs.readFileSync('src/ramp.obj')
   //var opt = {"output":"geometry"};
-  var geom = op.objload({"output":"geometry"}, rawData.toString());
+  var geom = op.obj_loads({"output":"geometry"}, rawData.toString());
 
   let S = [
     vox_info.ds[0][0],
@@ -1431,7 +1439,8 @@ function blockRotate(cell, rot) {
   return Array.from(rcell);
 }
 
-function createRepresentative(cfg, geom, info) {
+//function createRepresentative(cfg, geom, info) {
+function createRepresentative(cfg, info) {
 
   let name = info.name;
   let dock_block_list = info.dock;
@@ -1465,9 +1474,9 @@ function createRepresentative(cfg, geom, info) {
         let tile_irot = [ irot[0], irot[1], irot[2] ];
         let tile_rad_rot = [ Math.PI*irot[0]/2, Math.PI*irot[1]/2, Math.PI*irot[2]/2 ];
 
-        let tile_geom = op.rotZ( tile_rad_rot[2],
-                        op.rotY( tile_rad_rot[1],
-                        op.rotX( tile_rad_rot[0], geom ) ) );
+        //let tile_geom = op.rotZ( tile_rad_rot[2],
+        //                op.rotY( tile_rad_rot[1],
+        //                op.rotX( tile_rad_rot[0], geom ) ) );
 
         let tile_block = [[0,0,0]];
 
@@ -1480,8 +1489,8 @@ function createRepresentative(cfg, geom, info) {
           "irot": tile_irot,
           "rot": tile_rad_rot,
           "block" : tile_block,
-          "dock": cur_dock,
-          "geom": tile_geom
+          //"geom": tile_geom,
+          "dock": cur_dock
         });
 
         rot_lib[dock_key] = true;
@@ -1539,10 +1548,12 @@ function createRepresentative(cfg, geom, info) {
 // token.
 //
 //
-function _main() {
+function _main(conf_fn, base_dir, out_base_dir, _out_type) {
 
-  var cfg = JSON.parse( fs.readFileSync("./data/stickem_minigolf.conf") );
-  let base_dir = "./data/minigolf.obj";
+  //var cfg = JSON.parse( fs.readFileSync("./data/stickem_minigolf.conf") );
+  //let base_dir = "./data/minigolf.obj";
+
+  var cfg = JSON.parse( fs.readFileSync(conf_fn) );
 
   let stickem_info = {
     "basename": [],
@@ -1599,8 +1610,9 @@ function _main() {
   //
   for (let idx=0; idx<cfg.source.length; idx++) {
     let name = cfg.source[idx].name;
-    let geom = obj2geom( base_dir + "/" + name + ".obj" )[0];
-    let rl = createRepresentative(cfg, geom, cfg.source[idx]);
+    //let geom = obj2geom( base_dir + "/" + name + ".obj" )[0];
+    //let rl = createRepresentative(cfg, geom, cfg.source[idx]);
+    let rl = createRepresentative(cfg, cfg.source[idx]);
     for (let ii=0; ii<rl.length; ii++) {
       stickem_info.repr.push(rl[ii]);
     }
@@ -1767,7 +1779,7 @@ function _main() {
   };
 
 
-  let out_base_dir = ".minigolf_tile";
+  //let out_base_dir = ".minigolf_tile";
 
   poms_data.rule = rule_list;
   poms_data.name = tile_name;
@@ -1791,55 +1803,106 @@ function _main() {
   //
   //----
 
-  let empty_obj = out_base_dir + "/" + "._000_0.obj";
-  //let empty_mtl = out_base_dir + "/" + "._000_0.mtl";
+  if (_out_type == "obj") {
 
-  for (let ii=0; ii<poms_data.name.length; ii++) {
-    poms_data.objMap.push( out_base_dir + "/" + poms_data.name[ii] + ".obj" );
+    let empty_obj = out_base_dir + "/" + "._000_0.obj";
 
-    //console.log(poms_data.name[ii]);
+    for (let ii=0; ii<poms_data.name.length; ii++) {
+      poms_data.objMap.push( out_base_dir + "/" + poms_data.name[ii] + ".obj" );
 
-    let tok = poms_data.name[ii].split("_");
-    let subtile_id = tok.slice(-1);
-    let rotcode = tok.slice(-2).slice(0,1).join("");
+      let tok = poms_data.name[ii].split("_");
+      let subtile_id = tok.slice(-1);
+      let rotcode = tok.slice(-2).slice(0,1).join("");
 
-    let source_name = tok.slice(0, tok.length-2).join("_") ;
+      let source_name = tok.slice(0, tok.length-2).join("_") ;
 
-    //console.log(">>>", source_name, rotcode);
+      if ((source_name == '.') ||
+          (source_name == '#')) { continue; }
 
-    if ((source_name == '.') ||
-        (source_name == '#')) { continue; }
+      let json_obj = jeom.obj2json( fs.readFileSync(base_dir + "/" + source_name + ".obj") );
 
-    let json_obj = jeom.obj2json( fs.readFileSync(base_dir + "/" + source_name + ".obj") );
+      let axis = '';
+      let theta = 0;
+      let _rc = rotcode.split("");
+      if (_rc[2] != '0') {
+        theta = -parseFloat(_rc[2])*Math.PI/2.0;
+        json_obj = jeom.json_obj_transform(json_obj, [0,0,0], theta, 'z');
+      }
 
-    let axis = '';
-    let theta = 0;
-    let _rc = rotcode.split("");
-    if (_rc[2] != '0') {
-      theta = -parseFloat(_rc[2])*Math.PI/2.0;
-      json_obj = jeom.json_obj_transform(json_obj, [0,0,0], theta, 'z');
+      if (_rc[1] != '0') {
+        theta = -parseFloat(_rc[1])*Math.PI/2.0;
+
+        json_obj = jeom.json_obj_transform(json_obj, [0,0,0], theta, 'y');
+      }
+
+      if (_rc[0] != '0') {
+        theta = -parseFloat(_rc[0])*Math.PI/2.0;
+        json_obj = jeom.json_obj_transform(json_obj, [0,0,0], theta, 'x');
+      }
+
+      let sfx = poms_data.name[ii].split("_").slice(-1).join("");
+      if (sfx == "0") {
+        fs.writeFileSync( out_base_dir + "/" + poms_data.name[ii] + ".obj", jeom.json2obj(json_obj) );
+        fs.writeFileSync( out_base_dir + "/" + poms_data.name[ii] + ".mtl", fs.readFileSync( base_dir + "/" + source_name + ".mtl" ));
+      }
+      else {
+        fs.writeFileSync( out_base_dir + "/" + poms_data.name[ii] + ".obj", "" );
+        fs.writeFileSync( out_base_dir + "/" + poms_data.name[ii] + ".mtl", "" );
+      }
+
     }
 
-    if (_rc[1] != '0') {
-      theta = -parseFloat(_rc[1])*Math.PI/2.0;
+  }
+  else if (_out_type == "stl") {
 
-      json_obj = jeom.json_obj_transform(json_obj, [0,0,0], theta, 'y');
+    let empty_stl = out_base_dir + "/" + "._000_0.stl";
+    let ground_stl = out_base_dir + "/" + "#_000_0.stl";
+
+    for (let ii=0; ii<poms_data.name.length; ii++) {
+      poms_data.objMap.push( out_base_dir + "/" + poms_data.name[ii] + ".stl" );
+
+      let tok = poms_data.name[ii].split("_");
+      let subtile_id = tok.slice(-1);
+      let rotcode = tok.slice(-2).slice(0,1).join("");
+
+      let source_name = tok.slice(0, tok.length-2).join("_") ;
+
+      if ((source_name == '.') ||
+          (source_name == '#')) { continue; }
+
+      let geom = op.stl_loads({"output":"geometry"}, fs.readFileSync(base_dir + "/" + source_name + ".stl"));
+
+      let axis = '';
+      let theta = 0;
+      let _rc = rotcode.split("");
+      if (_rc[2] != '0') {
+        theta = -parseFloat(_rc[2])*Math.PI/2.0;
+        geom = op.rotZ(theta, geom);
+      }
+
+      if (_rc[1] != '0') {
+        theta = -parseFloat(_rc[1])*Math.PI/2.0;
+        geom = op.rotY(theta, geom);
+      }
+
+      if (_rc[0] != '0') {
+        theta = -parseFloat(_rc[0])*Math.PI/2.0;
+        geom = op.rotX(theta, geom);
+      }
+
+      let sfx = poms_data.name[ii].split("_").slice(-1).join("");
+      if (sfx == "0") {
+
+        console.log(">>", out_base_dir, poms_data.name[ii]);
+
+        fs.writeFileSync( out_base_dir + "/" + poms_data.name[ii] + ".stl", op.stl_dumps({"binary":false},geom).join("").toString() );
+      }
+      else {
+        fs.writeFileSync( out_base_dir + "/" + poms_data.name[ii] + ".stl", "" );
+      }
+
     }
 
-    if (_rc[0] != '0') {
-      theta = -parseFloat(_rc[0])*Math.PI/2.0;
-      json_obj = jeom.json_obj_transform(json_obj, [0,0,0], theta, 'x');
-    }
-
-    let sfx = poms_data.name[ii].split("_").slice(-1).join("");
-    if (sfx == "0") {
-      fs.writeFileSync( out_base_dir + "/" + poms_data.name[ii] + ".obj", jeom.json2obj(json_obj) );
-      fs.writeFileSync( out_base_dir + "/" + poms_data.name[ii] + ".mtl", fs.readFileSync( base_dir + "/" + source_name + ".mtl" ));
-    }
-    else {
-      fs.writeFileSync( out_base_dir + "/" + poms_data.name[ii] + ".obj", "" );
-      fs.writeFileSync( out_base_dir + "/" + poms_data.name[ii] + ".mtl", "" );
-    }
 
   }
 
@@ -1847,6 +1910,8 @@ function _main() {
 
 }
 
-_main();
+
+//_main("./data/stickem_minigolf.conf", "./data/minigolf.obj", ".minigolf_tile", "obj");
+_main("./data/stickem_plumarch.conf", ".plum_stl", ".plum_tile", "stl");
 
 
