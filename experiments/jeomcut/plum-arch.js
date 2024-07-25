@@ -50,6 +50,16 @@ var op = {
 
   "ruboid": jscad.primitives.roundedCuboid,
 
+  "circle": jscad.primitives.circle,
+  "cir": jscad.primitives.circle,
+
+  "lift": jscad.extrusions.extrudeLinear,
+  "lif": jscad.extrusions.extrudeLinear,
+
+  "lifr": jscad.extrusions.extrudeRotate,
+  "lifc": jscad.extrusions.extrudeRectangular,
+  "lifh": jscad.extrusions.extrudeHelical,
+
   "rot": jscad.transforms.rotate,
   "rotX": jscad.transforms.rotateX,
   "rotY": jscad.transforms.rotateY,
@@ -272,97 +282,85 @@ function block() {
   ];
 }
 
-function arch1() {
-  //let f = jscad_f();
-  let f = op;
+function doorway(opt, _debug) {
 
-  /*
-  let sub = jscad.booleans.subtract;
-  let and = jscad.booleans.intersection;
-  let add = jscad.booleans.union;
+  opt = ((typeof opt === "undefined") ? {"r":0.25, "h":0.75}:opt);
 
-  let mov = jscad.transforms.translate;
-  let rot = jscad.transforms.rotate;
-  let lif = jscad.extrusions.extrudeLinear;
-  let cub = jscad.primitives.cuboid;
-  let cir = jscad.primitives.circle;
-  */
+  let r = (("r" in opt) ? opt.r : 0.25);
+  let h = (("h" in opt) ? opt.h : 0.75);
+  
+  let _h = (h-r)/2;
+  let _c = h-r-0.5;
 
   let geom = 
-    f.mov([0.5,1.0,0.5],
-      f.rot([Math.PI/2,0,0],
-        f.sub(
-          f.mov([0,0,0.5], f.cub({"size":[1,1,1]})),
-          f.lif( {height:1}, f.cir({"radius":0.5})),
-          f.mov([0,-0.5,0.5], f.cub({"size":[1,1,1]}))
-        )
-      )
+    op.sub(
+      op.mov([0,0,0], op.cub({"size":[1,1,1]})),
+      op.mov([0,_c,-0.6], op.lif( {height:1.2}, op.cir({"radius":r})) ),
+      op.mov([0,-_h,0], op.cub({"size":[2*r,2*_h,1.2]}))
     );
+
+  if (_debug) {
+    geom = op.add(geom, DEBUG_GEOM);
+  }
 
   return [
     {"ds":[0,0,0], "geom":geom, "id":"a1", "nei":["b","b",".",".","b","."]}
   ];
 }
 
-function arch2() {
-  //let f = jscad_f();
-  let f = op;
-
-  /*
-  let sub = jscad.booleans.subtract;
-  let and = jscad.booleans.intersect;
-  let add = jscad.booleans.union;
-
-  let mov = jscad.transforms.translate;
-  let rot = jscad.transforms.rotate;
-  let lif = jscad.extrusions.extrudeLinear;
-  let cub = jscad.primitives.cuboid;
-  let cir = jscad.primitives.circle;
-  */
-
+function arch0(opt, _debug) {
   let geom = 
-    f.mov([0,1,0],
-      f.rot([Math.PI/2,0,0],
-        f.sub(
-          f.mov([0,0,0.5], f.cub({"size":[2,2,1]})),
-          f.mov([0,0,0], f.lif( {height:1}, f.cir({"radius":1.0}))),
-          f.mov([0,-1.0,0.5], f.cub({"size":[2,2,1]}))
-        )
-      )
+    op.sub(
+      op.mov([0,0,0], op.cub({"size":[1,1,1]})),
+      op.mov([0,0,-0.5], op.lif( {height:1}, op.cir({"radius":0.5})) ),
+      op.mov([0,-0.5,0], op.cub({"size":[1,1,1]}))
     );
 
-  let rgeom = f.and(f.mov([0,0,0],geom), f.mov([0.5,0.5,0.5], f.cub({"size":[1,1,1]})));
-  let lgeom = f.and(f.mov([1,0,0],geom), f.mov([0.5,0.5,0.5], f.cub({"size":[1,1,1]})));
+  if (_debug) {
+    geom = op.add(geom, DEBUG_GEOM);
+  }
 
   return [
-    {"ds":[ 0,0,0], "geom":rgeom, "id":"a2_0", "nei":[   "b","a2_1",".",".","b","."]},
-    {"ds":[-1,0,0], "geom":lgeom, "id":"a2_1", "nei":["a2_0",   "b",".",".","b","."]},
+    {"ds":[0,0,0], "geom":geom, "id":"a1", "nei":["b","b",".",".","b","."]}
   ];
 }
 
-function arch3() {
-  //let f = jscad_f();
-  let f = op;
+function arch1(opt, _debug) {
 
-  /*
-  let sub = jscad.booleans.subtract;
-  let and = jscad.booleans.intersect;
-  let add = jscad.booleans.union;
+  // left geom centered at (0,0,0)
+  //
+  let geom = 
+    op.mov([0.5,-0.5,0],
+      op.sub(
+        op.mov([0,0,0], op.cub({"size":[2,2,1], "center":[0,0,0]})),
+        op.mov([0,0,-0.5], op.lif( {height:1}, op.cir({"radius":1.0}))),
+        op.cub({"size":[2,2,1.2], "center":[0,-1,0]})
+      )
+    );
 
-  let mov = jscad.transforms.translate;
-  let rot = jscad.transforms.rotate;
-  let lif = jscad.extrusions.extrudeLinear;
-  let cub = jscad.primitives.cuboid;
-  let cir = jscad.primitives.circle;
-  */
+  let lgeom = op.and(geom, op.cub({"size":[1,1,1], "center":[0,0,0]}));
+  let rgeom = op.and(op.mov([-1,0,0],geom), op.cub({"size":[1,1,1], "center":[0,0,0]}));
+
+  if (_debug) {
+    lgeom = op.add(lgeom, DEBUG_GEOM);
+    rgeom = op.add(rgeom, DEBUG_GEOM);
+  }
+
+  return [
+    {"ds":[ 0,0,0], "geom":lgeom, "id":"a2_1", "nei":["a2_0",   "b",".",".","b","."]},
+    {"ds":[ 1,0,0], "geom":rgeom, "id":"a2_0", "nei":[   "b","a2_1",".",".","b","."]}
+  ];
+}
+
+function arch2() {
 
   let geom = 
-    f.mov([-0.5,1,0.5],
-      f.rot([Math.PI/2,0,0],
-        f.sub(
-          f.mov([0,0,0.5], f.cub({"size":[3,3,1]})),
-          f.mov([0,0,0], f.lif( {height:1}, f.cir({"radius":1.5}))),
-          f.mov([0,-1.5,0.5], f.cub({"size":[3,3,1]}))
+    op.mov([-0.5,1,0.5],
+      op.rot([Math.PI/2,0,0],
+        op.sub(
+          op.mov([0,0,0.5], op.cub({"size":[3,3,1]})),
+          op.mov([0,0,0], op.lif( {height:1}, op.cir({"radius":1.5}))),
+          op.mov([0,-1.5,0.5], op.cub({"size":[3,3,1]}))
         )
       )
     );
@@ -378,11 +376,11 @@ function arch3() {
 
   let info = [];
 
-  info.push({"ds":[ 0,0,0], "geom": f.and(f.mov([ 0, 0, 0],geom), f.mov([0.5,0.5,0.5], f.cub({"size":[1,1,1]}))) });
-  info.push({"ds":[ 0,0,1], "geom": f.and(f.mov([ 0, 0,-1],geom), f.mov([0.5,0.5,0.5], f.cub({"size":[1,1,1]}))) });
-  info.push({"ds":[-1,0,1], "geom": f.and(f.mov([ 1, 0,-1],geom), f.mov([0.5,0.5,0.5], f.cub({"size":[1,1,1]}))) });
-  info.push({"ds":[-2,0,1], "geom": f.and(f.mov([ 2, 0,-1],geom), f.mov([0.5,0.5,0.5], f.cub({"size":[1,1,1]}))) });
-  info.push({"ds":[-2,0,0], "geom": f.and(f.mov([ 2, 0, 0],geom), f.mov([0.5,0.5,0.5], f.cub({"size":[1,1,1]}))) });
+  info.push({"ds":[ 0,0,0], "geom": op.and(op.mov([ 0, 0, 0],geom), op.mov([0.5,0.5,0.5], op.cub({"size":[1,1,1]}))) });
+  info.push({"ds":[ 0,0,1], "geom": op.and(op.mov([ 0, 0,-1],geom), op.mov([0.5,0.5,0.5], op.cub({"size":[1,1,1]}))) });
+  info.push({"ds":[-1,0,1], "geom": op.and(op.mov([ 1, 0,-1],geom), op.mov([0.5,0.5,0.5], op.cub({"size":[1,1,1]}))) });
+  info.push({"ds":[-2,0,1], "geom": op.and(op.mov([ 2, 0,-1],geom), op.mov([0.5,0.5,0.5], op.cub({"size":[1,1,1]}))) });
+  info.push({"ds":[-2,0,0], "geom": op.and(op.mov([ 2, 0, 0],geom), op.mov([0.5,0.5,0.5], op.cub({"size":[1,1,1]}))) });
 
   info[0]["id"] = "a3_0";
   info[1]["id"] = "a3_1";
@@ -441,6 +439,10 @@ function main() {
     { "name": "block",        "f": function() { return block(); } },
     { "name": "wedge_up",     "f": function() { return wedge_up(); } },
     { "name": "wedge_down",   "f": function() { return wedge_down(); } },
+    { "name": "doorway",      "f": function() { return doorway(); } },
+    { "name": "arch0",        "f": function() { return arch0(); } },
+    { "name": "arch1",        "f": function() { return arch1(); } },
+    { "name": "arch2",        "f": function() { return arch2(); } },
     { "name": "stair",        "f": (function(_n){ return function() { return stair(_n); } })(5)  }
   ];
 
@@ -451,8 +453,17 @@ function main() {
     console.log(">>", li.name);
 
     let shape_info = li.f();
-    let stl_data = stlser.serialize({"binary":false}, shape_info[0].geom).join("");
-    fs.writeFileSync(".plum_stl/" + li.name + ".stl", stl_data);
+
+    if (shape_info.length == 1) {
+      let stl_data = stlser.serialize({"binary":false}, shape_info[0].geom).join("");
+      fs.writeFileSync(".plum_stl/" + li.name + ".stl", stl_data);
+    }
+    else {
+      for (let ii=0; ii<shape_info.length; ii++) {
+        let stl_data = stlser.serialize({"binary":false}, shape_info[ii].geom).join("");
+        fs.writeFileSync(".plum_stl/" + li.name + "_" + ii.toString() + ".stl", stl_data);
+      }
+    }
   }
 
   return;
