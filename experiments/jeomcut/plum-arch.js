@@ -332,7 +332,7 @@ function arch1(opt, _debug) {
   let geom = 
     op.mov([0.5,-0.5,0],
       op.sub(
-        op.mov([0,0,0], op.cub({"size":[2,2,1], "center":[0,0,0]})),
+        op.cub({"size":[2,2,1], "center":[0,0,0]}),
         op.mov([0,0,-0.5], op.lif( {height:1}, op.cir({"radius":1.0}))),
         op.cub({"size":[2,2,1.2], "center":[0,-1,0]})
       )
@@ -352,35 +352,51 @@ function arch1(opt, _debug) {
   ];
 }
 
-function arch2() {
-
+function arch2(opt, _debug) {
   let geom = 
-    op.mov([-0.5,1,0.5],
-      op.rot([Math.PI/2,0,0],
+    op.mov([1,-0.0,0],
         op.sub(
-          op.mov([0,0,0.5], op.cub({"size":[3,3,1]})),
-          op.mov([0,0,0], op.lif( {height:1}, op.cir({"radius":1.5}))),
-          op.mov([0,-1.5,0.5], op.cub({"size":[3,3,1]}))
+          op.cub({"size":[3,3,1], "center":[0,0,0]}),
+          op.mov([0,0,-0.5], op.lif( {height:1}, op.cir({"radius":1.5}))),
+          op.cub({"size":[3,3,1], "center":[0,-1.5,0]})
         )
-      )
-    );
+      );
 
-  //  z  y
-  //  | /
-  //  . --x
-  //
+  //DEBUG
+  //return [ {"geom":op.add(geom, DEBUG_GEOM) }];
+
+  //    y
+  //    |
+  //    . --x
+  //   /
+  //  z
   //     |  b   |  b   |   b  |
-  //  b  | a3_3 | a3_2 | a3_1 | b
-  //  b  | a3_4 |  .   | a3_0 | b
+  //  b  | a2_1 | a2_2 | a2_4 | b
+  //  b  | a2_0 |  .   | a2_3 | b
   //     |  .   |  .   |   .  |
 
   let info = [];
 
+  info.push({"ds":[ 0,0,0], "geom": op.and(op.cub({"size":[1,1,1],"center":[0,0,0]}), op.mov([0,0,0], geom)) });
+  info.push({"ds":[ 0,0,0], "geom": op.and(op.cub({"size":[1,1,1],"center":[0,0,0]}), op.mov([0,-1,0], geom)) });
+  //info.push({"ds":[ 0,0,0], "geom": op.and(op.cub({"size":[1,1,1],"center":[0,0,0]}), op.mov([-1,0,0], geom)) });
+  info.push({"ds":[ 0,0,0], "geom": op.and(op.cub({"size":[1,1,1],"center":[0,0,0]}), op.mov([-1,-1,0], geom)) });
+  info.push({"ds":[ 0,0,0], "geom": op.and(op.cub({"size":[1,1,1],"center":[0,0,0]}), op.mov([-2,0,0], geom)) });
+  info.push({"ds":[ 0,0,0], "geom": op.and(op.cub({"size":[1,1,1],"center":[0,0,0]}), op.mov([-2,-1,0], geom)) });
+
+  if (_debug) {
+    for (let ii=0; ii<info.length; ii++) {
+      info[ii].geom = op.add( info[ii].geom, DEBUG_GEOM );
+    }
+  }
+
+  /*
   info.push({"ds":[ 0,0,0], "geom": op.and(op.mov([ 0, 0, 0],geom), op.mov([0.5,0.5,0.5], op.cub({"size":[1,1,1]}))) });
   info.push({"ds":[ 0,0,1], "geom": op.and(op.mov([ 0, 0,-1],geom), op.mov([0.5,0.5,0.5], op.cub({"size":[1,1,1]}))) });
   info.push({"ds":[-1,0,1], "geom": op.and(op.mov([ 1, 0,-1],geom), op.mov([0.5,0.5,0.5], op.cub({"size":[1,1,1]}))) });
   info.push({"ds":[-2,0,1], "geom": op.and(op.mov([ 2, 0,-1],geom), op.mov([0.5,0.5,0.5], op.cub({"size":[1,1,1]}))) });
   info.push({"ds":[-2,0,0], "geom": op.and(op.mov([ 2, 0, 0],geom), op.mov([0.5,0.5,0.5], op.cub({"size":[1,1,1]}))) });
+  */
 
   info[0]["id"] = "a3_0";
   info[1]["id"] = "a3_1";
@@ -388,11 +404,11 @@ function arch2() {
   info[3]["id"] = "a3_3";
   info[4]["id"] = "a3_4";
 
-  info[0]["nei"] = [    "b",    ".", ".", ".", "a3_1",    "." ];
-  info[1]["nei"] = [    "b", "a3_2", ".", ".",    "b", "a3_0" ];
-  info[2]["nei"] = [ "a3_1", "a3_3", ".", ".",    "b",    "." ];
-  info[2]["nei"] = [ "a3_2",    "b", ".", ".",    "b", "a3_4" ];
-  info[2]["nei"] = [    ".",    "b", ".", ".", "a3_3",    "." ];
+  info[0]["nei"] = [    ".",    "b", "$1",  ".",    "*",    "*" ];
+  info[1]["nei"] = [   "$2",    "b",  "b", "$1",    "*",    "*" ];
+  info[2]["nei"] = [   "$4",   "$2",  "b",  ".",    "*",    "*" ];
+  info[3]["nei"] = [    "b",    ".", "$4",  ".",    "*",    "*" ];
+  info[4]["nei"] = [    "b",   "$2",  "b",  ".",    "*",    "*" ];
 
   return info;
 }
