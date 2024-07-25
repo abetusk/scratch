@@ -531,7 +531,7 @@ function main() {
     ]
   };
 
-  let lib_info = [
+  let _lib_info = [
     { "name": "block",        "f": function() { return block(); } },
     { "name": "wedge_up",     "f": function() { return wedge_up(); } },
     { "name": "wedge_down",   "f": function() { return wedge_down(); } },
@@ -544,6 +544,9 @@ function main() {
     { "name": "stair",        "f": (function(_n){ return function() { return stair(_n); } })(5)  }
   ];
 
+  let lib_info = [
+    { "name": "block",        "f": function() { return block(); } }
+  ];
 
 
   for (let li_idx=0; li_idx<lib_info.length; li_idx++) {

@@ -1764,7 +1764,8 @@ function _main(conf_fn, base_dir, out_base_dir, _out_type) {
     "objMap": [],
     "constraint": [
       {"type":"quiltForce", "range": {"tile":[1,2], "x":[], "y":[0,1], "z":[], "note": "force ground tile on bottom xz plane, y+ up"} },
-      {"type":  "quiltPin", "range": {"tile":[1,2], "x":[], "y":[0,1], "z":[], "note": "pin previously forced operation"} }
+      {"type":  "quiltPin", "range": {"tile":[1,2], "x":[], "y":[0,1], "z":[], "note": "pin previously forced operation"} },
+      {"type":"quiltRemove","range": {"tile":[1,2], "x":[], "y":[1],   "z":[], "note": "remove ground from rest of grid"} }
     ],
     "boundaryCondition":{
       "x+":{"type":"tile","value":0},
