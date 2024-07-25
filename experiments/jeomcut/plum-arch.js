@@ -191,7 +191,7 @@ function wedge_up() {
   );
 
   return [
-    {"ds":[0,0,0], "geom":geom, "id":"w", "dock":[":",":", ".", "b", "b", "."], "anchor":geom}
+    {"ds":[0,0,0], "geom":geom, "id":"w", "dock":[ ": .", ": .", ".", "b", "b", "."], "anchor":geom}
   ];
 }
 
@@ -202,7 +202,7 @@ function wedge_down() {
   );
 
   return [
-    {"ds":[0,0,0], "geom":geom, "id":"m", "dock":[":",":", "b",".", ".","b"], "anchor":geom}
+    {"ds":[0,0,0], "geom":geom, "id":"m", "dock":[ ": .", ": .", "b",".", ".","b"], "anchor":geom}
   ];
 }
 
@@ -243,7 +243,7 @@ function stair(n, _debug) {
   }
 
   return [
-    {"ds":[0,0,0], "geom":geom, "id":"b", "dock":[":",":", ".","_", "b","."], "anchor":geom}
+    {"ds":[0,0,0], "geom":geom, "id":"b", "dock":[ ": .", ": .", ".","_", "b","."], "anchor":geom}
   ];
 }
 
@@ -251,7 +251,7 @@ function block() {
 
   let geom = op.mov([0,0,0], op.cub({"size":[1,1,1]}));
   return [
-    {"ds":[0,0,0], "geom":geom, "id":"b", "dock":[":",":", "b .","_", ":",":"], "anchor":geom}
+    {"ds":[0,0,0], "geom":geom, "id":"b", "dock":[ ": .", ": .", "b .","_", ": .", ": ."], "anchor":geom}
   ];
 }
 
@@ -331,7 +331,7 @@ function block_2x2(opt, _debug) {
   }
 
   return [
-    {"ds":[0,0,0], "geom":geom, "id":"a1", "dock":[ ":", ":",  "4","_ 4", ":", ":"], "anchor":geom}
+    {"ds":[0,0,0], "geom":geom, "id":"a1", "dock":[ ": .", ": .",  "4","_ 4", ": .", ": ."], "anchor":geom}
   ];
 
 }
@@ -352,7 +352,7 @@ function arch0(opt, _debug) {
   }
 
   return [
-    {"ds":[0,0,0], "geom":geom, "id":"a1", "dock":[ "b", "b",  "b", ".",  ":", ":"], "anchor":geom}
+    {"ds":[0,0,0], "geom":geom, "id":"a1", "dock":[ "b", "b",  "b", ".",  ": .", ": ."], "anchor":geom}
   ];
 }
 
@@ -380,8 +380,8 @@ function arch1(opt, _debug) {
   }
 
   return [
-    {"ds":[ 0,0,0], "geom":lgeom, "id":"a1_0", "dock":[  "$1",  "b", "b", ".",  ":", ":"], "anchor": geom},
-    {"ds":[ 1,0,0], "geom":rgeom, "id":"a1_1", "dock":[   "b", "$0", "b", ".",  ":", ":"]}
+    {"ds":[ 0,0,0], "geom":lgeom, "id":"a1_0", "dock":[  "$1",  "b", "b", ".",  ": .", ": ."], "anchor": geom},
+    {"ds":[ 1,0,0], "geom":rgeom, "id":"a1_1", "dock":[   "b", "$0", "b", ".",  ": .", ": ."]}
   ];
 }
 
@@ -430,11 +430,11 @@ function arch2(opt, _debug) {
   info[3]["id"] = "a3_3";
   info[4]["id"] = "a3_4";
 
-  info[0]["dock"] = [    ".",    "b", "$1",  ".",    ":",    ":" ];
-  info[1]["dock"] = [   "$2",    "b",  "b", "$1",    ":",    ":" ];
-  info[2]["dock"] = [   "$4",   "$2",  "b",  ".",    ":",    ":" ];
-  info[3]["dock"] = [    "b",    ".", "$4",  ".",    ":",    ":" ];
-  info[4]["dock"] = [    "b",   "$2",  "b",  ".",    ":",    ":" ];
+  info[0]["dock"] = [    ".",    "b", "$1",  ".",    ": .",    ": ." ];
+  info[1]["dock"] = [   "$2",    "b",  "b", "$1",    ": .",    ": ." ];
+  info[2]["dock"] = [   "$4",   "$2",  "b",  ".",    ": .",    ": ." ];
+  info[3]["dock"] = [    "b",    ".", "$4",  ".",    ": .",    ": ." ];
+  info[4]["dock"] = [    "b",   "$2",  "b",  ".",    ": .",    ": ." ];
 
   return info;
 }
