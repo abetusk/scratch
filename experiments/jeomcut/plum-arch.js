@@ -261,6 +261,26 @@ function block() {
   ];
 }
 
+function column2() {
+
+  let geom = op.mov([0,0,0], op.cub({"size":[1,2,1], "center": [0,0.5,0] }));
+  return [
+    {"ds":[0,0,0], "geom":geom, "id":"b", "dock":[ ": .", ": .",  "$1",  "_", ": .", ": ."], "anchor":geom},
+    {"ds":[0,0,0], "geom":geom, "id":"b", "dock":[ ": .", ": .", "b .", "$0", ": .", ": ."]}
+  ];
+}
+
+function column3() {
+
+  let geom = op.mov([0,0,0], op.cub({"size":[1,3,1], "center": [0,1,0] }));
+  return [
+    {"ds":[0,0,0], "geom":geom, "id":"b", "dock":[ ": .", ": .",  "$1",  "_", ": .", ": ."], "anchor":geom},
+    {"ds":[0,0,0], "geom":geom, "id":"b", "dock":[ ": .", ": .",  "$2", "$0", ": .", ": ."] },
+    {"ds":[0,0,0], "geom":geom, "id":"b", "dock":[ ": .", ": .", "b .", "$1", ": .", ": ."] }
+  ];
+}
+
+
 // smaller arch taken out of block
 //
 function doorway(opt, _debug) {
@@ -431,6 +451,7 @@ function arch2(opt, _debug) {
   info.push({"ds":[ 0,0,0], "geom": op.and(op.cub({"size":[1,1,1],"center":[0,0,0]}), op.mov([-4,-1, 0], geom)) });
 
   if (_debug) {
+    info[0].anchor =  op.add( info[0].anchor, DEBUG_GEOM );
     for (let ii=0; ii<info.length; ii++) {
       info[ii].geom = op.add( info[ii].geom, DEBUG_GEOM );
     }
@@ -440,6 +461,7 @@ function arch2(opt, _debug) {
   info[1]["dock"] = [    ".",   "$0", "$5",  ".",    ": .",    ": ." ];
   info[2]["dock"] = [   "$3",    ".", "$7",  ".",    ": .",    ": ." ];
   info[3]["dock"] = [    "b",   "$2", "$8",  "b",    ": .",    ": ." ];
+
   info[4]["dock"] = [   "$5",    "b",  "b", "$0",    ": .",    ": ." ];
   info[5]["dock"] = [   "$6",   "$4",  "b", "$1",    ": .",    ": ." ];
   info[6]["dock"] = [   "$7",   "$5",  "b",  ".",    ": .",    ": ." ];
@@ -448,7 +470,6 @@ function arch2(opt, _debug) {
 
   return info;
 }
-
 
 // 3x2 top portion of arch
 // middle empty region not returned, so only 5 blocks
@@ -608,23 +629,29 @@ function main() {
     "source": [
     ],
     "weight": {
-      ".": 4000,
+      ".": 20000,
       "#": 1,
-      "block": 5,
+      "block": 1,
+      "column2": 5,
+      "column3": 5,
       "wedge_up": 1,
       "wedge_down": 1,
       "doorway": 1,
       "double-doorway": 1,
       "block-2x2": 1,
       "arch0": 100,
-      "arch1": 100,
-      "arch2": 100,
-      "stair": 100
+      "arch1": 1000,
+      "arch2": 100000,
+      "stair": 50
     }
   };
 
-  let lib_info = [
+  let _lib_info = [
     { "name": "block",        "f": function() { return block(); } },
+
+    { "name": "column2",        "f": function() { return column2(); } },
+    { "name": "column3",        "f": function() { return column3(); } },
+
     { "name": "wedge_up",     "f": function() { return wedge_up(); } },
     { "name": "wedge_down",   "f": function() { return wedge_down(); } },
     { "name": "doorway",      "f": function() { return doorway(); } },
@@ -636,7 +663,7 @@ function main() {
     { "name": "stair",        "f": (function(_n){ return function() { return stair(_n); } })(5)  }
   ];
 
-  let lib_info_test = [
+  let lib_info= [
     { "name": "arch2",        "f": function() { return arch2(); } },
     { "name": "block",        "f": function() { return block(); } }
   ];
