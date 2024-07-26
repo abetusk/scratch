@@ -842,7 +842,7 @@ function _main(conf_fn, base_dir, out_base_dir, _out_type) {
 
 
 //_main("./data/stickem_minigolf.conf", "./data/minigolf.obj", ".minigolf_tile", "obj");
-//_main("./data/stickem_plumarch.conf", ".plum_stl", ".plum_tile", "stl");
-_main("./data/stickem_plumarch.conf", ".plum_obj", ".plum_tile", "obj");
+//_main("./data/stickem_brutal-plum.conf", ".brutal-plum_stl", ".brutal-plum_tile", "stl");
+_main("./data/stickem_brutal-plum.conf", ".brutal-plum_obj", ".brutal-plum_tile", "obj");
 
 
