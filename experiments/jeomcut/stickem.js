@@ -494,6 +494,9 @@ function _main(conf_fn, base_dir, out_base_dir, _out_type) {
   tile_name_to_id['._000_0'] = 0;
   tile_name_to_id['#_000_0'] = 1;
 
+  dock_info.base_name_repr_idx["."] = [0];
+  dock_info.base_name_repr_idx["#"] = [1];
+
   // assign ids to representatives
   //
   let cur_id = tile_name.length;
@@ -683,6 +686,27 @@ function _main(conf_fn, base_dir, out_base_dir, _out_type) {
   // reweight
   //
   //poms_data.weight[0] = 600;
+
+  if ("weight" in cfg) {
+    for (let src_name in cfg.weight) {
+      let weight = cfg.weight[src_name];
+
+      if (!(src_name in dock_info.base_name_repr_idx)) { continue; }
+
+      let rep_idx_a = dock_info.base_name_repr_idx[src_name];
+
+      for (let _idx=0; _idx<rep_idx_a.length; _idx++) {
+        let tile_idx = rep_idx_a[_idx];
+
+        poms_data.weight[tile_idx] = weight;
+      }
+
+
+    }
+    
+  }
+
+  /*
   poms_data.weight[0] = 10;
   for (let ii=0; ii<poms_data.name.length; ii++) {
     if (poms_data.name[ii].match( 'ramp' )) {
@@ -692,6 +716,7 @@ function _main(conf_fn, base_dir, out_base_dir, _out_type) {
       poms_data.weight[ii] *= 1/1000;
     }
   }
+  */
 
   //
   //----

@@ -397,6 +397,65 @@ function arch1(opt, _debug) {
 function arch2(opt, _debug) {
 
   let geom = 
+    op.mov([2,0,0],
+        op.sub(
+          op.cub({"size":[5,4,1], "center":[0,-0.5,0]}),
+          op.mov([0,0,-0.5], op.lif( {height:1}, op.cir({"radius":1.5}))),
+          op.cub({"size":[5,3,1], "center":[0,-2.0,0]}),
+          op.cub({"size":[3,2,1], "center":[0,-1.0,0]})
+        )
+      );
+
+
+  //    y
+  //    |
+  //    . --x
+  //   /
+  //  z
+  //     |  b   |  b   |   b   |   b  |   b  |
+  //  b  |  $4  |  $5  |  $6   |  $7  |  $8  |  b
+  //  b  |  $0  |  $1  |   .   |  $2  |  $3  |  b
+  //     |   b  |   .  |   .   |   .  |   b  |
+
+  let info = [];
+
+  info.push({"ds":[ 0,0,0], "geom": op.and(op.cub({"size":[1,1,1],"center":[0,0,0]}), op.mov([ 0, 0, 0], geom)), "anchor": geom  });
+  info.push({"ds":[ 0,0,0], "geom": op.and(op.cub({"size":[1,1,1],"center":[0,0,0]}), op.mov([-1, 0, 0], geom)) });
+  info.push({"ds":[ 0,0,0], "geom": op.and(op.cub({"size":[1,1,1],"center":[0,0,0]}), op.mov([-3, 0, 0], geom)) });
+  info.push({"ds":[ 0,0,0], "geom": op.and(op.cub({"size":[1,1,1],"center":[0,0,0]}), op.mov([-4, 0, 0], geom)) });
+
+  info.push({"ds":[ 0,0,0], "geom": op.and(op.cub({"size":[1,1,1],"center":[0,0,0]}), op.mov([ 0,-1, 0], geom)) });
+  info.push({"ds":[ 0,0,0], "geom": op.and(op.cub({"size":[1,1,1],"center":[0,0,0]}), op.mov([-1,-1, 0], geom)) });
+  info.push({"ds":[ 0,0,0], "geom": op.and(op.cub({"size":[1,1,1],"center":[0,0,0]}), op.mov([-2,-1, 0], geom)) });
+  info.push({"ds":[ 0,0,0], "geom": op.and(op.cub({"size":[1,1,1],"center":[0,0,0]}), op.mov([-3,-1, 0], geom)) });
+  info.push({"ds":[ 0,0,0], "geom": op.and(op.cub({"size":[1,1,1],"center":[0,0,0]}), op.mov([-4,-1, 0], geom)) });
+
+  if (_debug) {
+    for (let ii=0; ii<info.length; ii++) {
+      info[ii].geom = op.add( info[ii].geom, DEBUG_GEOM );
+    }
+  }
+
+  info[0]["dock"] = [   "$1",    "b", "$4",  "b",    ": .",    ": ." ];
+  info[1]["dock"] = [    ".",   "$0", "$5",  ".",    ": .",    ": ." ];
+  info[2]["dock"] = [   "$3",    ".", "$7",  ".",    ": .",    ": ." ];
+  info[3]["dock"] = [    "b",   "$2", "$8",  "b",    ": .",    ": ." ];
+  info[4]["dock"] = [   "$5",    "b",  "b", "$0",    ": .",    ": ." ];
+  info[5]["dock"] = [   "$6",   "$4",  "b", "$1",    ": .",    ": ." ];
+  info[6]["dock"] = [   "$7",   "$5",  "b",  ".",    ": .",    ": ." ];
+  info[7]["dock"] = [   "$8",   "$6",  "b", "$2",    ": .",    ": ." ];
+  info[8]["dock"] = [    "b",   "$7",  "b", "$3",    ": .",    ": ." ];
+
+  return info;
+}
+
+
+// 3x2 top portion of arch
+// middle empty region not returned, so only 5 blocks
+//
+function _arch2(opt, _debug) {
+
+  let geom = 
     op.mov([1,-0.0,0],
         op.sub(
           op.cub({"size":[3,3,1], "center":[0,0,0]}),
@@ -437,10 +496,10 @@ function arch2(opt, _debug) {
   info[4]["id"] = "a3_4";
 
   info[0]["dock"] = [    ".",    "b", "$1",  ".",    ": .",    ": ." ];
-  info[1]["dock"] = [   "$2",    "b",  "b", "$1",    ": .",    ": ." ];
-  info[2]["dock"] = [   "$4",   "$2",  "b",  ".",    ": .",    ": ." ];
+  info[1]["dock"] = [   "$2",    "b",  "b", "$0",    ": .",    ": ." ];
+  info[2]["dock"] = [   "$4",   "$1",  "b",  ".",    ": .",    ": ." ];
   info[3]["dock"] = [    "b",    ".", "$4",  ".",    ": .",    ": ." ];
-  info[4]["dock"] = [    "b",   "$2",  "b",  ".",    ": .",    ": ." ];
+  info[4]["dock"] = [    "b",   "$2",  "b", "$3",    ": .",    ": ." ];
 
   return info;
 }
@@ -495,7 +554,20 @@ function _print_stickem_conf(info) {
 
     //console.log("  }" + sfx);
   }
-  console.log("  ]");
+  console.log("  ],");
+
+  console.log("  \"weight\": {");
+  if ("weight" in info) {
+    let weight_key_a = [];
+    for (let weight_key in info.weight) { weight_key_a.push(weight_key); }
+    for (let weight_key_idx=0; weight_key_idx<weight_key_a.length; weight_key_idx++) {
+      let weight_key = weight_key_a[weight_key_idx];
+      let sfx = ",";
+      if (weight_key_idx == (weight_key_a.length-1)) { sfx = ""; }
+      console.log("    \"" + weight_key + "\" : " + info.weight[weight_key].toString() + sfx);
+    }
+  }
+  console.log("  }");
 
   console.log("}");
 }
@@ -534,7 +606,21 @@ function main() {
       "1": {"name":"1", "description":"ground" }
     },
     "source": [
-    ]
+    ],
+    "weight": {
+      ".": 4000,
+      "#": 1,
+      "block": 5,
+      "wedge_up": 1,
+      "wedge_down": 1,
+      "doorway": 1,
+      "double-doorway": 1,
+      "block-2x2": 1,
+      "arch0": 100,
+      "arch1": 100,
+      "arch2": 100,
+      "stair": 100
+    }
   };
 
   let lib_info = [
@@ -551,8 +637,10 @@ function main() {
   ];
 
   let lib_info_test = [
+    { "name": "arch2",        "f": function() { return arch2(); } },
     { "name": "block",        "f": function() { return block(); } }
   ];
+
 
 
   for (let li_idx=0; li_idx<lib_info.length; li_idx++) {
