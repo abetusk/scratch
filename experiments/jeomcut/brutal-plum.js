@@ -7,6 +7,10 @@
 // Everything is centered aroudn 0 with unit cube cell (+-0.5, +-0.5, +-0.5)
 //
 
+let OUT_DIR = ".brutal-plum_tile";
+let OUT_DIR_STL = ".brutal-plum_stl";
+let OUT_DIR_OBJ = ".brutal-plum_obj";
+
 var fs = require("fs");
 
 var jscad = require("@jscad/modeling");
@@ -676,10 +680,10 @@ function main() {
     let shape_info = li.f();
 
     let stl_data = op.stl_dumps({"binary":false}, shape_info[0].anchor).join("");
-    fs.writeFileSync(".plum_stl/" + li.name + ".stl", stl_data);
+    fs.writeFileSync(OUT_DIR_STL + "/" + li.name + ".stl", stl_data);
 
     let obj_data = op.obj_dumps({}, shape_info[0].anchor).join("");
-    fs.writeFileSync(".plum_obj/" + li.name + ".obj", obj_data);
+    fs.writeFileSync(OUT_DIR_OBJ + "/" + li.name + ".obj", obj_data);
 
     let src_idx = stickem_info.source.length;
     stickem_info.source.push({"name":li.name, "dock":[ shape_info[0].dock ]});
