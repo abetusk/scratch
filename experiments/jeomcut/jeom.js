@@ -1619,7 +1619,7 @@ function jeom_json2obj(obj_json) {
     else if (ele.type == "f") {
       let _a = [];
       for (let ii=0; ii<ele.f.length; ii++) {
-        if (ele.f[ii].length == 1) { a.push( ele.f[ii][0].toString() ); }
+        if (ele.f[ii].length == 1) { _a.push( ele.f[ii][0].toString() ); }
         else { _a.push( ele.f[ii].join("/") ); }
       }
       lines.push( "f " + _a.join(" ") );

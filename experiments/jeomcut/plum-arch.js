@@ -10,10 +10,14 @@
 var fs = require("fs");
 
 var jscad = require("@jscad/modeling");
-var stlser = require("@jscad/stl-serializer");
-var objectDeserializer = require('@jscad/obj-deserializer')
-var stlSerializer = require('@jscad/stl-serializer')
 var array_utils = require('@jscad/array-utils')
+
+
+var objectDeserializer = require('@jscad/obj-deserializer')
+var objectSerializer = require('@jscad/obj-serializer')
+var stlDeserializer = require('@jscad/stl-deserializer')
+var stlSerializer = require('@jscad/stl-serializer')
+
 var m4 = require("./m4.js");
 var jeom = require("./jeom.js");
 
@@ -21,9 +25,11 @@ var jeom = require("./jeom.js");
 
 var op = {
 
-  "objload": objectDeserializer.deserialize,
+  "obj_loads": objectDeserializer.deserialize,
+  "obj_dumps": objectSerializer.serialize,
 
-  "stldumps": stlSerializer.serialize,
+  "stl_loads": stlDeserializer.deserialize,
+  "stl_dumps": stlSerializer.serialize,
 
   "flatten": array_utils.flatten,
 
@@ -502,8 +508,8 @@ function main() {
     "up":[0,1,0],
     "symmetry":"y",
     "dock": {
-      "." : { "type":"!", "tile":[0], "description":"empty space (.)" },
-      "#" : { "type":"!", "tile":[1], "description":"ground (#)" },
+      "." : { "type":"!", "dock":[0], "description":"empty space (.)" },
+      "#" : { "type":"!", "dock":[1], "description":"ground (#)" },
 
       "_" : { "type":"%", "dock":"b #", "description":"general wildcard like dock" },
       ":" : { "type":"@", "description":"general wildcard like dock" },
@@ -517,7 +523,7 @@ function main() {
       //"s" : { "type":"&", "dock":"S", "description":"stair side dock" },
       //"S" : { "type":"&", "dock":"s", "description":"stair side dock" },
 
-      "b" : { "type":"@", "description":"block" },
+      "b" : { "type":"!", "dock":["block"], "description":"block" },
       "4" : { "type":"@", "description":"2x2 blocks (y+-) (for under double doorway)" },
       //"a" : { "type":"@", "description":"xz dock for arch (side arch)" },
 
@@ -531,7 +537,7 @@ function main() {
     ]
   };
 
-  let _lib_info = [
+  let lib_info = [
     { "name": "block",        "f": function() { return block(); } },
     { "name": "wedge_up",     "f": function() { return wedge_up(); } },
     { "name": "wedge_down",   "f": function() { return wedge_down(); } },
@@ -544,7 +550,7 @@ function main() {
     { "name": "stair",        "f": (function(_n){ return function() { return stair(_n); } })(5)  }
   ];
 
-  let lib_info = [
+  let lib_info_test = [
     { "name": "block",        "f": function() { return block(); } }
   ];
 
@@ -554,8 +560,11 @@ function main() {
 
     let shape_info = li.f();
 
-    let stl_data = stlser.serialize({"binary":false}, shape_info[0].anchor).join("");
+    let stl_data = op.stl_dumps({"binary":false}, shape_info[0].anchor).join("");
     fs.writeFileSync(".plum_stl/" + li.name + ".stl", stl_data);
+
+    let obj_data = op.obj_dumps({}, shape_info[0].anchor).join("");
+    fs.writeFileSync(".plum_obj/" + li.name + ".obj", obj_data);
 
     let src_idx = stickem_info.source.length;
     stickem_info.source.push({"name":li.name, "dock":[ shape_info[0].dock ]});
