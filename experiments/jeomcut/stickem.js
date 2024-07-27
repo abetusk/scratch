@@ -328,14 +328,13 @@ function createRepresentative(cfg, info) {
   //let d_cell = (("d_cell" in info) ? info.d_cell : [[0,0,0]]);
 
   let rot_lib = {};
+  let rep_list = [];
 
   let sym = [];
   let _syms_ = cfg.symmetry.split(",");
   for (let ii=0; ii<_syms_.length; ii++) {
     sym.push( _syms_[ii].split("") );
   }
-
-  let rep_list = [];
 
   for (let dock_idx=0; dock_idx<info.dock.length; dock_idx++) {
 
@@ -346,7 +345,7 @@ function createRepresentative(cfg, info) {
 
     do {
 
-      let dock_key = cur_dock.join(",");
+      let dock_key = dock_idx.toString() + "," + cur_dock.join(",");
       if (!(dock_key in rot_lib)) {
 
         rot_sfx = "_" + irot.join("") + "_" + dock_idx.toString();
@@ -364,6 +363,8 @@ function createRepresentative(cfg, info) {
         //  tile_block.push( blockRotate( d_cell[cidx], tile_rad_rot ) );
         //}
 
+        rot_lib[dock_key] = rep_list.length;
+
         rep_list.push({
           "source_name": name,
           "name": tile_name,
@@ -374,7 +375,6 @@ function createRepresentative(cfg, info) {
           "dock": cur_dock
         });
 
-        rot_lib[dock_key] = true;
       }
 
       cur_dock = dock_permutation(cfg.symmetry, cur_dock);
@@ -385,6 +385,113 @@ function createRepresentative(cfg, info) {
 
   }
 
+  console.log(rep_list);
+
+  console.log("rot_lib:");
+  for (let k in rot_lib) {
+    console.log(k, "   ", rot_lib[k]);
+  }
+
+  let rot_match = {};
+
+  // dock_idx is really subtile index that indexes the tile
+  // in the pattern group
+  //
+  for (let dock_idx=0; dock_idx<info.dock.length; dock_idx++) {
+
+    rot_match[dock_idx] = {};
+
+    let src_dock = info.dock[dock_idx];
+    let dst_dock = info.dock[dock_idx];
+
+    let src_irot = [0,0,0];
+    do {
+
+      let src_dock_key = dock_idx.toString() + "," + src_dock.join(",");
+      let src_irot_key = [ src_irot[0].toString(), src_irot[1].toString(), src_irot[2].toString() ].join(",");
+
+      rot_match[dock_idx][src_irot_key] = {};
+
+      let dst_irot = [0,0,0];
+      do {
+
+        let dst_dock_key = dock_idx.toString() + "," + dst_dock.join(",");
+        let dst_irot_key = [ dst_irot[0].toString(), dst_irot[1].toString(), dst_irot[2].toString() ].join(",");
+
+        rot_match[dock_idx][src_irot_key][dst_irot_key] = {
+          "src_dock": src_dock,
+          "dst_dock": dst_dock,
+          "src_dock_key": src_dock_key,
+          "dst_dock_key": dst_dock_key,
+          "src_irot": [ src_irot[0], src_irot[1], src_irot[2] ],
+          "dst_irot": [ dst_irot[0], dst_irot[1], dst_irot[2] ],
+          "src_repr_idx": rot_lib[ src_dock_key ],
+          "dst_repr_idx": rot_lib[ dst_dock_key ]
+        };
+
+        dst_dock = dock_permutation(cfg.symmetry, dst_dock);
+        _incr_rot_idx(dst_irot, cfg.symmetry);
+      } while ((dst_irot[0] != 0) ||
+               (dst_irot[1] != 0) ||
+               (dst_irot[2] != 0));
+
+      src_dock = dock_permutation(cfg.symmetry, src_dock);
+      _incr_rot_idx(src_irot, cfg.symmetry);
+    } while ((src_irot[0] != 0) ||
+             (src_irot[1] != 0) ||
+             (src_irot[2] != 0));
+
+    //----
+    //----
+    /*
+    cur_dock = info.dock[dock_idx];
+    irot = [0,0,0];
+    do {
+      let flip_dock = dock_permutation('fx', cur_dock);
+
+      let cur_dock_key  = cur_dock.join(",");
+      let flip_dock_key = flip_dock.join(",");
+
+      if ((cur_dock_key != flip_dock_key) &&
+          (cur_dock_key in rot_fam) &&
+          (flip_dock_key in rot_fam)) {
+        console.log(name, ">>", cur_dock, "flip:", flip_dock);
+      }
+
+      cur_dock = dock_permutation(cfg.symmetry, cur_dock);
+      _incr_rot_idx(irot, cfg.symmetry);
+    } while ((irot[0] != 0) ||
+             (irot[1] != 0) ||
+             (irot[2] != 0));
+    */
+    //----
+    //----
+
+
+    //DEBUG
+    /*
+    console.log(name);
+    for (let dock_key in rot_fam) {
+      console.log("rot_fam[", dock_key, "]:");
+      for (let ii=0; ii<rot_fam[dock_key].fam_irot.length; ii++) {
+        console.log("  ", JSON.stringify(rot_fam[dock_key].fam_irot[ii]) );
+      }
+    }
+    */
+
+  }
+
+  console.log(">>>>");
+  console.log(name);
+  for (let dock_key in rot_match) {
+    for (let src_rot_key in rot_match[dock_key]) {
+      for (let dst_rot_key in rot_match[dock_key][src_rot_key]) {
+        console.log("[", dock_key, "][", src_rot_key, "][", dst_rot_key, "]:", rot_match[dock_key][src_rot_key][dst_rot_key]);
+      }
+    }
+  }
+  //console.log(rot_match);
+  console.log("<<<<");
 
 
   return rep_list;
