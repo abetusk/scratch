@@ -201,7 +201,7 @@ function wedge_up() {
   );
 
   return [
-    {"ds":[0,0,0], "geom":geom, "id":"w", "dock":[ ": .", ": .", ".", "b", "b", "."], "anchor":geom}
+    {"ds":[0,0,0], "geom":geom, "id":"w", "dock":[ ": .", ": .",  ".", "_",  "b", "."], "anchor":geom}
   ];
 }
 
@@ -293,11 +293,11 @@ function doorway(opt, _debug) {
 
   let r = (("r" in opt) ? opt.r : 0.25);
   let h = (("h" in opt) ? opt.h : 0.75);
-  
+
   let _h = (h-r)/2;
   let _c = h-r-0.5;
 
-  let geom = 
+  let geom =
     op.sub(
       op.mov([0,0,0], op.cub({"size":[1,1,1]})),
       op.mov([0,_c,-0.6], op.lif( {height:1.2}, op.cir({"radius":r})) ),
@@ -321,11 +321,11 @@ function double_doorway(opt, _debug) {
 
   let r = (("r" in opt) ? opt.r : 0.25);
   let h = (("h" in opt) ? opt.h : 0.75);
-  
+
   let _h = (h-r)/2;
   let _c = h-r-0.5;
 
-  let geom = 
+  let geom =
     op.sub(
       op.mov([0,0,0], op.cub({"size":[1,1,1]})),
       op.mov([0,_c,-0.6], op.lif( {height:1.2}, op.cir({"radius":r})) ),
@@ -349,7 +349,7 @@ function block_2x2(opt, _debug) {
 
   let r = (("r" in opt) ? opt.r : 0.25);
 
-  let geom = 
+  let geom =
     op.sub(
       op.mov([0,0,0], op.cub({"size":[1,1,1]})),
       op.cub({"size":[2*r,1.2,1.2]}),
@@ -366,11 +366,10 @@ function block_2x2(opt, _debug) {
 
 }
 
-// one cell occupancy.
-// Half height up arch
+// 3x2 cell occupancy to try and get ride of staircases on ends.
 //
 function arch0(opt, _debug) {
-  let geom = 
+  let geom =
     op.mov([1,0,0],
       op.sub(
         op.mov([0,0.5,0], op.cub({"size":[3,2,1]})),
@@ -403,7 +402,7 @@ function arch0(opt, _debug) {
 // Half height up arch
 //
 function _arch0(opt, _debug) {
-  let geom = 
+  let geom =
     op.sub(
       op.mov([0,0,0], op.cub({"size":[1,1,1]})),
       op.mov([0,0,-0.5], op.lif( {height:1}, op.cir({"radius":0.5})) ),
@@ -419,13 +418,49 @@ function _arch0(opt, _debug) {
   ];
 }
 
-// 2x1 top portion of arch
+// 4x3 occupancy to try to get rid of staircase on ends
 //
 function arch1(opt, _debug) {
 
   // left geom centered at (0,0,0)
   //
-  let geom = 
+  let geom =
+    op.mov([1.5,0,0],
+      op.sub(
+        op.mov([0,  0.5,    0], op.cub({"size":[4,2,1]})),
+        op.mov([0, -0.5, -0.5], op.lif( {height:1}, op.cir({"radius":1.0}))),
+        op.mov([0, -0.5,    0], op.cub({"size":[2,2,1.2], "center":[0,-1,0]}))
+      )
+    );
+
+  if (_debug) {
+    geom = op.add(geom, DEBUG_GEOM);
+  }
+
+  return [
+    {"ds":[ 0,0,0], "geom":geom, "dock":[  "$1","b .", "$4", "_",  ": .", ": ."], "anchor": geom},
+    {"ds":[ 0,0,0], "geom":geom, "dock":[  "$2", "$0", "$5", ".",  ": .", ": ."] },
+    {"ds":[ 0,0,0], "geom":geom, "dock":[  "$3", "$1", "$6", ".",  ": .", ": ."] },
+    {"ds":[ 0,0,0], "geom":geom, "dock":[ "b .", "$2", "$7", "_",  ": .", ": ."] },
+
+    {"ds":[ 0,0,0], "geom":geom, "dock":[  "$5","b .","b .", "$0",  ": .", ": ."] },
+    {"ds":[ 0,0,0], "geom":geom, "dock":[  "$6", "$4","b .", "$1",  ": .", ": ."] },
+    {"ds":[ 0,0,0], "geom":geom, "dock":[  "$7", "$5","b .", "$2",  ": .", ": ."] },
+    {"ds":[ 0,0,0], "geom":geom, "dock":[ "b .", "$6","b .", "$3",  ": .", ": ."] }
+  ];
+}
+
+//var x = arch1(null, true);
+//console.log( op.obj_dumps({}, x[0].anchor).join("") );
+//process.exit();
+
+// 2x1 top portion of arch
+//
+function _arch1(opt, _debug) {
+
+  // left geom centered at (0,0,0)
+  //
+  let geom =
     op.mov([0.5,-0.5,0],
       op.sub(
         op.cub({"size":[2,2,1], "center":[0,0,0]}),
@@ -448,12 +483,12 @@ function arch1(opt, _debug) {
   ];
 }
 
-// 3x2 top portion of arch
+// 5x3 top portion of arch
 // middle empty region not returned, so only 5 blocks
 //
 function arch2(opt, _debug) {
 
-  let geom = 
+  let geom =
     op.mov([2,0,0],
         op.sub(
           op.cub({"size":[5,4,1], "center":[0,-0.5,0]}),
@@ -513,7 +548,7 @@ function arch2(opt, _debug) {
 //
 function _arch2(opt, _debug) {
 
-  let geom = 
+  let geom =
     op.mov([1,-0.0,0],
         op.sub(
           op.cub({"size":[3,3,1], "center":[0,0,0]}),
@@ -666,24 +701,24 @@ function main() {
     "source": [
     ],
     "weight": {
-      ".": 200,
+      ".": 1000,
       "#": 1,
-      "block": 100,
+      "block": 10,
       "column2": 5,
       "column3": 5,
-      "wedge_up": 1,
+      "wedge_up": 100,
       "wedge_down": 1,
       "doorway": 1,
       "double-doorway": 1,
       "block-2x2": 1,
-      "arch0": 1000,
+      "arch0": 100,
       "arch1": 100,
       "arch2": 100,
       "stair": 50
     }
   };
 
-  let _lib_info = [
+  let lib_info = [
     { "name": "block",        "f": function() { return block(); } },
 
     { "name": "column2",        "f": function() { return column2(); } },
@@ -700,10 +735,11 @@ function main() {
     { "name": "stair",        "f": (function(_n){ return function() { return stair(_n); } })(5)  }
   ];
 
-  let lib_info= [
-    { "name": "arch0",        "f": function() { return arch0(); } },
+  let _lib_info= [
+    //{ "name": "arch0",        "f": function() { return arch0(); } },
     //{ "name": "arch1",        "f": function() { return arch1(); } },
     //{ "name": "arch2",        "f": function() { return arch2(); } },
+    { "name": "wedge_up",        "f": function() { return wedge_up(); } },
     { "name": "block",        "f": function() { return block(); } }
   ];
 

@@ -278,29 +278,15 @@ function blockRotate(cell, rot) {
 
   var _v = Array.from(m4.mulp( My, cell ));
 
-  /*
-  console.log("\n");
-  console.log("  ::", rot);
-  console.log("  ymul:", JSON.stringify(_v), m4.mulp( My, cell ));
-  console.log("  My:", rot[1]);
-  _mprint(My);
-  */
-  //console.log("  rcell:", rcell, "cell:", cell);
-
   rcell = m4.mulp( Mz, m4.mulp( My, m4.mulp( Mx, cell ) ) );
-
-  //console.log("    cell:", cell, "rcell:", rcell);
 
   for (let ii=0; ii<rcell.length; ii++) {
     rcell[ii] = Math.round(rcell[ii]);
   }
 
-  //console.log("    ---> rcell:", rcell);
-
   return Array.from(rcell);
 }
 
-//function createRepresentative(cfg, geom, info) {
 function createRepresentative(cfg, info) {
 
   let name = info.name;
@@ -683,10 +669,8 @@ function _main(conf_fn, base_dir, out_base_dir, _out_type) {
   }
 
   //----
-  // reweight
+  // use weights in config
   //
-  //poms_data.weight[0] = 600;
-
   if ("weight" in cfg) {
     for (let src_name in cfg.weight) {
       let weight = cfg.weight[src_name];
@@ -705,19 +689,6 @@ function _main(conf_fn, base_dir, out_base_dir, _out_type) {
     }
     
   }
-
-  /*
-  poms_data.weight[0] = 10;
-  for (let ii=0; ii<poms_data.name.length; ii++) {
-    if (poms_data.name[ii].match( 'ramp' )) {
-      poms_data.weight[ii] *= 50;
-    }
-    if (poms_data.name[ii].match( '^(end|hole-round|hole-square)_')) {
-      poms_data.weight[ii] *= 1/1000;
-    }
-  }
-  */
-
   //
   //----
 
