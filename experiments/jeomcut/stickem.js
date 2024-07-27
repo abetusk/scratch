@@ -218,6 +218,9 @@ function idir_irot(idir, irot) {
   return -1;
 }
 
+// permuatation of cube faces as if it were
+// a type of transform (rotation, mirror, etc.)
+//
 //            2 (y+)
 //            ^
 //            |   5 (z-)
@@ -228,28 +231,48 @@ function idir_irot(idir, irot) {
 //         /  |
 //        L   |
 //    4 (z+)  3 (y-)
-
+//
 function dock_permutation(sym, dock) {
   let perm_dock = [ dock[0], dock[1], dock[2], dock[3], dock[4], dock[5] ];
-  if (sym == 'y') {
+
+  // rotations
+  //
+  if ((sym == 'y') || (sym == 'ry')) {
     perm_dock[4] = dock[0];
     perm_dock[1] = dock[4];
     perm_dock[5] = dock[1];
     perm_dock[0] = dock[5];
   }
 
-  if (sym == 'x') {
+  if ((sym == 'x') || (sym == 'rx')) {
     perm_dock[3] = dock[5];
     perm_dock[4] = dock[3];
     perm_dock[2] = dock[4];
     perm_dock[5] = dock[2];
   }
 
-  if (sym == 'z') {
+  if ((sym == 'z') || (sym == 'rz')) {
     perm_dock[0] = dock[2];
     perm_dock[3] = dock[0];
     perm_dock[1] = dock[3];
     perm_dock[2] = dock[1];
+  }
+
+  // flip
+  //
+  if (sym == 'fx') {
+    perm_dock[0] = dock[1];
+    perm_dock[1] = dock[0];
+  }
+
+  if (sym == 'fy') {
+    perm_dock[2] = dock[3];
+    perm_dock[3] = dock[2];
+  }
+
+  if (sym == 'fz') {
+    perm_dock[4] = dock[5];
+    perm_dock[5] = dock[4];
   }
 
   return perm_dock;
@@ -287,11 +310,22 @@ function blockRotate(cell, rot) {
   return Array.from(rcell);
 }
 
+// info holds the tile group with `info.dock`
+// holding the array of docking port information,
+// one for each cell location that each of the tiles
+// in the tile group occupy.
+// The `info.dock` has 6 positions, one for each direction,
+// that hold docking information.
+// This function rotates the docking information for each
+// tile and throws away tiles with duplicate docking information.
+//
+// Only unique representatives are kept.
+//
 function createRepresentative(cfg, info) {
 
   let name = info.name;
   let dock_block_list = info.dock;
-  let d_cell = (("d_cell" in info) ? info.d_cell : [[0,0,0]]);
+  //let d_cell = (("d_cell" in info) ? info.d_cell : [[0,0,0]]);
 
   let rot_lib = {};
 
@@ -312,7 +346,7 @@ function createRepresentative(cfg, info) {
 
     do {
 
-      let dock_key = cur_dock.join("");
+      let dock_key = cur_dock.join(",");
       if (!(dock_key in rot_lib)) {
 
         rot_sfx = "_" + irot.join("") + "_" + dock_idx.toString();
@@ -325,18 +359,17 @@ function createRepresentative(cfg, info) {
         //                op.rotY( tile_rad_rot[1],
         //                op.rotX( tile_rad_rot[0], geom ) ) );
 
-        let tile_block = [[0,0,0]];
-
-        for (let cidx=1; cidx<d_cell.length; cidx++) {
-          tile_block.push( blockRotate( d_cell[cidx], tile_rad_rot ) );
-        }
+        //let tile_block = [[0,0,0]];
+        //for (let cidx=1; cidx<d_cell.length; cidx++) {
+        //  tile_block.push( blockRotate( d_cell[cidx], tile_rad_rot ) );
+        //}
 
         rep_list.push({
           "source_name": name,
           "name": tile_name,
           "irot": tile_irot,
           "rot": tile_rad_rot,
-          "block" : tile_block,
+          //"block" : tile_block,
           //"geom": tile_geom,
           "dock": cur_dock
         });
@@ -351,6 +384,8 @@ function createRepresentative(cfg, info) {
              (irot[2] != 0));
 
   }
+
+
 
   return rep_list;
 }
