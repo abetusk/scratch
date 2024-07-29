@@ -385,12 +385,13 @@ function createRepresentative(cfg, info) {
 
   }
 
+  /*
   console.log(rep_list);
-
   console.log("rot_lib:");
   for (let k in rot_lib) {
     console.log(k, "   ", rot_lib[k]);
   }
+  */
 
   /*
   let rot_match = {};
@@ -562,6 +563,7 @@ function matchSymmetry(cfg, src_rep_info, dstRepList) {
 
   }
 
+  /*
   console.log(">>>>");
   console.log(name);
   for (let dock_key in rot_match) {
@@ -573,6 +575,7 @@ function matchSymmetry(cfg, src_rep_info, dstRepList) {
   }
   //console.log(rot_match);
   console.log("<<<<");
+  */
 
 
 }
@@ -625,6 +628,8 @@ function _main(conf_fn, base_dir, out_base_dir, _out_type) {
 
   var cfg = JSON.parse( fs.readFileSync(conf_fn) );
 
+  if (!("n_dim" in cfg)) { cfg.n_dim = 3; }
+
   let stickem_info = {
     "basename": [],
     "repr" : [],
@@ -648,7 +653,6 @@ function _main(conf_fn, base_dir, out_base_dir, _out_type) {
     let dock_ele = cfg.dock[dock_tok];
 
     if (dock_ele.type == '!') {
-      //dock_info.force_token[dock_tok] = dock_ele.tile;
       dock_info.force_token[dock_tok] = dock_ele.dock;
     }
     else if (dock_ele.type == '%') {
@@ -696,18 +700,24 @@ function _main(conf_fn, base_dir, out_base_dir, _out_type) {
     }
   }
 
-
-
   let tile_name = [];
-  tile_name.push("._000_0");
-  tile_name.push("#_000_0");
-
   let tile_name_to_id = {};
-  tile_name_to_id['._000_0'] = 0;
-  tile_name_to_id['#_000_0'] = 1;
 
-  dock_info.base_name_repr_idx["."] = [0];
-  dock_info.base_name_repr_idx["#"] = [1];
+  if (cfg.n_dim == 2) {
+    tile_name.push("._000_0");
+    tile_name_to_id['._000_0'] = 0;
+    dock_info.base_name_repr_idx["."] = [0];
+  }
+  else {
+    tile_name.push("._000_0");
+    tile_name.push("#_000_0");
+
+    tile_name_to_id['._000_0'] = 0;
+    tile_name_to_id['#_000_0'] = 1;
+
+    dock_info.base_name_repr_idx["."] = [0];
+    dock_info.base_name_repr_idx["#"] = [1];
+  }
 
   // assign ids to representatives
   //
@@ -1040,6 +1050,7 @@ function _main(conf_fn, base_dir, out_base_dir, _out_type) {
 
 //_main("./data/stickem_minigolf.conf", "./data/minigolf.obj", ".minigolf_tile", "obj");
 //_main("./data/stickem_brutal-plum.conf", ".brutal-plum_stl", ".brutal-plum_tile", "stl");
-_main("./data/stickem_brutal-plum.conf", ".brutal-plum_obj", ".brutal-plum_tile", "obj");
+//_main("./data/stickem_brutal-plum.conf", ".brutal-plum_obj", ".brutal-plum_tile", "obj");
+_main("./data/stickem_twoloop.conf", "", "", "none");
 
 
