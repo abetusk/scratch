@@ -392,6 +392,7 @@ function createRepresentative(cfg, info) {
     console.log(k, "   ", rot_lib[k]);
   }
 
+  /*
   let rot_match = {};
 
   // dock_idx is really subtile index that indexes the tile
@@ -400,6 +401,7 @@ function createRepresentative(cfg, info) {
   for (let dock_idx=0; dock_idx<info.dock.length; dock_idx++) {
 
     rot_match[dock_idx] = {};
+    rot_match[dock_idx]["rot"] = {};
 
     let src_dock = info.dock[dock_idx];
     let dst_dock = info.dock[dock_idx];
@@ -410,7 +412,7 @@ function createRepresentative(cfg, info) {
       let src_dock_key = dock_idx.toString() + "," + src_dock.join(",");
       let src_irot_key = [ src_irot[0].toString(), src_irot[1].toString(), src_irot[2].toString() ].join(",");
 
-      rot_match[dock_idx][src_irot_key] = {};
+      rot_match[dock_idx].rot[src_irot_key] = {};
 
       let dst_irot = [0,0,0];
       do {
@@ -418,7 +420,7 @@ function createRepresentative(cfg, info) {
         let dst_dock_key = dock_idx.toString() + "," + dst_dock.join(",");
         let dst_irot_key = [ dst_irot[0].toString(), dst_irot[1].toString(), dst_irot[2].toString() ].join(",");
 
-        rot_match[dock_idx][src_irot_key][dst_irot_key] = {
+        rot_match[dock_idx].rot[src_irot_key][dst_irot_key] = {
           "src_dock": src_dock,
           "dst_dock": dst_dock,
           "src_dock_key": src_dock_key,
@@ -440,6 +442,7 @@ function createRepresentative(cfg, info) {
     } while ((src_irot[0] != 0) ||
              (src_irot[1] != 0) ||
              (src_irot[2] != 0));
+    */
 
     //----
     //----
@@ -479,14 +482,92 @@ function createRepresentative(cfg, info) {
     }
     */
 
+  //}
+
+/*
+  console.log(">>>>");
+  console.log(name);
+  for (let dock_key in rot_match) {
+    for (let src_rot_key in rot_match[dock_key].rot) {
+      for (let dst_rot_key in rot_match[dock_key].rot[src_rot_key]) {
+        console.log("[", dock_key, "][", src_rot_key, "][", dst_rot_key, "]:", rot_match[dock_key].rot[src_rot_key][dst_rot_key]);
+      }
+    }
+  }
+  //console.log(rot_match);
+  console.log("<<<<");
+*/
+
+
+  return {"repr_list": rep_list, "rot_idx_map": rot_lib, "source": info, "name": name};
+}
+
+function matchSymmetry(cfg, src_rep_info, dstRepList) {
+
+  let rot_match = {};
+
+  let template_list = src_rep_info.source;
+  let name = src_rep_info.name;
+
+  src_rep_list = src_rep_info.repr_list;
+  let rot_idx_map = src_rep_info.rot_idx_map;
+
+  // dock_idx is really subtile index that indexes the tile
+  // in the pattern group
+  //
+  for (let dock_idx=0; dock_idx<template_list.dock.length; dock_idx++) {
+
+    rot_match[dock_idx] = {};
+    rot_match[dock_idx]["rot"] = {};
+
+    let src_dock = template_list.dock[dock_idx];
+    let dst_dock = template_list.dock[dock_idx];
+
+    let src_irot = [0,0,0];
+    do {
+
+      let src_dock_key = dock_idx.toString() + "," + src_dock.join(",");
+      let src_irot_key = [ src_irot[0].toString(), src_irot[1].toString(), src_irot[2].toString() ].join(",");
+
+      rot_match[dock_idx].rot[src_irot_key] = {};
+
+      let dst_irot = [0,0,0];
+      do {
+
+        let dst_dock_key = dock_idx.toString() + "," + dst_dock.join(",");
+        let dst_irot_key = [ dst_irot[0].toString(), dst_irot[1].toString(), dst_irot[2].toString() ].join(",");
+
+        rot_match[dock_idx].rot[src_irot_key][dst_irot_key] = {
+          "src_dock": src_dock,
+          "dst_dock": dst_dock,
+          "src_dock_key": src_dock_key,
+          "dst_dock_key": dst_dock_key,
+          "src_irot": [ src_irot[0], src_irot[1], src_irot[2] ],
+          "dst_irot": [ dst_irot[0], dst_irot[1], dst_irot[2] ],
+          "src_repr_idx": rot_idx_map[ src_dock_key ],
+          "dst_repr_idx": rot_idx_map[ dst_dock_key ]
+        };
+
+        dst_dock = dock_permutation(cfg.symmetry, dst_dock);
+        _incr_rot_idx(dst_irot, cfg.symmetry);
+      } while ((dst_irot[0] != 0) ||
+               (dst_irot[1] != 0) ||
+               (dst_irot[2] != 0));
+
+      src_dock = dock_permutation(cfg.symmetry, src_dock);
+      _incr_rot_idx(src_irot, cfg.symmetry);
+    } while ((src_irot[0] != 0) ||
+             (src_irot[1] != 0) ||
+             (src_irot[2] != 0));
+
   }
 
   console.log(">>>>");
   console.log(name);
   for (let dock_key in rot_match) {
-    for (let src_rot_key in rot_match[dock_key]) {
-      for (let dst_rot_key in rot_match[dock_key][src_rot_key]) {
-        console.log("[", dock_key, "][", src_rot_key, "][", dst_rot_key, "]:", rot_match[dock_key][src_rot_key][dst_rot_key]);
+    for (let src_rot_key in rot_match[dock_key].rot) {
+      for (let dst_rot_key in rot_match[dock_key].rot[src_rot_key]) {
+        console.log("[", dock_key, "][", src_rot_key, "][", dst_rot_key, "]:", rot_match[dock_key].rot[src_rot_key][dst_rot_key]);
       }
     }
   }
@@ -494,7 +575,6 @@ function createRepresentative(cfg, info) {
   console.log("<<<<");
 
 
-  return rep_list;
 }
 
 // still some hardcoded values but getting closer to being finished.
@@ -606,7 +686,11 @@ function _main(conf_fn, base_dir, out_base_dir, _out_type) {
   for (let idx=0; idx<cfg.source.length; idx++) {
     let name = cfg.source[idx].name;
 
-    let rl = createRepresentative(cfg, cfg.source[idx]);
+    let rep_info = createRepresentative(cfg, cfg.source[idx]);
+    let rl = rep_info.repr_list;
+
+    matchSymmetry(cfg, rep_info);
+
     for (let ii=0; ii<rl.length; ii++) {
       stickem_info.repr.push(rl[ii]);
     }

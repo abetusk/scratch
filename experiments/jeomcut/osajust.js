@@ -13,7 +13,7 @@ var fs = require("fs");
 var getopt = require("posix-getopt");
 var jeom = require("./jeom.js");
 
-var OSAJUST_VERSION = "0.3.0";
+var OSAJUST_VERSION = "0.4.0";
 
 var parser, opt;
 
@@ -516,13 +516,12 @@ function _play() {
 function main_obj_patch() {
 
   var patch_data = JSON.parse(fs.readFileSync( g_ctx.opt.patch_fn ));
-  //console.log(patch_data);
 
   let obj_lib = [];
 
   for (let ii=0; ii<patch_data.objMap.length; ii++) {
 
-    console.log("# loading", patch_data.objMap[ii]);
+    //console.log("# loading", patch_data.objMap[ii]);
 
     let json_obj = jeom.obj2json( fs.readFileSync( patch_data.objMap[ii] ).toString() );
     obj_lib.push({"name": patch_data.name[ii], "fn":patch_data.objMap[ii], "json_obj": json_obj});
@@ -551,33 +550,22 @@ function main_obj_patch() {
         _mov[1] = y*dy;
         _mov[2] = z*dz;
 
-        //let _o = _obj_simple_transform( obj_lib[tile_id].json_obj, _mov, 0, '' )
         let _o = jeom.json_obj_transform( obj_lib[tile_id].json_obj, _mov, 0, '' )
 
         grid_json_obj.push(  _o );
 
-
-        console.log("# xyz:", x, y, z, "idx:", idx, "tile:", tile_id, "(", grid_json_obj.length, "/", grid_size[0]*grid_size[1]*grid_size[2], ")");
+        //console.log("# xyz:", x, y, z, "idx:", idx, "tile:", tile_id, "(", grid_json_obj.length, "/", grid_size[0]*grid_size[1]*grid_size[2], ")");
 
       }
     }
   }
 
-  let _m = jeom.json_obj_merge(grid_json_obj);
+  let _merge = jeom.json_obj_merge( grid_json_obj );
+  let _merge_obj_str = jeom.json2obj(_merge);
 
-  //console.log(_m);
+  console.log(_merge_obj_str);
 
-  let _tmp0 = jeom.json_obj_merge( grid_json_obj );
-
-  console.log("# cp.0");
-
-  let _tmp1 = jeom.json2obj(_tmp0);
-
-  console.log("# cp.1");
-
-  console.log(_tmp1);
-
-  return;
+  return 0;
 }
 
 for (let ii=0; ii<g_ctx.op_list.length; ii++) {
