@@ -353,14 +353,66 @@ async function _main() {
 
   out_img.write( OUT_TILESET_FN );
 
-  let _sz = [8,8];
+  let _sz = [32,32];
+
+  let empty_tile_id = 1;
+  let a_end_r = -1;
+  let a_end_u = -1;
+  let b_end_d = -1;
+  let b_end_l = -1;
+
+  for (let ii=0; ii<full_tilelist.length; ii++) {
+    if (full_tilelist[ii].name == "a_end_r") { a_end_r = full_tilelist[ii].id; }
+    if (full_tilelist[ii].name == "a_end_u") { a_end_u = full_tilelist[ii].id; }
+
+    if (full_tilelist[ii].name == "b_end_d") { b_end_d = full_tilelist[ii].id; }
+    if (full_tilelist[ii].name == "b_end_l") { b_end_l = full_tilelist[ii].id; }
+  }
+
+  let remove_name = [
+    "a_end_r", "a_end_l", "a_end_u", "a_end_d",
+    "b_end_r", "b_end_l", "b_end_u", "b_end_d"
+  ];
+  let remove_tile_id = [];
+
+  // order matters on constraints
+  //
+  let _constraint = [];
+  for (let ii=0; ii<full_tilelist.length; ii++) {
+    for (let jj=0; jj<remove_name.length; jj++) {
+      if (full_tilelist[ii].name == remove_name[jj]) {
+        remove_tile_id.push( full_tilelist[ii].id );
+        let _id = full_tilelist[ii].id;
+        _constraint.push({"type":"remove", "range":{"tile":[_id,_id+1], "x":[], "y":[], "z":[] }});
+      }
+    }
+
+  }
+
+  _constraint.push({"type":"add",  "range":{"tile":[a_end_r,a_end_r+1],"x":[1,2], "y":[0,1], "z":[0,1]}});
+  _constraint.push({"type":"add",  "range":{"tile":[a_end_u,a_end_u+1],"x":[-1,0], "y":[-2,-1], "z":[0,1]}});
+  _constraint.push({"type":"add",  "range":{"tile":[b_end_d,b_end_d+1],"x":[0,1], "y":[1,2], "z":[0,1]}});
+  _constraint.push({"type":"add",  "range":{"tile":[b_end_l,b_end_l+1],"x":[-2,-1], "y":[-1,0], "z":[0,1]}});
+
+  _constraint.push({"type":"force",  "range":{"tile":[a_end_r,a_end_r+1],"x":[1,2], "y":[0,1], "z":[0,1]}});
+  _constraint.push({"type":"force",  "range":{"tile":[a_end_u,a_end_u+1],"x":[-1,0], "y":[-2,-1], "z":[0,1]}});
+  _constraint.push({"type":"force",  "range":{"tile":[b_end_d,b_end_d+1],"x":[0,1], "y":[1,2], "z":[0,1]}});
+  _constraint.push({"type":"force",  "range":{"tile":[b_end_l,b_end_l+1],"x":[-2,-1], "y":[-1,0], "z":[0,1]}});
+
+  _constraint.push({"type":"remove", "range":{"tile":[0,1],"x":[], "y":[], "z":[]}});
+
+  let tile_weight = [];
+  for (let i=0; i<tile_name.length; i++) {
+    tile_weight.push(1);
+  }
+  tile_weight[1] = 10;
+
 
   let poms = {
     "rule": rule_list,
     "name": tile_name,
-    "constraint": [
-      {"type":"remove", "range":{"tile":[0,1],"x":[], "y":[], "z":[]}}
-    ],
+    "weight" : tile_weight,
+    "constraint": _constraint,
     "tileset": {
       "image": OUT_TILESET_FN,
       "tilecount": full_tilelist.length,
