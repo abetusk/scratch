@@ -8,17 +8,26 @@ before proceeding further with other more general tilesets.
 Two Loops
 ---
 
-For "two loops", the idea is to create a tileset that has
-tilesets for each of the two paths, call them `a` and `b`.
-The tileset can have tees and crosses but to restrict
-to only allow paths, the grid should be restricted to only
-allow `a` and `b` tiles with exactly two entry points per tile.
+A bit of a misnomer.
+It's really two paths, non intersecting, that start and end
+at a common point, creating a non intersecting loop.
 
-To create the "two loops", another tileset is created, one
-with a `c` path but that has tees and crosses where the extra
-docks are the `c` path.
-So, in addition to `a` paths and bends, there are now `a` paths
-and bends with `c` docks to make a tee and cross.
+The idea is to create a tileset that has
+three sets of tiles, one with only two connectors for
+one side of the loop, another with only two connectors for
+the other side and another set that connects between the two
+and is more freeform.
+
+This can be thought of in terms of "colors".
+One tileset is colored grey and only has bends and straights,
+save for the start and end portion of the path
+The other is orange and again has only bends and straights with
+the exception of the start and end of the path.
+
+The third is pink and has ends, bends, straights, tees and crosses
+but also bridging tiles to the grey and orange tiles.
+The bridging tiles only allow two connectors for the grey and orange
+to keep the forced path for the other two tilesets.
 
 ---
 
@@ -61,6 +70,28 @@ two path docks but with a `c1` tee and cross extra dock.
 The tileset doesn't blow up because only the level below it needs to dock
 to the one above it but it does need to be cut off, limiting the branching
 factor of the acyclic path.
+
+---
+
+This doesn't quite work.
+
+Instead, this is a possibility:
+
+* create some number of tileset "colors", say 4
+* for each color, have a color gredation so that every time a path is
+  extended, it needs to connect to the same color but faded
+  (tile $n$ has to connect to tile $n-1$ in front and $n+1$ from behind)
+* a color can branch into a new color
+
+The maximum branching factor is limited by the colors, and the length of each
+branch is limited by the gredation count.
+Branching need not completely alter the spine....
+
+This inflates the tile count significantly as you need a set of tiles
+(bends, straights, etc.) for each tile color gredation, but I think this at
+least avoids the exponential explosion.
+
+
 
 ---
 
