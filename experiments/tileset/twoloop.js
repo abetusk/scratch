@@ -1,3 +1,22 @@
+// To the extent possible under law, the person who associated CC0 with
+// this project has waived all copyright and related or neighboring rights
+// to this project.
+//
+// You should have received a copy of the CC0 legalcode along with this
+// work.  If not, see <http://creativecommons.org/publicdomain/zero/1.0/>.
+//
+
+
+// output:
+// - vexed_twoloop.png
+// - twoloop_poms.json
+//
+//
+// Create a local rule tileset that replicates the "Loop Constraint"
+// functionality in DeBroglie (https://github.com/BorisTheBrave/DeBroglie/blob/master/docs/articles/path_constraints.md)
+// using only nearest neighbor tile rules and tileset.
+//
+
 
 var fs = require("fs");
 var jimp = require("jimp");
@@ -122,41 +141,6 @@ let gen_info = {
 
   "straight_ud" : [ [ 'c', '.', '.', '.' ], [ '.', 'c', '.', '.' ], ['c', 'c', '.', '.'] ],
   "straight_lr" : [ [ '.', '.', '.', 'c' ], [ '.', '.', 'c', '.' ], ['.', '.', 'c', 'c']  ],
-
-}
-
-function xxx() {
-  /*
-  for (let _ii=0; _ii<3; _ii++) {
-
-    for (let tile_idx=0; tile_idx<order.length; tile_idx++) {
-      let name = order[tile_idx];
-
-      if ((_ii>0) && (name == "empty")) { continue; }
-
-      //console.log(_ii, name, name == "empty");
-
-      let tile_pos = rel_map[name];
-
-      let px = stride[0]*tile_pos[0];
-      let py = stride[1]*tile_pos[1] + (_ii*stride[1]*3);
-
-      console.log(name, px, py, "(", out_pxy, ")");
-
-      out_img.blit(src_tileset, out_pxy[0], out_pxy[1], px, py, stride[0], stride[1]);
-
-      out_pxy[0] += stride[0];
-      if (out_pxy[0] >= (out_img_tile_size[0]*stride[0])) {
-        out_pxy[0]=0;
-        out_pxy[1] += stride[1];
-      }
-
-    }
-
-  }
-  out_img.write("out.png");
-  */
-
 
 }
 
@@ -432,46 +416,7 @@ async function _main() {
 
   fs.writeFileSync( OUT_POMS_FN, JSON.stringify(poms, undefined, 2) );
 
-  //console.log( JSON.stringify(poms, undefined, 2) );
-
-
-  return;
-
-}
-
-function xxxy() {
-
-  //----
-
-
-  let test_img = new jimp(stride[0], stride[1]);
-  let mask_buf = new jimp(stride[0], stride[1]);
-
-  mask_buf.blit( src_tileset, 0,0, 0,0, 16,16 );
-  mask_buf.mask( mask_img[0], 0,0 );
-  test_img.blit(mask_buf, 0, 0);
-
-  mask_buf.blit( src_tileset, 0,0, 0,16*3, 16,16 );
-  mask_buf.mask( mask_img[1], 0,0 );
-  test_img.blit(mask_buf, 0, 0);
-
-  mask_buf.blit( src_tileset, 0,0, 0,16*6, 16,16 );
-  mask_buf.mask( mask_img[2], 0,0 );
-  test_img.blit(mask_buf, 0, 0);
-
-  mask_buf.blit( src_tileset, 0,0, 0,16*9, 16,16 );
-  mask_buf.mask( mask_img[3], 0,0 );
-  test_img.blit(mask_buf, 0, 0);
-
-
-  test_img.write("xxx.png");
-
-
-
-
-
-
-
+  return 0;
 }
 
 _main();

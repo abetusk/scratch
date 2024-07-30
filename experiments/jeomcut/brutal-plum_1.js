@@ -253,7 +253,7 @@ function stair(n, _debug) {
   }
 
   return [
-    {"ds":[0,0,0], "geom":geom, "id":"b", "dock":[ ": .", ": .", ".","_", "b","."], "anchor":geom}
+    {"ds":[0,0,0], "geom":geom, "id":"b", "dock":[ ": .", ": .", ".","_ Py", "b","."], "anchor":geom}
   ];
 }
 
@@ -261,28 +261,35 @@ function block() {
 
   let geom = op.mov([0,0,0], op.cub({"size":[1,1,1]}));
   return [
-    {"ds":[0,0,0], "geom":geom, "id":"b", "dock":[ ": .", ": .", "b .","_", ": .", ": ."], "anchor":geom}
+    {"ds":[0,0,0], "geom":geom, "id":"b", "dock":[ ": .", ": .", "b Py","_", ": .", ": ."], "anchor":geom}
   ];
 }
 
 function platform_bend() {
   let geom = op.mov([0,0,0], op.cub({"size":[1,1,1]}));
   return [
-    {"ds":[0,0,0], "geom":geom, "id":"pb", "dock":[ "P", ".", "b .","_", ".", "P"], "anchor":geom}
+    {"ds":[0,0,0], "geom":geom, "id":"pb", "dock":[ "Pxz", ".", "b .","Py", ".", "Pxz"], "anchor":geom}
   ];
 }
 
 function platform_tee() {
   let geom = op.mov([0,0,0], op.cub({"size":[1,1,1]}));
   return [
-    {"ds":[0,0,0], "geom":geom, "id":"pt", "dock":[ "P", "P", "b .","_", ".", "P"], "anchor":geom}
+    {"ds":[0,0,0], "geom":geom, "id":"pt", "dock":[ "Pxz", "Pxz", "b .","Py", ".", "Pxz"], "anchor":geom}
   ];
 }
 
 function platform_straight() {
   let geom = op.mov([0,0,0], op.cub({"size":[1,1,1]}));
   return [
-    {"ds":[0,0,0], "geom":geom, "id":"ps", "dock":[ "P", "P", "b .","_", ".", "."], "anchor":geom}
+    {"ds":[0,0,0], "geom":geom, "id":"ps", "dock":[ "Pxz", "Pxz", "b .","Py", ".", "."], "anchor":geom}
+  ];
+}
+
+function platform_cross() {
+  let geom = op.mov([0,0,0], op.cub({"size":[1,1,1]}));
+  return [
+    {"ds":[0,0,0], "geom":geom, "id":"ps", "dock":[ "Pxz", "Pxz", "b .","Py", "Pxz", "Pxz"], "anchor":geom}
   ];
 }
 
@@ -702,23 +709,15 @@ function main() {
       "." : { "type":"!", "dock":[0], "description":"empty space (.)" },
       "#" : { "type":"!", "dock":[1], "description":"ground (#)" },
 
+      "Pxz" : { "type":"@", "description": "platform dock (xz)" },
+      "Py+" : { "type":"@", "description": "platform dock (y+)" },
+      "Py-" : { "type":"@", "description": "platform dock (y-)" },
+
       "_" : { "type":"%", "dock":"b #", "description":"general wildcard like dock" },
-      ":" : { "type":"@", "description":"general wildcard like dock" },
+      //":" : { "type":"@", "description":"general wildcard like dock" },
 
-      //"w" : { "type":"&", "dock":"W", "description":"wedge (down) side dock" },
-      //"W" : { "type":"&", "dock":"w", "description":"wedge (down) side dock" },
+      "b" : { "type":"!", "dock":["block"], "description":"block" }
 
-      //"m" : { "type":"&", "dock":"M", "description":"wedge (up) side dock" },
-      //"M" : { "type":"&", "dock":"m", "description":"wedge (up) side dock" },
-
-      //"s" : { "type":"&", "dock":"S", "description":"stair side dock" },
-      //"S" : { "type":"&", "dock":"s", "description":"stair side dock" },
-
-      "b" : { "type":"!", "dock":["block"], "description":"block" },
-      "4" : { "type":"@", "description":"2x2 blocks (y+-) (for under double doorway)" },
-      //"a" : { "type":"@", "description":"xz dock for arch (side arch)" },
-
-      "A" : { "type":"@", "description":"top arch (y+-) dock connector" }
     },
     "tile": {
       "0": {"name":"0", "description":"empty" },
@@ -727,28 +726,37 @@ function main() {
     "source": [
     ],
     "weight": {
-      ".": 1000,
+      ".": 400,
       "#": 1,
-      "block": 10,
+      "block": 4,
       "column2": 5,
       "column3": 5,
-      "wedge_up": 100,
+      "wedge_up": 1,
       "wedge_down": 1,
       "doorway": 1,
       "double-doorway": 1,
       "block-2x2": 1,
-      "arch0": 100,
-      "arch1": 100,
-      "arch2": 100,
-      "stair": 50
+      "platform_bend": 10,
+      "platform_straight": 10,
+      "platform_tee": 10,
+      "platform_cross": 10,
+      "arch0": 1,
+      "arch1": 1,
+      "arch2": 1,
+      "stair": 1
     }
   };
 
   let lib_info = [
     { "name": "block",        "f": function() { return block(); } },
 
-    { "name": "column2",        "f": function() { return column2(); } },
-    { "name": "column3",        "f": function() { return column3(); } },
+    { "name": "platform_bend",        "f": function() { return platform_bend(); } },
+    { "name": "platform_straight",        "f": function() { return platform_straight(); } },
+    { "name": "platform_tee",        "f": function() { return platform_tee(); } },
+    { "name": "platform_cross",        "f": function() { return platform_cross(); } },
+
+    //{ "name": "column2",        "f": function() { return column2(); } },
+    //{ "name": "column3",        "f": function() { return column3(); } },
 
     { "name": "wedge_up",     "f": function() { return wedge_up(); } },
     { "name": "wedge_down",   "f": function() { return wedge_down(); } },
