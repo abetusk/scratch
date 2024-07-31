@@ -411,6 +411,8 @@ function path_stair(path_id, _debug) {
 
   let s = stair(5);
 
+  let path_dock_tok = "path" + pid;
+
   // 3 - y-
   // 4 - z+
 
@@ -421,12 +423,12 @@ function path_stair(path_id, _debug) {
   }
 
   s[0].dock[3] = "$1";
-  s[0].dock[4] = "path" + pid;
+  s[0].dock[4] = path_dock_tok;
 
   let ublock = op.cub({"center":[0,-1,0], "size":[1,1,1]});
   s[0].anchor = op.add( s[0].anchor, ublock );
 
-  s.push({ "ds":[0,0,0], "geom": ublock, "id":s[0].id, "dock":[": .", ": .", "$0", "_", "Pxz", ":" ] });
+  s.push({ "ds":[0,0,0], "geom": ublock, "id":s[0].id, "dock":[": .", ": .", "$0", "_", ":", path_dock_tok ] });
 
   return s;
 }
