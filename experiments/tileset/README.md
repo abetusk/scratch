@@ -85,22 +85,30 @@ Instead, this is a possibility:
 
 The maximum branching factor is limited by the colors, and the length of each
 branch is limited by the gredation count.
-Branching need not completely alter the spine....
+Branching need not completely alter the spine, so a color can branch to another
+color but still keep its countdown.
 
 This inflates the tile count significantly as you need a set of tiles
 (bends, straights, etc.) for each tile color gredation, but I think this at
 least avoids the exponential explosion.
 
-
-
+Cyclic Path
 ---
 
-The above is just stream of conscious, hopefully there'll be some pretty
-pictures to illustrate.
+I think there's a way to embed a cyclic path generator with local rules.
 
-I have a feeling it's going to be a nightmare to debug so I'm trying to create
-a tileset that has the `a`, `b` and `c` paths clearly distinguished, which
-is the purpose of this sub-directory.
+The idea is like the "two loop" but instead there's the possibility of
+branching new loop spawn points.
+
+So, each side of the loop are their own colors.
+Each color can be replaced by a branch with two sub-colors.
+
+The two sub colors can recombine into the parent color.
+Maybe we want to give a countdown to ensure the paths have a chance
+to get fare enough apart from each other.
+
+
+
 
 References
 ---

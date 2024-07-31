@@ -265,6 +265,8 @@ function block() {
   ];
 }
 
+//---
+
 function platform_bend() {
   let geom = op.mov([0,0,0], op.cub({"size":[1,1,1]}));
   return [
@@ -292,6 +294,170 @@ function platform_cross() {
     {"ds":[0,0,0], "geom":geom, "id":"ps", "dock":[ "Pxz", "Pxz", "b .","Py", "Pxz", "Pxz"], "anchor":geom}
   ];
 }
+
+//---
+
+// path bend has 2 path connectors and other connectors for platform blocks, as needed.
+// That is, behaves like a platform block but must connect up to other path blocks so
+// we can force embed a path into the instance if we filter the grid appropriately.
+//
+// xn - x negative direction
+// zp - z positive direction
+//
+// path_id is used to create the path docking id
+// block_perm_id cycles through the different valid platform connectors in the xz plane (0-3).
+//
+function path_bend(path_id, block_perm_id, _debug) {
+  path_id = ((typeof path_id === "undefined") ? 0 : path_id);
+  block_perm_id = ((typeof block_perm_id === "undefined") ? 0 : block_perm_id);
+
+  let pid = path_id.toString();
+
+  let xn_zp = [
+    [".", "."],
+    ["Pxz", "."],
+    [".", "Pxz"],
+    ["Pxz", "Pxz"]
+  ];
+
+  let xn = xn_zp[block_perm_id][0];
+  let zp = xn_zp[block_perm_id][1];
+
+  let geom = op.mov([0,0,0], op.cub({"size":[1,1,1]}));
+
+  if (_debug) {
+    geom = op.add( geom, op.cub({"center":[0.25,0.5,0], "size":[0.5,0.8,1/16]}) );
+    geom = op.add( geom, op.cub({"center":[0,0.5,-0.25], "size":[1/16,0.8,0.5]}) );
+  }
+
+  return [
+    //{"ds":[0,0,0], "geom":geom, "id":"path_bend_" + pid, "dock":[ "path" + pid, xn, "b .","Py", zp, "path" + pid], "anchor":geom}
+    {"ds":[0,0,0], "geom":geom, "id":"path_bend_" + pid, "dock":[ "path" + pid, xn, ".","Py", zp, "path" + pid], "anchor":geom}
+  ];
+}
+
+
+function path_straight(path_id, block_perm_id, _debug) {
+  path_id = ((typeof path_id === "undefined") ? 0 : path_id);
+  block_perm_id = ((typeof block_perm_id === "undefined") ? 0 : block_perm_id);
+
+  // symmetry takes care of the other direction
+  //
+  let zp_zn = [
+    [".", "."],
+    ["Pxz", "."],
+    ["Pxz", "Pxz"]
+  ];
+
+  let zp = zp_zn[block_perm_id][0];
+  let zn = zp_zn[block_perm_id][1];
+
+  let pid = path_id.toString();
+  let geom = op.mov([0,0,0], op.cub({"size":[1,1,1]}));
+
+  if (_debug) {
+    geom = op.add(geom, op.cub({"center":[0,0.5,0], "size":[1,0.8,1/16]}));
+  }
+
+  return [
+    //{"ds":[0,0,0], "geom":geom, "id":"path_straight_" + pid, "dock":[ "path" + pid, "path" + pid, "b .","Py", zp, zn], "anchor":geom}
+    {"ds":[0,0,0], "geom":geom, "id":"path_straight_" + pid, "dock":[ "path" + pid, "path" + pid, ".","Py", zp, zn], "anchor":geom}
+  ];
+}
+
+// connects to stairs upwards
+//
+function path_bend_up(path_id, block_perm_id, _debug) {
+  path_id = ((typeof path_id === "undefined") ? 0 : path_id);
+  block_perm_id = ((typeof block_perm_id === "undefined") ? 0 : block_perm_id);
+
+  // want at least two platform like blocks on the same level?
+  //
+  let xn_zp_zn = [
+    //[".", ".", "."],
+    ["Pxz", ".", "."],
+    [".", "Pxz", "."],
+    ["Pxz", "Pxz", "."],
+    [".", ".", "Pxz"],
+    ["Pxz", ".", "Pxz"],
+    [".", "Pxz", "Pxz"],
+    ["Pxz", "Pxz", "Pxz"]
+  ];
+
+  let xn = xn_zp_zn[block_perm_id][0];
+  let zp = xn_zp_zn[block_perm_id][1];
+  let zn = xn_zp_zn[block_perm_id][2];
+
+  let pid = path_id.toString();
+  let geom = op.mov([0,0,0], op.cub({"size":[1,1,1]}));
+
+  if (_debug) {
+    geom = op.add(geom, op.cub({"center":[0.35,0.35,0], "size":[1, 1, 1/16]}));
+  }
+
+  return [
+    {"ds":[0,0,0], "geom":geom, "id":"path_bendup_" + pid, "dock":[ "path" + pid, xn, "path" + pid,"Py", zp, zn], "anchor":geom}
+  ];
+}
+
+
+function path_stair(path_id, _debug) {
+  path_id = ((typeof path_id === "undefined") ? 0 : path_id);
+  let pid = path_id.toString();
+
+  let s = stair(5);
+
+  // 3 - y-
+  // 4 - z+
+
+  s[0].dock[3] = "path" + pid;
+  s[0].dock[4] = "path" + pid;
+
+  s[0].id = "path_stair_" + pid;
+
+  if (_debug) {
+    s[0].anchor = op.add( s[0].anchor, op.cub({"center":[0,0,0], "size":[1/16, 1, 1 ]}) );
+  }
+
+  return s;
+}
+
+function path_cap(path_id, block_perm_id, _debug) {
+  path_id = ((typeof path_id === "undefined") ? 0 : path_id);
+  block_perm_id = ((typeof block_perm_id === "undefined") ? 0 : block_perm_id);
+
+
+  // want at least two platform like blocks on the same level?
+  //
+  let xn_zp_zn = [
+    [".", ".", "."],
+    ["Pxz", ".", "."],
+    [".", "Pxz", "."],
+    ["Pxz", "Pxz", "."],
+    [".", ".", "Pxz"],
+    ["Pxz", ".", "Pxz"],
+    [".", "Pxz", "Pxz"],
+    ["Pxz", "Pxz", "Pxz"]
+  ];
+
+  let xn = xn_zp_zn[block_perm_id][0];
+  let zp = xn_zp_zn[block_perm_id][1];
+  let zn = xn_zp_zn[block_perm_id][2];
+
+  let pid = path_id.toString();
+  let geom = op.mov([0,0,0], op.cub({"size":[1,1,1]}));
+
+  if (_debug) {
+    geom = op.add( geom, op.cub({"center":[0.25,0.5,0], "size":[0.5, 0.8, 1/16 ]}) );
+  }
+
+  return [
+    //{"ds":[0,0,0], "geom":geom, "id":"path_cap_" + pid, "dock":[ "path" + pid, xn, "b .","Py", zp, zn], "anchor":geom}
+    {"ds":[0,0,0], "geom":geom, "id":"path_cap_" + pid, "dock":[ "path" + pid, xn, ".","Py", zp, zn], "anchor":geom}
+  ];
+}
+
+//---
 
 function column2() {
 
@@ -671,7 +837,19 @@ function _print_stickem_conf(info) {
     let sfx = ",";
     if (idx == (info.source.length-1)) { sfx = ""; }
 
-    console.log("    " + JSON.stringify(info.source[idx]) + sfx);
+    if (info.source[idx].dock.length==1) {
+      console.log("    {\"name\":" + JSON.stringify(info.source[idx].name) + ", \"dock\":" + JSON.stringify(info.source[idx].dock) + "}" + sfx)
+    }
+    else {
+      console.log("    {\"name\":" + JSON.stringify(info.source[idx].name) + ", \"dock\":[");
+      for (let dock_idx=0; dock_idx < info.source[idx].dock.length; dock_idx++) {
+        dock_sfx = ",";
+        if (dock_idx == (info.source[idx].dock.length-1)) { dock_sfx = ""; }
+        console.log("      " + JSON.stringify(info.source[idx].dock[dock_idx]) + dock_sfx )
+      }
+      console.log("    ]}" + sfx);
+    }
+    //console.log("    " + JSON.stringify(info.source[idx]) + sfx);
 
     //console.log("  {");
     //console.log("  { \"name\":", JSON.stringify(info.source[idx].name) + ",")
@@ -754,6 +932,38 @@ function main() {
     { "name": "platform_straight",        "f": function() { return platform_straight(); } },
     { "name": "platform_tee",        "f": function() { return platform_tee(); } },
     { "name": "platform_cross",        "f": function() { return platform_cross(); } },
+
+    //---
+
+    { "name": "patha_straight_0",        "f": function() { return path_straight(0,0,true); } },
+    { "name": "patha_straight_1",        "f": function() { return path_straight(0,1,true); } },
+    { "name": "patha_straight_2",        "f": function() { return path_straight(0,2,true); } },
+
+    { "name": "patha_bend_0",        "f": function() { return path_bend(0,0,true); } },
+    { "name": "patha_bend_1",        "f": function() { return path_bend(0,1,true); } },
+    { "name": "patha_bend_2",        "f": function() { return path_bend(0,2,true); } },
+    { "name": "patha_bend_3",        "f": function() { return path_bend(0,3,true); } },
+
+    { "name": "patha_bendup_0",        "f": function() { return path_bend_up(0,0,true); } },
+    { "name": "patha_bendup_1",        "f": function() { return path_bend_up(0,1,true); } },
+    { "name": "patha_bendup_2",        "f": function() { return path_bend_up(0,2,true); } },
+    { "name": "patha_bendup_3",        "f": function() { return path_bend_up(0,3,true); } },
+    { "name": "patha_bendup_4",        "f": function() { return path_bend_up(0,4,true); } },
+    { "name": "patha_bendup_5",        "f": function() { return path_bend_up(0,5,true); } },
+    { "name": "patha_bendup_6",        "f": function() { return path_bend_up(0,6,true); } },
+
+    { "name": "patha_stair_0",        "f": function() { return path_stair(0,true); } },
+
+    { "name": "patha_cap_0",        "f": function() { return path_cap(0,0,true); } },
+    { "name": "patha_cap_1",        "f": function() { return path_cap(0,1,true); } },
+    { "name": "patha_cap_2",        "f": function() { return path_cap(0,2,true); } },
+    { "name": "patha_cap_3",        "f": function() { return path_cap(0,3,true); } },
+    { "name": "patha_cap_4",        "f": function() { return path_cap(0,4,true); } },
+    { "name": "patha_cap_5",        "f": function() { return path_cap(0,5,true); } },
+    { "name": "patha_cap_6",        "f": function() { return path_cap(0,6,true); } },
+    { "name": "patha_cap_7",        "f": function() { return path_cap(0,7,true); } },
+
+    //---
 
     //{ "name": "column2",        "f": function() { return column2(); } },
     //{ "name": "column3",        "f": function() { return column3(); } },
