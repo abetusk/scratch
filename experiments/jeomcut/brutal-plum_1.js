@@ -7,6 +7,10 @@
 // Everything is centered aroudn 0 with unit cube cell (+-0.5, +-0.5, +-0.5)
 //
 
+// TODO:
+// * debug new path stair, looks like something is wrong with it (double check though)
+// * figure out how to pass in constraints so we don't need to keep updating them by hand
+
 let OUT_DIR = ".brutal-plum_tile";
 let OUT_DIR_STL = ".brutal-plum_stl";
 let OUT_DIR_OBJ = ".brutal-plum_obj";
@@ -410,14 +414,19 @@ function path_stair(path_id, _debug) {
   // 3 - y-
   // 4 - z+
 
-  s[0].dock[3] = "path" + pid;
-  s[0].dock[4] = "path" + pid;
-
   s[0].id = "path_stair_" + pid;
 
   if (_debug) {
     s[0].anchor = op.add( s[0].anchor, op.cub({"center":[0,0,0], "size":[1/16, 1, 1 ]}) );
   }
+
+  s[0].dock[3] = "$1";
+  s[0].dock[4] = "path" + pid;
+
+  let ublock = op.cub({"center":[0,-1,0], "size":[1,1,1]});
+  s[0].anchor = op.add( s[0].anchor, ublock );
+
+  s.push({ "ds":[0,0,0], "geom": ublock, "id":s[0].id, "dock":[": .", ": .", "$0", "_", "Pxz", ":" ] });
 
   return s;
 }
@@ -891,8 +900,10 @@ function main() {
       "Py+" : { "type":"@", "description": "platform dock (y+)" },
       "Py-" : { "type":"@", "description": "platform dock (y-)" },
 
+      "Py":  { "type":"@", "description": "platform dock (y+-)" },
+
       "_" : { "type":"%", "dock":"b #", "description":"general wildcard like dock" },
-      //":" : { "type":"@", "description":"general wildcard like dock" },
+      ":" : { "type":"@", "description":"general wildcard like dock" },
 
       "b" : { "type":"!", "dock":["block"], "description":"block" }
 
@@ -904,6 +915,8 @@ function main() {
     "source": [
     ],
     "weight": {
+      ".": 402,
+      "#": 2,
       "e": 403,
       "g": 1,
       "block": 4,
@@ -931,10 +944,10 @@ function main() {
   let lib_info = [
     { "name": "block",        "f": function() { return block(); } },
 
-    { "name": "platform_bend",        "f": function() { return platform_bend(); } },
-    { "name": "platform_straight",        "f": function() { return platform_straight(); } },
-    { "name": "platform_tee",        "f": function() { return platform_tee(); } },
-    { "name": "platform_cross",        "f": function() { return platform_cross(); } },
+    { "name": "platform_bend",      "f": function() { return platform_bend(); } },
+    { "name": "platform_straight",  "f": function() { return platform_straight(); } },
+    { "name": "platform_tee",       "f": function() { return platform_tee(); } },
+    { "name": "platform_cross",     "f": function() { return platform_cross(); } },
 
     //---
 
