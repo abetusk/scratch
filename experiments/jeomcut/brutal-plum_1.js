@@ -904,8 +904,8 @@ function main() {
     "source": [
     ],
     "weight": {
-      ".": 400,
-      "#": 1,
+      "e": 403,
+      "g": 1,
       "block": 4,
       "column2": 5,
       "column3": 5,
@@ -914,6 +914,9 @@ function main() {
       "doorway": 1,
       "double-doorway": 1,
       "block-2x2": 1,
+
+      "patha_stair_0": 30,
+
       "platform_bend": 10,
       "platform_straight": 10,
       "platform_tee": 10,

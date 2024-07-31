@@ -936,8 +936,23 @@ function _main(conf_fn, base_dir, out_base_dir, _out_type) {
     fs.writeFileSync( empty_obj, "v 0 0 0\nv 0 0 0\nv 0 0 0\n\nf 1 1 1\n");
     fs.writeFileSync( ground_obj, "v 0 0 0\nv 0 0 0\nv 0 0 0\n\nf 1 1 1\n");
 
+    empty_obj = out_base_dir + "/" + "e_000_0.obj";
+    ground_obj = out_base_dir + "/" + "g_000_0.obj";
+
+    fs.writeFileSync( empty_obj, "v 0 0 0\nv 0 0 0\nv 0 0 0\n\nf 1 1 1\n");
+    fs.writeFileSync( ground_obj, "v 0 0 0\nv 0 0 0\nv 0 0 0\n\nf 1 1 1\n");
+
     for (let ii=0; ii<poms_data.name.length; ii++) {
-      poms_data.objMap.push( out_base_dir + "/" + poms_data.name[ii] + ".obj" );
+
+      if (poms_data.name[ii] == "._000_0") {
+        poms_data.objMap.push( out_base_dir + "/" + "e_000_0"  + ".obj" );
+      }
+      else if (poms_data.name[ii] == "#_000_0") {
+        poms_data.objMap.push( out_base_dir + "/" + "g_000_0"  + ".obj" );
+      }
+      else {
+        poms_data.objMap.push( out_base_dir + "/" + poms_data.name[ii] + ".obj" );
+      }
 
       let tok = poms_data.name[ii].split("_");
       let subtile_id = tok.slice(-1);
@@ -983,7 +998,12 @@ function _main(conf_fn, base_dir, out_base_dir, _out_type) {
 
       }
       else {
-        fs.writeFileSync( out_base_dir + "/" + poms_data.name[ii] + ".obj", "" );
+
+        let placeholder_obj_str = "#placeholder empty\nv 0 0 0\nv 0 0 0\nv 0 0 0\n\nf 1 1 1\n";
+
+
+        //fs.writeFileSync( out_base_dir + "/" + poms_data.name[ii] + ".obj", "" );
+        fs.writeFileSync( out_base_dir + "/" + poms_data.name[ii] + ".obj", placeholder_obj_str );
         fs.writeFileSync( out_base_dir + "/" + poms_data.name[ii] + ".mtl", "" );
       }
 
@@ -1052,6 +1072,6 @@ function _main(conf_fn, base_dir, out_base_dir, _out_type) {
 //_main("./data/stickem_brutal-plum.conf", ".brutal-plum_stl", ".brutal-plum_tile", "stl");
 //_main("./data/stickem_brutal-plum.conf", ".brutal-plum_obj", ".brutal-plum_tile", "obj");
 //_main("./data/stickem_twoloop.conf", "", "", "none");
-_main("./data/stickem_brutal-plum_1.conf", ".brutal-plum_obj", ".brutal-plum_tile", "obj");
+_main("./data/stickem_brutal-plum_1.conf", ".brutal-plum_obj", "brutal-plum_tile", "obj");
 
 
