@@ -886,7 +886,7 @@ function _print_stickem_conf(info) {
   console.log("}");
 }
 
-function main() {
+function main_1path() {
 
   let stickem_info = {
     "comment": "stl out dir: '" + OUT_DIR_STL + "/', OBJ out dir: '" + OUT_DIR_OBJ + "/'",
@@ -1030,6 +1030,178 @@ function main() {
   //console.log(JSON.stringify(stickem_info, undefined, 2));
 
   return;
+}
+
+
+function main_2path() {
+
+  let stickem_info = {
+    "comment": "stl out dir: '" + OUT_DIR_STL + "/', OBJ out dir: '" + OUT_DIR_OBJ + "/'",
+    "unit": [1,1,1],
+    "unit_center":[0,0,0],
+    "up":[0,1,0],
+    "symmetry":"y",
+    "dock": {
+      "." : { "type":"!", "dock":[0], "description":"empty space (.)" },
+      "#" : { "type":"!", "dock":[1], "description":"ground (#)" },
+
+      "Pxz" : { "type":"@", "description": "platform dock (xz)" },
+      "Py+" : { "type":"@", "description": "platform dock (y+)" },
+      "Py-" : { "type":"@", "description": "platform dock (y-)" },
+
+      "Py":  { "type":"@", "description": "platform dock (y+-)" },
+
+      "_" : { "type":"%", "dock":"b #", "description":"general wildcard like dock" },
+      ":" : { "type":"@", "description":"general wildcard like dock" },
+
+      "b" : { "type":"!", "dock":["block"], "description":"block" }
+
+    },
+    "tile": {
+      "0": {"name":"0", "description":"empty" },
+      "1": {"name":"1", "description":"ground" }
+    },
+    "source": [
+    ],
+    "weight": {
+      ".": 402,
+      "#": 2,
+      "e": 403,
+      "g": 1,
+      "block": 4,
+      "column2": 5,
+      "column3": 5,
+      "wedge_up": 1,
+      "wedge_down": 1,
+      "doorway": 1,
+      "double-doorway": 1,
+      "block-2x2": 1,
+
+      "patha_stair_0": 30,
+
+      "platform_bend": 10,
+      "platform_straight": 10,
+      "platform_tee": 10,
+      "platform_cross": 10,
+      "arch0": 1,
+      "arch1": 1,
+      "arch2": 1,
+      "stair": 1
+    }
+  };
+
+  let lib_info = [
+    { "name": "block",        "f": function() { return block(); } },
+
+    { "name": "platform_bend",      "f": function() { return platform_bend(); } },
+    { "name": "platform_straight",  "f": function() { return platform_straight(); } },
+    { "name": "platform_tee",       "f": function() { return platform_tee(); } },
+    { "name": "platform_cross",     "f": function() { return platform_cross(); } },
+
+    //---
+
+    { "name": "patha_straight_0",        "f": function() { return path_straight(0,0,true); } },
+    { "name": "patha_straight_1",        "f": function() { return path_straight(0,1,true); } },
+    { "name": "patha_straight_2",        "f": function() { return path_straight(0,2,true); } },
+
+    { "name": "patha_bend_0",        "f": function() { return path_bend(0,0,true); } },
+    { "name": "patha_bend_1",        "f": function() { return path_bend(0,1,true); } },
+    { "name": "patha_bend_2",        "f": function() { return path_bend(0,2,true); } },
+    { "name": "patha_bend_3",        "f": function() { return path_bend(0,3,true); } },
+
+    { "name": "patha_bendup_0",        "f": function() { return path_bend_up(0,0,true); } },
+    { "name": "patha_bendup_1",        "f": function() { return path_bend_up(0,1,true); } },
+    { "name": "patha_bendup_2",        "f": function() { return path_bend_up(0,2,true); } },
+    { "name": "patha_bendup_3",        "f": function() { return path_bend_up(0,3,true); } },
+    { "name": "patha_bendup_4",        "f": function() { return path_bend_up(0,4,true); } },
+    { "name": "patha_bendup_5",        "f": function() { return path_bend_up(0,5,true); } },
+    { "name": "patha_bendup_6",        "f": function() { return path_bend_up(0,6,true); } },
+
+    { "name": "patha_stair_0",        "f": function() { return path_stair(0,true); } },
+
+    { "name": "patha_cap_0",        "f": function() { return path_cap(0,0,true); } },
+    { "name": "patha_cap_1",        "f": function() { return path_cap(0,1,true); } },
+    { "name": "patha_cap_2",        "f": function() { return path_cap(0,2,true); } },
+    { "name": "patha_cap_3",        "f": function() { return path_cap(0,3,true); } },
+    { "name": "patha_cap_4",        "f": function() { return path_cap(0,4,true); } },
+    { "name": "patha_cap_5",        "f": function() { return path_cap(0,5,true); } },
+    { "name": "patha_cap_6",        "f": function() { return path_cap(0,6,true); } },
+    { "name": "patha_cap_7",        "f": function() { return path_cap(0,7,true); } },
+
+    //---
+
+    { "name": "pathb_straight_0",        "f": function() { return path_straight(1,0,true); } },
+    { "name": "pathb_straight_1",        "f": function() { return path_straight(1,1,true); } },
+    { "name": "pathb_straight_2",        "f": function() { return path_straight(1,2,true); } },
+
+    { "name": "pathb_bend_0",        "f": function() { return path_bend(1,0,true); } },
+    { "name": "pathb_bend_1",        "f": function() { return path_bend(1,1,true); } },
+    { "name": "pathb_bend_2",        "f": function() { return path_bend(1,2,true); } },
+    { "name": "pathb_bend_3",        "f": function() { return path_bend(1,3,true); } },
+
+    { "name": "pathb_bendup_0",        "f": function() { return path_bend_up(1,0,true); } },
+    { "name": "pathb_bendup_1",        "f": function() { return path_bend_up(1,1,true); } },
+    { "name": "pathb_bendup_2",        "f": function() { return path_bend_up(1,2,true); } },
+    { "name": "pathb_bendup_3",        "f": function() { return path_bend_up(1,3,true); } },
+    { "name": "pathb_bendup_4",        "f": function() { return path_bend_up(1,4,true); } },
+    { "name": "pathb_bendup_5",        "f": function() { return path_bend_up(1,5,true); } },
+    { "name": "pathb_bendup_6",        "f": function() { return path_bend_up(1,6,true); } },
+
+    { "name": "pathb_stair_0",        "f": function() { return path_stair(1,true); } },
+
+    { "name": "pathb_cap_0",        "f": function() { return path_cap(1,0,true); } },
+    { "name": "pathb_cap_1",        "f": function() { return path_cap(1,1,true); } },
+    { "name": "pathb_cap_2",        "f": function() { return path_cap(1,2,true); } },
+    { "name": "pathb_cap_3",        "f": function() { return path_cap(1,3,true); } },
+    { "name": "pathb_cap_4",        "f": function() { return path_cap(1,4,true); } },
+    { "name": "pathb_cap_5",        "f": function() { return path_cap(1,5,true); } },
+    { "name": "pathb_cap_6",        "f": function() { return path_cap(1,6,true); } },
+    { "name": "pathb_cap_7",        "f": function() { return path_cap(1,7,true); } },
+
+    //---
+
+    //{ "name": "column2",        "f": function() { return column2(); } },
+    //{ "name": "column3",        "f": function() { return column3(); } },
+
+    { "name": "wedge_up",     "f": function() { return wedge_up(); } },
+    { "name": "wedge_down",   "f": function() { return wedge_down(); } },
+    { "name": "doorway",      "f": function() { return doorway(); } },
+    { "name": "double-doorway",      "f": function() { return double_doorway(); } },
+    { "name": "block-2x2",      "f": function() { return block_2x2(); } },
+    { "name": "arch0",        "f": function() { return arch0(); } },
+    { "name": "arch1",        "f": function() { return arch1(); } },
+    { "name": "arch2",        "f": function() { return arch2(); } },
+    { "name": "stair",        "f": (function(_n){ return function() { return stair(_n); } })(5)  }
+  ];
+
+
+  for (let li_idx=0; li_idx<lib_info.length; li_idx++) {
+    let li = lib_info[li_idx];
+
+    let shape_info = li.f();
+
+    let stl_data = op.stl_dumps({"binary":false}, shape_info[0].anchor).join("");
+    fs.writeFileSync(OUT_DIR_STL + "/" + li.name + ".stl", stl_data);
+
+    let obj_data = op.obj_dumps({}, shape_info[0].anchor).join("");
+    fs.writeFileSync(OUT_DIR_OBJ + "/" + li.name + ".obj", obj_data);
+
+    let src_idx = stickem_info.source.length;
+    stickem_info.source.push({"name":li.name, "dock":[ shape_info[0].dock ]});
+    for (let ii=1; ii<shape_info.length; ii++) {
+      stickem_info.source[src_idx].dock.push( shape_info[ii].dock );
+    }
+
+  }
+
+  _print_stickem_conf(stickem_info);
+  //console.log(JSON.stringify(stickem_info, undefined, 2));
+
+  return;
+}
+
+function main() {
+  return main_2path();
 }
 
 main();
