@@ -879,9 +879,9 @@ function _main(conf_fn, base_dir, out_base_dir, _out_type) {
     "weight": [],
     "objMap": [],
     "constraint": [
-      {"type":"quiltForce", "range": {"tile":[1,2], "x":[], "y":[0,1], "z":[], "note": "force ground tile on bottom xz plane, y+ up"} },
-      {"type":  "quiltPin", "range": {"tile":[1,2], "x":[], "y":[0,1], "z":[], "note": "pin previously forced operation"} },
-      {"type":"quiltRemove","range": {"tile":[1,2], "x":[], "y":[1],   "z":[], "note": "remove ground from rest of grid"} }
+      //{"type":"quiltForce", "range": {"tile":[1,2], "x":[], "y":[0,1], "z":[], "note": "force ground tile on bottom xz plane, y+ up"} },
+      //{"type":  "quiltPin", "range": {"tile":[1,2], "x":[], "y":[0,1], "z":[], "note": "pin previously forced operation"} },
+      //{"type":"quiltRemove","range": {"tile":[1,2], "x":[], "y":[1],   "z":[], "note": "remove ground from rest of grid"} }
     ],
     "boundaryCondition":{
       "x+":{"type":"tile","value":0},
@@ -894,7 +894,6 @@ function _main(conf_fn, base_dir, out_base_dir, _out_type) {
     "size": [8,8,8],
     "quiltSize": [8,8,8]
   };
-
 
   //let out_base_dir = ".minigolf_tile";
 
@@ -925,6 +924,58 @@ function _main(conf_fn, base_dir, out_base_dir, _out_type) {
     }
     
   }
+
+  if ("constraint" in cfg) {
+    for (let cidx=0; cidx<cfg.constraint.length; cidx++) {
+
+      let n = poms_data.name.length;
+
+      let tile_pattern = cfg.constraint[cidx].range.tile;
+
+      let tile_list = [];
+
+      for (let tile_idx=0; tile_idx < n; tile_idx++) {
+        if (poms_data.name[tile_idx].match( tile_pattern )) {
+          tile_list.push(tile_idx);
+        }
+      }
+
+      if (tile_list.length == 0) { continue; }
+
+
+      tile_list.sort( function(a,b) { if (a<b) { return -1; } if (a>b) { return 1; } return 0; } );
+
+      let tile_range = [];
+      let cur_range = [ tile_list[0], tile_list[0] + 1 ];
+      for (let tile_list_idx=1; tile_list_idx < tile_list.length; tile_list_idx++) {
+        if (tile_list[tile_list_idx] != cur_range[1]) {
+          tile_range.push( [ cur_range[0], cur_range[1] ] );
+          cur_range[0] = tile_list[tile_list_idx];
+        }
+        cur_range[1] = tile_list[tile_list_idx]+1;
+      }
+      tile_range.push( [ cur_range[0], cur_range[1] ] );
+
+      let _tile_range = 0;
+
+      for (let tile_range_idx=0; tile_range_idx < tile_range.length; tile_range_idx++) {
+        let _constraint = {
+          "type": cfg.constraint[cidx].type,
+          "range": {
+            "x": cfg.constraint[cidx].range.x,
+            "y": cfg.constraint[cidx].range.y,
+            "z": cfg.constraint[cidx].range.z,
+            "tile": tile_range[tile_range_idx]
+          }
+        };
+
+        poms_data.constraint.push( _constraint );
+      }
+
+    }
+  }
+
+
   //
   //----
 

@@ -274,28 +274,28 @@ function block() {
 function platform_bend() {
   let geom = op.mov([0,0,0], op.cub({"size":[1,1,1]}));
   return [
-    {"ds":[0,0,0], "geom":geom, "id":"pb", "dock":[ "Pxz", ".", "b .","Py", ".", "Pxz"], "anchor":geom}
+    {"ds":[0,0,0], "geom":geom, "id":"pb", "dock":[ "Pxz", ".", "b .","Py #", ".", "Pxz"], "anchor":geom}
   ];
 }
 
 function platform_tee() {
   let geom = op.mov([0,0,0], op.cub({"size":[1,1,1]}));
   return [
-    {"ds":[0,0,0], "geom":geom, "id":"pt", "dock":[ "Pxz", "Pxz", "b .","Py", ".", "Pxz"], "anchor":geom}
+    {"ds":[0,0,0], "geom":geom, "id":"pt", "dock":[ "Pxz", "Pxz", "b .","Py #", ".", "Pxz"], "anchor":geom}
   ];
 }
 
 function platform_straight() {
   let geom = op.mov([0,0,0], op.cub({"size":[1,1,1]}));
   return [
-    {"ds":[0,0,0], "geom":geom, "id":"ps", "dock":[ "Pxz", "Pxz", "b .","Py", ".", "."], "anchor":geom}
+    {"ds":[0,0,0], "geom":geom, "id":"ps", "dock":[ "Pxz", "Pxz", "b .","Py #", ".", "."], "anchor":geom}
   ];
 }
 
 function platform_cross() {
   let geom = op.mov([0,0,0], op.cub({"size":[1,1,1]}));
   return [
-    {"ds":[0,0,0], "geom":geom, "id":"ps", "dock":[ "Pxz", "Pxz", "b .","Py", "Pxz", "Pxz"], "anchor":geom}
+    {"ds":[0,0,0], "geom":geom, "id":"ps", "dock":[ "Pxz", "Pxz", "b .","Py #", "Pxz", "Pxz"], "anchor":geom}
   ];
 }
 
@@ -336,7 +336,7 @@ function path_bend(path_id, block_perm_id, _debug) {
 
   return [
     //{"ds":[0,0,0], "geom":geom, "id":"path_bend_" + pid, "dock":[ "path" + pid, xn, "b .","Py", zp, "path" + pid], "anchor":geom}
-    {"ds":[0,0,0], "geom":geom, "id":"path_bend_" + pid, "dock":[ "path" + pid, xn, ".","Py", zp, "path" + pid], "anchor":geom}
+    {"ds":[0,0,0], "geom":geom, "id":"path_bend_" + pid, "dock":[ "path" + pid, xn, ".","Py #", zp, "path" + pid], "anchor":geom}
   ];
 }
 
@@ -365,7 +365,7 @@ function path_straight(path_id, block_perm_id, _debug) {
 
   return [
     //{"ds":[0,0,0], "geom":geom, "id":"path_straight_" + pid, "dock":[ "path" + pid, "path" + pid, "b .","Py", zp, zn], "anchor":geom}
-    {"ds":[0,0,0], "geom":geom, "id":"path_straight_" + pid, "dock":[ "path" + pid, "path" + pid, ".","Py", zp, zn], "anchor":geom}
+    {"ds":[0,0,0], "geom":geom, "id":"path_straight_" + pid, "dock":[ "path" + pid, "path" + pid, ".","Py #", zp, zn], "anchor":geom}
   ];
 }
 
@@ -400,7 +400,7 @@ function path_bend_up(path_id, block_perm_id, _debug) {
   }
 
   return [
-    {"ds":[0,0,0], "geom":geom, "id":"path_bendup_" + pid, "dock":[ "path" + pid, xn, "path" + pid,"Py", zp, zn], "anchor":geom}
+    {"ds":[0,0,0], "geom":geom, "id":"path_bendup_" + pid, "dock":[ "path" + pid, xn, "path" + pid,"Py #", zp, zn], "anchor":geom}
   ];
 }
 
@@ -464,7 +464,7 @@ function path_cap(path_id, block_perm_id, _debug) {
 
   return [
     //{"ds":[0,0,0], "geom":geom, "id":"path_cap_" + pid, "dock":[ "path" + pid, xn, "b .","Py", zp, zn], "anchor":geom}
-    {"ds":[0,0,0], "geom":geom, "id":"path_cap_" + pid, "dock":[ "path" + pid, xn, ".","Py", zp, zn], "anchor":geom}
+    {"ds":[0,0,0], "geom":geom, "id":"path_cap_" + pid, "dock":[ "path" + pid, xn, ".","Py #", zp, zn], "anchor":geom}
   ];
 }
 
@@ -870,6 +870,15 @@ function _print_stickem_conf(info) {
   }
   console.log("  ],");
 
+  if ("constraint" in info) {
+    console.log("  \"constraint\": [");
+    for (let ii=0; ii < info.constraint.length; ii++) {
+      sfx = ((ii == (info.constraint.length-1)) ? "" : ",");
+      console.log("    " + JSON.stringify(info.constraint[ii]) + sfx);
+    }
+    console.log("  ],");
+  }
+
   console.log("  \"weight\": {");
   if ("weight" in info) {
     let weight_key_a = [];
@@ -1061,6 +1070,31 @@ function main_2path() {
       "0": {"name":"0", "description":"empty" },
       "1": {"name":"1", "description":"ground" }
     },
+
+    "constraint": [
+      {"type": "quiltRemove",  "range": { "x": [], "y":[1], "z":[], "tile":"#"} },
+      {"type": "quiltForce",   "range" : { "x":[],"y":[0,1],"z":[], "tile":"#"}},
+      {"type": "quiltPin",     "range" : { "x":[],"y":[0,1],"z":[], "tile":"#"}},
+
+      {"type": "quiltRemove", "range" : { "x":[],"y":[],"z":[], "tile":"patha_cap_.*$"}},
+      {"type": "quiltRemove", "range" : { "x":[],"y":[],"z":[], "tile":"pathb_cap_.*$"}},
+
+      {"type": "quiltAdd",   "range" : { "x":[2,3],"y":[1,2],"z":[1,2], "tile":"patha_cap_.*$"}},
+      {"type": "quiltForce", "range" : { "x":[2,3],"y":[1,2],"z":[1,2], "tile":"patha_cap_.*$"}},
+
+      {"type": "quiltAdd",   "range" : { "x":[1,2],"y":[1,2],"z":[2,3], "tile":"pathb_cap_.*$"}},
+      {"type": "quiltForce", "range" : { "x":[1,2],"y":[1,2],"z":[2,3], "tile":"pathb_cap_.*$"}},
+
+    //],
+    //"_constraint": [
+
+      {"type": "quiltAdd",   "range" : { "x":[-2,-1],"y":[-1],"z":[-3,-2], "tile":"patha_cap_.*$"}},
+      {"type": "quiltForce", "range" : { "x":[-2,-1],"y":[-1],"z":[-3,-2], "tile":"patha_cap_.*$"}},
+
+      {"type": "quiltAdd",   "range" : { "x":[-3,-2],"y":[-1],"z":[-2,-1], "tile":"pathb_cap_.*$"}},
+      {"type": "quiltForce", "range" : { "x":[-3,-2],"y":[-1],"z":[-2,-1], "tile":"pathb_cap_.*$"}}
+    ],
+
     "source": [
     ],
     "weight": {
@@ -1078,6 +1112,7 @@ function main_2path() {
       "block-2x2": 1,
 
       "patha_stair_0": 30,
+      "pathb_stair_0": 30,
 
       "platform_bend": 10,
       "platform_straight": 10,
