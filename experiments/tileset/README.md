@@ -92,6 +92,33 @@ This inflates the tile count significantly as you need a set of tiles
 (bends, straights, etc.) for each tile color gredation, but I think this at
 least avoids the exponential explosion.
 
+---
+
+This still doesn't work.
+The tileset scales as grid size, as you need a different tile for each length of path
+that you want
+
+
+Why doesn't the initial idea work?
+Right, doesn't work for 3d or for arbitrary 2d.
+The branches can loop back and connect in on themselves.
+If the path partitions the space, this is not an issue, but so long
+as there's an opening, the sub branches could wind around and connect up.
+
+The decrementing path specifically forbids that because it must connect
+to a strict subchild, with the appropriate dock...but now thinking about
+it, this still might not work.
+
+ok, how about this:
+
+* create a 2 dock tile with a parity dock, so a tile consists of
+  two docks, one with color red, the other with black
+  - black can connect to red and vice versa but black-black and red-red
+    disallowed
+  - branching creates red-black tiles that can only ever match up
+    with a begin red and end black
+  - end caps have black connector
+
 Cyclic Path
 ---
 
