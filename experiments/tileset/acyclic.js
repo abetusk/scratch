@@ -317,12 +317,10 @@ async function _main() {
   let oppo_idir = [1,0, 3,2, 5,4];
 
   let rule_list = [];
-
-  let base_tile_id = 1;
-  for (let src_tile_idx=0; src_tile_idx<full_tilelist.length; src_tile_idx++) {
+  for (let src_tile_idx=1; src_tile_idx<full_tilelist.length; src_tile_idx++) {
     let _src = full_tilelist[src_tile_idx];
 
-    for (let dst_tile_idx=0; dst_tile_idx<full_tilelist.length; dst_tile_idx++) {
+    for (let dst_tile_idx=1; dst_tile_idx<full_tilelist.length; dst_tile_idx++) {
       let _dst = full_tilelist[dst_tile_idx];
 
       for (let idir=0; idir<4; idir++) {
@@ -331,7 +329,12 @@ async function _main() {
         let src_dock = _src.dock[idir];
         let dst_dock = _dst.dock[rdir];
 
-        let dst_dock_partner = ((dst_dock.slice(0,1) == 'p') ? 'q' : 'p')  + dst_dock.slice(1);
+        let dst_dock_partner = dst_dock;
+
+        if ((dst_dock.slice(0) == 'p') ||
+            (dst_dock.slice(0) == 'q')) {
+          dst_dock_partner = ((dst_dock.slice(0,1) == 'p') ? 'q' : 'p')  + dst_dock.slice(1);
+        }
 
         //if (_src.dock[idir] == _dst.dock[rdir]) {
         if (src_dock == dst_dock_partner) {
@@ -340,21 +343,33 @@ async function _main() {
 
       }
 
-      // add in 0 rule to z in both directions for src
-      //
-      rule_list.push( [_src.id, 0, 4, 1] );
-      rule_list.push( [_src.id, 0, 5, 1] );
+    }
 
-      rule_list.push( [0, _src.id, 4, 1] );
-      rule_list.push( [0, _src.id, 5, 1] );
+    for (let idir=0; idir<4; idir++) {
+      let rdir = oppo_idir[idir];
+
+      if ( _src.dock[idir] == '.' ) {
+        rule_list.push([ _src.id, 0, idir, 1 ]);
+        rule_list.push([ 0, _src.id, rdir, 1 ]);
+      }
 
     }
 
+    // add in 0 rule to z in both directions for src
+    //
+    rule_list.push( [_src.id, 0, 4, 1] );
+    rule_list.push( [_src.id, 0, 5, 1] );
+
+    rule_list.push( [0, _src.id, 4, 1] );
+    rule_list.push( [0, _src.id, 5, 1] );
+
+    /*
     for (let idir=0; idir<4; idir++) {
       let rdir = oppo_idir[idir];
       if (_src.dock[idir] == '.') { rule_list.push([ _src.id, 0, idir, 1 ]); }
       if (_src.dock[idir] == '.') { rule_list.push([ 0, _src.id, rdir, 1 ]); }
     }
+    */
 
 
   }
