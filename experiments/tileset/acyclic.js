@@ -231,6 +231,9 @@ async function _main() {
     await jimp.read("./img/mask_down.png")
   ];
 
+  let join_buf = new jimp(STRIDE[0], STRIDE[1]);
+  let mask_buf = new jimp(STRIDE[0], STRIDE[1]);
+
 
   for (let tile_idx=1; tile_idx<fin_dock.length; tile_idx++) {
     let ele = fin_dock[tile_idx];
@@ -252,12 +255,45 @@ async function _main() {
       let _rm_name = name_tok.slice(0,2).join("_");
       let _lvl = parseInt(name_tok[2].slice(1));
 
+      let src_conn = name_tok[2];
+      let src_group = parseInt(src_conn.slice(1));
+
       let y_off = 3*_lvl;
       let tile_pos = REL_MAP[_rm_name];
       let px = STRIDE[0]*tile_pos[0];
       let py = STRIDE[1]*tile_pos[1] + (y_off*STRIDE[1]);
 
-      out_img.blit( src_tileset, out_pxy[0], out_pxy[1], px, py, STRIDE[0], STRIDE[1] );
+      let dock = ele.dock;
+
+      join_buf.blit( src_tileset, 0, 0, px, py, STRIDE[0], STRIDE[1] );
+
+      for (let idir=0; idir<4; idir++) {
+
+        if (dock[idir] == '.') { continue; }
+
+        let dst_conn = dock[idir];
+        let dst_group = parseInt(dst_conn.slice(1));
+
+        if (src_group == dst_group) { continue; }
+
+        let c_y_off = dst_group;
+
+        //console.log("  ", ele.name, "idir:", idir, dock[idir], src_group, dst_group);
+        //continue;
+
+        let c_tile_pos = REL_MAP["cross"];
+        let c_px = STRIDE[0]*c_tile_pos[0];
+        let c_py = STRIDE[1]*c_tile_pos[1] + (3*c_y_off*STRIDE[1]);
+
+        mask_buf.blit( src_tileset, 0,0, c_px,c_py, STRIDE[0], STRIDE[1] );
+        mask_buf.mask( mask_img[idir], 0,0 );
+        join_buf.blit( mask_buf, 0, 0 );
+
+      }
+
+      out_img.blit(join_buf, out_pxy[0], out_pxy[1], 0,0, STRIDE[0],STRIDE[1]);
+      //out_img.blit( src_tileset, out_pxy[0], out_pxy[1], px, py, STRIDE[0], STRIDE[1] );
+
 
     }
 
@@ -292,7 +328,7 @@ async function _main() {
       name = tile_pfx[group_idx] + template_name;
 
       let y_off = tile_base_idx[group_idx];
-      let tile_pos = rel_map[template_name];
+      let tile_pos = REL_MAP[template_name];
       let px = stride[0]*tile_pos[0];
       let py = stride[1]*tile_pos[1] + (3*y_off*stride[1]);
 
@@ -324,8 +360,8 @@ async function _main() {
 
   //console.log(">>>>", out_pxy);
 
-  let join_buf = new jimp(stride[0], stride[1]);
-  let mask_buf = new jimp(stride[0], stride[1]);
+  //let join_buf = new jimp(stride[0], stride[1]);
+  //let mask_buf = new jimp(stride[0], stride[1]);
 
   for (let group_idx=0; group_idx<2; group_idx++) {
 
