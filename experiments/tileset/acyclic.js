@@ -364,7 +364,8 @@ async function _main() {
   // create name list.
   //
 
-  let tile_name = [ "." ];
+  //let tile_name = [ "." ];
+  let tile_name = [ ];
   for (let ii=0; ii<full_tilelist.length; ii++) {
     tile_name.push( full_tilelist[ii].name );
   }
