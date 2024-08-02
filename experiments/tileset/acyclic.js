@@ -199,8 +199,8 @@ async function _main() {
   l_list.push( create_acyclic_level_tiles(LEVEL_TEMPLATE, 3, -1) );
 
   //DEBUG
-  l_list = [];
-  l_list.push( create_acyclic_level_tiles(LEVEL_TEMPLATE, 0, -1) );
+  //l_list = [];
+  //l_list.push( create_acyclic_level_tiles(LEVEL_TEMPLATE, 0, -1) );
 
 
   // flatten/..
@@ -214,6 +214,7 @@ async function _main() {
     }
   }
 
+  // DEBUG
   for (let ii=0; ii<full_tilelist.length; ii++) {
     console.log(JSON.stringify(full_tilelist[ii]));
   }

@@ -119,6 +119,19 @@ ok, how about this:
     with a begin red and end black
   - end caps have black connector
 
+
+---
+
+???
+
+ok, nope, above still has issues.
+
+An illustrative example:
+
+* orange tile path branches to a grey tile path.
+  - grey tile has p joining to orange and q acceptor outward
+* further on down the way, orange path branches again which
+
 Cyclic Path
 ---
 
