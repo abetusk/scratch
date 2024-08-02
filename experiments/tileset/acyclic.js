@@ -26,7 +26,7 @@ let STRIDE = [16,16];
 var OUT_TILESET_FN = "vexed_acylic.png";
 var OUT_POMS_FN = "acyclic_poms.json";
 
-let rel_map = {
+let REL_MAP = {
   "tee_d": [0,0],
   "tee_l": [1,0],
   "tee_r": [0,1],
@@ -189,8 +189,8 @@ async function _main() {
 
   let l_list = [];
   let fin_dock = [
-    {"name":"0", "dock":["*", "*", "*", "*"]},
-    {"name":"empty", "dock":[".", ".", ".", "."]}
+    {"name":"0", "dock":["*", "*", "*", "*"], "id":0},
+    {"name":"empty", "dock":[".", ".", ".", "."], "id":1}
   ];
 
   l_list.push( create_acyclic_level_tiles(LEVEL_TEMPLATE, 0, 1) );
@@ -200,9 +200,12 @@ async function _main() {
 
   // flatten/..
   //
+  cur_id = fin_dock.length;
   for (let idx=0; idx<l_list.length; idx++) {
     for (let ii=0; ii<l_list[idx].length; ii++) {
       fin_dock.push( l_list[idx][ii] );
+      fin_dock[ fin_dock.length-1 ]["id"] = cur_id;
+      cur_id++;
     }
   }
 
@@ -229,20 +232,49 @@ async function _main() {
   ];
 
 
-  return;
+  for (let tile_idx=1; tile_idx<fin_dock.length; tile_idx++) {
+    let ele = fin_dock[tile_idx];
 
-  let all_l = [];
-  for (let ii=0; ii<l0.length; ii++) { all_l.push(l0[ii]); }
-  for (let ii=0; ii<l1.length; ii++) { all_l.push(l1[ii]); }
-  for (let ii=0; ii<l2.length; ii++) { all_l.push(l2[ii]); }
+    if ( ele.name == "empty" ) {
 
-  for (let ii=0; ii<all_l.length; ii++) {
-    console.log(JSON.stringify(all_l[ii]));
+      let y_off = 3*0;
+      let tile_pos = REL_MAP[ele.name];
+      let px = STRIDE[0]*tile_pos[0];
+      let py = STRIDE[1]*tile_pos[1] + (y_off*STRIDE[1]);
+
+      out_img.blit( src_tileset, out_pxy[0], out_pxy[1], px, py, STRIDE[0], STRIDE[1] );
+
+    }
+    else {
+
+      let name_tok = ele.name.split("_");
+
+      let _rm_name = name_tok.slice(0,2).join("_");
+      let _lvl = parseInt(name_tok[2].slice(1));
+
+      let y_off = 3*_lvl;
+      let tile_pos = REL_MAP[_rm_name];
+      let px = STRIDE[0]*tile_pos[0];
+      let py = STRIDE[1]*tile_pos[1] + (y_off*STRIDE[1]);
+
+      out_img.blit( src_tileset, out_pxy[0], out_pxy[1], px, py, STRIDE[0], STRIDE[1] );
+
+    }
+
+    out_pxy[0] += STRIDE[0];
+    if (out_pxy[0] >= (out_img_tile_size[0]*STRIDE[0])) {
+      out_pxy[0]=0;
+      out_pxy[1] += STRIDE[1];
+    }
+
+
   }
 
+  console.log("## writing", OUT_TILESET_FN);
+  out_img.write( OUT_TILESET_FN );
+
 
   return;
-
 
   let full_tilelist = [];
 
