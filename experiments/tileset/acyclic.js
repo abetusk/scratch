@@ -21,7 +21,7 @@
 var fs = require("fs");
 var jimp = require("jimp");
 
-let stride = [16,16];
+let STRIDE = [16,16];
 
 var OUT_TILESET_FN = "vexed_acylic.png";
 var OUT_POMS_FN = "acyclic_poms.json";
@@ -80,78 +80,146 @@ let RULE_TEMPLATE = {
 }
 
 let LEVEL_TEMPLATE = {
-  "end_r" : [ "$$", ".", ".", "." ],
-  "end_l" : [ ".", "$$", ".", "." ],
-  "end_u" : [ ".", ".", ".", "$$" ],
-  "end_d" : [ ".", ".", "$$", "." ],
+  "end_r_p" : [ "p$$", ".", ".", "." ],
+  "end_l_p" : [ ".", "p$$", ".", "." ],
+  "end_u_p" : [ ".", ".", ".", "p$$" ],
+  "end_d_p" : [ ".", ".", "p$$", "." ],
 
-  "bend_rd" : [ "$$", ".", "$$", "." ],
-  "bend_ru" : [ "$$", ".", ".", "$$" ],
-  "bend_lu" : [ ".", "$$", ".", "$$" ],
-  "bend_ld" : [ ".", "$$", "$$", "." ],
+  "end_r_q" : [ "q$$", ".", ".", "." ],
+  "end_l_q" : [ ".", "q$$", ".", "." ],
+  "end_u_q" : [ ".", ".", ".", "q$$" ],
+  "end_d_q" : [ ".", ".", "q$$", "." ],
 
-  "straight_ud" : [ ".", ".", "$$", "$$" ],
-  "straight_lr" : [ "$$", "$$", ".", "." ]
+  "bend_rd_p" : [ "p$$", ".", "q$$", "." ],
+  "bend_rd_q" : [ "q$$", ".", "p$$", "." ],
+
+  "bend_ru_p" : [ "p$$", ".", ".", "q$$" ],
+  "bend_ru_q" : [ "q$$", ".", ".", "p$$" ],
+
+  "bend_lu_p" : [ ".", "p$$", ".", "q$$" ],
+  "bend_lu_q" : [ ".", "q$$", ".", "p$$" ],
+
+  "bend_ld_p" : [ ".", "p$$", "q$$", "." ],
+  "bend_ld_q" : [ ".", "q$$", "p$$", "." ],
+
+  "straight_ud_p" : [ ".", ".", "p$$", "q$$" ],
+  "straight_ud_q" : [ ".", ".", "q$$", "p$$" ],
+
+  "straight_lr_p" : [ "p$$", "q$$", ".", "." ],
+  "straight_lr_q" : [ "q$$", "p$$", ".", "." ]
 };
 
-// $> $< 
 
-function create_counter_join_tile(template, cur_id, prv_id, nxt_id, counter) {
+//---
+//
+// output name:
+//
+// <type>_<subtype>_[pq](\d+)_D(\d+)
+//
+// for example:
+//
+//   bend_rd_q0_D3
+//   |    |  |  |
+//   |    |  |  .- 4th branch dock
+//   |    |  |
+//   |    |  .---- p/q parity dock, 0th level
+//   |    |
+//   |    .------- subtype (right/down)
+//   |
+//   .------------ type (bend)
+//
+//
+function create_acyclic_level_tiles(template, cur_id, nxt_id) {
 
   let out = [ ];
 
   for (let key in template) {
 
-    let dock = template[key];
+    let _dock = template[key];
 
-    for (let join_dir=0; join_dir<2; join_dir++) {
+    let empty_count = 0;
+    let empty_pos = [];
 
-      _counter = counter;
+    let tmp_dock = [];
+    for (let idir=0; idir<4; idir++) {
+      let v = _dock[idir].replace( '$$', cur_id.toString() );
+      tmp_dock.push(v);
 
-      for (let count=0; count<_counter; count++) {
-
-        //let dock_back = "$" + count.toString() + ":" + (count+1).toString();
-        //let dock_next = "$" + (count+1).toString() + ":" + count.toString();
-
-        let dock_back = "$" + count.toString();
-        let dock_next = "$" + (count+1).toString();
-
-        let _dock_tok_a = [];
-        if (join_dir == 0) {
-          _dock_tok_a = [ dock_next, dock_back ];
-        }
-        else {
-          _dock_tok_a = [ dock_back, dock_next ];
-        }
-
-        let _dock = [];
-        for (let idir=0; idir<4; idir++) {
-          if (dock[idir] == '.') { _dock.push(dock[idir]); continue; }
-          let v = dock[idir].replace( '$$', _dock_tok_a.pop() );
-          _dock.push(v);
-        }
-
-        let sfx = "_" + count.toString();
-        sfx += "_" + ((join_dir == 0) ? "p" : "m");
-
-        out.push({"name": key + sfx, "dock": _dock });
-
+      if (v == '.') {
+        empty_pos.push(idir);
+        empty_count++;
       }
+    }
+
+    if (nxt_id < 0) {
+      let sfx = cur_id.toString() + "_" + "D0";
+      out.push({"name": key + sfx, "dock": tmp_dock});
+      continue;
+    }
+
+    for (bcount=0; bcount < (1<<empty_count); bcount++) {
+
+      let v = [];
+
+      let cur_dock = [];
+      for (let _pos=0; _pos<tmp_dock.length; _pos++) {
+        cur_dock.push(tmp_dock[_pos]);
+      }
+
+      for (let bpos=0; bpos<empty_pos.length; bpos++) {
+        let _val = ((bcount & (1<<bpos))  ? 1 : 0);
+
+        if (_val != 0) {
+          cur_dock[ empty_pos[bpos] ] = 'p' + nxt_id.toString();
+        }
+      }
+
+      let sfx = cur_id.toString() + "_" + "D" + bcount;
+      out.push({"name": key + sfx, "dock": cur_dock });
 
     }
 
   }
 
-  for (let ii=0; ii<out.length; ii++) {
-    console.log(JSON.stringify(out[ii]));
-  }
+  return out;
 
 }
 
 async function _main() {
 
-  create_counter_join_tile(LEVEL_TEMPLATE, 0, -1, 1, 10);
-  return;
+  let l_list = [];
+  let fin_dock = [
+    {"name":"0", "dock":["*", "*", "*", "*"]},
+    {"name":"empty", "dock":[".", ".", ".", "."]}
+  ];
+
+  l_list.push( create_acyclic_level_tiles(LEVEL_TEMPLATE, 0, 1) );
+  l_list.push( create_acyclic_level_tiles(LEVEL_TEMPLATE, 1, 2) );
+  l_list.push( create_acyclic_level_tiles(LEVEL_TEMPLATE, 2, 3) );
+  l_list.push( create_acyclic_level_tiles(LEVEL_TEMPLATE, 3, -1) );
+
+  // flatten/..
+  //
+  for (let idx=0; idx<l_list.length; idx++) {
+    for (let ii=0; ii<l_list[idx].length; ii++) {
+      fin_dock.push( l_list[idx][ii] );
+    }
+  }
+
+  for (let ii=0; ii<fin_dock.length; ii++) {
+    console.log(JSON.stringify(fin_dock[ii]));
+  }
+
+  let n_tile = fin_dock.length;
+  let wh_cell = Math.ceil( Math.sqrt(n_tile) );
+
+  console.log(">>>", wh_cell);
+
+  let src_tileset = await jimp.read("./img/vexed4col_1.png");
+  let out_img_tile_size = [wh_cell,wh_cell];
+  let _os = out_img_tile_size;
+  let out_img = new jimp(_os[0]*STRIDE[0], _os[1]*STRIDE[1]);
+  let out_pxy = [0,0];
 
   let mask_img = [
     await jimp.read("./img/mask_right.png"),
@@ -160,12 +228,21 @@ async function _main() {
     await jimp.read("./img/mask_down.png")
   ];
 
-  let src_tileset = await jimp.read("./img/vexed4col_1.png");
 
-  let out_img_tile_size = [9,9];
-  let _os = out_img_tile_size;
-  let out_img = new jimp(_os[0]*stride[0], _os[1]*stride[1]);
-  let out_pxy = [0,0];
+  return;
+
+  let all_l = [];
+  for (let ii=0; ii<l0.length; ii++) { all_l.push(l0[ii]); }
+  for (let ii=0; ii<l1.length; ii++) { all_l.push(l1[ii]); }
+  for (let ii=0; ii<l2.length; ii++) { all_l.push(l2[ii]); }
+
+  for (let ii=0; ii<all_l.length; ii++) {
+    console.log(JSON.stringify(all_l[ii]));
+  }
+
+
+  return;
+
 
   let full_tilelist = [];
 
