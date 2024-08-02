@@ -188,7 +188,7 @@ function create_acyclic_level_tiles(template, cur_id, nxt_id) {
 async function _main() {
 
   let l_list = [];
-  let fin_dock = [
+  let full_tilelist = [
     {"name":"0", "dock":["*", "*", "*", "*"], "id":0},
     {"name":"empty", "dock":[".", ".", ".", "."], "id":1}
   ];
@@ -198,25 +198,28 @@ async function _main() {
   l_list.push( create_acyclic_level_tiles(LEVEL_TEMPLATE, 2, 3) );
   l_list.push( create_acyclic_level_tiles(LEVEL_TEMPLATE, 3, -1) );
 
+  //DEBUG
+  l_list = [];
+  l_list.push( create_acyclic_level_tiles(LEVEL_TEMPLATE, 0, -1) );
+
+
   // flatten/..
   //
-  cur_id = fin_dock.length;
+  cur_id = full_tilelist.length;
   for (let idx=0; idx<l_list.length; idx++) {
     for (let ii=0; ii<l_list[idx].length; ii++) {
-      fin_dock.push( l_list[idx][ii] );
-      fin_dock[ fin_dock.length-1 ]["id"] = cur_id;
+      full_tilelist.push( l_list[idx][ii] );
+      full_tilelist[ full_tilelist.length-1 ]["id"] = cur_id;
       cur_id++;
     }
   }
 
-  for (let ii=0; ii<fin_dock.length; ii++) {
-    console.log(JSON.stringify(fin_dock[ii]));
+  for (let ii=0; ii<full_tilelist.length; ii++) {
+    console.log(JSON.stringify(full_tilelist[ii]));
   }
 
-  let n_tile = fin_dock.length;
+  let n_tile = full_tilelist.length;
   let wh_cell = Math.ceil( Math.sqrt(n_tile) );
-
-  console.log(">>>", wh_cell);
 
   let src_tileset = await jimp.read("./img/vexed4col_1.png");
   let out_img_tile_size = [wh_cell,wh_cell];
@@ -235,8 +238,8 @@ async function _main() {
   let mask_buf = new jimp(STRIDE[0], STRIDE[1]);
 
 
-  for (let tile_idx=1; tile_idx<fin_dock.length; tile_idx++) {
-    let ele = fin_dock[tile_idx];
+  for (let tile_idx=1; tile_idx<full_tilelist.length; tile_idx++) {
+    let ele = full_tilelist[tile_idx];
 
     if ( ele.name == "empty" ) {
 
@@ -274,12 +277,11 @@ async function _main() {
         let dst_conn = dock[idir];
         let dst_group = parseInt(dst_conn.slice(1));
 
+        //let dst_partner_dock = ((dst_conn == 'p') ? 'q' : 'p') + dst_conn.slice(1);
+
         if (src_group == dst_group) { continue; }
 
         let c_y_off = dst_group;
-
-        //console.log("  ", ele.name, "idir:", idir, dock[idir], src_group, dst_group);
-        //continue;
 
         let c_tile_pos = REL_MAP["cross"];
         let c_px = STRIDE[0]*c_tile_pos[0];
@@ -292,8 +294,6 @@ async function _main() {
       }
 
       out_img.blit(join_buf, out_pxy[0], out_pxy[1], 0,0, STRIDE[0],STRIDE[1]);
-      //out_img.blit( src_tileset, out_pxy[0], out_pxy[1], px, py, STRIDE[0], STRIDE[1] );
-
 
     }
 
@@ -309,158 +309,39 @@ async function _main() {
   console.log("## writing", OUT_TILESET_FN);
   out_img.write( OUT_TILESET_FN );
 
-
-  return;
-
-  let full_tilelist = [];
-
-  let tile_group = [ base_tiles, a_tiles, b_tiles, c_tiles ];
-  let tile_pfx = [ 'a_', 'b_', 'c_', 'd_' ];
-  let tile_base_idx = [0,1,2,3];
-
-  let cur_tile_id = 1;
-
-  for (let group_idx=0; group_idx<tile_pfx.length; group_idx++) {
-    let _order = tile_group[group_idx];
-    for (let tile_idx=0; tile_idx<_order.length; tile_idx++) {
-      let template_name = _order[tile_idx];
-
-      name = tile_pfx[group_idx] + template_name;
-
-      let y_off = tile_base_idx[group_idx];
-      let tile_pos = REL_MAP[template_name];
-      let px = stride[0]*tile_pos[0];
-      let py = stride[1]*tile_pos[1] + (3*y_off*stride[1]);
-
-      //console.log(template_name, name, px, py, "(", out_pxy, ")");
-
-      out_img.blit(src_tileset, out_pxy[0], out_pxy[1], px, py, stride[0], stride[1]);
-
-      out_pxy[0] += stride[0];
-      if (out_pxy[0] >= (out_img_tile_size[0]*stride[0])) {
-        out_pxy[0]=0;
-        out_pxy[1] += stride[1];
-      }
-
-
-      let dock_template = RULE_TEMPLATE[template_name];
-      let tile_dock = [ 0, 0, 0, 0 ];
-      for (let idir=0; idir<4; idir++) {
-        if      (dock_template[idir] == '.') { tile_dock[idir] = 0; }
-        else if (dock_template[idir] == 'o') { tile_dock[idir] = group_idx; }
-      }
-
-
-      full_tilelist.push({"name":name, "dock":tile_dock, "id": cur_tile_id});
-      cur_tile_id++;
-
-    }
-
-  }
-
-  //console.log(">>>>", out_pxy);
-
-  //let join_buf = new jimp(stride[0], stride[1]);
-  //let mask_buf = new jimp(stride[0], stride[1]);
-
-  for (let group_idx=0; group_idx<2; group_idx++) {
-
-    let src_group_id = group_idx+1;
-    let dst_group_id = 3;
-
-    for (let ii=0; ii<a_tiles.length; ii++) {
-
-      let base_name = a_tiles[ii];
-
-      let y_off = group_idx;
-      let tile_pos = rel_map[base_name];
-      let px = stride[0]*tile_pos[0];
-      let py = stride[1]*tile_pos[1] + (3*y_off*stride[1]);
-
-      let c_y_off = 2;
-      let c_tile_pos = rel_map["cross"];
-      let c_px = stride[0]*c_tile_pos[0];
-      let c_py = stride[1]*c_tile_pos[1] + (3*c_y_off*stride[1]);
-
-
-      if (!(base_name in gen_info)) { continue; }
-
-      for (let dock_idx=0; dock_idx<gen_info[base_name].length; dock_idx++) {
-        let dock = gen_info[base_name][dock_idx];
-
-        let pfx = ((group_idx==0) ? "a_" : "b_");
-        let new_tile_name = pfx + base_name + "_c" + dock_idx.toString();
-
-        let src_dock = RULE_TEMPLATE[base_name];
-
-        //console.log(base_name, dock, src_dock, new_tile_name);
-
-        let tile_dock = [ 0, 0, 0, 0 ];
-
-        join_buf.blit( src_tileset, 0, 0, px, py, stride[0], stride[1] );
-
-        for (let idir=0; idir<4; idir++) {
-
-          if      (src_dock[idir] == '.') { tile_dock[idir] = 0; }
-          else if (src_dock[idir] == 'o') { tile_dock[idir] = src_group_id; }
-
-          if (dock[idir] == '.') { continue; }
-
-          mask_buf.blit( src_tileset, 0,0, c_px,c_py, stride[0], stride[1] );
-          mask_buf.mask( mask_img[idir], 0,0 );
-          join_buf.blit( mask_buf, 0, 0 );
-
-          //else if (src_dock[idir] == 'c') { tile_dock[idir] = dst_group_id; }
-
-          //if      (dock[idir] == '.') { tile_dock[idir] = 0; }
-          //else if (dock[idir] == 'o') { tile_dock[idir] = src_group_id; }
-          if (dock[idir] == 'c') { tile_dock[idir] = dst_group_id; }
-
-
-        }
-
-        out_img.blit(join_buf, out_pxy[0], out_pxy[1], 0,0, stride[0],stride[1]);
-
-        out_pxy[0] += stride[0];
-        if (out_pxy[0] >= (out_img_tile_size[0]*stride[0])) {
-          out_pxy[0]=0;
-          out_pxy[1] += stride[1];
-        }
-
-
-        full_tilelist.push({"name":new_tile_name, "dock":tile_dock, "id":cur_tile_id});
-        cur_tile_id++;
-
-      }
-
-    }
-
-  }
-
-  let rule_list = [];
+  //------
+  //------
+  // create rules
+  //
 
   let oppo_idir = [1,0, 3,2, 5,4];
 
+  let rule_list = [];
+
   let base_tile_id = 1;
   for (let src_tile_idx=0; src_tile_idx<full_tilelist.length; src_tile_idx++) {
-
     let _src = full_tilelist[src_tile_idx];
-    for (let dst_tile_idx=0; dst_tile_idx<full_tilelist.length; dst_tile_idx++) {
 
+    for (let dst_tile_idx=0; dst_tile_idx<full_tilelist.length; dst_tile_idx++) {
       let _dst = full_tilelist[dst_tile_idx];
 
       for (let idir=0; idir<4; idir++) {
         let rdir = oppo_idir[idir];
 
-        if (_src.dock[idir] == _dst.dock[rdir]) {
+        let src_dock = _src.dock[idir];
+        let dst_dock = _dst.dock[rdir];
+
+        let dst_dock_partner = ((dst_dock.slice(0,1) == 'p') ? 'q' : 'p')  + dst_dock.slice(1);
+
+        //if (_src.dock[idir] == _dst.dock[rdir]) {
+        if (src_dock == dst_dock_partner) {
           rule_list.push([ _src.id, _dst.id, idir, 1 ]);
-          //rule_list.push([ _dst.id, _src.id, rdir, 1 ]);
         }
-
-
 
       }
 
+      // add in 0 rule to z in both directions for src
+      //
       rule_list.push( [_src.id, 0, 4, 1] );
       rule_list.push( [_src.id, 0, 5, 1] );
 
@@ -471,52 +352,72 @@ async function _main() {
 
     for (let idir=0; idir<4; idir++) {
       let rdir = oppo_idir[idir];
-      if (_src.dock[idir] == 0) { rule_list.push([ _src.id, 0, idir, 1 ]); }
-      if (_src.dock[idir] == 0) { rule_list.push([ 0, _src.id, rdir, 1 ]); }
+      if (_src.dock[idir] == '.') { rule_list.push([ _src.id, 0, idir, 1 ]); }
+      if (_src.dock[idir] == '.') { rule_list.push([ 0, _src.id, rdir, 1 ]); }
     }
 
 
   }
 
-
-
+  //------
+  //------
+  // create name list.
+  //
 
   let tile_name = [ "." ];
   for (let ii=0; ii<full_tilelist.length; ii++) {
-    //console.log("tile[", ii, "]:", JSON.stringify(full_tilelist[ii]));
     tile_name.push( full_tilelist[ii].name );
   }
 
-  out_img.write( OUT_TILESET_FN );
+  //------
+  //------
+  // create weight listt.
+  // weight the named empty tile more heavily to cut down on density.
+  //
 
-  let _sz = [32,32];
+
+  let tile_weight = [];
+  for (let i=0; i<tile_name.length; i++) {
+    tile_weight.push(1);
+  }
+  tile_weight[1] = 10;
+
+  //------
+  //------
+  // constraint filtering
+  //
+
+  let _constraint = [];
+
+  // remove all boundary tiles
+  //
+  _constraint.push({"type":"remove", "range":{"tile":[0,1],"x":[], "y":[], "z":[]}});
 
   let empty_tile_id = 1;
-  let a_end_r = -1;
-  let a_end_u = -1;
-  let b_end_d = -1;
-  let b_end_l = -1;
+
+  let end0_p_id = -1;
+  let end0_q_id = -1;
 
   for (let ii=0; ii<full_tilelist.length; ii++) {
-    if (full_tilelist[ii].name == "a_end_r") { a_end_r = full_tilelist[ii].id; }
-    if (full_tilelist[ii].name == "a_end_u") { a_end_u = full_tilelist[ii].id; }
-
-    if (full_tilelist[ii].name == "b_end_d") { b_end_d = full_tilelist[ii].id; }
-    if (full_tilelist[ii].name == "b_end_l") { b_end_l = full_tilelist[ii].id; }
+    if (full_tilelist[ii].name == "end_r_p0_D0") { end0_p_id = full_tilelist[ii].id; }
+    if (full_tilelist[ii].name == "end_l_q0_D0") { end0_q_id = full_tilelist[ii].id; }
   }
 
-  let remove_name = [
-    "a_end_r", "a_end_l", "a_end_u", "a_end_d",
-    "b_end_r", "b_end_l", "b_end_u", "b_end_d"
+  let remove_name_pattern = [
+    //"end_[rlud]_[pq]\\d+_"
+    "end_[rlud]_[pq]0_"
   ];
   let remove_tile_id = [];
 
   // order matters on constraints
+  // we want to:
+  // * first remove tiles everywhere
+  // * then add back in the ones we want at specific locations
+  // * remove all other tiles from that location
   //
-  let _constraint = [];
   for (let ii=0; ii<full_tilelist.length; ii++) {
-    for (let jj=0; jj<remove_name.length; jj++) {
-      if (full_tilelist[ii].name == remove_name[jj]) {
+    for (let jj=0; jj<remove_name_pattern.length; jj++) {
+      if ( full_tilelist[ii].name.match( remove_name_pattern[jj] ) ) {
         remove_tile_id.push( full_tilelist[ii].id );
         let _id = full_tilelist[ii].id;
         _constraint.push({"type":"remove", "range":{"tile":[_id,_id+1], "x":[], "y":[], "z":[] }});
@@ -525,6 +426,13 @@ async function _main() {
 
   }
 
+  _constraint.push({"type":"add",  "range":{"tile":[end0_p_id,end0_p_id+1],"x":[1,2], "y":[1,2], "z":[0,1]}});
+  _constraint.push({"type":"add",  "range":{"tile":[end0_q_id,end0_q_id+1],"x":[-2,-1], "y":[-2,-1], "z":[0,1]}});
+
+  _constraint.push({"type":"force",  "range":{"tile":[end0_p_id,end0_p_id+1],"x":[1,2], "y":[1,2], "z":[0,1]}});
+  _constraint.push({"type":"force",  "range":{"tile":[end0_q_id,end0_q_id+1],"x":[-2,-1], "y":[-2,-1], "z":[0,1]}});
+
+  /*
   _constraint.push({"type":"add",  "range":{"tile":[a_end_r,a_end_r+1],"x":[1,2], "y":[0,1], "z":[0,1]}});
   _constraint.push({"type":"add",  "range":{"tile":[a_end_u,a_end_u+1],"x":[-1,0], "y":[-2,-1], "z":[0,1]}});
   _constraint.push({"type":"add",  "range":{"tile":[b_end_d,b_end_d+1],"x":[0,1], "y":[1,2], "z":[0,1]}});
@@ -534,15 +442,17 @@ async function _main() {
   _constraint.push({"type":"force",  "range":{"tile":[a_end_u,a_end_u+1],"x":[-1,0], "y":[-2,-1], "z":[0,1]}});
   _constraint.push({"type":"force",  "range":{"tile":[b_end_d,b_end_d+1],"x":[0,1], "y":[1,2], "z":[0,1]}});
   _constraint.push({"type":"force",  "range":{"tile":[b_end_l,b_end_l+1],"x":[-2,-1], "y":[-1,0], "z":[0,1]}});
+  */
 
-  _constraint.push({"type":"remove", "range":{"tile":[0,1],"x":[], "y":[], "z":[]}});
 
-  let tile_weight = [];
-  for (let i=0; i<tile_name.length; i++) {
-    tile_weight.push(1);
-  }
-  tile_weight[1] = 10;
 
+  //------
+  //------
+  // poms structure
+  //
+
+
+  let grid_sz = [32,32];
 
   let poms = {
     "rule": rule_list,
@@ -552,13 +462,13 @@ async function _main() {
     "tileset": {
       "image": OUT_TILESET_FN,
       "tilecount": full_tilelist.length,
-      "imagewidth" : stride[0]*out_img_tile_size[0],
-      "imageheight" : stride[1]*out_img_tile_size[1],
-      "tilewidth": stride[0],
-      "tileheight": stride[1]
+      "imagewidth" : STRIDE[0]*out_img_tile_size[0],
+      "imageheight" : STRIDE[1]*out_img_tile_size[1],
+      "tilewidth": STRIDE[0],
+      "tileheight": STRIDE[1]
     },
-    "size" :      [_sz[0],_sz[1],1],
-    "quiltSize" : [_sz[0],_sz[1],1],
+    "size" :      [grid_sz[0],grid_sz[1],1],
+    "quiltSize" : [grid_sz[0],grid_sz[1],1],
     "boundaryCondition" : {
       "x+":{"type":"tile","value":0}, "x-":{"type":"tile","value":0},
       "y+":{"type":"tile","value":0}, "y-":{"type":"tile","value":0},
@@ -566,6 +476,7 @@ async function _main() {
     }
   };
 
+  console.log("## writing", OUT_POMS_FN);
   fs.writeFileSync( OUT_POMS_FN, JSON.stringify(poms, undefined, 2) );
 
   return 0;
