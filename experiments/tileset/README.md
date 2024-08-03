@@ -128,6 +128,7 @@ Looks like it works. Here's a tileset with an example output:
 |---|---|
 | ![acyclic tileset](vexed_acylic.png) | ![acyclic example (2d)](acyclic_example.png) |
 
+Since single tiles are "checkered" in a path, this shoudl work for 3d.
 
 Cyclic Path
 ---
