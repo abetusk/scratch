@@ -332,10 +332,15 @@ async function _main() {
 
         let dst_dock_partner = dst_dock;
 
-        if ((dst_dock.slice(0) == 'p') ||
-            (dst_dock.slice(0) == 'q')) {
+        if ((dst_dock.slice(0,1) == 'p') ||
+            (dst_dock.slice(0,1) == 'q')) {
           dst_dock_partner = ((dst_dock.slice(0,1) == 'p') ? 'q' : 'p')  + dst_dock.slice(1);
         }
+
+        //DEBUG
+        //if ((_src.name == "bend_lu_q0_D3") || (_dst.name == "bend_lu_q0_D3")) {
+        //  console.log( "src:", _src.name, "dock:", src_dock, ", dst:", _dst.name, "dock:", dst_dock, "partner:", dst_dock_partner);
+        //}
 
         //if (_src.dock[idir] == _dst.dock[rdir]) {
         if (src_dock == dst_dock_partner) {

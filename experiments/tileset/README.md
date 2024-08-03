@@ -122,15 +122,12 @@ ok, how about this:
 
 ---
 
-???
+Looks like it works. Here's a tileset with an example output:
 
-ok, nope, above still has issues.
+| | |
+|---|---|
+| ![acyclic tileset](vexed_acylic.png) | ![acyclic example (2d)](acyclic_example.png) |
 
-An illustrative example:
-
-* orange tile path branches to a grey tile path.
-  - grey tile has p joining to orange and q acceptor outward
-* further on down the way, orange path branches again which
 
 Cyclic Path
 ---
