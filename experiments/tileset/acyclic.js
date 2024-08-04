@@ -62,23 +62,6 @@ let TILE_ORDER = [
 
 // up is down (for tiled)
 //
-let RULE_TEMPLATE = {
-  "empty": [ ".", ".", ".", "." ],
-
-  "end_r" : [ "o", ".", ".", "." ], "end_l" : [ ".", "o", ".", "." ],
-  "end_u" : [ ".", ".", ".", "o" ], "end_d" : [ ".", ".", "o", "." ],
-
-  "bend_rd" : [ "o", ".", "o", "." ], "bend_ru" : [ "o", ".", ".", "o" ],
-  "bend_lu" : [ ".", "o", ".", "o" ], "bend_ld" : [ ".", "o", "o", "." ],
-
-  "straight_ud" : [ ".", ".", "o", "o" ], "straight_lr" : [ "o", "o", ".", "." ],
-
-  "tee_r" : [ "o", ".", "o", "o" ], "tee_u" : [ "o", "o", ".", "o" ],
-  "tee_l" : [ ".", "o", "o", "o" ], "tee_d" : [ "o", "o", "o", "." ],
-
-  "cross" : [ "o", "o", "o", "o" ]
-}
-
 let LEVEL_TEMPLATE = {
   "end_r_p" : [ "p$$", ".", ".", "." ],
   "end_l_p" : [ ".", "p$$", ".", "." ],
