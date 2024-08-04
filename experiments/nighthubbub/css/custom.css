@@ -1,0 +1,21 @@
+@font-face {
+  font-family: "BebasNeue";
+  font-weight: 400;
+  font-style: normal;
+  src: url(font/BebasNeue-Regular.ttf) format('truetype');
+}
+
+h1,h2,h3,h4,h5,h6,div,body {
+  font-family: BebasNeue;
+}
+
+body {
+  background: #1D1E22;
+  color: #eee;
+
+  /* xxx: fa0c00 */
+}
+
+
+
+
