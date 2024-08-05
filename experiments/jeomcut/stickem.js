@@ -1121,9 +1121,9 @@ function _main(conf_fn, base_dir, out_base_dir, _out_type) {
 
 //_main("./data/stickem_minigolf.conf", "./data/minigolf.obj", ".minigolf_tile", "obj");
 //_main("./data/stickem_brutal-plum.conf", ".brutal-plum_stl", ".brutal-plum_tile", "stl");
-//_main("./data/stickem_brutal-plum.conf", ".brutal-plum_obj", ".brutal-plum_tile", "obj");
+_main("./data/stickem_brutal-plum.conf", ".brutal-plum_obj", ".brutal-plum_tile", "obj");
 //_main("./data/stickem_twoloop.conf", "", "", "none");
 //_main("./data/stickem_brutal-plum_1.conf", ".brutal-plum_obj", "brutal-plum_tile", "obj");
-_main("./data/stickem_brutal-plum_2path.conf", ".brutal-plum_obj", "brutal-plum_tile", "obj");
+//_main("./data/stickem_brutal-plum_2path.conf", ".brutal-plum_obj", "brutal-plum_tile", "obj");
 
 

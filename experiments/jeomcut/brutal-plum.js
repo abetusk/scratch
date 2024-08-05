@@ -674,6 +674,15 @@ function _print_stickem_conf(info) {
   }
   console.log("  ],");
 
+  if ("constraint" in info) {
+    console.log("  \"constraint\": [");
+    for (let ii=0; ii < info.constraint.length; ii++) {
+      sfx = ((ii == (info.constraint.length-1)) ? "" : ",");
+      console.log("    " + JSON.stringify(info.constraint[ii]) + sfx);
+    }
+    console.log("  ],");
+  }
+
   console.log("  \"weight\": {");
   if ("weight" in info) {
     let weight_key_a = [];
@@ -726,6 +735,14 @@ function main() {
     },
     "source": [
     ],
+
+    "constraint": [
+      {"type": "quiltRemove",  "range": { "x": [], "y":[1], "z":[], "tile":"#"} },
+      {"type": "quiltForce",   "range" : { "x":[],"y":[0,1],"z":[], "tile":"#"}},
+      {"type": "quiltPin",     "range" : { "x":[],"y":[0,1],"z":[], "tile":"#"}}
+    ],
+
+
     "weight": {
       ".": 1000,
       "#": 1,
