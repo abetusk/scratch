@@ -1,15 +1,19 @@
 // LICENSE: CC0
 //
+// To the extent possible under law, the person who associated CC0 with
+// this project has waived all copyright and related or neighboring rights
+// to this project.
+// 
+// You should have received a copy of the CC0 legalcode along with this
+// work. If not, see <http://creativecommons.org/publicdomain/zero/1.0/>.
+//
+
 
 // Y is 'up'
 // XZ plan is flat, Z comes into camera, X goes to the right
 //
 // Everything is centered aroudn 0 with unit cube cell (+-0.5, +-0.5, +-0.5)
 //
-
-// TODO:
-// * debug new path stair, looks like something is wrong with it (double check though)
-// * figure out how to pass in constraints so we don't need to keep updating them by hand
 
 let OUT_DIR = ".brutal-plum_tile";
 let OUT_DIR_STL = ".brutal-plum_stl";
@@ -28,8 +32,6 @@ var stlSerializer = require('@jscad/stl-serializer')
 
 var m4 = require("./m4.js");
 var jeom = require("./jeom.js");
-
-
 
 var op = {
 
@@ -275,6 +277,7 @@ function platform_bend() {
   let geom = op.mov([0,0,0], op.cub({"size":[1,1,1]}));
   return [
     {"ds":[0,0,0], "geom":geom, "id":"pb", "dock":[ "Pxz", ".", "b .","Py #", ".", "Pxz"], "anchor":geom}
+    //{"ds":[0,0,0], "geom":geom, "id":"pb", "dock":[ "Pxz", ".", "b .","Py # .", ".", "Pxz"], "anchor":geom}
   ];
 }
 
@@ -282,13 +285,15 @@ function platform_tee() {
   let geom = op.mov([0,0,0], op.cub({"size":[1,1,1]}));
   return [
     {"ds":[0,0,0], "geom":geom, "id":"pt", "dock":[ "Pxz", "Pxz", "b .","Py #", ".", "Pxz"], "anchor":geom}
+    //{"ds":[0,0,0], "geom":geom, "id":"pt", "dock":[ "Pxz", "Pxz", "b .","Py #", ".", "Pxz"], "anchor":geom}
   ];
 }
 
 function platform_straight() {
   let geom = op.mov([0,0,0], op.cub({"size":[1,1,1]}));
   return [
-    {"ds":[0,0,0], "geom":geom, "id":"ps", "dock":[ "Pxz", "Pxz", "b .","Py #", ".", "."], "anchor":geom}
+    //{"ds":[0,0,0], "geom":geom, "id":"ps", "dock":[ "Pxz", "Pxz", "b .","Py #", ".", "."], "anchor":geom}
+    {"ds":[0,0,0], "geom":geom, "id":"ps", "dock":[ "Pxz", "Pxz", "b .","Py # .", ".", "."], "anchor":geom}
   ];
 }
 
@@ -735,19 +740,6 @@ function arch2(opt, _debug) {
       op.cub({"size":[3,1,1], "center":[cx,0.0,cz]})
     );
 
-  /*
-  let geom =
-    op.mov([2,0,0],
-        op.sub(
-          op.cub({"size":[sx,sy,sz], "center":[cx,cy,cz]}),
-          op.mov([0,0,-0.5], op.lif( {height:1}, op.cir({"radius":1.5}))),
-          op.cub({"size":[5,3,1], "center":[0,-2.0,0]}),
-          op.cub({"size":[3,2,1], "center":[0,-1.0,0]})
-        )
-      );
-  */
-
-
   //    y
   //    |
   //    . --x
@@ -792,18 +784,6 @@ function arch2(opt, _debug) {
   info[13]["dock"]  = ["$14", "$12",  "b . Py", "$8",   "Pxz : .",    "Pxz : ." ];
   info[14]["dock"]  = ["$15", "$13",  "b . Py", "$9",   "Pxz : .",    "Pxz : ." ];
   info[15]["dock"]  = [". b", "$14",  "b . Py","$10",   "Pxz : .",    "Pxz : ." ];
-
-  //info[4]["dock"] = [   "$5",    "b",  "b", "$0",    ": .",    ": ." ];
-  //info[5]["dock"] = [   "$6",   "$4",  "b", "$1",    ": .",    ": ." ];
-  //info[6]["dock"] = [   "$7",   "$5",  "b",  ".",    ": .",    ": ." ];
-  //info[7]["dock"] = [   "$8",   "$6",  "b", "$2",    ": .",    ": ." ];
-  //info[8]["dock"] = [    "b",   "$7",  "b", "$3",    ": .",    ": ." ];
-
-  //info[4]["dock"] = [ "$5", "b .",  "b Py", "$0",    ": .",    ": ." ];
-  //info[5]["dock"] = [ "$6", "$4",   "b Py", "$1",    ": .",    ": ." ];
-  //info[6]["dock"] = [ "$7", "$5",   "b Py",  ".",    ": .",    ": ." ];
-  //info[7]["dock"] = [ "$8", "$6",   "b Py", "$2",    ": .",    ": ." ];
-  //info[8]["dock"] = [ "b .", "$7",  "b Py", "$3",    ": .",    ": ." ];
 
   return info;
 }
@@ -994,11 +974,11 @@ function main_nopath() {
 
 
     "weight": {
-      ".": 8002,
+      ".": 20002,
       "#": 2,
       //"e": 403,
       //"g": 1,
-      "block": 4,
+      "block": 10,
       "column2": 5,
       "column3": 5,
       "wedge_up": 1,
@@ -1008,13 +988,13 @@ function main_nopath() {
       "block-2x2": 1,
 
       "platform_bend": 50,
-      "platform_straight": 50,
+      "platform_straight": 150,
       "platform_tee": 20,
       "platform_cross": 20,
       "arch0": 10,
       "arch1": 10,
-      "arch2": 100,
-      "stair": 5
+      "arch2": 10,
+      "stair": 2000
     }
   };
 
@@ -1429,9 +1409,42 @@ function main_2path() {
   return;
 }
 
-function main() {
-  //return main_2path();
-  return main_nopath();
+function show_help() {
+  console.log("\nusage:");
+  console.log("\n  node brutal-plum_parth.js [op]");
+  console.log("");
+  console.log("provide operation, one of:");
+  console.log("");
+  console.log("  nopath     - create tileset with no embedded paths (default)");
+  console.log("  1path      - create tileset with 1 path");
+  console.log("  2path      - create tileset with 2 paths");
+  console.log("  help       - this screen");
+  console.log("");
+  console.log("will print out the stickem config file and create OBJ or STL files in:");
+  console.log("  ", OUT_DIR_OBJ);
+  console.log("  ", OUT_DIR_STL);
+  console.log("");
+
 }
 
-main();
+function main(argv) {
+
+  let op = "nopath";
+  if (argv.length > 2) { op = argv[2]; }
+
+  if (op == "help") {
+    show_help();
+    return;
+  }
+
+  if      (op == "nopath")  { return main_nopath(); }
+  else if (op == "1path")   { return main_1path(); }
+  else if (op == "2path")   { return main_2path(); }
+  else {
+    show_help();
+  }
+
+  return -1;
+}
+
+main(process.argv);
