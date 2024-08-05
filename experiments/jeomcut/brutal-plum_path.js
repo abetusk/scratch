@@ -604,12 +604,16 @@ function arch0(opt, _debug) {
 
   return [
     {"ds":[0,0,0], "geom":geom, "dock":[ "$1","b .", "$3", "b #",  ": .", ": ."], "anchor":geom},
-    {"ds":[0,0,0], "geom":geom, "dock":[ "$2","$0",  "$4", ".",  ": .", ": ."] },
+    {"ds":[0,0,0], "geom":geom, "dock":[ "$2","$0",  "$4", ". #",  ": .", ": ."] },
     {"ds":[0,0,0], "geom":geom, "dock":["b .","$1",  "$5", "b #",  ": .", ": ."] },
 
-    {"ds":[0,0,0], "geom":geom, "dock":[ "$4","b .", "b .","$0", ": .", ": ."] },
-    {"ds":[0,0,0], "geom":geom, "dock":[ "$5","$3",  "b .","$1", ": .", ": ."] },
-    {"ds":[0,0,0], "geom":geom, "dock":["b .","$4",  "b .","$2", ": .", ": ."] }
+    //{"ds":[0,0,0], "geom":geom, "dock":[ "$4","b .", "b .","$0", ": .", ": ."] },
+    //{"ds":[0,0,0], "geom":geom, "dock":[ "$5","$3",  "b .","$1", ": .", ": ."] },
+    //{"ds":[0,0,0], "geom":geom, "dock":["b .","$4",  "b .","$2", ": .", ": ."] }
+
+    {"ds":[0,0,0], "geom":geom, "dock":[ "$4","Pxz b .",  "b Py .","$0", "Pxz : .", "Pxz : ."] },
+    {"ds":[0,0,0], "geom":geom, "dock":[ "$5","$3",       "b Py .","$1", "Pxz : .", "Pxz : ."] },
+    {"ds":[0,0,0], "geom":geom, "dock":[ "Pxz b .","$4",  "b Py .","$2", "Pxz : .", "Pxz : ."] }
   ]
 
 }
@@ -658,15 +662,20 @@ function arch1(opt, _debug) {
   }
 
   return [
-    {"ds":[ 0,0,0], "geom":geom, "dock":[  "$1","b .", "$4", "_",  ": .", ": ."], "anchor": geom},
-    {"ds":[ 0,0,0], "geom":geom, "dock":[  "$2", "$0", "$5", ".",  ": .", ": ."] },
-    {"ds":[ 0,0,0], "geom":geom, "dock":[  "$3", "$1", "$6", ".",  ": .", ": ."] },
-    {"ds":[ 0,0,0], "geom":geom, "dock":[ "b .", "$2", "$7", "_",  ": .", ": ."] },
+    {"ds":[ 0,0,0], "geom":geom, "dock":[  "$1","b .",  "$4", "_",    ": .", ": ."], "anchor": geom},
+    {"ds":[ 0,0,0], "geom":geom, "dock":[  "$2", "$0",  "$5", ". #",  ": .", ": ."] },
+    {"ds":[ 0,0,0], "geom":geom, "dock":[  "$3", "$1",  "$6", ". #",  ": .", ": ."] },
+    {"ds":[ 0,0,0], "geom":geom, "dock":[ "b .", "$2",  "$7", "_",    ": .", ": ."] },
 
-    {"ds":[ 0,0,0], "geom":geom, "dock":[  "$5","b .","b .", "$0",  ": .", ": ."] },
-    {"ds":[ 0,0,0], "geom":geom, "dock":[  "$6", "$4","b .", "$1",  ": .", ": ."] },
-    {"ds":[ 0,0,0], "geom":geom, "dock":[  "$7", "$5","b .", "$2",  ": .", ": ."] },
-    {"ds":[ 0,0,0], "geom":geom, "dock":[ "b .", "$6","b .", "$3",  ": .", ": ."] }
+    //{"ds":[ 0,0,0], "geom":geom, "dock":[  "$5","b .","b .", "$0",  ": .", ": ."] },
+    //{"ds":[ 0,0,0], "geom":geom, "dock":[  "$6", "$4","b .", "$1",  ": .", ": ."] },
+    //{"ds":[ 0,0,0], "geom":geom, "dock":[  "$7", "$5","b .", "$2",  ": .", ": ."] },
+    //{"ds":[ 0,0,0], "geom":geom, "dock":[ "b .", "$6","b .", "$3",  ": .", ": ."] }
+
+    {"ds":[ 0,0,0], "geom":geom, "dock":[ "$5","Pxz b .",   "b Py .", "$0",  "Pxz : .", "Pxz : ."] },
+    {"ds":[ 0,0,0], "geom":geom, "dock":[ "$6", "$4",       "b Py .", "$1",  "Pxz : .", "Pxz : ."] },
+    {"ds":[ 0,0,0], "geom":geom, "dock":[ "$7", "$5",       "b Py .", "$2",  "Pxz : .", "Pxz : ."] },
+    {"ds":[ 0,0,0], "geom":geom, "dock":[ "Pxz b .", "$6",  "b Py .", "$3",  "Pxz : .", "Pxz : ."] }
   ];
 }
 
@@ -708,15 +717,35 @@ function _arch1(opt, _debug) {
 //
 function arch2(opt, _debug) {
 
+  // want center is at 0, which means a cube is +-0.5 in each direction.
+  // op.cub will create a curboid whose center of mass ias at (0,0,0).
+  //
+
+  let sx = 5,
+      sy = 4,
+      sz = 1;
+  let cx = (sx/2 - 0.5),
+      cy = (sy/2 - 0.5),
+      cz = (sz/2 - 0.5);
+
+  let geom =
+    op.sub(
+      op.cub({"size":[sx,sy,sz], "center":[cx,cy,cz]}),
+      op.mov([cx,0.5,-0.5], op.lif( {height:1}, op.cir({"radius":1.5}))),
+      op.cub({"size":[3,1,1], "center":[cx,0.0,cz]})
+    );
+
+  /*
   let geom =
     op.mov([2,0,0],
         op.sub(
-          op.cub({"size":[5,4,1], "center":[0,-0.5,0]}),
+          op.cub({"size":[sx,sy,sz], "center":[cx,cy,cz]}),
           op.mov([0,0,-0.5], op.lif( {height:1}, op.cir({"radius":1.5}))),
           op.cub({"size":[5,3,1], "center":[0,-2.0,0]}),
           op.cub({"size":[3,2,1], "center":[0,-1.0,0]})
         )
       );
+  */
 
 
   //    y
@@ -725,22 +754,17 @@ function arch2(opt, _debug) {
   //   /
   //  z
   //     |  b   |  b   |   b   |   b  |   b  |
-  //  b  |  $4  |  $5  |  $6   |  $7  |  $8  |  b
-  //  b  |  $0  |  $1  |   .   |  $2  |  $3  |  b
+  //  b  | $11  | $12  | $13   | $14  | $15  |  b
+  //  b  |  $6  |  $7  |  $8   |  $9  | $10  |  b
+  //  b  |  $2  |  $3  |   .   |  $4  |  $5  |  b
+  //  b  |  $0  |   .  |   .   |   .  |  $1  |  b
   //     |   b  |   .  |   .   |   .  |   b  |
 
   let info = [];
 
-  info.push({"ds":[ 0,0,0], "geom": op.and(op.cub({"size":[1,1,1],"center":[0,0,0]}), op.mov([ 0, 0, 0], geom)), "anchor": geom  });
-  info.push({"ds":[ 0,0,0], "geom": op.and(op.cub({"size":[1,1,1],"center":[0,0,0]}), op.mov([-1, 0, 0], geom)) });
-  info.push({"ds":[ 0,0,0], "geom": op.and(op.cub({"size":[1,1,1],"center":[0,0,0]}), op.mov([-3, 0, 0], geom)) });
-  info.push({"ds":[ 0,0,0], "geom": op.and(op.cub({"size":[1,1,1],"center":[0,0,0]}), op.mov([-4, 0, 0], geom)) });
+  for (let ii=0; ii<16; ii++) { info.push({"dock":['.', '.', '.', '.', '.', '.']}); }
+  info[0]["anchor"] = geom;
 
-  info.push({"ds":[ 0,0,0], "geom": op.and(op.cub({"size":[1,1,1],"center":[0,0,0]}), op.mov([ 0,-1, 0], geom)) });
-  info.push({"ds":[ 0,0,0], "geom": op.and(op.cub({"size":[1,1,1],"center":[0,0,0]}), op.mov([-1,-1, 0], geom)) });
-  info.push({"ds":[ 0,0,0], "geom": op.and(op.cub({"size":[1,1,1],"center":[0,0,0]}), op.mov([-2,-1, 0], geom)) });
-  info.push({"ds":[ 0,0,0], "geom": op.and(op.cub({"size":[1,1,1],"center":[0,0,0]}), op.mov([-3,-1, 0], geom)) });
-  info.push({"ds":[ 0,0,0], "geom": op.and(op.cub({"size":[1,1,1],"center":[0,0,0]}), op.mov([-4,-1, 0], geom)) });
 
   if (_debug) {
     info[0].anchor =  op.add( info[0].anchor, DEBUG_GEOM );
@@ -749,16 +773,37 @@ function arch2(opt, _debug) {
     }
   }
 
-  info[0]["dock"] = [   "$1",    "b", "$4",  "_",    ": .",    ": ." ];
-  info[1]["dock"] = [    ".",   "$0", "$5",  ".",    ": .",    ": ." ];
-  info[2]["dock"] = [   "$3",    ".", "$7",  ".",    ": .",    ": ." ];
-  info[3]["dock"] = [    "b",   "$2", "$8",  "_",    ": .",    ": ." ];
+  info[0]["dock"] = [ ".",  ". b",  "$2",  "_",   ": .",    ": ." ];
+  info[1]["dock"] = [ ". b",  ".",  "$5",  "_",   ": .",    ": ." ];
 
-  info[4]["dock"] = [   "$5",    "b",  "b", "$0",    ": .",    ": ." ];
-  info[5]["dock"] = [   "$6",   "$4",  "b", "$1",    ": .",    ": ." ];
-  info[6]["dock"] = [   "$7",   "$5",  "b",  ".",    ": .",    ": ." ];
-  info[7]["dock"] = [   "$8",   "$6",  "b", "$2",    ": .",    ": ." ];
-  info[8]["dock"] = [    "b",   "$7",  "b", "$3",    ": .",    ": ." ];
+  info[2]["dock"] = [ "$3", ". b",  "$6", "$0",   ": .",    ": ." ];
+  info[3]["dock"] = [  ".",  "$2",  "$7",  ".",   ": .",    ": ." ];
+  info[4]["dock"] = [ "$5",   ".",  "$9",  ".",   ": .",    ": ." ];
+  info[5]["dock"] = [ ". b", "$4", "$10", "$1",   ": .",    ": ." ];
+
+  info[6]["dock"]   = [ "$7", ". b", "$11", "$2",   ": .",    ": ." ];
+  info[7]["dock"]   = [ "$8",  "$6", "$12", "$3",   ": .",    ": ." ];
+  info[8]["dock"]   = [ "$9",  "$7", "$13",  ".",   ": .",    ": ." ];
+  info[9]["dock"]   = ["$10",  "$8", "$14", "$4",   ": .",    ": ." ];
+  info[10]["dock"]  = [". b",  "$9", "$15", "$5",   ": .",    ": ." ];
+
+  info[11]["dock"]  = ["$12", ". b",  "b . Py", "$6",   "Pxz : .",    "Pxz : ." ];
+  info[12]["dock"]  = ["$13", "$11",  "b . Py", "$7",   "Pxz : .",    "Pxz : ." ];
+  info[13]["dock"]  = ["$14", "$12",  "b . Py", "$8",   "Pxz : .",    "Pxz : ." ];
+  info[14]["dock"]  = ["$15", "$13",  "b . Py", "$9",   "Pxz : .",    "Pxz : ." ];
+  info[15]["dock"]  = [". b", "$14",  "b . Py","$10",   "Pxz : .",    "Pxz : ." ];
+
+  //info[4]["dock"] = [   "$5",    "b",  "b", "$0",    ": .",    ": ." ];
+  //info[5]["dock"] = [   "$6",   "$4",  "b", "$1",    ": .",    ": ." ];
+  //info[6]["dock"] = [   "$7",   "$5",  "b",  ".",    ": .",    ": ." ];
+  //info[7]["dock"] = [   "$8",   "$6",  "b", "$2",    ": .",    ": ." ];
+  //info[8]["dock"] = [    "b",   "$7",  "b", "$3",    ": .",    ": ." ];
+
+  //info[4]["dock"] = [ "$5", "b .",  "b Py", "$0",    ": .",    ": ." ];
+  //info[5]["dock"] = [ "$6", "$4",   "b Py", "$1",    ": .",    ": ." ];
+  //info[6]["dock"] = [ "$7", "$5",   "b Py",  ".",    ": .",    ": ." ];
+  //info[7]["dock"] = [ "$8", "$6",   "b Py", "$2",    ": .",    ": ." ];
+  //info[8]["dock"] = [ "b .", "$7",  "b Py", "$3",    ": .",    ": ." ];
 
   return info;
 }
@@ -962,14 +1007,14 @@ function main_nopath() {
       "double-doorway": 1,
       "block-2x2": 1,
 
-      "platform_bend": 10,
-      "platform_straight": 10,
+      "platform_bend": 50,
+      "platform_straight": 50,
       "platform_tee": 20,
       "platform_cross": 20,
-      "arch0": 1,
-      "arch1": 1,
-      "arch2": 5,
-      "stair": 10
+      "arch0": 10,
+      "arch1": 10,
+      "arch2": 100,
+      "stair": 5
     }
   };
 

@@ -56,6 +56,7 @@ var g_ctx = {
     [ "occupancy", main_block_occupancy],
     [ "gnuplot", main_gnuplot ],
     [ "bound", main_bound ],
+    [ "bounds", main_bound ],
     [ "create", main_nop ]
   ],
 
