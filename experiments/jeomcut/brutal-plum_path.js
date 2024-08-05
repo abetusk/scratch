@@ -854,6 +854,8 @@ function _print_stickem_conf(info) {
   console.log("  \"unit_center\": ", JSON.stringify(info.unit_center) + ",");
   console.log("  \"up\": ", JSON.stringify(info.up) + ",");
   console.log("  \"symmetry\": ", JSON.stringify(info.symmetry) + ",");
+  console.log("  \"stl_dir\": ", JSON.stringify(info.stl_dir) + ",");
+  console.log("  \"obj_dir\": ", JSON.stringify(info.obj_dir) + ",");
 
   console.log("  \"dock\": {");
   let dock_key_a = [];
@@ -943,6 +945,8 @@ function main_nopath() {
     "unit_center":[0,0,0],
     "up":[0,1,0],
     "symmetry":"y",
+    "stl_dir": OUT_DIR_STL,
+    "obj_dir": OUT_DIR_OBJ,
     "dock": {
       "." : { "type":"!", "dock":[0], "description":"empty space (.)" },
       "#" : { "type":"!", "dock":[1], "description":"ground (#)" },
@@ -1051,6 +1055,8 @@ function main_1path() {
     "unit_center":[0,0,0],
     "up":[0,1,0],
     "symmetry":"y",
+    "stl_dir": OUT_DIR_STL,
+    "obj_dir": OUT_DIR_OBJ,
     "dock": {
       "." : { "type":"!", "dock":[0], "description":"empty space (.)" },
       "#" : { "type":"!", "dock":[1], "description":"ground (#)" },
@@ -1074,8 +1080,6 @@ function main_1path() {
     "source": [
     ],
 
-    // UNTESTED@!!!!!!!
-    //
     "constraint": [
       {"type": "quiltRemove",  "range": { "x": [], "y":[1], "z":[], "tile":"#"} },
       {"type": "quiltForce",   "range" : { "x":[],"y":[0,1],"z":[], "tile":"#"}},
@@ -1100,10 +1104,8 @@ function main_1path() {
 
 
     "weight": {
-      ".": 402,
+      ".": 4002,
       "#": 2,
-      "e": 403,
-      "g": 1,
       "block": 4,
       "column2": 5,
       "column3": 5,
@@ -1113,7 +1115,7 @@ function main_1path() {
       "double-doorway": 1,
       "block-2x2": 1,
 
-      "patha_stair_0": 30,
+      "patha_stair_0": 5000,
 
       "platform_bend": 10,
       "platform_straight": 10,
@@ -1122,9 +1124,11 @@ function main_1path() {
       "arch0": 1,
       "arch1": 1,
       "arch2": 1,
-      "stair": 1
+      "stair": 10
     }
   };
+
+  let _dbg = true;
 
   let lib_info = [
     { "name": "block",        "f": function() { return block(); } },
@@ -1136,33 +1140,35 @@ function main_1path() {
 
     //---
 
-    { "name": "patha_straight_0",        "f": function() { return path_straight(0,0,true); } },
-    { "name": "patha_straight_1",        "f": function() { return path_straight(0,1,true); } },
-    { "name": "patha_straight_2",        "f": function() { return path_straight(0,2,true); } },
+    { "name": "patha_straight_0",        "f": function() { return path_straight(0,0,_dbg); } },
+    { "name": "patha_straight_1",        "f": function() { return path_straight(0,1,_dbg); } },
+    { "name": "patha_straight_2",        "f": function() { return path_straight(0,2,_dbg); } },
 
-    { "name": "patha_bend_0",        "f": function() { return path_bend(0,0,true); } },
-    { "name": "patha_bend_1",        "f": function() { return path_bend(0,1,true); } },
-    { "name": "patha_bend_2",        "f": function() { return path_bend(0,2,true); } },
-    { "name": "patha_bend_3",        "f": function() { return path_bend(0,3,true); } },
+    { "name": "patha_bend_0",        "f": function() { return path_bend(0,0,_dbg); } },
+    { "name": "patha_bend_1",        "f": function() { return path_bend(0,1,_dbg); } },
+    { "name": "patha_bend_2",        "f": function() { return path_bend(0,2,_dbg); } },
+    { "name": "patha_bend_3",        "f": function() { return path_bend(0,3,_dbg); } },
 
-    { "name": "patha_bendup_0",        "f": function() { return path_bend_up(0,0,true); } },
-    { "name": "patha_bendup_1",        "f": function() { return path_bend_up(0,1,true); } },
-    { "name": "patha_bendup_2",        "f": function() { return path_bend_up(0,2,true); } },
-    { "name": "patha_bendup_3",        "f": function() { return path_bend_up(0,3,true); } },
-    { "name": "patha_bendup_4",        "f": function() { return path_bend_up(0,4,true); } },
-    { "name": "patha_bendup_5",        "f": function() { return path_bend_up(0,5,true); } },
-    { "name": "patha_bendup_6",        "f": function() { return path_bend_up(0,6,true); } },
+    /*
+    { "name": "patha_bendup_0",        "f": function() { return path_bend_up(0,0,_dbg); } },
+    { "name": "patha_bendup_1",        "f": function() { return path_bend_up(0,1,_dbg); } },
+    { "name": "patha_bendup_2",        "f": function() { return path_bend_up(0,2,_dbg); } },
+    { "name": "patha_bendup_3",        "f": function() { return path_bend_up(0,3,_dbg); } },
+    { "name": "patha_bendup_4",        "f": function() { return path_bend_up(0,4,_dbg); } },
+    { "name": "patha_bendup_5",        "f": function() { return path_bend_up(0,5,_dbg); } },
+    { "name": "patha_bendup_6",        "f": function() { return path_bend_up(0,6,_dbg); } },
+*/
 
-    { "name": "patha_stair_0",        "f": function() { return path_stair(0,true); } },
+    { "name": "patha_stair_0",        "f": function() { return path_stair(0,_dbg); } },
 
-    { "name": "patha_cap_0",        "f": function() { return path_cap(0,0,true); } },
-    { "name": "patha_cap_1",        "f": function() { return path_cap(0,1,true); } },
-    { "name": "patha_cap_2",        "f": function() { return path_cap(0,2,true); } },
-    { "name": "patha_cap_3",        "f": function() { return path_cap(0,3,true); } },
-    { "name": "patha_cap_4",        "f": function() { return path_cap(0,4,true); } },
-    { "name": "patha_cap_5",        "f": function() { return path_cap(0,5,true); } },
-    { "name": "patha_cap_6",        "f": function() { return path_cap(0,6,true); } },
-    { "name": "patha_cap_7",        "f": function() { return path_cap(0,7,true); } },
+    { "name": "patha_cap_0",        "f": function() { return path_cap(0,0,_dbg); } },
+    { "name": "patha_cap_1",        "f": function() { return path_cap(0,1,_dbg); } },
+    { "name": "patha_cap_2",        "f": function() { return path_cap(0,2,_dbg); } },
+    { "name": "patha_cap_3",        "f": function() { return path_cap(0,3,_dbg); } },
+    { "name": "patha_cap_4",        "f": function() { return path_cap(0,4,_dbg); } },
+    { "name": "patha_cap_5",        "f": function() { return path_cap(0,5,_dbg); } },
+    { "name": "patha_cap_6",        "f": function() { return path_cap(0,6,_dbg); } },
+    { "name": "patha_cap_7",        "f": function() { return path_cap(0,7,_dbg); } },
 
     //---
 
@@ -1179,16 +1185,6 @@ function main_1path() {
     { "name": "arch2",        "f": function() { return arch2(); } },
     { "name": "stair",        "f": (function(_n){ return function() { return stair(_n); } })(5)  }
   ];
-
-  let _lib_info= [
-    //{ "name": "arch0",        "f": function() { return arch0(); } },
-    //{ "name": "arch1",        "f": function() { return arch1(); } },
-    //{ "name": "arch2",        "f": function() { return arch2(); } },
-    { "name": "wedge_up",        "f": function() { return wedge_up(); } },
-    { "name": "block",        "f": function() { return block(); } }
-  ];
-
-
 
   for (let li_idx=0; li_idx<lib_info.length; li_idx++) {
     let li = lib_info[li_idx];
@@ -1210,7 +1206,6 @@ function main_1path() {
   }
 
   _print_stickem_conf(stickem_info);
-  //console.log(JSON.stringify(stickem_info, undefined, 2));
 
   return;
 }
@@ -1224,6 +1219,8 @@ function main_2path() {
     "unit_center":[0,0,0],
     "up":[0,1,0],
     "symmetry":"y",
+    "stl_dir": OUT_DIR_STL,
+    "obj_dir": OUT_DIR_OBJ,
     "dock": {
       "." : { "type":"!", "dock":[0], "description":"empty space (.)" },
       "#" : { "type":"!", "dock":[1], "description":"ground (#)" },
@@ -1272,7 +1269,7 @@ function main_2path() {
     "source": [
     ],
     "weight": {
-      ".": 402,
+      ".": 3002,
       "#": 2,
       "e": 403,
       "g": 1,
@@ -1285,19 +1282,21 @@ function main_2path() {
       "double-doorway": 1,
       "block-2x2": 1,
 
-      "patha_stair_0": 30,
-      "pathb_stair_0": 30,
+      "patha_stair_0": 300,
+      "pathb_stair_0": 300,
 
       "platform_bend": 10,
       "platform_straight": 10,
       "platform_tee": 10,
       "platform_cross": 10,
-      "arch0": 1,
-      "arch1": 1,
-      "arch2": 1,
-      "stair": 1
+      "arch0": 30,
+      "arch1": 20,
+      "arch2": 10,
+      "stair": 10
     }
   };
+
+  let _dbg = true;
 
   let lib_info = [
     { "name": "block",        "f": function() { return block(); } },
@@ -1309,63 +1308,63 @@ function main_2path() {
 
     //---
 
-    { "name": "patha_straight_0",        "f": function() { return path_straight(0,0,true); } },
-    { "name": "patha_straight_1",        "f": function() { return path_straight(0,1,true); } },
-    { "name": "patha_straight_2",        "f": function() { return path_straight(0,2,true); } },
+    { "name": "patha_straight_0",        "f": function() { return path_straight(0,0,_dbg); } },
+    { "name": "patha_straight_1",        "f": function() { return path_straight(0,1,_dbg); } },
+    { "name": "patha_straight_2",        "f": function() { return path_straight(0,2,_dbg); } },
 
-    { "name": "patha_bend_0",        "f": function() { return path_bend(0,0,true); } },
-    { "name": "patha_bend_1",        "f": function() { return path_bend(0,1,true); } },
-    { "name": "patha_bend_2",        "f": function() { return path_bend(0,2,true); } },
-    { "name": "patha_bend_3",        "f": function() { return path_bend(0,3,true); } },
+    { "name": "patha_bend_0",        "f": function() { return path_bend(0,0,_dbg); } },
+    { "name": "patha_bend_1",        "f": function() { return path_bend(0,1,_dbg); } },
+    { "name": "patha_bend_2",        "f": function() { return path_bend(0,2,_dbg); } },
+    { "name": "patha_bend_3",        "f": function() { return path_bend(0,3,_dbg); } },
 
-    { "name": "patha_bendup_0",        "f": function() { return path_bend_up(0,0,true); } },
-    { "name": "patha_bendup_1",        "f": function() { return path_bend_up(0,1,true); } },
-    { "name": "patha_bendup_2",        "f": function() { return path_bend_up(0,2,true); } },
-    { "name": "patha_bendup_3",        "f": function() { return path_bend_up(0,3,true); } },
-    { "name": "patha_bendup_4",        "f": function() { return path_bend_up(0,4,true); } },
-    { "name": "patha_bendup_5",        "f": function() { return path_bend_up(0,5,true); } },
-    { "name": "patha_bendup_6",        "f": function() { return path_bend_up(0,6,true); } },
+    { "name": "patha_bendup_0",        "f": function() { return path_bend_up(0,0,_dbg); } },
+    { "name": "patha_bendup_1",        "f": function() { return path_bend_up(0,1,_dbg); } },
+    { "name": "patha_bendup_2",        "f": function() { return path_bend_up(0,2,_dbg); } },
+    { "name": "patha_bendup_3",        "f": function() { return path_bend_up(0,3,_dbg); } },
+    { "name": "patha_bendup_4",        "f": function() { return path_bend_up(0,4,_dbg); } },
+    { "name": "patha_bendup_5",        "f": function() { return path_bend_up(0,5,_dbg); } },
+    { "name": "patha_bendup_6",        "f": function() { return path_bend_up(0,6,_dbg); } },
 
-    { "name": "patha_stair_0",        "f": function() { return path_stair(0,true); } },
+    { "name": "patha_stair_0",        "f": function() { return path_stair(0,_dbg); } },
 
-    { "name": "patha_cap_0",        "f": function() { return path_cap(0,0,true); } },
-    { "name": "patha_cap_1",        "f": function() { return path_cap(0,1,true); } },
-    { "name": "patha_cap_2",        "f": function() { return path_cap(0,2,true); } },
-    { "name": "patha_cap_3",        "f": function() { return path_cap(0,3,true); } },
-    { "name": "patha_cap_4",        "f": function() { return path_cap(0,4,true); } },
-    { "name": "patha_cap_5",        "f": function() { return path_cap(0,5,true); } },
-    { "name": "patha_cap_6",        "f": function() { return path_cap(0,6,true); } },
-    { "name": "patha_cap_7",        "f": function() { return path_cap(0,7,true); } },
+    { "name": "patha_cap_0",        "f": function() { return path_cap(0,0,_dbg); } },
+    { "name": "patha_cap_1",        "f": function() { return path_cap(0,1,_dbg); } },
+    { "name": "patha_cap_2",        "f": function() { return path_cap(0,2,_dbg); } },
+    { "name": "patha_cap_3",        "f": function() { return path_cap(0,3,_dbg); } },
+    { "name": "patha_cap_4",        "f": function() { return path_cap(0,4,_dbg); } },
+    { "name": "patha_cap_5",        "f": function() { return path_cap(0,5,_dbg); } },
+    { "name": "patha_cap_6",        "f": function() { return path_cap(0,6,_dbg); } },
+    { "name": "patha_cap_7",        "f": function() { return path_cap(0,7,_dbg); } },
 
     //---
 
-    { "name": "pathb_straight_0",        "f": function() { return path_straight(1,0,true); } },
-    { "name": "pathb_straight_1",        "f": function() { return path_straight(1,1,true); } },
-    { "name": "pathb_straight_2",        "f": function() { return path_straight(1,2,true); } },
+    { "name": "pathb_straight_0",        "f": function() { return path_straight(1,0,_dbg); } },
+    { "name": "pathb_straight_1",        "f": function() { return path_straight(1,1,_dbg); } },
+    { "name": "pathb_straight_2",        "f": function() { return path_straight(1,2,_dbg); } },
 
-    { "name": "pathb_bend_0",        "f": function() { return path_bend(1,0,true); } },
-    { "name": "pathb_bend_1",        "f": function() { return path_bend(1,1,true); } },
-    { "name": "pathb_bend_2",        "f": function() { return path_bend(1,2,true); } },
-    { "name": "pathb_bend_3",        "f": function() { return path_bend(1,3,true); } },
+    { "name": "pathb_bend_0",        "f": function() { return path_bend(1,0,_dbg); } },
+    { "name": "pathb_bend_1",        "f": function() { return path_bend(1,1,_dbg); } },
+    { "name": "pathb_bend_2",        "f": function() { return path_bend(1,2,_dbg); } },
+    { "name": "pathb_bend_3",        "f": function() { return path_bend(1,3,_dbg); } },
 
-    { "name": "pathb_bendup_0",        "f": function() { return path_bend_up(1,0,true); } },
-    { "name": "pathb_bendup_1",        "f": function() { return path_bend_up(1,1,true); } },
-    { "name": "pathb_bendup_2",        "f": function() { return path_bend_up(1,2,true); } },
-    { "name": "pathb_bendup_3",        "f": function() { return path_bend_up(1,3,true); } },
-    { "name": "pathb_bendup_4",        "f": function() { return path_bend_up(1,4,true); } },
-    { "name": "pathb_bendup_5",        "f": function() { return path_bend_up(1,5,true); } },
-    { "name": "pathb_bendup_6",        "f": function() { return path_bend_up(1,6,true); } },
+    { "name": "pathb_bendup_0",        "f": function() { return path_bend_up(1,0,_dbg); } },
+    { "name": "pathb_bendup_1",        "f": function() { return path_bend_up(1,1,_dbg); } },
+    { "name": "pathb_bendup_2",        "f": function() { return path_bend_up(1,2,_dbg); } },
+    { "name": "pathb_bendup_3",        "f": function() { return path_bend_up(1,3,_dbg); } },
+    { "name": "pathb_bendup_4",        "f": function() { return path_bend_up(1,4,_dbg); } },
+    { "name": "pathb_bendup_5",        "f": function() { return path_bend_up(1,5,_dbg); } },
+    { "name": "pathb_bendup_6",        "f": function() { return path_bend_up(1,6,_dbg); } },
 
-    { "name": "pathb_stair_0",        "f": function() { return path_stair(1,true); } },
+    { "name": "pathb_stair_0",        "f": function() { return path_stair(1,_dbg); } },
 
-    { "name": "pathb_cap_0",        "f": function() { return path_cap(1,0,true); } },
-    { "name": "pathb_cap_1",        "f": function() { return path_cap(1,1,true); } },
-    { "name": "pathb_cap_2",        "f": function() { return path_cap(1,2,true); } },
-    { "name": "pathb_cap_3",        "f": function() { return path_cap(1,3,true); } },
-    { "name": "pathb_cap_4",        "f": function() { return path_cap(1,4,true); } },
-    { "name": "pathb_cap_5",        "f": function() { return path_cap(1,5,true); } },
-    { "name": "pathb_cap_6",        "f": function() { return path_cap(1,6,true); } },
-    { "name": "pathb_cap_7",        "f": function() { return path_cap(1,7,true); } },
+    { "name": "pathb_cap_0",        "f": function() { return path_cap(1,0,_dbg); } },
+    { "name": "pathb_cap_1",        "f": function() { return path_cap(1,1,_dbg); } },
+    { "name": "pathb_cap_2",        "f": function() { return path_cap(1,2,_dbg); } },
+    { "name": "pathb_cap_3",        "f": function() { return path_cap(1,3,_dbg); } },
+    { "name": "pathb_cap_4",        "f": function() { return path_cap(1,4,_dbg); } },
+    { "name": "pathb_cap_5",        "f": function() { return path_cap(1,5,_dbg); } },
+    { "name": "pathb_cap_6",        "f": function() { return path_cap(1,6,_dbg); } },
+    { "name": "pathb_cap_7",        "f": function() { return path_cap(1,7,_dbg); } },
 
     //---
 

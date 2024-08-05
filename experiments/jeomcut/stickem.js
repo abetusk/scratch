@@ -621,12 +621,15 @@ function matchSymmetry(cfg, src_rep_info, dstRepList) {
 // token.
 //
 //
-function _main(conf_fn, base_dir, out_base_dir, _out_type) {
+//function _main(conf_fn, base_dir, out_base_dir, _out_type) {
+function _main(conf_fn, out_base_dir, _out_type) {
 
   //var cfg = JSON.parse( fs.readFileSync("./data/stickem_minigolf.conf") );
   //let base_dir = "./data/minigolf.obj";
 
   var cfg = JSON.parse( fs.readFileSync(conf_fn) );
+
+  let base_dir = cfg.obj_dir;
 
   if (!("n_dim" in cfg)) { cfg.n_dim = 3; }
 
@@ -1118,10 +1121,46 @@ function _main(conf_fn, base_dir, out_base_dir, _out_type) {
 
 }
 
+function show_help() {
+  console.log("");
+  console.log("usage:");
+  console.log("");
+  console.log("  node stickem.js <stickem_conf> [out_dir] [out_type]");
+  console.log("");
+  console.log("    stickem_conf       - stickem config file (required)");
+  console.log("    out_dir            - out directory for 3d object files");
+  console.log("    out_type           - one of 'obj' or 'stl'");
+  console.log("");
+  console.log("will print out POMS config file to stdout");
+  console.log("");
+}
+
+function cli_main(argv) {
+
+  if (argv.length < 3) {
+    show_help();
+    return -1;
+  }
+
+  if (argv[2] == "help") { show_help(); return 0; }
+
+  let conf_fn = argv[2];
+  let out_dir = "out";
+  let out_type = "obj";
+
+  if (argv.length > 3) { out_dir = argv[3]; }
+  if (argv.length > 4) { out_type = argv[4]; }
+
+  _main( conf_fn, out_dir, out_type );
+
+
+}
+
+cli_main(process.argv);
 
 //_main("./data/stickem_minigolf.conf", "./data/minigolf.obj", ".minigolf_tile", "obj");
 //_main("./data/stickem_brutal-plum.conf", ".brutal-plum_stl", ".brutal-plum_tile", "stl");
-_main("./data/stickem_brutal-plum.conf", ".brutal-plum_obj", ".brutal-plum_tile", "obj");
+//_main("./data/stickem_brutal-plum.conf", ".brutal-plum_obj", ".brutal-plum_tile", "obj");
 //_main("./data/stickem_twoloop.conf", "", "", "none");
 //_main("./data/stickem_brutal-plum_1.conf", ".brutal-plum_obj", "brutal-plum_tile", "obj");
 //_main("./data/stickem_brutal-plum_2path.conf", ".brutal-plum_obj", "brutal-plum_tile", "obj");
