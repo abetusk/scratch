@@ -1,0 +1,8 @@
+{
+  "location": "Ithaca, NY USA 14850",
+  "timezone": "EST",
+  "schedule" :[
+    {"datetime": "2024-08-08 21:00", "name": "Apactor", "venue": "The Downstairs", "img": "", "venue_location": "" },
+    {"datetime": "2024-08-10 20:00", "name": "Seeming, The FMs, Silver Rein", "venue": "Deep Dive", "img": "", "venue_location": "" }
+  ]
+}
