@@ -742,7 +742,6 @@ function main() {
       {"type": "quiltPin",     "range" : { "x":[],"y":[0,1],"z":[], "tile":"#"}}
     ],
 
-
     "weight": {
       ".": 1000,
       "#": 1,
