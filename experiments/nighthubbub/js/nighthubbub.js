@@ -43,6 +43,15 @@ var op = {
 
   "br": function() { return document.createElement("br"); },
 
+  "img": function(src, w) {
+    let _img = document.createElement("img");
+    _img.src = src;
+    if (typeof w !== "undefined") {
+      _img.style.width = w;
+    }
+    return _img;
+  },
+
   "div": function(n) {
     n = ((typeof n === "undefined") ? 0 : n);
     let n2s = ["", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve" ];
@@ -70,6 +79,7 @@ var op = {
     }
     return s;
   },
+  "text": function(v) { return document.createTextNode(v); },
   "t": function(v) { return document.createTextNode(v); }
 };
 
@@ -124,9 +134,18 @@ function add_event(list_id, day_num, day_week, thumb_img, band, venue) {
   dt.appendChild( op.br() );
   dt.appendChild( op.span(day_week, "3em") );
 
-  let thumb = op.div(2);
+  let thumb_div = op.div(2);
 
-  thumb.appendChild( op.h3(thumb_img) );
+  //let thumb = op.img(thumb_img);
+
+  if (thumb_img != "") {
+    //thumb.appendChild( op.h3(thumb_img) );
+    thumb_div.appendChild( op.img(thumb_img, "100%") );
+  }
+  else {
+    thumb_div.innerHTML = "&nbsp;";
+    //thumb_div.appendChild( op.text("") );
+  }
 
   let ev = op.div(8);
 
@@ -134,7 +153,7 @@ function add_event(list_id, day_num, day_week, thumb_img, band, venue) {
   ev.appendChild( op.h4(venue) );
 
   r.appendChild(dt);
-  r.appendChild(thumb);
+  r.appendChild(thumb_div);
   r.appendChild(ev);
 
   ele.appendChild(r);
@@ -165,7 +184,7 @@ function populate_events() {
 
     let day_num = _d;
     let day_week = day_code[ ds.getDay() ];
-    let thumb = "thumb";
+    let thumb = sched[ii].img;
     let band = sched[ii].name;
     let venue = sched[ii].venue;
 
