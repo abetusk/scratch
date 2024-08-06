@@ -15,9 +15,9 @@
 // Everything is centered aroudn 0 with unit cube cell (+-0.5, +-0.5, +-0.5)
 //
 
-let OUT_DIR = ".brutal-plum_tile";
-let OUT_DIR_STL = ".brutal-plum_stl";
-let OUT_DIR_OBJ = ".brutal-plum_obj";
+let OUT_DIR = "brutal-plum_tile";
+let OUT_DIR_STL = "brutal-plum_stl";
+let OUT_DIR_OBJ = "brutal-plum_obj";
 
 var fs = require("fs");
 
@@ -268,6 +268,28 @@ function block() {
   let geom = op.mov([0,0,0], op.cub({"size":[1,1,1]}));
   return [
     {"ds":[0,0,0], "geom":geom, "id":"b", "dock":[ ": .", ": .", "b Py","_", ": .", ": ."], "anchor":geom}
+  ];
+}
+
+function block_b() {
+
+  let geom = op.mov([0,0,0], op.cub({"size":[1,1,1]}));
+  return [
+    { "ds":[0,0,0],
+      "geom":geom, "id":"B",
+      "dock":[
+        //"Pxz b q0xz q1xz q2xz q3xz .",
+        //"Pxz b q0xz q1xz q2xz q3xz .",
+        "Pxz b q2xz q3xz .",
+        "Pxz b q2xz q3xz .",
+        "b Py",
+        //"b q0y q1y q2y q3y #",
+        "b q2y q3y #",
+        //"Pxz b q0xz q1xz q2xz q3xz .",
+        //"Pxz b q0xz q1xz q2xz q3xz ."],
+        "Pxz b q2xz q3xz .",
+        "Pxz b q2xz q3xz ."],
+      "anchor":geom}
   ];
 }
 
@@ -591,6 +613,105 @@ function block_2x2(opt, _debug) {
 
 }
 
+function arch0_s(opt, _debug) {
+  let geom =
+    op.sub( 
+        op.mov([0,0.0,0], op.cub({"size":[1,1,1]})),
+        op.mov([0,0,-0.5], op.lif( {height:1}, op.cir({"radius":0.5})) ),
+        op.mov([0,-0.5,0], op.cub({"size":[1,1,1]}))
+      );
+
+  if (_debug) {
+    geom = op.add(geom, DEBUG_GEOM);
+  }
+
+  return [
+    //{"dock":[ "p0xz b","p0xz b", "p0y Py b", ". _",  ": .", ": ."], "anchor":geom},
+    //{"dock":[ "p0xz b","p0xz b", "p0y Py b", ".",  ": .", ": ."], "anchor":geom},
+    {"dock":[ "b","b", "Py b", ".",  ": .", ": ."], "anchor":geom},
+  ];
+}
+
+function arch1_s(opt, _debug) {
+  let geom =
+    op.mov([0.5,-0.5,0],
+      op.sub( 
+        op.mov([0,0.0,0], op.cub({"size":[2,2,1]})),
+        op.mov([0,0,-0.5], op.lif( {height:1}, op.cir({"radius":1.0})) ),
+        op.mov([0,-1,0], op.cub({"size":[2,2,1]}))
+      )
+    );
+
+  if (_debug) {
+    geom = op.add(geom, DEBUG_GEOM);
+  }
+
+  return [
+    //{"dock":[ "$1","p1xz b", "p1y Py b", ". _",  ": .", ": ."], "anchor":geom},
+    //{"dock":[ "p1xz b","$0", "p1y Py b", ". _",  ": .", ": ."]}
+    //{"dock":[ "$1","p1xz b", "p1y Py b", ".",  ": .", ": ."], "anchor":geom},
+    //{"dock":[ "p1xz b","$0", "p1y Py b", ".",  ": .", ": ."]}
+    {"dock":[ "$1","b", "Py b", ".",  ": .", ": ."], "anchor":geom},
+    {"dock":[ "b","$0", "Py b", ".",  ": .", ": ."]}
+  ];
+}
+
+function arch2_s(opt, _debug) {
+  let geom =
+    op.mov([1,0,0],
+      op.sub( 
+        op.mov([0,0.0,0], op.cub({"size":[3,3,1]})),
+        op.mov([0,0,-0.5], op.lif( {height:1}, op.cir({"radius":1.5})) ),
+        op.mov([0,-1.5,0], op.cub({"size":[3,3,1]}))
+      )
+    );
+
+  if (_debug) {
+    geom = op.add(geom, DEBUG_GEOM);
+  }
+
+  return [
+    //{"dock":[ ".","p2xz b",     "$2", ". _",  ": .", ": ."], "anchor":geom},
+    //{"dock":[ "p2xz b",".",     "$4", ". _",  ": .", ": ."]},
+
+    {"dock":[ ".","p2xz b",     "$2", ".",  ": .", ": ."], "anchor":geom},
+    {"dock":[ "p2xz b",".",     "$4", ".",  ": .", ": ."]},
+
+    {"dock":[ "$3", "p2xz b",   "p2y Py b", "$0",  ": .", ": ."]},
+    {"dock":[ "$4","$2",        "p2y Py b",  ".",  ": .", ": ."]},
+    {"dock":[ "p2xz b", "$3",   "p2y Py b", "$1",  ": .", ": ."]}
+  ];
+}
+
+function arch3_s(opt, _debug) {
+  let geom =
+    op.mov([1.5,-0.5,0],
+      op.sub( 
+        op.mov([0,0.0,0], op.cub({"size":[4,4,1]})),
+        op.mov([0,0,-0.5], op.lif( {height:1}, op.cir({"radius":2})) ),
+        op.mov([0,-2,0], op.cub({"size":[4,4,1]}))
+      )
+    );
+
+  if (_debug) {
+    geom = op.add(geom, DEBUG_GEOM);
+  }
+
+  return [
+    //{"dock":[ ".","p3xz b",  "$2", ". _",  ": .", ": ."], "anchor":geom},
+    //{"dock":[ "p3xz b",".",  "$5", ". _",  ": .", ": ."]},
+    {"dock":[ ".","p3xz b",  "$2", ".",  ": .", ": ."], "anchor":geom},
+    {"dock":[ "p3xz b",".",  "$5", ".",  ": .", ": ."]},
+
+    {"dock":[ "$3", "p3xz b", "p3y Py b", "$0",  ": .", ": ."]},
+    {"dock":[ "$4","$2",      "p3y Py b",  ".",  ": .", ": ."]},
+    {"dock":[ "$5","$3",      "p3y Py b",  ".",  ": .", ": ."]},
+    {"dock":[ "p3xz b", "$4", "p3y Py b", "$1",  ": .", ": ."]}
+  ];
+}
+
+
+
 // 3x2 cell occupancy to try and get ride of staircases on ends.
 //
 function arch0(opt, _debug) {
@@ -619,6 +740,36 @@ function arch0(opt, _debug) {
     {"ds":[0,0,0], "geom":geom, "dock":[ "$4","Pxz b .",  "b Py .","$0", "Pxz : .", "Pxz : ."] },
     {"ds":[0,0,0], "geom":geom, "dock":[ "$5","$3",       "b Py .","$1", "Pxz : .", "Pxz : ."] },
     {"ds":[0,0,0], "geom":geom, "dock":[ "Pxz b .","$4",  "b Py .","$2", "Pxz : .", "Pxz : ."] }
+  ]
+
+}
+
+function arch0_c(opt, _debug) {
+  let geom =
+    op.mov([1,0,0],
+      op.sub(
+        op.mov([0,0.5,0], op.cub({"size":[3,2,1]})),
+        op.mov([0,0,-0.5], op.lif( {height:1}, op.cir({"radius":0.5})) ),
+        op.mov([0,-0.5,0], op.cub({"size":[1,1,1]}))
+      )
+    );
+
+  if (_debug) {
+    geom = op.add(geom, DEBUG_GEOM);
+  }
+
+  return [
+    {"ds":[0,0,0], "geom":geom, "dock":[ "$1","A b .", "$3", "b #",  "A : .", "A : ."], "anchor":geom},
+    {"ds":[0,0,0], "geom":geom, "dock":[ "$2","$0",  "$4", ". #",  "A : .", "A : ."] },
+    {"ds":[0,0,0], "geom":geom, "dock":["A b .","$1",  "$5", "b #",  "A : .", "A : ."] },
+
+    //{"ds":[0,0,0], "geom":geom, "dock":[ "$4","b .", "b .","$0", ": .", ": ."] },
+    //{"ds":[0,0,0], "geom":geom, "dock":[ "$5","$3",  "b .","$1", ": .", ": ."] },
+    //{"ds":[0,0,0], "geom":geom, "dock":["b .","$4",  "b .","$2", ": .", ": ."] }
+
+    {"ds":[0,0,0], "geom":geom, "dock":[ "$4","A Pxz b .",  "b Py .","$0", "A Pxz : .", "A Pxz : ."] },
+    {"ds":[0,0,0], "geom":geom, "dock":[ "$5","$3",       "b Py .","$1", "A Pxz : .", "A Pxz : ."] },
+    {"ds":[0,0,0], "geom":geom, "dock":[ "A Pxz b .","$4",  "b Py .","$2", "A Pxz : .", "A Pxz : ."] }
   ]
 
 }
@@ -670,6 +821,54 @@ function arch1(opt, _debug) {
     {"ds":[ 0,0,0], "geom":geom, "dock":[  "$1","b .",  "$4", "_",    ": .", ": ."], "anchor": geom},
     {"ds":[ 0,0,0], "geom":geom, "dock":[  "$2", "$0",  "$5", ". #",  ": .", ": ."] },
     {"ds":[ 0,0,0], "geom":geom, "dock":[  "$3", "$1",  "$6", ". #",  ": .", ": ."] },
+    {"ds":[ 0,0,0], "geom":geom, "dock":[ "b .", "$2",  "$7", "_",    ": .", ": ."] },
+
+    //{"ds":[ 0,0,0], "geom":geom, "dock":[  "$5","b .","b .", "$0",  ": .", ": ."] },
+    //{"ds":[ 0,0,0], "geom":geom, "dock":[  "$6", "$4","b .", "$1",  ": .", ": ."] },
+    //{"ds":[ 0,0,0], "geom":geom, "dock":[  "$7", "$5","b .", "$2",  ": .", ": ."] },
+    //{"ds":[ 0,0,0], "geom":geom, "dock":[ "b .", "$6","b .", "$3",  ": .", ": ."] }
+
+    {"ds":[ 0,0,0], "geom":geom, "dock":[ "$5","Pxz b .",   "b Py .", "$0",  "Pxz : .", "Pxz : ."] },
+    {"ds":[ 0,0,0], "geom":geom, "dock":[ "$6", "$4",       "b Py .", "$1",  "Pxz : .", "Pxz : ."] },
+    {"ds":[ 0,0,0], "geom":geom, "dock":[ "$7", "$5",       "b Py .", "$2",  "Pxz : .", "Pxz : ."] },
+    {"ds":[ 0,0,0], "geom":geom, "dock":[ "Pxz b .", "$6",  "b Py .", "$3",  "Pxz : .", "Pxz : ."] }
+  ];
+}
+
+// 4x3 occupancy to try to get rid of staircase on ends
+//
+function arch1_c(opt, _debug) {
+
+  //    y
+  //    |
+  //    . --x
+  //   /
+  //  z
+  //     |  b   |  b   |  b  |   b  |
+  //  b  |  $4  |  $5  | $6  |  $7  |  b
+  //  b  |  $0  |  $1  | $2  |  $3  |  b
+  //     |   b  |   .  |  .  |   b  |
+
+
+  // left geom centered at (0,0,0)
+  //
+  let geom =
+    op.mov([1.5,0,0],
+      op.sub(
+        op.mov([0,  0.5,    0], op.cub({"size":[4,2,1]})),
+        op.mov([0, -0.5, -0.5], op.lif( {height:1}, op.cir({"radius":1.0}))),
+        op.mov([0, -0.5,    0], op.cub({"size":[2,2,1.2], "center":[0,-1,0]}))
+      )
+    );
+
+  if (_debug) {
+    geom = op.add(geom, DEBUG_GEOM);
+  }
+
+  return [
+    {"ds":[ 0,0,0], "geom":geom, "dock":[ "$1", "b .",  "$4", "_",    ": .", ": ."], "anchor": geom},
+    {"ds":[ 0,0,0], "geom":geom, "dock":[ "$2",  "$0",  "$5", ". #",  ": .", ": ."] },
+    {"ds":[ 0,0,0], "geom":geom, "dock":[ "$3",  "$1",  "$6", ". #",  ": .", ": ."] },
     {"ds":[ 0,0,0], "geom":geom, "dock":[ "b .", "$2",  "$7", "_",    ": .", ": ."] },
 
     //{"ds":[ 0,0,0], "geom":geom, "dock":[  "$5","b .","b .", "$0",  ": .", ": ."] },
@@ -951,6 +1150,29 @@ function main_nopath() {
       "." : { "type":"!", "dock":[0], "description":"empty space (.)" },
       "#" : { "type":"!", "dock":[1], "description":"ground (#)" },
 
+      "A" : { "type":"@", "description": "arch dock (xz)" },
+      "B" : { "type":"@", "description": "arch dock (xz)" },
+
+      //"p0xz" : { "type":"&", "dock":"q0xz", "description":"arch0_s(simple) pair to block_b (xz)" },
+      //"q0xz" : { "type":"&", "dock":"p0xz", "description":"arch0_s(simple) pair to block_b (xz)" },
+      //"p0y" : { "type":"&", "dock":"q0y", "description":"arch0_s(simple) pair to block_b (y)" },
+      //"q0y" : { "type":"&", "dock":"p0y", "description":"arch0_s(simple) pair to block_b (y)" },
+
+      //"p1xz" : { "type":"&", "dock":"q1xz", "description":"arch1_s(simple) pair to block_b (xz)" },
+      //"q1xz" : { "type":"&", "dock":"p1xz", "description":"arch1_s(simple) pair to block_b (xz)" },
+      //"p1y" : { "type":"&", "dock":"q1y", "description":"arch1_s(simple) pair to block_b (y)" },
+      //"q1y" : { "type":"&", "dock":"p1y", "description":"arch1_s(simple) pair to block_b (y)" },
+
+      "p2xz" : { "type":"&", "dock":"q2xz", "description":"arch2_s(simple) pair to block_b (xz)" },
+      "q2xz" : { "type":"&", "dock":"p2xz", "description":"arch2_s(simple) pair to block_b (xz)" },
+      "p2y" : { "type":"&", "dock":"q2y", "description":"arch2_s(simple) pair to block_b (y)" },
+      "q2y" : { "type":"&", "dock":"p2y", "description":"arch2_s(simple) pair to block_b (y)" },
+
+      "p3xz" : { "type":"&", "dock":"q3xz", "description":"arch3_s(simple) pair to block_b (xz)" },
+      "q3xz" : { "type":"&", "dock":"p3xz", "description":"arch3_s(simple) pair to block_b (xz)" },
+      "p3y" : { "type":"&", "dock":"q3y", "description":"arch3_s(simple) pair to block_b (y)" },
+      "q3y" : { "type":"&", "dock":"p3y", "description":"arch3_s(simple) pair to block_b (y)" },
+
       "Pxz" : { "type":"@", "description": "platform dock (xz)" },
       "Py+" : { "type":"@", "description": "platform dock (y+)" },
       "Py-" : { "type":"@", "description": "platform dock (y-)" },
@@ -978,11 +1200,10 @@ function main_nopath() {
 
 
     "weight": {
-      ".": 20002,
+      ".": 32000,
       "#": 2,
-      //"e": 403,
-      //"g": 1,
-      "block": 10,
+      "block": 1,
+      "block_b": 1,
       "column2": 5,
       "column3": 5,
       "wedge_up": 1,
@@ -991,19 +1212,23 @@ function main_nopath() {
       "double-doorway": 1,
       "block-2x2": 1,
 
-      "platform_bend": 50,
-      "platform_straight": 150,
-      "platform_tee": 20,
-      "platform_cross": 20,
-      "arch0": 10,
-      "arch1": 10,
-      "arch2": 10,
-      "stair": 2000
+      "platform_bend": 1,
+      "platform_straight": 1,
+      "platform_tee": 1,
+      "platform_cross": 1,
+
+      "arch0": 100,
+      "arch1": 100,
+      "arch2": 100,
+      "arch3": 100,
+
+      "stair": 1
     }
   };
 
   let lib_info = [
     { "name": "block",        "f": function() { return block(); } },
+    { "name": "block_b",        "f": function() { return block_b(); } },
 
     { "name": "platform_bend",      "f": function() { return platform_bend(); } },
     { "name": "platform_straight",  "f": function() { return platform_straight(); } },
@@ -1017,9 +1242,12 @@ function main_nopath() {
     { "name": "doorway",      "f": function() { return doorway(); } },
     { "name": "double-doorway",      "f": function() { return double_doorway(); } },
     { "name": "block-2x2",      "f": function() { return block_2x2(); } },
-    { "name": "arch0",        "f": function() { return arch0(); } },
-    { "name": "arch1",        "f": function() { return arch1(); } },
-    { "name": "arch2",        "f": function() { return arch2(); } },
+
+    { "name": "arch0",        "f": function() { return arch0_s(); } },
+    { "name": "arch1",        "f": function() { return arch1_s(); } },
+    { "name": "arch2",        "f": function() { return arch2_s(); } },
+    { "name": "arch3",        "f": function() { return arch3_s(); } },
+
     { "name": "stair",        "f": (function(_n){ return function() { return stair(_n); } })(5)  }
   ];
 
@@ -1115,7 +1343,7 @@ function main_1path() {
       "double-doorway": 1,
       "block-2x2": 1,
 
-      "patha_stair_0": 5000,
+      "patha_stair_0": 100,
 
       "platform_bend": 10,
       "platform_straight": 10,
