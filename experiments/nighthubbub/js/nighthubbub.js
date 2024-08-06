@@ -121,7 +121,7 @@ function get_schedule(url) {
 	</div>
 */
 
-function add_event(list_id, day_num, day_week, thumb_img, band, venue) {
+function add_event(list_id, day_num, day_week, thumb_img, band, venue, url ) {
   let ele = document.getElementById(list_id);
 
   let r = op.row();
@@ -147,7 +147,14 @@ function add_event(list_id, day_num, day_week, thumb_img, band, venue) {
     //thumb_div.appendChild( op.text("") );
   }
 
-  let ev = op.div(8);
+  let ev = op.div(6);
+
+  let link = op.div(2);
+
+  if ((typeof url !== "undefined") &&
+      (url.length > 0)) {
+    link.innerHTML = "<a href='" + url + "'>X</a>";
+  }
 
   ev.appendChild( op.h2(band) );
   ev.appendChild( op.h4(venue) );
@@ -155,6 +162,7 @@ function add_event(list_id, day_num, day_week, thumb_img, band, venue) {
   r.appendChild(dt);
   r.appendChild(thumb_div);
   r.appendChild(ev);
+  r.appendChild(link);
 
   ele.appendChild(r);
 }
@@ -187,8 +195,15 @@ function populate_events() {
     let thumb = sched[ii].img;
     let band = sched[ii].name;
     let venue = sched[ii].venue;
+    let url = sched[ii].url;
 
-    add_event( "event_list", day_num, day_week, thumb, band, venue );
+    if ((typeof sched[ii].showtime !== "undefined") &&
+        (sched[ii].showtime.length > 0)) {
+      venue += ", " + sched[ii].showtime;
+    }
+
+
+    add_event( "event_list", day_num, day_week, thumb, band, venue, url );
   }
 }
 

@@ -2,7 +2,7 @@
   "location": "Ithaca, NY USA 14850",
   "timezone": "EST",
   "schedule" :[
-    {"datetime": "2024-08-08 21:00", "name": "Apactor", "venue": "The Downstairs", "img": "", "venue_location": "" },
-    {"datetime": "2024-08-10 20:00", "name": "Seeming, The FMs, Silver Rein", "venue": "Deep Dive", "img": "img/thumb01.jpg", "venue_location": "" }
+    {"datetime": "2024-08-08 21:00", "name": "Apactor", "venue": "The Downstairs", "showtime": "9pm","img": "img/apactor_thumb.jpg", "url": "https://thedownstairsithaca.com/event/apactor-0"},
+    {"datetime": "2024-08-10 20:00", "name": "Seeming, The FMs, Silver Rein", "venue": "Deep Dive", "showtime": "9pm","img": "img/thumb01.jpg", "url": "https://www.deepdiveithaca.com/events/the-fms-x-seeming-x-silver-rein" }
   ]
 }
