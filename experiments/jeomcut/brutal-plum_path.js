@@ -340,7 +340,6 @@ function platform_tee_overhang() {
   ];
 }
 
-
 //---
 
 // path bend has 2 path connectors and other connectors for platform blocks, as needed.
@@ -517,7 +516,8 @@ function column2() {
   let geom = op.mov([0,0,0], op.cub({"size":[1,2,1], "center": [0,0.5,0] }));
   return [
     {"ds":[0,0,0], "geom":geom, "id":"b", "dock":[ ": .", ": .",  "$1",  "_", ": .", ": ."], "anchor":geom},
-    {"ds":[0,0,0], "geom":geom, "id":"b", "dock":[ ": .", ": .", "b .", "$0", ": .", ": ."]}
+    //{"ds":[0,0,0], "geom":geom, "id":"b", "dock":[ ": .", ": .", "b", "$0", ": .", ": ."]}
+    {"ds":[0,0,0], "geom":geom, "id":"b", "dock":[ ": .", ": .", "b Py", "$0", ": .", ": ."]}
   ];
 }
 
@@ -527,7 +527,8 @@ function column3() {
   return [
     {"ds":[0,0,0], "geom":geom, "id":"b", "dock":[ ": .", ": .",  "$1",  "_", ": .", ": ."], "anchor":geom},
     {"ds":[0,0,0], "geom":geom, "id":"b", "dock":[ ": .", ": .",  "$2", "$0", ": .", ": ."] },
-    {"ds":[0,0,0], "geom":geom, "id":"b", "dock":[ ": .", ": .", "b .", "$1", ": .", ": ."] }
+    //{"ds":[0,0,0], "geom":geom, "id":"b", "dock":[ ": .", ": .", "b .", "$1", ": .", ": ."] }
+    {"ds":[0,0,0], "geom":geom, "id":"b", "dock":[ ": .", ": .", "b Py", "$1", ": .", ": ."] }
   ];
 }
 
@@ -671,15 +672,19 @@ function arch2_s(opt, _debug) {
   }
 
   return [
-    //{"dock":[ ".","p2xz b",     "$2", ". _",  ": .", ": ."], "anchor":geom},
-    //{"dock":[ "p2xz b",".",     "$4", ". _",  ": .", ": ."]},
+    {"dock":[ ".","b",     "$2", ". _",  ": .", ": ."], "anchor":geom},
+    {"dock":[ "b",".",     "$4", ". _",  ": .", ": ."]},
 
-    {"dock":[ ".","p2xz b",     "$2", ".",  ": .", ": ."], "anchor":geom},
-    {"dock":[ "p2xz b",".",     "$4", ".",  ": .", ": ."]},
+    //{"dock":[ ".","p2xz b",     "$2", ".",  ": .", ": ."], "anchor":geom},
+    //{"dock":[ "p2xz b",".",     "$4", ".",  ": .", ": ."]},
 
-    {"dock":[ "$3", "p2xz b",   "p2y Py b", "$0",  ": .", ": ."]},
-    {"dock":[ "$4","$2",        "p2y Py b",  ".",  ": .", ": ."]},
-    {"dock":[ "p2xz b", "$3",   "p2y Py b", "$1",  ": .", ": ."]}
+    {"dock":[ "$3", "b",   "Py b", "$0",  ": .", ": ."]},
+    {"dock":[ "$4","$2",   "Py b",  ".",  ": .", ": ."]},
+    {"dock":[ "b", "$3",   "Py b", "$1",  ": .", ": ."]}
+
+    //{"dock":[ "$3", "p2xz b",   "p2y Py b", "$0",  ": .", ": ."]},
+    //{"dock":[ "$4","$2",        "p2y Py b",  ".",  ": .", ": ."]},
+    //{"dock":[ "p2xz b", "$3",   "p2y Py b", "$1",  ": .", ": ."]}
   ];
 }
 
@@ -698,15 +703,20 @@ function arch3_s(opt, _debug) {
   }
 
   return [
-    //{"dock":[ ".","p3xz b",  "$2", ". _",  ": .", ": ."], "anchor":geom},
-    //{"dock":[ "p3xz b",".",  "$5", ". _",  ": .", ": ."]},
-    {"dock":[ ".","p3xz b",  "$2", ".",  ": .", ": ."], "anchor":geom},
-    {"dock":[ "p3xz b",".",  "$5", ".",  ": .", ": ."]},
+    {"dock":[ ".","b",  "$2", ". _",  ": .", ": ."], "anchor":geom},
+    {"dock":[ "b",".",  "$5", ". _",  ": .", ": ."]},
+    //{"dock":[ ".","p3xz b",  "$2", ".",  ": .", ": ."], "anchor":geom},
+    //{"dock":[ "p3xz b",".",  "$5", ".",  ": .", ": ."]},
 
-    {"dock":[ "$3", "p3xz b", "p3y Py b", "$0",  ": .", ": ."]},
-    {"dock":[ "$4","$2",      "p3y Py b",  ".",  ": .", ": ."]},
-    {"dock":[ "$5","$3",      "p3y Py b",  ".",  ": .", ": ."]},
-    {"dock":[ "p3xz b", "$4", "p3y Py b", "$1",  ": .", ": ."]}
+    {"dock":[ "$3", "b", "Py b", "$0",  ": .", ": ."]},
+    {"dock":[ "$4","$2", "Py b",  ".",  ": .", ": ."]},
+    {"dock":[ "$5","$3", "Py b",  ".",  ": .", ": ."]},
+    {"dock":[ "b", "$4", "Py b", "$1",  ": .", ": ."]}
+
+    //{"dock":[ "$3", "p3xz b", "p3y Py b", "$0",  ": .", ": ."]},
+    //{"dock":[ "$4","$2",      "p3y Py b",  ".",  ": .", ": ."]},
+    //{"dock":[ "$5","$3",      "p3y Py b",  ".",  ": .", ": ."]},
+    //{"dock":[ "p3xz b", "$4", "p3y Py b", "$1",  ": .", ": ."]}
   ];
 }
 
@@ -1163,15 +1173,15 @@ function main_nopath() {
       //"p1y" : { "type":"&", "dock":"q1y", "description":"arch1_s(simple) pair to block_b (y)" },
       //"q1y" : { "type":"&", "dock":"p1y", "description":"arch1_s(simple) pair to block_b (y)" },
 
-      "p2xz" : { "type":"&", "dock":"q2xz", "description":"arch2_s(simple) pair to block_b (xz)" },
-      "q2xz" : { "type":"&", "dock":"p2xz", "description":"arch2_s(simple) pair to block_b (xz)" },
-      "p2y" : { "type":"&", "dock":"q2y", "description":"arch2_s(simple) pair to block_b (y)" },
-      "q2y" : { "type":"&", "dock":"p2y", "description":"arch2_s(simple) pair to block_b (y)" },
+      //"p2xz" : { "type":"&", "dock":"q2xz", "description":"arch2_s(simple) pair to block_b (xz)" },
+      //"q2xz" : { "type":"&", "dock":"p2xz", "description":"arch2_s(simple) pair to block_b (xz)" },
+      //"p2y" : { "type":"&", "dock":"q2y", "description":"arch2_s(simple) pair to block_b (y)" },
+      //"q2y" : { "type":"&", "dock":"p2y", "description":"arch2_s(simple) pair to block_b (y)" },
 
-      "p3xz" : { "type":"&", "dock":"q3xz", "description":"arch3_s(simple) pair to block_b (xz)" },
-      "q3xz" : { "type":"&", "dock":"p3xz", "description":"arch3_s(simple) pair to block_b (xz)" },
-      "p3y" : { "type":"&", "dock":"q3y", "description":"arch3_s(simple) pair to block_b (y)" },
-      "q3y" : { "type":"&", "dock":"p3y", "description":"arch3_s(simple) pair to block_b (y)" },
+      //"p3xz" : { "type":"&", "dock":"q3xz", "description":"arch3_s(simple) pair to block_b (xz)" },
+      //"q3xz" : { "type":"&", "dock":"p3xz", "description":"arch3_s(simple) pair to block_b (xz)" },
+      //"p3y" : { "type":"&", "dock":"q3y", "description":"arch3_s(simple) pair to block_b (y)" },
+      //"q3y" : { "type":"&", "dock":"p3y", "description":"arch3_s(simple) pair to block_b (y)" },
 
       "Pxz" : { "type":"@", "description": "platform dock (xz)" },
       "Py+" : { "type":"@", "description": "platform dock (y+)" },
@@ -1200,12 +1210,12 @@ function main_nopath() {
 
 
     "weight": {
-      ".": 32000,
+      ".": 4000,
       "#": 2,
       "block": 1,
       "block_b": 1,
-      "column2": 5,
-      "column3": 5,
+      "column2": 1,
+      "column3": 1,
       "wedge_up": 1,
       "wedge_down": 1,
       "doorway": 1,
@@ -1217,12 +1227,12 @@ function main_nopath() {
       "platform_tee": 1,
       "platform_cross": 1,
 
-      "arch0": 100,
-      "arch1": 100,
-      "arch2": 100,
-      "arch3": 100,
+      "arch0": 1,
+      "arch1": 2,
+      "arch2": 40,
+      "arch3": 30,
 
-      "stair": 1
+      "stair": 20
     }
   };
 
@@ -1242,6 +1252,9 @@ function main_nopath() {
     { "name": "doorway",      "f": function() { return doorway(); } },
     { "name": "double-doorway",      "f": function() { return double_doorway(); } },
     { "name": "block-2x2",      "f": function() { return block_2x2(); } },
+
+    { "name": "column2",        "f": function() { return column2(); } },
+    { "name": "column3",        "f": function() { return column3(); } },
 
     { "name": "arch0",        "f": function() { return arch0_s(); } },
     { "name": "arch1",        "f": function() { return arch1_s(); } },
@@ -1332,7 +1345,7 @@ function main_1path() {
 
 
     "weight": {
-      ".": 4002,
+      ".": 1001,
       "#": 2,
       "block": 4,
       "column2": 5,
@@ -1343,16 +1356,16 @@ function main_1path() {
       "double-doorway": 1,
       "block-2x2": 1,
 
-      "patha_stair_0": 100,
+      "patha_stair_0": 5,
 
-      "platform_bend": 10,
-      "platform_straight": 10,
-      "platform_tee": 10,
-      "platform_cross": 10,
+      "platform_bend": 1,
+      "platform_straight": 1,
+      "platform_tee": 1,
+      "platform_cross": 1,
       "arch0": 1,
       "arch1": 1,
       "arch2": 1,
-      "stair": 10
+      "stair": 40
     }
   };
 
@@ -1360,11 +1373,15 @@ function main_1path() {
 
   let lib_info = [
     { "name": "block",        "f": function() { return block(); } },
+    { "name": "block_b",        "f": function() { return block_b(); } },
 
     { "name": "platform_bend",      "f": function() { return platform_bend(); } },
     { "name": "platform_straight",  "f": function() { return platform_straight(); } },
-    { "name": "platform_tee",       "f": function() { return platform_tee(); } },
-    { "name": "platform_cross",     "f": function() { return platform_cross(); } },
+
+    //{ "name": "platform_tee",       "f": function() { return platform_tee(); } },
+    //{ "name": "platform_cross",     "f": function() { return platform_cross(); } },
+    { "name": "platform_tee",       "f": function() { return platform_tee_overhang(); } },
+    { "name": "platform_cross",     "f": function() { return platform_cross_overhang(); } },
 
     //---
 
@@ -1385,7 +1402,7 @@ function main_1path() {
     { "name": "patha_bendup_4",        "f": function() { return path_bend_up(0,4,_dbg); } },
     { "name": "patha_bendup_5",        "f": function() { return path_bend_up(0,5,_dbg); } },
     { "name": "patha_bendup_6",        "f": function() { return path_bend_up(0,6,_dbg); } },
-*/
+    */
 
     { "name": "patha_stair_0",        "f": function() { return path_stair(0,_dbg); } },
 
@@ -1408,10 +1425,17 @@ function main_1path() {
     { "name": "doorway",      "f": function() { return doorway(); } },
     { "name": "double-doorway",      "f": function() { return double_doorway(); } },
     { "name": "block-2x2",      "f": function() { return block_2x2(); } },
-    { "name": "arch0",        "f": function() { return arch0(); } },
-    { "name": "arch1",        "f": function() { return arch1(); } },
-    { "name": "arch2",        "f": function() { return arch2(); } },
+
+    //{ "name": "arch0",        "f": function() { return arch0(); } },
+    //{ "name": "arch1",        "f": function() { return arch1(); } },
+    //{ "name": "arch2",        "f": function() { return arch2(); } },
+
+    { "name": "arch0",        "f": function() { return arch0_s(); } },
+    { "name": "arch1",        "f": function() { return arch1_s(); } },
+    { "name": "arch2",        "f": function() { return arch2_s(); } },
+
     { "name": "stair",        "f": (function(_n){ return function() { return stair(_n); } })(5)  }
+
   ];
 
   for (let li_idx=0; li_idx<lib_info.length; li_idx++) {
@@ -1484,43 +1508,51 @@ function main_2path() {
       {"type": "quiltAdd",   "range" : { "x":[1,2],"y":[1,2],"z":[2,3], "tile":"pathb_cap_.*$"}},
       {"type": "quiltForce", "range" : { "x":[1,2],"y":[1,2],"z":[2,3], "tile":"pathb_cap_.*$"}},
 
-    //],
-    //"_constraint": [
+      //---
+      // trying to figure out why 32^3 doesn't work well for these constraints...
+      //
 
-      {"type": "quiltAdd",   "range" : { "x":[-2,-1],"y":[-1],"z":[-3,-2], "tile":"patha_cap_.*$"}},
-      {"type": "quiltForce", "range" : { "x":[-2,-1],"y":[-1],"z":[-3,-2], "tile":"patha_cap_.*$"}},
+      {"type": "quiltAdd",   "range" : { "x":[-2,-1],"y":[-2,-1],"z":[-3,-2], "tile":"patha_cap_.*$"}},
+      {"type": "quiltForce", "range" : { "x":[-2,-1],"y":[-2,-1],"z":[-3,-2], "tile":"patha_cap_.*$"}},
 
-      {"type": "quiltAdd",   "range" : { "x":[-3,-2],"y":[-1],"z":[-2,-1], "tile":"pathb_cap_.*$"}},
-      {"type": "quiltForce", "range" : { "x":[-3,-2],"y":[-1],"z":[-2,-1], "tile":"pathb_cap_.*$"}}
+      {"type": "quiltAdd",   "range" : { "x":[-3,-2],"y":[-2,-1],"z":[-2,-1], "tile":"pathb_cap_.*$"}},
+      {"type": "quiltForce", "range" : { "x":[-3,-2],"y":[-2,-1],"z":[-2,-1], "tile":"pathb_cap_.*$"}}
+
+      //{"type": "quiltAdd",   "range" : { "x":[-2,-1],"y":[1,2],"z":[-3,-2], "tile":"patha_cap_.*$"}},
+      //{"type": "quiltForce", "range" : { "x":[-2,-1],"y":[1,2],"z":[-3,-2], "tile":"patha_cap_.*$"}},
+
+      //{"type": "quiltAdd",   "range" : { "x":[-3,-2],"y":[1,2],"z":[-2,-1], "tile":"pathb_cap_.*$"}},
+      //{"type": "quiltForce", "range" : { "x":[-3,-2],"y":[1,2],"z":[-2,-1], "tile":"pathb_cap_.*$"}}
+
     ],
 
     "source": [
     ],
     "weight": {
-      ".": 3002,
+      ".": 4003,
       "#": 2,
-      "e": 403,
-      "g": 1,
-      "block": 4,
+      "block": 1,
+
       "column2": 5,
       "column3": 5,
+
       "wedge_up": 1,
       "wedge_down": 1,
       "doorway": 1,
       "double-doorway": 1,
       "block-2x2": 1,
 
-      "patha_stair_0": 300,
-      "pathb_stair_0": 300,
+      "patha_stair_0": 5,
+      "pathb_stair_0": 5,
 
-      "platform_bend": 10,
-      "platform_straight": 10,
-      "platform_tee": 10,
-      "platform_cross": 10,
-      "arch0": 30,
-      "arch1": 20,
-      "arch2": 10,
-      "stair": 10
+      "platform_bend": 1,
+      "platform_straight": 1,
+      "platform_tee": 1,
+      "platform_cross": 1,
+      "arch0": 1,
+      "arch1": 1,
+      "arch2": 1,
+      "stair": 40
     }
   };
 
@@ -1528,6 +1560,8 @@ function main_2path() {
 
   let lib_info = [
     { "name": "block",        "f": function() { return block(); } },
+
+    { "name": "block_b",        "f": function() { return block(); } },
 
     { "name": "platform_bend",      "f": function() { return platform_bend(); } },
     { "name": "platform_straight",  "f": function() { return platform_straight(); } },
@@ -1604,9 +1638,15 @@ function main_2path() {
     { "name": "doorway",      "f": function() { return doorway(); } },
     { "name": "double-doorway",      "f": function() { return double_doorway(); } },
     { "name": "block-2x2",      "f": function() { return block_2x2(); } },
-    { "name": "arch0",        "f": function() { return arch0(); } },
-    { "name": "arch1",        "f": function() { return arch1(); } },
-    { "name": "arch2",        "f": function() { return arch2(); } },
+
+    //{ "name": "arch0",        "f": function() { return arch0(); } },
+    //{ "name": "arch1",        "f": function() { return arch1(); } },
+    //{ "name": "arch2",        "f": function() { return arch2(); } },
+
+    { "name": "arch0",        "f": function() { return arch0_s(); } },
+    { "name": "arch1",        "f": function() { return arch1_s(); } },
+    { "name": "arch2",        "f": function() { return arch2_s(); } },
+
     { "name": "stair",        "f": (function(_n){ return function() { return stair(_n); } })(5)  }
   ];
 
