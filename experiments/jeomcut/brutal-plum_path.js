@@ -1210,7 +1210,7 @@ function main_nopath() {
 
 
     "weight": {
-      ".": 4000,
+      ".": 2000,
       "#": 2,
       "block": 1,
       "block_b": 1,
