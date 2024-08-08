@@ -1369,7 +1369,7 @@ function main_1path() {
     }
   };
 
-  let _dbg = true;
+  let _dbg = false;
 
   let lib_info = [
     { "name": "block",        "f": function() { return block(); } },
@@ -1529,7 +1529,7 @@ function main_2path() {
     "source": [
     ],
     "weight": {
-      ".": 4003,
+      ".": 1003,
       "#": 2,
       "block": 1,
 
@@ -1556,7 +1556,7 @@ function main_2path() {
     }
   };
 
-  let _dbg = true;
+  let _dbg = false;
 
   let lib_info = [
     { "name": "block",        "f": function() { return block(); } },
