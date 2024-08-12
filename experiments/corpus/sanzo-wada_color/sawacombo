@@ -1,0 +1,46 @@
+#!/usr/bin/node
+
+var fs = require("fs");
+
+var color_data = JSON.parse( fs.readFileSync("./sanzo-wada_colors.json") );
+
+let g = [ {"index":0, "name":"empty", "combinations":[], "use_count": 0} ];
+
+let combo2idx = [];
+
+let _c = color_data.colors;
+
+let max_combo = -1;
+for (let ii=0; ii<_c.length; ii++) {
+  let combo = _c[ii].combinations;
+  for (let jj=0; jj<combo.length; jj++) {
+    if (max_combo < combo[jj]) { max_combo = combo[jj]; }
+  }
+}
+
+max_combo++;
+for (let ii=0; ii<max_combo; ii++) { combo2idx.push( [] ); }
+
+for (let c_idx=0; c_idx < _c.length; c_idx++) {
+
+  let combo = _c[c_idx].combinations;
+  for (let ii=0; ii < combo.length; ii++) {
+    combo2idx[ combo[ii] ].push(c_idx);
+  }
+
+}
+
+for (let p_idx=0; p_idx < combo2idx.length; p_idx++) {
+
+  let name_a = [];
+  let hexrgb_a = [];
+  for (let c_idx=0; c_idx < combo2idx[p_idx].length; c_idx++) {
+    let c_ele = _c[ combo2idx[p_idx][c_idx] ];
+    name_a.push( c_ele.name );
+    hexrgb_a.push( c_ele.hex );
+  }
+  console.log(p_idx, JSON.stringify(name_a), JSON.stringify(hexrgb_a));
+}
+
+
+

@@ -1,0 +1,7 @@
+#!/bin/bash
+
+cat \
+  <( jq '.[].name' spells.json | shuf | head -n1 ) \
+  <( jq '.[].name' monsters.json | shuf | head -n1 ) \
+  <( jq '.[].name' magicitems.json | shuf | head -n1 ) \
+  | tr '\n' ' ' ; echo

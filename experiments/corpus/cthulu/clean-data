@@ -1,0 +1,16 @@
+#!/bin/bash
+
+tr '\n' ' ' < xx | \
+  sed 's;<tr>;\n;g' | sed 's/<a href=[^>]*>//g' | \
+  sed 's/"//g' | \
+  sed 's/<i>//g' | \
+  sed 's/<\/i>//g' | \
+  sed 's/<\/a>//g' | \
+  sed 's/ *<\/td> *<td>/","/g' | \
+  sed 's/<br *\/>//g' | \
+  sed 's/<tr>//g' | \
+  sed 's/<\/tr>//g' | \
+  sed 's/<\/tbody> *<\/table>//g' | \
+  sed 's/ *<td> */["/' | \
+  sed 's/ *<\/td> */"]/'
+

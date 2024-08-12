@@ -1,0 +1,2131 @@
+{
+  "description" : "Mottos found on sundials taken from _A book of sundial mottoes_ by Alfred H Hyatt (Alfred Henry), 1903 (https://archive.org/details/bookofsundialmot00hyat)",
+  "mottos": [
+
+    {
+      "orig":"ALIIS . INSERVIENDO . CONSUMOR.\n(my . LOSS . IS . YOUR . GAIN).",
+      "clean":"My loss is your gain."
+    },
+
+    {
+      "orig":"ARS . LONGA , VITA . BREVIS.\n(l . DIE . TO-DAY . AND . LIVE . TO-MORROW).",
+      "clean":"I die today and live tomorrow."
+    },
+
+    {
+      "orig":"AVARITIA . HODIE . DOMINATUR.\n(you . COVET . to-morrow).",
+      "clean":"You covet tomorrow."
+    },
+
+    {
+      "orig":"AUT . CAESAR . AUT . NIHIL.\n(l . SHINE . OR . shroud).",
+      "clean":"I shine or shroud."
+    },
+
+    {
+      "orig":"SEE, . AND . BE . GONE . ABOUT . YOUR . BUSINESS.",
+      "clean":"See and be gone about your business."
+    },
+
+    {
+      "orig":"BULLA . EST . VITA . HUMANA.\n(life's . A . bubble).",
+      "clean":"Life's a bubble."
+    },
+
+    {
+      "orig":"CONSUME . NOT . THY . TIME . IN . IDLENESS.",
+      "clean":"Consume not thy time in idleness."
+    },
+
+    {
+      "orig":"DEUS . ADEST . LABORANTIBUS.\n(heaven . FAVOURS . THE . DILIGENT).",
+      "clean":"Heaven favours the diligent."
+    },
+
+    {
+      "orig":"DISCE . DIES . NUMERARE . TUOS.\n(LEARN . TO . VALUE . YOUR . TIME).",
+      "clean":"Learn to value your time."
+    },
+
+    {
+      "orig":"DISCE . BENE . VIVERE . & . MORI.\n(shine . AND . set).",
+      "clean":"Shine and set."
+    },
+
+    {
+      "orig":"DlES . DIEM . TRUDIT.\n(a . DAY . KICKS . ME . DOWN).",
+      "clean":"A day kicks me down."
+    },
+
+    {
+      "orig":"DUM . SPECTAS . FUGIO.\n(UNSIGHT, . UNSEEN).",
+      "clean":"Unsign, unseen."
+    },
+
+    {
+      "orig":"EN.  SUPRA . VITA . FUGAX .  EN . INFRA . CERTA . MORS.\n(a . LIFE . ON . flight's . SOON . OUT . OF . SIGHT).",
+      "clean":"A life on flight's soon out of sight."
+    },
+
+    {
+      "orig":"EX . HOC . MOMENTO . PENDET . AETERNITAS.\n(now . OR , never).",
+      "clean":"Now or never."
+    },
+
+    {
+      "orig":"FESTINA . LENTE.\n(mind . MY . movements).",
+      "clean":"Mind my movements."
+    },
+
+    {
+      "orig":"FORTUNA . URBES . AMPLISSIMAS . EVERTIT.\n(no . exemption . from , MY . INFLUENCE).",
+      "clean":"No exemption from my influence."
+    },
+
+    {
+      "orig":"FUGIO . FUGE.\n(be . GONE . ABOUT . YOUR . BUSINESS.  I . STAY , FOR . NO . MAN).",
+      "clean":"Be gone about your business, I stay for no man."
+    },
+
+    {
+      "orig":"HINC . VIVERE . DISCE.  ILLINC . DISCE . MORI.\n(rising . PORTENDS . SETTING).",
+      "clean":"Rising portends setting."
+    },
+
+    {
+      "orig":"HOMO . QUASI . UMBRA.\n(man . is . a . SHADE . OF . A . SHADOW).",
+      "clean":"Man is a shade of a shadow."
+    },
+
+    {
+      "orig":"HORA . FUGIT . RAPIDE . LETHUMQ; .  INVADIT . INERMES. \n(the . HOURS . GLIDE . SWIFTLY, . AND . THE . UNGUARDED . ARE . EASILY . SURPRIZED).",
+      "clean":"The hours glide swiftly and the unguarded are easily suprized."
+    },
+
+    {
+      "orig":"HORA . PARS . VITAE .\n(every . HOUR . SHORTENS . LIFE).",
+      "clean":"Every hour shortens life."
+    },
+
+    {
+      "orig":"ITA . VITA.\n(such . IS . life's . HALF . CIRCLE).",
+      "clean":"Such is life's half circle."
+    },
+
+    {
+      "orig":"Labor . ipse . voluptas .\n(my . PAIN . IS . YOUR . pleasure).",
+      "clean":"My pain is your pleasure."
+    },
+
+    {
+      "orig":"LEX . DEI, . LUX . DIEI.\n(the . LAW . OF . GOD . IS . THE . BROAD . DAY-LIGHT).",
+      "clean":"The law of god is the broad daylight."
+    },
+
+    {
+      "orig":"Let . YOUR . LIGHT, so . SHINE . BEFORE .  MEN . THAT . THEY . MAY . SEE . YOUR .  GOOD . WORKS.",
+      "clean":"Let your light so shine before men that they may see your good works."
+    },
+
+
+
+    {
+      "orig":"LENTE . SUSCIPE . CITO . PERFICE.\n(set . OUT . AT . LEISURE, . PROCEED . WITH . HASTE). ",
+      "clean":"Set out at leisure, proceed with haste."
+    },
+
+    {
+      "orig":"MORA . TRAHIT . PERICULUM.\n(delay . DRAGS . DANGER). ",
+      "clean":"Delay drags danger."
+    },
+
+    {
+      "orig":"NEMO . SINE . CRIMINE . VIVIT.\n(the . BRIGHTEST . DAY . HAS . ITS . SHADES). ",
+      "clean":"The brightest day has its shades."
+    },
+
+    {
+      "orig":"NIL . DAT . QUOD . NON . HABET.\n(out . OF . NOTHING . COMES . NOTHING). ",
+      "clean":"Out of nothing comes nothing."
+    },
+
+    {
+      "orig":"NON . SEMPER . ERUNT . SATURNALIA.\n(take . TIME . BY . THE . FORELOCK). ",
+      "clean":"Take time by the forelock."
+    },
+
+    {
+      "orig":"NON . NOBIS . NATI . SUMUS.\n(we . ARE . NOT . MADE . FOR . OURSELVES). ",
+      "clean":"We are not made for ourselves."
+    },
+
+    {
+      "orig":"NON . SINE . LUMINE.\n(we . shine). ",
+      "clean":"We shine."
+    },
+
+    {
+      "orig":"NOSCE . TEIPSUM.\n(look . INTO . THY . SELf). ",
+      "clean":"Look into thy self."
+    },
+
+    {
+      "orig":"NULLA . DIES . SINE . LINEA\n(every . DAY . HAS . ITS . BOUNDS). ",
+      "clean":"Every day has its bounds."
+    },
+
+    {
+      "orig":"OMNEM . CREDE . DIEM . TIBI . DILUXISSE . SUPREMUM.\n(believe . EVERY . DAY . TO . BE . THY . LAST). ",
+      "clean":"Believe every day to be thy last."
+    },
+
+    {
+      "orig":"OMNIA . FALCE . METIT . TEMPUS.\n(the . SCYTHE . OF . TIME . CARRIES . A . KEEN . EDGE), ",
+      "clean":"The scythe of time carries a keen edge."
+    },
+
+    {
+      "orig":"PEREUNT . & . IMPUTANTUR.\n(the . HOURS . VANISH, . YET . ARE . ON . RECORD).",
+      "clean":"The hours vanish, yet are on records."
+    },
+
+    {"rest":"
+
+PAX . OPTIMA . RERUM. 
+(light . IS . THE . PARENT . OF . PEACE). 
+
+POST . VOLUPTATEM . MISERICORDIA. 
+(pleasure . IS . THE . PARENT . OF . PAIN ; . NIGHT . TREADS . UPON . THE . HEELS . OF . DAY). 
+
+QUALIS . VITA, . FINIS . ITA. 
+(praise . A . FAIR . DAY . AT . NIGHT). 
+
+QUOD . TIBI . FIERI . NON . VIS, . ALTERI . NE . FECERIS. 
+(do . NOT . RENDER . EVIL . FOR . GOOD). 
+
+QUA . REDIT . NESCITIS . HORAM, 
+(ye . KNOW . NOT . THE . HOUR). 
+
+QUID . CELERIUS . TEMPORE? 
+(what . IS . SWIFTER . THAN . TIME ?) 
+
+SlC . VITA. 
+(life's . lot). 
+
+SIC . TRANSIT . GLORIA . MUNDI. 
+(so . marches . THE . GOD . OF . DAY). 
+
+SINE . LUMINE . INANE. 
+(darkness . PRECEDES . DAY). 
+
+Sic .  PRAETERIT . .AETAS. 
+(life . IS . winged). 
+
+TEMPUS . AD . LUCEM . DUCIT . VERITATEM. 
+(time . BRINGS . TRUTH . TO . LIGHT). 
+
+TEMPUS . OBIT, . MORS . VENIT. 
+(time . DIES, . DEATH . REIGNS). 
+
+TEMPUS . FUGIT. 
+(time . hastes). 
+
+TEMPUS . VITAE . MONITOR. 
+(time . IS . life's . remembrancer). 
+
+TENERE . NON . POTES . NEC . PERDERE. 
+(you . CANNOT . KEEP . IT, . NOR . LOSE . IT). 
+
+Umbra . DEI
+(the . WORKMANSHIP . OF . THE . GREAT . ARCHITECT). 
+
+UT . UMBRA . SIC . VITA. 
+(shade . IS . life's . pattern). 
+
+VENIO . UT . SUR. 
+(I . STEAL . UPON . you). 
+
+VIGILATE . & . ORATE, . TEMPUS . FUGIT. 
+(watch . AND . PRAY, . TIME . HASTES . AWAY). 
+
+VIA . VITAE .
+(life's . road). 
+
+VITA . NOSTRA . EST . INSTAR . COMOEDIAE .
+(life . OFTEN . CHANGES . SCENES). 
+
+VERITAS . TEMPORIS . FILIA. 
+(time . THE . FATHER . OF . TRUTH). 
+
+*WELCOME . CHAPMAN. 
+*0N A DIAL IN A MARKET PLACE. 
+
+
+LET . OTHERS . TELL . OF . STORMS . AND
+  SHOWERS,
+I'LL . ONLY . COUNT . YOUR . SUNNY . HOURS. 
+(the motto chosen by queen ALEXANDRA FOR THE SUNDIAL 
+AT SANDRINGHAM). 
+
+
+
+UNITED . IN . TIME, . PARTED . IN . TIME, 
+TO . BE . REUNITED, . WHEN . TIME . SHALL . BE 
+NO . MORE. 
+(in the king's garden, holyrood, on the dial presented 
+BY CHARLES I. TO QUEEN HENRIETTA MARIA). 
+
+AS . TIME . AND . HOURES . PASSETH 
+  AWAYE. 
+SO . DOETH . THE . LIFE . OF . MAN . DECAYE, 
+AS . TIME . CAN . BE . REDEEMED . WITH . NO 
+  COST, 
+BESTOW . IT . WELL . AND . LET . NO . HOURE 
+  BE . LOST. 
+(on a ring dial). 
+
+TRANSEUNT . DIES . TUI. 
+(thy . DAYS . ARE . PASSING). 
+
+TO . NO . ONE . IS . GIVEN , RIGHT . OF 
+  DELAY, 
+NOTED . IN . HEAVEN . PASSETH . EACH . DAY; 
+BE . THOU . NOT . FRUITLESS, . WORK . WHILE 
+  YE . MAY, 
+TRIFLING . WERE . BOOTLESS, . WATCH . THOU 
+  AND . PRAY. 
+
+
+THESE . SHADES . SO . FLEET 
+  FROM . DAY . TO . DAY. 
+AND . SO . THIS . LIFE 
+  PASSETH . AVVAIE. 
+
+
+
+VT . HORA . PRAETERITA . SIC . FUGIT . VITA. 
+(as . THE . HOUR . THAT . IS . PAST, . SO . LIFE . FLIES). 
+
+
+AS . SHADOWE . SO . MAN . SPEEDETH, 
+
+
+TIME . TIDE 
+DOTH . WAIST 
+THEREFORE 
+MAKE . HASTE 
+WE . SHALL. ---
+
+
+
+UT . HORA . FUGIT . VITA. 
+(as . AN .'HOUR . LIFE . FLIES). 
+
+
+
+YOU . MAY . WASTE . BUT . CANNOT . STOP 
+  ME. 
+(on an old church at tunbridge wells). 
+
+AS . THE . SUNE . RUNS . SO . DEATH 
+  COMES. 
+
+
+AS . TIME . AND . HOURS . PASSETH . AWAY .
+  SO . DOUTH . THE . LIFE . OP . MAN . DECAY. 
+
+
+
+TRANSEUNT . ET . IMPUTANTUR. 
+(they . PASS . AND . ARE . RECKONED). 
+
+
+
+BRIGHT . SOL . AND . LUNA . TIME . AND 
+  TIDE . DOTH . HOLD. 
+
+
+
+BON . JOUR — BON . SOIR. 
+
+
+AS . THESE . HOURS . DOTH . PASS . AWAY, 
+SO . DOTH . THE . LIFE . OF . MEN . DECAY. 
+> MEMENTO . MORI. 
+
+
+
+A . DAY . MAY . RUIN . THEE. 
+THIS . HOUR. 
+> A.D. . MDCCXXXII. 
+
+
+
+THE . HOUR . NOW . SHOWN . PERHAPS 
+MAY . BE . THY . LAST, 
+REPENT . AND . PRAY . BEFORE . THAT . HOUR 
+BE . PAST. 
+
+
+
+THIS . FOURFOLD . INDEX . OF . SWIFT 
+  TIME 
+ON . WHICH . YE . SHADOW . VEERETH 
+  ROUND, 
+SHOULD . MAN . EXCITE . TO . THEMES . SUB- 
+  LIME. 
+SINCE . NOUT . BUT . SHADOWS . HERE . ARE 
+  FOUND. 
+
+BEHOLD . NOW . IS . THE . ACCEPTED 
+  TIME.— (2 . Cor. . vi. . 2). 
+SEEK . YE . THE . LORD . WHILE . HE . MAY 
+  BE . FOUND.— (IsA. . Lv. . 6). 
+
+VIRTUE . JOIN . PRECIOUS . TIME. 
+
+THUS . ETERNITY . APPROACHETH. 
+
+CERTA . RATIO. 
+(a . SURE . reckoning). 
+
+ASPICE . IN . HORAM, . ET . MEMENTO . MORI. 
+(look . ON . THE . HOUR . AND . REMEMBER . DEATH). 
+
+TRIFLE . NOT, . YOUR . TIME'S . SHORT. 
+
+TIME . CAN . DO . MUCH. 
+
+AETAS . RAPIET . DIEM. 
+(time . WILL . HURRY . THE . DAY . AWAY). 
+
+
+
+VER . NON . SEMPER . VIRIT. 
+(spring . IS . NOT . ALWAYS . GREEN). 
+
+IME . IS . MORE . SACRED . THAN . GOLD. 
+
+AETAS . CITO . PEDE . PRAETERIT. 
+(age . PASSES . WITH . SWIFT . FOOT). 
+
+THUS . THE . GLORY . OF . THE . WORLD 
+  PASSES . AWAY. 
+
+
+
+TIME . AS . THE . DIAL . TO . THE . SUN. 
+ALTHOUGH . IT . BE . NOT . SHONE . UPON. 
+
+
+
+DUM , LOQUIMUR . FUGERIT . INVIDA . AETAS, 
+CARPE . DIEM , OUAM . ININIME . CREDULA 
+POSTERO. 
+(while . SPEAKING . SO . ENVIOUS . TIME . HAS . FLOWN, 
+SEIZE . TO-DAY, . LITTLE . TRUST . THE . MORROW). 
+
+
+
+SUB . SOLE . VANITAS. 
+(UNDER . THE . SUN . VANITY). 
+
+POST . TENEBRAS . SPERO . LUCEM. 
+(after . DARKNESS . HOPE . FOR . LIGHT). 
+
+L'HEURE . PASSE, . L'AMITIE . RESTE. 
+(the . HOUR . PASSES, . FRIENDSHIP , STAYS). 
+
+C'EST . L'HEURE . DE . BIEN . FAIRE. 
+(this . IS . THY . FORTUNATE . HOUR). 
+
+
+Mia.  VITA . E . IL . SOLE: . DELI'UM . LA 
+VITA . E . DIO. 
+SENZA . ESSO . E . L'UM, . QUAL . SENZA . SOL 
+SON' . 10. 
+(monastery NEAR FLORENCE). 
+
+SILENS . LOQUOR. 
+(though . SILENT, . I . SPEAK). 
+
+MICAT . IN . TENEBRIS ; LUX . JUSTORUM. 
+(unto . the . upright . there . ariseth . light . in . the darkness), 
+
+SINE . SOLE . SILEO. 
+(without . SUN . I . KEEP . SILENCe). 
+
+THE . HOUR . THOU . READEST . NOW . ON 
+  ME. 
+WILL . NEVER . MORE . BE . OFFERED . THEE; 
+IF . THOU . TAK'ST . HEED . WISE . THOU 
+  WILT . BE. 
+
+TOMORROW'S . HOURS . MAY . BE . LESS 
+FORTUNATE. 
+
+
+
+UT . FILII . LUCIS . INCEDITE. 
+(walk . AS . CHILDREN . OF . LIGHT). 
+
+SINE . UMBRA . NIHIL. 
+(without . SHADOW . NOTHING). 
+
+
+
+I . SEEK . MY . LIGHT . FROM . GOD. 
+
+OH . EARLY . PASSENGER, . LOOK . UP, . BE 
+  WISE, 
+AND . THINK . HOW . NIGHT . AND . DAY . TIME 
+  EVER . FLIES. 
+
+
+
+TIME'S . A . HAND'S . BREADTH'; . 'TIS . A 
+  TALE ; 
+'TIS . A . VESSEL . UNDER . SAIL; 
+'TIS . AN . EAGLE , IN . ITS . WAY, 
+DARTING . DOWN . UPON . ITS . PREY; 
+'TIS . AN . ARROW . IN . ITS . FLIGHT, 
+MOCKING . THE . PURSUING . SIGHT. 
+
+SOL . DEUS . VISIBILIS 
+DEUS . SOL . INVISIBILIS. 
+(the . SUN . IS . THY . VISIBLE . GOD, GOD . THE . INVISIBLE . SUN). 
+
+In . LUCE . TUA . FRUAMUR . LUCE. 
+(in . THY . LIGHT . SHALL . WE . SEE . LIGHT). 
+
+I'll . LIVE . TO-MORROW, . YOU . DELAYING 
+  CRY, 
+IN . WHAT . FAR . COUNTRY . DOES . TO-MORROW 
+  LIE? 
+
+THE . LEARNED . LINE . SHOWETH . THE 
+  CITY'S . HOUR. 
+(on a sundial in Milan). 
+
+Lux . HUJUS . SOLIS . VOBIS . INDICABIT 
+  HORUM. 
+(this . sun's . LIGHT . WILL . SHOW . THE . HOUR). 
+
+OLD . FATHER . TIME . STANDS . STILL . FOR 
+  NONE; 
+THIS . MOMENT . HERE, . THE . NEXT . HE'S 
+  GONE; 
+AND . THOUGH . YOU . SPEAK . HIM . NE'ER 
+  SO . KIND, 
+HE . NEVER . LAGS . ONE . STEP . BEHIND; 
+IF, . THEN, . WITH . TIME . YOU'D . FORWARD 
+  BE, 
+YOU . E'EN . MUST . RUN . AS . FAST . AS . HE. 
+
+
+
+THE .  DAY . IS . THINE. 
+
+
+UNAM . TIME. 
+(fear . ONE . hour). 
+
+UNA . HARUM . VITAE . HORARUM ERIT 
+  ULTIMA; 
+{ one of these hours will be the last of your life }
+
+
+ABSQUE . SOLE, . ABSQUE . USU. 
+(without . SUN, . WITHOUT . USE). 
+
+
+TIME . WASTED . IS . EXISTENCE, . USED 
+  IS . LIFE. 
+
+
+
+
+
+
+THAT . SOLAR . SHADOW, . AS . IT . MEASURES 
+  LIFE, 
+IT . LIFE . RESEMBLES . TOO. 
+
+As. A. SHADOW . SUCH . IS . LIFE. 
+
+ULTIMA . DECIDET. 
+(the . LAST . decides). 
+(at ventlmiglia). 
+
+
+
+A . SPAN . IS . ALL . THAT . WE . CAN 
+  BOAST, 
+AN . INCH . OR ; SO . OF . TIME: 
+MAN . IS . BUT . VANITY . AND . DUST 
+IN . ALL . HIS , FLOWER . AND . PRIME. 
+
+BE . THANKFUL, . WATCH, ; PRAY, . WORK. 
+
+ASPICE . ME. 
+(look . UPON . me). 
+
+As . THE . SHADE . IS, . SO . IS . LIFE. 
+
+
+ALUMINE . MOTUS, 
+(moved . BY . light). 
+
+SHADOW . AND . SUN— SO . TOO . OUR . LIVES 
+  ARE . MADE— 
+YET . THINK . HOW . GREAT . THE . SUN, 
+  HOW . SMALL . THE . SHADE. 
+
+MEN . DO . BLAME . TIME, . WHILE . IT 
+  THEY . SPEND 
+UNTO . NO . PURPOSE, . OR . TO . A . BAD . END. 
+
+THERE . IS . A . SEASON . FOR . EVERYTHING. 
+
+SOL . TEMPORA . DIVEDIT . AEVI. 
+(the . SUN . DIVIDES . THE . SEASONS . OF . TIME). 
+
+ASPICE . ET . ABI. 
+(gaze . AND . PASS . ON). 
+
+TIME'S . GLASS . AND . SCYTHE 
+THY . LIFE . AND . DEATH . DECLARE. 
+SPEND . WELL . THY . TIME 
+AND . FOR . THY . DEATH . PREPARE. 
+
+
+
+THE . GAY . WHO . WOULD . BE . COUNTED 
+  WISE, 
+THINK . ALL . DELIGHT . IN . PASTIME . LIES.— 
+NOR . HEED . THEY . WHAT . THE . WISE 
+  CONDEMN, 
+WHILST . THEY . PASS . TIME, . TIME . PASSES 
+  THEM. 
+
+SENZA . PALAR . DA . TUTTI . SON . INTESO. 
+SENZA . PALESO . FAR . RUMOR . L'ORA. 
+(without . SPEAKING , I . AM . UNDERSTOOD . BY . ALL. 
+WITHOUT . A . NOISE . I . REVEAL . THE . HOUR). 
+
+
+
+It.  IS ; LATER . THAN . YOU . THINK. 
+
+READ . ON . THIS . DIAL . HOW . THE 
+  SHADOWS . DEVOUR 
+MY . SHORT-LIVED . WINTER'S . DAY. . HOUR 
+  EATS . UP . HOUR 
+ALAS! . THE . TOTAL'S . BUT . FROM . EIGHT 
+  TO . FOUR. 
+
+VOS . ESTIS . LUX . MUNDI. 
+(ye . ARE . THE . LIGHT . OF . THE . WORLD). 
+
+MAKE . THE . PASSING . SHADOW . SERVE 
+  THY . WILL. 
+
+THOU . BY . THE . DIAL'S . SHADY . STEALTH 
+  MAYST . KNOW 
+TIME'S . THIEVISH . PROGRESS . TO . ETER- 
+  NITY. 
+(Shakespeare's sonnet lxxvii.) 
+
+
+SENZA . L'UMBRA . NON . DILETTO, 
+E . PUR . L'UMBRA . E : MIO . DIFETTO. 
+(without . A . SHADOW . I . PLEASE . NOT, 
+AND . YET . A . SHADOW . IS . MY . DEFECT). 
+
+
+
+IN . HIS . OWN . IMAGE . THE . CREATOR 
+  MADE, 
+HIS . OWN . PURE . SUNBEAM . QUICKENED 
+  THEE— O . MAN ! 
+THOU . BREATHING . DIAL! . SINCE . THY 
+  NAME . BEGAN 
+THE . PRESENT . HOUR . WAS . EVER . MARKED 
+  BY . SHADE. 
+
+
+I . NOTE . THE . TIME . THAT . YOU . WASTE. 
+
+
+
+WHEN . THOU . DOST . LOOK . UPON , MY 
+  FACE, 
+TO . LEARN . THE . TIME . OF . DAY, 
+THINK . HOW . MY . SHADOW . KEEPS . ITS 
+  PACE, 
+AS . THY . LIFE . FLIES . AWAY. 
+TAKE, . MORTAL, . THIS . ADVICE . FROM . ME 
+  AND . SO . RESOLVE . TO . SPEND 
+THY . LIFE . ON . EARTH, . THAT . HEAVEN 
+  SHALL . BE 
+THY . HOME, . WHEN . TIME . SHALL . END, 
+(in county KERRY, IRELAND). 
+
+NOW . IS . YESTERDAY'S . TO-MORROW. 
+
+WHILST . PHOEBUS . ON . ME . SHINES, 
+THEN . VIEW . MY . SHADE . AND LINES. 
+
+LIFE'S . BUT . A . SHADOW 
+MAN'S . BUT . DUST; 
+ThIs . DIALL . SAYS 
+DY . ALL . WE . MUST. 
+{ sic }
+
+
+
+IO . VADE . E . VENGO . OGNI . GIORNO 
+MA . TU . ANDRAI . SENZA . RITORNO, 
+(I . GO . AND . COME . EVERY . DAY, BUT . THOU . SHALT . GO . WITHOUT . RETURNING). 
+(in a RIVIERA garden). 
+
+
+
+IN .  COELO . OUIES. 
+(in . HEAVEN . IS . REST). 
+
+
+QUI . LABORAT . ORAT. 
+(who . WORKS . prays), 
+(in LAYLAND churchyard, LANCASHIRE). 
+
+TRANSIT . UMBRA, . LUX . PERMANET. 
+(shadow . PASSES . LIGHT . STAYS). 
+
+A . MOMENT— MARK . HOW . SMALL . A 
+  SPACE 
+THE . DIAL . SHOWS . UPON . THE . FACE; 
+YET . WASTE . BUT . ONE— AND . YOU . SEE 
+OF . HOW . GREAT . MOMENT . IT . CAN . BE. 
+(at oxford on a DIAL BEARING THE ARMS OF THE EARL OF 
+WHARTON, 1691 — 1702). 
+
+WHAT . THOU . SEEKEST . IS . A . SHADOW. 
+
+PEREUNT . ET . IMPUTANTUR. 
+(they . PASS . AND . ARE . RECKONED). 
+
+I . STAND . ON . EARTH. 
+
+TEMPORA . LABUNTUR . QUAE . NOBIS 
+PEREUNT . ET . IMPUTANTUR. 
+(time . GLIDES . BY, , WHICH . PERISHES . FOR . US . AND . IS reckoned). 
+(at adlington). 
+
+MARK . THE . MOMENTS . TROD . FOR 
+  GOOD . OR . ILL. 
+(on WARWICK priory). 
+
+SE . IL . sole : SI . VEDE 
+NESSUN . MI . CREDE. 
+(if . THE . SUN . SHINES . NOT . NONE . WILL . BELIEVE . IN . ME). 
+
+
+
+SE . NON . RILUCE . IL . SOLE, . NESSUM 
+MIA . GUARDA. 
+(if . NO . SUN . SHINES, . NO . ONE . LOOKS . AT . ME). 
+
+REDEEM . YE . TIME. 
+
+AFTER . DARKNESS, . THE . LIGHT. 
+
+SlCUT . UMBRA. 
+(as . A . shadow). 
+
+
+I'M . GOING . WHERE . TIME . FOLLOWS 
+NOT— WHERE . IS . ETERNITY. 
+
+
+
+VIVERE . DISCE. 
+COGITA . MORI. 
+(LEARN  . HOW . TO . LIVE THINK . HOW . TO . DIE). 
+
+SlC . VITA . TRANSIT. 
+(so . PASSES . life). 
+
+SIC . FORTUNA . VOLUTAT. 
+(so . FORTUNE . TURNETH). 
+
+
+
+WE . MAY . NOT . STAY. 
+
+
+THE . SILENT . SHADOW . SPEAKSe 
+DOST , THOU . HEED? 
+
+SOLAREM . SIGNAT . LINEA . PICTA . VIAM. 
+(the . PAINTED . LINE . MARKS . THE . SUN's . PATH), 
+
+VIVITE, . AIT, . FUGIO. 
+(" LIVE . YE " . IT . SAYS : . " I . FLY "). 
+
+
+SINCE . EVERY . ONE . HATH, . EVERY . ONE, 
+  ONE . SHADE, 
+AND . YOU, . BUT . ONE, . CAN . EVERY 
+  SHADOW . LEND. 
+(Shakespeare's sonnet liii.) 
+
+TIME . IS . THE . MONITOR . OF . LIFE. 
+
+SI . SOL . DEFICIET . NEMO . NE . ASPICIET. 
+(if . THE . SUN . PAILS, . NO . ONE . WILL . LOOK . ON . HB). 
+
+EHEU . FUGACES . LABUNTUR . ANNl. 
+— Horace. 
+(so . THE . FLEETING . YEARS . GO . BY). 
+
+
+
+VIVENS . MORTALIS. 
+(he . THAT . LIVES . IS . MORTAL). 
+
+Allez . vous. 
+(pass . on). 
+
+ITER . ENIM . JUSTORUM . SIMILE . EST . LUCI 
+SPLENDIDAE, . PERGENTI . LUCERE: 
+ADEO . UT . CORUM . QUISQUE . SIT 
+STABILIS . DIE. 
+(the . PATH . OF . THE . JUST . IS . AS . THE . SHINING . LIGHT, . THAT . SHINETH . MORE . AND . MORE . UNTO . THE PERFECT . day). 
+
+SHADOW . AND . SHINE . IS . LIFE. 
+(tENNYSON's " GRANDMOTHER "). 
+
+LIFE . IS . A . VAIN . SHADOW. 
+
+SHORT . THE . DAY . AND . GREAT . THE 
+  WORK. 
+
+SEE. THE . LITTLE . DAY-STAR . MOVING 
+LIFE . AND . TIME . ARE . WORTH . IMPROVING 
+SEIZE . THE . MOMENTS, . WHILE . THEY 
+STAY: 
+SEIZE . AND . USE . THEM 
+LEST . YOU . LOSE . THEM 
+AND . LAMENT . THE . WASTED . DAY. 
+
+
+
+AMENDE . TO-DAY . AND . SLACK . NOT, 
+DETHE . COMETH . AND . WARNETH . NOT, 
+TYME . PASSETH . AND . SPEKETH . NOT. 
+
+
+UT . VITA . FINIS . ITA. 
+(as . LIFE . IS . SO . IS . ITS . END). 
+(on the tower of CHELSEA OLD CHURCH). 
+
+BEGONE . ABOUT . YOUR . BUSINESS. 
+
+TIME . WAS, . IS . PAST; . THOU . CANST 
+  NOT . IT . RECALL: 
+TIME . IS, . THOU . HAST; . EMPLOY . THE 
+  PORTION . SMALL: 
+TIME . FUTURE . IS . NOT; . AND . MAY . NEVER 
+  BE: 
+TIME . PRESENT . IS . THE . ONLY . TIME . FOR 
+  THEE. 
+
+WATCH . AND . PRAY. 
+
+RESPICITIE, . NON . MIHI . SOLE . LABORAVI. 
+(mark . YE, . NOT , FOR . MYSELF . ONLY . HAVE . I . TOILED). 
+
+TIME . FLIES. . LINES . RISE . AND 
+  SHADOWS . FALL. 
+LET . IT . PASS . BY. 
+LOVE . REIGNS . FOR . EVER . OVER . ALL. 
+
+I . WAKEN . WITH . THE , RISING . SUN, 
+  AND . SLEEP . WHEN . HIS . LONG . COURSE . IS 
+RUN. 
+
+A . CLOCK . THE . TIME . MAY . WRONGLY 
+  TELL; 
+I, . never, . if . the . sun . shines . well. 
+
+Shadows . 'are . we . and . like 
+  shadows . depart. 
+
+OMNIA . FERT . AETAS. 
+(time . BRINGS . ALL . THINGS). 
+
+DAMNOSA . QUID . NON . IMMINUIT . DIES? 
+(what . IS . THERE . WASTING . TIME . DOES . NOT . IMPAIR ?) 
+— From Horace, 
+(on A SUNDIAL IN A VENETIAN GARDEN). 
+
+
+
+THE . UTMOST . FOR . THE . HIGHEST. 
+(the motto on the SUNDIAL BELONGING TO G. F. WATTS, R.A., AT HIS RESIDENCE, LIMNERSLEASE, COHPTON). 
+
+Live . to-day. 
+
+THY . DIAL... WILL . SHOW . HOW . THY 
+PRECIOUS . MINUTES . WASTE. 
+(Shakespeare's sonnet lxxvii.) 
+
+
+VADAM . ET . REVERTAR. 
+(l , SHALL . GO . AND . RETURN). 
+
+Induce . animum . sapientem. 
+(take . TO . THYSELF . A . WISE . WORD). 
+
+SOL . REGIT . OMNIA. 
+(the . SUN . RULES . ALL). 
+
+LEARN . TO . VALUE . YOUR . TIME. 
+
+
+
+NONE . CAN . CALL . AGAIN . THE . PASSED 
+  TIME; 
+
+SHINING . SPOT . FOR . EVER . SHINING 
+BRIGHTEST . HOURS . HAVE . NO . ABIDING. 
+USE . THY . GOLDEN . MOMENTS . WELL. 
+  LIFE . IS . WASTING 
+  DEATH . IS . HASTING. 
+DEATH . CONSIGNS . TO . HEAVEN . OR . HELL. 
+
+VIVE . MEMOR . LETHI, . FUGIT . HORA- 
+(live . REMEMBERING . DEATH, . THE . HOUR . FLIES). 
+
+
+SOL . GLORIA . MUNDI. 
+(the . SUN . IS . THE . WORLD'S . GLORY). 
+
+INIMICUM . TIBI? . QUARE . FACIEM . TUAM 
+ABSCONDAS, . ET . REPUTES . ME. 
+(wherefore . HIDEST . THOU . THY . FACE . AND . BOLDEST . ME . THINE . ENEMY ?) 
+
+
+VENI, .  VIDE, . VALE. 
+(come, . SEE, . farewell). 
+
+EVERY . DAY . BRINGS . LIFE . NEARER. 
+
+WHAT . IS . YOUR . SUBSTANCE, . WHEREOF 
+  ARE . YOU . MADE, 
+THAT . MILLIONS . OF . STRANGE . SHADOWS 
+  ON . YOU . TEND? 
+(Shakespeare's . sonnet . liii). 
+
+
+SIC . LABITUR . AETAS. 
+(thus . slips . LIFE . away). 
+
+
+SUB .  UMBRA . QUIESCUNT. 
+(under . SHADOW . THEY . REST). 
+
+SUB . LUCE . GAUDENT. 
+(under . LIGHT . THEY . REJOICE), 
+
+
+
+UT . FILII . LUCIS . INCEDITE. 
+(walk . AS . CHILDREN . OF . LIGHT). 
+
+VOLAT . TEMPUS. 
+(time . turns). 
+
+OMNES . VOS . FILII . LUCIS . ESTIS, . AC 
+PILII . DIEI: . NON . SUMUS . FILII 
+NOCTIS, . NEQUE ; TENEBRARUM, 
+(ye . ARE . ALL . THE . CHILDREN . OF . LIGHT, . AND . THE . CHILDREN . OF . THE . DAY ; . WE . ARE . NOT . OF . THE NIGHT, . NOR . THE . DARKNESS). 
+
+
+JUSTUM . ET . AEQUUN. 
+(just . AND . fair). 
+
+
+RETAIN . YOUR . LOYALTY, . PRESERVE 
+  YOUR . RIGHTS. 
+
+
+
+DIES . AD . DIEM . EURETAT . SERMONEM. 
+(day . UNTO . DAY . UTTERETH . SPEECH). 
+
+SAPIENTIS . EST . NUMERARE. 
+(it . IS . THE . WISE . WHO . NUMBER). 
+
+WELL . ARRANGED . TIME . IS . THE 
+  SUREST . SIGN . OF . A . WELL 
+  ARRANGED . MIND. 
+
+## PAGE 60 CHECKPOINT https://archive.org/details/bookofsundialmot00hyat/page/60/mode/1up
+
+Jll/RIT . NOMEN . EJUS . IN . SECULUM, 
+DURANTE . SOLE. 
+(his . NAME . SHALL . ENDURE . FOR . EVER, . HIS . NAME 
+SHALL . BE . CONTINUED . AS . LONG . AS . THE . SUN). 
+
+C'EST . L'HEURE . DE . BOIRE. 
+(this . IS . THE . HOUR . FOR , DRINKING). 
+(on an INN AT LILBOURNE). 
+
+AH . WHAT . IS . HUMAN . LIFE! 
+HOW . LIKE . THE . DIAL'S . TARDY . MOVING 
+  SHADE: 
+DAY . AFTER . DAY . GLIDES . BY . US 
+  UNPERCEIVED, 
+YET . SOON . MAN'S , LIFE . IS . UP . AND . WE 
+  ARE . GONE. 
+
+
+EUS . ADEST . LABORANTIBUS. 
+(god . STANDS . BY . THE . WORKER). 
+
+Loose . no . time. 
+
+
+---
+
+DIALL (loq.) STAIE, . PASSINGER 
+  TELL . ME . MY . NAME, 
+    THY . NATVRE. 
+PASS (RESP.) THY . NAME . IS . DIE 
+  ALL. I . AM . A . MORTALL 
+    CREATVRE. 
+
+DIALL (LOQ.) SINCE . MY . NAME 
+  AND . THY . NATVRE 
+    SO . AGREE, 
+  THINK . ON . THY . SELFE 
+  WHEN . THOU . LOOKST 
+    VPON . ME. 
+
+---
+
+In . VIIS . TUIS . RESPLENDEBIT . LUX. 
+(the . LIGHT . SHALL . SHINE . UPON . THY . WAYS). 
+
+OLD . TIME . IS . STILL . A-FLYING. 
+  — Herrick, 
+
+
+
+
+ANNON . PAULISPER . DIEBUS . MEIS 
+CESSABIT? 
+(are . NOT . MY . DAYS . FEW ?) 
+
+TEMPUS . ACCEPTUM. 
+(now . IS . THE . ACCEPTED . TIME). 
+
+
+
+UTERE . NON . NUMERA. 
+(employ . THEM, . COUNT . THEM . NOT). 
+
+VIVl . BREV'ORE, . INDI . A . SERRAR . VAI 
+  GLI . OCCHI. 
+(live . YOUR . BRIEF . HOUR . THEN . FOR , EVER . CLOSE 
+  YOUR . eyes). 
+
+ET . IPSE . MUTAT . TEMPORA . ET 
+  TEMPESTATES. 
+(he . CHANGETH . the . TIMES . AND . THE . SEASONS). 
+
+WAIT . NOT . FOR . TO-MORROW. 
+
+OMNIBUS . LUCET. 
+(the . LIGHT . SHINES . FOR . ALL). 
+
+
+ONLY . AS . I . ABIDE . IN . THE . LIGHT 
+  OF . HEAVEN 
+DO . I . FULFIL . THE . WILL . OP . MY . MAKER. 
+
+
+THE . SHADOW • OF . THE . ETERNAL. 
+
+
+IN . HORA . NULLA . MORA. 
+(in . THE . HOUR . IS . NO . DELAY). 
+
+
+In . GOD'S . GOOD . TIME. 
+
+OPPOSTO . DI . ME— 
+PENSI . DI . TE. 
+
+(think . NOT . OF . ME-
+THINK . OF . thyself). 
+
+DlSCE . DIES . NUMERARE . TUOS. 
+(learn . TO . NUMBER . THY . DAYS). 
+
+WITH . MY . SHADOW . MOVES . THE 
+  WORLD. 
+
+YESTERDAY'S . GONE, . TO-DAY . IS . HERE, 
+TO-MORROW . NEVER . MAY . APPEAR. 
+
+
+OUR . LIFE'S . A . FLYING . SHADOW, . GOD'S 
+  THE . POLE, 
+DEATH . THE . HORIZON, . WHERE . OUR 
+  SUN . IS . SET; 
+THE . INDEX, . POINTING . AT . HIM, . IS . OUR 
+  SOUL, 
+AND . WILL ; THROUGH . CHRIST . A 
+  RESURRECTION . GET. 
+(milton church, berks.) 
+
+THEY . (THE . HOURS) . PERISH . AND . ARE 
+  NOT . THOUGHT . OF. 
+
+
+
+PER . I . FELICI . ED . I . TRISTI . SEGNO 
+  UGUALMENTE . LE . ORE. 
+(for . THE . HAPPY . AND . THE . SAD . I . MARK . THE . HOURS 
+alike). 
+
+NIL . SINE . NOBIS. 
+(nothing . exists . WITHOUT . US). 
+
+
+
+AS . SILENT . I . STAND . MID . YE . FLOWERS 
+I . RECKON . ALL . YE . PASSING . HOURS, 
+GAZER, . WHO . LOOKEST . ON . ME . NOW, 
+THE . HOURS . OF . LIFE . DOST . RECKON 
+  THOU? 
+
+
+
+THE . HOURS . FLY . FAST . ON . WINGS . OF 
+LIGHT. 
+
+
+NOISELESS . FALLS . THE . FOOT . OF . TIME 
+WHICH . ONLY . TREADS . ON . FLOWERS. 
+
+NON . REDIBO. 
+(l . SHALL . NOT . RETURN). 
+
+BE . WATCHFUL . THOU, . TIME . POSTS 
+  AWAY . AMAIN, 
+NOR . CAN . THE . HOUR . THAT'S . PAST 
+  RETURN . AGAIN. 
+
+
+NON . TARDUM . OPPERIOR. 
+(not . FOR . THE . SLOW . DO . I . TARRY). 
+
+
+NOS . EXIGUUM . TEMPUS . HABEMUS, . SED 
+MULTUM . PERDIMUS. 
+(a . LITTLE . TIME . HAVE . WE, . BUT . WASTE . MUCH). 
+
+
+
+NOW . OR . WHEN ? 
+(BEVERLEY MINSTER). 
+
+LUX . TUA . VITA . MEA. 
+(thy . LIGHT . MY . LIFE). 
+
+NOTHING , IS . TRUE . BUT . THE . LIGHT. 
+
+MANEO . NEMINI. 
+(l . WAIT . FOR . none). 
+
+WHEN . THOU . DOST . GAZE . UPON . MY 
+  FACE 
+THINK . THEN . OF . TIME, . HOW . SWIFT 
+  HIS . PACE, 
+AND . THAT . WITH . EVERY . MOMENT . FLOWN 
+THY . OPPORTUNITY . IS . GONE. 
+
+MEMOR . ESTO . BREVIS . AEVI. 
+(remember . HOW . BRIEF . IS . LIFE). 
+
+
+
+MISSPEND . NO . TIME. 
+
+THE . SHADOW . FLIES . AND . IT . IS . SEEN 
+  NO . MORE. 
+
+
+HOURES . ARE . MADE . OF . SUN 
+  AND . SHADE 
+TAKE . HEDE . OF . WHAT . YOUR . HOURES 
+  BE . MADE. 
+
+
+LIFE . AS . THIS . SHADE 
+DOTH . FLY . AND . FADE. 
+
+LIFE . IS . SHORT, . TIME . IS . SWIFT, . MUCH 
+  IS . TO . BE , DONE. 
+
+LUCEM . DEMONSTRAT . UMBRA. 
+(light . SHOWS . shadow). 
+
+LUX . DIEI, . LEX . DEI. 
+(the . LIGHT . OF . DAY, . THE . LAW . OF . GOD). 
+
+THE . CARELESS . LOOK . AND . DO . NOT 
+  HEED, 
+THE . WISE . TAKE . NOTE . AS . ME . THEY 
+  READ : 
+    TEMPUS . FUGIT. 
+
+LUX . ET . UMBRA . VICISSIM . SED . SEMPER 
+  AMOR. 
+(light . AND . SHADOW . BY . TURNS . BUT . ALWAYS . LOVE). 
+
+
+SO . GLIDES . THE . HOURS, . SO . WEARS 
+  THE . DAY, 
+THESE . MOMENTS . MEASURE . LIFE . AWAY. 
+WITH . ALL . ITS . TRAINS . OF . HOPE . AND 
+  FEAR; 
+TILL . SHIFTING . SCENES . OF . SHADE . AND 
+  LIGHT 
+RISE . TO . THE . ETERNAL . DAY, . OR . SINK 
+  IN . ENDLESS . NIGHT. 
+—Dr. Watts. 
+
+AS . TYME . DOTH . HASTE 
+SO . LIFE . DOTH . WASTE. 
+
+
+OUR . DAYS . DECLINE . LIKE . A . SHADOW. 
+
+OUR . TIME'S . AT . HAND. 
+
+
+I . SHINE . NOT . FOR . ONE . BUT . FOR . ALL. 
+
+MUNDI . OCULUS. 
+(the . EYE . OF . THE . WORLD). 
+
+
+OMNIA . SUNT . HOMINUM . PENDENTIA 
+  FILO. 
+(all . THE . THINGS . OF . MAN . HANG . UPON . A . THREAD), 
+
+THE . SHADOWES . FLOWN; . RETURN . NO 
+  MORE. 
+
+EST . HORA. 
+(it . IS . THE . hour). 
+
+ORA . NE . TE . ULTIME . FALLAT. 
+(pray . LEST . THE . LAST . HOUR . COME . UNAWARES). 
+
+ORBIS . ET . UMBRA. 
+(a . CIRCLE . AND . A . SHADOW). 
+
+ORIENS . SOL . ADORNATUR. 
+(the . RISING . SUN . IS . ADORNED). 
+
+
+
+NOW . MAYEST . THOU . LEARN . FROM . THE 
+PAST. 
+
+OSERVE . HOW . FAST . TIME . HURRIES 
+  PAST, 
+THEN . USE . EACH . HOUR, . WHILE . IN 
+  YOUR . POWER 
+FOR . COMES . THE . SUN, . BUT . TIME . FLIES 
+  ON, 
+PROCEEDING . EVER . RETURNING , NEVER. 
+
+OF . SHADE . AND . SUNSHINE . FOR . EACH 
+  HOUR 
+SEE . HERB . A . MEASURE . MADE: 
+THEN . WONDER . NOT . IF . LIFE . CONSIST 
+OF . SUNSHINE . AND . OF . SHADE. 
+
+
+AUT . DISCE, . AUT . DISCED. 
+(either . LEARN . OR . GO). 
+
+THE . SUN . ON . ME . DOTH . SHADOW 
+  THROW, 
+WHAT . SHALL . THIS . DAY . THY . MORROW 
+  SHOW? 
+
+AFFLICTIS . LENTAE. 
+(time . IS . SLOW . TO . THE . SORROWFUL). 
+
+LE . TEMPS . PASSE, . L'AMITIE . RESTE. 
+(time . PASSES, . FRIENDSHIP . STAYS). 
+
+
+GOD . GIVETH . ALL. 
+
+GIVE . GOD . THY . HEART, . THY . HOPES, 
+  THY . SERVICE, . AND . THY . GOLD. 
+THE . DAY . WEARS . ON, . AND . TIME . IS 
+  WAXING . OLD. 
+
+OPPORTUNITY . HAS . LOCKS . IN . FRONT 
+  AND . IS . BALD . BEHIND. 
+
+
+
+DIES . SERENUS. 
+  SERENUS . SIT . ANIMUS. 
+(thy . DAYS . BE . BRIGHT. 
+BRIGHT . BE . THY . SPIRIT). 
+
+
+DEUS . EST . LUMEN . LUMINIS. 
+(god . IS . THE . LIGHT . OF . LIGHT). 
+
+
+
+I . WISH . THE . SUN . WOULD . SHINE . ON 
+  ALL . MEN'S . FRUITS . AND . FLOWERS 
+  AS . WELL . AS ; MINE. 
+(in the garden of belcarres, fife). 
+
+
+
+I . GIVE . MEN . WARNING . HOW . THE 
+  HOURS . FLY, 
+FOR . MEN . ARE . SHADOWS . AND . A 
+  SHADOW . I. 
+
+MY . HOURS . ARE . SUMMED . IN . SHINE 
+  AND . SHADE; 
+OF . JOY . AND . SADNESS . MAN'S . ARE 
+  MADE. 
+
+
+HOW . LONG . IS . TIME? . ASK . THOU . OF 
+  ME; 
+HOW . FLEET . IS . TIME? . I . ASK . OF 
+  THEE. 
+
+
+
+HORA, . DIES, . ET , VITA . FUGUINT; 
+  MANET . UNICA . VIRTUS. 
+(the . HOUR, . DAY, . AND . LIFE . ALL . FLY, . ONLY . VIRTUE 
+remains). 
+
+SOMNO . SUGERE. 
+(awake . FROM . sleep). 
+
+
+
+THIS . IS . YOUR . HOUR, . ACCEPT . IT. 
+
+HE . THAT . WOULD . THRIVE . MUST . RISE 
+  AT . FIVE. 
+HE . THAT . HATH . THRIVEN . MUST . STAY 
+  TILL . SEVEN, 
+HE . THAT . WILL . NEVER . THRIVE, . MAY . LIE 
+  TILL . ELEVEN. 
+
+I . HAVE . NO . VOICE . AND . YET . I . SPEAK, 
+TAKE . HEED . WHEN . YOU . THE . TIME . DO 
+  SEEK. 
+
+J'AVANCE. 
+(l . PASS . along). 
+
+Irrevocabile. 
+(never . to . be , recalled). 
+
+
+
+IMPROVE . THE . PRESENT . HOUR, . FOR 
+  ALL . BESIDE 
+IS . A . MERE . FEATHER . ON . A . TORRENT'S 
+  TIDE. 
+
+ICH . DIEN. 
+(I . serve). 
+
+
+
+COUNT . THE . HOURS . AS . ONE . BY . ONE 
+  THEY . FLY. 
+
+NOR . DO . I . BEG . THIS . SLENDER NICHE, 
+  TO . WHILE 
+MY . TIME . AWAY, . OR . SAFELY . TO . BEGUILE 
+MY . THOUGHTS . WITH . JOY,— THERE'S 
+  NOTHING . WORTH . A . SMILE. 
+
+ABIIT . DIES, . QUIA . INCLINARUNT . UMBRAE 
+VESPERTINAE. 
+(the . DAY . GOETH . AWAY, . AND . THE . SHADOWS . OF . THE 
+EVENIING . ARE . STRETCHED . OUT). 
+
+SOL . SOLUS . SOLVIT. 
+(the . SUN . IS . THE . ONLY . SOLVER). 
+
+
+SO . FLYS . LIFE . AWAY. 
+
+NONEO, . DUM . MOVEO. 
+(I . WARN . AS . I . move). 
+
+THE . MOMENT . PAST 
+LAID . MANY . FAST. 
+
+
+NE . QUID . PEREAT. 
+(let . NOTHING . BE . LOST). 
+
+
+
+NIHIL . VOLENTIBUS . ARDUUM. 
+(to . THE . WILLING . NOTHING . IS . DIFFICULT). 
+
+SPLENDETIS . UT , FACES . IN . MUNDO. 
+(ye . SHINE . AS . LIGHTS . IN . THE . WORLD). 
+
+VEDI . L'ORA . MIA, . E . L'ORA . TUA . NON 
+SAI? 
+(thou . SEEST . MY . HOUR, . BEHOLDEST . THOU . THINE ?) 
+
+TEMPUS . NON . FORE . AMPLIUS. 
+(that . THERE . SHOULD . BE . TIME . NO . LONGER). 
+
+
+
+LUX . FATA . EST . JUSTO. 
+(light . IS . SOWN . FOR . THE . RIGHTEOUS). 
+
+
+
+SIC . PETIS . HORA . QUOTA . EST, . DUM 
+PETIS . HORA . FUGIT. 
+(thou . SEEKEST . THE . HOUR, . WHILE . THOU . SEEKEST, 
+THE . HOUR . flies). 
+
+
+
+NOVIT . QUAD . IN . TENEBRIS . EST, . ET 
+LUX . CUM . EO . HABITAT. 
+(he . KNOWETH . WHAT . IS . IN . THE . DARKNESS, . AND . THE 
+LIGHT . DWELLETH . WITH . HIM). 
+
+
+I . MARK . NOT . THE . HOURS . UNLESS 
+  THEY . BE . BRIGHT, 
+I . MARK. NOT . THE . HOURS . OF . DARKNESS 
+  AND . NIGHT. 
+MY . PROMISE . IS . SOLELY . TO . FOLLOW 
+  THE . SUN 
+AND , POINT . OUT . THE . COURSE . HIS 
+  CHARIOT . DOTH . RUN. 
+
+
+
+"SIC . TRANSIT," . SAYEST . THOU? . WELL, 
+  THEN, . LET . IT . PASS! 
+WOULD'ST . BE . A . GLUTTON . AT . THE 
+  FEAST . OF . LIFE, 
+AND . EAT . AND . EAT, . AND . EVER . FILL 
+  THY . GLASS? 
+WELL-FED, . CONTENT . LAYS . DOWN . HIS 
+  FORK . AND . KNIFE. 
+
+DO . TO-DAY'S . WORK . TO-DAY. 
+
+FOR . IN . AND . OUT, . ABOVE . US . AND 
+  BELOW, 
+'TIS . NOTHING . BUT . A . MAGIC . SHADOW- 
+  SHOW 
+PLAYED . IN . A . BOX . WHOSE . CANDLE . IS 
+  THE . SUN, 
+ROUND . WHICH . WE . PHANTOM . FIGURES 
+  COME . AND . GO. 
+— Omar Khayyam, 
+
+
+LIFE'S . BUT . A . SHORT . DAY, 
+BUT . IT . IS . A . WORKING . DAY. 
+
+
+TIME . FLEETETH . AWAY 
+WITHOUT . DELAY. 
+
+TIME'S . A . TORRENT'S . RAPID . STREAM; 
+TIME'S . A . SHADOW, . TIME'S . A . DREAM; 
+TIME'S . THE . CLOSING . WATCH . OF . NIGHT, 
+DYING . AT . THE . RISING . LIGHT. 
+TIME'S . A . BUBBLE . ON . TIME'S . SEA, 
+USE . TIME . WELL . WHILE . TIME'S . WITH 
+  THEE. 
+
+
+
+THINK . AND . THANK. 
+
+
+ONCE . AT . A . POTENT . LEADER'S . VOICE 
+  I . STAYED; 
+ONCE . I . WENT . BACK . WHEN . A . GOOD 
+  MONARCH . PRAYED; 
+MORTALS, . HOWE'ER . WE . GRIEVE, 
+  HOWE'ER . DEPLORE, 
+THE . FLYING . SHADOW . WILL . RETURN . NO 
+  MORE. 
+
+THE . TIME . TO . COME . IS , NO . MORE 
+OURS . THAN . THE . PAST. 
+
+
+
+Life . is . a . passing . shadow . . . the 
+shadow . of . a . bird . in . his 
+FLIGHT. 
+— From the Talmud, 
+
+THE . TIME . THOU . KILLEST . WILL . IN 
+TIME . KILL . THEE. 
+
+LET . PLEASURE . BE . GRANTED . TO 
+  YOUTH; 
+BUT . SINCE . HUMAN . LIFE . IS . SOON . RUN, 
+AND . HAS . BUT— TO . SPEAK . SOBER . TRUTH- 
+TWO . MOMENTS —LET . WISDOM . HAVE . ONE. 
+
+HOURS . FLY, 
+FLOWERS . DIE, 
+NEW . DAYS, 
+NEW . WAYS, 
+PASS . BY ; 
+LOVE . STAYS. 
+
+
+
+TRADITUR . DIES . DIE 
+NOVAEQUE . PERGUNT . INTERIRE . LUNAE. 
+(day . DISPLACES . DAY . AND . NEW . MOONS . HASTEN . ON- 
+WARD . BUT . TO . fade). 
+— From Horace, 
+(on a sundial in a GRECIAN GARDEN). 
+
+DUM . VIVIMUS . VIVAMUS. 
+(live . WHILE . YOU . LIVE). 
+
+
+
+DICIMUS . INTEGRO 
+SICCI . MANE . DIE, . DICIMUS . UVIDI, 
+QUUM . SOL . OCEANO . SUBEST. 
+(so . PRAY . WE . SOBER . IN . THE . MORNING, . WHEN . THE 
+DAY . IS . BEFORE . US ; . SO . PRAY . WE . . . WHEN . THE . SUN 
+SINKS . BENEATH . THE . OCEAN). 
+— From Horace, 
+(on a SUNDIAL IN A GRECIAN GARDEN). 
+
+
+VOLAT . IRREVOCABILIS . HORA. 
+(flies . THE . HOUR . NEVER . TO . BE . RECALLED). 
+
+
+
+VOUS . QUI . PASSE . SOUVENE . VOUS . AU 
+PASSANT . QUE . TOUT . PASSE . COMME 
+JE . PASSE. 
+(remember . ALL . WHO . PASS, . ALL . THINGS ; PASS . AS . I 
+pass). 
+
+
+
+Such, . such . a . man . extends . his 
+  life's . short . space, 
+and . from . the . goal . again . renews 
+  THE . RACE: 
+FOR . HE . LIVES . TWICE . WHO . CAN . AT 
+  ONCE . EMPLOY 
+THE . PRESENT . WELL, . AND . E'EN . THE 
+  PAST . ENJOY. 
+— From Martial. 
+
+TIME . IS 
+TOO . SLOW . FOR . THOSE . WHO . WAIT, 
+TOO . SWIFT . FOR . THOSE . WHO . FEAR, 
+TOO . LONG . FOR . THOSE . WHO . GRIEVE, 
+TOO . SHORT . FOR . THOSE . WHO . REJOICE; 
+BUT . FOR . THOSE . WHO . LOVE 
+  TIME . IS 
+  ETERNITY. 
+
+
+TODAY . IS . YESTERDAY'S . PUPIL. 
+
+
+A . DAY . TO . COME . SHOWS . LONGER 
+THAN . A . YEAR . THAT'S . GONE. 
+
+
+
+IN . SPACE 
+COMES . GRACE. 
+
+
+
+SOME . COME,— 
+SOME . GO — 
+THIS . LIFE 
+IS . SO. 
+
+OUR . TEACHERS . ARE . THE . HOURS 
+WHICH . OPEN . OR . CLOSE . THE 
+GATE . OF . HEAVEN. 
+
+
+UT . MIGRATURUS . HABITA. 
+(dwell . as . if . ABOUT . TO . DEPART). 
+
+SI . SANS . SOLEIL . VOUS . VIENDREZ, 
+SANS . REPONSE . VOUS . EN . RETOURNEREZ. 
+(if . WITHOUT . SUN . YOU . COME, 
+WITHOUT . A . REPLY . WILL . YOU . GO). 
+
+
+VIGILANTIBUS 
+(to . THE . watchful). 
+
+
+AGE . QUOD . AGIS. 
+(do . WHAT . YOU . ARE . DOING). 
+
+
+DlSPONENDO . ME, . NON . MUTANDO . ME. 
+(by . DISPOSING . OF . ME, . NOT . BY . CHANGING , HE). 
+
+
+FUGIT . IRREPARABILE . TEMPUS. 
+(irrecoverable . TIME . IS . FLYING . AWAY). 
+
+
+
+DEO . FAVENTE. 
+(with . god's . favour). 
+
+
+
+A . LA . BONNE . HEURE. 
+(well-timed). 
+
+
+
+FAS . EST . EB . AB . HOSTE . DOCERI. 
+(it . IS . RIGHT . TO . DERIVE . INSTRUCTION . EVEN . FROM . AN 
+enemy). 
+
+
+SO . TEACH . US . TO . NUMBER . OUR . DAYS 
+THAT . WE . MAY . APPLY . OUR 
+HEARTS . UNTO . WISDOM. 
+
+
+
+LEAD, KINDLY . LIGHT. 
+
+
+
+UNTO . YOU . THAT . FEAR . MY . NAME 
+  SHALL . THE . SUN . OF . RIGHTEOUS- 
+  NESS . ARISE. 
+
+
+THE . WHIRLIGIG . OF . TIME . BRINGS . IN 
+HIS . REVENGES. 
+— Shakespeare, 
+
+
+TO . THEM . THAT . MOURN . THE . HOURS 
+ARE . SLOW, 
+BUT . WITH . THE . JOYFUL . SWIFTLY . GO. 
+
+
+
+As . WE . USE . THE . HOURS . SO . WILL 
+THE . HOURS . USE . US. 
+
+THE . MOVING . FINGER . WRITES: . AND 
+  HAVING . WRIT 
+MOVES . ON : . NOR . ALL . THY . PIETY . NOR 
+  WIT 
+SHALL . LURE . IT . BACK . TO . CANCEL 
+  HALF . A . LINE, 
+NOR . ALL . THY . TEARS . WASH . OUT . A 
+  WORD . OF . IT. 
+— Omar Khayyam, 
+
+
+
+DIES . MEI . SIMILES . SUNT . UMBRE 
+INCLINATAE^. 
+(my . DAYS . ARE . LIKE . A . SHADOW . THAT . DECLINETH). 
+
+UTERE . NON . REDIT . HORA. 
+(employ , THE . HOUR, . IT . RETURNETH . NOT). 
+
+
+REMOVE . NOT . THE . ANCIENT . LANDMARK 
+  WHICH . THY . FATHER . HATH . SET 
+  UP. 
+
+QUIA . TEMPOS . QUIDEM . EST . CUIQUE 
+VOLUNTATI. 
+(there . is . a . TIME . FOR , EVERY . PURPOSE . AND . FOR 
+EVERY . W^ORK). 
+
+WHEN . SLOTH . PUTS . URGENT . BUSINESS 
+  BY, 
+"TO-MORROW'S . A . NEW . DAY," . SHE'LL 
+  CRY; 
+AND . ALL . HER . MORROWS . PROVE . IT 
+  TRUE 
+THEY'RE . NEVER . USED, . AND . THEREFORE 
+  NEW. 
+
+SET . ME . RIGHT . AND . USE . ME . WELL 
+AND . I . THE . TIME . TO . YOU . WILL . TELL. 
+(on a pocket dial). 
+
+SOON . SHALL . THE . SHINING . CIRCLE 
+  CEASE . TO . RUN ; 
+SOON . SHALL . TO-MORROW . TURN . TO 
+  YESTERDAY. 
+THAT . KNIFE . OF . SHADOW . CUTTING . IN 
+  THE . SUN 
+CUTS . PATIENTLY . THY . LIGHT . OF . LIFE 
+  AWAY. 
+
+UNA . DABIT . QUOD . ALTERA . NEGAT. 
+(one . HOUR . WILL . GIVE . WHAT . THE . NEXT . DENIES). 
+
+NAM . JEHOVA . TIBI . ERIT . LUCI 
+PERPETUAE
+(the . LORD . SHALL . BE . THINE . EVERLASTING . LIGHT). 
+
+
+
+USE . THE . PRESENT . TIME 
+REDEEM . THE . PAST 
+FOR . THUS . UNCERTAINTY 
+THOUGH . IMPERCEPTIBLY 
+THE . NIGHT . OF . LIFE 
+APPROACHES. 
+(in ALDINGHAM CHURCHYARD, LANCASHIRE). 
+
+STAY . AND . THINK. 
+(Shakespeare's sonnet lvii.) 
+
+VOLANO . L'ORE, . I . GIORNI, . GL'ANNI . E 
+I . MESI. 
+— Petrarch. 
+(hours, . DAYS, . MONTHS, . YEARS, . ALL . FLY) 
+
+
+COME . IN . TIME. 
+(on A CHURCH AT BRADFORD ST. GEORGE, SUFFOLK). 
+
+
+USE . WELL . THE . PRESENT . MOMENTS 
+  AS . THEY . FLEET, 
+YOUR . LIFE, . HOWEVER . SHORT, . WILL . BE 
+  COMPLETE. 
+IF . AT . ITS . FATAL . ENDING . YOU . CAN 
+  SAY: 
+I'VE . LIVED . AND . MADE . THE . MOST . OF 
+  EVERY . DAY. 
+(in waterfall CHURCHYARD, STAFFORDSHIRE). 
+
+
+SURGE, . LUCE, . QUANDOQUIDEM . ADVENIT 
+LUX . TUA. 
+(arise, . SHINE ; . FOR . THY . LIGHT . IS . COME). 
+
+TIME . IS . THE . CHRYSALIS . OF . ETERNITY. 
+
+SWIFT . FLY . THE . HOURS . AND . BRIEF 
+THE . TIME 
+FOR . ACTION . AND . REPOSE:— 
+FAST . FLITS . THIS . SCENE . OF . WOE . AND 
+CRIME, 
+AND . SOON . THE . WHOLE . SHALL . CLOSE. 
+THE . EVENING . SHADOWS . DEEPER . FALL, 
+THE . DAYLIGHT . DIES . AWAY, 
+WAKE, . SLUMBERER, . AT . THE . MASTER'S 
+CALL, 
+AND . WORK . WHILE . IT . IS . DAY. 
+
+
+UNA . UMBRA . ET . VAPOR . HOMINUM . VITA. 
+(a . SHADOW . AND . SMOKE . IS . MAN's . LIFE). 
+(in helston churchyard, Cornwall). 
+
+Umbra ! . quid . aspicis? . umbram. 
+(shadow ! . WHAT . SEEST . THOU ? . SHADOW). 
+
+UT . QUI . EXEMPLARI . ET . UMBRAE,
+DESERVIANT . REUM . COELESTIUM. 
+(the . EXAMPLE . AND , SHADOW . OF . HEAVENLY . THINGS). 
+
+VOICI . VOTRE . HEURE. 
+(here , IS . YOUR . hour). 
+
+ULTIMA . LATET . ET . OBSERVANTUR 
+OMNES. 
+(the . LAST . [hour] . IS . HIDDEN . AND . ALL . WATCHED). 
+
+Lex . ENIM . UMBRAM . OBTINENS 
+FUTURORUM . BONORUM. 
+(a . SHADOW . OF . GOOD . THINGS . TO . COME). 
+
+TAMEN . HIS . AEVUM . COMPONITUR 
+UMBRIS. 
+(time . IS . MADE . UP . OF . SHADOWS). 
+
+APUD . QUEM . NON . INEST . TRANSMUTATIO 
+AUT . CONVERSIONIS . OBUMBRATIO. 
+(with . WHOM . IS . NO . VARIABLENESS . NEITHER . SHADOW 
+OF . turning). 
+
+
+BEING . YOUR . SLAVE, . WHAT . SHOULD . I 
+DO . BUT . TEND 
+UPON . THE . HOURS . AND . TIMES . OF . YOUR 
+DESIRE? 
+— Shakespeare, 
+
+VESTIGIA . NULLA . RETRORSUM. 
+(there . ARE . NO . STEPS . BACKWARD). 
+
+CURRICULUM . MEUM . PERFICIAM . DONEC 
+ADVENERINT . DOMINUS. 
+(l . will . run . my . course , until . the . lord ; shall 
+come). 
+
+
+VIA . CRUCIS . VIA . LUCIS. 
+(the . WAY . OF . THE . CROSS . IS . THE . WAY . OF . LIGHT). 
+
+WITH . WARNING . HAND . I . MARK . TIME'S 
+  RAPID . FLIGHT 
+FROM . LIFE'S . GLAD . MORNING . TO . ITS 
+  SOLEMN . NIGHT; 
+YET, . THROUGH . THE . DEAR , GOD'S . LOVE, 
+  I . ALSO . SHOW 
+THERE'S . A . LIGHT . ABOVE . ME . BY . THE 
+   SHADE . BELOW. 
+(written by JOHN GREENLEAF WHITTIER, FOR A SUNDIAL). 
+
+
+
+DUM . EXSPECTAMUS . LUCEM, . ECCE 
+TENEBR^. 
+(we . WAIT . FOR . LIGHT, . BUT . BEHOLD . OBSCURITY). 
+
+AMBULEMUS . IN . LUCE . JEHOVAE. 
+(let . us . WALK . IN . THE . LIGHT . OF . THE LORD). 
+
+
+LABUNTUR . ANNI . NEC . PIETAS . MORAM 
+RUGIS . ET . . . 
+AFFERET. 
+(the . FLEETING . YEARS . GLIDE . AWAY, . AND . PIETY . WILL 
+NEVER . BRING . A . CHECK . TO . WRINKLES). 
+— From Horace, 
+
+TU . NUMERI . L'ORE . MA . NON . SAI 
+L'ORA . DELLA . MORTE. 
+(thou . NUMBEREST . THE . HOURS . BUT . KNOWEST . NOT . THE 
+HOUR . OF . death). 
+
+
+
+VELUT . UMBRA . SUNT . DIES . NOSTRI 
+SUPER . TERRAM. 
+(our . DAYS . ON . EARTH . ARE . A . SHADOW). 
+
+
+
+W ATCH . FASTER— WATCH . SLOWER. 
+
+
+
+TUTTE . LE . COSE . PERISCONA, . I0 . SONO 
+IMMORTALE. 
+(all . THING6 . PERISH, . I . AM . IMMORTAL). 
+
+COME, . LIGHT! . VISIT . ME! 
+(in the garden of HARRIET MARTINEAU). 
+
+
+HOMO . VANITATI . SIMILIS . EST, 
+DIES . EJUS . SUNT . UT . UMBRA 
+PRAETEREUNTIS. 
+(man . IS . LIKE . TO . VANITY : . HIS . DAYS . ARE . AS . A . SHADOW 
+THAT . PASSETH . AWAY). 
+
+LUMINARE . MAJUS . AD . PRAEFECTURAM 
+DIEI. 
+(the . GREATER . LIGHT . TO . RULE . THE . DAY). 
+
+
+
+UT . UMBRA . QUUM . DECLINAT. 
+(l . AM . GONE . LIKE . A . SHADOW). 
+
+
+
+LITTLE ; SUN . UPON . THE . CEILING 
+EVER . MOVING, . EVER . STEALING 
+  MOMENTS, . MINUTES, . HOURS . AWAY. 
+MAY . NO . SHADE . FORBID . THY . SHINING 
+WHILE . THE . HEAVENLY . SUN . DECLINING 
+  CALLS . US . TO . IMPROVE . THE . DAY. 
+(on a CEILING DIAL AT THEOBALDS). 
+
+
+TAK . TINT . O' . TIME . ERE . TIME . TAK 
+TINT . O' . THEE. 
+
+
+
+VIX . ORIMUR . ET . OCCIDIMUS. 
+(scarcely . ARISEN , AND . WE . HAVE . SET). 
+
+TIS . ALWAYS . MORNING . SOMEWHERE . IN 
+THE . WORLD. 
+
+
+
+
+### IN PRAISE OF SUNDIALS. 
+
+WHAT an antique air had the now almost effaced 
+sun-dials, with their moral inscriptions, seeming 
+coevals with that Time which they measured, and 
+to take their revelations of its flight immediately from 
+Heaven, holding correspondence with the fountain of light! 
+How would the dark line steal imperceptibly on, watched 
+by the eye of childhood, eager to detect its movement, never 
+catched, nice as an evanescent cloud, or the first arrests of 
+sleep ! . , . 
+
+Ah ! yet doth beauty like a dial hand 
+
+Steal from his figure, and no pace perceived ! 
+
+What a dead thing is a clock, with its ponderous 
+embowelments of lead and brass, its pert or solemn dulness 
+of communication, compared with the simple altar-like 
+structure and silent heart-language of the old dial ! It 
+stood as the garden god of Christian gardens. Why is it 
+almost every where vanished ? If its business-use be super- 
+seded by more elaborate inventions, its moral uses, its 
+beauty, might have pleaded for its continuance. It spoke of 
+moderate labours, of pleasures not protracted after sunset. 
+
+Charles Lamb. — Essays of Elia. 
+
+117 
+
+
+
+IN PRAISE OF SUNDIALS, 
+
+HOW well the skilful gardener drew, 
+Of flowers and herbs, this dial new ! 
+Where, from above, the milder sun 
+Does through a fragrant zodiac run : 
+And, as it works, the industrious bee 
+Computes its time as well as we. 
+How could such sweet and wholesome hours 
+Be reckon'd, but w^ith herbs and flowers ? 
+
+Andrew Marvell. — The Garden. 
+
+
+
+^^*^^*^^* 
+
+
+
+A DIAL is the Visible Map of Time, till Whose Invention 
+'twas follie in the Sun to play with a Shadow. It is 
+the Anatomic of the Day and a Scale of Miles for the 
+Jornie of the Sun. It is the silent Voice of Time and without 
+it the Day were dumbe ... It is ye Book of ye Sun on which 
+he writes the Storie of the Day. Lastly, Heaven itself is but 
+a generall Dial, and a Dial it, in a lesser volume. 
+
+Robert Hegge. — Heliotropum Sciotherictim {1630), 
+
+119 
+
+
+
+IN PRAISE OF SUNDIALS, 
+
+METHINKS it were a happy life . . . 
+To carve out dials quaintly point by point, 
+Thereby to see the minutes how they run ; — 
+How many make the hour full complete ; 
+How many hours bring about the day ; 
+How many days will finish up the year. 
+How many years a mortal man may live. 
+When this is known then to divide the times ; — ... 
+So minutes, hours, days, weeks, months, and years, 
+Pass'd over to the end they were created. 
+
+Shakespeare. — Henry VI. (3 part), Act ii., Scene 5. 
+
+THE sundial is a thing of deep sentiment. All feel the 
+beauty and wonder of the thought that Time, that 
+most intangible, most fleeting, most wonderful of 
+conditions, is marked so fittingly in its passing by a 
+shadow almost equally intangible ; and the noblest evidences 
+of creations — the stars in the heavens — would be to us 
+invisible and unknown save for their revelation through the 
+shadow of the earth. 
+Mrs. Alice Morse Earle. — Sun-dials and Roses of Yesterday. 
+
+121 
+
+
+
+IN PRAISE OF SUNDIALS. 
+
+THE hours when the mind is absorbed by beauty are the 
+only hours when we really live, so that the longer we 
+can stay among these things so much more is snatched 
+from inevitable Time. Let the shadow advance upon the 
+dial — I can watch it with equanimity while it is there to be 
+watched. It is only when the shadow is not there, when the 
+clouds of winter cover it, that the dial is terrible. The 
+nvisible shadow goes on and steals from us . . . These are 
+the only hours that are not wasted — these hours that 
+absorb the soul and fill it with beauty. 
+
+Richard Jefferies. — The Pageant of Summer. 
+
+THERE is always, to my thinking, a charm about a sun- 
+dial . . . The sacred grey of the aged stone, mellowed 
+by the many years of sun and rain, forms a 
+fair ground for the patterns which our loved lichens have 
+traced upon it, in dark and orange, gold and oxydised silver . . . 
+The Dial seems a witness with a silent voice, amid the 
+changes of this life, to the lastingness of things. 
+The Author of The Harvest of a Quiet Eye. — On Sundials. 
+
+123 
+
+
+
+The Garden Lover's SerieSt !♦ 
+
+A Garden Lover's Birthday Book, 
+
+Compiled and Arranged by ALFRED H. HYATT. 
+
+
+
+Bound in Sateen, with Special Cover Design and Register Ribbon, 
+3s. 6d. net. 
+
+t^' t^ i^' t^' t^ i^* t^* t^^ t^^ 
+
+" A good idea, well carried out. Mr. Hyatt not only knows his 
+modern writers about the garden — Mrs. Earle, Miss Jekyll, Canon 
+Ellacombe, Dean Hole, and the rest of them — passing well, but he 
+knows the ancients also. The anthology is very full and well chosen." 
+— Country Life. 
+
+
+
+" For those garden lovers who require a Birthday Book, Mr. 
+Alfred H. Hyatt has produced exactly the right thing, a dainty 
+volum.e in the form of a Garden Calendar and Anthology, the extracts 
+being taken from the Poets and many modern writers whose works on 
+the subject are well known." — Yorkshire Post. 
+
+
+
+" From first to last it is sweet, fragrant, and delicately arranged. 
+To the lovers of flowers we can scarcely imagine any Birthday Book 
+more acceptable, ... It forms the first volume in a new series 
+especially devoted to garden lovers, and if succeeding issues are any- 
+thing like as good as this there need be little apprehension about its 
+success." — The Publishers' Circular 
+
+
+
+IX PREPARATIOX. 
+
+
+
+The Garden Lover's Series, III. 
+
+
+
+A GARDEN OF PLEASANT FLOWERS 
+
+Containing 
+
+The description of loo examples of Old Flowering Plants and 
+
+Medicinal Herbs, as set forth in the Herbals of John Parkinson and 
+
+John Gerard. 
+
+Chosen and arranged by 
+ALFRED H. HYATT. 
+
+
+
+Price 3s. 6d. net. 
+
+
+
+Philip Wellby, Covent Garden, London. 
+
+
+
+University of California 
+
+SOUTHERN REGIONAL LIBRARY FACILITY 
+
+305 De Neve Drive - Parking Lot 17 • Box 951388 
+
+LOS ANGELES, CALIFORNIA 90095-1388 
+
+Return this material to the library from which it was borrowed. 
+
+
+"}
+  ]
+}
