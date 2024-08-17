@@ -1210,7 +1210,7 @@ function main_nopath() {
 
 
     "weight": {
-      ".": 2000,
+      ".": 400,
       "#": 2,
       "block": 1,
       "block_b": 1,
@@ -1228,11 +1228,11 @@ function main_nopath() {
       "platform_cross": 1,
 
       "arch0": 1,
-      "arch1": 2,
-      "arch2": 40,
-      "arch3": 30,
+      "arch1": 31,
+      "arch2": 97,
+      "arch3": 79,
 
-      "stair": 20
+      "stair": 43
     }
   };
 

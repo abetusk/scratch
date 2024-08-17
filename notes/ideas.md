@@ -20,6 +20,12 @@
 
 ---
 
+* Forgive God, for he knows not what he does
+* A drop from the ocean
+
+
+---
+
 * an ancient relic grants a wish but the grantee unravels thinking there's
   a cost that never comes
 * a victim of a malevolent ghost (serial murdere, etc.) herself becomes a ghost
