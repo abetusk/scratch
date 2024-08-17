@@ -21,6 +21,7 @@
 ---
 
 * Forgive God, for he knows not what he does
+* Shame Heaven by showing compassion
 * A drop from the ocean
 
 
