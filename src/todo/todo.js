@@ -31,7 +31,7 @@ let argv = process.argv.slice(2);
 
 function show_all(fp,data) {
 
-  fp.write("");
+  fp.write("\n");
 
   fp.write("mondo:\n---\n");
   for (let i=0; i<data.length; i++) {
