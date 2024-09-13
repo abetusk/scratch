@@ -8,11 +8,13 @@
 
 
 var numeric = require("numeric");
+var Q = require("quaternion");
 var njs = numeric;
 
 var g_info = {
   "sfarling": {
     "v" : [0,0,0],
+    "q": {},
     "d" : [ [1,0,0], [0,1,0], [0,0,1] ]
   }
 };
