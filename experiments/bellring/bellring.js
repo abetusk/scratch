@@ -3,6 +3,70 @@
 
 var DEBUG_LVL = 0;
 
+function count_anti(a,b) {
+  let n = a.length;
+  let c = 0;
+  for (let i=0; i<n; i++) {
+    if (a[i].v != b[i].v) { c++; }
+  }
+  return c;
+}
+
+function swaptill_d(a,b, theta, m) {
+  let target = Math.cos(Math.PI*theta);
+
+  let tot  = 0;
+  let keep = 0;
+  let discard = 0;
+
+  let n = a.length;
+  for (let it=0; it<m; it++) {
+    for (let idx0=0; idx0<n; idx0++) {
+      let u0 = a[idx0].v;
+      let v0 = b[idx0].v;
+
+      if (u0==v0) { continue; }
+
+      for (let idx1=idx0+1; idx1<n; idx1++) {
+        let u1 = a[idx1].v;
+        let v1 = b[idx1].v;
+
+        if (u1==v1) { continue; }
+        if (u0==u1) { continue; }
+
+        tot++;
+
+        let cur = corr_ab(a,b);
+
+        b[idx0].v = v1;
+        b[idx1].v = v0;
+
+        let tst = corr_ab(a,b);
+
+        let res_test = Math.abs(target-tst);
+        let res_cur = Math.abs(target-cur);
+
+        console.log("##", idx0, idx1, "target:", target, ", tst:", tst, ", cur:", cur, ", res_test:", res_test, ", res_cur:", res_cur);
+
+        if (Math.abs(target-tst) < Math.abs(target-cur)) {
+          keep++;
+        }
+        else {
+          b[idx0].v = v0;
+          b[idx1].v = v1;
+          discard++;
+        }
+
+        break;
+
+      }
+
+    }
+  }
+
+  return {"tot":tot, "keep":keep, "discard":discard};
+}
+
 function swaptill_m(a,b, theta, m) {
   let target = Math.cos(Math.PI*theta);
 
@@ -195,9 +259,13 @@ function print_ab(ab) {
 }
 
 let N = 64;
-let n = 8*1024;
+let n = 1024;
 
 for (let idx=0; idx<=N; idx++) {
+
+  //##### DEBUG #####
+  if (idx > 5) { break; }
+
   let theta = idx / N;
 
   if (DEBUG_LVL > 0) {
@@ -215,7 +283,11 @@ for (let idx=0; idx<=N; idx++) {
     console.log("#", theta, corr(ab));
   }
 
-  swaptill_m(ab.a, ab.b, theta, 128*1024);
+  let bef_anti = count_anti(ab.a, ab.b);
+
+  let c = swaptill_d(ab.a, ab.b, theta, 100);
+  console.log("##", c, "(of", bef_anti, "/", count_anti(ab.a, ab.b), ")");
+  //swaptill_m(ab.a, ab.b, theta, 128*1024);
   //swaptill_x(ab.a, ab.b, theta);
   //swaptill_x(ab.a, ab.b, theta);
 
