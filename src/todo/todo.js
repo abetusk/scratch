@@ -60,6 +60,15 @@ function show_all(fp,data) {
   }
   fp.write("\n");
 
+  fp.write("^^sotto^^:\n---\n");
+  for (let i=0; i<data.length; i++) {
+    let ele = data[i];
+    if (ele.scope == "sotto") {
+      fp.write("  " + ele.title + "\n");
+    }
+  }
+  fp.write("\n");
+
 }
 
 if (argv.length < 1) {
