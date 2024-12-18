@@ -10,6 +10,11 @@ var g_ctx = {
 
   "gid_count": 0,
 
+  "wrap_around": false,
+
+  "totW" : 0,
+  "totV" : {},
+
   "flock": []
 };
 
@@ -209,10 +214,10 @@ class p5arling {
   }
 
   update(dt) {
+
     if (isNaN(this.p.x)) {
       console.log("cp.-1!!!", this.p.x, this.p.y, this.v.x, this.v.y, this.w, this.a.x, this.a.y);
     }
-
 
     this.align();
     this.cohere();
@@ -221,7 +226,6 @@ class p5arling {
     if (isNaN(this.p.x)) {
       console.log("cp.0!!!", this.p.x, this.p.y, this.v.x, this.v.y, this.w, this.a.x, this.a.y);
     }
-
 
     this.v.x += this.a.x * dt;
     this.v.y += this.a.y * dt;
@@ -271,11 +275,13 @@ class p5arling {
 
     // wrap around boundaries
     //
-    if (this.p.x < 0) { this.p.x += g_ctx.W; }
-    if (this.p.y < 0) { this.p.y += g_ctx.H; }
+    if (g_ctx.wrap_around) {
+      if (this.p.x < 0) { this.p.x += g_ctx.W; }
+      if (this.p.y < 0) { this.p.y += g_ctx.H; }
 
-    if (this.p.x >= g_ctx.W) { this.p.x -= g_ctx.W; }
-    if (this.p.y >= g_ctx.H) { this.p.y -= g_ctx.H; }
+      if (this.p.x >= g_ctx.W) { this.p.x -= g_ctx.W; }
+      if (this.p.y >= g_ctx.H) { this.p.y -= g_ctx.H; }
+    }
 
     // viz
     //
@@ -317,6 +323,23 @@ class p5arling {
   reset() { this.resetAcceleration(); }
 }
 
+function flock_recenter() {
+  let center = createVector( g_ctx.W/2 ,g_ctx.H/2 );
+  let com = createVector(0,0);
+
+  let flock = g_ctx.flock;
+
+  for (let i=0; i<g_ctx.n; i++) {
+    com.add( flock[i].p );
+  }
+  com.mult( 1.0 / g_ctx.n );
+
+  for (let i=0; i<g_ctx.n; i++) {
+    flock[i].p.sub( com );
+    flock[i].p.add( center );
+  }
+
+}
 
 
 function init_flock() {
@@ -331,7 +354,67 @@ function init_flock() {
     flock[i].id = i;
     flock[i].flock = flock;
   }
+
+  let tot_v = createVector(0,0);
+  let tot_w = 0;
+
+  for (let i=0; i<g_ctx.n; i++) {
+    tot_v.add( flock[i].v );
+    tot_w += flock[i].w;
+  }
+
+  g_ctx.totV = tot_v;
+  g_ctx.totW = tot_w;
+
+  console.log(">>>", "v(", tot_v.x, tot_v.y, ")", "w", tot_w);
+
+
 };
+
+function _debug() {
+
+  let flock = g_ctx.flock;
+
+  let tot_v = createVector(0,0);
+  let tot_w = 0;
+
+
+  for (let i=0; i<g_ctx.n; i++) {
+    tot_v.add( flock[i].v );
+    tot_w += flock[i].w;
+  }
+
+  console.log(">>>", "v(", tot_v.x, tot_v.y, ")", "w", tot_w);
+
+
+}
+
+function flock_tweak() {
+  let flock = g_ctx.flock;
+
+  let tot_v = createVector(0,0);
+  let tot_w = 0;
+
+  for (let i=0; i<g_ctx.n; i++) {
+    tot_v.add( flock[i].v );
+    tot_w += flock[i].w;
+  }
+
+  tot_v.sub( g_ctx.totV );
+  tot_w -= g_ctx.totW;
+
+  let avg_w = tot_w / g_ctx.n;
+  let avg_v = tot_v.copy();
+  avg_v.mult( 1/g_ctx.n );
+
+  for (let i=0; i<g_ctx.n; i++) {
+    let f = ((_rnd() < 0.5) ? -1 : 1);
+    //flock[i].applyTorque( f*avg_w / 4);
+  }
+
+  //console.log(">>>", tot_v.x, tot_v.y, tot_w);
+
+}
 
 function setup() {
 
@@ -364,10 +447,16 @@ function draw() {
     flock[i].reset();
   }
 
+  flock_tweak();
+
+  flock_recenter();
+
   // draw
   for (let i=0; i<flock.length; i++) {
     triangle(...flock[i].tri);
   }
+
+  //_debug();
 }
 
 
