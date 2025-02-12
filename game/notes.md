@@ -322,6 +322,27 @@ Tom Coxon has a few suggestions on scaling difficulty for generative games
 * Add connective edges to the tree, using the appropriate gates or other one-way valves to connect the graph
   further and allow for easy exit or more aesthetically pleasing connectivity
 
+Couch Coop
+---
+
+Couch Coop games seems like it might be an underserved market (and one that I personally like quite a bit).
+
+Some games that I like in this area:
+
+* Unrailed
+* Overcooked
+* Cook-out (vr)
+
+### Unrailed
+
+* has wood, stone and water as main materials to manage
+  - tracks need combination of wood and stone
+  - bridges need wood
+  - water for engine overheating
+* need long range planning to decide where to go
+* has thieves add some variety
+
+
 ### References
 
 * [PROCJAM 2014 - Flow In Procedural Generation - Tom Coxon](https://www.youtube.com/watch?v=z6lweIGJYS8)
