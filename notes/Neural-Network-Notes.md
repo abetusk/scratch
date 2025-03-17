@@ -1,6 +1,13 @@
 Neural Network Notes
 ===
 
+###### 2025-03-17
+
+* *loss function* - synonymous with 'objective function', the function we're ultimately
+  trying to run gradient descent on (e.g. mean square error of calculated value vs. training values)
+* *epoch* - one complete pass through a training dataset
+
+
 ###### 2024-09-22
 
 A place to put some notes about neural networks.
@@ -51,3 +58,4 @@ References
 [5]: https://github.com/tinygrad/tinygrad
 [6]: https://pytorch.org/
 [7]: https://www.youtube.com/watch?v=eaAonE58sLU
+[8]: https://arxiv.org/pdf/2203.10036
