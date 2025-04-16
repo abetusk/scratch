@@ -64,12 +64,64 @@ clean:
 \trm -f $(ODIR)/*.o *~ $(INCDIR)/*~ 
 """
 
+TWOJS_TEMPLATE = """<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>TwoJS Example</title>
+
+  <!--  <link rel="icon" type="image/png" href="images/favicon.ico"> -->
+  <!-- <script type='text/javascript' src='js/J.js'></script> -->
+  <script type='text/javascript' src='js/two.js'></script>
+  <!--  <link rel='stylesheet' href='css/CSS.css'> -->
+
+  <script>
+    var CANVAS_ID = 'twojs_canvas';
+    var g_two = {};
+    function initTwoJS() {
+      let two = new Two({"fitted":true});
+
+      let ele = document.getElementById(CANVAS_ID);
+      two.appendTo(ele);
+
+      // centered at (150,150)
+      // be careful with using rgba for color as this has problems
+      // with converting to SVG. Better to use opacity explicitely
+      //
+      let rect = two.makeRectangle(150,150,100,80);
+      rect.fill = "rgb(32,50,70)";
+      rect.linewidth = 10;
+      rect.stroke = "rgb(50,32,60)";
+      rect.opacity = 0.9;
+
+      let circle = two.makeCircle(150,150,5);
+      circle.noStroke();
+      circle.fill = "rgb(200,200,200)";
+      circle.opacity = 0.8;
+
+      two.update();
+
+      g_two = two;
+      return two;
+    }
+  </script>
+</head>
+
+<body>
+  <div id='twojs_canvas' style='width:800px;height:600px;'> </div>
+</body>
+
+<script>
+  initTwoJS();
+</script>
+<html>
+"""
 
 
 
 def usage(ofp):
   ofp.write("\nusage:\n\n    tplate <language>\n\n")
-  ofp.write(" <language>    (html|c|c++|cpp|make|makefile)\n")
+  ofp.write(" <language>    (html|c|c++|cpp|make|makefile|two.js)\n")
   ofp.write("\n")
 
 if len(sys.argv) < 2:
@@ -93,5 +145,9 @@ elif (cmd == "c++") or (cmd == "cpp"):
   print(CPP_TEMPLATE)
 elif (cmd == "makefile") or (cmd == "make"):
   print(MAKEFILE_TEMPLATE)
+elif (cmd == "twojs") or (cmd == "two.js") or (cmd == "two"):
+  print(TWOJS_TEMPLATE)
+
+
 
 
