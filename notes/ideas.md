@@ -18,6 +18,9 @@
 * pure psychic automation ([psa](https://en.wikipedia.org/wiki/Surrealist_automatism))
 * What is the equivalent of Noether's theorem for conservation of souls?
 * Sleep labyrinth
+* Parasocial, Narcisisstic Echo Chamber
+  - Narcisocial parassistic infinity chamber
+* Not meow later, meow now
 
 ---
 
