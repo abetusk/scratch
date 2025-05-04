@@ -60,10 +60,17 @@ Skew Approaches
 * Is the domain sparse?
 * Triage by importance
 * Progressively load
-* Randomely generate input
+* Randomly generate input
 * Transform back to verify correctness
 * Is the problem impossible? Restate it as a possible version
 * Assume independence
+* Read the literature
+* What is the more general problem that this is a special case of?
+* Use heuristics
+* Provide good default input ranges
+* Strive to minimize surprise
+* Format data for ease of viewing
+
 
 
 License
