@@ -7,6 +7,7 @@ Skew Approaches
 * Transpose the problem
 * Can it be done with a lookup?
 * What is the solution for $n=1$, $n=2$, $n=3$?
+* How does it behave in the large system limit?
 * Start from end end and work backwards
 * Refactor
 * Profile
@@ -29,7 +30,7 @@ Skew Approaches
 * Verify input data
 * Verify output solution
 * Visualize the algorithm as it's running
-* Make variable names more descriptive
+* Make variable and/or function names more descriptive
 * Brute force the solution
 * Identify simpler components of the problem
 * Is it NP-Complete?
@@ -45,6 +46,9 @@ Skew Approaches
 * What is the entropy (how many bits does it take to describe the system)?
 * Don't stress inconsequential minutae
 * Describe your problem to a rubber duck
-
-
+* Add a layer of abstraction
+* Remove a layer of abstraction
+* Format the special case to be more general
+* Preprocess input
+* Clean your work area
 
