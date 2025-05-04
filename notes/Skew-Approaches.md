@@ -19,7 +19,7 @@ Skew Approaches
 * Kill your darlings
 * Break for personal maintenance (eat, sleep, shower, etc.)
 * What would your mentor tell you to do?
-* Don't be ashamed of using a libary
+* Don't be ashamed of using a library
 * What old assumptions are challenged by new information?
 * Abstract common tasks
 * Don't prematurely optimize
@@ -29,6 +29,8 @@ Skew Approaches
 * Visualize output
 * Verify input data
 * Verify output solution
+* Use print statements to debug
+* Log operations
 * Visualize the algorithm as it's running
 * Make variable and/or function names more descriptive
 * Brute force the solution
@@ -44,11 +46,35 @@ Skew Approaches
 * Can it be conditioned to be naively parallelizable?
 * Does the dependence still hold at large scales?
 * What is the entropy (how many bits does it take to describe the system)?
-* Don't stress inconsequential minutae
+* Don't stress inconsequential minutiae
 * Describe your problem to a rubber duck
 * Add a layer of abstraction
 * Remove a layer of abstraction
 * Format the special case to be more general
 * Preprocess input
 * Clean your work area
+* What does the lack of information tell you?
+* Is there a local property that is globally true?
+* Is there an invariant? Can you find one?
+* Change coordinate system (change of basis)
+* Is the domain sparse?
+* Triage by importance
+* Progressively load
+* Randomely generate input
+* Transform back to verify correctness
+* Is the problem impossible? Restate it as a possible version
+* Assume independence
+
+
+License
+---
+
+CC0
+
+To the extent possible under law, the person who associated CC0 with
+this project has waived all copyright and related or neighboring rights
+to this project.
+
+You should have received a copy of the CC0 legalcode along with this
+work.  If not, see <http://creativecommons.org/publicdomain/zero/1.0/>.
 
