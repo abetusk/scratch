@@ -71,7 +71,10 @@ Skew Approaches
 * Strive to minimize surprise
 * Format data for ease of viewing
 * Correct spelling
-
+* Visualize with a log-log plot
+* Use a linear approximation
+* Make the plot linear
+* Transform multiple plots so they align
 
 License
 ---
