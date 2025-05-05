@@ -75,6 +75,7 @@ Skew Approaches
 * Use a linear approximation
 * Make the plot linear
 * Transform multiple plots so they align
+* Say it succinctly
 
 License
 ---
