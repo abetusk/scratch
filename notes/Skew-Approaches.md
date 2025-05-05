@@ -70,7 +70,7 @@ Skew Approaches
 * Provide good default input ranges
 * Strive to minimize surprise
 * Format data for ease of viewing
-
+* Correct spelling
 
 
 License
