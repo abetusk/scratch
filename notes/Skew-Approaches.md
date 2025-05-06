@@ -55,7 +55,7 @@ Skew Approaches
 * Clean your work area
 * What does the lack of information tell you?
 * Is there a local property that is globally true?
-* Is there an invariant? Can you find one?
+* What is the invariant?
 * Change coordinate system (change of basis)
 * Is the domain sparse?
 * Triage by importance
@@ -76,6 +76,7 @@ Skew Approaches
 * Make the plot linear
 * Transform multiple plots so they align
 * Say it succinctly
+* Methodology is distinct from the goal
 
 License
 ---
