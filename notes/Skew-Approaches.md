@@ -77,6 +77,9 @@ Skew Approaches
 * Transform multiple plots so they align
 * Say it succinctly
 * Methodology is distinct from the goal
+* Go slow to go fast
+* You ain't gonna need it
+* Read the manual
 
 License
 ---
