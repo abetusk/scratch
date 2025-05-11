@@ -80,6 +80,8 @@ Skew Approaches
 * Go slow to go fast
 * You ain't gonna need it
 * Read the manual
+* Exceptions should be exceptional
+* Make it easy to do the simple thing
 
 License
 ---
