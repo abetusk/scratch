@@ -1,15 +1,18 @@
 Current Focus
 ===
 
-###### 2024-12-24
+
+
+###### 2025-05-24
 
 0 - minimal impact
 1 - low
 2 - high
 3 - max impact
 
-| Project | Subtask | Description | Cost | Time | Impact |
-|---------|---------|-------------|------|------|--------|
+| Project | Subtask | Description | Cost | Time | Impact  |
+|---------|---------|-------------|------|------|---------|
+| dreadcam | 3-4x   | dreadcam    | $100 ea. | 4h ea. | 3 |
 | Maslow  | test motors | Test H-Bridge with worm motors | $0 | 8h | 0 |
 | Maslow  | assemble frame | Assemble the maslow frame | $300 | 8h | 1 |
 | Maslow  | cut sign | Cut some signs, starting with old school | $200 | 40h | 1 |
@@ -22,6 +25,12 @@ Current Focus
 | NFT     | lgu | ... | $0 | 40h | 1 |
 | SplitFlap | validation | laser cut metal sheets to see if they'll work (+ motor construction) | $200 | 40h | 1 |
 
+
+Free time investigation
+
+* Hobby curve
+* Bernstein polynomial
+* Automatic differentiation
 
 ###### 2023-06-06
 
