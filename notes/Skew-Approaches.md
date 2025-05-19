@@ -82,6 +82,8 @@ Skew Approaches
 * Read the manual
 * Exceptions should be exceptional
 * Make it easy to do the simple thing
+* Chunk into blocks
+* Ineficient algorithms on small data can be efficient
 
 License
 ---
