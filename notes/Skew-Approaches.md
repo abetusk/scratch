@@ -86,6 +86,7 @@ Skew Approaches
 * Ineficient algorithms on small data can be efficient
 * Exploit symmetry
 * Assume randomness, behave accordingly
+* Complexity comes from repeated application of simplicity
 
 License
 ---
