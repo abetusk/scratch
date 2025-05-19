@@ -2,7 +2,7 @@ Skew Approaches
 ===
 
 * Reduce scope
-* Randomize input
+* Randomize order
 * Invert the problem
 * Transpose the problem
 * Can it be done with a lookup?
@@ -84,6 +84,8 @@ Skew Approaches
 * Make it easy to do the simple thing
 * Chunk into blocks
 * Ineficient algorithms on small data can be efficient
+* Exploit symmetry
+* Assume randomness, behave accordingly
 
 License
 ---
