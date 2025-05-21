@@ -21,6 +21,7 @@
 * Parasocial, Narcisisstic Echo Chamber
   - Narcisocial parassistic infinity chamber
 * Not meow later, meow now
+* The abject hypocrisy of beautiful minds
 
 ---
 
@@ -37,7 +38,7 @@
 
 * an ancient relic grants a wish but the grantee unravels thinking there's
   a cost that never comes
-* a victim of a malevolent ghost (serial murdere, etc.) herself becomes a ghost
+* a victim of a malevolent ghost (serial murderer, etc.) herself becomes a ghost
   and starts stalking the malevolent ghost
 * a song/album heard faintly in the background of another recording and reconstructed
   to become a hit. A lore builds up around the album, with the artists being unable to
