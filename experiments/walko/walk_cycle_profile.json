@@ -1,0 +1,294 @@
+{
+  "width": -1,
+  "height": -1,
+  "frame": [
+    {
+      "width": 443,
+      "height": 808,
+      "hip_anchor": {
+        "x": 215,
+        "y": 372
+      },
+      "right_knee": {
+        "x": 289,
+        "y": 241
+      },
+      "right_ankle": {
+        "x": 334,
+        "y": 74
+      },
+      "left_knee": {
+        "x": 152,
+        "y": 227
+      },
+      "left_ankle": {
+        "x": 43,
+        "y": 99
+      }
+    },
+    {
+      "width": 443,
+      "height": 808,
+      "hip_anchor": {
+        "x": 222,
+        "y": 383
+      },
+      "right_knee": {
+        "x": 274,
+        "y": 249
+      },
+      "right_ankle": {
+        "x": 280,
+        "y": 72
+      },
+      "left_knee": {
+        "x": 204,
+        "y": 228
+      },
+      "left_ankle": {
+        "x": 57,
+        "y": 127
+      }
+    },
+    {
+      "width": 443,
+      "height": 808,
+      "hip_anchor": {
+        "x": 216,
+        "y": 392
+      },
+      "right_knee": {
+        "x": 243,
+        "y": 244
+      },
+      "right_ankle": {
+        "x": 229,
+        "y": 70
+      },
+      "left_knee": {
+        "x": 255,
+        "y": 234
+      },
+      "left_ankle": {
+        "x": 134,
+        "y": 120
+      }
+    },
+    {
+      "width": 443,
+      "height": 808,
+      "hip_anchor": {
+        "x": 212,
+        "y": 396
+      },
+      "right_knee": {
+        "x": 201,
+        "y": 238
+      },
+      "right_ankle": {
+        "x": 176,
+        "y": 71
+      },
+      "left_knee": {
+        "x": 287,
+        "y": 251
+      },
+      "left_ankle": {
+        "x": 233,
+        "y": 91
+      }
+    },
+    {
+      "width": 443,
+      "height": 808,
+      "hip_anchor": {
+        "x": 206,
+        "y": 390
+      },
+      "right_knee": {
+        "x": 163,
+        "y": 234
+      },
+      "right_ankle": {
+        "x": 121,
+        "y": 73
+      },
+      "left_knee": {
+        "x": 294,
+        "y": 245
+      },
+      "left_ankle": {
+        "x": 339,
+        "y": 81
+      }
+    },
+    {
+      "width": 443,
+      "height": 808,
+      "hip_anchor": {
+        "x": 207,
+        "y": 387
+      },
+      "right_knee": {
+        "x": 153,
+        "y": 238
+      },
+      "right_ankle": {
+        "x": 64,
+        "y": 86
+      },
+      "left_knee": {
+        "x": 297,
+        "y": 237
+      },
+      "left_ankle": {
+        "x": 363,
+        "y": 79
+      }
+    },
+    {
+      "width": 443,
+      "height": 808,
+      "hip_anchor": {
+        "x": 211,
+        "y": 381
+      },
+      "right_knee": {
+        "x": 181,
+        "y": 227
+      },
+      "right_ankle": {
+        "x": 47,
+        "y": 117
+      },
+      "left_knee": {
+        "x": 296,
+        "y": 238
+      },
+      "left_ankle": {
+        "x": 318,
+        "y": 73
+      }
+    },
+    {
+      "width": 443,
+      "height": 808,
+      "hip_anchor": {
+        "x": 219,
+        "y": 383
+      },
+      "right_knee": {
+        "x": 237,
+        "y": 229
+      },
+      "right_ankle": {
+        "x": 97,
+        "y": 130
+      },
+      "left_knee": {
+        "x": 273,
+        "y": 229
+      },
+      "left_ankle": {
+        "x": 261,
+        "y": 70
+      }
+    },
+    {
+      "width": 443,
+      "height": 808,
+      "hip_anchor": {
+        "x": 222,
+        "y": 391
+      },
+      "right_knee": {
+        "x": 283,
+        "y": 249
+      },
+      "right_ankle": {
+        "x": 183,
+        "y": 105
+      },
+      "left_knee": {
+        "x": 238,
+        "y": 235
+      },
+      "left_ankle": {
+        "x": 221,
+        "y": 68
+      }
+    },
+    {
+      "width": 443,
+      "height": 808,
+      "hip_anchor": {
+        "x": 230,
+        "y": 381
+      },
+      "right_knee": {
+        "x": 302,
+        "y": 255
+      },
+      "right_ankle": {
+        "x": 301,
+        "y": 79
+      },
+      "left_knee": {
+        "x": 196,
+        "y": 233
+      },
+      "left_ankle": {
+        "x": 160,
+        "y": 68
+      }
+    },
+    {
+      "width": 443,
+      "height": 808,
+      "hip_anchor": {
+        "x": 225,
+        "y": 376
+      },
+      "right_knee": {
+        "x": 304,
+        "y": 242
+      },
+      "right_ankle": {
+        "x": 386,
+        "y": 91
+      },
+      "left_knee": {
+        "x": 173,
+        "y": 229
+      },
+      "left_ankle": {
+        "x": 107,
+        "y": 70
+      }
+    },
+    {
+      "width": 443,
+      "height": 808,
+      "hip_anchor": {
+        "x": 224,
+        "y": 370
+      },
+      "right_knee": {
+        "x": 306,
+        "y": 239
+      },
+      "right_ankle": {
+        "x": 383,
+        "y": 84
+      },
+      "left_knee": {
+        "x": 155,
+        "y": 223
+      },
+      "left_ankle": {
+        "x": 56,
+        "y": 86
+      }
+    }
+  ]
+}
