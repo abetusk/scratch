@@ -87,6 +87,12 @@ Skew Approaches
 * Exploit symmetry
 * Assume randomness, behave accordingly
 * Complexity comes from repeated application of simplicity
+* The fastest way to process a byte is to not consider it in the first place
+* Local constraints everywhere lead to global constraints
+* What local invariant would make a greedy algorithm work?
+* Use an exemplar to create a narrative
+* Are exponential increases exponentially rare? Can they be amortized?
+
 
 License
 ---
