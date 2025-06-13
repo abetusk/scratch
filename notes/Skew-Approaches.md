@@ -95,6 +95,9 @@ Skew Approaches
 * Are you using the information to inform choices?
 * What got you here might not get you there
 * Abstraction is a form of optimization
+* Go for a walk
+* Take a shower
+* Eat. Drink water
 
 
 License
