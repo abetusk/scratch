@@ -92,6 +92,9 @@ Skew Approaches
 * What local invariant would make a greedy algorithm work?
 * Use an exemplar to create a narrative
 * Are exponential increases exponentially rare? Can they be amortized?
+* Are you using the information to inform choices?
+* What got you here might not get you there
+* Abstraction is a form of optimization
 
 
 License

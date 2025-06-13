@@ -5,6 +5,8 @@
 //  to this file.
 //
 
+VERSION = "0.1.0";
+
 var fs = require("fs");
 
 var base_dir = process.env["HOME"] + "/.config/reminder";
@@ -37,19 +39,37 @@ var item =  [
   { "op": "kw", "description": "show keywords", "action": reminder_kw_show },
 ];
 
-function show_help() {
-  console.log("\nusage:\n\n  reminder <item>\n\n");
-  console.log("current items are:\n");
+function show_version() {
+  console.log("version:", VERSION);
+}
+
+function show_help(show_kw) {
+  show_kw = ((typeof show_kw === "undefined") ? true : false);
+
+  console.log("");
+  show_version();
+  console.log("\nusage:\n\n  reminder <item>");
+  console.log("\n\n");
+  console.log("current operations are:\n");
   for (let i=0; i<item.length; i++) {
     let _ws = "";
     for (let j=0; j<(5-item[i].op.length); j++) { _ws += " "; };
     console.log("  ", item[i].op, _ws, item[i].description);
   }
   console.log("\n");
+
+  if (show_kw) {
+    console.log("current keywords:\n");
+    reminder_kw_show();
+    console.log("");
+  }
+
 }
 
-function show_help_and_exit() {
+function show_help_and_exit(show_kw) {
+
   show_help();
+
   process.exit(-1);
 }
 
