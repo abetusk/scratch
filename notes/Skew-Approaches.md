@@ -64,6 +64,8 @@ Skew Approaches
 * Transform back to verify correctness
 * Is the problem impossible? Restate it as a possible version
 * Assume independence
+* Assume the opposite. Is there a contradiction? If not, why not?
+  Can the opposite be true?
 * Read the literature
 * What is the more general problem that this is a special case of?
 * Use heuristics
@@ -98,6 +100,14 @@ Skew Approaches
 * Go for a walk
 * Take a shower
 * Eat. Drink water
+* Optimize for the common case. Provide a special control flow to handle exceptional, slow cases
+* Do a full range scan to find if the special case exists
+* Find or impose a global structure that would make local search work
+* Does the boundary of the problem completely determine the whole?
+* Find heuristics that make progress. Prove these are sufficient
+* Take the Fourier transform (Mellin, Laplace)
+* Turn it into a Monte Carlo-Markov Chaing (MCMC) problem
+* Create an energy function that allows for partial solutions
 
 
 License
