@@ -8,7 +8,7 @@ Skew Approaches
 * Can it be done with a lookup?
 * What is the solution for $n=1$, $n=2$, $n=3$?
 * How does it behave in the large system limit?
-* Start from end end and work backwards
+* Start from the end and work backwards
 * Refactor
 * Profile
 * Where is the bottleneck?
@@ -85,7 +85,7 @@ Skew Approaches
 * Exceptions should be exceptional
 * Make it easy to do the simple thing
 * Chunk into blocks
-* Ineficient algorithms on small data can be efficient
+* Inefficient algorithms on small data can be efficient
 * Exploit symmetry
 * Assume randomness, behave accordingly
 * Complexity comes from repeated application of simplicity
@@ -106,8 +106,13 @@ Skew Approaches
 * Does the boundary of the problem completely determine the whole?
 * Find heuristics that make progress. Prove these are sufficient
 * Take the Fourier transform (Mellin, Laplace)
-* Turn it into a Monte Carlo-Markov Chaing (MCMC) problem
+* Turn it into a Monte Carlo-Markov Chain (MCMC) problem
 * Create an energy function that allows for partial solutions
+* Prove by induction
+* Look at the complement or dual
+* Enumerate small examples and test cases
+* Find a counterexample
+* Run a small experiment to validate your idea
 
 
 License
