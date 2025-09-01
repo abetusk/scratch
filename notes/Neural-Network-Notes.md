@@ -1,6 +1,30 @@
 Neural Network Notes
 ===
 
+###### 2025-09-01
+
+Some high level intuition:
+
+* a layer in a NN does a transformation on an input space and effectively does a partition.
+  Multiple layers to multiple partitions but subsequent layers partition in transformed space
+  rather than the original space.
+  This allows for discrimination based on the transformed space rather than the original space,
+  allowing for more abstracted methods of pattern classification
+* Universal approximation makes no bounds on width of layer, with (most likely) exponential growth
+  for some functions. Chaining NN layers allows for the potential of multiplicative pattern matching
+  growth with polynomial sized computational model growth. The type of function that can be approximated
+  (well) by this method is of a particular structure (maybe represented well by iterated function systems?
+  scale symmetry? etc.) so exponential pattern classification is not naively true. Another idea is that
+  this is exploiting symmetry, where the symmetry is this type of compression by scale or iterated function
+  application.
+* It seems like there should be some type of continuity condition, even if very weak, but this could be
+  technically true while being practically not, as a highly variable continuous function sub-sampled might as well 
+  be discontinuous. It seems like continuity is needed, or at least beneficial, as there needs to be a path
+  to progress, but this is counter weighed by jumbling up the input so that more novel patterns can be detected.
+
+I don't particularly like the video but it was the inspiration for these insights ([here](https://www.youtube.com/watch?v=qx7hirqgfuU)).
+
+
 ###### 2025-03-17
 
 * *loss function* - synonymous with 'objective function', the function we're ultimately
@@ -16,12 +40,12 @@ A place to put some notes about neural networks.
 
 * Simple algorithms on lots of data beat out complex algorithms on little data ([1][1])
   - Algorithms conditioned on naive parallelism will win out
-  - "The Bitter Lesson" says that "genral methods that leverage computation are most effective", *not*
+  - "The Bitter Lesson" says that "general methods that leverage computation are most effective", *not*
     that simple algorithms on lots of data will win out, so methods that do reasoning, on little data,
     for example, still have the bitter lesson applied to them
 * Neural networks work best when the networks themselves are highly parallel and shallow
   - "Deep" neural networks are inherently serial, so aren't as amenable to parallel speedups
-  - I suspect backpropagation also has a harder time on deep neural networks and the success
+  - I suspect back propagation also has a harder time on deep neural networks and the success
     of gradient descent like algorithms comes from shallow but parallel networks
 * Higher dimensional space is a blessing, not a curse
   - If there's a signal, even weak, and directions are random, the chance of going down a dead end
@@ -34,13 +58,13 @@ A place to put some notes about neural networks.
     to help the neural network learn
   - Attention is effectively a pre-processing step and might itself be doing gradient descent in some other space ([2][2])
   - This goes beyond "garbage-in/garbage-out" as it's specifically conditioning data to be amenable
-    to the type of classificatoin that NNs do
+    to the type of classification that NNs do
 * Automatic differentiation allows for a mixed numerical and symbolic derivative and gradient descent with
   a minimum of resources ([3][3])
   - As far as I can tell, it's a dynamic programming like method
 * Simple frameworks that leverage compute (GPU, FPGA) will still work
   - e.g. micrograd ([4][4]), tinygrad ([5][5])
-  - PyTorch ([6][6]) and the like are also, effectively, minimal and straighforward
+  - PyTorch ([6][6]) and the like are also, effectively, minimal and straightforward
 * Once the hype dies down, we'll get a better sense of what the limitations are and how other methods
   can complement using NNs as a fundamental tool
   - Search/inference (aka "runtime search") can improve quality by many orders of magnitude (5-6 as opposed to 1-2) ([7][7])
