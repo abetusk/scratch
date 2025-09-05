@@ -75,5 +75,10 @@ update: consider it a roguelike except with no combat, music as the main challen
 
 Call it a bard-like.
 
+---
+
+continuing on with the bard-like theme:
+
+
 
 
