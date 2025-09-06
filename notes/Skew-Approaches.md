@@ -100,6 +100,7 @@ Skew Approaches
 * Go for a walk
 * Take a shower
 * Eat. Drink water
+* Sleep
 * Optimize for the common case. Provide a special control flow to handle exceptional, slow cases
 * Do a full range scan to find if the special case exists
 * Find or impose a global structure that would make local search work
@@ -112,8 +113,26 @@ Skew Approaches
 * Look at the complement or dual
 * Enumerate small examples and test cases
 * Find a counterexample
-* Run a small experiment to validate your idea
+* Run a small experiment to validate or disprove your idea
+* Write pseudo-code
+* Document your progress and obstacles
+* Ask for help
 
+Notes
+---
+
+sideways
+diverging
+eccentric
+arcane
+orphic
+licht
+generating
+characteristic
+
+designs
+tactics
+functions
 
 License
 ---
