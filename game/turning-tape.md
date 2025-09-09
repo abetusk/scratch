@@ -142,7 +142,7 @@ four notes we care about.
 
 Tempo should be learned at this point (re-enforced 4 times).
 
-Arming the flute, it only allows for `*c4,*g4,*a4,*b4`.
+Arming the flute, it only allows for `*e4,*g4,*a4,*b4`.
 
 Flute notes must be played in order for door to open to next area.
 Door has clue along with verbose help.
@@ -175,69 +175,141 @@ Parchement put together to create song (ask for name?).
 Parchment then played on guard in door writes tune into
 world lexicon, opens gateway and opens next section.
 
+### Second Floor
+
+Note restriction: `f4,a4,b4,c4 | f5,a5,b5,c5`
+
+Tempo restrictions: `. . . . : :` `: : . . :`
+
+Two chests, each with a tempo clue, that gives, `c4` and `f4`.
+
+Pick up item that gives pitch shift ability to flute.
+
+Figure out a way to 
+
+* one must start on tonic (2.a.0)
+* one must end on tonic   (2.a.1) 
+* one must repeat         (2.a.2)
+* three are free form     (2.a.[345])
+
+Chests have different codes, depending on whether they
+have to start with a tonic, what kind of scale restriction
+they have, etc.
+In some sense, the 'monsters' are these smaller challenges.
+Larger challenges are gates but can be thought of as larger monsters.
+Maybe they are monsters directly and can be swayed/banished depending
+on what type of tune is played.
+
+They all give parchement piece, six measures long.
+
+Use `2.a.0` to start, `2.a.1` to end, rest anywhere in the middle.
+
+---
+
+After first monster defeated (2.a), reveals room with final flute reed, `d4`, as treasure/prize.
+
+Three doors that have note order restriction:
+
+```
+d4 a4 f4 e4 c4
+```
+
+Notes can be repeated and other octaves can be used.
+So it's a Markov chain with self loops on each node and
+`d4 -> a4 -> f4 -> e4 -> c4`.
+
+Rhythm restriction: `: . . +` `z . . .`
+
+six to ten measures long.
+
+So, how about this, something like, monsters
+that have sub restrictions (starting/ending on a tonic,
+some number of measures long).
+When each is defated, they coallesce into a larger
+monster that needs all elements to be put together (in order).
+
+So, for example, three monsters, the first needs to start on
+the tonic, two measures long, second, two measures long, free
+form, third, two measures long, and on a tonic.
+Once defeated, merge into larger monster that needs to be
+defeated with concatenation of three sub tunes.
+
+This particular challenge doesn't need this detail but could
+be used for future challenges.
+
+---
+
+next room has:
+
+note restriction: c-major (`c4,d4,e4,f4,g4,a4,b4` with other octaves)
+
+tempo restriction: `: . . +`
+
+start and end on tonic
+
+repeat at least one measure.
+
+---
+
+
+next room:
+
+water/lake/waterfall/stream/rain
+
+same note restriction, c-major, but starts on `d4` (d Dorian scale).
+
+`d4 e4 f4 g4 a4 b4 c4 d5`
+
+rhythm restriction: `: . . +`
+
+start and end on tonic
+
+repeat at least one measure.
+
+---
+
+next room:
+
+dark/moody
+
+e phrygian
+
+`e4 f4 g4 a4 b4 c4 d5 e5`
+
+6-10 measures
+
+rhythm restriction: `: . . : :`  `: : +`
+
+
+---
+
+mistake exercise?
+
+joker? start end on non-tonic (and not on the same note)
+
+don't repeate
+
+I say we nix this...
+
+
+
+
 
 Notation
 ---
 
 ```
-01234567890123456789012345678901234567890
-|   .   |   .   |   .   |   .   |
-c4  .   |   .   |   .   |   .   |
-|   g4  |   .   |   .   |   .   |
-|   .   a4  .   |   .   |   .   |
-|   .   |   .   b4  .   |   .   |
+Tempo Token:
 
-01234567890123456789012345678901234567890
-      "  '  "  '  "  '  "  '  "
-      *  '  "  '  "  '  "  '  "
-      "  *  "  '  "  '  "  '  "
-      "  '  *  '  "  '  "  '  "
-      "  '  "  '  *  '  "  '  "
-
-01234567890123456789012345678901234567890
-      "  '  "  '  "  '  "  '  "
-      *# '  "  '  "  '  "  '  "
-      "  *# "  '  "  '  "  '  "
-      "  '  *# '  "  '  "  '  "
-      "  '  "  '  *# '  "  '  "
-
-01234567890123456789012345678901234567890
-      " ' " ' " ' " ' "
-      * ' " ' " ' " ' "
-      " * " ' " ' " ' "
-      " ' * ' " ' " ' "
-      " ' " ' * ' " ' "
-
-      ' ` ' ` ' ` ' ` '
-      * ` ' ` ' ` ' ` '
-      ' * ' ` ' ` ' ` '
-      ' ` * ` ' ` ' ` '
-      ' ` ' ` * ` ' ` '
-
-      ' ` ' ` ' ` ' ` '
-      $ ` ' ` ' ` ' ` '
-      ' % ' ` ' ` ' ` '
-      ' ` $ ` ' ` ' ` '
-      ' ` ' ` % ` ' ` '
-
-      ' ` ' ` ' ` ' ` '
-      . ` ' ` ' ` ' ` '
-      ' , ' ` ' ` ' ` '
-      ' ` ! ` ' ` ' ` '
-      ' ` ' ` = ` ' ` '
-
-      ' ` ' ` ' ` ' ` '
-      : ` ' ` ' ` ' ` '
-      ' ; ' ` ' ` ' ` '
-      ' ` = ` ' ` ' ` '
-      ' ` ' ` = ` ' ` '
-
-      ' ` ' ` ' ` ' ` '
-      - ` ' ` ' ` ' ` '
-      ' + ' ` ' ` ' ` '
-      ' ` _ ` ' ` ' ` '
-      ' ` ' ` % ` ' ` '
-
+          whole
+          | half
+------------------
+Normal|   * + : .
+Sharp |   $ - ; ,
+Flat  |   % _ = !
+------------------
+              | eighth
+              quarter
 
 ' ' ' ' ' ' ' ' '
 ` ` ` ` ` ` ` ` `
@@ -291,3 +363,19 @@ tempo only notation:
  + + + *
 ```
 
+Notes
+---
+
+```
+
+    ' ' ' ' ' ' ' ' '
+    ` ` ` ` ` ` ` ` `
+    ' ' ' ' ' ' ' ' '
+ &  ` ` ` ` ` ` ` ` `
+    ' ' ' ' ' ' ' ' '
+    ` ` ` ` ` ` ` ` `
+    ' ' ' ' ' ' ' ' ' 
+
+
+
+```
