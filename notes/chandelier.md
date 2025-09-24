@@ -22,6 +22,8 @@ Chandelier Notes
   - hex coupling nut ([example](https://www.amazon.com/PATIKIL-Coupling-Connector-Hexagonal-Hardware/dp/B0BN62QND9));
 * fitter neck
 * pipe clamp
+* bobesh, drip protector or drip dish ([example](https://www.amazon.com/Chandelier-Bobeche-Elegant-Hanging-Birthday/dp/B0BVVK3ZY4))
+* 14 gauge wire (12 if socket) ([amz](https://www.amazon.com/HONENCN-Conductor-Electrical-Copper-clad-Automotive/dp/B0DRW19H43))
 
 hm...
 
