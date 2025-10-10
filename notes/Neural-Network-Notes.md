@@ -1,6 +1,24 @@
 Neural Network Notes
 ===
 
+###### 2025-10-10
+
+[Stochastic Gradient Descent by R. Ward](https://youtu.be/NQ0AaVjMcZQ?si=BztKEvVaMRpY_B_n)
+
+Some takeaways:
+
+* SGD converges in settings where $F(w) = \frac{1}{n} \sum f _ j (w)$, where each $f _ j$ convex, loss
+  function $F$ is $\mu$ strongly convex (has curvature that's reasonable) and has some $L$-smooth conditions
+* A lot of training is preconditioning data to be in this regime
+* Lifting to higher dimensions often "smooths" functions out so that these methods work better
+* Hyperparameters, such as step size, are even more sensitive in the SGD realm
+* Double (triple, quadruple?) descent might happen because of decreasing step size schedule???
+* Adaptive gradient descent, take some type of variance, norm, average, etc. of the step size length
+  and adjust step size to this average
+  - $b^2 _ {t+1} \leftarrow b^2 _ t + || \nabla f _ {i _ t} (w ^{(t)} || ^ 2 _ 2$ ( $i _ t \sim \text{Uniform}\{1,2,\dots,n\}$ )
+  - $w^{(t+1)} \leftarrow w^{(t)} - \frac{ \eta }{ b _ {t+1} } \nabla f _ {i _ t} ( w ^{(t)} )$
+  - $b _ {t+1}$ bigger leads to smaller step sizes, smaller leads to larger step sizes
+
 ###### 2025-09-01
 
 Some high level intuition:
