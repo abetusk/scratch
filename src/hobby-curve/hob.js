@@ -68,7 +68,8 @@ function HobbyLUT(p, seg) {
   let out_pnt = [];
   for (let i=0; i<bez_chain.length; i++) {
     let lut = bez_chain[i].getLUT(seg);
-    for (let j=0; j<(lut.length-1); j++) {
+    if (i==0) { out_pnt.push( [ lut[0].x, lut[0].y ] ); }
+    for (let j=1; j<lut.length; j++) {
       out_pnt.push([ lut[j].x, lut[j].y ]);
     }
   }
