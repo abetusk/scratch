@@ -363,6 +363,27 @@ tempo only notation:
  + + + *
 ```
 
+Synth Basics
+---
+
+```
+      : lfo_0  :
+      : (freq) :
+          |
+      : osc_0 :\              
+                \          : lfo_f :   : lfo_a :       : lfo_? :
+: lfo_1 : -\     \             |          |               |
+        osc_1 :--: gain :--: filter :--: adsr :------: effects :----: out    :
+                /          :(lp, bp,:  :(gain):      : (chorus,:    : (gain) :
+      : osc_2 :/           :hp, etc):                :  delay, :
+          |                    |                     :   etc)  :
+          |                    |
+       : lfo_2  :          :  adsr  :
+       : (freq) :          : filter :
+
+
+```
+
 Notes
 ---
 
@@ -379,3 +400,14 @@ Notes
 
 
 ```
+
+Idea - make the dungeon the step sequencer
+---
+
+Instead of having a HUD that pops up to create the notes, we
+make the dungeon itself the step sequencer.
+
+```
+
+```
+
