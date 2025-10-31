@@ -116,7 +116,7 @@ function experiment2_off() {
 
 }
 
-// note with adsr
+// note with filter
 //
 function experiment3() {
   var actx = g_ctx.actx;
@@ -125,6 +125,8 @@ function experiment3() {
   var val_f = 1000;
   var val_Q = 10;
 
+  // frequency can do linear ramps and 'setvalueattime' etc.
+  //
   var filter = actx.createBiquadFilter();
   filter.type = 'lowpass';
   filter.frequency.value = val_f * max_filt_freq;
