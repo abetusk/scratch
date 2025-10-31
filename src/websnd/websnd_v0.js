@@ -21,6 +21,8 @@ function __() {
   AudioParam.cancelScheduledValues();
 }
 
+// play note
+//
 function experiment0() {
   var osc = g_ctx.actx.createOscillator();
   osc.type = 'sawtooth';
@@ -30,6 +32,9 @@ function experiment0() {
   osc.stop(g_ctx.actx.currentTime + 2);
 }
 
+// play note with 3 osc, slightly
+// detuned from one another
+//
 function experiment1() {
   var actx = g_ctx.actx;
   var freq = g_ctx.note['c4'];
@@ -52,6 +57,8 @@ function experiment1() {
 
 }
 
+// note ON with adsr
+//
 function experiment2_on() {
   var actx = g_ctx.actx;
   var freq = g_ctx.note['c4'];
@@ -84,6 +91,8 @@ function experiment2_on() {
 
 }
 
+// note OFF with adsr
+//
 function experiment2_off() {
   var actx = g_ctx.actx;
 
@@ -107,6 +116,8 @@ function experiment2_off() {
 
 }
 
+// note with adsr
+//
 function experiment3() {
   var actx = g_ctx.actx;
   var max_filt_freq = actx.sampleRate/2;
