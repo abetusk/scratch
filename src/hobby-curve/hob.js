@@ -1,3 +1,5 @@
+// LICENSE: CC0
+//
 
 var bez = require("./bez.cjs");
 var hob = require("./mp_path.js");
