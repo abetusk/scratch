@@ -19,6 +19,7 @@ Skew Approaches
 * Kill your darlings
 * Break for personal maintenance (eat, sleep, shower, etc.)
 * What would your mentor tell you to do?
+* What would you tell someone else to do in the same situation?
 * Don't be ashamed of using a library
 * What old assumptions are challenged by new information?
 * Abstract common tasks
@@ -37,7 +38,7 @@ Skew Approaches
 * Identify simpler components of the problem
 * Is it NP-Complete?
 * Is there an ensemble that makes it polynomial time solvable?
-* Cache results
+* Cache results (Memoize)
 * Defer the difficult case
 * Can it be reduced to another problem?
 * Does it need to be done more than once?
@@ -50,6 +51,7 @@ Skew Approaches
 * Describe your problem to a rubber duck
 * Add a layer of abstraction
 * Remove a layer of abstraction
+* Scale requires it's own set of solutions
 * Format the special case to be more general
 * Preprocess input
 * Clean your work area
