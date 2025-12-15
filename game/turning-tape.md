@@ -136,6 +136,12 @@ experimenting with notation:
   |   |    |___|    |===|===|===|
 ```
 
+Another idea:
+
+```
+ c4* c4+ c4: c4.
+```
+
 The chest opens to give a single note flute.
 Four chests in total and the flute can be strung together to create a flute with the
 four notes we care about.
