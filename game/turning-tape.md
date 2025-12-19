@@ -417,3 +417,12 @@ make the dungeon itself the step sequencer.
 
 ```
 
+---
+
+Chromatic Button Accordian layout:
+
+| |
+|---|
+| ![kb accordian](img/qwerty_accordian.svg) |
+
+(see [a](https://okathira-dev.github.io/client-web-api-sandbox/button-accordion-with-keyboard/index.html) [b](https://www.rmwinslow.com/tones/))
