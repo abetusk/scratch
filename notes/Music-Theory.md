@@ -73,6 +73,34 @@ This text will almost exclusively talk about the bottom three tiers
 of the pyramid in the hopes that this will provide a foundation to
 help with musical creation.
 
+#### Pitched vs. Non-Pitched
+
+Pitched instruments have a timbre that is characterized by
+a discernable frequency spectra that falls mainly on a root note
+with upper harmonics, peaks in the energy spectra, at whole multiples
+of the root frequency.
+As such, they have a discernable base frequency, the peak in the spectra
+characterizing the root note, with dissonate harmonics kept to a relative
+minimum.
+
+Contrast this with non-pitched instruments that have harmonics
+that are not whole multiples of a base frequency.
+
+Examples of pitched instruments are guitars, pianos, flutes, etc.
+Examples of non-pitched instruments are bells, drumes, etc.
+
+One clear experiment is to make a take a root frequency and add
+in a harmonic at 2.7 times, keeping an ADSR envelope with a quick attack 
+and relatively long sustain.
+With a little tuning, the 2.7 multiple gives it a metallic sound, emulating
+a simple bell.
+
+#### Other Notes
+
+* Larger amplitude upper harmonics -> "light", lower amplitude upper harmonics -> "dark"
+* Pitch - the main frequency of a pitched instrument
+* Harmonics - the upper non main frequencies that are multipes of the pitch
+
 
 The Human Auditory System and Psychoacoustics
 ---
