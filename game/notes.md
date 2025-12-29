@@ -343,6 +343,23 @@ Some games that I like in this area:
 * has thieves add some variety
 
 
+Lock and Key mechanics
+---
+
+I find it more pleasing when the lock is gated by an ability
+the player can have.
+
+* High area that needs high jump or double jump to access
+* Freeze monsters to provide platforms to overcome large pits
+* Hook shot to repel over pits or get to high areas
+* Bridges over water (rivers)
+* Flute to dry up lake
+  - Alternatively, musical instrument to make monsters fall asleep
+* Teleport to get through walls
+* Wall jump to scale up
+* Gecko hands to scale walls
+* Dash to dodge trap/attack
+
 ### References
 
 * [PROCJAM 2014 - Flow In Procedural Generation - Tom Coxon](https://www.youtube.com/watch?v=z6lweIGJYS8)
