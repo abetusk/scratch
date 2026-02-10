@@ -1,6 +1,14 @@
 DIY Cards
 ===
 
+Bruner method
+---
+
+* Linen (25% cotton) 24lbs  ([amzn](https://www.amazon.com/gp/product/B0087D7ZBE/?th=1))
+* 5 mil lamination letter ([amzn](https://www.amazon.com/gp/product/B001LQWWFS/))
+
+
+
 490643 method
 ---
 
@@ -53,4 +61,5 @@ References
 
 * [bgg/531400/my-overkill-card-making-technique](https://boardgamegeek.com/thread/631400/my-overkill-card-making-technique)
 * [bgg/490643/making-cards-you-ll-never-use-your-old-method-agai](https://boardgamegeek.com/thread/490643/making-cards-you-ll-never-use-your-old-method-agai)
+* ["Print and Play Cards Made Like Playing Cards" by Rachel Bruner](https://www.youtube.com/watch?v=geJGoGsSUxE)
 * [reddit](https://www.reddit.com/r/boardgames/comments/upugb8/whats_the_best_method_for_making_quality_diy/)

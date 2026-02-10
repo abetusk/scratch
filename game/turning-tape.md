@@ -307,15 +307,15 @@ Notation
 ```
 Tempo Token:
 
-          whole
-          | half
+          half
+          | quarter
 ------------------
 Normal|   * + : .
 Sharp |   $ - ; ,
 Flat  |   % _ = !
 ------------------
-              | eighth
-              quarter
+              | sixteenth
+              eigth
 
 ' ' ' ' ' ' ' ' '
 ` ` ` ` ` ` ` ` `
@@ -368,6 +368,53 @@ tempo only notation:
 ```
  + + + *
 ```
+
+Restrictions
+---
+
+As cards?
+
+### general constraints
+
+* Tonic Return Constraint
+  - melody must start and end on the same note
+* Octave Return Constraint
+  - melody must start and end on the same octave
+* Range Constraint
+  - highest and lowest notes must not be more than 10th apart
+* Basic Note Tempo Constraint
+  - half, quarter
+  - eigth in multiples of two, never followed by a rest
+  - sixteenth in multiples of four, never followed by a rest
+  - rests in 1/4, never more than two in succession
+
+### exercise constraints
+
+* Note Constraint
+* Tempo Template
+  - e.g. `+++*`, `::::++|++::+`
+* Tempo Constraint
+  - e.g. `z:::`, `s...`, `::z`, `....z` not allowed
+* Measure Repeat (bonus)
+* Note Restraint (bonus)
+  - use more than 1 but less than all available notes in melody
+* Octave Constraint
+  - like note constraint but can use octaves of notes as well
+* Measure Length Constraint
+  - e.g. 6-10 measures in length
+* Tempo Variety Constraint
+  - measure of all same note length (esp. sixteenth) too monotonous
+  - rests longer than a measure ( `zzzz|z ` )
+* Chord Constraint
+  - e.g. choose chords perfect 4th/5th apar, 2nd apart, 3rd apart
+* Chord Progression Constraint
+  - e.g. 2 chord progression
+* Diatonic Chord Progression Constraint
+  - use only diatonic major an dminor triads
+  - first and last chord must be triad with tonic root note
+  - root of next to last chord must be above/below 2/4/5 of last chord tonic note
+  - ??? "roots of chords form singable line", "progression points 'back home' ..."
+
 
 Synth Basics
 ---
