@@ -98,6 +98,7 @@
 * OK Doomer
 * Oubliette
 * "new liver, same eagles" (prometheus) ([src](https://x.com/CSMFHT/status/1848670439507156996))
+* "Do what you love" is not aspirational, it's a warning
 
 ---
 
