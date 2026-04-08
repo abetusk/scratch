@@ -53,10 +53,12 @@ function _Bezier(x,y, rx,ry, lx,ly, xn,yn) {
                          xn,yn );
 }
 
-function HobbyLUT(p, seg) {
+function HobbyLUT(p, seg, tension, isloop) {
   seg = ((typeof seg === "undefined") ? 100 : seg);
+  tension = ((typeof tension === "undefined") ? 1 : tension);
+  isloop = ((typeof isloop === "undefined") ? false : isloop);
 
-  let knots = hob.Hobby(p);
+  let knots = hob.Hobby(p, tension, isloop);
 
   let bez_chain = [];
   for (let i=0; i<(knots.length-1); i++) {
@@ -65,6 +67,17 @@ function HobbyLUT(p, seg) {
                              knots[i+1].lx_pt, knots[i+1].ly_pt,
                              knots[i+1].x_pt, knots[i+1].y_pt );
     bez_chain.push( _b );
+  }
+
+  if (isloop) {
+    let m = knots.length;
+    if (m > 1) {
+      let _b = new bez.Bezier( knots[m-1].x_pt, knots[m-1].y_pt,
+                               knots[m-1].rx_pt, knots[m-1].ry_pt,
+                               knots[0].lx_pt, knots[0].ly_pt,
+                               knots[0].x_pt, knots[0].y_pt );
+      bez_chain.push( _b );
+    }
   }
 
   let out_pnt = [];

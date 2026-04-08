@@ -23,7 +23,7 @@ For browser use, this exposes a `Hobby` object for use.
 
 | Function | Description | Example |
 |---|---|---|
-| `HobbyLUT(p,seg)` | `p` holds knot points, `seg` is the number of segments per Bezier segment (default `100`) | `HobbyLUT( [[0,0], [200,133], [130,300], [33,233], [100,167]], 16)` |
+| `HobbyLUT(p,seg,tension=1,isloop=false)` | `p` holds knot points, `seg` is the number of segments per Bezier segment (default `100`) | `HobbyLUT( [[0,0], [200,133], [130,300], [33,233], [100,167]], 16)` |
 | `Bezier(x,y, rx,ry, lx,ly, xn,yn)` | Bezier curve helper function. `x,y` and `xn,yn` are endpoints, `rx,ry` and `lx,ly` are control points | ... |
 
 
