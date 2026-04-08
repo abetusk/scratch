@@ -97,7 +97,7 @@
 * necrotokyo
 * OK Doomer
 * Oubliette
-* "new liver, same eagles" ([src](https://x.com/CSMFHT/status/1848670439507156996))
+* "new liver, same eagles" (prometheus) ([src](https://x.com/CSMFHT/status/1848670439507156996))
 
 ---
 
