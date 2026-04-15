@@ -14,6 +14,33 @@ Printing
 
 * A rough guess is that, for pixel art, 60 pixels per inch is a nice resolution
 
+
+Cleaning
+---
+
+###### 2026-04-10
+
+I'm seeing very bad prints, where it looks like no black is coming out.
+Doing test pattern prints, I see breaks in the grid.
+
+I'm in the process of 'power cleaning', so we'll see if that does anything.
+
+Barring that, I'm going to try and do some more cleaning as suggested [here](https://www.youtube.com/watch?v=ERIU-aD_-u0)
+
+A more in-depth cleaning:
+
+* try to print to free the head
+* unplug (during printing)
+* put a paper towel under the print head (move the print head over it)
+* unscrew the top panel, pop it off
+* working on one color:
+  - remove the silicone nozzle
+  - use a cleaning kit with syringe and solution to push it through
+* power cleaning to clean out the cleaning solution
+
+OK, well, after a power clean cycle, the test print looks much better.
+We'll see if it keeps up.
+
 References
 ---
 
