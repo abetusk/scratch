@@ -3,6 +3,7 @@
 
 var bez = require("./bez.cjs");
 var hob = require("./mp_path.js");
+var njs = require("./numeric.js");
 
 function _bez_example() {
   let b = new bez.Bezier(100,25, 10,90, 110, 100, 160,195);
@@ -91,6 +92,94 @@ function HobbyLUT(p, seg, tension, isloop) {
 
   return out_pnt;
 }
+
+
+// EXPERIMENTAL
+//
+
+
+// Solve tridiagonal system
+//
+// - a,b,c,d have the same length, n
+// - a_0 and c_{n-1} are not used
+//
+// Solves Ax=d
+// where A=
+// [ b_0 c_0
+//   a_1 b_1 c_1
+//       ......
+//         a_{n-2} b_{n-2} c_{n-2}
+//                 a_{n-1}   b_{n-1}   ]
+//
+function thomas(a,b,c,d) {
+  let n = a.length;
+
+  for (let i=1; i<n; i++) {
+    let w = a[i] / b[i-1];
+    b[i] = b[i] - w*c[i-1];
+    d[i] = d[i] - w*d[i-1];
+  }
+
+  let x = njs.rep([n], 0);
+  x[n-1] = d[n-1] / b[n-1];
+  for (i=(n-2); i>0; i--) {
+    x[i] = (d[i] - (c[i]*x[i+1])) / b[i];
+  }
+
+  return x;
+}
+
+// Solve cyclic tridiagonal system
+//
+// - a,b,c,d have the same length, n
+//
+// Solves Ax=d
+// where A=
+// [ b_0 c_0                         a_0
+//   a_1 b_1 c_1
+//           ......
+//                   a_{n-2} b_{n-2} c_{n-2}
+//  c_{n-1}                  a_{n-1} b_{n-1}     ]
+//
+function thomas_cyclic(a,b,c,d) {
+  let n = a.length;
+
+  let u = njs.rep([n], 0);
+  u[0] = a[0];
+  u[n-1] = c[n-1];
+
+  let v = njs.rep([n], 0);
+  v[0] = 1;
+  v[n-1] = 1;
+
+  let bp = njs.sub(b,u);
+  let y = thomas(a,bp,c,d);
+  let z = thomas(a,bp,c,u);
+
+  return njs.sub(y, njs.mul( njs.dot(v,y) / (1+njs.dot(v,z)), z ) );
+}
+
+function hobby2cubic_open(points, ta, tb, rho, omega) {
+  let n = points.length;
+
+  if (typeof ta === "undefined") { ta = njs.rep([n-1], 1); }
+  if (typeof tb === "undefined") { tb = njs.rep([n-1], 1); }
+  if (typeof rho === "undefined") {
+    rho = function(_a,_b) {
+      return  (2 + ( calc.sqrt(2) *
+                    (calc.sin(a) - (calc.sin(b)/16)) *
+                    (calc.sin(b) - (calc.sin(a)/16)) *
+                    (calc.cos(a) - (calc.cos(b))) ) ) /
+              (1 + ( calc.cos(a) * ((calc.sqrt(5)-1)/2)) +
+                    (calc.cos(b)*(3-calc.sqrt(5))/2)) ;
+    }
+  }
+
+  let v = njs.rep([n,2], 0);
+}
+
+//
+// EXPERIMENTAL
 
 //_hob_example();
 
