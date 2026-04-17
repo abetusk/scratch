@@ -35,3 +35,4 @@ Resources
 * [elements of decorative composition](https://archive.org/details/lmentsdecomposit00quni/page/217/mode/thumb)
 * [modern decorative art](https://archive.org/details/moderndecorative00newyuoft/moderndecorative00newyuoft/page/n36/mode/thumb)
 * [arabische](https://archive.org/details/moderndecorative00newyuoft/moderndecorative00newyuoft/page/n36/mode/thumb)
+* [guide acanthus](https://archive.org/details/guidefordrawinga00pagerich/page/13/mode/thumb)
