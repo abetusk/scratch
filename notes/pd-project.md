@@ -40,3 +40,6 @@ Resources
 * [course in flourishing](https://archive.org/details/a-course-in-flourishing-for-learners/page/n23/mode/thumb)
 * [excelsior fresco stencils](https://archive.org/details/ExcelsiorFrescoStencils/page/n174/mode/thumb)
 * [historic design in printing](https://archive.org/details/historicdesignin00john/page/n102/mode/thumb)
+* [schreibart](https://archive.org/details/kunstrichtigesch00fran/page/n108/mode/thumb)
+* [modeles de calligraphie](https://archive.org/details/l-art-decrire-demontre-par-...-bedigis-francois-btv-1b-84965694/page/n36/mode/1up)
+* [natural writing](https://archive.org/details/bim_eighteenth-century_natural-writing-in-all-t_shelley-george_1709/mode/thumb)

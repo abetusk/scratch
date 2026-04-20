@@ -12,8 +12,10 @@
 //
 
 var hob = require("./hob.js");
+var printf = require("./printf.js");
+var fs = require("fs");
 
-var DEBUG = 0;
+var DEBUG = 1;
 
 function _rnd(a,b) {
   if (typeof a === "undefined") { a = 0; b = 1; }
@@ -47,9 +49,16 @@ for (let i=0; i<knot.length; i++) {
 }
 
 if (DEBUG) {
+  let knot_lines = [];
   for (let i=0; i<knot.length; i++) {
-    console.log(knot[i][0], knot[i][1]);
+    //console.log(knot[i][0], knot[i][1]);
+    knot_lines.push( printf("%f %f", knot[i][0], knot[i][1]) );
+
   }
+
+  fs.writeFileSync("swish_knot.gp", knot_lines.join("\n"));
+
+  //process.exit();
 }
 
 let lut = hob.HobbyLUT(knot);
