@@ -36,3 +36,7 @@ Resources
 * [modern decorative art](https://archive.org/details/moderndecorative00newyuoft/moderndecorative00newyuoft/page/n36/mode/thumb)
 * [arabische](https://archive.org/details/moderndecorative00newyuoft/moderndecorative00newyuoft/page/n36/mode/thumb)
 * [guide acanthus](https://archive.org/details/guidefordrawinga00pagerich/page/13/mode/thumb)
+* [popular drawing copies](https://archive.org/details/cassellspopulard00ryan/page/n5/mode/1up)
+* [course in flourishing](https://archive.org/details/a-course-in-flourishing-for-learners/page/n23/mode/thumb)
+* [excelsior fresco stencils](https://archive.org/details/ExcelsiorFrescoStencils/page/n174/mode/thumb)
+* [historic design in printing](https://archive.org/details/historicdesignin00john/page/n102/mode/thumb)
