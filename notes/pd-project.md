@@ -43,3 +43,6 @@ Resources
 * [schreibart](https://archive.org/details/kunstrichtigesch00fran/page/n108/mode/thumb)
 * [modeles de calligraphie](https://archive.org/details/l-art-decrire-demontre-par-...-bedigis-francois-btv-1b-84965694/page/n36/mode/1up)
 * [natural writing](https://archive.org/details/bim_eighteenth-century_natural-writing-in-all-t_shelley-george_1709/mode/thumb)
+* [triplici philosophia](https://archive.org/details/hin-wel-all-00000584-001/page/n90/mode/thumb)
+* [schriften atlas](https://archive.org/details/schriftenatlasei02petz/page/n12/mode/thumb)
+
