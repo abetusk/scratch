@@ -132,4 +132,143 @@ function swish1() {
 
 }
 
-swish();
+function capsule() {
+
+  let dx = 10,
+      dy = 5;
+
+  let knot = [
+    [ -2*dx, -5*dy ],
+    [ dx, -4*dy ],
+    [ -dx, -3*dy ],
+    [ dx, -2*dy ],
+    [ -dx, -dy ],
+    [ dx, 0 ],
+    [ -dx, dy ],
+    [ dx, 2*dy ],
+    [ -dx, 3*dy ],
+    [ dx, 4*dy ],
+    [ -2*dx, 5*dy]
+  ];
+
+  knot = [
+    [ -2*dx, -5*dy ],
+    [ dx, -4*dy ],
+    [ 0, -3.5*dy],
+    [ -dx, -3*dy ],
+    [ 0, -2.5*dy ],
+    [ dx, -2*dy ],
+    [ 0, -1.5*dy ],
+    [ -dx, -dy ],
+    [ 0, -0.5*dy ],
+    [ dx, 0 ],
+    [ 0, 0.5*dy ],
+    [ -dx, dy ],
+    [ 0, 1.5*dy ],
+    [ dx, 2*dy ],
+    [ 0, 2.5*dy],
+    [ -dx, 3*dy ],
+    [ 0, 3.5*dy ],
+    [ dx, 4*dy ],
+    [ -2*dx, 5*dy]
+  ];
+
+  knot = [
+    [ -2*dx, -5*dy ],
+
+    [ dx, -4*dy ],
+    [ dx/2, -3.5*dy],
+    [ -dx/2, -3.5*dy],
+    [ -dx, -3*dy ],
+
+    [ -dx/2, -2.5*dy ],
+    [ dx/2, -2.5*dy ],
+    [ dx, -2*dy ],
+
+    [ dx/2, -1.5*dy ],
+    [ -dx/2, -1.5*dy ],
+    [ -dx, -dy ],
+
+    [ -dx/2, -0.5*dy ],
+    [ dx/2, -0.5*dy ],
+    [ dx, 0 ],
+
+    [ dx/2, 0.5*dy ],
+    [ -dx/2, 0.5*dy ],
+    [ -dx, dy ],
+
+    [ -dx/2, 1.5*dy ],
+    [ dx/2, 1.5*dy ],
+    [ dx, 2*dy ],
+
+    [ dx/2, 2.5*dy],
+    [ -dx/2, 2.5*dy],
+    [ -dx, 3*dy ],
+
+    [-dx/2, 3.5*dy ],
+    [ dx/2, 3.5*dy ],
+    [ dx, 4*dy ],
+    [ -2*dx, 5*dy]
+  ];
+
+  // want control points to be close to a circle endpoint
+  //
+  dx = 50;
+  let a = 1 - (dy / (1.25*dx));
+
+  knot = [
+    //[ -2*dx, -5*dy ],
+
+    [ dx, -4*dy ],
+    //[ dx*a, -3.5*dy],
+    [ -dx*a, -3.5*dy],
+    [ -dx, -3*dy ],
+
+    [ -dx*a, -2.5*dy ],
+    [ dx*a, -2.5*dy ],
+    [ dx, -2*dy ],
+
+    [ dx*a, -1.5*dy ],
+    [ -dx*a, -1.5*dy ],
+    [ -dx, -dy ],
+
+    [ -dx*a, -0.5*dy ],
+    [ dx*a, -0.5*dy ],
+    [ dx, 0 ],
+
+    [ dx*a, 0.5*dy ],
+    [ -dx*a, 0.5*dy ],
+    [ -dx, dy ],
+
+    [ -dx*a, 1.5*dy ],
+    [ dx*a, 1.5*dy ],
+    [ dx, 2*dy ],
+
+    [ dx*a, 2.5*dy],
+    [ -dx*a, 2.5*dy],
+    [ -dx, 3*dy ],
+
+    [-dx*a, 3.5*dy ],
+    //[ dx*a, 3.5*dy ],
+    [ dx, 4*dy ],
+    //[ -2*dx, 5*dy]
+  ];
+
+  if (DEBUG) {
+    let knot_lines = [];
+    for (let i=0; i<knot.length; i++) {
+      knot_lines.push( printf("%f %f\n\n", knot[i][0], knot[i][1]) );
+    }
+    fs.writeFileSync("knot.gp", knot_lines.join("\n"));
+  }
+
+  let lut = hob.HobbyLUT(knot);
+
+  for (let i=0; i<lut.length; i++) {
+    console.log(lut[i][0], lut[i][1]);
+  }
+
+
+}
+
+capsule();
