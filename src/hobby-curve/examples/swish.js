@@ -23,48 +23,113 @@ function _rnd(a,b) {
   return (Math.random()*(b-a)) + a;
 }
 
-let n = 10,
-    ds = 3,
-    dh = 2;
+function swish() {
 
-let s = 4*ds,
-    dh2 = dh/2;
+  let n = 10,
+      ds = 3,
+      dh = 2;
 
-let knot = [];
+  let s = 4*ds,
+      dh2 = dh/2;
 
-for (let i=0; i<n; i++) {
-  knot.push( [ -2*ds,      -dh*i ] );
-  knot.push( [ -2*ds + ds, -dh*i + dh2 ] );
+  let knot = [];
 
-  knot.push( [  2*ds - ds, -dh*i - dh ] );
-  knot.push( [  2*ds ,     -dh*i - dh2 ] );
-  knot.push( [  2*ds - ds ,-dh*i ] );
+  for (let i=0; i<n; i++) {
+    knot.push( [ -2*ds,      -dh*i ] );
+    knot.push( [ -2*ds + ds, -dh*i + dh2 ] );
 
-  knot.push( [ -2*ds + ds ,-dh*(i+1) - dh2 ] );
-}
+    knot.push( [  2*ds - ds, -dh*i - dh ] );
+    knot.push( [  2*ds ,     -dh*i - dh2 ] );
+    knot.push( [  2*ds - ds ,-dh*i ] );
 
-for (let i=0; i<knot.length; i++) {
-  knot[i][0] += _rnd(-0.125,0.125);
-  knot[i][1] += _rnd(-0.125,0.125);
-}
-
-if (DEBUG) {
-  let knot_lines = [];
-  for (let i=0; i<knot.length; i++) {
-    //console.log(knot[i][0], knot[i][1]);
-    knot_lines.push( printf("%f %f", knot[i][0], knot[i][1]) );
-
+    knot.push( [ -2*ds + ds ,-dh*(i+1) - dh2 ] );
   }
 
-  fs.writeFileSync("swish_knot.gp", knot_lines.join("\n"));
+  for (let i=0; i<knot.length; i++) {
+    knot[i][0] += _rnd(-0.125,0.125);
+    knot[i][1] += _rnd(-0.125,0.125);
+  }
 
-  //process.exit();
+  if (DEBUG) {
+    let knot_lines = [];
+    for (let i=0; i<knot.length; i++) {
+      //console.log(knot[i][0], knot[i][1]);
+      knot_lines.push( printf("%f %f", knot[i][0], knot[i][1]) );
+
+    }
+
+    fs.writeFileSync("swish_knot.gp", knot_lines.join("\n"));
+
+    //process.exit();
+  }
+
+  let lut = hob.HobbyLUT(knot);
+
+  for (let i=0; i<lut.length; i++) {
+    console.log(lut[i][0], lut[i][1]);
+  }
+
 }
 
-let lut = hob.HobbyLUT(knot);
+// not looking good...
+//
+function swish1() {
 
-for (let i=0; i<lut.length; i++) {
-  console.log(lut[i][0], lut[i][1]);
+  let knot = [
+    [-12, 12],
+    [-9, 5],
+    [ -6, 0.0],
+    [ 5, 0.5],
+    [ -5, 0.5],
+    [ 4, -0.5],
+    [ 0, 0],
+    [ -4, 0.0],
+    [ 5, -1],
+    [ -5, -1],
+    [ 6, -0.5],
+    [ 9, -5],
+    [ 12, -12]
+  ];
+
+  knot = [
+    [-12, 16],
+    [ 2.5, -2],
+    [ 5.5, 0.5],
+    [ -2.5, 3],
+    [ -5.5, 2],
+
+    [ 1.5, -1],
+    [3.5, -0.5],
+    [ 2,0, 0.0],
+
+    [0,0, 0.0],
+
+    [-2,0, 0.0],
+    [-3.5, 0.5],
+    [-1.5, 1],
+
+    [5.5, -1.5],
+    [2.5, -3],
+    [-5.5, 0],
+    [-1.5, 2],
+    [12, -16]
+  ];
+
+  if (DEBUG) {
+    let knot_lines = [];
+    for (let i=0; i<knot.length; i++) {
+      knot_lines.push( printf("%f %f\n\n", knot[i][0], knot[i][1]) );
+    }
+    fs.writeFileSync("knot.gp", knot_lines.join("\n"));
+  }
+
+  let lut = hob.HobbyLUT(knot);
+
+  for (let i=0; i<lut.length; i++) {
+    console.log(lut[i][0], lut[i][1]);
+  }
+
+
 }
 
-
+swish();
