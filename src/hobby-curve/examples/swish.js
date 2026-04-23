@@ -213,18 +213,21 @@ function capsule() {
 
   // want control points to be close to a circle endpoint
   //
-  dx = 50;
-  let a = 1 - (dy / (1.25*dx));
+  dx = 25;
+  let a = 1 - (dy / (1.125*dx));
 
   knot = [
     //[ -2*dx, -5*dy ],
 
     [ dx, -4*dy ],
     //[ dx*a, -3.5*dy],
+
+
     [ -dx*a, -3.5*dy],
     [ -dx, -3*dy ],
-
     [ -dx*a, -2.5*dy ],
+
+
     [ dx*a, -2.5*dy ],
     [ dx, -2*dy ],
 
