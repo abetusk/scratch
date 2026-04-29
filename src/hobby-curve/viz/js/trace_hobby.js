@@ -5,16 +5,36 @@ var g_ctx= {
   "canvas":null,
   "ctx": null,
 
-  "grid_dx": 20,
-  "grid_dy": 20,
+  "grid_dx": 10,
+  "grid_dy": 10,
 
   "mouse_x": 0,
   "mouse_y": 0,
   "mouse_grid_x": 0,
   "mouse_grid_y": 0,
 
-  "knot": []
+  "knot_select_idx": -1,
+
+  "ui_state" : "idle",
+
+  "knot": [],
+
+  "show_image" : true
 };
+
+function process_click_down(x,y) {
+
+  let knot = g_ctx.knot;
+
+  for (let i=0; i<knot.length; i++) {
+    if ((x == knot[i][0]) && (y == knot[i][1])) {
+      g_ctx.knot_select_idx = i;
+      g_ctx.ui_state = "drag";
+      return;
+    }
+  }
+
+}
 
 function process_click(x,y) {
 
@@ -36,7 +56,7 @@ function process_click(x,y) {
 
 }
 
-function mkgrid() {
+function _mkgrid() {
   let two = g_ctx.two;
 
   let W = two.width,
@@ -63,7 +83,38 @@ function mkgrid() {
   }
 }
 
-function showKnots() {
+function mkgrid() {
+  let ctx = g_ctx.ctx;
+
+  let W = 800;
+      H = 800;
+
+  let dx = g_ctx.grid_dx,
+      dy = g_ctx.grid_dy;
+
+  let n_col = Math.ceil(W / dx);
+  let n_row = Math.ceil(H / dy);
+
+  ctx.strokeStyle = "rgb(20,20,20)";
+
+  for (let c=0; c<n_col; c++) {
+    ctx.beginPath();
+    ctx.moveTo(dx*c, 0);
+    ctx.lineTo(dx*c, H);
+    ctx.lineWidth = 0.5;
+    ctx.stroke();
+  }
+
+  for (let r=0; r<n_row; r++) {
+    ctx.beginPath();
+    ctx.moveTo(0, dy*r);
+    ctx.lineTo(W, dy*r);
+    ctx.lineWidth = 0.5;
+    ctx.stroke();
+  }
+}
+
+function _showKnots() {
   let two = g_ctx.two;
   let knot = g_ctx.knot;
 
@@ -73,7 +124,23 @@ function showKnots() {
   }
 }
 
-function showCursor() {
+function showKnots() {
+  let ctx = g_ctx.ctx;
+  let knot = g_ctx.knot;
+
+  let sz = [5,5];
+
+  for (let i=0; i<knot.length; i++) {
+    //_knot.fill = "rgb(20,20,20)";
+
+    ctx.beginPath();
+    ctx.rect( knot[i][0] - (sz[0]/2), knot[i][1] - (sz[1]/2), 5,5);
+    ctx.fill();
+
+  }
+}
+
+function _showCursor() {
   let two = g_ctx.two;
   let gx = g_ctx.mouse_grid_x;
   let gy = g_ctx.mouse_grid_y;
@@ -87,7 +154,22 @@ function showCursor() {
   mr.opacity = 0.9;
 }
 
-function showCurve() {
+function showCursor() {
+  let ctx = g_ctx.ctx;
+  let gx = g_ctx.mouse_grid_x;
+  let gy = g_ctx.mouse_grid_y;
+
+  let csz = [ 10,10];
+
+  ctx.lineWidth = 1;
+  ctx.strokeStyle = "rgb(40,40,40)";
+  ctx.beginPath();
+  ctx.rect(gx - (csz[0]/2), gy - (csz[1]/2), csz[0], csz[1]);
+  ctx.stroke();
+
+}
+
+function _showCurve() {
   let two = g_ctx.two;
 
   if (g_ctx.knot.length == 0) { return ; }
@@ -103,21 +185,41 @@ function showCurve() {
 
 }
 
+function showCurve() {
+  let ctx = g_ctx.ctx;
+
+  if (g_ctx.knot.length < 2) { return ; }
+
+  let lut = Hobby.HobbyLUT( g_ctx.knot );
+
+  ctx.lineWidth = 1;
+  ctx.strokeStyle = "rgb(255,0,0)";
+  ctx.beginPath();
+  ctx.moveTo(lut[0][0], lut[0][1]);
+  for (let i=1; i<lut.length; i++) {
+    ctx.lineTo( lut[i][0], lut[i][1] );
+  }
+  ctx.stroke();
+
+}
+
 function showBGImg() {
   let canvas = g_ctx.canvas;
 
   let img = document.getElementById('ui_img');
 
-  g_ctx.ctx.drawImage( img, 0, 0 );
+  g_ctx.ctx.drawImage( img, 0, 0, 1600, 1600 );
 }
 
-function draw() {
+function _draw() {
   let two = g_ctx.two;
   two.clear();
 
   //showBGImg();
 
   mkgrid();
+
+  showImg();
 
   showKnots();
   showCursor();
@@ -169,3 +271,85 @@ function initTwoJS() {
   return two;
 }
 
+function showImg() {
+  let ctx = g_ctx.ctx;
+  let img = document.getElementById('ui_img');
+  g_ctx.ctx.drawImage(img, 0, 0, 800, 800);
+}
+
+
+function draw() {
+  let ctx = g_ctx.ctx;
+
+  let W = g_ctx.width,
+      H = g_ctx.height;
+
+  ctx.clearRect(0,0, W,H);
+
+  if (g_ctx.show_image) { showImg(); }
+
+  mkgrid();
+
+  showCursor();
+  showKnots();
+  showCurve();
+}
+
+
+function init() {
+  g_ctx.canvas = document.getElementById('ui_canvas');
+  g_ctx.ctx = g_ctx.canvas.getContext('2d');
+
+  g_ctx.width = g_ctx.canvas.width;
+  g_ctx.height = g_ctx.canvas.height;
+
+  //let img = document.getElementById('ui_img');
+  //g_ctx.ctx.drawImage(img, 0, 0);
+
+
+  window.addEventListener('mouseup', function(ev) {
+
+    if (g_ctx.ui_state == "drag") {
+      g_ctx.ui_state = "idel";
+    }
+
+    else {
+      process_click( g_ctx.mouse_grid_x, g_ctx.mouse_grid_y );
+    }
+
+    draw();
+  });
+
+  window.addEventListener('mousedown', function(ev) {
+    process_click_down( g_ctx.mouse_grid_x, g_ctx.mouse_grid_y );
+    draw();
+  });
+
+  window.addEventListener('mousemove', function(ev) {
+    let r = g_ctx.canvas.getBoundingClientRect();
+    let x = ev.clientX - r.left,
+        y = ev.clientY - r.top;
+
+    g_ctx.mouse_x = x;
+    g_ctx.mouse_y = y;
+
+    g_ctx.mouse_grid_x = g_ctx.grid_dx*Math.round( g_ctx.mouse_x / g_ctx.grid_dx );
+    g_ctx.mouse_grid_y = g_ctx.grid_dy*Math.round( g_ctx.mouse_y / g_ctx.grid_dy );
+
+    if (g_ctx.ui_state == "drag") {
+      let idx = g_ctx.knot_select_idx;
+      g_ctx.knot[idx][0] = g_ctx.mouse_grid_x;
+      g_ctx.knot[idx][1] = g_ctx.mouse_grid_y;
+    }
+
+    draw();
+  });
+
+  window.addEventListener('keydown', function(ev) {
+    console.log(">>>", ev);
+    if (ev.key == 'i') { g_ctx.show_image = !g_ctx.show_image; draw(); }
+  });
+
+
+  draw();
+}
