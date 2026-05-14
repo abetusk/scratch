@@ -32,6 +32,7 @@ function init() {
   g_ctx.vid = vid;
 
   btn.addEventListener('click', photo_snap);
+  vid.addEventListener('click', photo_snap);
 
   //btn_dl.addEventListener('click', photo_download);
 
@@ -48,6 +49,8 @@ function photo_snap() {
   let h = g_ctx.canvas.height;
 
   g_ctx.ctx.drawImage(vid, 0, 0, w,h);
+
+
 }
 
 function photo_download() {
