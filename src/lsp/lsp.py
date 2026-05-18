@@ -12,6 +12,22 @@
 
 import re
 
+def lsp_env():
+  _env = {
+    "parent" : None
+  }
+  return _env
+
+# i : integer
+# d : float
+# a : array/list
+# p : proc (?)
+# f : lambda
+#
+def lsp_ele(_type, val):
+  return { "type": _type, "val": val }
+
+
 def is_atom(a):
   return True
 
@@ -45,7 +61,10 @@ def lsp_ast(rtok, ctx = None):
     ctx["comment"] = "no beginning '('"
     return ctx
 
-  ast_cur = []
+  ast_cur = {
+    "type": "a",
+    "val": []
+  }
   while t != ')':
 
     if len(rtok)==0:
