@@ -14,10 +14,14 @@ var LU_DESCR = {
   "s" : "symbol",
   "p" : "proc",
   "d" : "define",
+  "f" : "funcdef",
   "c" : "if (cond)",
+  "q" : "quote",
   "!" : "set",
+  "@" : "at (array)",
   "I" : "introspection",
   "u" : 'nop',
+  "h" : "help",
   "E" : "error"
 };
 
@@ -35,6 +39,14 @@ function _lookup_env(env, key) {
   if (key in env) { return env[key]; }
   if ("par" in env) { return _lookup_env( env.par, key ); }
   return undefined;
+}
+
+function _lsp_help() {
+  console.log("help:");
+  for (let key in LU_DESCR) {
+    console.log("  ", key, ":", LU_DESCR[key]);
+  }
+  console.log("");
 }
 
 function tokenize( _line ) {
@@ -158,12 +170,12 @@ function _eval(ast) {
     if      ( ast.val == 'd' ) { return { "type": 'd' }; }
     else if ( ast.val == 'c' ) { return { "type": 'c' }; }
     else if ( ast.val == '!' ) { return { "type": '!' }; }
-    else if ( ast.val == 'I' ) {
+    else if ( ast.val == '@' ) { return { "type": '@' }; }
+    else if ( ast.val == 'q' ) { return { "type": 'q' }; }
+    else if ( ast.val == 'f' ) { return { "type": 'f' }; }
 
-      _lsp_print_env( ast.env );
-
-      return {"type": 'I' };
-    }
+    else if ( ast.val == 'h' ) { return { 'type': 'h' }; }
+    else if ( ast.val == 'I' ) { return { "type": 'I' }; }
 
 
     let vv = _lookup_env( ast.env, ast.val );
@@ -229,6 +241,17 @@ function _eval(ast) {
       return { "type": "u", "val": 0 };
     }
 
+    // at (array)
+    //
+    // WIP
+    else if (u.type == '@') {
+      let _at_idx = _eval( _a[1] );
+
+      if (_at_idx.type != 'n') {
+      }
+    }
+
+
     // conditional
     //
     else if (u.type == 'c') {
@@ -242,8 +265,48 @@ function _eval(ast) {
 
     }
 
-    else if (u.type == 'I') {
+    // quote...
+    //
+    else if (u.type == 'q') {
 
+      if (_debug > 3) {
+        console.log("q...", _a.length, _a);
+
+        for (let i=0; i<_a.length; i++) {
+          console.log("  ", i, ":" + _a[i].type + ":", _a[i].val ? _a[i].val : '');
+
+          if (_a[i].type == 'a') {
+            let _b = _a[i].child;
+            for (let j=0; j<_b.length; j++) {
+              console.log("    ", j, _b[j].type );
+            }
+          }
+        }
+      }
+
+      return { "type": "a", "child" : _a[1] };
+    }
+
+    // funcdef (lambda)
+    //
+    else if (u.type == 'f') {
+
+      console.log("funcdef ... _a:", _a);
+
+      for (let i=0; i<_a.length; i++) {
+        console.log("  ", i, JSON.stringify(_a[i], undefined, 2));
+      }
+
+      return { "type": "u", "val": -1 };
+    }
+
+    else if (u.type == 'h') {
+      _lsp_help();
+      return { "type": "u", "val": 0 };
+    }
+
+    else if (u.type == 'I') {
+      _lsp_print_env( ast.env );
       return { "type": "u", "val": 0 };
     }
 
