@@ -8,17 +8,47 @@
 // work.  If not, see <http://creativecommons.org/publicdomain/zero/1.0/>.
 //   
 
+// This is still a work in progress.
+//
+// Some issues that I'm working through:
+//
+// funcdef  : this needs to have a parameter list and have a local environment
+//            passed in when called. I'm still trying to work through exactly how to do
+//            this.
+// proc     : right now, they take in literal values as parameters and this probably should
+//            be some sort of AST or something. I haven't figured out how to make it
+//            generalized to the point where you can do things like eval recursively
+// eval     : related to proc and funcdef, this should evaluate a quoted symbol list, say
+//            and maybe have some sort of environment passed in? Currently this isn't even
+//            in the list of lookup types
+//
+// I think how the proceduresl, lambdas, evals etc are resolved is the last major point.
+//
+// Some minor points:
+//
+// define and set scoping issues might need to be looked at. Right now, def only goes
+// one level up.
+//
+// I'm also unclear about return values and how to process them for different functions.
+//
+// Should there be an explicit env/dict command? Is this just the define in disguise?
+// Some other semantics for scoping issues?
+//
+
 var LU_DESCR = {
   "n" : "num",
   "a" : "array",
   "s" : "symbol",
   "p" : "proc",
   "d" : "define",
-  "f" : "funcdef",
   "c" : "if (cond)",
-  "q" : "quote",
+  "?" : "if (cond)",
   "!" : "set",
+  "q" : "quote",
   "@" : "at (array)",
+
+  "f" : "funcdef",
+
   "I" : "introspection",
   "u" : 'nop',
   "h" : "help",
@@ -27,11 +57,20 @@ var LU_DESCR = {
 
 var readline = require("readline");
 
+/*
 var COMMON_ENV = {
   "+" : { "type": "p", "n_param": 2, "func": function(a,b) { return a+b; } },
   "-" : { "type": "p", "n_param": 2, "func": function(a,b) { return a-b; } },
   "*" : { "type": "p", "n_param": 2, "func": function(a,b) { return a*b; } },
   "/" : { "type": "p", "n_param": 2, "func": function(a,b) { return a/b; } }
+};
+*/
+
+var COMMON_ENV = {
+  "+" : { "type": "p", "n_param": 2, "func": function(a,b) { return _lsp_num(a+b); } },
+  "-" : { "type": "p", "n_param": 2, "func": function(a,b) { return _lsp_num(a-b); } },
+  "*" : { "type": "p", "n_param": 2, "func": function(a,b) { return _lsp_num(a*b); } },
+  "/" : { "type": "p", "n_param": 2, "func": function(a,b) { return _lsp_num(a/b); } }
 };
 
 function _lookup_env(env, key) {
@@ -40,6 +79,8 @@ function _lookup_env(env, key) {
   if ("par" in env) { return _lookup_env( env.par, key ); }
   return undefined;
 }
+
+function _lsp_num( v ) { return {"type":"n", "val": v}; }
 
 function _lsp_help() {
   console.log("help:");
@@ -169,6 +210,7 @@ function _eval(ast) {
 
     if      ( ast.val == 'd' ) { return { "type": 'd' }; }
     else if ( ast.val == 'c' ) { return { "type": 'c' }; }
+    else if ( ast.val == '?' ) { return { "type": 'c' }; }
     else if ( ast.val == '!' ) { return { "type": '!' }; }
     else if ( ast.val == '@' ) { return { "type": '@' }; }
     else if ( ast.val == 'q' ) { return { "type": 'q' }; }
@@ -193,18 +235,28 @@ function _eval(ast) {
 
     if (_debug > 2) { console.log(">>>", u); }
 
+    // ?????
+    //
+    if (u.type == 'P') {
+
+      let _parm = u.param;
+      let _ast_func = u.ast_func;
+      let _ev = { };
+
+      for (let i=0; i<_parm.length; i++) {
+        _ast_func.env[ _parm[i] ] = _eval( _a[i+1] );
+      }
+
+      return _eval( _ast_func );
+    }
+
     // proc
     //
-    if (u.type == 'p') {
+    else if (u.type == 'p') {
       if (u.n_param == 2) {
 
         let ok0 = _eval( _a[1] );
         let ok1 = _eval( _a[2] );
-
-        if (_debug > 3) {
-          console.log(">>>>", ok0, _a[1]);
-          console.log(">>>>", ok1, _a[2]);
-        }
 
         let param = [
           _eval( _a[1] ),
@@ -212,16 +264,19 @@ function _eval(ast) {
         ];
 
         let _res = u.func( param[0].val, param[1].val );
-
-        if (_debug > 2) { console.log("got:", _res); }
-
-        return { "type":"n", "val": _res };
+        return _res;
       }
 
     }
 
     // define
     //   define symbol and shove it in env above
+    //
+    //   This might be wrong, we might want to walk the
+    //   heirarchy until we reach the root or the first
+    //   child not defined and place it there.
+    //   As it stands, this only goes one level up th
+    //   heirarchy
     //
     else if (u.type == 'd') {
       ast.env.par[ _a[1].val ] = _eval( _a[2] );
@@ -243,18 +298,32 @@ function _eval(ast) {
 
     // at (array)
     //
-    // WIP
     else if (u.type == '@') {
       let _at_idx = _eval( _a[1] );
+      let _at_a = _eval( _a[2] );
 
-      if (_at_idx.type != 'n') {
+      if ((_at_idx.type == 'n') &&
+          (_at_a.type == 'a')) {
+
+        let _idx = _at_idx.val;
+        if ((_idx < 0) ||
+            (_idx >= _at_a.child.length)) {
+          return { "type": "E", "msg": "@ OOB" };
+        }
+
+        return _at_a.child[_idx];
+
+      }
+      else {
+        return {"type": "E", "msg" : "invalid parameters to '@'" };
       }
     }
 
 
     // conditional
     //
-    else if (u.type == 'c') {
+    else if ((u.type == 'c') ||
+             (u.type == '?')) {
 
       let _tst = _eval( _a[1] );
 
@@ -266,6 +335,9 @@ function _eval(ast) {
     }
 
     // quote...
+    // completed? Still unsure about the resolution...:
+    //   quote number -> number
+    //   quote array -> array
     //
     else if (u.type == 'q') {
 
@@ -284,10 +356,16 @@ function _eval(ast) {
         }
       }
 
-      return { "type": "a", "child" : _a[1] };
+      if (_a[1].type == 'a') {
+        return { "type": "a", "child" : _a[1].child };
+      }
+
+      return { "type": _a[1].type, "val": _a[1].val };
     }
 
     // funcdef (lambda)
+    //
+    // WIP!!
     //
     else if (u.type == 'f') {
 

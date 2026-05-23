@@ -20,6 +20,8 @@ MANIFEST_DIR = "manifest"
 IMG_DIR = "img"
 AUTH_DB = "auth.json"
 
+do_auth = False
+
 cgitb.enable();
 
 
@@ -28,7 +30,6 @@ u_id = -1
 print("Content-Type: application/json")
 print("")
 print("")
-
 
 auth = False
 if do_auth:

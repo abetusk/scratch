@@ -5,6 +5,47 @@ var g_ctx = {
   "btn": null
 };
 
+
+//----
+//----
+//----
+
+function sendFile( file ) {
+  console.log("file:");
+  console.log(file);
+
+  for (x in file) {
+    console.log(x, file[x]);
+  }
+
+  var info = document.getElementById("fileInfo").value;
+
+  var formData = new FormData();
+  formData.append( "fileData", file );
+  formData.append( "fileInfo", info);
+  formData.append( "fileName", file["name"])
+  formData.append( "fileTime", file["lastModified"]);
+
+  var uri = "ul.py";
+  var xhr = new XMLHttpRequest();
+  xhr.upload.addEventListener("progress", uploadProgress, false );
+  xhr.addEventListener("load", uploadComplete, false );
+  xhr.addEventListener("error", uploadError, false );
+  xhr.addEventListener("abort", uploadAbort, false );
+
+  xhr.open( "POST", uri );
+  xhr.send( formData );
+
+}
+
+
+//----
+//----
+//----
+
+
+
+
 function _stream_func(s) {
   let video = document.getElementById("ui_camera");
   video.srcObject = s;
@@ -49,6 +90,28 @@ function photo_snap() {
   let h = g_ctx.canvas.height;
 
   g_ctx.ctx.drawImage(vid, 0, 0, w,h);
+
+
+  g_ctx.ctx.canvas.toBlob( function(_b) {
+    let _img = document.createElement("img");
+    let url = URL.createObjectURL(_b);
+
+    _img.src = url;
+
+    console.log("???", _b);
+
+    let _form_data = new FormData();
+    _form_data.append('file', _b, 'img.png');
+
+    fetch('ul.cgi', {
+      "method" : "POST",
+      "body": _form_data
+    })
+    .then( resp => resp.json() )
+    .then( data => console.log("success?", data) )
+    .catch( err => console.error("error:", err ) );
+
+  });
 
 
 }
