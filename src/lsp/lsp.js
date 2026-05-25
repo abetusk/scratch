@@ -46,6 +46,7 @@ var LU_DESCR = {
   "!" : "set",
   "q" : "quote",
   "@" : "at (array)",
+  "e" : "eval",
 
   "f" : "funcdef",
 
@@ -56,15 +57,6 @@ var LU_DESCR = {
 };
 
 var readline = require("readline");
-
-/*
-var COMMON_ENV = {
-  "+" : { "type": "p", "n_param": 2, "func": function(a,b) { return a+b; } },
-  "-" : { "type": "p", "n_param": 2, "func": function(a,b) { return a-b; } },
-  "*" : { "type": "p", "n_param": 2, "func": function(a,b) { return a*b; } },
-  "/" : { "type": "p", "n_param": 2, "func": function(a,b) { return a/b; } }
-};
-*/
 
 function _lsp_ce_add() {
   let s = 0;
@@ -263,6 +255,8 @@ function _eval(ast) {
     else if ( ast.val == '?' ) { return { "type": 'c' }; }
     else if ( ast.val == '!' ) { return { "type": '!' }; }
     else if ( ast.val == '@' ) { return { "type": '@' }; }
+    else if ( ast.val == 'e' ) { return { "type": 'e' }; }
+
     else if ( ast.val == 'q' ) { return { "type": 'q' }; }
     else if ( ast.val == 'f' ) { return { "type": 'f' }; }
 
@@ -298,6 +292,34 @@ function _eval(ast) {
       }
 
       return _eval( _ast_func );
+    }
+
+    // eval
+    //
+    else if (u.type == 'e') {
+      if (_a.length < 2) { return { "type":"u", "val":0 }; }
+
+      //console.log("--eval--");
+
+      // assume first parameter is a quote, say,
+      // now we have an ast that needs to be evaluated.
+      //
+      let __res = _eval( _a[1] );
+
+      /*
+      console.log( "__res.env.id:", __res); //_res.env.id);
+      if (__res.type == 'a') {
+        for (let i=0; i<__res.child.length; i++) {
+          console.log("  ", i, ("env" in __res.child[i]) ? __res.child[i].env.id : 'nil')
+        }
+      }
+      */
+
+      let _res = _eval( __res );
+
+      //console.log( "_res.env.id:", _res); //_res.env.id);
+
+      return _res;
     }
 
     // proc
@@ -468,18 +490,17 @@ function lsp_print_ast(ast, _indent) {
       console.log("/*", JSON.stringify(vv), "*/");
     }
 
-
     if (vv.type == 'p') {
       console.log( ws.join(""), ast.type, "{", _lu[ast.type], "}", ":", "'" + ast.val.toString() + "'",
         "=>",
-        vv.type, "{", _lu[vv.type], "}", "_" + vv.n_param.toString() + "_" );
+        vv.type, "{", _lu[vv.type], "}" );
+        //vv.type, "{", _lu[vv.type], "}", "_" + vv.n_param.toString() + "_" );
     }
     else {
       console.log( ws.join(""), ast.type, "{", _lu[ast.type], "}", ":", "'" + ast.val.toString() + "'",
       "=>",
       vv.type, "{", _lu[vv.type], "}");
     }
-
 
     return;
   }
