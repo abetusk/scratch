@@ -66,11 +66,61 @@ var COMMON_ENV = {
 };
 */
 
+function _lsp_ce_add() {
+  let s = 0;
+  for (let i=0; i<arguments.length; i++) {
+    let ele = arguments[i];
+    if (ele.type != 'n') { return {"type":'E', "msg":"invalid type to commen env '+'"}; }
+    s += ele.val;
+  }
+  return _lsp_num(s);
+}
+
+function _lsp_ce_sub() {
+  let s = 0;
+  for (let i=0; i<arguments.length; i++) {
+    let ele = arguments[i];
+    if (ele.type != 'n') { return {"type":'E', "msg":"invalid type to commen env '-'"}; }
+    if (i==0) { s += ele.val; }
+    else { s -= ele.val }
+  }
+  return _lsp_num(s);
+}
+
+function _lsp_ce_mul() {
+  let s = 1;
+  for (let i=0; i<arguments.length; i++) {
+    let ele = arguments[i];
+    if (ele.type != 'n') { return {"type":'E', "msg":"invalid type to commen env '*'"}; }
+    s *= ele.val;
+  }
+  return _lsp_num(s);
+}
+
+function _lsp_ce_div() {
+  let s = 1;
+  for (let i=0; i<arguments.length; i++) {
+    let ele = arguments[i];
+    if (ele.type != 'n') { return {"type":'E', "msg":"invalid type to commen env '/'"}; }
+    if (i==0) { s *= ele.val; }
+    else { s /= ele.val }
+  }
+  return _lsp_num(s);
+}
+
+
+
+
 var COMMON_ENV = {
-  "+" : { "type": "p", "n_param": 2, "func": function(a,b) { return _lsp_num(a+b); } },
-  "-" : { "type": "p", "n_param": 2, "func": function(a,b) { return _lsp_num(a-b); } },
-  "*" : { "type": "p", "n_param": 2, "func": function(a,b) { return _lsp_num(a*b); } },
-  "/" : { "type": "p", "n_param": 2, "func": function(a,b) { return _lsp_num(a/b); } }
+  //"+" : { "type": "p", "n_param": 2, "func": function(a,b) { return _lsp_num(a+b); } },
+  //"-" : { "type": "p", "n_param": 2, "func": function(a,b) { return _lsp_num(a-b); } },
+  //"*" : { "type": "p", "n_param": 2, "func": function(a,b) { return _lsp_num(a*b); } },
+  //"/" : { "type": "p", "n_param": 2, "func": function(a,b) { return _lsp_num(a/b); } }
+
+  "+" : { "type": "p", "n_param": -1, "func": _lsp_ce_add },
+  "-" : { "type": "p", "n_param": -1, "func": _lsp_ce_sub },
+  "*" : { "type": "p", "n_param": -1, "func": _lsp_ce_mul },
+  "/" : { "type": "p", "n_param": -1, "func": _lsp_ce_div }
 };
 
 function _lookup_env(env, key) {
@@ -253,20 +303,18 @@ function _eval(ast) {
     // proc
     //
     else if (u.type == 'p') {
-      if (u.n_param == 2) {
-
-        let ok0 = _eval( _a[1] );
-        let ok1 = _eval( _a[2] );
-
-        let param = [
-          _eval( _a[1] ),
-          _eval( _a[2] )
-        ];
-
-        let _res = u.func( param[0].val, param[1].val );
-        return _res;
+      let param = [];
+      for (let i=1; i<_a.length; i++) {
+        param.push( _eval( _a[i] ) );
       }
 
+      let param_val = [];
+      for (let i=0; i<param.length; i++) {
+        param_val.push( param[i].val );
+      }
+
+      let _res = u.func( ...param );
+      return _res;
     }
 
     // define
