@@ -55,7 +55,8 @@ var LU_DESCR = {
   "I" : "introspection",
   "u" : 'nop',
   "h" : "help",
-  "E" : "error"
+  "E" : "error",
+
 };
 
 var readline = require("readline");
@@ -105,6 +106,38 @@ function _lsp_ce_div() {
   return _lsp_num(s);
 }
 
+function _lsp_uop() {
+  let aval = 0;
+
+  if (arguments.length == 0) { 
+    return {"type":'E', "msg":"bop must have > 0 args"};
+  }
+
+  let ele0 = arguments[0];
+  if (ele0.type != 's') { return {"type":'E', "msg":"bop op must be 's'"}; }
+
+  let _op = ele0.val;
+
+  if (arguments.length > 1) {
+    let ele = arguments[1];
+    if (ele.type != 'n') { return {"type":'E', "msg":"bop param@1 not 'n'"}; }
+    aval = ele.val;
+  }
+
+  let rval = 0;
+
+  switch (_op) {
+    case 'trunc' : rval = Math.trunc(aval); break;
+    case 'floor' : rval = Math.floor(aval); break;
+    case 'ceil' : rval = Math.ceil(aval); break;
+    case 'round' : rval = Math.round(aval); break;
+    case 'frac' : rval = aval%1; break;
+    default: return { "type":"E", "msg": "uop invalid op"}; break;
+  }
+
+  return _lsp_num(rval);
+}
+
 function _lsp_bop() {
   let aval = 0,
       bval = 0;
@@ -112,8 +145,6 @@ function _lsp_bop() {
   if (arguments.length == 0) { 
     return {"type":'E', "msg":"bop must have > 0 args"};
   }
-
-  console.log(arguments);
 
   let ele0 = arguments[0];
   if (ele0.type != 's') { return {"type":'E', "msg":"bop op must be 's'"}; }
@@ -144,6 +175,9 @@ function _lsp_bop() {
 
     case '=' : rval = ((aval == bval) ? 1 : 0); break;
 
+    case '%' : rval = aval % bval; break;
+    case '//' : rval = Math.trunc(aval / bval); break;
+
     default: return { "type":"E", "msg": "bop invalid op"}; break;
   }
 
@@ -163,9 +197,16 @@ var COMMON_ENV = {
   "<" : { "type": "p", "n_param": -1, "func": function() { return _lsp_bop(_lsp_symb('<'), ...arguments); } },
   ">=" : { "type": "p", "n_param": -1, "func": function() { return _lsp_bop(_lsp_symb('>='), ...arguments); } },
   "<=" : { "type": "p", "n_param": -1, "func": function() { return _lsp_bop(_lsp_symb('<='), ...arguments); } },
+  "%" : { "type": "p", "n_param": -1, "func": function() { return _lsp_bop(_lsp_symb('%'), ...arguments); } },
+  "//" : { "type": "p", "n_param": -1, "func": function() { return _lsp_bop(_lsp_symb('//'), ...arguments); } },
 
   "B" : { "type": "p", "n_param": -1, "func": _lsp_bop },
 
+  "trunc" : { "type": "p", "n_param": -1, "func": function() { return _lsp_uop(_lsp_symb('trunc'), ...arguments); } },
+  "floor" : { "type": "p", "n_param": -1, "func": function() { return _lsp_uop(_lsp_symb('floor'), ...arguments); } },
+  "ceil" : { "type": "p", "n_param": -1, "func": function() { return _lsp_uop(_lsp_symb('ceil'), ...arguments); } },
+  "round" : { "type": "p", "n_param": -1, "func": function() { return _lsp_uop(_lsp_symb('round'), ...arguments); } },
+  "frac" : { "type": "p", "n_param": -1, "func": function() { return _lsp_uop(_lsp_symb('frac'), ...arguments); } },
 
   "id": "0000",
   "par": undefined
@@ -206,7 +247,8 @@ function tokenize( _line ) {
 }
 
 function _is_num(s) {
-  if (s.match( /^-?\d+$/ )) { return true; }
+  //if (s.match( /^-?\d+$/ )) { return true; }
+  if (s.match( /^-?\d+(.\d*)?$/ )) { return true; }
   return false;
 }
 
@@ -378,17 +420,33 @@ function _eval(ast, _env) {
   if (_type == 's') {
 
     if      ( ast.val == 'd' ) { return { "type": 'd' }; }
+    else if ( ast.val == 'def' ) { return { "type": 'd' }; }
+    else if ( ast.val == 'define' ) { return { "type": 'd' }; }
+
     else if ( ast.val == 'c' ) { return { "type": 'c' }; }
     else if ( ast.val == '?' ) { return { "type": 'c' }; }
     else if ( ast.val == '?:' ) { return { "type": 'c' }; }
+    else if ( ast.val == 'if' ) { return { "type": 'c' }; }
+
     else if ( ast.val == '!' ) { return { "type": '!' }; }
+    else if ( ast.val == 'set' ) { return { "type": '!' }; }
+
     else if ( ast.val == '@' ) { return { "type": '@' }; }
+    else if ( ast.val == 'at' ) { return { "type": '@' }; }
+
     else if ( ast.val == 'e' ) { return { "type": 'e' }; }
+    else if ( ast.val == 'eval' ) { return { "type": 'e' }; }
 
     else if ( ast.val == 'q' ) { return { "type": 'q' }; }
+    else if ( ast.val == 'quote' ) { return { "type": 'q' }; }
+
     else if ( ast.val == 'f' ) { return { "type": 'f' }; }
+    else if ( ast.val == 'func' ) { return { "type": 'f' }; }
+    else if ( ast.val == 'lambda' ) { return { "type": 'f' }; }
 
     else if ( ast.val == 'h' ) { return { 'type': 'h' }; }
+    else if ( ast.val == 'help' ) { return { 'type': 'h' }; }
+
     else if ( ast.val == 'I' ) { return { "type": 'I' }; }
 
 
@@ -416,11 +474,11 @@ function _eval(ast, _env) {
 
     if (_debug > 2) { console.log(">>>", u); }
 
-    // ?????
+    // procedure type
+    // the big difference between other types is the 'param' parameter
+    // which holds (simple) types of variables
     //
     if (u.type == 'P') {
-
-      //console.log("??? u:", JSON.stringify(u));
 
       let _parm = u.param;
       let _proc = u.val;
@@ -428,43 +486,25 @@ function _eval(ast, _env) {
       let _local_env = _lsp_env_new(_child_env);
 
       for (let i=0; i<_parm.child.length; i++) {
-
-        //console.log("parm[", i, "]:", _parm.child[i].val);
-
-        //_ast_func.env[ _parm[i] ] = _eval( _a[i+1], _child_env );
         _local_env[ _parm.child[i].val ] = _eval( _a[i+1], _child_env );
       }
-
-      //console.log("local_env:", _local_env);
 
       return _eval( _proc, _local_env );
     }
 
     // eval
+    // I'm still a little shaky on this.
+    // I think the way to think of this is as an 'unquote',
+    // meaning (e (q ...)) = ...
     //
     else if (u.type == 'e') {
       if (_a.length < 2) { return { "type":"u", "val":0 }; }
-
-      //console.log("--eval--");
 
       // assume first parameter is a quote, say,
       // now we have an ast that needs to be evaluated.
       //
       let __res = _eval( _a[1], _child_env );
-
-      /*
-      console.log( "__res.env.id:", __res); //_res.env.id);
-      if (__res.type == 'a') {
-        for (let i=0; i<__res.child.length; i++) {
-          console.log("  ", i, ("env" in __res.child[i]) ? __res.child[i].env.id : 'nil')
-        }
-      }
-      */
-
       let _res = _eval( __res, _child_env );
-
-      //console.log( "_res.env.id:", _res); //_res.env.id);
-
       return _res;
     }
 
@@ -495,8 +535,6 @@ function _eval(ast, _env) {
     //   heirarchy
     //
     else if (u.type == 'd') {
-      //ast.env.par[ _a[1].val ] = _eval( _a[2], _child_env );
-      //_child_env.par[ _a[1].val ] = _eval( _a[2], _child_env );
       _env.par[ _a[1].val ] = _eval( _a[2], _child_env );
 
       if (_debug > 2) {
