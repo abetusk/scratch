@@ -44,6 +44,7 @@ var LU_DESCR = {
   "d" : "define",
   "c" : "if (cond)",
   "?" : "if (cond)",
+  "?:" : "if (cond)",
   "!" : "set",
   "q" : "quote",
   "@" : "at (array)",
@@ -58,6 +59,9 @@ var LU_DESCR = {
 };
 
 var readline = require("readline");
+
+function _lsp_num( v ) { return {"type":"n", "val": v}; }
+function _lsp_symb( s ) { return {"type": "s", "val": s}; }
 
 function _lsp_ce_add() {
   let s = 0;
@@ -101,19 +105,67 @@ function _lsp_ce_div() {
   return _lsp_num(s);
 }
 
+function _lsp_bop() {
+  let aval = 0,
+      bval = 0;
+
+  if (arguments.length == 0) { 
+    return {"type":'E', "msg":"bop must have > 0 args"};
+  }
+
+  console.log(arguments);
+
+  let ele0 = arguments[0];
+  if (ele0.type != 's') { return {"type":'E', "msg":"bop op must be 's'"}; }
+
+  let _op = ele0.val;
+
+
+  if (arguments.length > 1) {
+    let ele = arguments[1];
+    if (ele.type != 'n') { return {"type":'E', "msg":"bop param@1 not 'n'"}; }
+    aval = ele.val;
+  }
+
+  if (arguments.length > 2) {
+    let ele = arguments[2];
+    if (ele.type != 'n') { return {"type":'E', "msg":"bop param@2 not 'n'"}; }
+    bval = ele.val;
+  }
+
+  let rval = 0;
+
+  switch (_op) {
+    case '<' : rval = ((aval <  bval) ? 1 : 0); break;
+    case '<=': rval = ((aval <= bval) ? 1 : 0); break;
+
+    case '>' : rval = ((aval >  bval) ? 1 : 0); break;
+    case '>=': rval = ((aval >= bval) ? 1 : 0); break;
+
+    case '=' : rval = ((aval == bval) ? 1 : 0); break;
+
+    default: return { "type":"E", "msg": "bop invalid op"}; break;
+  }
+
+  return _lsp_num(rval);
+}
 
 
 
 var COMMON_ENV = {
-  //"+" : { "type": "p", "n_param": 2, "func": function(a,b) { return _lsp_num(a+b); } },
-  //"-" : { "type": "p", "n_param": 2, "func": function(a,b) { return _lsp_num(a-b); } },
-  //"*" : { "type": "p", "n_param": 2, "func": function(a,b) { return _lsp_num(a*b); } },
-  //"/" : { "type": "p", "n_param": 2, "func": function(a,b) { return _lsp_num(a/b); } }
-
   "+" : { "type": "p", "n_param": -1, "func": _lsp_ce_add },
   "-" : { "type": "p", "n_param": -1, "func": _lsp_ce_sub },
   "*" : { "type": "p", "n_param": -1, "func": _lsp_ce_mul },
   "/" : { "type": "p", "n_param": -1, "func": _lsp_ce_div },
+
+  "=" : { "type": "p", "n_param": -1, "func": function() { return _lsp_bop(_lsp_symb('='), ...arguments); } },
+  ">" : { "type": "p", "n_param": -1, "func": function() { return _lsp_bop(_lsp_symb('>'), ...arguments); } },
+  "<" : { "type": "p", "n_param": -1, "func": function() { return _lsp_bop(_lsp_symb('<'), ...arguments); } },
+  ">=" : { "type": "p", "n_param": -1, "func": function() { return _lsp_bop(_lsp_symb('>='), ...arguments); } },
+  "<=" : { "type": "p", "n_param": -1, "func": function() { return _lsp_bop(_lsp_symb('<='), ...arguments); } },
+
+  "B" : { "type": "p", "n_param": -1, "func": _lsp_bop },
+
 
   "id": "0000",
   "par": undefined
@@ -126,7 +178,6 @@ function _lookup_env(env, key) {
   return undefined;
 }
 
-function _lsp_num( v ) { return {"type":"n", "val": v}; }
 
 function _lsp_help() {
   console.log("help:");
@@ -329,6 +380,7 @@ function _eval(ast, _env) {
     if      ( ast.val == 'd' ) { return { "type": 'd' }; }
     else if ( ast.val == 'c' ) { return { "type": 'c' }; }
     else if ( ast.val == '?' ) { return { "type": 'c' }; }
+    else if ( ast.val == '?:' ) { return { "type": 'c' }; }
     else if ( ast.val == '!' ) { return { "type": '!' }; }
     else if ( ast.val == '@' ) { return { "type": '@' }; }
     else if ( ast.val == 'e' ) { return { "type": 'e' }; }
