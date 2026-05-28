@@ -42,9 +42,11 @@ var LU_DESCR = {
   "p" : "proc",
   "P" : "proc (lambda, result of funcdef)",
   "d" : "define",
-  "c" : "if (cond)",
-  "?" : "if (cond)",
-  "?:" : "if (cond)",
+
+  "C" : "cond",
+
+  "?" : "if",
+  "?:" : "if",
   "!" : "set",
   "q" : "quote",
   "@" : "at (array)",
@@ -424,9 +426,11 @@ function _eval(ast, _env) {
     else if ( ast.val == 'define' ) { return { "type": 'd' }; }
 
     else if ( ast.val == 'c' ) { return { "type": 'c' }; }
-    else if ( ast.val == '?' ) { return { "type": 'c' }; }
-    else if ( ast.val == '?:' ) { return { "type": 'c' }; }
-    else if ( ast.val == 'if' ) { return { "type": 'c' }; }
+    else if ( ast.val == 'cond' ) { return { "type": 'c' }; }
+
+    else if ( ast.val == '?' ) { return { "type": '?' }; }
+    else if ( ast.val == '?:' ) { return { "type": '?' }; }
+    else if ( ast.val == 'if' ) { return { "type": '?' }; }
 
     else if ( ast.val == '!' ) { return { "type": '!' }; }
     else if ( ast.val == 'set' ) { return { "type": '!' }; }
@@ -592,18 +596,44 @@ function _eval(ast, _env) {
     }
 
 
-    // conditional
+    else if (u.type == 'c') {
+
+      for (let c_idx=1; c_idx<_a.length; c_idx++) {
+        //let ele = _eval(_a[c_idx], _child_env);
+
+        let _ele = _a[c_idx];
+
+        if (_ele.type != 'a') {
+          return {"type":"E", "msg": "condition ele must be array type"};
+        }
+
+        if (_ele.child.length != 2) {
+          return {"type":"E", "msg": "condition ele must be of length 2"};
+        }
+
+        let _c = _eval(_ele.child[0], _child_env);
+        if (_c.type != 'n') {
+          return {"type":"E", "msg": "condition invalid return condition type"};
+        }
+
+        if (_c.val != 0) {
+          return _eval( _ele.child[1], _child_env );
+        }
+
+      }
+
+      return {"type":"n", "val": 0};
+      return {"type":"E", "msg": "condition fell through"};
+    }
+
+    // if
     //
-    else if ((u.type == 'c') ||
-             (u.type == '?')) {
-
+    else if (u.type == '?') {
       let _tst = _eval( _a[1], _child_env );
-
       if (_tst.val != 0) {
         return _eval( _a[2], _child_env );
       }
       return _eval( _a[3], _child_env );
-
     }
 
     // quote...
