@@ -394,6 +394,36 @@ function _build_ast(tok, idx, par_env) {
   return { "type": "s", "di": 1, "msg": "", "val": t, "env": _env };
 }
 
+function _lsp_print_redux( _e, _indent, pfx ){
+  _indent = ((typeof _indent === "undefined") ? 0 : _indent);
+  pfx = ((typeof pfx === "undefined") ? "" : pfx);
+  if (typeof _e === "undefined") { return ; }
+  let ws = [];
+  for (let i=0; i<_indent; i++) { ws.push(" "); }
+
+  if ( _e.type == 'P' ) {
+    let _parm_str = [];
+    let _val_str = [];
+    for (let i=0; i<_e.param.child.length; i++) {
+      _parm_str.push( _e.param.child[i].val );
+    }
+
+    if ("child" in _e.val) {
+      for (let i=0; i<_e.val.child.length; i++) {
+        if ("val" in _e.val.child[i]) {
+          _val_str.push( _e.val.child[i].val.toString() );
+        }
+        else {
+          _val_str.push( "." );
+        }
+      }
+    }
+
+    console.log( ws.join(""), pfx, "P{ (", _parm_str.join(" "), ") (", _val_str.join(","), ") }"  );
+
+  }
+}
+
 function _lsp_print_env( _env, _indent ) {
   _indent = ((typeof _indent === "undefined") ? 0 : _indent);
 
@@ -403,7 +433,13 @@ function _lsp_print_env( _env, _indent ) {
   for (let i=0; i<_indent; i++) { ws.push(" "); }
   for (let key in _env) {
     if (key == 'par') { continue; }
-    console.log( ws.join(""), key, ":", _env[key]);
+
+    if (_env[key].type == 'P') {
+      _lsp_print_redux( _env[key], _indent, key + ":");
+    }
+    else {
+      console.log( ws.join(""), key, ":", JSON.stringify(_env[key]));
+    }
   }
   _lsp_print_env( _env.par, _indent + 2 );
 }
@@ -416,6 +452,18 @@ function _eval(ast, _env) {
   if (_debug > 2) { console.log("::eval:", ast); }
 
   let _type = ast.type;
+
+
+  //DEBUG
+  //DEBUG
+  //DEBUG
+
+  console.log("\n_eval:", ast, _env["id"]);
+
+  //DEBUG
+  //DEBUG
+  //DEBUG
+
 
   if (_type == 'n') { return { "type":'n', "val":ast.val }; }
 
@@ -452,6 +500,7 @@ function _eval(ast, _env) {
     else if ( ast.val == 'help' ) { return { 'type': 'h' }; }
 
     else if ( ast.val == 'I' ) { return { "type": 'I' }; }
+    else if ( ast.val == 'J' ) { return { "type": 'J' }; }
 
 
     if (_debug > 2) {
@@ -489,9 +538,23 @@ function _eval(ast, _env) {
 
       let _local_env = _lsp_env_new(_child_env);
 
+      //DEBUG
+      console.log("P:", "u.param:", u.param, "u.val:", u.val, "_a:", _a);
+
+      // we map input into the proc as variables in our local environment.
+      // It's an error, of some sort, if there aren't enough passed parameters
+      // to match what the proc instantiaion expects (no error checking is
+      // done below, TODO).
+      //
       for (let i=0; i<_parm.child.length; i++) {
         _local_env[ _parm.child[i].val ] = _eval( _a[i+1], _child_env );
+
+        //DEBUG
+        console.log("  local_env[", _parm.child[i].val, "] = ", _local_env[ _parm.child[i].val ]);
       }
+
+      //DEBUG
+      console.log("  ", _proc, "w/", _local_env);
 
       return _eval( _proc, _local_env );
     }
@@ -591,7 +654,7 @@ function _eval(ast, _env) {
 
       }
       else {
-        return {"type": "E", "msg" : "invalid parameters to '@'" };
+        return {"type": "E", "msg" : "invalid parameters to '@' (" + _at_idx.type + "," + _at_a.type + ")" };
       }
     }
 
@@ -698,7 +761,35 @@ function _eval(ast, _env) {
 
     else if (u.type == 'I') {
       //_lsp_print_env( ast.env );
-      _lsp_print_env( _env );
+
+      console.log( "wtf:", _env);
+
+
+      console.log("??", _a);
+
+      if (_a.length > 1) {
+        _lsp_print_env( _a[1] );
+
+        let vv = _lookup_env( _env, _a[1].val );
+        JSON.stringify( "!!!", vv );
+
+      }
+      else {
+        _lsp_print_env( _env );
+
+        JSON.stringify(_a[1]);
+      }
+
+
+      return { "type": "u", "val": 0 };
+    }
+
+    else if (u.type == 'J') {
+
+      for (let i=1; i<_a.length; i++) {
+        console.log( JSON.stringify( _eval(_a[i]), undefined, 1));
+      }
+
       return { "type": "u", "val": 0 };
     }
 
@@ -772,10 +863,12 @@ async function repl() {
     let res = _eval(ast);
     console.log(res);
 
+    process.stdout.write("$ ");
+
     //console.log(JSON.stringify(ast, undefined, 2));
   }
 };
 
+process.stdout.write("$ ");
 repl();
 
-console.log("...");

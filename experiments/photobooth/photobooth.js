@@ -79,6 +79,45 @@ function init() {
 
 }
 
+function uploadComplete(x) {
+  console.log("uc:", this.response);
+  return;
+
+  var json_data = JSON.parse( this.response );
+
+  console.log( json_data.id , json_data);
+  //window.location.href = "ngc_view?id=" + json_data.id;
+
+  g_data.message.push("complete");
+
+  var msg = "...";
+  var info = "...";
+  if ("id" in json_data) {
+    msg = "success";
+    info = json_data.id;
+  }
+  else if ("info" in json_data) {
+    msg = "fail";
+    info = json_data.info;
+  }
+
+  _add_info_row('upload', msg, info);
+
+}
+
+function uploadError() {
+  console.log("upload error");
+}
+
+function uploadAbort() {
+  console.log("upload abort");
+}
+
+function uploadProgress() {
+  console.log("upload progress");
+}
+
+
 function photo_snap() {
   let vid = g_ctx.vid;
 
@@ -98,18 +137,22 @@ function photo_snap() {
 
     _img.src = url;
 
-    console.log("???", _b);
+    //var info = document.getElementById("fileInfo").value;
 
-    let _form_data = new FormData();
-    _form_data.append('file', _b, 'img.png');
+    var formData = new FormData();
+    formData.append( "fileData", _b );
 
-    fetch('ul.cgi', {
-      "method" : "POST",
-      "body": _form_data
-    })
-    .then( resp => resp.json() )
-    .then( data => console.log("success?", data) )
-    .catch( err => console.error("error:", err ) );
+    //var uri = "ul.cgi";
+    var uri = "cgi-bin/ul.cgi";
+    var xhr = new XMLHttpRequest();
+    xhr.upload.addEventListener("progress", uploadProgress, false );
+    xhr.addEventListener("load", uploadComplete, false );
+    xhr.addEventListener("error", uploadError, false );
+    xhr.addEventListener("abort", uploadAbort, false );
+
+    xhr.open( "POST", uri );
+    xhr.send( formData );
+
 
   });
 
@@ -117,6 +160,8 @@ function photo_snap() {
 }
 
 function photo_download() {
-  let dl_link
+  let dl_link;
   let data = g_ctx.canvas.toDataURL('image/png');
+
+  console.log(data);
 }
