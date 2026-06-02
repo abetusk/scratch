@@ -829,7 +829,13 @@ async function repl() {
   });
   for await (let _line of _rl) {
 
-    console.log("#$", _line);
+    _line = _line.trim();
+
+    if ((_line.length == 0) ||
+        (_line[0] == ';')) { 
+      process.stdout.write("$ ");
+      continue;
+    }
 
     let tok = tokenize(_line);
     let ast = build_ast(tok, 0, COMMON_ENV);
