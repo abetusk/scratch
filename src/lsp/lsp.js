@@ -62,67 +62,31 @@ var LU_DESCR = {
 };
 
 var readline = require("readline");
+var srand = require("seedrandom");
+
+var RND = srand("lsp.js");
 
 function _lsp_num( v ) { return {"type":"n", "val": v}; }
 function _lsp_symb( s ) { return {"type": "s", "val": s}; }
 
-function _lsp_ce_add() {
-  let s = 0;
-  for (let i=0; i<arguments.length; i++) {
-    let ele = arguments[i];
-    if (ele.type != 'n') { return {"type":'E', "msg":"invalid type to commen env '+'"}; }
-    s += ele.val;
-  }
-  return _lsp_num(s);
-}
-
-function _lsp_ce_sub() {
-  let s = 0;
-  for (let i=0; i<arguments.length; i++) {
-    let ele = arguments[i];
-    if (ele.type != 'n') { return {"type":'E', "msg":"invalid type to commen env '-'"}; }
-    if (i==0) { s += ele.val; }
-    else { s -= ele.val }
-  }
-  return _lsp_num(s);
-}
-
-function _lsp_ce_mul() {
-  let s = 1;
-  for (let i=0; i<arguments.length; i++) {
-    let ele = arguments[i];
-    if (ele.type != 'n') { return {"type":'E', "msg":"invalid type to commen env '*'"}; }
-    s *= ele.val;
-  }
-  return _lsp_num(s);
-}
-
-function _lsp_ce_div() {
-  let s = 1;
-  for (let i=0; i<arguments.length; i++) {
-    let ele = arguments[i];
-    if (ele.type != 'n') { return {"type":'E', "msg":"invalid type to commen env '/'"}; }
-    if (i==0) { s *= ele.val; }
-    else { s /= ele.val }
-  }
-  return _lsp_num(s);
-}
-
+// unary operation
+// easier to consolidate op and argument checking
+//
 function _lsp_uop() {
   let aval = 0;
 
   if (arguments.length == 0) { 
-    return {"type":'E', "msg":"bop must have > 0 args"};
+    return {"type":'E', "msg":"uop must have > 0 args"};
   }
 
   let ele0 = arguments[0];
-  if (ele0.type != 's') { return {"type":'E', "msg":"bop op must be 's'"}; }
+  if (ele0.type != 's') { return {"type":'E', "msg":"uop op must be 's'"}; }
 
   let _op = ele0.val;
 
   if (arguments.length > 1) {
     let ele = arguments[1];
-    if (ele.type != 'n') { return {"type":'E', "msg":"bop param@1 not 'n'"}; }
+    if (ele.type != 'n') { return {"type":'E', "msg":"uop param@1 not 'n'"}; }
     aval = ele.val;
   }
 
@@ -140,6 +104,9 @@ function _lsp_uop() {
   return _lsp_num(rval);
 }
 
+// binary operation
+// easier to consolidate op and argument checking
+//
 function _lsp_bop() {
   let aval = 0,
       bval = 0;
@@ -180,6 +147,11 @@ function _lsp_bop() {
     case '%' : rval = aval % bval; break;
     case '//' : rval = Math.trunc(aval / bval); break;
 
+    case '*' : rval = aval*bval; break;
+    case '/' : rval = aval/bval; break;
+    case '+' : rval = aval+bval; break;
+    case '-' : rval = aval-bval; break;
+
     default: return { "type":"E", "msg": "bop invalid op"}; break;
   }
 
@@ -189,10 +161,10 @@ function _lsp_bop() {
 
 
 var COMMON_ENV = {
-  "+" : { "type": "p", "n_param": -1, "func": _lsp_ce_add },
-  "-" : { "type": "p", "n_param": -1, "func": _lsp_ce_sub },
-  "*" : { "type": "p", "n_param": -1, "func": _lsp_ce_mul },
-  "/" : { "type": "p", "n_param": -1, "func": _lsp_ce_div },
+  "+" : { "type": "p", "n_param": -1, "func": function() { return _lsp_bop( _lsp_symb('+'), ...arguments); } },
+  "-" : { "type": "p", "n_param": -1, "func": function() { return _lsp_bop( _lsp_symb('-'), ...arguments); } },
+  "*" : { "type": "p", "n_param": -1, "func": function() { return _lsp_bop( _lsp_symb('*'), ...arguments); } },
+  "/" : { "type": "p", "n_param": -1, "func": function() { return _lsp_bop( _lsp_symb('/'), ...arguments); } },
 
   "=" : { "type": "p", "n_param": -1, "func": function() { return _lsp_bop(_lsp_symb('='), ...arguments); } },
   ">" : { "type": "p", "n_param": -1, "func": function() { return _lsp_bop(_lsp_symb('>'), ...arguments); } },
@@ -258,7 +230,8 @@ function _uuid() {
   let a = "abcdefghijkmlnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
   let _a = [];
   for (let i=0; i<4; i++) {
-    _a.push( a[ Math.floor(Math.random()*a.length) ] );
+    //_a.push( a[ Math.floor(Math.random()*a.length) ] );
+    _a.push( a[ Math.floor(RND()*a.length) ] );
   }
   return _a.join("");
 }
@@ -445,7 +418,8 @@ function _lsp_print_env( _env, _indent ) {
 }
 
 function _eval(ast, _env) {
-  _env = ((typeof _env === "undefined") ? {"par": COMMON_ENV } : _env);
+  //_env = ((typeof _env === "undefined") ? {"par": COMMON_ENV } : _env);
+  _env = ((typeof _env === "undefined") ? _lsp_env_new() : _env);
 
   let _debug = 0;
 
@@ -523,6 +497,10 @@ function _eval(ast, _env) {
     if (_a.length == 0) { return { "type":"E", "msg":"empty list" }; }
 
     let _child_env = _lsp_env_new(_env);
+
+    //DEBUG
+    console.log("MADE ENV:", _child_env.id, "FROM", _env.id);
+
     let u = _eval( _a[0], _child_env );
 
     if (_debug > 2) { console.log(">>>", u); }
@@ -535,8 +513,11 @@ function _eval(ast, _env) {
 
       let _parm = u.param;
       let _proc = u.val;
+      let _p_env = u.env;
 
-      let _local_env = _lsp_env_new(_child_env);
+      let _local_env = _lsp_env_new(u.env);
+
+      console.log("MADE PENV:", _local_env.id, "FROM", u.env.id);
 
       //DEBUG
       console.log("P:", "u.param:", u.param, "u.val:", u.val, "_a:", _a);
@@ -547,7 +528,8 @@ function _eval(ast, _env) {
       // done below, TODO).
       //
       for (let i=0; i<_parm.child.length; i++) {
-        _local_env[ _parm.child[i].val ] = _eval( _a[i+1], _child_env );
+        //_local_env[ _parm.child[i].val ] = _eval( _a[i+1], _child_env );
+        _local_env[ _parm.child[i].val ] = _eval( _a[i+1], u.env );
 
         //DEBUG
         console.log("  local_env[", _parm.child[i].val, "] = ", _local_env[ _parm.child[i].val ]);
@@ -603,13 +585,6 @@ function _eval(ast, _env) {
     //
     else if (u.type == 'd') {
       _env.par[ _a[1].val ] = _eval( _a[2], _child_env );
-
-      if (_debug > 2) {
-        console.log("\n=== define");
-        console.log( JSON.stringify( _child_env, undefined, 2 ) );
-        console.log("===\n");
-      }
-
       return { "type": "u", "val": 0 };
     }
 
@@ -617,12 +592,6 @@ function _eval(ast, _env) {
     //   set symbol wherever it is up the env chain
     //
     else if (u.type == '!') {
-      //let _env = ast.env;
-      //while (typeof _env.par !== "undefined") {
-      //  if ( _a[1].val in _env ) { break; }
-      //  _env = _env.par;
-      //}
-      //_env[ _a[1].val ] = _eval( _a[2], _child_env );
 
       let _local_env = _child_env;
       while (typeof _local_env.par !== "undefined") {
@@ -630,7 +599,6 @@ function _eval(ast, _env) {
         _local_env = _local_env.par;
       }
       _local_env[ _a[1].val ] = _eval( _a[2], _child_env );
-
 
       return { "type": "u", "val": 0 };
     }
@@ -662,7 +630,6 @@ function _eval(ast, _env) {
     else if (u.type == 'c') {
 
       for (let c_idx=1; c_idx<_a.length; c_idx++) {
-        //let ele = _eval(_a[c_idx], _child_env);
 
         let _ele = _a[c_idx];
 
@@ -734,24 +701,28 @@ function _eval(ast, _env) {
     //
     else if (u.type == 'f') {
 
-      //console.log("funcdef ... _a:", _a);
-
-      //console.log(">1>>", JSON.stringify(_a[1]));
-      //console.log(">2>>", JSON.stringify(_a[2]));
-
       let _res = {
         "type": "P",
         "param": _a[1],
-        "val": _a[2]
+        "val": _a[2],
+        "env": _child_env
       };
 
+      //DEBUG
+      /*
+      console.log("funcdef env, child_env.id:", _child_env.id);
+      if (_child_env.id == 'U356') {
+        console.log("  .:", _child_env.id, _child_env.gg);
+        console.log("  .par^1:", _child_env.par.id,                 _child_env.par.gg);
+        console.log("  .par^2:", _child_env.par.par.id,             _child_env.par.par.gg);
+        console.log("  .par^3:", _child_env.par.par.par.id,         _child_env.par.par.par.gg);
+        console.log("  .par^4:", _child_env.par.par.par.par.id,     _child_env.par.par.par.par.gg);
+        console.log("  .par^5:", _child_env.par.par.par.par.par.id, _child_env.par.par.par.par.par.gg);
+      }
+      */
+      //console.log("FFF.env:", JSON.stringify(_child_env));
+
       return _res;
-
-      //for (let i=0; i<_a.length; i++) {
-      //  console.log("  ", i, JSON.stringify(_a[i], undefined, 2));
-      //}
-
-      return { "type": "u", "val": -1 };
     }
 
     else if (u.type == 'h') {
@@ -760,26 +731,16 @@ function _eval(ast, _env) {
     }
 
     else if (u.type == 'I') {
-      //_lsp_print_env( ast.env );
-
-      console.log( "wtf:", _env);
-
-
-      console.log("??", _a);
 
       if (_a.length > 1) {
         _lsp_print_env( _a[1] );
-
         let vv = _lookup_env( _env, _a[1].val );
-        JSON.stringify( "!!!", vv );
-
+        JSON.stringify( "env val:", vv );
       }
       else {
         _lsp_print_env( _env );
-
         JSON.stringify(_a[1]);
       }
-
 
       return { "type": "u", "val": 0 };
     }
@@ -787,7 +748,19 @@ function _eval(ast, _env) {
     else if (u.type == 'J') {
 
       for (let i=1; i<_a.length; i++) {
-        console.log( JSON.stringify( _eval(_a[i]), undefined, 1));
+
+        let xxx = _eval(_a[i]);
+        let exxx = xxx.env;
+        console.log("_a[", i, "]:", _a[i], xxx);
+
+        if (("par" in exxx) &&
+            ("par" in exxx.par)) {
+          console.log("xxx.par.par:", exxx.par.par);
+          console.log("xxx.par.par.par:", exxx.par.par.par);
+
+        }
+
+        //console.log( JSON.stringify( _eval(_a[i]), undefined, 1));
       }
 
       return { "type": "u", "val": 0 };
@@ -855,6 +828,9 @@ async function repl() {
     "terminal": false
   });
   for await (let _line of _rl) {
+
+    console.log("#$", _line);
+
     let tok = tokenize(_line);
     let ast = build_ast(tok, 0, COMMON_ENV);
 

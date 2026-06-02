@@ -44,3 +44,12 @@ Electronics Notes
 
 
 ---
+
+###
+
+mickey mouse flak helmet
+---
+
+* [Brian M. Viveros](https://www.facebook.com/photo/?fbid=1440603887431915&set=pcb.1440604017431902)
+* [Rihanna "Hard"](https://www.youtube.com/watch?v=Xcwd_Nz6Zog&list=RDXcwd_Nz6Zog&start_radio=1)
+* Erin Hirsh bullet bra, Jeremy Scott 2007 spring collection mickey mouse flak helmet
