@@ -400,6 +400,9 @@ function _lsp_print_redux( _e, _indent, pfx ){
 }
 
 function _lsp_print_env( _env, _indent ) {
+
+  return;
+
   _indent = ((typeof _indent === "undefined") ? 0 : _indent);
 
   if (typeof _env === "undefined") { return ; }
