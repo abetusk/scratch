@@ -13,7 +13,7 @@
 ;           1
 ;           (* n (self (- n 1)))))))
 
-(d fg (f (self) (f (u) (if (= u 0) 1 (* u (self (- u 1)))))))
+(d fg (f (self) (f (w) (if (= w 0) 1 (* w (self (- w 1)))))))
 
 (d factorio (Y fg))
 (factorio 5)
