@@ -1,10 +1,10 @@
 ; https://8dcc.github.io/programming/understanding-y-combinator.html
 ;(d Y
-;   (f (foo)
-;      ((f (x) (foo (f (n) ((x x) n))))
-;       (f (x) (foo (f (n) ((x x) n)))))))
+;   (f (g)
+;      ((f (x) (g (f (n) ((x x) n))))
+;       (f (x) (g (f (n) ((x x) n)))))))
 
-(d Y (f (foo) ((f (x) (foo (f (n) ((x x) n)))) (f (x) (foo (f (n) ((x x) n)))))))
+(d Y (f (g) ((f (x) (g (f (n) ((x x) n)))) (f (x) (g (f (n) ((x x) n)))))))
 
 ;(d fg
 ;   (f (self)
