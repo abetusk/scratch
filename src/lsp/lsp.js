@@ -159,6 +159,8 @@ function _lsp_bop() {
 }
 
 
+var ENV_MAP = {};
+
 
 var COMMON_ENV = {
   "+" : { "type": "p", "n_param": -1, "func": function() { return _lsp_bop( _lsp_symb('+'), ...arguments); } },
@@ -184,6 +186,8 @@ var COMMON_ENV = {
 
   "id": "0000",
   "par": undefined,
+
+  "child": [],
 
   "_lvl": 0
 };
@@ -240,7 +244,13 @@ function _uuid() {
 
 function _lsp_env_new(par_env) {
   par_env = ((typeof par_env === "undefined") ? COMMON_ENV : par_env);
-  return { "id": _uuid(), "par": par_env, "_lvl" : par_env._lvl + 1 };
+  let _ev = { "id": _uuid(), "par": par_env, "_lvl" : par_env._lvl + 1, "child" : [] };
+  par_env.child.push( _ev.id );
+
+  ENV_MAP[ _ev.id ] = _ev;
+  ENV_MAP[ par_env.id ] = par_env;
+
+  return _ev;
 }
 
 function build_ast(tok, idx) {
@@ -401,8 +411,6 @@ function _lsp_print_redux( _e, _indent, pfx ){
 
 function _lsp_print_env( _env, _indent ) {
 
-  return;
-
   _indent = ((typeof _indent === "undefined") ? 0 : _indent);
 
   if (typeof _env === "undefined") { return ; }
@@ -508,6 +516,7 @@ function _eval(ast, _env) {
 
     else if ( ast.val == 'I' ) { return { "type": 'I' }; }
     else if ( ast.val == 'J' ) { return { "type": 'J' }; }
+    else if ( ast.val == 'env_debug' ) { return { "type": 'env_debug' }; }
 
 
     if (_debug > 2) {
@@ -574,12 +583,20 @@ function _eval(ast, _env) {
       for (let i=0; i<_parm.child.length; i++) {
         //_local_env[ _parm.child[i].val ] = _eval( _a[i+1], _child_env );
 
-        let _ev = _eval( _a[i+1], u.env );
+        // Each parameter needs to be evaluated in the *calling* environment.
+        // Once parameters have been resolved, the local environment
+        // where the lambda was defined is then used.
+        //
+        let _ev = _eval( _a[i+1], _child_env );
 
         if (_ev.type == 'E') {
-          console.log("ERROR1:", _proc, _a[i+1], "parm:", i, _ev);
+          console.log("ERROR1:", _proc, "a[", i+1, "]:", _a[i+1], "parm:", i, _ev);
           _lsp_print_env( u.env );
+          
+          return { "type":"E", "msg": "P param eval (" + i.toString() +"): " + _ev.msg };
         }
+
+        console.log("   !!ADDING param!!", _parm.child[i].val, _ev, "(", _local_env.id, ")");
 
         //_local_env[ _parm.child[i].val ] = _eval( _a[i+1], u.env );
         _local_env[ _parm.child[i].val ] = _ev;
@@ -835,6 +852,27 @@ function _eval(ast, _env) {
       }
 
       return { "type": "u", "val": 0 };
+    }
+
+    else if (u.type == 'env_debug') {
+
+      for (let env_uuid in ENV_MAP) {
+        let _ev = ENV_MAP[env_uuid];
+
+        console.log("env[", env_uuid, "] (par:", (_ev.par?_ev.par.id:'nil') ,")");
+
+        for (let key in _ev) {
+          if ((key == 'child') ||
+              (key == 'par') ||
+              (key == 'id') ||
+              (key == '_lvl')) { continue; }
+          let _v = _ev[key];
+          console.log("  ", _v.type, _v.val);
+        }
+
+      }
+
+      return {"type":"u", "val": 0};
     }
 
   }
