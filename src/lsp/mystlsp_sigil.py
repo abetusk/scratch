@@ -148,6 +148,9 @@ def sigil_add():
   d.save_svg("sigil/sigil_add.svg")
 
 
+def sigil_xxx():
+  pass
+
 sigil_exec()
 sigil_def()
 sigil_add()

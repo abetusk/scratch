@@ -526,7 +526,6 @@ function _eval(ast, _env) {
       console.log("");
     }
 
-    //let vv = _lookup_env( ast.env, ast.val );
     let vv = _lookup_env( _env, ast.val );
 
     if (typeof vv !== "undefined") { return vv; }
@@ -572,16 +571,12 @@ function _eval(ast, _env) {
       console.log("MADE PENV:", _local_env.id, "FROM", u.env.id);
       _lsp_print_env(_local_env);
 
-      //DEBUG
-      //console.log("P:", "u.param:", u.param, "u.val:", u.val, "_a:", _a);
-
       // we map input into the proc as variables in our local environment.
       // It's an error, of some sort, if there aren't enough passed parameters
       // to match what the proc instantiaion expects (no error checking is
       // done below, TODO).
       //
       for (let i=0; i<_parm.child.length; i++) {
-        //_local_env[ _parm.child[i].val ] = _eval( _a[i+1], _child_env );
 
         // Each parameter needs to be evaluated in the *calling* environment.
         // Once parameters have been resolved, the local environment
@@ -598,17 +593,8 @@ function _eval(ast, _env) {
 
         console.log("   !!ADDING param!!", _parm.child[i].val, _ev, "(", _local_env.id, ")");
 
-        //_local_env[ _parm.child[i].val ] = _eval( _a[i+1], u.env );
         _local_env[ _parm.child[i].val ] = _ev;
-
-
-
-        //DEBUG
-        //console.log("  local_env[", _parm.child[i].val, "] = ", _local_env[ _parm.child[i].val ]);
       }
-
-      //DEBUG
-      //console.log("  ", _proc, "w/", _local_env);
 
       return _eval( _proc, _local_env );
     }
@@ -781,8 +767,6 @@ function _eval(ast, _env) {
 
     // funcdef (lambda)
     //
-    // WIP!!
-    //
     else if (u.type == 'f') {
 
       let _res = {
@@ -795,20 +779,6 @@ function _eval(ast, _env) {
       //DEBUG
       console.log("MAKEF: param:", _lsp_ast2S(_a[1]), ", val:", _lsp_ast2S(_a[2]), ", env:", _child_env.id);
       _lsp_print_env(_child_env);
-
-      //DEBUG
-      /*
-      console.log("funcdef env, child_env.id:", _child_env.id);
-      if (_child_env.id == 'U356') {
-        console.log("  .:", _child_env.id, _child_env.gg);
-        console.log("  .par^1:", _child_env.par.id,                 _child_env.par.gg);
-        console.log("  .par^2:", _child_env.par.par.id,             _child_env.par.par.gg);
-        console.log("  .par^3:", _child_env.par.par.par.id,         _child_env.par.par.par.gg);
-        console.log("  .par^4:", _child_env.par.par.par.par.id,     _child_env.par.par.par.par.gg);
-        console.log("  .par^5:", _child_env.par.par.par.par.par.id, _child_env.par.par.par.par.par.gg);
-      }
-      */
-      //console.log("FFF.env:", JSON.stringify(_child_env));
 
       return _res;
     }
@@ -847,8 +817,6 @@ function _eval(ast, _env) {
           console.log("xxx.par.par.par:", exxx.par.par.par);
 
         }
-
-        //console.log( JSON.stringify( _eval(_a[i]), undefined, 1));
       }
 
       return { "type": "u", "val": 0 };
@@ -901,7 +869,7 @@ function lsp_print_ast(ast, _env, _indent) {
   }
 
   if (ast.type == 's') {
-    let vv = _lookup_env( ast.env, ast.val );
+    let vv = _lookup_env( _env, ast.val );
 
     if (typeof vv === "undefined") { return; }
 
