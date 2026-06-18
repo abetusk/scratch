@@ -317,68 +317,6 @@ function build_ast(tok, idx) {
   return { "type": "s", "di": 1, "msg": "", "val": t };
 }
 
-
-
-function _build_ast(tok, idx, par_env) {
-  idx = ((typeof idx === "undefined") ? 0 : idx);
-  par_env = ((typeof par_env === "undefined") ? { "id": _uuid() } : par_env);
-
-  let _env = { "id": _uuid(), "par": par_env  };
-
-  if ((tok.length - idx) <= 0) {
-    return { "type": "E", "msg": "|tok| < 0", "di":-1 };
-  }
-
-  let _di = 0;
-
-  let t = tok[idx];
-  idx++;
-  _di++;
-
-  // number
-  //
-  if ( _is_num(t) ) {
-    return { "type": "n", "di": 1, "msg": "", "val": parseFloat(t), "env": _env };
-  }
-
-  // start of list
-  //
-  if ( t == '(') {
-
-    let _a_res = { "type": "a", "di": 0, "child": [], "msg": "", "env": _env };
-
-    if ((tok.length - idx) <= 0) {
-      return { "type": "E", "msg": "|tok| < 0 (B)", "di":-1 };
-    }
-
-    t = tok[idx];
-    while (t != ')') {
-      let res = build_ast(tok, idx, _env);
-      if (res.type == 'E') { return res; }
-
-      _a_res.child.push( res );
-
-      idx += res.di;
-      _di += res.di;
-
-      if ((tok.length - idx) <= 0) {
-        return { "type": "E", "msg": "|tok| < 0 (C)", "di":-1 };
-      }
-
-      t = tok[idx];
-    }
-    idx++;
-    _di++;
-
-    _a_res.di = _di;
-    return _a_res;
-  }
-
-  // symbol
-  //
-  return { "type": "s", "di": 1, "msg": "", "val": t, "env": _env };
-}
-
 function _lsp_print_redux( _e, _indent, pfx ){
   _indent = ((typeof _indent === "undefined") ? 0 : _indent);
   pfx = ((typeof pfx === "undefined") ? "" : pfx);
