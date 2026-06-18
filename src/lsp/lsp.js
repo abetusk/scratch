@@ -227,7 +227,6 @@ function tokenize( _line ) {
 }
 
 function _is_num(s) {
-  //if (s.match( /^-?\d+$/ )) { return true; }
   if (s.match( /^-?\d+(.\d*)?$/ )) { return true; }
   return false;
 }
@@ -236,7 +235,6 @@ function _uuid() {
   let a = "abcdefghijkmlnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
   let _a = [];
   for (let i=0; i<4; i++) {
-    //_a.push( a[ Math.floor(Math.random()*a.length) ] );
     _a.push( a[ Math.floor(RND()*a.length) ] );
   }
   return _a.join("");
@@ -255,9 +253,6 @@ function _lsp_env_new(par_env) {
 
 function build_ast(tok, idx) {
   idx = ((typeof idx === "undefined") ? 0 : idx);
-  //par_env = ((typeof par_env === "undefined") ? { "id": _uuid() } : par_env);
-
-  //let _env = { "id": _uuid(), "par": par_env  };
 
   if ((tok.length - idx) <= 0) {
     return { "type": "E", "msg": "|tok| < 0", "di":-1 };
@@ -272,7 +267,6 @@ function build_ast(tok, idx) {
   // number
   //
   if ( _is_num(t) ) {
-    //return { "type": "n", "di": 1, "msg": "", "val": parseFloat(t), "env": _env };
     return { "type": "n", "di": 1, "msg": "", "val": parseFloat(t) };
   }
 
@@ -280,7 +274,6 @@ function build_ast(tok, idx) {
   //
   if ( t == '(') {
 
-    //let _a_res = { "type": "a", "di": 0, "child": [], "msg": "", "env": _env };
     let _a_res = { "type": "a", "di": 0, "child": [], "msg": "" };
 
     if ((tok.length - idx) <= 0) {
@@ -289,7 +282,6 @@ function build_ast(tok, idx) {
 
     t = tok[idx];
     while (t != ')') {
-      //let res = build_ast(tok, idx, _env);
       let res = build_ast(tok, idx);
       if (res.type == 'E') { return res; }
 
@@ -313,7 +305,6 @@ function build_ast(tok, idx) {
 
   // symbol
   //
-  //return { "type": "s", "di": 1, "msg": "", "val": t, "env": _env };
   return { "type": "s", "di": 1, "msg": "", "val": t };
 }
 
@@ -853,7 +844,7 @@ async function repl() {
     }
 
     let tok = tokenize(_line);
-    let ast = build_ast(tok, 0, COMMON_ENV);
+    let ast = build_ast(tok, 0);
 
     if (_debug > 1) { lsp_print_ast(ast, COMMON_ENV); }
 
