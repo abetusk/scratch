@@ -35,6 +35,8 @@
 // Some other semantics for scoping issues?
 //
 
+var LSP_VERSION = "0.1.0";
+
 var LU_DESCR = {
   "n" : "num",
   "a" : "array",

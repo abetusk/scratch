@@ -367,8 +367,6 @@ async function repl() {
 
 
     let deps = process_ast(ast);
-    console.log("...", ast);
-    console.log(">>", deps);
 
     _print_ast_redux(ast);
 

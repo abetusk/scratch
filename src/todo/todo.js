@@ -29,7 +29,8 @@ var todo_data = JSON.parse(fs.readFileSync( TODO_JSON ));
 let fp = process.stdout;
 let argv = process.argv.slice(2);
 
-function show_all(fp,data) {
+function show_all(fp,data, flag) {
+  flag = ((typeof flag === "undefined") ? {} : flag);
 
   fp.write("\n");
 
@@ -38,6 +39,12 @@ function show_all(fp,data) {
     let ele = data[i];
     if (ele.scope == "mondo") {
       fp.write("  " + ele.title + "\n");
+
+      if (("note" in flag) &&
+          (flag.note) &&
+          ("note" in ele)) {
+        fp.write("    " + ele.note + "\n\n");
+      }
     }
   }
   fp.write("\n");
@@ -47,6 +54,25 @@ function show_all(fp,data) {
     let ele = data[i];
     if (ele.scope == "mezzo") {
       fp.write("  " + ele.title + "\n");
+      if (("note" in flag) &&
+          (flag.note) &&
+          ("note" in ele)) {
+        fp.write("    " + ele.note + "\n\n");
+      }
+    }
+  }
+  fp.write("\n");
+
+  fp.write("divertire:\n---\n");
+  for (let i=0; i<data.length; i++) {
+    let ele = data[i];
+    if (ele.scope == "divertire") {
+      fp.write("  " + ele.title + "\n");
+      if (("note" in flag) &&
+          (flag.note) &&
+          ("note" in ele)) {
+        fp.write("    " + ele.note + "\n\n");
+      }
     }
   }
   fp.write("\n");
@@ -56,6 +82,11 @@ function show_all(fp,data) {
     let ele = data[i];
     if (ele.scope == "nigh") {
       fp.write("  " + ele.title + "\n");
+      if (("note" in flag) &&
+          (flag.note) &&
+          ("note" in ele)) {
+        fp.write("    " + ele.note + "\n\n");
+      }
     }
   }
   fp.write("\n");
@@ -65,6 +96,11 @@ function show_all(fp,data) {
     let ele = data[i];
     if (ele.scope == "sotto") {
       fp.write("  " + ele.title + "\n");
+      if (("note" in flag) &&
+          (flag.note) &&
+          ("note" in ele)) {
+        fp.write("    " + ele.note + "\n\n");
+      }
     }
   }
   fp.write("\n");
@@ -73,6 +109,11 @@ function show_all(fp,data) {
 
 if (argv.length < 1) {
   show_all(fp, todo_data.todo);
+}
+else {
+  if ((argv[0] == "verbose") || (argv[0] == 'v')) {
+    show_all(fp, todo_data.todo, { "note": true });
+  }
 }
 
 
