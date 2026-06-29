@@ -94,10 +94,12 @@ function _stream_err(e) {
 
 function init() {
 
+  update_cookie_credential();
+
   let _desktop = false;
 
   let err_ele = document.getElementById("ui_error_message");
-  err_ele.innerHTML = "cp.0";
+  err_ele.innerHTML = "cp.0:" + JSON.stringify(navigator);
 
 
   if (_desktop) {
@@ -106,7 +108,17 @@ function init() {
       .catch(_stream_err);
   }
   else {
-    let _u = navigator.mediaDevices.getUserMedia({"video": {"facingMode":"evironment"}, "audio":false})
+    let _u = navigator.mediaDevices.getUserMedia({
+      "video": {
+        //"width": {"ideal":4096 },
+	//"height":{"ideal": 2160 },
+	//"height":{"ideal": 4096 },
+	//"height":{"ideal": 2160 },
+	"height":{"ideal": 3840 },
+        "facingMode":"environment"
+      },
+      "audio":false
+    })
       .then(_stream_func)
       .catch(_stream_err);
 
@@ -198,11 +210,12 @@ function photo_snap() {
 
     var formData = new FormData();
     formData.append( "fileData", _b );
-    formData.append( "username", _user );
-    formData.append( "passhash", _pwhash );
+    //formData.append( "username", _user );
+    //formData.append( "passhash", _pwhash );
 
     //var uri = "ul.cgi";
     var uri = "cgi-bin/ul.cgi";
+    //var uri = "cgi-bin/ul.py";
     var xhr = new XMLHttpRequest();
     xhr.upload.addEventListener("progress", uploadProgress, false );
     xhr.addEventListener("load", uploadComplete, false );
