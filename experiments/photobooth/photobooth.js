@@ -121,7 +121,6 @@ function uploadProgress() {
 function photo_snap() {
   let vid = g_ctx.vid;
 
-
   g_ctx.canvas.width = vid.videoWidth;
   g_ctx.canvas.height = vid.videoHeight;
 
