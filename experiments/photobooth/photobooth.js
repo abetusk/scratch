@@ -44,6 +44,40 @@ function sendFile( file ) {
 //----
 
 
+async function digestMessage(message) {
+  const msgUint8 = new TextEncoder().encode(message);                           // encode as (utf-8) Uint8Array
+  const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);           // hash the message
+  const hashArray = Array.from(new Uint8Array(hashBuffer));                     // convert buffer to byte array
+  const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join(''); // convert bytes to hex string
+  return hashHex;
+}
+
+
+function delete_cookie(key, path) {
+  var a = document.cookie.split(";");
+  for (var ii=0; ii<a.length; ii++) {
+    var kv = a[ii].split("=");
+    if (kv[0].trim() == key) {
+      if (typeof path !== 'undefined') {
+        document.cookie = key + "= ; expires = Thu, 01 Jan 1970 00:00:00 GMT;path=" + path;
+      }
+      else {
+        document.cookie = key + "= ; expires = Thu, 01 Jan 1970 00:00:00 GMT";
+      }
+    }
+  }
+}
+
+
+function update_cookie_credential() {
+
+  let u = "anonymous";
+  let h = "xxxx";
+
+  document.cookie = "username=" + u;
+  document.cookie = "passhash=" + h;
+}
+
 
 
 function _stream_func(s) {
@@ -136,10 +170,15 @@ function photo_snap() {
 
     _img.src = url;
 
+    let _user = "anonymous";
+    let _pwhash = "xxxx";
+
     //var info = document.getElementById("fileInfo").value;
 
     var formData = new FormData();
     formData.append( "fileData", _b );
+    formData.append( "username", _user );
+    formData.append( "passhash", _pwhash );
 
     //var uri = "ul.cgi";
     var uri = "cgi-bin/ul.cgi";
@@ -151,10 +190,7 @@ function photo_snap() {
 
     xhr.open( "POST", uri );
     xhr.send( formData );
-
-
   });
-
 
 }
 
