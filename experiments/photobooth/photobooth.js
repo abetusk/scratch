@@ -87,12 +87,33 @@ function _stream_func(s) {
 
 function _stream_err(e) {
   console.log("stream error:", e);
+
+  let err_ele = document.getElementById("ui_error_message");
+  err_ele.innerHTML = e;
 }
 
 function init() {
-  navigator.mediaDevices.getUserMedia({"video": true})
-    .then(_stream_func)
-    .catch(_stream_err);
+
+  let _desktop = false;
+
+  let err_ele = document.getElementById("ui_error_message");
+  err_ele.innerHTML = "cp.0";
+
+
+  if (_desktop) {
+    navigator.mediaDevices.getUserMedia({"video": true})
+      .then(_stream_func)
+      .catch(_stream_err);
+  }
+  else {
+    let _u = navigator.mediaDevices.getUserMedia({"video": {"facingMode":"evironment"}, "audio":false})
+      .then(_stream_func)
+      .catch(_stream_err);
+
+  let err_ele = document.getElementById("ui_error_message");
+  err_ele.innerHTML = _u;
+
+  }
 
   let btn = document.getElementById("ui_capture");
   //let btn_dl = document.getElementById("ui_download");
