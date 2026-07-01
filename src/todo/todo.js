@@ -10,14 +10,48 @@
 
 var fs = require("fs");
 
+var TODO_VERSION = "0.1.0";
+
 let TODO_JSON = process.env['HOME'] + "/.config/todo/todo.json";
 
+function _ws(n) {
+  let a = [];
+  for (let i=0; i<n; i++) { a.push(" "); }
+  return a.join("");
+}
+
 function show_help(fp, msg) {
-  if (typeof msg !== "undefined") {
-    fp.write(msg + "\n");
+  if (typeof msg !== "undefined") { fp.write(msg + "\n"); }
+
+  fp.write("\ntodo - a simple command line todo interface (v" + TODO_VERSION + ")\n\n");
+  fp.write("  todo [verbose|help]\n\n");
+  fp.write("               (no args) print todo\n");
+  fp.write("    verbose    print notes with todo items\n");
+  fp.write("    help       this screen\n");
+  fp.write("\n");
+  fp.write("To add todo items, edit the `todo.json` file\n");
+  fp.write("located in '" + TODO_JSON + "'.\n");
+  fp.write("\n");
+  fp.write("Items have a \"scope\", which consists of:\n\n");
+
+  let descr_map = {};
+  for (let i=0; i<todo_data.template.description.length; i++) {
+    let descr = todo_data.template.description[i];
+    for (let _key in descr) {
+      descr_map[_key] = descr[_key];
+    }
   }
 
-  fp.write("help ...\n");
+  for (let i=0; i<todo_data.template.scope.length; i++) {
+    let scope_name = todo_data.template.scope[i];
+    fp.write("  " + scope_name + _ws( 10 - scope_name.length ) + descr_map[scope_name] + "\n");
+  }
+  fp.write("\n");
+
+  fp.write("Items may be further adorned with a 'note' field.\n");
+  fp.write("Completed todo items ('finire') can be adorned with a 'finished_date' field.\n");
+  fp.write("\n\n");
+
 }
 
 if (!fs.existsSync(TODO_JSON)) {
@@ -113,6 +147,44 @@ if (argv.length < 1) {
 else {
   if ((argv[0] == "verbose") || (argv[0] == 'v')) {
     show_all(fp, todo_data.todo, { "note": true });
+  }
+  else if (argv[0] == "help") {
+
+    show_help(fp);
+    /*
+
+    console.log("\ntodo - a simple command line todo interface\n");
+    console.log("  todo [verbose|help]\n");
+    console.log("               (no args) print todo")     ;
+    console.log("    verbose    print notes with todo items");
+    console.log("    help       this screen");
+    console.log("");
+    console.log("To add todo items, edit the `todo.json` file");
+    console.log("located in '" + TODO_JSON + "'.");
+    console.log("");
+    console.log("Items have a \"scope\" which consists of:\n");
+
+    let descr_map = {};
+    for (let i=0; i<todo_data.template.description.length; i++) {
+      let descr = todo_data.template.description[i];
+      for (let _key in descr) {
+        descr_map[_key] = descr[_key];
+      }
+    }
+
+    for (let i=0; i<todo_data.template.scope.length; i++) {
+      let scope_name = todo_data.template.scope[i];
+      console.log("  " + scope_name + _ws( 10 - scope_name.length ) + descr_map[scope_name]);
+    }
+    console.log("");
+
+    console.log("Items may be further adorned with a 'note' field.");
+    console.log("Completed todo items ('finire') can be adorned with a 'finished_date' field.");
+    console.log("\n");
+    */
+  }
+  else {
+    show_help(process.stderr , "invalid option");
   }
 }
 
