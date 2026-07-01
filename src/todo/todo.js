@@ -149,39 +149,7 @@ else {
     show_all(fp, todo_data.todo, { "note": true });
   }
   else if (argv[0] == "help") {
-
     show_help(fp);
-    /*
-
-    console.log("\ntodo - a simple command line todo interface\n");
-    console.log("  todo [verbose|help]\n");
-    console.log("               (no args) print todo")     ;
-    console.log("    verbose    print notes with todo items");
-    console.log("    help       this screen");
-    console.log("");
-    console.log("To add todo items, edit the `todo.json` file");
-    console.log("located in '" + TODO_JSON + "'.");
-    console.log("");
-    console.log("Items have a \"scope\" which consists of:\n");
-
-    let descr_map = {};
-    for (let i=0; i<todo_data.template.description.length; i++) {
-      let descr = todo_data.template.description[i];
-      for (let _key in descr) {
-        descr_map[_key] = descr[_key];
-      }
-    }
-
-    for (let i=0; i<todo_data.template.scope.length; i++) {
-      let scope_name = todo_data.template.scope[i];
-      console.log("  " + scope_name + _ws( 10 - scope_name.length ) + descr_map[scope_name]);
-    }
-    console.log("");
-
-    console.log("Items may be further adorned with a 'note' field.");
-    console.log("Completed todo items ('finire') can be adorned with a 'finished_date' field.");
-    console.log("\n");
-    */
   }
   else {
     show_help(process.stderr , "invalid option");
