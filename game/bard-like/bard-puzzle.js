@@ -252,13 +252,33 @@ function check_melody_rhythm(M, rhythm_lib) {
   return res;
 }
 
-function ex_1_1(M) {
+function descr_ex1_1() {
+  let descr = [];
+  let valid_notes = [ "e4", "g4", "a4", "b4" ];
+  let rhythm_lib = [ [ "+", "+", "+", "*" ] ];
+  let n_measure = [6,7];
+
+  let rhythm_s = [];
+  for (let i=0; i<rhythm_lib.length; i++) {
+    rhythm_s.push( rhythm_lib[i].join("") );
+  }
+
+
+  descr.push("note restrict " + valid_notes.join(" "));
+  descr.push("rhythm restrict " + rhythm_s.join(" "));
+  descr.push("measure length " + n_measure[0].toString());
+  descr.push("constraint: tonic,basic rhythm");
+
+  return "(" + descr.join( ") (" ) + ")"
+}
+
+function ex1_1(M) {
   let ok_res = { "r":0, "msg": ""};
 
   let valid_notes = _unfurl( [ "e4", "g4", "a4", "b4" ] );
   let rhythm_lib = [ [ "+", "+", "+", "*" ] ];
 
-  let n_measure = 6;
+  let n_measure = [6,7];
 
   res = check_melody_notes(M, valid_notes);
   if (res.r != 0) { return res; }
@@ -316,6 +336,11 @@ function _main_repl() {
         console.log("  ct  - check tonic constraint");
         console.log("  cr  - check basic rhythm constraint");
         console.log("");
+        console.log("challenges:");
+        console.log("");
+        console.log("  ex1.1:", descr_ex1_1());
+        console.log("");
+
       }
 
       else if (tok[0] == 's2m') {
@@ -337,7 +362,7 @@ function _main_repl() {
 
       else if (tok[0] == 'ex1.1') {
         let M = s2melody( tok.slice(1).join(" ") );
-        let res = ex_1_1( M );
+        let res = ex1_1( M );
         console.log(">>", res);
       }
 
@@ -357,10 +382,10 @@ function _test0() {
 
   console.log( s2melody(melo0) );
 
-  ex_1_1( s2melody(melo0) );
-  ex_1_1( s2melody(melo1) );
-  ex_1_1( s2melody(melo2) );
-  ex_1_1( s2melody(melo3) );
+  ex1_1( s2melody(melo0) );
+  ex1_1( s2melody(melo1) );
+  ex1_1( s2melody(melo2) );
+  ex1_1( s2melody(melo3) );
 }
 
 if ((typeof process !== "undefined") &&
