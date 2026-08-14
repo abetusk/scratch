@@ -6,6 +6,41 @@ var g_ctx = {
 };
 
 
+//const socket = io("http://192.168.0.1:3000");
+//const socket = io("http://localhost:3000");
+const socket = io("http://localhost:8182");
+//const socket = io("http://127.0.0.1:3000");
+
+socket.on("connect_error", (err) => {
+  console.log("err", err.message);
+});
+
+socket.on("connection", () => {
+  console.log("connection?");
+  //log("Connected to server");
+});
+
+socket.on("connect", () => {
+  console.log("connect?");
+  //log("Connected to server");
+});
+
+socket.on("msg", data => {
+  log("Server: " + data);
+});
+
+function send() {
+  const t = document.getElementById("text").value;
+  socket.emit("msg", t);
+  log("Client: " + t);
+}
+
+function log(msg) {
+  const div = document.getElementById("log");
+  div.innerHTML += msg + "<br>";
+}
+
+
 //----
 //----
 //----
@@ -150,6 +185,10 @@ function uploadComplete(x) {
   console.log("uc:", this.response);
   return;
 
+}
+
+
+function __uploadComplete(x) {
   var json_data = JSON.parse( this.response );
 
   console.log( json_data.id , json_data);
@@ -234,3 +273,10 @@ function photo_download() {
 
   console.log(data);
 }
+
+//---
+//---
+//---
+
+
+
