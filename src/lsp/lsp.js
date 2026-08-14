@@ -387,29 +387,13 @@ function _lsp_ast2S(ast) {
 }
 
 function _eval(ast, _env) {
-  //_env = ((typeof _env === "undefined") ? {"par": COMMON_ENV } : _env);
   _env = ((typeof _env === "undefined") ? _lsp_env_new() : _env);
 
   let _debug = 0;
-
-  if (_debug > 2) { console.log("::eval:", ast); }
-
   let _type = ast.type;
 
-
-
-  //DEBUG
-  //DEBUG
-  //DEBUG
-
-  //console.log("\n_eval:", ast, _env["id"]);
-
-  console.log( WS(_env._lvl, ',') + _env.id, ":", _lsp_ast2S(ast));
-
-  //DEBUG
-  //DEBUG
-  //DEBUG
-
+  if (_debug > 2) { console.log("::eval:", ast); }
+  if (_debug > 0) { console.log( WS(_env._lvl, ',') + _env.id, ":", _lsp_ast2S(ast)); }
 
   if (_type == 'n') { return { "type":'n', "val":ast.val }; }
 
@@ -462,8 +446,10 @@ function _eval(ast, _env) {
     if (typeof vv !== "undefined") { return vv; }
 
     //DEBUG
-    console.log("ERROR0:", "lookup fail:", ast.val, ast, "env:", _env.id);
-    _lsp_print_env(_env);
+    if (_debug > 0) {
+      console.log("ERROR0:", "lookup fail:", ast.val, ast, "env:", _env.id);
+      _lsp_print_env(_env);
+    }
 
     return { "type":"E", "msg":"invalid 's':" + ast.val.toString() };
   }
@@ -475,13 +461,16 @@ function _eval(ast, _env) {
     let _child_env = _lsp_env_new(_env);
 
     //DEBUG
-    console.log("MADE ENV:", _child_env.id, "FROM", _env.id);
+    if (_debug > 0) { console.log("MADE ENV:", _child_env.id, "FROM", _env.id); }
 
     let u = _eval( _a[0], _child_env );
 
     if (u.type == 'E') {
-      console.log("ERROR:", _a[0], u, _lookup_env( _child_env, _a[0].val ) );
-      _lsp_print_env( _child_env );
+
+      if (_debug > 0) {
+        console.log("ERROR:", _a[0], u, _lookup_env( _child_env, _a[0].val ) );
+        _lsp_print_env( _child_env );
+      }
     }
 
 
@@ -499,8 +488,10 @@ function _eval(ast, _env) {
 
       let _local_env = _lsp_env_new(u.env);
 
-      console.log("MADE PENV:", _local_env.id, "FROM", u.env.id);
-      _lsp_print_env(_local_env);
+      if (_debug > 0) {
+        console.log("MADE PENV:", _local_env.id, "FROM", u.env.id);
+        _lsp_print_env(_local_env);
+      }
 
       // we map input into the proc as variables in our local environment.
       // It's an error, of some sort, if there aren't enough passed parameters
@@ -516,13 +507,18 @@ function _eval(ast, _env) {
         let _ev = _eval( _a[i+1], _child_env );
 
         if (_ev.type == 'E') {
-          console.log("ERROR1:", _proc, "a[", i+1, "]:", _a[i+1], "parm:", i, _ev);
-          _lsp_print_env( u.env );
+
+          if (_debug > 0) {
+            console.log("ERROR1:", _proc, "a[", i+1, "]:", _a[i+1], "parm:", i, _ev);
+            _lsp_print_env( u.env );
+          }
           
           return { "type":"E", "msg": "P param eval (" + i.toString() +"): " + _ev.msg };
         }
 
-        console.log("   !!ADDING param!!", _parm.child[i].val, _ev, "(", _local_env.id, ")");
+        if (_debug > 0) {
+          console.log("   !!ADDING param!!", _parm.child[i].val, _ev, "(", _local_env.id, ")");
+        }
 
         _local_env[ _parm.child[i].val ] = _ev;
       }
@@ -580,10 +576,11 @@ function _eval(ast, _env) {
       //DEBUG
       let dbg_str = "";
       if (_ev.type == 'P') { dbg_str = ", P.env: " + _ev.env.id; }
-      console.log("DEF", _a[1].val, dbg_str);
+
+      if (_debug > 0) { console.log("DEF", _a[1].val, dbg_str); }
 
       if (_ev.type == 'P') {
-        _lsp_print_env(_ev.env);
+        if (_debug > 0) { _lsp_print_env(_ev.env); }
       }
 
       return { "type": "u", "val": 0 };
@@ -674,21 +671,6 @@ function _eval(ast, _env) {
     //
     else if (u.type == 'q') {
 
-      if (_debug > 3) {
-        console.log("q...", _a.length, _a);
-
-        for (let i=0; i<_a.length; i++) {
-          console.log("  ", i, ":" + _a[i].type + ":", _a[i].val ? _a[i].val : '');
-
-          if (_a[i].type == 'a') {
-            let _b = _a[i].child;
-            for (let j=0; j<_b.length; j++) {
-              console.log("    ", j, _b[j].type );
-            }
-          }
-        }
-      }
-
       if (_a[1].type == 'a') {
         return { "type": "a", "child" : _a[1].child };
       }
@@ -708,8 +690,10 @@ function _eval(ast, _env) {
       };
 
       //DEBUG
-      console.log("MAKEF: param:", _lsp_ast2S(_a[1]), ", val:", _lsp_ast2S(_a[2]), ", env:", _child_env.id);
-      _lsp_print_env(_child_env);
+      if (_debug > 0) {
+        console.log("MAKEF: param:", _lsp_ast2S(_a[1]), ", val:", _lsp_ast2S(_a[2]), ", env:", _child_env.id);
+        _lsp_print_env(_child_env);
+      }
 
       return _res;
     }
@@ -829,7 +813,7 @@ function lsp_print_ast(ast, _env, _indent) {
 
 async function repl() {
 
-  let _debug = 2;
+  let _debug = 0;
 
   let _rl = readline.createInterface({
     "input" :  process.stdin,
@@ -854,8 +838,6 @@ async function repl() {
     console.log(res);
 
     process.stdout.write("$ ");
-
-    //console.log(JSON.stringify(ast, undefined, 2));
   }
 };
 

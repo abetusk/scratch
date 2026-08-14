@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>WebSocket Demo (aux)</title>
+</head>
+<body>
+  <h2>WebSocket Live Test (aux)</h2>
+  <button onclick="send_msg()">Send Message</button>
+  <p id="log"></p>
+
+  <script>
+    var dt_reconnect_attempt = 1000;
+
+    function _connect() {
+      const ws = new WebSocket('ws://localhost:8080');
+      
+      ws.onopen = function() { console.log('Connected to server'); }
+      ws.onmessage = function(event) {
+        document.getElementById('log').innerText = event.data;
+      };
+
+      ws.onclose = function(ev) {
+        console.log("connection lost... will retry");
+
+        setTimeout( () => {
+          console.log("attempting...");
+          _connect();
+        }, dt_reconnect_attempt);
+      };
+
+      function send_msg() {
+        ws.send( JSON.stringify({"message": "ok", "id": 0, "type": "click" }) );
+      }
+
+    }
+
+    _connect();
+  </script>
+</body>
+</html>

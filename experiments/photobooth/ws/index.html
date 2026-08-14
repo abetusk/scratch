@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>WebSocket Demo</title>
+</head>
+<body>
+  <h2>WebSocket Live Test</h2>
+  <button onclick="sendPing()">Send Message</button>
+  <p id="log"></p>
+
+  <script>
+    const ws = new WebSocket('ws://localhost:8080');
+    
+    ws.onopen = () => console.log('Connected to server');
+    ws.onmessage = (event) => {
+      document.getElementById('log').innerText = event.data;
+    };
+
+    function sendPing() {
+      ws.send('Hello from client!');
+    }
+  </script>
+</body>
+</html>
