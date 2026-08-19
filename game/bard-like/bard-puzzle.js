@@ -8,7 +8,7 @@
 // work.  If not, see <http://creativecommons.org/publicdomain/zero/1.0/>.
 //
 
-var _descr = {
+var TEMPO_DESCR = {
   "*" : "half",
   "+" : "quarter",
   ":" : "eighth",
@@ -28,6 +28,9 @@ var terms = [
   "measure", "melody"
 ];
 
+// take notes in note template and
+// enumerate all possibilities of them.
+//
 function _unfurl(note_template) {
 
   let tempo_type = [
@@ -74,6 +77,21 @@ function s2melody(s) {
   }
 
   return melody;
+}
+
+// "do not exceed a total range of a major 10th":
+//   16 semitones
+// to semitones for a major valur v is:
+//
+//   12*floor( (v-1)/7 ) + ((...))
+//
+// "use 2nds and 3rds freely" skip 1-2/3-4 semitones
+//   freely
+//   - in the scale, if next note is 1-2 semitones, this
+//     is considered a 2nd, if the next note is 3-4 semitones,
+//     it's considered a 3rd
+//
+function check_melody_stride(M) {
 }
 
 function check_melody_tonic(M) {
@@ -266,7 +284,13 @@ function descr_ex1_1() {
 
   descr.push("note restrict " + valid_notes.join(" "));
   descr.push("rhythm restrict " + rhythm_s.join(" "));
-  descr.push("measure length " + n_measure[0].toString());
+
+  if ((n_measure[1]-1) == n_measure[0]) {
+    descr.push("measure length " + n_measure[0].toString());
+  }
+  else {
+    descr.push("measure length [" + n_measure[0].toString(), n_measure[1].toString(), ")");
+  }
   descr.push("constraint: tonic,basic rhythm");
 
   return "(" + descr.join( ") (" ) + ")"
@@ -293,7 +317,59 @@ function ex1_1(M) {
   if (res.r != 0) { return res; }
 
   return ok_res;
+}
 
+function descr_ex1_2() {
+  let descr = [];
+  let valid_notes = ["f", "a", "b", "c"];
+  let rhythm_lib = [
+    [ ":", ":", ":", ":", "+", "+" ],
+    [ "+", "+", ":", ":", "+" ]
+  ];
+  let n_measure = [4,8];
+
+  let rhythm_s = [];
+  for (let i=0; i<rhythm_lib.length; i++) {
+    rhythm_s.push( rhythm_lib[i].join("") );
+  }
+
+  descr.push("note restrict " + valid_notes.join(" "));
+  descr.push("rhythm restrict " + rhythm_s.join(" "));
+  if ((n_measure[1]-1) == n_measure[0]) {
+    descr.push("measure length " + n_measure[0].toString());
+  }
+  else {
+    descr.push("measure length [" + n_measure[0].toString() + " : " + n_measure[1].toString() + ")");
+  }
+  descr.push("constraint: tonic,basic rhythm");
+
+  return "(" + descr.join( ") (" ) + ")"
+}
+
+function ex1_2(M) {
+
+  let ok_res = { "r": 0, "msg": "", "score": 0 };
+
+  let valid_notes = _unfurl( ["f", "a", "b", "c"] );
+  let rhythm_lib = [
+    [ ":", ":", ":", ":", "+", "+" ],
+    [ "+", "+", ":", ":", "+" ]
+  ];
+  let n_measure = [4,8];
+
+  res = check_melody_notes(M, valid_notes);
+  if (res.r != 0) { return res; }
+
+  res = check_melody_rhythm(M, rhythm_lib);
+  if (res.r != 0) { return res; }
+
+  res = check_melody_tonic(M);
+  if (res.r != 0) { return res; }
+
+  res = check_melody_basic_rhythm(M);
+  if (res.r != 0) { return res; }
+
+  return ok_res;
 }
 
 function parse_line(line) {
@@ -324,6 +400,13 @@ function _main_repl() {
       if (tok.length == 0) { continue; }
 
       if ((tok[0] == 'help') || (tok[0] == '?'))  {
+
+        let tkey = ['*', '+', ':', '.'];
+
+        console.log("");
+        for (let i=0; i<tkey.length; i++) {
+          console.log("  " + tkey[i] + "  " + TEMPO_DESCR[tkey[i]])
+        }
         console.log("");
         console.log("  norm:", _normal.join(" "));
         console.log("  shrp:", _sharp.join(" "));
@@ -339,6 +422,7 @@ function _main_repl() {
         console.log("challenges:");
         console.log("");
         console.log("  ex1.1:", descr_ex1_1());
+        console.log("  ex1.2:", descr_ex1_2());
         console.log("");
 
       }
@@ -363,7 +447,13 @@ function _main_repl() {
       else if (tok[0] == 'ex1.1') {
         let M = s2melody( tok.slice(1).join(" ") );
         let res = ex1_1( M );
-        console.log(">>", res);
+        console.log(">>", ((res.r == 0) ? "PASS:" : "FAIL:"), res);
+      }
+
+      else if (tok[0] == 'ex1.2') {
+        let M = s2melody( tok.slice(1).join(" ") );
+        let res = ex1_2( M );
+        console.log(">>", ((res.r == 0) ? "PASS:" : "FAIL:"), res);
       }
 
 
