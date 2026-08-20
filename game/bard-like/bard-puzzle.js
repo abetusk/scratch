@@ -191,7 +191,7 @@ function check_melody_stride(M) {
       if ((note == 'z') || (note == 'Z')) { continue; }
 
       if (!(note in bard_note2midi_map)) {
-        return { "r": -1, "msg" : "note: " + note.toString() + " not in midi map", "score":-1 };
+        return { "r": -1, "msg" : "melody_stride: note {" + note.toString() + "} not in midi map", "score":-1 };
       }
 
       let val = bard_note2midi_map[note];
@@ -203,7 +203,7 @@ function check_melody_stride(M) {
   }
 
   if ((mM[1] - mM[0]) > 16) {
-    return { "r": -1, "msg" : "stride too large (got:" + (mM[1]-mM[0]).toString() + ")", "score": -1 };
+    return { "r": -1, "msg" : "melody_stride: stride too large (got:" + (mM[1]-mM[0]).toString() + ")", "score": -1 };
   }
 
   return { "r": 0, "msg": "", "score": 0 }
@@ -211,12 +211,37 @@ function check_melody_stride(M) {
 
 function check_melody_progression(M, prog) {
 
+  let prog_cur_idx = 0,
+      prog_nxt_idx = 1,
+      prog_prv_idx = -1;
+
+
+
   for (let measure_idx=0; measure_idx<M.length; measure_idx++) {
 
     for (let n_idx=0; n_idx<M[measure_idx].length; n_idx++) {
       let note = M[measure_idx][n_idx];
+      if ((note == 'z') || (note == 'Z')) { continue; }
+      let base_note = note[1];
 
-      //WIP
+      if ((prog_prv_idx >= 0) &&
+          (prog[prog_prv_idx] == base_note)) {
+        continue;
+      }
+
+      if ( prog[prog_cur_idx] == base_note ) {
+        prog_prv_idx = prog_cur_idx;
+        prog_cur_idx = (prog_cur_idx+1)%prog.length;
+      }
+      else {
+        return {
+          "r" : -1,
+          "msg": "melody_progression: expected note {" + ((prog_prv_idx >= 0) ? (prog[prog_prv_idx] + "," + prog[prog_cur_idx]) : prog[prog_cur_idx]) + "}," +
+            "got measure[" + measure_idx.toString() + "], note[" + n_idx.toString() + "] {" + note + "}",
+          "score": -1
+        };
+      }
+
 
     }
   }
@@ -382,7 +407,7 @@ function check_melody_notes(M, notes) {
 
       if (!_found) {
         res.r = -1;
-        res.msg = "melody_notes: measure:" + im.toString() + ", note:" + _measure[j] + " (" + j.toString() + ")";
+        res.msg = "melody_notes: measure[" + im.toString() + "], note[" + j.toString() + "]{" + _measure[j] + "} not in permissable note list";
         break;
       }
     }
