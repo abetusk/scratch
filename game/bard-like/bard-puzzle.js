@@ -9,10 +9,25 @@
 //
 
 var TEMPO_DESCR = {
-  "*" : "half",
-  "+" : "quarter",
-  ":" : "eighth",
-  "." : "sixteenth"
+  "H" : "half",
+  "q" : "quarter",
+  "e" : "eighth",
+  "s" : "sixteenth",
+
+  "*" : "half (normal)",
+  "+" : "quarter (normal)",
+  ":" : "eighth (normal)",
+  "." : "sixteenth (normal)",
+
+  "#" : "half (sharp)",
+  "=" : "quarter (sharp)",
+  "-" : "eighth (sharp)",
+  "," : "sixteenth (sharp)",
+
+  "&" : "half (flat)",
+  "@" : "quarter (flat)",
+  "/" : "eighth (flat)",
+  "_" : "sixteenth (flat)"
 };
 
 var _rest = [ "Z", "z" ];
@@ -192,6 +207,19 @@ function check_melody_stride(M) {
   return { "r": 0, "msg": "", "score": 0 }
 }
 
+function check_melody_length(M, mM_measure) {
+  if ((M.length < mM_measure[0]) ||
+      (M.length >= mM_measure[1])) {
+    return {
+      "r": -1,
+      "msg": "melody_length: length (" + M.length.toString() + ") out of range ([" + mM_measure[0].toString() + ":" + mM_measure[1].toString() + "))",
+      "score": -1
+    };
+  }
+
+  return {"r":0, "msg": "", "score": 0 };
+}
+
 function check_melody_tonic(M) {
 
   let note_first = "";
@@ -340,6 +368,13 @@ function check_melody_notes(M, notes) {
 function check_melody_rhythm(M, rhythm_lib) {
   let res = { "r": 0, "msg": "" };
 
+  let nsf_tempo2wc_tempo = {
+    "*": "H", "#":"H", "&":"H",
+    "+": "q", "=":"q", "@":"q",
+    ":": "e", "-":"e", "/":"e",
+    ".": "s", ",":"s", "_":"s"
+  };
+
   for (let im=0; im<M.length; im++) {
     let _measure = M[im];
 
@@ -351,7 +386,11 @@ function check_melody_rhythm(M, rhythm_lib) {
 
       let _rhythm_match = true;
       for (let t_idx=0; t_idx < rhythm.length; t_idx++) {
-        if (rhythm[t_idx] != _measure[t_idx][0]) { _rhythm_match = false; break; }
+
+        let _t2w = nsf_tempo2wc_tempo[ _measure[t_idx][0] ];
+
+        //if (rhythm[t_idx] != _measure[t_idx][0]) { _rhythm_match = false; break; }
+        if (rhythm[t_idx] != _t2w) { _rhythm_match = false; break; }
       }
 
       if (_rhythm_match) { _found = true; break; }
@@ -371,7 +410,8 @@ function check_melody_rhythm(M, rhythm_lib) {
 function descr_ex1_1() {
   let descr = [];
   let valid_notes = [ "e4", "g4", "a4", "b4" ];
-  let rhythm_lib = [ [ "+", "+", "+", "*" ] ];
+  //let rhythm_lib = [ [ "+", "+", "+", "*" ] ];
+  let rhythm_lib = [ [ "q", "q", "q", "H" ] ];
   let n_measure = [6,7];
 
   let rhythm_s = [];
@@ -397,10 +437,15 @@ function descr_ex1_1() {
 function ex1_1(M) {
   let ok_res = { "r":0, "msg": ""};
 
-  let valid_notes = _unfurl( [ "e4", "g4", "a4", "b4" ] );
-  let rhythm_lib = [ [ "+", "+", "+", "*" ] ];
+  //let valid_notes = _unfurl( [ "e4", "g4", "a4", "b4" ] );
+  let valid_notes = [ "+e4", "*e4", "+g4", "*g4", "+a4", "*a4", "+b4", "*b44" ];
+  //let rhythm_lib = [ [ "+", "+", "+", "*" ] ];
+  let rhythm_lib = [ [ "q", "q", "q", "H" ] ];
 
   let n_measure = [6,7];
+
+  res = check_melody_length(M, n_measure);
+  if (res.r != 0) { return res; }
 
   res = check_melody_notes(M, valid_notes);
   if (res.r != 0) { return res; }
@@ -420,9 +465,13 @@ function ex1_1(M) {
 function descr_ex1_2() {
   let descr = [];
   let valid_notes = ["f", "a", "b", "c"];
+  //let rhythm_lib = [
+  //  [ ":", ":", ":", ":", "+", "+" ],
+  //  [ "+", "+", ":", ":", "+" ]
+  //];
   let rhythm_lib = [
-    [ ":", ":", ":", ":", "+", "+" ],
-    [ "+", "+", ":", ":", "+" ]
+    [ "e", "e", "e", "e", "q", "q" ],
+    [ "q", "q", "e", "e", "q" ]
   ];
   let n_measure = [4,8];
 
@@ -448,12 +497,22 @@ function ex1_2(M) {
 
   let ok_res = { "r": 0, "msg": "", "score": 0 };
 
+  // NEEDS UPDATING!!
   let valid_notes = _unfurl( ["f", "a", "b", "c"] );
+
+  //let rhythm_lib = [
+  //  [ ":", ":", ":", ":", "+", "+" ],
+  //  [ "+", "+", ":", ":", "+" ]
+  //];
   let rhythm_lib = [
-    [ ":", ":", ":", ":", "+", "+" ],
-    [ "+", "+", ":", ":", "+" ]
+    [ "e", "e", "e", "e", "q", "q" ],
+    [ "q", "q", "e", "e", "q" ]
   ];
+
   let n_measure = [4,8];
+
+  res = check_melody_length(M, n_measure);
+  if (res.r != 0) { return res; }
 
   res = check_melody_stride(M);
   if (res.r != 0) { return res; }
@@ -472,6 +531,25 @@ function ex1_2(M) {
 
   return ok_res;
 }
+
+function ex1_3(M) {
+
+  let ok_res = { "r": 0, "msg": "", "score": 0 };
+
+  let valid_notes = _unfurl( ["f", "a", "b", "c"] );
+  let rhythm_lib = [
+    [ ":", ":", ":", ":", "+", "+" ],
+    [ "+", "+", ":", ":", "+" ]
+  ];
+  let n_measure = [4,8];
+
+
+}
+
+//----
+//----
+//----
+//----
 
 function parse_line(line) {
   let tok = line.trim().split(/  */);
@@ -502,11 +580,14 @@ function _main_repl() {
 
       if ((tok[0] == 'help') || (tok[0] == '?'))  {
 
-        let tkey = ['*', '+', ':', '.'];
+        let tnkey = ['*', '+', ':', '.'];
+        let tskey = ['#', '=', '-', ','];
+        let tfkey = ['&', '@', '/', '_'];
+        let wildcard_tempo_key = ['H', 'q', 'e', 's'];
 
         console.log("");
-        for (let i=0; i<tkey.length; i++) {
-          console.log("  " + tkey[i] + "  " + TEMPO_DESCR[tkey[i]])
+        for (let i=0; i<wildcard_tempo_key.length; i++) {
+          console.log("  " + wildcard_tempo_key[i] + " (" + tnkey[i] + tskey[i] + tfkey[i] + ")  " + TEMPO_DESCR[wildcard_tempo_key[i]])
         }
         console.log("");
         console.log("  norm:", _normal.join(" "));
@@ -525,6 +606,21 @@ function _main_repl() {
         console.log("  ex1.1:", descr_ex1_1());
         console.log("  ex1.2:", descr_ex1_2());
         console.log("");
+
+      }
+
+      else if (tok[0] == 'unfurl') {
+        let u = _unfurl( tok.slice(1) );
+
+        let _a = [], _fold = 12;
+        for (let i=0; i<u.length; i++) {
+          if ((_a.length > 0) && ((i%_fold)==0)) {
+            console.log( _a.join(" ") );
+            _a = [];
+          }
+          _a.push( u[i] );
+        }
+        if (_a.length > 0) { console.log(_a.join(" ")); }
 
       }
 
