@@ -188,6 +188,8 @@ function check_melody_stride(M) {
     for (let n_idx=0; n_idx<M[measure_idx].length; n_idx++) {
       let note = M[measure_idx][n_idx];
 
+      if ((note == 'z') || (note == 'Z')) { continue; }
+
       if (!(note in bard_note2midi_map)) {
         return { "r": -1, "msg" : "note: " + note.toString() + " not in midi map", "score":-1 };
       }
@@ -206,6 +208,23 @@ function check_melody_stride(M) {
 
   return { "r": 0, "msg": "", "score": 0 }
 }
+
+function check_melody_progression(M, prog) {
+
+  for (let measure_idx=0; measure_idx<M.length; measure_idx++) {
+
+    for (let n_idx=0; n_idx<M[measure_idx].length; n_idx++) {
+      let note = M[measure_idx][n_idx];
+
+      //WIP
+
+    }
+  }
+
+
+  return { "r": 0, "msg": "", "score": 0 }
+}
+
 
 function check_melody_length(M, mM_measure) {
   if ((M.length < mM_measure[0]) ||
@@ -239,15 +258,16 @@ function check_melody_tonic(M) {
       (note_first != note_last)) {
     return {
       "r": -1,
-      "msg": "melody_tonic: first note (" + note_first + ") != last note (" + note_last + ")"
+      "msg": "melody_tonic: first note (" + note_first + ") != last note (" + note_last + ")",
+      "score": -1
     };
   }
 
-  return { "r": 0, "msg": "" };
+  return { "r": 0, "msg": "", "score": 0 };
 }
 
 function check_melody_basic_rhythm(M) {
-  let ok_res = { "r": 0, "msg": "" };
+  let ok_res = { "r": 0, "msg": "", "score": 0 };
   let a_rhythm = [];
 
   let rhythm_constraint = {
@@ -276,7 +296,8 @@ function check_melody_basic_rhythm(M) {
       if (s_len > 1) {
         return {
           "r": -1,
-          "msg": "basic_rhythm: two rests in a row at " + (r_idx-1).toString()
+          "msg": "basic_rhythm: two rests in a row at " + (r_idx-1).toString(),
+          "score": -1
         };
       }
 
@@ -287,7 +308,8 @@ function check_melody_basic_rhythm(M) {
       if (!(s_val in rhythm_constraint)) {
         return {
           "r": -1,
-          "msg": "basic_rhythm: unknown tempo value " + s_val + " at " + (r_idx-1).toString()
+          "msg": "basic_rhythm: unknown tempo value " + s_val + " at " + (r_idx-1).toString(),
+          "score": -1
         };
       }
 
@@ -295,7 +317,8 @@ function check_melody_basic_rhythm(M) {
       if ( (s_len % _L) != 0 ) {
         return {
           "r": -1,
-          "msg": "basic_rhythm: constraint violation for tempo " + s_val + " at " + (r_idx-1).toString()
+          "msg": "basic_rhythm: constraint violation for tempo " + s_val + " at " + (r_idx-1).toString(),
+          "score": -1
         };
 
       }
@@ -312,7 +335,8 @@ function check_melody_basic_rhythm(M) {
     if (s_len > 1) {
       return {
         "r": -1,
-        "msg": "basic_rhythm: two rests in a row at " + (a_rhythm.length-1).toString()
+        "msg": "basic_rhythm: two rests in a row at " + (a_rhythm.length-1).toString(),
+        "score": -1
       };
     }
 
@@ -323,7 +347,8 @@ function check_melody_basic_rhythm(M) {
     if (!(s_val in rhythm_constraint)) {
       return {
         "r": -1,
-        "msg": "basic_rhythm: unknown tempo value " + s_val + " at " + (a_rhythm.length-1).toString()
+        "msg": "basic_rhythm: unknown tempo value " + s_val + " at " + (a_rhythm.length-1).toString(),
+        "score": -1
       };
     }
 
@@ -331,7 +356,8 @@ function check_melody_basic_rhythm(M) {
     if ( (s_len % _L) != 0 ) {
       return {
         "r": -1,
-        "msg": "basic_rhythm: constraint violation for tempo " + s_val + " at " + (a_rhythm.length-1).toString()
+        "msg": "basic_rhythm: constraint violation for tempo " + s_val + " at " + (a_rhythm.length-1).toString(),
+        "score": -1
       };
     }
 
@@ -342,7 +368,7 @@ function check_melody_basic_rhythm(M) {
 }
 
 function check_melody_notes(M, notes) {
-  let res = { "r": 0, "msg": "" };
+  let res = { "r": 0, "msg": "", "score": 0 };
 
   for (let im=0; im<M.length; im++) {
 
@@ -366,13 +392,14 @@ function check_melody_notes(M, notes) {
 }
 
 function check_melody_rhythm(M, rhythm_lib) {
-  let res = { "r": 0, "msg": "" };
+  let res = { "r": 0, "msg": "", "score": 0 };
 
   let nsf_tempo2wc_tempo = {
     "*": "H", "#":"H", "&":"H",
     "+": "q", "=":"q", "@":"q",
     ":": "e", "-":"e", "/":"e",
-    ".": "s", ",":"s", "_":"s"
+    ".": "s", ",":"s", "_":"s",
+    "z": "z", "Z":"Z"
   };
 
   for (let im=0; im<M.length; im++) {
@@ -444,6 +471,8 @@ function ex1_1(M) {
 
   let n_measure = [6,7];
 
+  let res = {};
+
   res = check_melody_length(M, n_measure);
   if (res.r != 0) { return res; }
 
@@ -497,8 +526,26 @@ function ex1_2(M) {
 
   let ok_res = { "r": 0, "msg": "", "score": 0 };
 
-  // NEEDS UPDATING!!
-  let valid_notes = _unfurl( ["f", "a", "b", "c"] );
+  let _vnre = "[\*\+\:\.][fabc][345]";
+
+  let valid_notes = [
+    "*f4", "+f4", ":f4", ".f4",
+    "*f3", "+f3", ":f3", ".f3",
+    "*f5", "+f5", ":f5", ".f5",
+
+    "*a4", "+a4", ":a4", ".a4",
+    "*a3", "+a3", ":a3", ".a3",
+    "*a5", "+a5", ":a5", ".a5",
+
+    "*b4", "+b4", ":b4", ".b4",
+    "*b3", "+b3", ":b3", ".b3",
+    "*b5", "+b5", ":b5", ".b5",
+
+    "*c4", "+c4", ":c4", ".c4",
+    "*c3", "+c3", ":c3", ".c3",
+    "*c5", "+c5", ":c5", ".c5"
+  ];
+
 
   //let rhythm_lib = [
   //  [ ":", ":", ":", ":", "+", "+" ],
@@ -510,6 +557,8 @@ function ex1_2(M) {
   ];
 
   let n_measure = [4,8];
+
+  let res = {};
 
   res = check_melody_length(M, n_measure);
   if (res.r != 0) { return res; }
@@ -536,14 +585,71 @@ function ex1_3(M) {
 
   let ok_res = { "r": 0, "msg": "", "score": 0 };
 
-  let valid_notes = _unfurl( ["f", "a", "b", "c"] );
-  let rhythm_lib = [
-    [ ":", ":", ":", ":", "+", "+" ],
-    [ "+", "+", ":", ":", "+" ]
+  let valid_notes = [
+    "*d4", "+d4", ":d4", ".d4",
+    "*d3", "+d3", ":d3", ".d3",
+    "*d5", "+d5", ":d5", ".d5",
+
+    "*a4", "+a4", ":a4", ".a4",
+    "*a3", "+a3", ":a3", ".a3",
+    "*a5", "+a5", ":a5", ".a5",
+
+    "*f4", "+f4", ":f4", ".f4",
+    "*f3", "+f3", ":f3", ".f3",
+    "*f5", "+f5", ":f5", ".f5",
+
+    "*e4", "+e4", ":e4", ".e4",
+    "*e3", "+e3", ":e3", ".e3",
+    "*e5", "+e5", ":e5", ".e5",
+
+    "*c4", "+c4", ":c4", ".c4",
+    "*c3", "+c3", ":c3", ".c3",
+    "*c5", "+c5", ":c5", ".c5",
+
+    "z", "Z"
   ];
-  let n_measure = [4,8];
 
+  let note_progression = [ "d", "a", "f", "e", "c" ];
 
+  let rhythm_lib = [
+    [ "q", "e", "e", "H" ],
+    [ "z", "q", "q", "q" ]
+  ];
+  let n_measure = [6,11];
+
+  n_measure = [2,11];
+
+  let res = {};
+
+  res = check_melody_length(M, n_measure);
+  if (res.r != 0) { return res; }
+  ok_res.score += res.score;
+
+  res = check_melody_stride(M);
+  if (res.r != 0) { return res; }
+  ok_res.score += res.score;
+
+  res = check_melody_notes(M, valid_notes);
+  if (res.r != 0) { return res; }
+  ok_res.score += res.score;
+
+  res = check_melody_rhythm(M, rhythm_lib);
+  if (res.r != 0) { return res; }
+  ok_res.score += res.score;
+
+  res = check_melody_tonic(M);
+  if (res.r != 0) { return res; }
+  ok_res.score += res.score;
+
+  res = check_melody_basic_rhythm(M);
+  if (res.r != 0) { return res; }
+  ok_res.score += res.score;
+
+  res = check_melody_progression(M, note_progression);
+  if (res.r != 0) { return res; }
+  ok_res.score += res.score;
+
+  return ok_res;
 }
 
 //----
@@ -650,6 +756,12 @@ function _main_repl() {
       else if (tok[0] == 'ex1.2') {
         let M = s2melody( tok.slice(1).join(" ") );
         let res = ex1_2( M );
+        console.log(">>", ((res.r == 0) ? "PASS:" : "FAIL:"), res);
+      }
+
+      else if (tok[0] == 'ex1.3') {
+        let M = s2melody( tok.slice(1).join(" ") );
+        let res = ex1_3( M );
         console.log(">>", ((res.r == 0) ? "PASS:" : "FAIL:"), res);
       }
 
