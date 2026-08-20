@@ -28,6 +28,67 @@ var terms = [
   "measure", "melody"
 ];
 
+var MIDI_NOTE_MAP = {},
+    MIDI_NOTE_NAME = [];
+
+//                 0    1     2    3     4    5    6     7    8     9    10    11
+var BASE_NOTE = [ "c", "c#", "d", "d#", "e", "f", "f#", "g", "g#", "a", "a#", "b" ];
+
+var bard_note2midi_map = {};
+
+var SHARP_FLAT = {
+  "#c" : "&d", "&d" : "#c",
+  "#d" : "&e", "&e" : "#d",
+  "#f" : "&g", "&g" : "#f",
+  "#g" : "&a", "&a" : "#g",
+  "#a" : "&b", "&b" : "#a"
+};
+
+function init_note_map() {
+
+  let _norm = [ "*", "+", ":", "." ];
+  let _shrp = [ "#", "=", "-", "," ];
+  let _flat = [ "&", "@", "/", "_" ];
+
+  let midi_idx = 0;
+  for (let octave=-1; octave <= 9; octave++) {
+    for (let idx=0; idx<BASE_NOTE.length; idx++) {
+
+      if ((octave == 9) && (idx >= 8)) { continue; }
+
+      let note = BASE_NOTE[idx] + octave.toString();
+      MIDI_NOTE_MAP[note] = midi_idx;
+      MIDI_NOTE_NAME.push(note);
+
+      let _oc = ((octave < 0) ? "<" : octave.toString());
+      let _t = BASE_NOTE[idx][0];
+
+      if (BASE_NOTE[idx].length == 2) {
+
+        for (let i=0; i<_shrp.length; i++) {
+          let _bn = _shrp[i] + _t + _oc;
+          bard_note2midi_map[ _bn ] = midi_idx;
+
+          let _k = _shrp[i] + _t;
+          let _bfn = _flat[i] + SHARP_FLAT[ "#" + _t ][1] + _oc;
+          bard_note2midi_map[ _bfn ] = midi_idx;
+        }
+      }
+
+      else {
+        for (let i=0; i<_norm.length; i++) {
+          let _bn = _norm[i] + _t + _oc;
+          bard_note2midi_map[ _bn ] = midi_idx;
+        }
+      }
+
+      midi_idx++;
+    }
+  }
+
+}
+init_note_map();
+
 // take notes in note template and
 // enumerate all possibilities of them.
 //
@@ -83,7 +144,19 @@ function s2melody(s) {
 //   16 semitones
 // to semitones for a major valur v is:
 //
-//   12*floor( (v-1)/7 ) + ((...))
+//   lookup:
+//     major 2nd = 2 semitones
+//     major 3rd = 4 semitones
+//     major 4th = 5 semitones
+//     major 5th = 7 semitones
+//     major 6th = 9 semitones
+//     major 7th = 11 semitones
+//     major 8th = 12 semitones
+//     major 9th = 14 semitones
+//     major 10th = 16 semitones
+//
+//
+//   12*floor( (v-1)/7 ) + (major[v%7])
 //
 // "use 2nds and 3rds freely" skip 1-2/3-4 semitones
 //   freely
@@ -92,6 +165,31 @@ function s2melody(s) {
 //     it's considered a 3rd
 //
 function check_melody_stride(M) {
+
+  let mM = [-1,-1];
+
+  for (let measure_idx=0; measure_idx<M.length; measure_idx++) {
+
+    for (let n_idx=0; n_idx<M[measure_idx].length; n_idx++) {
+      let note = M[measure_idx][n_idx];
+
+      if (!(note in bard_note2midi_map)) {
+        return { "r": -1, "msg" : "note: " + note.toString() + " not in midi map", "score":-1 };
+      }
+
+      let val = bard_note2midi_map[note];
+
+      if ((mM[0] < 0) || (val < mM[0])) { mM[0] = val; }
+      if ((mM[1] < 0) || (val > mM[1])) { mM[1] = val; }
+    }
+
+  }
+
+  if ((mM[1] - mM[0]) > 16) {
+    return { "r": -1, "msg" : "stride too large (got:" + (mM[1]-mM[0]).toString() + ")", "score": -1 };
+  }
+
+  return { "r": 0, "msg": "", "score": 0 }
 }
 
 function check_melody_tonic(M) {
@@ -356,6 +454,9 @@ function ex1_2(M) {
     [ "+", "+", ":", ":", "+" ]
   ];
   let n_measure = [4,8];
+
+  res = check_melody_stride(M);
+  if (res.r != 0) { return res; }
 
   res = check_melody_notes(M, valid_notes);
   if (res.r != 0) { return res; }
