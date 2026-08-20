@@ -606,6 +606,39 @@ function ex1_2(M) {
   return ok_res;
 }
 
+function descr_ex1_3(M) {
+
+  let descr = [];
+  let valid_notes = ["d", "a", "f", "e", "c"];
+  let note_progression = [ "d", "a", "f", "e", "c" ];
+
+
+  let rhythm_lib = [
+    [ "q", "e", "e", "H" ],
+    [ "z", "q", "q", "q" ]
+  ];
+  let n_measure = [6,11];
+
+  let rhythm_s = [];
+  for (let i=0; i<rhythm_lib.length; i++) {
+    rhythm_s.push( rhythm_lib[i].join("") );
+  }
+
+  descr.push("note restrict " + valid_notes.join(" "));
+  descr.push("note progression " + note_progression.join(" "));
+  descr.push("rhythm restrict " + rhythm_s.join(" "));
+  if ((n_measure[1]-1) == n_measure[0]) {
+    descr.push("measure length " + n_measure[0].toString());
+  }
+  else {
+    descr.push("measure length [" + n_measure[0].toString() + " : " + n_measure[1].toString() + ")");
+  }
+  descr.push("constraint: tonic,basic rhythm");
+
+  return "(" + descr.join( ") (" ) + ")"
+
+}
+
 function ex1_3(M) {
 
   let ok_res = { "r": 0, "msg": "", "score": 0 };
@@ -677,6 +710,49 @@ function ex1_3(M) {
   return ok_res;
 }
 
+//     uvxyz
+//     U     V      X    Y    Z
+//     C#    D#     F#   G#   A#
+//  C     D     E F    G    A    B
+//
+
+// a_t - tempo, array of tempo (Hqes)
+// a_n - generalized note class (cudvefxgyazb)
+// a_o - octave range, min/max-1
+//
+function enumerate_note( a_t, a_n, a_o ) {
+
+  let note_list = [];
+
+  let is_sharp = {
+    "c":0, "u":1, "d":0, "v":1, "e":0, "f":0,
+    "x":1, "g":0, "y":1, "a":0, "z":1, "b":0
+  };
+
+  let note_redux = {
+    "c":'c', "u":'c', "d":'d', "v":'d', "e":'e', "f":'f',
+    "x":'f', "g":'g', "y":'g', "a":'a', "z":'a', "b":'b'
+  };
+
+  let norm_tempo = { "H": "*", "q":"+", "e":":", "s":"." };
+  let shrp_tempo = { "H": "#", "q":"=", "e":"-", "s":"," };
+
+  for (let i=0; i<a_t.length; i++) {
+    for (let j=0; j<a_n.length; j++) {
+      let _iss = is_sharp[a_n[j]];
+      let _tc = (_iss ? shrp_tempo[a_t[i]] : norm_tempo[a_t[i]]);
+      let _nc = note_redux[a_n[j]];
+
+      for (let octave=a_o[0]; octave<a_o[1]; octave++) {
+        let note = _tc + _nc + octave.toString();
+        note_list.push(note);
+      }
+    }
+  }
+
+  return note_list;
+}
+
 //----
 //----
 //----
@@ -736,6 +812,7 @@ function _main_repl() {
         console.log("");
         console.log("  ex1.1:", descr_ex1_1());
         console.log("  ex1.2:", descr_ex1_2());
+        console.log("  ex1.3:", descr_ex1_3());
         console.log("");
 
       }

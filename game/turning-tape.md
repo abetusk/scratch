@@ -369,6 +369,40 @@ tempo only notation:
  + + + *
 ```
 
+Alternative
+---
+
+Another alternative is to use different codes for sharp notes and then only a tempo
+code.
+So:
+
+```
+   u    v      x    y    z
+   c#   d#     f#   g#   a#
+c     d    e f    g    a    b
+
+```
+
+So `u` is `c#` and `d_flat`, etc.
+
+Now tempo can be a single code:
+
+| | | |
+|---|---|---|
+| half | `H` | `*` |
+| quarter | `q` | `+` |
+| eight | `e` | `:` |
+| sixteenth | `s` | `.` |
+
+It's much less to remember, tempo codes are normalized across all sharp/flat,
+sharp/flat are now a single code (as they should be?) with the distinction in
+display, not representation.
+
+Further, we don't need a generalized tempo code now because they're uniform.
+
+It's always going to be clunky, so we might as well settle on something that's
+easier to memorize.
+
 Restrictions
 ---
 
