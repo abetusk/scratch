@@ -16,31 +16,11 @@ var TEMPO_DESCR = {
   "." : "sixteenth",
 };
 
-var _TEMPO_DESCR = {
-  "H" : "half",
-  "q" : "quarter",
-  "e" : "eighth",
-  "s" : "sixteenth",
-
-  "*" : "half (normal)",
-  "+" : "quarter (normal)",
-  ":" : "eighth (normal)",
-  "." : "sixteenth (normal)",
-
-  "#" : "half (sharp)",
-  "=" : "quarter (sharp)",
-  "-" : "eighth (sharp)",
-  "," : "sixteenth (sharp)",
-
-  "&" : "half (flat)",
-  "@" : "quarter (flat)",
-  "/" : "eighth (flat)",
-  "_" : "sixteenth (flat)"
-};
-
 var BARD_NOTE = [
-  "c", "u", "d", "v", "e", "f","w",
-  "g", "x", "a", "y", "b"
+  "c", "u",   "d", "v",
+  "e",
+  "f", "w",   "g", "x",   "a", "y",
+  "b"
 ];
 
 var BARD_NOTE_DESCR = {
@@ -93,6 +73,46 @@ function s2melody(s) {
   }
 
   return melody;
+}
+
+function check_melody_start_note(M, base_note) {
+  if (M.length == 0) {
+    return {
+      "r": -1,
+      "msg": "start_note: no melody",
+      "score":-1
+    };
+  }
+
+  if (M[0].length == 0) {
+    return {
+      "r": -1,
+      "msg": "start_note: invalid first measure",
+      "score":-1
+    };
+  }
+
+  let note = M[0][0];
+  if (note == base_note) { return { "r": 0, "msg":"", "score":0 }; }
+
+  if (note.length != 3) {
+    return {
+      "r": -1,
+      "msg": "start_note: invalid first note {" + note + "}",
+      "score":-1
+    };
+  }
+
+  let _bn = note.slice(1);
+  if (_bn != base_note) {
+    return {
+      "r": -1,
+      "msg": "start_note: invalid first note {" + note + " != " + base_note + "}",
+      "score":-1
+    };
+  }
+
+  return { "r": 0, "msg": "", "score": 0 };
 }
 
 // "do not exceed a total range of a major 10th":
@@ -159,6 +179,25 @@ function check_melody_stride(M) {
   }
 
   return { "r": 0, "msg": "", "score": 0 }
+}
+
+function check_melody_repeat(M, min_rep_count) {
+  for (let measure_idx=0; measure_idx<M.length; measure_idx++) {
+    for (let m1_idx=(measure_idx+1); m1_idx < M.length; m1_idx++) {
+
+      let _ml = M[measure_idx].length;
+      if (_ml != M[m1_idx].length) { continue; }
+
+      let found = true;
+      for (let n=0; n < _ml; n++) {
+        if (M[measure_idx][n] != M[m1_idx][n]) { found = false; break; }
+      }
+
+      //WIP
+      if (found) { }
+    }
+  }
+
 }
 
 function check_melody_progression(M, prog) {
@@ -412,8 +451,11 @@ function descr_ex1_1() {
   }
 
 
-  descr.push("note restrict " + valid_notes.join(" "));
-  descr.push("rhythm restrict " + rhythm_s.join(" "));
+  //descr.push("note restrict " + valid_notes.join(" "));
+  //descr.push("rhythm restrict " + rhythm_s.join(" "));
+
+  descr.push("restrict " + valid_notes.join(" "));
+  descr.push("restrict " + rhythm_s.join(" "));
 
   if ((n_measure[1]-1) == n_measure[0]) {
     descr.push("measure length " + n_measure[0].toString());
@@ -468,8 +510,8 @@ function descr_ex1_2() {
     rhythm_s.push( rhythm_lib[i].join("") );
   }
 
-  descr.push("note restrict " + valid_notes.join(" "));
-  descr.push("rhythm restrict " + rhythm_s.join(" "));
+  descr.push("restrict " + valid_notes.join(" "));
+  descr.push("restrict " + rhythm_s.join(" "));
   if ((n_measure[1]-1) == n_measure[0]) {
     descr.push("measure length " + n_measure[0].toString());
   }
@@ -553,9 +595,9 @@ function descr_ex1_3(M) {
     rhythm_s.push( rhythm_lib[i].join("") );
   }
 
-  descr.push("note restrict " + valid_notes.join(" "));
-  descr.push("note progression " + note_progression.join(" "));
-  descr.push("rhythm restrict " + rhythm_s.join(" "));
+  descr.push("restrict " + valid_notes.join(" "));
+  descr.push("progression " + note_progression.join(" "));
+  descr.push("restrict " + rhythm_s.join(" "));
   if ((n_measure[1]-1) == n_measure[0]) {
     descr.push("measure length " + n_measure[0].toString());
   }
@@ -604,6 +646,7 @@ function ex1_3(M) {
   ];
   let n_measure = [6,11];
 
+  //DEBUG
   n_measure = [2,11];
 
   let res = {};
@@ -638,6 +681,86 @@ function ex1_3(M) {
 
   return ok_res;
 }
+
+function descr_ex1_4(M) {
+
+  let descr = [];
+  let valid_notes = ["c", "d", "e", "f", "g", "a", "b"];
+  let rhythm_lib = [ [ "+", ":", ":", "*" ] ];
+  let n_measure = [6,11];
+
+  let first_note = "c4";
+
+  let rhythm_s = [];
+  for (let i=0; i<rhythm_lib.length; i++) {
+    rhythm_s.push( rhythm_lib[i].join("") );
+  }
+
+  descr.push("restrict " + valid_notes.join(" "));
+  descr.push("restrict " + rhythm_s.join(" "));
+  if ((n_measure[1]-1) == n_measure[0]) {
+    descr.push("measure length " + n_measure[0].toString());
+  }
+  else {
+    descr.push("measure length [" + n_measure[0].toString() + " : " + n_measure[1].toString() + ")");
+  }
+  descr.push("constraint: tonic{" + first_note + "},basic rhythm");
+
+  return "(" + descr.join( ") (" ) + ")"
+}
+
+
+
+function ex1_4(M) {
+  let ok_res = { "r": 0, "msg": "", "score": 0 };
+
+  let valid_notes = enumerate_note( "*+:.", "cdefgab", [3,6]);
+  let rhythm_lib = [ [ "+", ":", ":", "*" ] ];
+  let n_measure = [6,11];
+
+  let first_note = "c4";
+
+  //DEBUG
+  n_measure = [2,11];
+
+  let res = {};
+
+  res = check_melody_start_note(M, first_note);
+  if (res.r != 0) { return res; }
+  ok_res.score += res.score;
+
+  res = check_melody_length(M, n_measure);
+  if (res.r != 0) { return res; }
+  ok_res.score += res.score;
+
+  res = check_melody_stride(M);
+  if (res.r != 0) { return res; }
+  ok_res.score += res.score;
+
+  res = check_melody_notes(M, valid_notes);
+  if (res.r != 0) { return res; }
+  ok_res.score += res.score;
+
+  res = check_melody_rhythm(M, rhythm_lib);
+  if (res.r != 0) { return res; }
+  ok_res.score += res.score;
+
+  res = check_melody_tonic(M);
+  if (res.r != 0) { return res; }
+  ok_res.score += res.score;
+
+  res = check_melody_basic_rhythm(M);
+  if (res.r != 0) { return res; }
+  ok_res.score += res.score;
+
+  res = check_melody_repeat(M, 1);
+  if (res.r != 0) { return res; }
+  ok_res.score += res.score;
+
+  return ok_res;
+}
+
+
 
 //     uvxyz
 //     U     V      X    Y    Z
@@ -702,17 +825,17 @@ function _main_repl() {
 
       if ((tok[0] == 'help') || (tok[0] == '?'))  {
 
-        let tempo = ['*', '+', ':', '.'];
+        let tempo = [ 'o', '*', '+', ':', '.'];
 
         console.log("");
         console.log("  note format:");
         console.log("");
-        console.log("       tempo                octave");
-        console.log("         |                    |");
-        console.log("      {*+:.}{cudvefwgxaybz}{<0-9}");
-        console.log("                 |");
-        console.log("                note");
-        console.log("");
+        console.log("       tempo                octave         rest note");
+        console.log("         |                    |                |");
+        console.log("      {o*+:.}{cudvefwgxayb}{<0-9}      { o*+:.}z");
+        console.log("                  |                        |");
+        console.log("                 note               tempo (optional)");
+        console.log("")
         console.log("  example:");
         console.log("");
         console.log("    :z :g4 :g4 :g4 | *v4 | :z :f4 :f4 :f4 | *d4");
@@ -750,6 +873,7 @@ function _main_repl() {
         console.log("  ex1.1:", descr_ex1_1());
         console.log("  ex1.2:", descr_ex1_2());
         console.log("  ex1.3:", descr_ex1_3());
+        console.log("  ex1.4:", descr_ex1_4());
         console.log("");
 
       }
@@ -801,6 +925,12 @@ function _main_repl() {
       else if (tok[0] == 'ex1.3') {
         let M = s2melody( tok.slice(1).join(" ") );
         let res = ex1_3( M );
+        console.log(">>", ((res.r == 0) ? "PASS:" : "FAIL:"), res);
+      }
+
+      else if (tok[0] == 'ex1.4') {
+        let M = s2melody( tok.slice(1).join(" ") );
+        let res = ex1_4( M );
         console.log(">>", ((res.r == 0) ? "PASS:" : "FAIL:"), res);
       }
 
