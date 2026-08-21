@@ -9,6 +9,14 @@
 //
 
 var TEMPO_DESCR = {
+  "o" : "whole",
+  "*" : "half",
+  "+" : "quarter",
+  ":" : "eighth",
+  "." : "sixteenth",
+};
+
+var _TEMPO_DESCR = {
   "H" : "half",
   "q" : "quarter",
   "e" : "eighth",
@@ -30,40 +38,37 @@ var TEMPO_DESCR = {
   "_" : "sixteenth (flat)"
 };
 
-var _rest = [ "Z", "z" ];
-var _normal = [ "*c4", "+c4", ":c4", ".c4" ];
-var _sharp  = [ "#c4", "=c4", "-c4", ",c4" ];
-var _flat = [ "&c4", "@c4", "/c4", "_c4" ];
+var BARD_NOTE = [
+  "c", "u", "d", "v", "e", "f","w",
+  "g", "x", "a", "y", "b"
+];
 
-" hc4 qc4 ec4 sc4";
-" Sc4 sc4 ";
-" Sc4 sc4 ";
+var BARD_NOTE_DESCR = {
+  "c": "C", "u": "C#/B flat",
+  "d": "D", "v": "D#/E flat",
+  "e": "E",
+  "f": "F", "w": "F#/G flat",
+  "g": "G", "x": "G#/A flat",
+  "a": "A", "y": "A#/B flat",
+  "b": "B",
+  "z": "quarter rest", "Z":"half rest"
+};
+
+var _rest = [ "Z", "z" ];
+//var _normal = [ "*c4", "+c4", ":c4", ".c4" ];
+//var _sharp  = [ "#c4", "=c4", "-c4", ",c4" ];
+//var _flat = [ "&c4", "@c4", "/c4", "_c4" ];
 
 var terms = [
   "measure", "melody"
 ];
 
-var MIDI_NOTE_MAP = {},
-    MIDI_NOTE_NAME = [];
+var BARD_NOTE_MIDI_MAP = {};
 
-//                 0    1     2    3     4    5    6     7    8     9    10    11
-var BASE_NOTE = [ "c", "c#", "d", "d#", "e", "f", "f#", "g", "g#", "a", "a#", "b" ];
-
-var bard_note2midi_map = {};
-
-var SHARP_FLAT = {
-  "#c" : "&d", "&d" : "#c",
-  "#d" : "&e", "&e" : "#d",
-  "#f" : "&g", "&g" : "#f",
-  "#g" : "&a", "&a" : "#g",
-  "#a" : "&b", "&b" : "#a"
-};
+//                 0    1    2    3    4    5    6    7    8    9    10   11
+var BASE_NOTE = [ "c", "u", "d", "v", "e", "f", "w", "g", "x", "a", "y", "b" ];
 
 function init_note_map() {
-
-  let _norm = [ "*", "+", ":", "." ];
-  let _shrp = [ "#", "=", "-", "," ];
-  let _flat = [ "&", "@", "/", "_" ];
 
   let midi_idx = 0;
   for (let octave=-1; octave <= 9; octave++) {
@@ -72,31 +77,7 @@ function init_note_map() {
       if ((octave == 9) && (idx >= 8)) { continue; }
 
       let note = BASE_NOTE[idx] + octave.toString();
-      MIDI_NOTE_MAP[note] = midi_idx;
-      MIDI_NOTE_NAME.push(note);
-
-      let _oc = ((octave < 0) ? "<" : octave.toString());
-      let _t = BASE_NOTE[idx][0];
-
-      if (BASE_NOTE[idx].length == 2) {
-
-        for (let i=0; i<_shrp.length; i++) {
-          let _bn = _shrp[i] + _t + _oc;
-          bard_note2midi_map[ _bn ] = midi_idx;
-
-          let _k = _shrp[i] + _t;
-          let _bfn = _flat[i] + SHARP_FLAT[ "#" + _t ][1] + _oc;
-          bard_note2midi_map[ _bfn ] = midi_idx;
-        }
-      }
-
-      else {
-        for (let i=0; i<_norm.length; i++) {
-          let _bn = _norm[i] + _t + _oc;
-          bard_note2midi_map[ _bn ] = midi_idx;
-        }
-      }
-
+      BARD_NOTE_MIDI_MAP[note] = midi_idx;
       midi_idx++;
     }
   }
@@ -104,6 +85,7 @@ function init_note_map() {
 }
 init_note_map();
 
+/*
 // take notes in note template and
 // enumerate all possibilities of them.
 //
@@ -141,6 +123,7 @@ function _unfurl(note_template) {
 
   return note;
 }
+*/
 
 function s2melody(s) {
   let tok0 = s.split("|");
@@ -183,6 +166,8 @@ function check_melody_stride(M) {
 
   let mM = [-1,-1];
 
+  let _midi = BARD_NOTE_MIDI_MAP;
+
   for (let measure_idx=0; measure_idx<M.length; measure_idx++) {
 
     for (let n_idx=0; n_idx<M[measure_idx].length; n_idx++) {
@@ -190,11 +175,21 @@ function check_melody_stride(M) {
 
       if ((note == 'z') || (note == 'Z')) { continue; }
 
-      if (!(note in bard_note2midi_map)) {
+      if (note.length != 3) {
+        return {
+          "r": -1,
+          "msg" : "melody_stride: invalid note {" + note.toString() + "}",
+          "score":-1
+        };
+      }
+
+      let base_note = note.slice(1);
+
+      if (!(base_note in _midi)) {
         return { "r": -1, "msg" : "melody_stride: note {" + note.toString() + "} not in midi map", "score":-1 };
       }
 
-      let val = bard_note2midi_map[note];
+      let val = _midi[base_note];
 
       if ((mM[0] < 0) || (val < mM[0])) { mM[0] = val; }
       if ((mM[1] < 0) || (val > mM[1])) { mM[1] = val; }
@@ -246,7 +241,6 @@ function check_melody_progression(M, prog) {
     }
   }
 
-
   return { "r": 0, "msg": "", "score": 0 }
 }
 
@@ -295,11 +289,13 @@ function check_melody_basic_rhythm(M) {
   let ok_res = { "r": 0, "msg": "", "score": 0 };
   let a_rhythm = [];
 
+  // rhythm constrained to multiples of value
+  //
   let rhythm_constraint = {
-    "*": 1, "#": 1, "&": 1,
-    "+": 1, "=": 1, "@": 1,
-    ":": 2, "-": 2, "/": 2,
-    ".": 4, ",": 4, "_": 4
+    "*": 1,
+    "+": 1,
+    ":": 2,
+    ".": 4,
   };
 
   for (let m_idx=0; m_idx < M.length; m_idx++) {
@@ -419,6 +415,7 @@ function check_melody_notes(M, notes) {
 function check_melody_rhythm(M, rhythm_lib) {
   let res = { "r": 0, "msg": "", "score": 0 };
 
+  /*
   let nsf_tempo2wc_tempo = {
     "*": "H", "#":"H", "&":"H",
     "+": "q", "=":"q", "@":"q",
@@ -426,6 +423,7 @@ function check_melody_rhythm(M, rhythm_lib) {
     ".": "s", ",":"s", "_":"s",
     "z": "z", "Z":"Z"
   };
+  */
 
   for (let im=0; im<M.length; im++) {
     let _measure = M[im];
@@ -439,10 +437,10 @@ function check_melody_rhythm(M, rhythm_lib) {
       let _rhythm_match = true;
       for (let t_idx=0; t_idx < rhythm.length; t_idx++) {
 
-        let _t2w = nsf_tempo2wc_tempo[ _measure[t_idx][0] ];
+        //let _t2w = nsf_tempo2wc_tempo[ _measure[t_idx][0] ];
+        //if (rhythm[t_idx] != _t2w) { _rhythm_match = false; break; }
 
-        //if (rhythm[t_idx] != _measure[t_idx][0]) { _rhythm_match = false; break; }
-        if (rhythm[t_idx] != _t2w) { _rhythm_match = false; break; }
+        if (rhythm[t_idx] != _measure[t_idx][0]) { _rhythm_match = false; break; }
       }
 
       if (_rhythm_match) { _found = true; break; }
@@ -462,8 +460,8 @@ function check_melody_rhythm(M, rhythm_lib) {
 function descr_ex1_1() {
   let descr = [];
   let valid_notes = [ "e4", "g4", "a4", "b4" ];
-  //let rhythm_lib = [ [ "+", "+", "+", "*" ] ];
-  let rhythm_lib = [ [ "q", "q", "q", "H" ] ];
+  let rhythm_lib = [ [ "+", "+", "+", "*" ] ];
+  //let rhythm_lib = [ [ "q", "q", "q", "H" ] ];
   let n_measure = [6,7];
 
   let rhythm_s = [];
@@ -490,9 +488,9 @@ function ex1_1(M) {
   let ok_res = { "r":0, "msg": ""};
 
   //let valid_notes = _unfurl( [ "e4", "g4", "a4", "b4" ] );
-  let valid_notes = [ "+e4", "*e4", "+g4", "*g4", "+a4", "*a4", "+b4", "*b44" ];
-  //let rhythm_lib = [ [ "+", "+", "+", "*" ] ];
-  let rhythm_lib = [ [ "q", "q", "q", "H" ] ];
+  let valid_notes = [ "+e4", "*e4", "+g4", "*g4", "+a4", "*a4", "+b4", "*b4" ];
+  let rhythm_lib = [ [ "+", "+", "+", "*" ] ];
+  //let rhythm_lib = [ [ "q", "q", "q", "H" ] ];
 
   let n_measure = [6,7];
 
@@ -519,14 +517,14 @@ function ex1_1(M) {
 function descr_ex1_2() {
   let descr = [];
   let valid_notes = ["f", "a", "b", "c"];
-  //let rhythm_lib = [
-  //  [ ":", ":", ":", ":", "+", "+" ],
-  //  [ "+", "+", ":", ":", "+" ]
-  //];
   let rhythm_lib = [
-    [ "e", "e", "e", "e", "q", "q" ],
-    [ "q", "q", "e", "e", "q" ]
+    [ ":", ":", ":", ":", "+", "+" ],
+    [ "+", "+", ":", ":", "+" ]
   ];
+  //let rhythm_lib = [
+  //  [ "e", "e", "e", "e", "q", "q" ],
+  //  [ "q", "q", "e", "e", "q" ]
+  //];
   let n_measure = [4,8];
 
   let rhythm_s = [];
@@ -572,14 +570,14 @@ function ex1_2(M) {
   ];
 
 
-  //let rhythm_lib = [
-  //  [ ":", ":", ":", ":", "+", "+" ],
-  //  [ "+", "+", ":", ":", "+" ]
-  //];
   let rhythm_lib = [
-    [ "e", "e", "e", "e", "q", "q" ],
-    [ "q", "q", "e", "e", "q" ]
+    [ ":", ":", ":", ":", "+", "+" ],
+    [ "+", "+", ":", ":", "+" ]
   ];
+  //let rhythm_lib = [
+  //  [ "e", "e", "e", "e", "q", "q" ],
+  //  [ "q", "q", "e", "e", "q" ]
+  //];
 
   let n_measure = [4,8];
 
@@ -614,9 +612,13 @@ function descr_ex1_3(M) {
 
 
   let rhythm_lib = [
-    [ "q", "e", "e", "H" ],
-    [ "z", "q", "q", "q" ]
+    [ "+", ":", ":", "*" ],
+    [ "z", "+", "+", "+" ]
   ];
+  //let rhythm_lib = [
+  //  [ "q", "e", "e", "H" ],
+  //  [ "z", "q", "q", "q" ]
+  //];
   let n_measure = [6,11];
 
   let rhythm_s = [];
@@ -670,9 +672,13 @@ function ex1_3(M) {
   let note_progression = [ "d", "a", "f", "e", "c" ];
 
   let rhythm_lib = [
-    [ "q", "e", "e", "H" ],
-    [ "z", "q", "q", "q" ]
+    [ "+", ":", ":", "*" ],
+    [ "z", "+", "+", "+" ]
   ];
+  //let rhythm_lib = [
+  //  [ "q", "e", "e", "H" ],
+  //  [ "z", "q", "q", "q" ]
+  //];
   let n_measure = [6,11];
 
   n_measure = [2,11];
@@ -724,6 +730,7 @@ function enumerate_note( a_t, a_n, a_o ) {
 
   let note_list = [];
 
+  /*
   let is_sharp = {
     "c":0, "u":1, "d":0, "v":1, "e":0, "f":0,
     "x":1, "g":0, "y":1, "a":0, "z":1, "b":0
@@ -736,12 +743,15 @@ function enumerate_note( a_t, a_n, a_o ) {
 
   let norm_tempo = { "H": "*", "q":"+", "e":":", "s":"." };
   let shrp_tempo = { "H": "#", "q":"=", "e":"-", "s":"," };
+  */
 
   for (let i=0; i<a_t.length; i++) {
     for (let j=0; j<a_n.length; j++) {
-      let _iss = is_sharp[a_n[j]];
-      let _tc = (_iss ? shrp_tempo[a_t[i]] : norm_tempo[a_t[i]]);
-      let _nc = note_redux[a_n[j]];
+      //let _iss = is_sharp[a_n[j]];
+      //let _tc = (_iss ? shrp_tempo[a_t[i]] : norm_tempo[a_t[i]]);
+      let _tc = a_t[i];
+      //let _nc = note_redux[a_n[j]];
+      let _nc = a_n[j];
 
       for (let octave=a_o[0]; octave<a_o[1]; octave++) {
         let note = _tc + _nc + octave.toString();
@@ -787,20 +797,46 @@ function _main_repl() {
 
       if ((tok[0] == 'help') || (tok[0] == '?'))  {
 
-        let tnkey = ['*', '+', ':', '.'];
-        let tskey = ['#', '=', '-', ','];
-        let tfkey = ['&', '@', '/', '_'];
-        let wildcard_tempo_key = ['H', 'q', 'e', 's'];
+        let tempo = ['*', '+', ':', '.'];
 
         console.log("");
-        for (let i=0; i<wildcard_tempo_key.length; i++) {
-          console.log("  " + wildcard_tempo_key[i] + " (" + tnkey[i] + tskey[i] + tfkey[i] + ")  " + TEMPO_DESCR[wildcard_tempo_key[i]])
+        console.log("  note format:");
+        console.log("");
+        console.log("       tempo                octave");
+        console.log("         |                    |");
+        console.log("      {*+:.}{cudvefwgxaybz}{<0-9}");
+        console.log("                 |");
+        console.log("                note");
+        console.log("");
+        console.log("  example:");
+        console.log("");
+        console.log("    :z :g4 :g4 :g4 | *v4 | :z :f4 :f4 :f4 | *d4");
+        console.log("");
+        console.log("  tempo:");
+        console.log("");
+        for (let i=0; i<tempo.length; i++) {
+          console.log("    " + tempo[i] + " " + TEMPO_DESCR[tempo[i]])
         }
         console.log("");
-        console.log("  norm:", _normal.join(" "));
-        console.log("  shrp:", _sharp.join(" "));
-        console.log("  flat:", _flat.join(" "));
-        console.log("  rest:", _rest.join(" "));
+        console.log("  notes:");
+        console.log("");
+        for (let i=0; i<4; i+=2) {
+          console.log("    " + BARD_NOTE[i] + "  " + BARD_NOTE_DESCR[ BARD_NOTE[i] ] +
+            "    " +BARD_NOTE[i+1] + "  " + BARD_NOTE_DESCR[ BARD_NOTE[i+1] ] );
+        }
+        console.log("    " + BARD_NOTE[4] + "  " + BARD_NOTE_DESCR[ BARD_NOTE[4] ] );
+        for (let i=5; i<10; i+=2) {
+          console.log("    " + BARD_NOTE[i] + "  " + BARD_NOTE_DESCR[ BARD_NOTE[i] ] +
+            "    " +BARD_NOTE[i+1] + "  " + BARD_NOTE_DESCR[ BARD_NOTE[i+1] ] );
+        }
+        console.log("    " + BARD_NOTE[11] + "  " + BARD_NOTE_DESCR[ BARD_NOTE[11] ] );
+
+
+        console.log("");
+        //console.log("  norm:", _normal.join(" "));
+        //console.log("  shrp:", _sharp.join(" "));
+        //console.log("  flat:", _flat.join(" "));
+        //console.log("  rest:", _rest.join(" "));
         console.log("");
         console.log("op:");
         console.log("");
