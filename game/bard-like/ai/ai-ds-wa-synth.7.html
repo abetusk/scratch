@@ -1,0 +1,1307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modular Synth Engine - Dungeon Synth</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+            user-select: none;
+        }
+        body {
+            background: linear-gradient(145deg, #0a0a12 0%, #1a1420 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+        }
+        .synth-container {
+            max-width: 1200px;
+            width: 100%;
+            background: rgba(16, 14, 26, 0.92);
+            backdrop-filter: blur(4px);
+            border-radius: 48px;
+            padding: 30px 28px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.9), inset 0 1px 2px rgba(180, 150, 200, 0.05);
+            border: 1px solid #3a2a3e;
+            color: #d4c8d4;
+        }
+        h1 {
+            font-weight: 400;
+            font-size: 1.9rem;
+            letter-spacing: 2px;
+            margin-top: 0;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid #3a2a3e;
+            padding-bottom: 16px;
+            color: #c4b0c4;
+            text-shadow: 0 0 20px rgba(180, 120, 200, 0.1);
+        }
+        h1 small {
+            font-size: 0.8rem;
+            font-weight: 300;
+            opacity: 0.5;
+            margin-left: 8px;
+            letter-spacing: 1px;
+        }
+        .preset-bar {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            background: #1a1422;
+            border-radius: 40px;
+            padding: 8px 18px;
+            border: 1px solid #3a2a3e;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+        .preset-bar button {
+            background: #2a1a32;
+            border: 1px solid #5a3a5e;
+            color: #d4c0d4;
+            padding: 6px 18px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: 0.2s;
+        }
+        .preset-bar button:hover {
+            background: #3a2a4a;
+            border-color: #8a5a8e;
+        }
+        .preset-bar button.active {
+            background: #4a2a5a;
+            border-color: #aa7aae;
+            box-shadow: 0 0 20px rgba(150, 80, 180, 0.2);
+        }
+        .preset-bar input {
+            background: #0a0610;
+            border: 1px solid #3a2a3e;
+            color: #d4c8d4;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            width: 120px;
+        }
+        .keyboard-section {
+            background: #120e1a;
+            border-radius: 28px;
+            padding: 20px 18px;
+            margin: 16px 0 20px;
+            border: 1px solid #2a1a2e;
+        }
+        .keyboard {
+            display: flex;
+            justify-content: center;
+            gap: 2px;
+            margin: 10px 0 12px;
+            flex-wrap: wrap;
+        }
+        .key {
+            width: 42px;
+            height: 140px;
+            background: #d4c8d4;
+            border-radius: 0 0 6px 6px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            padding-bottom: 8px;
+            font-size: 0.6rem;
+            color: #2a1a2a;
+            font-weight: 600;
+            transition: 0.05s ease;
+            border: 2px solid #8a7a8a;
+            border-top: none;
+            position: relative;
+        }
+        .key.black {
+            width: 28px;
+            height: 90px;
+            background: #1a0a1a;
+            border-color: #0a000a;
+            color: #b0a0b0;
+            margin: 0 -14px;
+            z-index: 2;
+            border-radius: 0 0 4px 4px;
+            font-size: 0.5rem;
+        }
+        .key.active {
+            background: #b080c0 !important;
+            transform: scale(0.96);
+            border-color: #9050a0;
+        }
+        .key.black.active {
+            background: #804090 !important;
+        }
+        .key:hover {
+            background: #c0b0c0;
+        }
+        .key.black:hover {
+            background: #2a1a2a;
+        }
+        .controls-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            align-items: center;
+            justify-content: space-between;
+            margin: 10px 0 6px;
+        }
+        .controls-row button {
+            background: #2a1a32;
+            border: 1px solid #4a3a4e;
+            color: #d4c0d4;
+            font-size: 0.9rem;
+            padding: 8px 20px;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .controls-row button:hover {
+            background: #3a2a4a;
+            border-color: #6a4a6e;
+        }
+        .controls-row button.record {
+            background: #3a1a2a;
+            border-color: #6a2a4a;
+        }
+        .controls-row button.record.active {
+            background: #6a2a4a;
+            border-color: #aa4a7a;
+            animation: pulse 0.8s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .melody-display {
+            background: #0a0610;
+            border-radius: 20px;
+            padding: 10px 16px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.8rem;
+            min-height: 40px;
+            border: 1px solid #2a1a2e;
+            margin-top: 8px;
+            overflow-x: auto;
+            white-space: nowrap;
+            color: #b090b0;
+        }
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 18px;
+        }
+        .osc-card {
+            background: #1a1422;
+            border-radius: 24px;
+            padding: 14px 14px 16px;
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.6), 0 6px 12px rgba(0,0,0,0.3);
+            border: 1px solid #2a1a2e;
+        }
+        .osc-card h3 {
+            display: flex;
+            justify-content: space-between;
+            margin: 0 0 10px 0;
+            font-weight: 400;
+            font-size: 1rem;
+            color: #b0a0b0;
+        }
+        .control-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 6px 10px;
+            margin-bottom: 8px;
+        }
+        .control-row label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            opacity: 0.6;
+            min-width: 28px;
+        }
+        .control-row input[type="range"] {
+            flex: 1;
+            min-width: 50px;
+            accent-color: #7a4a8a;
+            background: #0a0610;
+            height: 3px;
+            border-radius: 10px;
+        }
+        .control-row select {
+            background: #0a0610;
+            color: #b0a0b0;
+            border: 1px solid #2a1a2e;
+            border-radius: 40px;
+            padding: 2px 10px;
+            font-size: 0.7rem;
+        }
+        .lfo-badge {
+            display: inline-block;
+            background: #1a0a22;
+            border-radius: 40px;
+            padding: 2px 10px 2px 6px;
+            font-size: 0.6rem;
+            border-left: 2px solid #7a4a8a;
+        }
+        .filter-section {
+            background: #1a1422;
+            border-radius: 24px;
+            padding: 14px 18px;
+            margin: 10px 0 14px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px 16px;
+            border: 1px solid #2a1a2e;
+        }
+        .filter-section .group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .filter-section .group label {
+            font-size: 0.6rem;
+            opacity: 0.6;
+        }
+        .filter-section input[type="range"] {
+            width: 60px;
+            accent-color: #7a4a8a;
+        }
+        .reverb-box {
+            background: #120e1a;
+            border-radius: 40px;
+            padding: 4px 14px 4px 10px;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            border: 1px solid #2a1a2e;
+        }
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #120e1a;
+            padding: 4px 14px 4px 10px;
+            border-radius: 40px;
+            border: 1px solid #2a1a2e;
+        }
+        .volume-control input[type="range"] {
+            width: 80px;
+            accent-color: #7a4a8a;
+        }
+        .lfo-module {
+            background: #120e1a;
+            border-radius: 16px;
+            padding: 8px 12px;
+            border: 1px solid #2a1a2e;
+        }
+        .lfo-module .lfo-row {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .lfo-module .lfo-row label {
+            font-size: 0.55rem;
+            opacity: 0.6;
+            min-width: 22px;
+        }
+        .lfo-module .lfo-row input[type="range"] {
+            width: 55px;
+            accent-color: #7a4a8a;
+        }
+        .lfo-module .lfo-row select {
+            font-size: 0.55rem;
+            padding: 1px 6px;
+            background: #0a0610;
+            color: #b0a0b0;
+            border: 1px solid #2a1a2e;
+        }
+        .module-label {
+            font-size: 0.6rem;
+            font-weight: 300;
+            opacity: 0.7;
+        }
+        .dungeon-badge {
+            background: #2a1a2a;
+            border: 1px solid #4a3a4a;
+            padding: 2px 12px;
+            border-radius: 20px;
+            font-size: 0.6rem;
+            color: #b090b0;
+            letter-spacing: 1px;
+        }
+        @media (max-width: 800px) {
+            .grid-3 { grid-template-columns: 1fr; }
+            .key { width: 32px; height: 100px; }
+            .key.black { width: 22px; height: 65px; margin: 0 -11px; }
+        }
+    </style>
+</head>
+<body>
+<div class="synth-container">
+    <h1>⚔️ MODULAR SYNTH <small>engine · presets · melody player</small></h1>
+
+    <!-- Preset Bar -->
+    <div class="preset-bar">
+        <span style="opacity:0.5; font-size:0.8rem;">🏰</span>
+        <button class="active" id="dungeonPreset">DUNGEON</button>
+        <button id="cathedralPreset">CATHEDRAL</button>
+        <button id="goblinPreset">GOBLIN</button>
+        <button id="resetPreset">⟲ RESET</button>
+        <span style="opacity:0.5;">|</span>
+        <input type="text" id="presetNameInput" placeholder="preset name" value="my_preset">
+        <button id="savePresetBtn">💾 SAVE</button>
+        <button id="loadPresetBtn">📂 LOAD</button>
+        <span class="dungeon-badge">⚡ dark magic</span>
+    </div>
+
+    <!-- Keyboard -->
+    <div class="keyboard-section">
+        <div class="keyboard" id="keyboard"></div>
+        <div class="controls-row">
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                <button id="recordBtn" class="record">⏺ RECORD</button>
+                <button id="playMelodyBtn">▶ PLAY MELODY</button>
+                <button id="clearMelodyBtn">✕ CLEAR</button>
+                <button id="playTestMelodyBtn">🎵 TEST</button>
+            </div>
+            <div style="display:flex; gap:8px; align-items:center;">
+                <span style="font-size:0.7rem; opacity:0.5;">tempo</span>
+                <input type="range" id="tempo" min="60" max="180" value="90" style="width:80px;">
+                <span id="tempoLabel" style="font-size:0.7rem;">90</span>
+            </div>
+        </div>
+        <div class="melody-display" id="melodyDisplay">🎵 summon ancient melodies... click keys to play</div>
+    </div>
+
+    <!-- 3 oscillators -->
+    <div class="grid-3" id="oscContainer"></div>
+
+    <!-- Filter + Gain ADSR -->
+    <div class="filter-section">
+        <div class="group">
+            <span style="font-weight:300; font-size:0.75rem;">🎛️ FILTER</span>
+            <label>A</label><input type="range" id="fAttack" min="0.001" max="1.0" step="0.001" value="0.15">
+            <label>D</label><input type="range" id="fDecay" min="0.01" max="1.0" step="0.01" value="0.3">
+            <label>S</label><input type="range" id="fSustain" min="0" max="1" step="0.01" value="0.3">
+            <label>R</label><input type="range" id="fRelease" min="0.01" max="1.5" step="0.01" value="0.6">
+        </div>
+        <div class="group">
+            <span style="font-weight:300; font-size:0.75rem;">🎚️ GAIN</span>
+            <label>A</label><input type="range" id="gAttack" min="0.001" max="1.0" step="0.001" value="0.15">
+            <label>D</label><input type="range" id="gDecay" min="0.01" max="1.0" step="0.01" value="0.2">
+            <label>S</label><input type="range" id="gSustain" min="0" max="1" step="0.01" value="0.6">
+            <label>R</label><input type="range" id="gRelease" min="0.01" max="1.5" step="0.01" value="0.8">
+        </div>
+    </div>
+
+    <!-- LFO Controls -->
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 14px;">
+        <div class="lfo-module">
+            <span class="module-label">🌀 FILTER LFO</span>
+            <div class="lfo-row">
+                <label>rate</label><input type="range" id="filterLfoRate" min="0.1" max="12" step="0.1" value="1.2">
+                <label>depth</label><input type="range" id="filterLfoDepth" min="0" max="300" step="1" value="80">
+                <select id="filterLfoWave"><option value="sine">sine</option><option value="square">square</option><option value="sawtooth">sawtooth</option><option value="triangle" selected>triangle</option></select>
+            </div>
+        </div>
+        <div class="lfo-module">
+            <span class="module-label">🌀 GAIN LFO</span>
+            <div class="lfo-row">
+                <label>rate</label><input type="range" id="gainLfoRate" min="0.1" max="12" step="0.1" value="0.8">
+                <label>depth</label><input type="range" id="gainLfoDepth" min="0" max="0.5" step="0.01" value="0.08">
+                <select id="gainLfoWave"><option value="sine">sine</option><option value="square">square</option><option value="sawtooth">sawtooth</option><option value="triangle" selected>triangle</option></select>
+            </div>
+        </div>
+        <div class="lfo-module">
+            <span class="module-label">🌀 REVERB LFO</span>
+            <div class="lfo-row">
+                <label>rate</label><input type="range" id="reverbLfoRate" min="0.1" max="12" step="0.1" value="0.4">
+                <label>depth</label><input type="range" id="reverbLfoDepth" min="0" max="0.3" step="0.01" value="0.05">
+                <select id="reverbLfoWave"><option value="sine">sine</option><option value="square">square</option><option value="sawtooth">sawtooth</option><option value="triangle" selected>triangle</option></select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reverb + Master -->
+    <div style="display:flex; flex-wrap:wrap; gap:12px; align-items:center; justify-content:space-between;">
+        <div class="reverb-box">
+            <span style="opacity:0.6; font-size:0.8rem;">⏳ REVERB</span>
+            <label style="font-size:0.6rem;">wet</label><input type="range" id="reverbWet" min="0" max="1" step="0.01" value="0.45">
+            <label style="font-size:0.6rem;">decay</label><input type="range" id="reverbDecay" min="0.1" max="3.0" step="0.1" value="2.0">
+        </div>
+        <div class="volume-control">
+            <span style="opacity:0.6; font-size:0.8rem;">🔊</span>
+            <input type="range" id="masterVolume" min="0" max="1" step="0.01" value="0.6">
+        </div>
+        <div style="display:flex; gap:8px;">
+            <button id="panicBtn" style="background:#2a1a22; border-color:#4a2a3a;">🔇 PANIC</button>
+        </div>
+    </div>
+</div>
+<script>
+    // ============================================
+    // 1. SYNTH ENGINE (completely separate from GUI)
+    // ============================================
+    class SynthEngine {
+        constructor() {
+            this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            this.activeNotes = new Map();
+
+            // Master
+            this.masterGain = this.audioCtx.createGain();
+            this.masterGain.gain.value = 0.6;
+            this.masterGain.connect(this.audioCtx.destination);
+
+            // Reverb
+            this.reverb = null;
+            this.createReverb(2.0, 0.45);
+
+            // Filter
+            this.filterNode = this.audioCtx.createBiquadFilter();
+            this.filterNode.type = 'lowpass';
+            this.filterNode.frequency.value = 1200;
+            this.filterNode.Q.value = 0.8;
+
+            this.filterADSR = this.audioCtx.createGain();
+            this.filterADSR.gain.value = 0.001;
+            this.filterNode.connect(this.filterADSR);
+            this.filterADSR.connect(this.reverb.convolver);
+
+            // Gain envelope
+            this.gainEnvelope = this.audioCtx.createGain();
+            this.gainEnvelope.gain.value = 0.001;
+            this.gainEnvelope.connect(this.filterNode);
+
+            // Oscillators
+            this.oscData = [];
+            for (let i = 0; i < 3; i++) {
+                const osc = this.audioCtx.createOscillator();
+                const gain = this.audioCtx.createGain();
+                gain.gain.value = 0.25 + i*0.05;
+                osc.type = i === 0 ? 'sawtooth' : i === 1 ? 'square' : 'triangle';
+                osc.frequency.value = 440;
+                osc.detune.value = (i-1)*8;
+
+                const lfoOsc = this.audioCtx.createOscillator();
+                const lfoGain = this.audioCtx.createGain();
+                lfoGain.gain.value = 0.15 + i*0.05;
+                lfoOsc.frequency.value = 2.0 + i*0.3;
+                lfoOsc.type = 'sine';
+
+                lfoOsc.connect(lfoGain);
+                lfoGain.connect(osc.frequency);
+
+                osc.connect(gain);
+                gain.connect(this.gainEnvelope);
+                osc.start();
+                lfoOsc.start();
+
+                this.oscData.push({ osc, gain, lfoOsc, lfoGain });
+            }
+
+            // LFOs
+            this.filterLfo = this.audioCtx.createOscillator();
+            this.filterLfoGain = this.audioCtx.createGain();
+            this.filterLfoGain.gain.value = 80;
+            this.filterLfo.frequency.value = 1.2;
+            this.filterLfo.type = 'triangle';
+            this.filterLfo.connect(this.filterLfoGain);
+            this.filterLfoGain.connect(this.filterNode.frequency);
+            this.filterLfo.start();
+
+            this.gainLfo = this.audioCtx.createOscillator();
+            this.gainLfoGain = this.audioCtx.createGain();
+            this.gainLfoGain.gain.value = 0.08;
+            this.gainLfo.frequency.value = 0.8;
+            this.gainLfo.type = 'triangle';
+            this.gainLfo.connect(this.gainLfoGain);
+            this.gainLfoGain.connect(this.gainEnvelope.gain);
+            this.gainLfo.start();
+
+            this.reverbLfo = this.audioCtx.createOscillator();
+            this.reverbLfoGain = this.audioCtx.createGain();
+            this.reverbLfoGain.gain.value = 0.05;
+            this.reverbLfo.frequency.value = 0.4;
+            this.reverbLfo.type = 'triangle';
+            this.reverbLfo.connect(this.reverbLfoGain);
+            this.reverbLfoGain.connect(this.reverb.wetGain.gain);
+            this.reverbLfo.start();
+
+            // ADSR params (default dungeon synth)
+            this.params = {
+                fAttack: 0.15, fDecay: 0.3, fSustain: 0.3, fRelease: 0.6,
+                gAttack: 0.15, gDecay: 0.2, gSustain: 0.6, gRelease: 0.8,
+                reverbWet: 0.45, reverbDecay: 2.0,
+                filterLfoRate: 1.2, filterLfoDepth: 80, filterLfoWave: 'triangle',
+                gainLfoRate: 0.8, gainLfoDepth: 0.08, gainLfoWave: 'triangle',
+                reverbLfoRate: 0.4, reverbLfoDepth: 0.05, reverbLfoWave: 'triangle',
+                masterVol: 0.6,
+                osc1Wave: 'sawtooth', osc2Wave: 'square', osc3Wave: 'triangle',
+                osc1Vol: 0.3, osc2Vol: 0.35, osc3Vol: 0.4,
+                osc1Detune: -8, osc2Detune: 0, osc3Detune: 8,
+                osc1LfoRate: 2.0, osc2LfoRate: 2.3, osc3LfoRate: 2.6,
+                osc1LfoDepth: 0.15, osc2LfoDepth: 0.2, osc3LfoDepth: 0.25,
+                filterFreq: 1200, filterQ: 0.8
+            };
+        }
+
+        createReverb(decay, wet) {
+            if (this.reverb) {
+                try {
+                    this.reverb.convolver.disconnect();
+                    this.reverb.wetGain.disconnect();
+                    this.reverb.dryGain.disconnect();
+                } catch(e) {}
+            }
+            const convolver = this.audioCtx.createConvolver();
+            const length = this.audioCtx.sampleRate * decay;
+            const impulse = this.audioCtx.createBuffer(2, length, this.audioCtx.sampleRate);
+            for (let channel = 0; channel < 2; channel++) {
+                const data = impulse.getChannelData(channel);
+                for (let i = 0; i < length; i++) {
+                    const env = Math.exp(-i / (this.audioCtx.sampleRate * decay * 0.7));
+                    data[i] = (Math.random() * 2 - 1) * env * 0.8;
+                }
+            }
+            convolver.buffer = impulse;
+            const wetGain = this.audioCtx.createGain();
+            wetGain.gain.value = wet;
+            const dryGain = this.audioCtx.createGain();
+            dryGain.gain.value = 1 - wet;
+            convolver.connect(wetGain);
+            wetGain.connect(this.masterGain);
+            dryGain.connect(this.masterGain);
+            this.reverb = { convolver, wetGain, dryGain };
+        }
+
+        triggerNote(frequency, velocity = 0.7) {
+            if (this.activeNotes.has(frequency)) return;
+
+            const now = this.audioCtx.currentTime;
+            const p = this.params;
+
+            const noteGain = this.audioCtx.createGain();
+            noteGain.gain.value = 0.001;
+            noteGain.connect(this.filterNode);
+
+            const noteFilter = this.audioCtx.createBiquadFilter();
+            noteFilter.type = 'lowpass';
+            noteFilter.frequency.value = p.filterFreq || 1200;
+            noteFilter.Q.value = p.filterQ || 0.8;
+            noteGain.connect(noteFilter);
+
+            const noteFilterEnv = this.audioCtx.createGain();
+            noteFilterEnv.gain.value = 0.001;
+            noteFilter.connect(noteFilterEnv);
+            noteFilterEnv.connect(this.reverb.convolver);
+
+            const freqMod = this.audioCtx.createGain();
+            freqMod.gain.value = 60;
+            freqMod.connect(noteFilter.frequency);
+
+            this.oscData.forEach(d => {
+                d.gain.disconnect();
+                d.gain.connect(noteGain);
+                d.osc.frequency.value = frequency;
+            });
+
+            const gParam = noteGain.gain;
+            gParam.cancelScheduledValues(now);
+            gParam.setValueAtTime(0.001, now);
+            gParam.linearRampToValueAtTime(velocity * 0.6, now + p.gAttack);
+            gParam.linearRampToValueAtTime(p.gSustain * velocity * 0.6, now + p.gAttack + p.gDecay);
+
+            const fParam = noteFilterEnv.gain;
+            fParam.cancelScheduledValues(now);
+            fParam.setValueAtTime(0.001, now);
+            fParam.linearRampToValueAtTime(1.0, now + p.fAttack);
+            fParam.linearRampToValueAtTime(p.fSustain * 1.0, now + p.fAttack + p.fDecay);
+
+            const freqParam = freqMod.gain;
+            freqParam.cancelScheduledValues(now);
+            freqParam.setValueAtTime(60, now);
+            freqParam.linearRampToValueAtTime(1200, now + p.fAttack);
+            freqParam.linearRampToValueAtTime(400 + p.fSustain * 800, now + p.fAttack + p.fDecay);
+
+            this.activeNotes.set(frequency, { 
+                noteGain, noteFilter, noteFilterEnv, freqMod, 
+                gParam, fParam, freqParam, 
+                gR: p.gRelease, fR: p.fRelease 
+            });
+        }
+
+        releaseNote(frequency) {
+            const note = this.activeNotes.get(frequency);
+            if (!note) return;
+
+            const now = this.audioCtx.currentTime;
+            const { noteGain, noteFilterEnv, freqMod, gParam, fParam, freqParam, gR, fR } = note;
+
+            gParam.cancelScheduledValues(now);
+            gParam.setValueAtTime(gParam.value, now);
+            gParam.linearRampToValueAtTime(0.001, now + gR);
+
+            fParam.cancelScheduledValues(now);
+            fParam.setValueAtTime(fParam.value, now);
+            fParam.linearRampToValueAtTime(0.001, now + fR);
+
+            freqParam.cancelScheduledValues(now);
+            freqParam.setValueAtTime(freqParam.value, now);
+            freqParam.linearRampToValueAtTime(60, now + fR);
+
+            setTimeout(() => {
+                try {
+                    noteGain.disconnect();
+                    noteFilter.disconnect();
+                    noteFilterEnv.disconnect();
+                    freqMod.disconnect();
+                    this.oscData.forEach(d => {
+                        d.gain.disconnect();
+                        d.gain.connect(this.gainEnvelope);
+                    });
+                } catch(e) {}
+            }, (Math.max(gR, fR) * 1000) + 100);
+
+            this.activeNotes.delete(frequency);
+        }
+
+        panic() {
+            this.activeNotes.forEach((_, freq) => this.releaseNote(freq));
+        }
+
+        // ----- Preset Management -----
+        getPreset() {
+            const p = this.params;
+            return {
+                fAttack: p.fAttack, fDecay: p.fDecay, fSustain: p.fSustain, fRelease: p.fRelease,
+                gAttack: p.gAttack, gDecay: p.gDecay, gSustain: p.gSustain, gRelease: p.gRelease,
+                reverbWet: p.reverbWet, reverbDecay: p.reverbDecay,
+                filterLfoRate: p.filterLfoRate, filterLfoDepth: p.filterLfoDepth, filterLfoWave: p.filterLfoWave,
+                gainLfoRate: p.gainLfoRate, gainLfoDepth: p.gainLfoDepth, gainLfoWave: p.gainLfoWave,
+                reverbLfoRate: p.reverbLfoRate, reverbLfoDepth: p.reverbLfoDepth, reverbLfoWave: p.reverbLfoWave,
+                masterVol: p.masterVol,
+                osc1Wave: p.osc1Wave, osc2Wave: p.osc2Wave, osc3Wave: p.osc3Wave,
+                osc1Vol: p.osc1Vol, osc2Vol: p.osc2Vol, osc3Vol: p.osc3Vol,
+                osc1Detune: p.osc1Detune, osc2Detune: p.osc2Detune, osc3Detune: p.osc3Detune,
+                osc1LfoRate: p.osc1LfoRate, osc2LfoRate: p.osc2LfoRate, osc3LfoRate: p.osc3LfoRate,
+                osc1LfoDepth: p.osc1LfoDepth, osc2LfoDepth: p.osc2LfoDepth, osc3LfoDepth: p.osc3LfoDepth,
+                filterFreq: p.filterFreq, filterQ: p.filterQ
+            };
+        }
+
+        loadPreset(preset) {
+            this.panic();
+
+            // Update params
+            Object.assign(this.params, preset);
+            const p = this.params;
+
+            // Apply LFOs
+            this.filterLfo.frequency.value = p.filterLfoRate;
+            this.filterLfoGain.gain.value = p.filterLfoDepth;
+            this.filterLfo.type = p.filterLfoWave;
+            this.gainLfo.frequency.value = p.gainLfoRate;
+            this.gainLfoGain.gain.value = p.gainLfoDepth;
+            this.gainLfo.type = p.gainLfoWave;
+            this.reverbLfo.frequency.value = p.reverbLfoRate;
+            this.reverbLfoGain.gain.value = p.reverbLfoDepth;
+            this.reverbLfo.type = p.reverbLfoWave;
+
+            // Apply oscillators
+            const oscWaves = [p.osc1Wave, p.osc2Wave, p.osc3Wave];
+            const oscVols = [p.osc1Vol, p.osc2Vol, p.osc3Vol];
+            const oscDetunes = [p.osc1Detune, p.osc2Detune, p.osc3Detune];
+            const oscLfoRates = [p.osc1LfoRate, p.osc2LfoRate, p.osc3LfoRate];
+            const oscLfoDepths = [p.osc1LfoDepth, p.osc2LfoDepth, p.osc3LfoDepth];
+
+            this.oscData.forEach((d, i) => {
+                d.osc.type = oscWaves[i];
+                d.gain.gain.value = oscVols[i];
+                d.osc.detune.value = oscDetunes[i];
+                d.lfoOsc.frequency.value = oscLfoRates[i];
+                d.lfoGain.gain.value = oscLfoDepths[i];
+            });
+
+            // Apply filter
+            this.filterNode.frequency.value = p.filterFreq;
+            this.filterNode.Q.value = p.filterQ;
+
+            // Apply reverb
+            this.createReverb(p.reverbDecay, p.reverbWet);
+            if (this.filterADSR) {
+                this.filterADSR.disconnect();
+                this.filterADSR.connect(this.reverb.convolver);
+            }
+            this.reverbLfoGain.disconnect();
+            this.reverbLfoGain.connect(this.reverb.wetGain.gain);
+
+            // Master volume
+            this.masterGain.gain.value = p.masterVol;
+        }
+
+        // ----- Melody Playback -----
+        // notes: array of {freq: number, time: number} (time in ms from start)
+        // tempo: BPM for note duration fallback
+        playMelody(notes, tempo = 90, callback = null) {
+            if (!notes || notes.length === 0) return;
+
+            const beatDuration = 60 / tempo;
+            let index = 0;
+            const startTime = this.audioCtx.currentTime;
+            const firstNoteTime = notes[0]?.time || 0;
+            let isPlaying = true;
+
+            const scheduleNext = () => {
+                if (!isPlaying || index >= notes.length) {
+                    if (callback) callback();
+                    return;
+                }
+
+                const note = notes[index];
+                const time = startTime + (note.time - firstNoteTime) / 1000;
+                const duration = index < notes.length - 1 
+                    ? (notes[index + 1].time - note.time) / 1000 
+                    : beatDuration * 0.6;
+
+                const scheduledTime = this.audioCtx.currentTime + Math.max(0, time - this.audioCtx.currentTime);
+                const freq = note.freq;
+
+                const now = this.audioCtx.currentTime;
+                const p = this.params;
+
+                const noteGain = this.audioCtx.createGain();
+                noteGain.gain.setValueAtTime(0.001, scheduledTime);
+                noteGain.connect(this.filterNode);
+
+                const noteFilter = this.audioCtx.createBiquadFilter();
+                noteFilter.type = 'lowpass';
+                noteFilter.frequency.setValueAtTime(p.filterFreq || 1200, scheduledTime);
+                noteFilter.Q.value = p.filterQ || 0.8;
+                noteGain.connect(noteFilter);
+
+                const noteFilterEnv = this.audioCtx.createGain();
+                noteFilterEnv.gain.setValueAtTime(0.001, scheduledTime);
+                noteFilter.connect(noteFilterEnv);
+                noteFilterEnv.connect(this.reverb.convolver);
+
+                const freqMod = this.audioCtx.createGain();
+                freqMod.gain.setValueAtTime(60, scheduledTime);
+                freqMod.connect(noteFilter.frequency);
+
+                this.oscData.forEach(d => {
+                    d.gain.disconnect();
+                    d.gain.connect(noteGain);
+                    d.osc.frequency.setValueAtTime(freq, scheduledTime);
+                });
+
+                const gParam = noteGain.gain;
+                gParam.linearRampToValueAtTime(0.5, scheduledTime + p.gAttack);
+                gParam.linearRampToValueAtTime(p.gSustain * 0.5, scheduledTime + p.gAttack + p.gDecay);
+
+                const fParam = noteFilterEnv.gain;
+                fParam.linearRampToValueAtTime(1.0, scheduledTime + p.fAttack);
+                fParam.linearRampToValueAtTime(p.fSustain * 1.0, scheduledTime + p.fAttack + p.fDecay);
+
+                const freqParam = freqMod.gain;
+                freqParam.linearRampToValueAtTime(1200, scheduledTime + p.fAttack);
+                freqParam.linearRampToValueAtTime(400 + p.fSustain * 800, scheduledTime + p.fAttack + p.fDecay);
+
+                const releaseTime = scheduledTime + Math.max(duration, 0.05);
+                setTimeout(() => {
+                    const now2 = this.audioCtx.currentTime;
+                    gParam.cancelScheduledValues(now2);
+                    gParam.setValueAtTime(gParam.value, now2);
+                    gParam.linearRampToValueAtTime(0.001, now2 + p.gRelease);
+
+                    fParam.cancelScheduledValues(now2);
+                    fParam.setValueAtTime(fParam.value, now2);
+                    fParam.linearRampToValueAtTime(0.001, now2 + p.fRelease);
+
+                    freqParam.cancelScheduledValues(now2);
+                    freqParam.setValueAtTime(freqParam.value, now2);
+                    freqParam.linearRampToValueAtTime(60, now2 + p.fRelease);
+
+                    setTimeout(() => {
+                        try {
+                            noteGain.disconnect();
+                            noteFilter.disconnect();
+                            noteFilterEnv.disconnect();
+                            freqMod.disconnect();
+                            this.oscData.forEach(d => {
+                                d.gain.disconnect();
+                                d.gain.connect(this.gainEnvelope);
+                            });
+                        } catch(e) {}
+                    }, (Math.max(p.gRelease, p.fRelease) * 1000) + 100);
+                }, (releaseTime - this.audioCtx.currentTime) * 1000);
+
+                index++;
+                const nextDelay = index < notes.length 
+                    ? Math.max(0, (notes[index].time - note.time) / 1000)
+                    : 0.1;
+                setTimeout(scheduleNext, nextDelay * 1000 + 50);
+            };
+
+            setTimeout(scheduleNext, 100);
+
+            // Return stop function
+            return () => { isPlaying = false; };
+        }
+    }
+
+    // ============================================
+    // 2. GUI BINDINGS (separate from engine)
+    // ============================================
+    const synth = new SynthEngine();
+
+    // DOM refs
+    const $ = id => document.getElementById(id);
+    const fAttack = $('fAttack'), fDecay = $('fDecay'), fSustain = $('fSustain'), fRelease = $('fRelease');
+    const gAttack = $('gAttack'), gDecay = $('gDecay'), gSustain = $('gSustain'), gRelease = $('gRelease');
+    const reverbWet = $('reverbWet'), reverbDecay = $('reverbDecay');
+    const masterVol = $('masterVolume');
+    const filterLfoRate = $('filterLfoRate'), filterLfoDepth = $('filterLfoDepth'), filterLfoWave = $('filterLfoWave');
+    const gainLfoRate = $('gainLfoRate'), gainLfoDepth = $('gainLfoDepth'), gainLfoWave = $('gainLfoWave');
+    const reverbLfoRate = $('reverbLfoRate'), reverbLfoDepth = $('reverbLfoDepth'), reverbLfoWave = $('reverbLfoWave');
+
+    // Link GUI controls to synth params
+    function updateSynthParams() {
+        synth.params.fAttack = parseFloat(fAttack.value);
+        synth.params.fDecay = parseFloat(fDecay.value);
+        synth.params.fSustain = parseFloat(fSustain.value);
+        synth.params.fRelease = parseFloat(fRelease.value);
+        synth.params.gAttack = parseFloat(gAttack.value);
+        synth.params.gDecay = parseFloat(gDecay.value);
+        synth.params.gSustain = parseFloat(gSustain.value);
+        synth.params.gRelease = parseFloat(gRelease.value);
+        synth.params.reverbWet = parseFloat(reverbWet.value);
+        synth.params.reverbDecay = parseFloat(reverbDecay.value);
+        synth.params.filterLfoRate = parseFloat(filterLfoRate.value);
+        synth.params.filterLfoDepth = parseFloat(filterLfoDepth.value);
+        synth.params.filterLfoWave = filterLfoWave.value;
+        synth.params.gainLfoRate = parseFloat(gainLfoRate.value);
+        synth.params.gainLfoDepth = parseFloat(gainLfoDepth.value);
+        synth.params.gainLfoWave = gainLfoWave.value;
+        synth.params.reverbLfoRate = parseFloat(reverbLfoRate.value);
+        synth.params.reverbLfoDepth = parseFloat(reverbLfoDepth.value);
+        synth.params.reverbLfoWave = reverbLfoWave.value;
+        synth.params.masterVol = parseFloat(masterVol.value);
+
+        // Update oscillator params from GUI
+        synth.oscData.forEach((d, i) => {
+            const card = document.querySelectorAll('.osc-card')[i];
+            if (card) {
+                const wave = card.querySelector('.oscWave')?.value || 'triangle';
+                const vol = parseFloat(card.querySelector('.oscVolume')?.value || 0.3);
+                const detune = parseFloat(card.querySelector('.oscDetune')?.value || 0);
+                const lfoRate = parseFloat(card.querySelector('.lfoRate')?.value || 2.0);
+                const lfoDepth = parseFloat(card.querySelector('.lfoDepth')?.value || 0.15);
+
+                synth.params[`osc${i+1}Wave`] = wave;
+                synth.params[`osc${i+1}Vol`] = vol;
+                synth.params[`osc${i+1}Detune`] = detune;
+                synth.params[`osc${i+1}LfoRate`] = lfoRate;
+                synth.params[`osc${i+1}LfoDepth`] = lfoDepth;
+
+                d.osc.type = wave;
+                d.gain.gain.value = vol;
+                d.osc.detune.value = detune;
+                d.lfoOsc.frequency.value = lfoRate;
+                d.lfoGain.gain.value = lfoDepth;
+            }
+        });
+    }
+
+    // Bind all controls to update params
+    document.querySelectorAll('input, select').forEach(el => {
+        el.addEventListener('input', updateSynthParams);
+        el.addEventListener('change', updateSynthParams);
+    });
+
+    // Special reverb handling
+    reverbWet.addEventListener('input', () => {
+        synth.params.reverbWet = parseFloat(reverbWet.value);
+        synth.reverb.wetGain.gain.value = synth.params.reverbWet;
+        synth.reverb.dryGain.gain.value = 1 - synth.params.reverbWet;
+    });
+
+    reverbDecay.addEventListener('input', () => {
+        synth.params.reverbDecay = parseFloat(reverbDecay.value);
+        synth.createReverb(synth.params.reverbDecay, synth.params.reverbWet);
+        if (synth.filterADSR) {
+            synth.filterADSR.disconnect();
+            synth.filterADSR.connect(synth.reverb.convolver);
+        }
+        synth.reverbLfoGain.disconnect();
+        synth.reverbLfoGain.connect(synth.reverb.wetGain.gain);
+    });
+
+    // Master volume
+    masterVol.addEventListener('input', () => {
+        synth.params.masterVol = parseFloat(masterVol.value);
+        synth.masterGain.gain.value = synth.params.masterVol;
+    });
+
+    // Panic button
+    $('panicBtn').addEventListener('click', () => synth.panic());
+
+    // ============================================
+    // 3. KEYBOARD UI
+    // ============================================
+    const notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+    const baseFreq = 261.63;
+    const keyboardEl = $('keyboard');
+
+    for (let octave = 3; octave <= 6; octave++) {
+        for (let i = 0; i < 12; i++) {
+            const freq = baseFreq * Math.pow(2, (octave - 4) + (i / 12));
+            const isBlack = notes[i].includes('#');
+            const key = document.createElement('div');
+            key.className = `key${isBlack ? ' black' : ''}`;
+            key.dataset.freq = freq;
+            key.textContent = notes[i] + octave;
+
+            key.addEventListener('mousedown', (e) => {
+                e.preventDefault();
+                if (synth.audioCtx.state === 'suspended') synth.audioCtx.resume();
+                key.classList.add('active');
+                synth.triggerNote(parseFloat(key.dataset.freq), 0.7);
+                if (isRecording) {
+                    recordedNotes.push({ freq: parseFloat(key.dataset.freq), time: performance.now() - recordStart });
+                }
+            });
+            key.addEventListener('mouseup', (e) => {
+                e.preventDefault();
+                key.classList.remove('active');
+                synth.releaseNote(parseFloat(key.dataset.freq));
+            });
+            key.addEventListener('mouseleave', () => {
+                key.classList.remove('active');
+                synth.releaseNote(parseFloat(key.dataset.freq));
+            });
+            key.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                if (synth.audioCtx.state === 'suspended') synth.audioCtx.resume();
+                key.classList.add('active');
+                synth.triggerNote(parseFloat(key.dataset.freq), 0.7);
+                if (isRecording) {
+                    recordedNotes.push({ freq: parseFloat(key.dataset.freq), time: performance.now() - recordStart });
+                }
+            });
+            key.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                key.classList.remove('active');
+                synth.releaseNote(parseFloat(key.dataset.freq));
+            });
+            keyboardEl.appendChild(key);
+        }
+    }
+
+    // ============================================
+    // 4. RECORDING & MELODY PLAYBACK
+    // ============================================
+    let isRecording = false;
+    let recordedNotes = [];
+    let recordStart = 0;
+    let isPlaying = false;
+    let currentPlayback = null;
+    const melodyDisplay = $('melodyDisplay');
+
+    $('recordBtn').addEventListener('click', function() {
+        if (isRecording) {
+            isRecording = false;
+            this.classList.remove('active');
+            this.textContent = '⏺ RECORD';
+            melodyDisplay.textContent = `📜 recorded ${recordedNotes.length} notes... press PLAY to hear`;
+        } else {
+            recordedNotes = [];
+            isRecording = true;
+            recordStart = performance.now();
+            this.classList.add('active');
+            this.textContent = '⏹ STOP';
+            melodyDisplay.textContent = '🔮 recording ancient melody...';
+        }
+    });
+
+    $('clearMelodyBtn').addEventListener('click', () => {
+        recordedNotes = [];
+        melodyDisplay.textContent = '🗑️ melody forgotten';
+        if (isPlaying) {
+            isPlaying = false;
+            if (currentPlayback) {
+                currentPlayback();
+                currentPlayback = null;
+            }
+            $('playMelodyBtn').textContent = '▶ PLAY MELODY';
+        }
+    });
+
+    $('playMelodyBtn').addEventListener('click', function() {
+        if (isPlaying) {
+            isPlaying = false;
+            if (currentPlayback) {
+                currentPlayback();
+                currentPlayback = null;
+            }
+            this.textContent = '▶ PLAY MELODY';
+            return;
+        }
+        if (recordedNotes.length === 0) {
+            melodyDisplay.textContent = '⚠️ no melody recorded! click RECORD and play';
+            return;
+        }
+
+        isPlaying = true;
+        this.textContent = '⏹ STOP';
+        melodyDisplay.textContent = `🎵 playing ${recordedNotes.length} notes...`;
+
+        const tempo = parseInt($('tempo').value);
+        currentPlayback = synth.playMelody(recordedNotes, tempo, () => {
+            isPlaying = false;
+            $('playMelodyBtn').textContent = '▶ PLAY MELODY';
+            melodyDisplay.textContent = `✨ ${recordedNotes.length} notes played`;
+            currentPlayback = null;
+        });
+    });
+
+    // Test melody (Twinkle Twinkle style)
+    $('playTestMelodyBtn').addEventListener('click', function() {
+        const testNotes = [];
+        const melody = [261.63, 261.63, 392.00, 392.00, 440.00, 440.00, 392.00,
+                        349.23, 349.23, 329.63, 329.63, 293.66, 293.66, 261.63];
+        const duration = 400; // ms per note
+        melody.forEach((freq, i) => {
+            testNotes.push({ freq, time: i * duration });
+        });
+
+        recordedNotes = testNotes;
+        melodyDisplay.textContent = `🎵 playing test melody (${testNotes.length} notes)...`;
+
+        const tempo = parseInt($('tempo').value);
+        synth.playMelody(testNotes, tempo, () => {
+            melodyDisplay.textContent = `✨ test melody complete`;
+        });
+    });
+
+    $('tempo').addEventListener('input', (e) => {
+        $('tempoLabel').textContent = e.target.value;
+    });
+
+    // ============================================
+    // 5. PRESET SYSTEM
+    // ============================================
+    function applyPreset(name) {
+        synth.panic();
+
+        const presets = {
+            "_dungeon": {
+                fAttack: 0.15, fDecay: 0.3, fSustain: 0.3, fRelease: 0.6,
+                gAttack: 0.15, gDecay: 0.2, gSustain: 0.6, gRelease: 0.8,
+                reverbWet: 0.45, reverbDecay: 2.0,
+                filterLfoRate: 1.2, filterLfoDepth: 80, filterLfoWave: 'triangle',
+                gainLfoRate: 0.8, gainLfoDepth: 0.08, gainLfoWave: 'triangle',
+                reverbLfoRate: 0.4, reverbLfoDepth: 0.05, reverbLfoWave: 'triangle',
+                masterVol: 0.6,
+                osc1Wave: 'sawtooth', osc2Wave: 'square', osc3Wave: 'triangle',
+                osc1Vol: 0.3, osc2Vol: 0.35, osc3Vol: 0.4,
+                osc1Detune: -8, osc2Detune: 0, osc3Detune: 8,
+                osc1LfoRate: 2.0, osc2LfoRate: 2.3, osc3LfoRate: 2.6,
+                osc1LfoDepth: 0.15, osc2LfoDepth: 0.2, osc3LfoDepth: 0.25,
+                filterFreq: 1200, filterQ: 0.8
+            },
+
+            "dungeon": {
+                fAttack: 0.015, fDecay: 0.3, fSustain: 0.3, fRelease: 0.6,
+                gAttack: 0.015, gDecay: 0.2, gSustain: 0.6, gRelease: 0.8,
+                reverbWet: 0.85, reverbDecay: 0.5,
+                filterLfoRate: 1.2, filterLfoDepth: 80, filterLfoWave: 'triangle',
+                gainLfoRate: 0.8, gainLfoDepth: 0.08, gainLfoWave: 'triangle',
+                reverbLfoRate: 0.4, reverbLfoDepth: 0.05, reverbLfoWave: 'triangle',
+                masterVol: 0.8,
+                osc1Wave: 'sawtooth', osc2Wave: 'square', osc3Wave: 'triangle',
+                osc1Vol: 0.8, osc2Vol: 0.8, osc3Vol: 0.8,
+                osc1Detune: -8, osc2Detune: 0, osc3Detune: 8,
+                osc1LfoRate: 2.0, osc2LfoRate: 2.3, osc3LfoRate: 2.6,
+                osc1LfoDepth: 0.15, osc2LfoDepth: 0.2, osc3LfoDepth: 0.25,
+                filterFreq: 1200, filterQ: 0.8
+            },
+
+            "cathedral": {
+                fAttack: 0.02, fDecay: 0.5, fSustain: 0.4, fRelease: 1.0,
+                gAttack: 0.02, gDecay: 0.3, gSustain: 0.7, gRelease: 1.2,
+                reverbWet: 1.0, reverbDecay: 0.8,
+                filterLfoRate: 0.6, filterLfoDepth: 50, filterLfoWave: 'sine',
+                gainLfoRate: 0.3, gainLfoDepth: 0.05, gainLfoWave: 'sine',
+                reverbLfoRate: 0.2, reverbLfoDepth: 0.03, reverbLfoWave: 'sine',
+                masterVol: 0.85,
+                osc1Wave: 'sine', osc2Wave: 'sine', osc3Wave: 'triangle',
+                osc1Vol: 0.8, osc2Vol: 0.8, osc3Vol: 0.8,
+                osc1Detune: -12, osc2Detune: 0, osc3Detune: 12,
+                osc1LfoRate: 1.0, osc2LfoRate: 1.3, osc3LfoRate: 1.6,
+                osc1LfoDepth: 0.1, osc2LfoDepth: 0.15, osc3LfoDepth: 0.2,
+                filterFreq: 800, filterQ: 0.6
+            },
+
+            "goblin": {
+                fAttack: 0.02, fDecay: 0.1, fSustain: 0.2, fRelease: 0.2,
+                gAttack: 0.01, gDecay: 0.08, gSustain: 0.4, gRelease: 0.15,
+                reverbWet: 1.0, reverbDecay: 0.4,
+                filterLfoRate: 4.0, filterLfoDepth: 150, filterLfoWave: 'square',
+                gainLfoRate: 3.0, gainLfoDepth: 0.2, gainLfoWave: 'square',
+                reverbLfoRate: 1.5, reverbLfoDepth: 0.1, reverbLfoWave: 'square',
+                masterVol: 0.8,
+                osc1Wave: 'square', osc2Wave: 'sawtooth', osc3Wave: 'square',
+                osc1Vol: 0.8, osc2Vol: 0.8, osc3Vol: 0.8,
+                osc1Detune: -24, osc2Detune: 0, osc3Detune: 24,
+                osc1LfoRate: 5.0, osc2LfoRate: 4.5, osc3LfoRate: 5.5,
+                osc1LfoDepth: 0.4, osc2LfoDepth: 0.3, osc3LfoDepth: 0.35,
+                filterFreq: 800, filterQ: 1.5
+            }
+        };
+
+        const preset = presets[name];
+        if (!preset) return;
+
+        synth.loadPreset(preset);
+
+        // Update GUI to match
+        fAttack.value = preset.fAttack;
+        fDecay.value = preset.fDecay;
+        fSustain.value = preset.fSustain;
+        fRelease.value = preset.fRelease;
+        gAttack.value = preset.gAttack;
+        gDecay.value = preset.gDecay;
+        gSustain.value = preset.gSustain;
+        gRelease.value = preset.gRelease;
+        reverbWet.value = preset.reverbWet;
+        reverbDecay.value = preset.reverbDecay;
+        filterLfoRate.value = preset.filterLfoRate;
+        filterLfoDepth.value = preset.filterLfoDepth;
+        filterLfoWave.value = preset.filterLfoWave;
+        gainLfoRate.value = preset.gainLfoRate;
+        gainLfoDepth.value = preset.gainLfoDepth;
+        gainLfoWave.value = preset.gainLfoWave;
+        reverbLfoRate.value = preset.reverbLfoRate;
+        reverbLfoDepth.value = preset.reverbLfoDepth;
+        reverbLfoWave.value = preset.reverbLfoWave;
+        masterVol.value = preset.masterVol;
+
+        // Update oscillator GUI
+        const oscWaves = [preset.osc1Wave, preset.osc2Wave, preset.osc3Wave];
+        const oscVols = [preset.osc1Vol, preset.osc2Vol, preset.osc3Vol];
+        const oscDetunes = [preset.osc1Detune, preset.osc2Detune, preset.osc3Detune];
+        const oscLfoRates = [preset.osc1LfoRate, preset.osc2LfoRate, preset.osc3LfoRate];
+        const oscLfoDepths = [preset.osc1LfoDepth, preset.osc2LfoDepth, preset.osc3LfoDepth];
+
+        document.querySelectorAll('.osc-card').forEach((card, i) => {
+            if (i < oscWaves.length) {
+                card.querySelector('.oscWave').value = oscWaves[i];
+                card.querySelector('.oscVolume').value = oscVols[i];
+                card.querySelector('.oscDetune').value = oscDetunes[i];
+                card.querySelector('.lfoRate').value = oscLfoRates[i];
+                card.querySelector('.lfoDepth').value = oscLfoDepths[i];
+            }
+        });
+
+        // Update active button
+        document.querySelectorAll('.preset-bar button').forEach(b => b.classList.remove('active'));
+        document.querySelector(`#${name}Preset`)?.classList.add('active');
+
+        melodyDisplay.textContent = `🏰 ${name.toUpperCase()} preset loaded`;
+    }
+
+    $('dungeonPreset').addEventListener('click', () => applyPreset('dungeon'));
+    $('cathedralPreset').addEventListener('click', () => applyPreset('cathedral'));
+    $('goblinPreset').addEventListener('click', () => applyPreset('goblin'));
+    $('resetPreset').addEventListener('click', () => applyPreset('dungeon'));
+
+    // Save/Load presets to localStorage
+    $('savePresetBtn').addEventListener('click', () => {
+        const name = $('presetNameInput').value.trim() || 'my_preset';
+        const preset = synth.getPreset();
+        try {
+            localStorage.setItem(`synth_preset_${name}`, JSON.stringify(preset));
+            melodyDisplay.textContent = `💾 preset "${name}" saved!`;
+        } catch(e) {
+            melodyDisplay.textContent = `❌ failed to save: ${e.message}`;
+        }
+    });
+
+    $('loadPresetBtn').addEventListener('click', () => {
+        const name = $('presetNameInput').value.trim() || 'my_preset';
+        try {
+            const data = localStorage.getItem(`synth_preset_${name}`);
+            if (!data) {
+                melodyDisplay.textContent = `❌ preset "${name}" not found`;
+                return;
+            }
+            const preset = JSON.parse(data);
+            synth.loadPreset(preset);
+
+            // Update GUI
+            // (simplified - just update the key params)
+            fAttack.value = preset.fAttack;
+            fDecay.value = preset.fDecay;
+            fSustain.value = preset.fSustain;
+            fRelease.value = preset.fRelease;
+            gAttack.value = preset.gAttack;
+            gDecay.value = preset.gDecay;
+            gSustain.value = preset.gSustain;
+            gRelease.value = preset.gRelease;
+            reverbWet.value = preset.reverbWet;
+            reverbDecay.value = preset.reverbDecay;
+            filterLfoRate.value = preset.filterLfoRate;
+            filterLfoDepth.value = preset.filterLfoDepth;
+            filterLfoWave.value = preset.filterLfoWave;
+            gainLfoRate.value = preset.gainLfoRate;
+            gainLfoDepth.value = preset.gainLfoDepth;
+            gainLfoWave.value = preset.gainLfoWave;
+            reverbLfoRate.value = preset.reverbLfoRate;
+            reverbLfoDepth.value = preset.reverbLfoDepth;
+            reverbLfoWave.value = preset.reverbLfoWave;
+            masterVol.value = preset.masterVol;
+
+            // Update oscillators
+            document.querySelectorAll('.osc-card').forEach((card, i) => {
+                const idx = i + 1;
+                card.querySelector('.oscWave').value = preset[`osc${idx}Wave`];
+                card.querySelector('.oscVolume').value = preset[`osc${idx}Vol`];
+                card.querySelector('.oscDetune').value = preset[`osc${idx}Detune`];
+                card.querySelector('.lfoRate').value = preset[`osc${idx}LfoRate`];
+                card.querySelector('.lfoDepth').value = preset[`osc${idx}LfoDepth`];
+            });
+
+            melodyDisplay.textContent = `📂 preset "${name}" loaded!`;
+        } catch(e) {
+            melodyDisplay.textContent = `❌ failed to load: ${e.message}`;
+        }
+    });
+
+    // ============================================
+    // 6. INIT
+    // ============================================
+    // Load dungeon preset on startup
+    setTimeout(() => applyPreset('dungeon'), 100);
+
+    // Cleanup
+    window.addEventListener('beforeunload', () => {
+        try { synth.audioCtx.close(); } catch(e) {}
+    });
+</script>
+</body>
+</html>

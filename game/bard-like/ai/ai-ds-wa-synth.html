@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebAudio 3‑Oscillator Synth with LFOs & ADSR</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+        }
+        body {
+            background: linear-gradient(145deg, #1a1e2c 0%, #2b3042 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+        }
+        .synth-container {
+            max-width: 1100px;
+            width: 100%;
+            background: rgba(22, 26, 40, 0.85);
+            backdrop-filter: blur(4px);
+            border-radius: 48px;
+            padding: 30px 28px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7), inset 0 1px 2px rgba(255, 255, 255, 0.08);
+            border: 1px solid #4a506a;
+            color: #e8edf5;
+        }
+        h1 {
+            font-weight: 400;
+            font-size: 1.9rem;
+            letter-spacing: 1px;
+            margin-top: 0;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid #3f455e;
+            padding-bottom: 16px;
+        }
+        h1 small {
+            font-size: 0.9rem;
+            font-weight: 300;
+            opacity: 0.6;
+            margin-left: 8px;
+        }
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 28px;
+        }
+        .osc-card {
+            background: #262b3f;
+            border-radius: 28px;
+            padding: 18px 16px 20px;
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.6), 0 6px 12px rgba(0,0,0,0.3);
+            border: 1px solid #3c425e;
+        }
+        .osc-card h3 {
+            display: flex;
+            justify-content: space-between;
+            margin: 0 0 14px 0;
+            font-weight: 400;
+            font-size: 1.2rem;
+            color: #bcc6e6;
+        }
+        .control-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px 12px;
+            margin-bottom: 10px;
+        }
+        .control-row label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            opacity: 0.7;
+            min-width: 34px;
+        }
+        .control-row input[type="range"] {
+            flex: 1;
+            min-width: 60px;
+            accent-color: #9aa9ff;
+            background: #191e30;
+            height: 4px;
+            border-radius: 10px;
+        }
+        .control-row select {
+            background: #1b2035;
+            color: #d6defa;
+            border: 1px solid #3d4462;
+            border-radius: 40px;
+            padding: 4px 12px;
+            font-size: 0.8rem;
+        }
+        .lfo-badge {
+            display: inline-block;
+            background: #2f3650;
+            border-radius: 40px;
+            padding: 2px 12px 2px 8px;
+            font-size: 0.7rem;
+            border-left: 2px solid #7b8aff;
+        }
+        .filter-section {
+            background: #1f243b;
+            border-radius: 30px;
+            padding: 18px 22px;
+            margin: 12px 0 18px 0;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px 16px;
+            border: 1px solid #3f4663;
+        }
+        .filter-section .group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .filter-section .group label {
+            font-size: 0.7rem;
+            opacity: 0.7;
+        }
+        .filter-section input[type="range"] {
+            width: 90px;
+            accent-color: #b7a6ff;
+        }
+        .reverb-box {
+            background: #1b2037;
+            border-radius: 40px;
+            padding: 6px 18px 6px 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 16px;
+            border: 1px solid #4b5272;
+        }
+        .master-controls {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            margin: 16px 0 8px;
+            gap: 20px;
+        }
+        .master-controls button {
+            background: #3f4670;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            padding: 10px 28px;
+            border-radius: 60px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            box-shadow: 0 8px 0 #1d2137, 0 4px 12px black;
+            transition: 0.08s ease;
+            border: 1px solid #6b74a2;
+        }
+        .master-controls button:active {
+            transform: translateY(6px);
+            box-shadow: 0 2px 0 #1d2137;
+        }
+        .master-controls button#stopBtn {
+            background: #5a4060;
+            border-color: #8a6a92;
+        }
+        .knob-label {
+            font-size: 0.7rem;
+            opacity: 0.6;
+        }
+        .flex-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px 14px;
+        }
+        hr {
+            border: 0.5px solid #353b57;
+            margin: 18px 0;
+        }
+        .lfo-indicator {
+            font-size: 0.7rem;
+            background: #1f253e;
+            padding: 4px 12px;
+            border-radius: 30px;
+            border: 1px solid #4b5377;
+        }
+        @media (max-width: 800px) {
+            .grid-3 { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+<div class="synth-container">
+    <h1>🌀 3‑OSC · LFO + ADSR <small>filter · gain · reverb</small></h1>
+
+    <!-- 3 oscillators -->
+    <div class="grid-3" id="oscContainer">
+        <!-- each osc card will be populated by js -->
+    </div>
+
+    <!-- Filter ADSR + Reverb -->
+    <div class="filter-section">
+        <div class="group">
+            <span style="font-weight:300;">🎛️ FILTER ADSR</span>
+            <label>A</label><input type="range" id="fAttack" min="0.001" max="1.0" step="0.001" value="0.05">
+            <label>D</label><input type="range" id="fDecay" min="0.01" max="1.0" step="0.01" value="0.2">
+            <label>S</label><input type="range" id="fSustain" min="0" max="1" step="0.01" value="0.6">
+            <label>R</label><input type="range" id="fRelease" min="0.01" max="1.5" step="0.01" value="0.3">
+        </div>
+        <div class="group">
+            <span style="font-weight:300;">🎚️ GAIN ADSR</span>
+            <label>A</label><input type="range" id="gAttack" min="0.001" max="1.0" step="0.001" value="0.01">
+            <label>D</label><input type="range" id="gDecay" min="0.01" max="1.0" step="0.01" value="0.15">
+            <label>S</label><input type="range" id="gSustain" min="0" max="1" step="0.01" value="0.7">
+            <label>R</label><input type="range" id="gRelease" min="0.01" max="1.5" step="0.01" value="0.4">
+        </div>
+    </div>
+
+    <!-- Reverb + LFO master -->
+    <div class="master-controls">
+        <div class="reverb-box">
+            <span style="opacity:0.7;">⏳ REVERB</span>
+            <label style="font-size:0.7rem;">wet</label>
+            <input type="range" id="reverbWet" min="0" max="1" step="0.01" value="0.35">
+            <label style="font-size:0.7rem;">decay</label>
+            <input type="range" id="reverbDecay" min="0.1" max="3.0" step="0.1" value="1.2">
+        </div>
+        <div style="display:flex; gap:12px;">
+            <button id="playBtn">▶ PLAY</button>
+            <button id="stopBtn">■ STOP</button>
+        </div>
+    </div>
+
+    <!-- LFO status (per node) -->
+    <div style="display: flex; flex-wrap: wrap; gap: 12px 24px; margin-top: 10px; font-size:0.8rem; background: #171c30; padding: 10px 18px; border-radius: 60px;">
+        <span>⚡ LFOs active: <span id="lfoStatus">all nodes</span></span>
+        <span class="lfo-indicator" id="lfoRateDisplay">rate 4.0 Hz</span>
+        <span class="lfo-indicator" id="lfoDepthDisplay">depth 0.4</span>
+    </div>
+</div>
+
+<script>
+    (function(){
+        // ---------- AUDIO CONTEXT ----------
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        // ---------- MASTER NODES ----------
+        let masterGain = audioCtx.createGain();
+        masterGain.gain.value = 0.45;
+        masterGain.connect(audioCtx.destination);
+
+        // Reverb (convolution)
+        let reverbNode = null;
+        function createReverb(decay = 1.2, wet = 0.35) {
+            if (reverbNode) {
+                try { reverbNode.disconnect(); } catch(e) {}
+            }
+            const convolver = audioCtx.createConvolver();
+            const length = audioCtx.sampleRate * decay;
+            const impulse = audioCtx.createBuffer(2, length, audioCtx.sampleRate);
+            for (let channel = 0; channel < 2; channel++) {
+                const data = impulse.getChannelData(channel);
+                for (let i = 0; i < length; i++) {
+                    const env = Math.exp(-i / (audioCtx.sampleRate * decay * 0.7));
+                    data[i] = (Math.random() * 2 - 1) * env * 0.8;
+                }
+            }
+            convolver.buffer = impulse;
+            // wet/dry via gain nodes
+            const wetGain = audioCtx.createGain();
+            wetGain.gain.value = wet;
+            const dryGain = audioCtx.createGain();
+            dryGain.gain.value = 1 - wet;
+            convolver.connect(wetGain);
+            wetGain.connect(masterGain);
+            dryGain.connect(masterGain);
+            reverbNode = { convolver, wetGain, dryGain };
+            return reverbNode;
+        }
+        let reverb = createReverb(1.2, 0.35);
+
+        // update reverb params
+        document.getElementById('reverbWet').addEventListener('input', (e) => {
+            if (reverb) {
+                reverb.wetGain.gain.value = parseFloat(e.target.value);
+                reverb.dryGain.gain.value = 1 - parseFloat(e.target.value);
+            }
+        });
+        document.getElementById('reverbDecay').addEventListener('input', (e) => {
+            const decay = parseFloat(e.target.value);
+            const wet = parseFloat(document.getElementById('reverbWet').value);
+            // recreate reverb
+            const newReverb = createReverb(decay, wet);
+            // reconnect chain: filterADSR -> reverb -> master
+            if (filterADSR) {
+                filterADSR.disconnect();
+                filterADSR.connect(newReverb.convolver);
+                // reconnect dry/wet already connected to master
+                // but we need to reconnect dry/wet to master (already done inside createReverb)
+            }
+            reverb = newReverb;
+        });
+
+        // ---------- FILTER ADSR ----------
+        let filterNode = audioCtx.createBiquadFilter();
+        filterNode.type = 'lowpass';
+        filterNode.frequency.value = 1200;
+        filterNode.Q.value = 1.2;
+
+        let filterADSR = audioCtx.createGain(); // envelope for filter
+        filterADSR.gain.value = 0.001; // will be controlled by ADSR
+        // connect: filterNode -> filterADSR (gain) -> reverb
+        filterNode.connect(filterADSR);
+        // connect filterADSR to reverb convolver
+        filterADSR.connect(reverb.convolver);
+
+        // Filter ADSR parameters
+        const fAttack = document.getElementById('fAttack');
+        const fDecay = document.getElementById('fDecay');
+        const fSustain = document.getElementById('fSustain');
+        const fRelease = document.getElementById('fRelease');
+
+        // Gain ADSR (amplitude envelope)
+        let gainEnvelope = audioCtx.createGain();
+        gainEnvelope.gain.value = 0.001; // start silent
+        // connect gainEnvelope -> filterNode
+        gainEnvelope.connect(filterNode);
+
+        const gAttack = document.getElementById('gAttack');
+        const gDecay = document.getElementById('gDecay');
+        const gSustain = document.getElementById('gSustain');
+        const gRelease = document.getElementById('gRelease');
+
+        // ---------- OSCILLATORS (3) ----------
+        const oscData = [];
+        const oscContainer = document.getElementById('oscContainer');
+
+        function buildOscCard(index) {
+            const card = document.createElement('div');
+            card.className = 'osc-card';
+            card.dataset.index = index;
+            card.innerHTML = `
+                <h3>OSC ${index+1} <span class="lfo-badge">⚡ LFO</span></h3>
+                <div class="control-row">
+                    <label>wave</label>
+                    <select class="oscWave" data-index="${index}">
+                        <option value="sine">sine</option>
+                        <option value="square">square</option>
+                        <option value="sawtooth">sawtooth</option>
+                        <option value="triangle" selected>triangle</option>
+                    </select>
+                    <label>detune</label>
+                    <input type="range" class="oscDetune" data-index="${index}" min="-50" max="50" step="0.5" value="${(index-1)*12}">
+                </div>
+                <div class="control-row">
+                    <label>freq</label>
+                    <input type="range" class="oscFreq" data-index="${index}" min="40" max="1200" step="1" value="${220 + index*110}">
+                    <span class="knob-label" id="freqVal${index}">${220 + index*110} Hz</span>
+                </div>
+                <div class="control-row" style="margin-top:4px;">
+                    <label>LFO rate</label>
+                    <input type="range" class="lfoRate" data-index="${index}" min="0.1" max="12" step="0.1" value="4.0">
+                    <label>depth</label>
+                    <input type="range" class="lfoDepth" data-index="${index}" min="0" max="1" step="0.02" value="0.4">
+                </div>
+            `;
+            return card;
+        }
+
+        for (let i = 0; i < 3; i++) {
+            const card = buildOscCard(i);
+            oscContainer.appendChild(card);
+
+            // create oscillator nodes
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            gain.gain.value = 0.25; // per-osc level
+            osc.type = 'triangle';
+            osc.frequency.value = 220 + i * 110;
+            osc.detune.value = (i-1)*12;
+
+            // LFO for oscillator frequency
+            const lfoOsc = audioCtx.createOscillator();
+            const lfoGain = audioCtx.createGain();
+            lfoGain.gain.value = 0.4; // depth
+            lfoOsc.frequency.value = 4.0;
+            lfoOsc.type = 'sine';
+
+            // connect lfo -> lfoGain -> osc.frequency
+            lfoOsc.connect(lfoGain);
+            lfoGain.connect(osc.frequency);
+
+            // store
+            oscData.push({
+                osc,
+                gain,
+                lfoOsc,
+                lfoGain,
+                card,
+                waveSelect: card.querySelector('.oscWave'),
+                detuneRange: card.querySelector('.oscDetune'),
+                freqRange: card.querySelector('.oscFreq'),
+                lfoRate: card.querySelector('.lfoRate'),
+                lfoDepth: card.querySelector('.lfoDepth'),
+                freqLabel: document.getElementById(`freqVal${i}`)
+            });
+
+            // connect osc -> gain -> gainEnvelope (main amp)
+            osc.connect(gain);
+            gain.connect(gainEnvelope);
+
+            // start oscillators (they run continuously)
+            osc.start();
+            lfoOsc.start();
+
+            // hook UI
+            const data = oscData[i];
+            data.waveSelect.addEventListener('change', (e) => {
+                data.osc.type = e.target.value;
+            });
+            data.detuneRange.addEventListener('input', (e) => {
+                data.osc.detune.value = parseFloat(e.target.value);
+            });
+            data.freqRange.addEventListener('input', (e) => {
+                const val = parseFloat(e.target.value);
+                data.osc.frequency.value = val;
+                data.freqLabel.textContent = val + ' Hz';
+            });
+            data.lfoRate.addEventListener('input', (e) => {
+                data.lfoOsc.frequency.value = parseFloat(e.target.value);
+                document.getElementById('lfoRateDisplay').textContent = `rate ${parseFloat(e.target.value).toFixed(1)} Hz`;
+            });
+            data.lfoDepth.addEventListener('input', (e) => {
+                data.lfoGain.gain.value = parseFloat(e.target.value);
+                document.getElementById('lfoDepthDisplay').textContent = `depth ${parseFloat(e.target.value).toFixed(2)}`;
+            });
+        }
+
+        // ----- LFO for FILTER and GAIN (additional LFOs) -----
+        // Filter LFO (frequency)
+        const filterLfo = audioCtx.createOscillator();
+        const filterLfoGain = audioCtx.createGain();
+        filterLfoGain.gain.value = 80; // frequency modulation depth
+        filterLfo.frequency.value = 3.2;
+        filterLfo.type = 'sine';
+        filterLfo.connect(filterLfoGain);
+        filterLfoGain.connect(filterNode.frequency);
+        filterLfo.start();
+
+        // Gain LFO (amplitude modulation) – modulates gainEnvelope gain (extra)
+        const gainLfo = audioCtx.createOscillator();
+        const gainLfoGain = audioCtx.createGain();
+        gainLfoGain.gain.value = 0.15;
+        gainLfo.frequency.value = 2.7;
+        gainLfo.type = 'sine';
+        gainLfo.connect(gainLfoGain);
+        gainLfoGain.connect(gainEnvelope.gain);
+        gainLfo.start();
+
+        // Reverb LFO (modulate wet/dry? but we keep it simple: LFO on reverb decay? too heavy, we do a small modulation on wet gain)
+        const reverbLfo = audioCtx.createOscillator();
+        const reverbLfoGain = audioCtx.createGain();
+        reverbLfoGain.gain.value = 0.08;
+        reverbLfo.frequency.value = 0.6;
+        reverbLfo.type = 'sine';
+        reverbLfo.connect(reverbLfoGain);
+        reverbLfoGain.connect(reverb.wetGain.gain);
+        reverbLfo.start();
+
+        // ----- ADSR envelope trigger (play / stop) -----
+        let envelopeActive = false;
+        let releaseTimer = null;
+
+        function triggerADSR(attack, decay, sustain, release, targetGain, startVal = 0.001, endVal = 0.7) {
+            const now = audioCtx.currentTime;
+            targetGain.cancelScheduledValues(now);
+            targetGain.setValueAtTime(startVal, now);
+            targetGain.linearRampToValueAtTime(endVal, now + attack);
+            targetGain.linearRampToValueAtTime(sustain * endVal, now + attack + decay);
+            // sustain held until release
+        }
+
+        function releaseADSR(release, targetGain, startVal = 0.7) {
+            const now = audioCtx.currentTime;
+            targetGain.cancelScheduledValues(now);
+            targetGain.setValueAtTime(targetGain.value, now);
+            targetGain.linearRampToValueAtTime(0.001, now + release);
+        }
+
+        // play button
+        document.getElementById('playBtn').addEventListener('click', () => {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+
+            // filter ADSR
+            const fA = parseFloat(fAttack.value);
+            const fD = parseFloat(fDecay.value);
+            const fS = parseFloat(fSustain.value);
+            const fR = parseFloat(fRelease.value);
+            // gain ADSR
+            const gA = parseFloat(gAttack.value);
+            const gD = parseFloat(gDecay.value);
+            const gS = parseFloat(gSustain.value);
+            const gR = parseFloat(gRelease.value);
+
+            // trigger filter envelope: modulate filter frequency (via gain node)
+            // we use filterADSR.gain to scale frequency? instead we directly modulate filterNode.frequency 
+            // but we have an LFO already connected; we can add a second modulation.
+            // Simpler: use filterADSR as gain before reverb, already connected.
+            // We'll trigger gainEnvelope for amplitude, and filterADSR for filter cutoff (using gain as multiplier)
+            // but filterADSR is a gain node, we use it to modulate frequency via an extra connection? 
+            // Instead, we'll use filterADSR.gain to control an additional frequency offset.
+            // let's do: set filterADSR.gain as envelope for filter frequency (0..1) * 1500 + 200
+            // we need to schedule gain of filterADSR
+            const now = audioCtx.currentTime;
+            // we schedule filterADSR gain to modulate frequency via a separate oscillator? easier: use filterADSR gain to drive frequency.
+            // We'll disconnect previous schedule
+            filterADSR.gain.cancelScheduledValues(now);
+            filterADSR.gain.setValueAtTime(0.001, now);
+            filterADSR.gain.linearRampToValueAtTime(0.9, now + fA);
+            filterADSR.gain.linearRampToValueAtTime(fS * 0.9, now + fA + fD);
+            // connect filterADSR gain to filter frequency modulation? we need a mapping: we use a separate gain node as modulator.
+            // but we already have filterLfoGain connected to frequency. We'll add a second modulator: 
+            // create a gain node that scales filterADSR.gain and connects to frequency. But we must ensure not to conflict.
+            // We'll instead use filterADSR as a gain before reverb, and also use its output to modulate frequency? 
+            // Too complex, instead we use a simple envelope on filter frequency using a separate GainNode.
+            // However we already have filterADSR connected to reverb; we also use it as a gain envelope for filter output.
+            // For filter frequency envelope we use a separate node: 
+            const freqMod = audioCtx.createGain();
+            freqMod.gain.value = 0;
+            freqMod.connect(filterNode.frequency);
+            // schedule freqMod
+            freqMod.gain.cancelScheduledValues(now);
+            freqMod.gain.setValueAtTime(80, now);
+            freqMod.gain.linearRampToValueAtTime(1200, now + fA);
+            freqMod.gain.linearRampToValueAtTime(400 + fS * 800, now + fA + fD);
+            // store for release
+            window._freqMod = freqMod;
+            window._freqModRelease = fR;
+
+            // trigger gain envelope (amplitude)
+            triggerADSR(gA, gD, gS, gR, gainEnvelope, 0.001, 0.55);
+
+            // also trigger filterADSR gain (for output level before reverb)
+            filterADSR.gain.cancelScheduledValues(now);
+            filterADSR.gain.setValueAtTime(0.001, now);
+            filterADSR.gain.linearRampToValueAtTime(0.8, now + fA);
+            filterADSR.gain.linearRampToValueAtTime(fS * 0.8, now + fA + fD);
+
+            envelopeActive = true;
+            if (releaseTimer) clearTimeout(releaseTimer);
+        });
+
+        // stop button (release)
+        document.getElementById('stopBtn').addEventListener('click', () => {
+            if (!envelopeActive) return;
+            const now = audioCtx.currentTime;
+            const fR = parseFloat(fRelease.value);
+            const gR = parseFloat(gRelease.value);
+
+            // release filter freq mod
+            if (window._freqMod) {
+                window._freqMod.gain.cancelScheduledValues(now);
+                window._freqMod.gain.setValueAtTime(window._freqMod.gain.value, now);
+                window._freqMod.gain.linearRampToValueAtTime(80, now + fR);
+            }
+            // release gain envelope
+            releaseADSR(gR, gainEnvelope);
+            // release filterADSR
+            filterADSR.gain.cancelScheduledValues(now);
+            filterADSR.gain.setValueAtTime(filterADSR.gain.value, now);
+            filterADSR.gain.linearRampToValueAtTime(0.001, now + fR);
+
+            envelopeActive = false;
+            releaseTimer = setTimeout(() => {
+                gainEnvelope.gain.value = 0.001;
+                filterADSR.gain.value = 0.001;
+            }, fR * 1000 + 200);
+        });
+
+        // update LFO status display
+        document.getElementById('lfoStatus').textContent = '3 osc + filter + gain + reverb';
+
+        // Cleanup on page unload (optional)
+        window.addEventListener('beforeunload', () => {
+            try { audioCtx.close(); } catch(e) {}
+        });
+
+        // reverb LFO depth UI (not directly shown but active)
+    })();
+</script>
+</body>
+</html>
