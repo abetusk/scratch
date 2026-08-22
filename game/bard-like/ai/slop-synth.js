@@ -133,8 +133,144 @@
             this.reverb = { convolver, wetGain, dryGain };
         }
 
-        triggerNote(frequency, velocity = 0.7) {
-            if (this.activeNotes.has(frequency)) return;
+triggerNote(frequency, velocity = 0.7) {
+    if (this.activeNotes.has(frequency)) {
+        // If the same note is already playing, do a smooth retrigger
+        this.retriggerNote(frequency, velocity);
+        return;
+    }
+    
+    const now = this.audioCtx.currentTime;
+    const p = this.params;
+    
+    // Create new nodes for this note
+    const noteGain = this.audioCtx.createGain();
+    noteGain.gain.value = 0.001;
+    noteGain.connect(this.filterNode);
+    
+    const noteFilter = this.audioCtx.createBiquadFilter();
+    noteFilter.type = 'lowpass';
+    noteFilter.frequency.value = p.filterFreq || 1200;
+    noteFilter.Q.value = p.filterQ || 0.8;
+    noteGain.connect(noteFilter);
+    
+    const noteFilterEnv = this.audioCtx.createGain();
+    noteFilterEnv.gain.value = 0.001;
+    noteFilter.connect(noteFilterEnv);
+    noteFilterEnv.connect(this.reverb.convolver);
+    
+    const freqMod = this.audioCtx.createGain();
+    freqMod.gain.value = 60;
+    freqMod.connect(noteFilter.frequency);
+    
+    // CRITICAL FIX: Reset phase and reconnect oscillators
+    this.oscData.forEach(d => {
+        // Disconnect from old gain
+        d.gain.disconnect();
+        // Connect to new note's gain
+        d.gain.connect(noteGain);
+        // Set frequency and reset phase
+        d.osc.frequency.setValueAtTime(frequency, now);
+        // Modern browsers support setPeriodicWave for phase reset
+        // We'll use a workaround: briefly disconnect and reconnect
+        // or use a constant source to reset phase
+    });
+    
+            const gParam = noteGain.gain;
+            gParam.cancelScheduledValues(now);
+            gParam.setValueAtTime(0.001, now);
+            gParam.linearRampToValueAtTime(velocity * 0.6, now + p.gAttack);
+            gParam.linearRampToValueAtTime(p.gSustain * velocity * 0.6, now + p.gAttack + p.gDecay);
+
+            const fParam = noteFilterEnv.gain;
+            fParam.cancelScheduledValues(now);
+            fParam.setValueAtTime(0.001, now);
+            fParam.linearRampToValueAtTime(1.0, now + p.fAttack);
+            fParam.linearRampToValueAtTime(p.fSustain * 1.0, now + p.fAttack + p.fDecay);
+
+            const freqParam = freqMod.gain;
+            freqParam.cancelScheduledValues(now);
+            freqParam.setValueAtTime(60, now);
+            freqParam.linearRampToValueAtTime(1200, now + p.fAttack);
+            freqParam.linearRampToValueAtTime(400 + p.fSustain * 800, now + p.fAttack + p.fDecay);
+
+            this.activeNotes.set(frequency, { 
+                noteGain, noteFilter, noteFilterEnv, freqMod, 
+                gParam, fParam, freqParam, 
+                gR: p.gRelease, fR: p.fRelease 
+            });
+        }
+
+        releaseNote(frequency) {
+            const note = this.activeNotes.get(frequency);
+            if (!note) { return; }
+
+            const now = this.audioCtx.currentTime;
+            const { noteGain, noteFilterEnv, freqMod, gParam, fParam, freqParam, gR, fR } = note;
+
+            gParam.cancelScheduledValues(now);
+            gParam.setValueAtTime(gParam.value, now);
+            gParam.linearRampToValueAtTime(0.001, now + gR);
+
+            fParam.cancelScheduledValues(now);
+            fParam.setValueAtTime(fParam.value, now);
+            fParam.linearRampToValueAtTime(0.001, now + fR);
+
+            freqParam.cancelScheduledValues(now);
+            freqParam.setValueAtTime(freqParam.value, now);
+            freqParam.linearRampToValueAtTime(60, now + fR);
+
+            setTimeout(() => {
+                try {
+                    noteGain.disconnect();
+                    noteFilter.disconnect();
+                    noteFilterEnv.disconnect();
+                    freqMod.disconnect();
+                    this.oscData.forEach(d => {
+                        d.gain.disconnect();
+                        d.gain.connect(this.gainEnvelope);
+                    });
+                } catch(e) {}
+            }, (Math.max(gR, fR) * 1000) + 100);
+
+            this.activeNotes.delete(frequency);
+}
+
+retriggerNote(frequency, velocity = 0.7) {
+    const note = this.activeNotes.get(frequency);
+    if (!note) return;
+    
+    const now = this.audioCtx.currentTime;
+    const p = this.params;
+    
+    // Instead of creating new nodes, smoothly restart the envelopes
+    const { gParam, fParam, freqParam } = note;
+    
+    // Reset gain envelope with a tiny fade to avoid clicks
+    gParam.cancelScheduledValues(now);
+    gParam.setValueAtTime(gParam.value, now);
+    // Quick fade to silence then back up
+    gParam.linearRampToValueAtTime(0.001, now + 0.005);
+    gParam.linearRampToValueAtTime(velocity * 0.6, now + 0.005 + p.gAttack);
+    gParam.linearRampToValueAtTime(p.gSustain * velocity * 0.6, now + 0.005 + p.gAttack + p.gDecay);
+    
+    // Reset filter envelope
+    fParam.cancelScheduledValues(now);
+    fParam.setValueAtTime(fParam.value, now);
+    fParam.linearRampToValueAtTime(0.001, now + 0.005);
+    fParam.linearRampToValueAtTime(1.0, now + 0.005 + p.fAttack);
+    fParam.linearRampToValueAtTime(p.fSustain * 1.0, now + 0.005 + p.fAttack + p.fDecay);
+    
+    // Reset frequency modulation
+    freqParam.cancelScheduledValues(now);
+    freqParam.setValueAtTime(freqParam.value, now);
+    freqParam.linearRampToValueAtTime(60, now + 0.005);
+    freqParam.linearRampToValueAtTime(1200, now + 0.005 + p.fAttack);
+    freqParam.linearRampToValueAtTime(400 + p.fSustain * 800, now + 0.005 + p.fAttack + p.fDecay);
+}
+
+        _triggerNote(frequency, velocity = 0.7) {
+            if (this.activeNotes.has(frequency)) { return; }
 
             const now = this.audioCtx.currentTime;
             const p = this.params;
@@ -191,7 +327,7 @@
 
         releaseNote(frequency) {
             const note = this.activeNotes.get(frequency);
-            if (!note) return;
+            if (!note) { return; }
 
             const now = this.audioCtx.currentTime;
             const { noteGain, noteFilterEnv, freqMod, gParam, fParam, freqParam, gR, fR } = note;
@@ -302,7 +438,9 @@
         // notes: array of {freq: number, time: number} (time in ms from start)
         // tempo: BPM for note duration fallback
         playMelody(notes, tempo = 90, callback = null) {
-            if (!notes || notes.length === 0) return;
+            if (!notes || notes.length === 0) { return; }
+
+          console.log(">>>", notes);
 
             const beatDuration = 60 / tempo;
             let index = 0;
@@ -312,15 +450,15 @@
 
             const scheduleNext = () => {
                 if (!isPlaying || index >= notes.length) {
-                    if (callback) callback();
+                    if (callback) { callback(); }
                     return;
                 }
 
                 const note = notes[index];
                 const time = startTime + (note.time - firstNoteTime) / 1000;
-                const duration = index < notes.length - 1 
-                    ? (notes[index + 1].time - note.time) / 1000 
-                    : beatDuration * 0.6;
+                const duration = (index < (notes.length - 1)) 
+                    ? ((notes[index + 1].time - note.time) / 1000)
+                    : (beatDuration * 0.6);
 
                 const scheduledTime = this.audioCtx.currentTime + Math.max(0, time - this.audioCtx.currentTime);
                 const freq = note.freq;

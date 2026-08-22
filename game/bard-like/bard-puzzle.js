@@ -44,6 +44,10 @@ var BARD_NOTE_MIDI_MAP = {};
 
 //                 0    1    2    3    4    5    6    7    8    9    10   11
 var BASE_NOTE = [ "c", "u", "d", "v", "e", "f", "w", "g", "x", "a", "y", "b" ];
+var BASE_NOTE_IDX = {
+  "c":0, "u":1, "d":2, "v":3, "e":4,  "f":5,
+  "w":6, "g":7, "x":8, "a":9, "y":10, "b":11
+};
 
 function init_note_map() {
 
@@ -73,6 +77,63 @@ function s2melody(s) {
   }
 
   return melody;
+}
+
+// array of frequency duration
+//
+function melody2afd(M) {
+
+  let a = [];
+
+  let quarter_note_s_dur_90bpm = 60/90;
+  let _qnd = quarter_note_s_dur_90bpm;
+
+  let bpm = 90;
+
+  let dur_map = {
+    "o": 4*_qnd,
+    "*": 2*_qnd,
+    "+": 1*_qnd,
+    ":": _qnd/2,
+    ".": _qnd/4
+
+  };
+
+  let base_freq = 261.63;
+
+  let freq_map = { "z": 0 };
+  for (let octave=0; octave<10; octave++) {
+    for (let i=0; i<12; i++) {
+      let bno = BASE_NOTE[i] + octave.toString();
+      let freq = base_freq * Math.pow(2, (octave-4) + (i/12));
+      freq_map[bno] = freq;
+    }
+  }
+
+  let cur_t = 0;
+
+  for (let measure_idx=0; measure_idx<M.length; measure_idx++) {
+    for (let n_idx=0; n_idx<M[measure_idx].length; n_idx++) {
+      let note = M[measure_idx][n_idx];
+
+      let _dur = _qnd;
+
+      if ((note.length == 1) &&
+          (note == 'z')) {
+        a.push({"freq":0, "time": 1000*cur_t});
+        cur_t += _dur;
+        continue;
+      }
+
+      let bn = note.slice(1);
+      _dur = dur_map[note[0]];
+
+      a.push({"freq": freq_map[bn], "time": 1000*cur_t});
+      cur_t += _dur;
+    }
+  }
+
+  return a;
 }
 
 function check_melody_start_note(M, base_note) {
