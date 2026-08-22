@@ -182,6 +182,8 @@ function check_melody_stride(M) {
 }
 
 function check_melody_repeat(M, min_rep_count) {
+  let res = { "r": 0, "msg": "", "score": 0, "match_count": 0, "data": [] };
+
   for (let measure_idx=0; measure_idx<M.length; measure_idx++) {
     for (let m1_idx=(measure_idx+1); m1_idx < M.length; m1_idx++) {
 
@@ -194,10 +196,19 @@ function check_melody_repeat(M, min_rep_count) {
       }
 
       //WIP
-      if (found) { }
+      if (found) {
+        res.match_count++;
+        res.data.push( [measure_idx, m1_idx] );
+      }
     }
   }
 
+  if (res.match_count < min_rep_count) {
+    res.r = -1;
+    res.msg = "melody_repeat: failed to meet min. measure rep. count (" + res.match_count.toString() + " != " + min_rep_count +")";
+  }
+
+  return res;
 }
 
 function check_melody_progression(M, prog) {
@@ -646,9 +657,6 @@ function ex1_3(M) {
   ];
   let n_measure = [6,11];
 
-  //DEBUG
-  n_measure = [2,11];
-
   let res = {};
 
   res = check_melody_length(M, n_measure);
@@ -720,9 +728,6 @@ function ex1_4(M) {
 
   let first_note = "c4";
 
-  //DEBUG
-  n_measure = [2,11];
-
   let res = {};
 
   res = check_melody_start_note(M, first_note);
@@ -758,6 +763,40 @@ function ex1_4(M) {
   ok_res.score += res.score;
 
   return ok_res;
+}
+
+function ex1_1_example_solution() {
+  return "+e4 +e4 +e4 *g4 | " +
+    "+e4 +e4 +e4 *a4 | " +
+    "+e4 +e4 +e4 *b4 | " +
+    "+e4 +e4 +e4 *g4 | " +
+    "+e4 +e4 +e4 *a4 | " +
+    "+e4 +e4 +e4 *e4";
+}
+
+function ex1_2_example_solution() {
+  return ":f4 :f4 :f4 :f4 +a4 +b4 | " +
+    "+b4 +c4 :f4 :f4 +a4 | " +
+    ":a4 :b4 :c4 :f4 +a4 +a4 | " +
+    "+c4 +c4 :b4 :b4 +f4";
+}
+
+function ex1_3_example_solution() {
+  return "+d4 :d4 :d4 *d4 | " +
+    "z +d4 +d4 +d4 | " +
+    "z +a4 +f4 +e4 | " +
+    "z +c4 +d4 +d4 | " +
+    "+a4 :a4 :f4 *e4 | " +
+    "z +e4 +c4 +d4";
+}
+
+function ex1_4_example_solution() {
+  return "+c4 :d4 :d4 *e4 | " +
+    "+a4 :d4 :e4 *a4 | " +
+    "+a4 :d4 :e4 *e4 | " +
+    "+g4 :a4 :b4 *c4 | " +
+    "+c4 :d4 :d4 *e4 | " +
+    "+g4 :a4 :b4 *c4";
 }
 
 
@@ -916,8 +955,24 @@ function _main_repl() {
         console.log(">>", ((res.r == 0) ? "PASS:" : "FAIL:"), res);
       }
 
+      else if (tok[0] == 'ex1.1.sol') {
+        let _sol = ex1_1_example_solution();
+        console.log(">>>", _sol);
+        let M = s2melody( _sol );
+        let res = ex1_1( M );
+        console.log(">>", ((res.r == 0) ? "PASS:" : "FAIL:"), res);
+      }
+
       else if (tok[0] == 'ex1.2') {
         let M = s2melody( tok.slice(1).join(" ") );
+        let res = ex1_2( M );
+        console.log(">>", ((res.r == 0) ? "PASS:" : "FAIL:"), res);
+      }
+
+      else if (tok[0] == 'ex1.2.sol') {
+        let _sol = ex1_2_example_solution();
+        console.log(">>>", _sol);
+        let M = s2melody( _sol );
         let res = ex1_2( M );
         console.log(">>", ((res.r == 0) ? "PASS:" : "FAIL:"), res);
       }
@@ -928,8 +983,24 @@ function _main_repl() {
         console.log(">>", ((res.r == 0) ? "PASS:" : "FAIL:"), res);
       }
 
+      else if (tok[0] == 'ex1.3.sol') {
+        let _sol = ex1_3_example_solution();
+        console.log(">>>", _sol);
+        let M = s2melody( _sol );
+        let res = ex1_3( M );
+        console.log(">>", ((res.r == 0) ? "PASS:" : "FAIL:"), res);
+      }
+
       else if (tok[0] == 'ex1.4') {
         let M = s2melody( tok.slice(1).join(" ") );
+        let res = ex1_4( M );
+        console.log(">>", ((res.r == 0) ? "PASS:" : "FAIL:"), res);
+      }
+
+      else if (tok[0] == 'ex1.4.sol') {
+        let _sol = ex1_4_example_solution();
+        console.log(">>>", _sol);
+        let M = s2melody( _sol );
         let res = ex1_4( M );
         console.log(">>", ((res.r == 0) ? "PASS:" : "FAIL:"), res);
       }
