@@ -829,6 +829,162 @@ function ex1_4(M) {
   return ok_res;
 }
 
+function descr_ex1_5(M) {
+
+  let descr = [];
+  let valid_notes = ["d","e","f","g","a","b","c"];
+  let rhythm_lib = [ [ "+", ":", ":", "*" ] ];
+  let n_measure = [6,11];
+
+  let first_note = "d4";
+
+  let rhythm_s = [];
+  for (let i=0; i<rhythm_lib.length; i++) {
+    rhythm_s.push( rhythm_lib[i].join("") );
+  }
+
+  descr.push("restrict " + valid_notes.join(" "));
+  descr.push("restrict " + rhythm_s.join(" "));
+  if ((n_measure[1]-1) == n_measure[0]) {
+    descr.push("measure length " + n_measure[0].toString());
+  }
+  else {
+    descr.push("measure length [" + n_measure[0].toString() + " : " + n_measure[1].toString() + ")");
+  }
+  descr.push("constraint: tonic{" + first_note + "},basic rhythm");
+
+  return "(" + descr.join( ") (" ) + ")"
+}
+
+
+
+function ex1_5(M) {
+  let ok_res = { "r": 0, "msg": "", "score": 0 };
+
+  let valid_notes = enumerate_note( "*+:.", "defgabc", [3,6]);
+  let rhythm_lib = [ [ "+", ":", ":", "*" ] ];
+  let n_measure = [6,11];
+
+  let first_note = "d4";
+
+  let res = {};
+
+  res = check_melody_start_note(M, first_note);
+  if (res.r != 0) { return res; }
+  ok_res.score += res.score;
+
+  res = check_melody_length(M, n_measure);
+  if (res.r != 0) { return res; }
+  ok_res.score += res.score;
+
+  res = check_melody_stride(M);
+  if (res.r != 0) { return res; }
+  ok_res.score += res.score;
+
+  res = check_melody_notes(M, valid_notes);
+  if (res.r != 0) { return res; }
+  ok_res.score += res.score;
+
+  res = check_melody_rhythm(M, rhythm_lib);
+  if (res.r != 0) { return res; }
+  ok_res.score += res.score;
+
+  res = check_melody_tonic(M);
+  if (res.r != 0) { return res; }
+  ok_res.score += res.score;
+
+  res = check_melody_basic_rhythm(M);
+  if (res.r != 0) { return res; }
+  ok_res.score += res.score;
+
+  res = check_melody_repeat(M, 1);
+  if (res.r != 0) { return res; }
+  ok_res.score += res.score;
+
+  return ok_res;
+}
+
+function descr_ex1_6(M) {
+
+  let descr = [];
+  let valid_notes = ["e","f","g","a","b","c","d"];
+  let rhythm_lib = [ 
+    [ "+", ":", ":", "+", "+" ],
+    [ "+", "+", "*" ]
+  ];
+  let n_measure = [6,11];
+
+  let first_note = "34";
+
+  let rhythm_s = [];
+  for (let i=0; i<rhythm_lib.length; i++) {
+    rhythm_s.push( rhythm_lib[i].join("") );
+  }
+
+  descr.push("restrict " + valid_notes.join(" "));
+  descr.push("restrict " + rhythm_s.join(" "));
+  if ((n_measure[1]-1) == n_measure[0]) {
+    descr.push("measure length " + n_measure[0].toString());
+  }
+  else {
+    descr.push("measure length [" + n_measure[0].toString() + " : " + n_measure[1].toString() + ")");
+  }
+  descr.push("constraint: tonic{" + first_note + "},basic rhythm");
+
+  return "(" + descr.join( ") (" ) + ")"
+}
+
+
+
+function ex1_6(M) {
+  let ok_res = { "r": 0, "msg": "", "score": 0 };
+
+  let valid_notes = enumerate_note( "*+:.", "efgabcd", [3,6]);
+  let rhythm_lib = [
+    [ "+", ":", ":", "+", "+" ],
+    [ "+", "+", "*" ]
+  ];
+  let n_measure = [6,11];
+
+  let first_note = "e4";
+
+  let res = {};
+
+  res = check_melody_start_note(M, first_note);
+  if (res.r != 0) { return res; }
+  ok_res.score += res.score;
+
+  res = check_melody_length(M, n_measure);
+  if (res.r != 0) { return res; }
+  ok_res.score += res.score;
+
+  res = check_melody_stride(M);
+  if (res.r != 0) { return res; }
+  ok_res.score += res.score;
+
+  res = check_melody_notes(M, valid_notes);
+  if (res.r != 0) { return res; }
+  ok_res.score += res.score;
+
+  res = check_melody_rhythm(M, rhythm_lib);
+  if (res.r != 0) { return res; }
+  ok_res.score += res.score;
+
+  res = check_melody_tonic(M);
+  if (res.r != 0) { return res; }
+  ok_res.score += res.score;
+
+  res = check_melody_basic_rhythm(M);
+  if (res.r != 0) { return res; }
+  ok_res.score += res.score;
+
+  res = check_melody_repeat(M, 1);
+  if (res.r != 0) { return res; }
+  ok_res.score += res.score;
+
+  return ok_res;
+}
+
 function ex1_1_example_solution() {
   return "+e4 +e4 +e4 *g4 | " +
     "+e4 +e4 +e4 *a4 | " +
@@ -863,7 +1019,23 @@ function ex1_4_example_solution() {
     "+g4 :a4 :b4 *c4";
 }
 
+function ex1_5_example_solution() {
+  return "+d4 :d4 :d4 *d4 | " +
+    "+d4 :d4 :d4 *d4 | " +
+    "+d4 :d4 :d4 *d4 | " +
+    "+d4 :d4 :d4 *d4 | " +
+    "+d4 :d4 :d4 *d4 | " +
+    "+d4 :d4 :d4 *d4 ";
+}
 
+function ex1_6_example_solution() {
+  return "+e4 :e4 :e4 +e4 +e4 | " +
+    "+e4 :e4 :e4 +e4 +e4 | " +
+    "+e4 :e4 :e4 +e4 +e4 | " +
+    "+e4 :e4 :e4 +e4 +e4 | " +
+    "+e4 :e4 :e4 +e4 +e4 | " +
+    "+e4 :e4 :e4 +e4 +e4 ";
+}
 
 //     uvxyz
 //     U     V      X    Y    Z
@@ -977,6 +1149,8 @@ function _main_repl() {
         console.log("  ex1.2:", descr_ex1_2());
         console.log("  ex1.3:", descr_ex1_3());
         console.log("  ex1.4:", descr_ex1_4());
+        console.log("  ex1.5:", descr_ex1_5());
+        console.log("  ex1.6:", descr_ex1_6());
         console.log("");
 
       }
@@ -1013,6 +1187,8 @@ function _main_repl() {
         console.log(res);
       }
 
+      //--- 1.1 ---
+
       else if (tok[0] == 'ex1.1') {
         let M = s2melody( tok.slice(1).join(" ") );
         let res = ex1_1( M );
@@ -1026,6 +1202,8 @@ function _main_repl() {
         let res = ex1_1( M );
         console.log(">>", ((res.r == 0) ? "PASS:" : "FAIL:"), res);
       }
+
+      //--- 1.2 ---
 
       else if (tok[0] == 'ex1.2') {
         let M = s2melody( tok.slice(1).join(" ") );
@@ -1041,6 +1219,8 @@ function _main_repl() {
         console.log(">>", ((res.r == 0) ? "PASS:" : "FAIL:"), res);
       }
 
+      //--- 1.3 ---
+
       else if (tok[0] == 'ex1.3') {
         let M = s2melody( tok.slice(1).join(" ") );
         let res = ex1_3( M );
@@ -1055,6 +1235,8 @@ function _main_repl() {
         console.log(">>", ((res.r == 0) ? "PASS:" : "FAIL:"), res);
       }
 
+      //--- 1.4 ---
+
       else if (tok[0] == 'ex1.4') {
         let M = s2melody( tok.slice(1).join(" ") );
         let res = ex1_4( M );
@@ -1066,6 +1248,38 @@ function _main_repl() {
         console.log(">>>", _sol);
         let M = s2melody( _sol );
         let res = ex1_4( M );
+        console.log(">>", ((res.r == 0) ? "PASS:" : "FAIL:"), res);
+      }
+
+      //--- 1.5 ---
+
+      else if (tok[0] == 'ex1.5') {
+        let M = s2melody( tok.slice(1).join(" ") );
+        let res = ex1_5( M );
+        console.log(">>", ((res.r == 0) ? "PASS:" : "FAIL:"), res);
+      }
+
+      else if (tok[0] == 'ex1.5.sol') {
+        let _sol = ex1_5_example_solution();
+        console.log(">>>", _sol);
+        let M = s2melody( _sol );
+        let res = ex1_5( M );
+        console.log(">>", ((res.r == 0) ? "PASS:" : "FAIL:"), res);
+      }
+
+      //--- 1.6 ---
+
+      else if (tok[0] == 'ex1.6') {
+        let M = s2melody( tok.slice(1).join(" ") );
+        let res = ex1_6( M );
+        console.log(">>", ((res.r == 0) ? "PASS:" : "FAIL:"), res);
+      }
+
+      else if (tok[0] == 'ex1.6.sol') {
+        let _sol = ex1_6_example_solution();
+        console.log(">>>", _sol);
+        let M = s2melody( _sol );
+        let res = ex1_6( M );
         console.log(">>", ((res.r == 0) ? "PASS:" : "FAIL:"), res);
       }
 
