@@ -125,6 +125,7 @@ class Synth {
 
     this.chorusLFO = audioCtx.createOscillator();
     this.chorusLFO.frequency.value = 0.8;
+    this.chorusLFO.frequency.value = 0.0;
 
     //----
     //
@@ -171,6 +172,9 @@ class Synth {
     const lfoGain = this.audioCtx.createGain();
     lfo.frequency.value = 5;
     lfoGain.gain.value = 10; // pitch modulation depth
+
+    lfo.frequency.value = 0;
+    lfoGain.gain.value = 0; // pitch modulation depth
 
     lfo.connect(lfoGain);
     lfoGain.connect(osc1.frequency);
@@ -277,6 +281,22 @@ class StepSequencer {
     this.currentStep = (this.currentStep + 1) % this.steps.length;
   }
 
+  _scheduleNote(stepIndex, time) {
+    let info = this.steps[stepIndex];
+    let freq = info.freq;
+    let dur = info.duration;
+    if (freq) {
+      this.synth.playNote(freq, {
+          attack: 0.01,
+          attackLevel: 1.0,
+          decay: 0.1,
+          sustainLevel: 0.6,
+          duration: 0.2,
+          release: 0.1
+      }, time);
+    }
+  }
+
   scheduleNote(stepIndex, time) {
     const freq = this.steps[stepIndex];
     if (freq) {
@@ -327,7 +347,9 @@ function bard_init() {
 
   // C major arpeggio
   seq.setSequence([
-      261.63, 329.63, 392.00, 523.25,
+      261.63, 
+      261.63, 
+    329.63, 392.00, 523.25,
       392.00, 329.63, 261.63, null
   ]);
 
