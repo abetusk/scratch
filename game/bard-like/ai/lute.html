@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tone.js Lute Demo</title>
+    <!-- Include the Tone.js Library -->
+    <script src="https://cloudflare.com"></script>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f4f1ea;
+            color: #4a3c31;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+            padding: 30px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        button {
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            background-color: #8c6d53;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background-color: #6f543e;
+        }
+        .status {
+            margin-top: 15px;
+            font-size: 14px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Renaissance Lute Demo</h1>
+    <p>Press the button to initialize audio and play a lute chord arpeggio.</p>
+    <button id="play-btn">Play Lute Arpeggio</button>
+    <div id="status" class="status">Audio Context: Stopped</div>
+</div>
+
+<script>
+    // Initialize the Lute Synth using physical modeling
+    const lute = new Tone.PluckSynth({
+        attackNoise: 1.2,
+        dampening: 3500,
+        resonance: 0.92
+    }).toDestination();
+
+    // Add a subtle reverb to simulate an old wooden room
+    const reverb = new Tone.Reverb({
+        decay: 1.5,
+        wet: 0.3
+    }).toDestination();
+    lute.connect(reverb);
+
+    // Define a classic lute renaissance chord arpeggio (G minor / Modal)
+    const notes = ["G3", "D4", "G4", "Bb4", "D5", "G5"];
+
+    document.getElementById("play-btn").addEventListener("click", async () => {
+        // Essential step: Start audio context on user click
+        await Tone.start();
+        document.getElementById("status").innerText = "Audio Context: Active";
+
+        const now = Tone.now();
+        
+        // Schedule each string to pluck in a staggered arpeggio sequence
+        notes.forEach((note, index) => {
+            // Stagger each note by 0.12 seconds
+            lute.triggerAttackRelease(note, "2n", now + (index * 0.12));
+        });
+    });
+</script>
+
+</body>
+</html>
+

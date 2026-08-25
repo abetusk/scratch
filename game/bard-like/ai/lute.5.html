@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fur Elise · Chiptune Style</title>
+    <style>
+        body {
+            background: #1a1e2a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+        }
+        .container {
+            background: #2a2f3f;
+            padding: 2.5rem;
+            border-radius: 2.5rem;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.6);
+            text-align: center;
+            max-width: 500px;
+        }
+        h1 {
+            color: #b7c9e2;
+            font-weight: 300;
+            letter-spacing: 2px;
+            font-size: 1.2rem;
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid #3f465b;
+            padding-bottom: 0.8rem;
+        }
+        button {
+            background: #5b7a9e;
+            border: none;
+            border-radius: 2rem;
+            padding: 0.7rem 2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #d6e3ff;
+            box-shadow: 0 6px 0 #2a3a4e, 0 8px 12px rgba(0,0,0,0.4);
+            cursor: pointer;
+            transition: all 0.06s ease;
+            margin: 0.3rem;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+        button:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #2a3a4e, 0 6px 12px rgba(0,0,0,0.4);
+        }
+        button:disabled {
+            opacity: 0.5;
+            transform: translateY(3px);
+            box-shadow: 0 3px 0 #2a3a4e;
+            pointer-events: none;
+        }
+        button.stop {
+            background: #8f5f6b;
+            box-shadow: 0 6px 0 #5a3a42;
+        }
+        .status {
+            color: #8f9fc7;
+            font-size: 0.8rem;
+            margin-top: 1rem;
+        }
+        .controls {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 1rem 0;
+        }
+        .badge {
+            background: #232836;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            color: #b3c5e6;
+            font-size: 0.7rem;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎹 · Fur Elise · Chiptune</h1>
+        
+        <div class="controls">
+            <button id="playBtn">▶ Play</button>
+            <button id="stopBtn" class="stop" disabled>■ Stop</button>
+        </div>
+        
+        <div class="badge">3-voice unison · pulse waves</div>
+        <div class="status" id="status">Ready</div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js"></script>
+    <script>
+        (function() {
+            "use strict";
+
+            // --------------------------------------------------------------
+            // CHIPTUNE INSTRUMENT (Working version)
+            // --------------------------------------------------------------
+            class ChiptuneLute {
+                constructor(params = {}) {
+                    // Effects
+                    this.gainNode = new Tone.Gain(params.gain ?? 0.5);
+                    
+                    this.chorus = new Tone.Chorus({
+                        frequency: 2.5,
+                        delayTime: 3,
+                        depth: 0.7,
+                        spread: 180
+                    });
+                    
+                    this.reverb = new Tone.Reverb({
+                        decay: 1.8,
+                        preDelay: 0.02,
+                        wet: 0.2
+                    });
+                    
+                    // Routing
+                    this.gainNode.connect(this.chorus);
+                    this.chorus.connect(this.reverb);
+                    this.reverb.connect(Tone.Destination);
+                    
+                    // 3 voices
+                    this.voice1 = new Tone.MonoSynth({
+                        oscillator: { type: 'pulse', width: 0.5 },
+                        filter: { type: 'lowpass', frequency: 3000, rolloff: -24 },
+                        filterEnvelope: {
+                            attack: 0.001, decay: 0.1, sustain: 0.6, release: 0.05,
+                            baseFrequency: 1000, octaves: 3.0
+                        },
+                        envelope: { attack: 0.001, decay: params.decay ?? 0.7, sustain: 0, release: 0.05 },
+                        volume: -8
+                    });
+                    
+                    this.voice2 = new Tone.MonoSynth({
+                        oscillator: { type: 'pulse', width: 0.4 },
+                        filter: { type: 'lowpass', frequency: 2800, rolloff: -24 },
+                        filterEnvelope: {
+                            attack: 0.002, decay: 0.08, sustain: 0.5, release: 0.04,
+                            baseFrequency: 800, octaves: 2.8
+                        },
+                        envelope: { attack: 0.002, decay: params.decay ?? 0.7, sustain: 0, release: 0.05 },
+                        volume: -10
+                    });
+                    
+                    this.voice3 = new Tone.MonoSynth({
+                        oscillator: { type: 'pulse', width: 0.6 },
+                        filter: { type: 'lowpass', frequency: 2600, rolloff: -12 },
+                        filterEnvelope: {
+                            attack: 0.002, decay: 0.12, sustain: 0.4, release: 0.06,
+                            baseFrequency: 700, octaves: 2.5
+                        },
+                        envelope: { attack: 0.002, decay: params.decay ?? 0.7, sustain: 0, release: 0.05 },
+                        volume: -11
+                    });
+                    
+                    this.voice1.connect(this.gainNode);
+                    this.voice2.connect(this.gainNode);
+                    this.voice3.connect(this.gainNode);
+                    
+                    this._osc1 = this.voice1.oscillator;
+                    this._osc2 = this.voice2.oscillator;
+                    this._osc3 = this.voice3.oscillator;
+                    
+                    this._detuneAmount = params.detune ?? 18;
+                    this._decay = params.decay ?? 0.7;
+                    
+                    // Melody state
+                    this._events = [];
+                    this._isPlaying = false;
+                    this._callback = null;
+                }
+                
+                playMelody(melodyData, bpm = 120, callback = null) {
+                    this.stop();
+                    
+                    if (!melodyData || melodyData.length === 0) return { stop: () => {} };
+                    
+                    if (Tone.context.state === 'suspended') Tone.context.resume();
+                    
+                    Tone.Transport.bpm.value = bpm;
+                    this._callback = callback;
+                    this._isPlaying = true;
+                    
+                    let totalBeats = 0;
+                    const events = [];
+                    
+                    melodyData.forEach((item) => {
+                        const note = item.note;
+                        const duration = item.duration || 0.5;
+                        
+                        const event = Tone.Transport.schedule((time) => {
+                            if (!this._isPlaying) return;
+                            
+                            // Detune
+                            const d1 = 0;
+                            const d2 = this._detuneAmount * 0.6 + (Math.random() * 4 - 2);
+                            const d3 = -this._detuneAmount * 0.8 + (Math.random() * 4 - 2);
+                            this._osc1.set({ detune: d1 });
+                            this._osc2.set({ detune: d2 });
+                            this._osc3.set({ detune: d3 });
+                            
+                            // Pulse width
+                            this._osc1.set({ width: 0.45 + Math.random() * 0.1 });
+                            this._osc2.set({ width: 0.35 + Math.random() * 0.1 });
+                            this._osc3.set({ width: 0.55 + Math.random() * 0.1 });
+                            
+                            // Play
+                            const dur = duration * 0.85;
+                            this.voice1.triggerAttackRelease(note, dur, time);
+                            this.voice2.triggerAttackRelease(note, dur, time + 0.004);
+                            this.voice3.triggerAttackRelease(note, dur, time + 0.008);
+                        }, totalBeats);
+                        
+                        events.push(event);
+                        totalBeats += duration;
+                    });
+                    
+                    this._events = events;
+                    
+                    const cleanup = Tone.Transport.schedule(() => {
+                        this._isPlaying = false;
+                        if (this._callback) {
+                            this._callback();
+                            this._callback = null;
+                        }
+                    }, totalBeats + 0.1);
+                    
+                    this._events.push(cleanup);
+                    
+                    if (Tone.Transport.state === 'stopped') {
+                        Tone.Transport.start();
+                    }
+                    
+                    return { stop: () => this.stop() };
+                }
+                
+                stop() {
+                    this._events.forEach(e => {
+                        if (e && e.id !== undefined) Tone.Transport.clear(e.id);
+                    });
+                    this._events = [];
+                    this._isPlaying = false;
+                    this._callback = null;
+                    this.voice1.triggerRelease();
+                    this.voice2.triggerRelease();
+                    this.voice3.triggerRelease();
+                }
+                
+                isPlaying() { return this._isPlaying; }
+                
+                dispose() {
+                    this.stop();
+                    this.voice1.dispose();
+                    this.voice2.dispose();
+                    this.voice3.dispose();
+                    this.gainNode.dispose();
+                    this.chorus.dispose();
+                    this.reverb.dispose();
+                }
+            }
+
+            // --------------------------------------------------------------
+            // FUR ELISE (First 10 bars or so)
+            // --------------------------------------------------------------
+            const furElise = [
+                // Bar 1-2: Main theme
+                { note: 'E5', duration: 0.25 }, { note: 'D#5', duration: 0.25 },
+                { note: 'E5', duration: 0.25 }, { note: 'D#5', duration: 0.25 },
+                { note: 'E5', duration: 0.25 }, { note: 'B4', duration: 0.25 },
+                { note: 'D5', duration: 0.25 }, { note: 'C5', duration: 0.25 },
+                
+                // Bar 3-4
+                { note: 'A4', duration: 0.25 }, { note: 'C4', duration: 0.25 },
+                { note: 'E4', duration: 0.25 }, { note: 'A4', duration: 0.25 },
+                { note: 'B4', duration: 0.25 }, { note: 'E4', duration: 0.25 },
+                { note: 'G#4', duration: 0.25 }, { note: 'B4', duration: 0.25 },
+                
+                // Bar 5-6
+                { note: 'C5', duration: 0.25 }, { note: 'E4', duration: 0.25 },
+                { note: 'A4', duration: 0.25 }, { note: 'C5', duration: 0.25 },
+                { note: 'B4', duration: 0.25 }, { note: 'E4', duration: 0.25 },
+                { note: 'G#4', duration: 0.25 }, { note: 'B4', duration: 0.25 },
+                
+                // Bar 7-8
+                { note: 'C5', duration: 0.25 }, { note: 'E4', duration: 0.25 },
+                { note: 'A4', duration: 0.25 }, { note: 'C5', duration: 0.25 },
+                { note: 'B4', duration: 0.25 }, { note: 'D4', duration: 0.25 },
+                { note: 'G4', duration: 0.25 }, { note: 'B4', duration: 0.25 },
+                
+                // Bar 9-10
+                { note: 'C5', duration: 0.25 }, { note: 'D4', duration: 0.25 },
+                { note: 'G4', duration: 0.25 }, { note: 'B4', duration: 0.25 },
+                { note: 'C5', duration: 0.25 }, { note: 'E4', duration: 0.25 },
+                { note: 'A4', duration: 0.25 }, { note: 'C5', duration: 0.25 },
+                
+                // Bar 11-12
+                { note: 'B4', duration: 0.25 }, { note: 'D4', duration: 0.25 },
+                { note: 'G4', duration: 0.25 }, { note: 'B4', duration: 0.25 },
+                { note: 'C5', duration: 0.25 }, { note: 'E4', duration: 0.25 },
+                { note: 'A4', duration: 0.25 }, { note: 'C5', duration: 0.25 },
+                
+                // Bar 13-14
+                { note: 'B4', duration: 0.25 }, { note: 'F4', duration: 0.25 },
+                { note: 'B4', duration: 0.25 }, { note: 'D5', duration: 0.25 },
+                { note: 'C5', duration: 0.25 }, { note: 'E4', duration: 0.25 },
+                { note: 'A4', duration: 0.25 }, { note: 'C5', duration: 0.25 },
+                
+                // Bar 15-16
+                { note: 'B4', duration: 0.25 }, { note: 'E4', duration: 0.25 },
+                { note: 'A4', duration: 0.25 }, { note: 'C5', duration: 0.25 },
+                { note: 'B4', duration: 0.25 }, { note: 'E4', duration: 0.25 },
+                { note: 'G#4', duration: 0.25 }, { note: 'B4', duration: 0.25 },
+                
+                // Bar 17-18
+                { note: 'C5', duration: 0.25 }, { note: 'E4', duration: 0.25 },
+                { note: 'A4', duration: 0.25 }, { note: 'C5', duration: 0.25 },
+                { note: 'B4', duration: 0.25 }, { note: 'D4', duration: 0.25 },
+                { note: 'G4', duration: 0.25 }, { note: 'B4', duration: 0.25 },
+                
+                // Bar 19-20 (ending)
+                { note: 'C5', duration: 0.25 }, { note: 'E4', duration: 0.25 },
+                { note: 'A4', duration: 0.25 }, { note: 'C5', duration: 0.25 },
+                { note: 'E5', duration: 0.5 }, { note: 'E5', duration: 0.5 },
+                { note: 'E5', duration: 0.75 },
+            ];
+
+            // --------------------------------------------------------------
+            // GUI
+            // --------------------------------------------------------------
+            const instrument = new ChiptuneLute({ decay: 0.7, gain: 0.5, detune: 18 });
+            const playBtn = document.getElementById('playBtn');
+            const stopBtn = document.getElementById('stopBtn');
+            const status = document.getElementById('status');
+
+            playBtn.addEventListener('click', () => {
+                if (instrument.isPlaying()) return;
+                
+                playBtn.disabled = true;
+                stopBtn.disabled = false;
+                status.textContent = '🎵 Playing...';
+                
+                instrument.playMelody(furElise, 132, () => {
+                    playBtn.disabled = false;
+                    stopBtn.disabled = true;
+                    status.textContent = '✅ Complete';
+                });
+            });
+
+            stopBtn.addEventListener('click', () => {
+                instrument.stop();
+                playBtn.disabled = false;
+                stopBtn.disabled = true;
+                status.textContent = '⏹ Stopped';
+            });
+
+            // Resume audio on interaction
+            document.addEventListener('click', () => {
+                if (Tone.context.state === 'suspended') {
+                    Tone.context.resume();
+                }
+            });
+
+            // Cleanup
+            window.addEventListener('beforeunload', () => {
+                Tone.Transport.stop();
+                Tone.Transport.cancel();
+                instrument.dispose();
+            });
+
+        })();
+    </script>
+</body>
+</html>
