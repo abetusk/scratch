@@ -24,7 +24,7 @@ var BARD_NOTE = [
 ];
 
 var BARD_NOTE_DESCR = {
-  "c": "C", "u": "C#/B flat",
+  "c": "C", "u": "C#/D flat",
   "d": "D", "v": "D#/E flat",
   "e": "E",
   "f": "F", "w": "F#/G flat",
@@ -73,7 +73,24 @@ function s2melody(s) {
 
   for (let i=0; i<tok0.length; i++) {
     let a = tok0[i].trim().split(/  */);
-    melody.push(a);
+
+    let measure_note = [];
+
+    for (let j=0; j<a.length; j++) {
+      let note = a[j];
+      if (note.search('^[o\*\+:\.]{.*}$') == 0) {
+        let ta = note.slice(2,-1).split(",");
+        for (let k=0; k<ta.length; k++) {
+          ta[k] = note[0] + ta[k];
+        }
+        measure_note.push( ta );
+      }
+      else {
+        measure_note.push( note );
+      }
+    }
+    //melody.push(a);
+    melody.push(measure_note);
   }
 
   return melody;
@@ -1037,8 +1054,73 @@ function ex1_6_example_solution() {
     "+e4 :e4 :e4 +e4 +e4 ";
 }
 
-//     uvxyz
-//     U     V      X    Y    Z
+//-- skipping ex1_7 (violation exercise) and
+//   ex1_8 (percussive exercise)
+
+//---
+
+function descr_ex2_1() {
+  return "Fmin Amaj G#min Dflat_maj Bmin (Fmin Amaj Xmin Umin Bmin) (maj[0,+4,+7] min[0,+3,+7])"
+}
+
+function ex2_1_example_solution() {
+  return "o{f4,x4,c5} | o{a4,u5,e5} | o{x4,b4,v5} | o{u4,f4,x4} | o{b4,d5,w5}"
+}
+
+function ex2_1(M) {
+  let ok_res = { "r": 0, "msg": "", "score": 0 };
+
+  let Fmin = [ "of4", "ox4", "oc5" ],
+      Amaj = [ "oa4", "ou5", "oe5" ],
+      Xmin = [ "ox4", "ob4", "ov5" ],
+      Umaj = [ "ou4", "of4", "ox4" ],
+      Bmin = [ "ob4", "od5", "ow5" ];
+
+  let _chords = [ Fmin, Amaj, Xmin, Umaj, Bmin ];
+
+  if (M.length != _chords.length) {
+    return {
+      "r": -1,
+      "msg": "must be " + _chords.length.toString() + "  measures",
+      "score":-1
+    };
+  }
+
+
+  for (let i=0; i<M.length; i++) {
+
+    if (M[i].length != 1) {
+      return {
+        "r": -1,
+        "msg": "measure " + i.toString() + " must be comprised of exactly 1 chord",
+        "score": -1
+      };
+    }
+
+    if (M[i][0].length != _chords[i].length) {
+      return {
+        "r": -1,
+        "msg": "chord in measure " + i.toString() + " must be comprised of 3 notes",
+        "score": -1
+      };
+    }
+
+    for (let j=0; j<3; j++) {
+      if (M[i][0][j] != _chords[i][j]) {
+        return {
+          "r": -1,
+          "msg": "incorrect chord at measure " + i.toString() + "(" + j.toString() + ")",
+          "score": -1
+        };
+      }
+    }
+  }
+
+  return ok_res;
+}
+
+//     uvwxy
+//     U     V      W    X    Y
 //     C#    D#     F#   G#   A#
 //  C     D     E F    G    A    B
 //
@@ -1151,6 +1233,8 @@ function _main_repl() {
         console.log("  ex1.4:", descr_ex1_4());
         console.log("  ex1.5:", descr_ex1_5());
         console.log("  ex1.6:", descr_ex1_6());
+        console.log("");
+        console.log("  ex2.1:", descr_ex2_1());
         console.log("");
 
       }
@@ -1280,6 +1364,22 @@ function _main_repl() {
         console.log(">>>", _sol);
         let M = s2melody( _sol );
         let res = ex1_6( M );
+        console.log(">>", ((res.r == 0) ? "PASS:" : "FAIL:"), res);
+      }
+
+      //--- 2.1 ---
+
+      else if (tok[0] == 'ex2.1') {
+        let M = s2melody( tok.slice(1).join(" ") );
+        let res = ex2_1( M );
+        console.log(">>", ((res.r == 0) ? "PASS:" : "FAIL:"), res);
+      }
+
+      else if (tok[0] == 'ex2.1.sol') {
+        let _sol = ex2_1_example_solution();
+        console.log(">>>", _sol);
+        let M = s2melody( _sol );
+        let res = ex2_1( M );
         console.log(">>", ((res.r == 0) ? "PASS:" : "FAIL:"), res);
       }
 
