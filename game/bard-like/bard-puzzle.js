@@ -81,11 +81,14 @@ function s2melody(s) {
 
 // array of frequency duration
 //
-function melody2afd(M) {
+function melody2afd(M, tempo) {
+
+  tempo = ((typeof tempo === "undefined") ? 90 : tempo);
 
   let a = [];
 
-  let quarter_note_s_dur_90bpm = 60/90;
+  //let quarter_note_s_dur_90bpm = 60/90;
+  let quarter_note_s_dur_90bpm = 60/tempo;
   let _qnd = quarter_note_s_dur_90bpm;
 
   let bpm = 90;

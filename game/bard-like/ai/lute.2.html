@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chiptune Lute · Tone.js</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      user-select: none;
+    }
+    body {
+      background: #1a1e2a;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+    }
+    .card {
+      background: #2a2f3f;
+      padding: 2rem 2.5rem;
+      border-radius: 2.5rem;
+      box-shadow: 0 15px 30px rgba(0,0,0,0.6), inset 0 1px 2px rgba(255,255,255,0.08);
+      backdrop-filter: blur(2px);
+      transition: 0.2s;
+    }
+    .gui {
+      display: flex;
+      flex-direction: column;
+      gap: 1.8rem;
+      align-items: center;
+    }
+    .title {
+      color: #b7c9e2;
+      font-weight: 400;
+      letter-spacing: 2px;
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      border-bottom: 1px solid #3f465b;
+      padding-bottom: 0.6rem;
+      width: 100%;
+      text-align: center;
+      text-shadow: 0 2px 3px #0f111a;
+    }
+    .keyboard {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.6rem;
+      max-width: 500px;
+      margin: 0.2rem 0;
+    }
+    .lute-key {
+      background: #323a4e;
+      border: none;
+      border-radius: 2rem 1rem 1rem 2rem;
+      padding: 0.5rem 1.1rem;
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #d6e3ff;
+      box-shadow: 0 6px 0 #151b26, 0 8px 12px rgba(0,0,0,0.4);
+      cursor: pointer;
+      transition: all 0.04s ease;
+      min-width: 48px;
+      text-align: center;
+      letter-spacing: 1px;
+      border-left: 3px solid #5f6b88;
+      font-family: 'Courier New', monospace;
+    }
+    .lute-key:active {
+      transform: translateY(5px);
+      box-shadow: 0 1px 0 #151b26, 0 6px 10px rgba(0,0,0,0.5);
+      background: #3e485f;
+    }
+    .lute-key:focus-visible {
+      outline: 2px solid #b0c7f0;
+      outline-offset: 3px;
+    }
+    .lute-key[data-note="C4"] { border-left-color: #f7b773; }
+    .lute-key[data-note="D4"] { border-left-color: #f5a77a; }
+    .lute-key[data-note="E4"] { border-left-color: #f09b7a; }
+    .lute-key[data-note="F4"] { border-left-color: #e88f7a; }
+    .lute-key[data-note="G4"] { border-left-color: #d9837a; }
+    .lute-key[data-note="A4"] { border-left-color: #c97a7a; }
+    .lute-key[data-note="B4"] { border-left-color: #b8737a; }
+    .lute-key[data-note="C5"] { border-left-color: #a86d7a; }
+    .lute-key[data-note="D5"] { border-left-color: #98687a; }
+    .lute-key[data-note="E5"] { border-left-color: #88637a; }
+    .controls {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      margin-top: 0.2rem;
+    }
+    .control-group {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      background: #232836;
+      padding: 0.3rem 1rem 0.3rem 1.2rem;
+      border-radius: 3rem;
+      box-shadow: inset 0 2px 6px #0e121b;
+    }
+    .control-group label {
+      color: #b3c5e6;
+      font-size: 0.8rem;
+      letter-spacing: 1px;
+      font-weight: 300;
+    }
+    .control-group input[type="range"] {
+      width: 90px;
+      height: 4px;
+      -webkit-appearance: none;
+      appearance: none;
+      background: #4d5773;
+      border-radius: 10px;
+      outline: none;
+    }
+    .control-group input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #b7cef0;
+      cursor: pointer;
+      box-shadow: 0 2px 6px #0a0e17;
+      border: 1px solid #d3e2ff;
+    }
+    .value-badge {
+      min-width: 30px;
+      color: #d6e3ff;
+      font-size: 0.9rem;
+      font-weight: 500;
+      background: #1b212e;
+      padding: 0.1rem 0.5rem;
+      border-radius: 20px;
+      text-align: center;
+    }
+    .melody-controls {
+      display: flex;
+      gap: 0.8rem;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .melody-btn {
+      background: #3d465e;
+      border: none;
+      border-radius: 2rem;
+      padding: 0.4rem 1.2rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #d6e3ff;
+      box-shadow: 0 4px 0 #1a1f2e, 0 4px 8px rgba(0,0,0,0.4);
+      cursor: pointer;
+      transition: all 0.06s ease;
+      letter-spacing: 0.5px;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+    }
+    .melody-btn:active {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 #1a1f2e, 0 4px 8px rgba(0,0,0,0.4);
+    }
+    .melody-btn:disabled {
+      opacity: 0.5;
+      transform: translateY(2px);
+      box-shadow: 0 2px 0 #1a1f2e;
+      pointer-events: none;
+    }
+    .melody-btn.play { background: #5b7a9e; }
+    .melody-btn.stop { background: #8f5f6b; }
+    .footer {
+      color: #5f6d8a;
+      font-size: 0.7rem;
+      letter-spacing: 1px;
+      margin-top: 0.3rem;
+    }
+    .standalone-badge {
+      background: #2b3347;
+      padding: 0.2rem 1rem;
+      border-radius: 30px;
+      color: #8f9fc7;
+      font-size: 0.65rem;
+      border: 1px solid #3d465e;
+    }
+    .bpm-display {
+      color: #b3c5e6;
+      font-size: 0.8rem;
+      font-weight: 400;
+      min-width: 35px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+<div class="card">
+  <div class="gui">
+    <div class="title">🎸 · CHIPTUNE LUTE</div>
+
+    <!-- KEYBOARD (GUI) -->
+    <div class="keyboard" id="keyboardContainer">
+      <!-- keys will be injected by JS -->
+    </div>
+
+    <!-- CONTROLS (GUI) -->
+    <div class="controls">
+      <div class="control-group">
+        <label>✨ decay</label>
+        <input type="range" id="decaySlider" min="0.05" max="1.2" step="0.01" value="0.45">
+        <span class="value-badge" id="decayValue">0.45</span>
+      </div>
+      <div class="control-group">
+        <label>🔊 gain</label>
+        <input type="range" id="gainSlider" min="0.1" max="1.0" step="0.01" value="0.55">
+        <span class="value-badge" id="gainValue">0.55</span>
+      </div>
+      <div class="control-group">
+        <label>🎵 BPM</label>
+        <input type="range" id="bpmSlider" min="60" max="200" step="1" value="120">
+        <span class="value-badge bpm-display" id="bpmValue">120</span>
+      </div>
+    </div>
+
+    <!-- MELODY CONTROLS -->
+    <div class="melody-controls">
+      <button class="melody-btn play" id="playMelodyBtn">▶ Play Melody</button>
+      <button class="melody-btn stop" id="stopMelodyBtn" disabled>■ Stop</button>
+    </div>
+
+    <div class="standalone-badge">⚡ instrument standalone · GUI separate</div>
+    <div class="footer">click keys · chiptune pluck · melody via Tone.Transport</div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!--  TONE.JS LIBRARY                                              -->
+<!-- ============================================================ -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js"></script>
+
+<script>
+  (function() {
+    "use strict";
+
+    // --------------------------------------------------------------
+    // 1. INSTRUMENT MODULE (standalone, no GUI references)
+    //    - ChiptuneLute: uses Tone.Synth with chiptune-style oscillator
+    //    - Exposes playNote(note, decayTime, gainValue)
+    //    - Exposes playMelody(melodyData, bpm, callback)
+    // --------------------------------------------------------------
+    class ChiptuneLute {
+      /**
+       * @param {Object} params
+       * @param {number} [params.decay=0.45]  - decay time in seconds
+       * @param {number} [params.gain=0.55]   - output gain (0–1)
+       */
+      constructor(params = {}) {
+        // --- core synth: chiptune lute with square wave ---
+        this.synth = new Tone.Synth({
+          oscillator: {
+            type: 'square8',       // chiptune classic with 8 partials
+          },
+          envelope: {
+            attack: 0.002,
+            decay: params.decay ?? 0.45,
+            sustain: 0.0,           // pluck-style: no sustain
+            release: 0.05,
+          },
+          volume: -8,               // headroom
+        }).toDestination();
+
+        // extra gain stage for finer control
+        this.gainNode = new Tone.Gain(params.gain ?? 0.55);
+        this.synth.chain(this.gainNode, Tone.Destination);
+
+        // store current params
+        this._decay = params.decay ?? 0.45;
+        this._gain = params.gain ?? 0.55;
+
+        // store the oscillator reference for detune
+        this._oscillator = this.synth.oscillator;
+
+        // melody playback state
+        this._melodyEvents = [];
+        this._isMelodyPlaying = false;
+        this._melodyCallback = null;
+      }
+
+      /** Play a single note (frequency or note name) */
+      playNote(note, decayTime = this._decay, gainValue = this._gain) {
+        if (!Tone.context.state || Tone.context.state === 'suspended') {
+          Tone.context.resume();
+        }
+
+        // update envelope decay if different
+        if (decayTime !== this._decay) {
+          this.synth.envelope.decay = decayTime;
+          this._decay = decayTime;
+        }
+
+        // update gain if different
+        if (gainValue !== this._gain) {
+          this.gainNode.gain.value = gainValue;
+          this._gain = gainValue;
+        }
+
+        // chiptune "lute" touch: tiny random detune (±5 cents)
+        const detuneCents = (Math.random() * 10 - 5);
+        this._oscillator.set({ detune: detuneCents });
+
+        // trigger the note with a short duration
+        this.synth.triggerAttackRelease(note, '8n');
+      }
+
+      /**
+       * Play a melody using Tone.Transport scheduler
+       * @param {Array} melodyData - Array of { note, duration } objects
+       *        duration is in beats (e.g., 0.5 = eighth note, 1 = quarter note)
+       * @param {number} bpm - Beats per minute
+       * @param {Function} callback - Called when melody finishes
+       * @returns {Object} - Control object with stop() method
+       */
+      playMelody(melodyData, bpm = 120, callback = null) {
+        // Stop any currently playing melody
+        this.stopMelody();
+
+        if (!melodyData || melodyData.length === 0) {
+          console.warn('No melody data provided');
+          return { stop: () => {} };
+        }
+
+        // Resume audio context if needed
+        if (Tone.context.state === 'suspended') {
+          Tone.context.resume();
+        }
+
+        // Set BPM
+        Tone.Transport.bpm.value = bpm;
+
+        // Store callback
+        this._melodyCallback = callback;
+        this._isMelodyPlaying = true;
+
+        // Calculate total duration for scheduling cleanup
+        let totalBeats = 0;
+        const events = [];
+
+        // Schedule each note
+        melodyData.forEach((item, index) => {
+          const note = item.note;
+          const duration = item.duration || 0.5; // default to eighth note
+          
+          // Schedule note at the accumulated time
+          const event = Tone.Transport.schedule((time) => {
+            if (!this._isMelodyPlaying) return;
+            
+            // Add detune variation for each note
+            const detuneCents = (Math.random() * 10 - 5);
+            this._oscillator.set({ detune: detuneCents });
+            
+            // Trigger the note
+            this.synth.triggerAttackRelease(note, duration * 0.9, time);
+            // The duration is shortened slightly to create space between notes
+          }, totalBeats);
+
+          events.push(event);
+          totalBeats += duration;
+        });
+
+        this._melodyEvents = events;
+
+        // Schedule cleanup at the end of the melody
+        const cleanupEvent = Tone.Transport.schedule((time) => {
+          this._isMelodyPlaying = false;
+          if (this._melodyCallback) {
+            this._melodyCallback();
+            this._melodyCallback = null;
+          }
+        }, totalBeats);
+
+        this._melodyEvents.push(cleanupEvent);
+
+        // Start the Transport if it's not already running
+        if (!Tone.Transport.state || Tone.Transport.state === 'stopped') {
+          Tone.Transport.start();
+        }
+
+        // Return control object
+        return {
+          stop: () => this.stopMelody()
+        };
+      }
+
+      /** Stop the currently playing melody */
+      stopMelody() {
+        if (!this._isMelodyPlaying && this._melodyEvents.length === 0) return;
+
+        // Clear all scheduled events
+        this._melodyEvents.forEach(event => {
+          if (event && event.id !== undefined) {
+            Tone.Transport.clear(event.id);
+          }
+        });
+        this._melodyEvents = [];
+        this._isMelodyPlaying = false;
+
+        // Stop Transport if it's not needed elsewhere
+        // (We stop it in the GUI cleanup, but don't force stop here
+        // in case other parts of the app use Transport)
+        
+        if (this._melodyCallback) {
+          this._melodyCallback = null;
+        }
+      }
+
+      /** Check if melody is currently playing */
+      isMelodyPlaying() {
+        return this._isMelodyPlaying;
+      }
+
+      /** Update decay time (seconds) */
+      setDecay(time) {
+        this._decay = Math.min(1.5, Math.max(0.02, time));
+        this.synth.envelope.decay = this._decay;
+      }
+
+      /** Update gain (0–1) */
+      setGain(val) {
+        this._gain = Math.min(1.0, Math.max(0.0, val));
+        this.gainNode.gain.value = this._gain;
+      }
+
+      /** Dispose and clean up */
+      dispose() {
+        this.stopMelody();
+        this.synth.dispose();
+        this.gainNode.dispose();
+      }
+    }
+
+    // --------------------------------------------------------------
+    // 2. GUI CONTROLLER (separate from instrument logic)
+    // --------------------------------------------------------------
+    class LuteGUI {
+      constructor(instrument) {
+        this.instrument = instrument;
+
+        // DOM elements
+        this.keyboardEl = document.getElementById('keyboardContainer');
+        this.decaySlider = document.getElementById('decaySlider');
+        this.decayValue = document.getElementById('decayValue');
+        this.gainSlider = document.getElementById('gainSlider');
+        this.gainValue = document.getElementById('gainValue');
+        this.bpmSlider = document.getElementById('bpmSlider');
+        this.bpmValue = document.getElementById('bpmValue');
+        this.playMelodyBtn = document.getElementById('playMelodyBtn');
+        this.stopMelodyBtn = document.getElementById('stopMelodyBtn');
+
+        // notes in the chiptune lute range (C4 – E5)
+        this.notes = ['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4', 'C5', 'D5', 'E5'];
+
+        // Example melody: "Twinkle Twinkle" style
+        this.defaultMelody = [
+          { note: 'C4', duration: 0.5 },
+          { note: 'C4', duration: 0.5 },
+          { note: 'G4', duration: 0.5 },
+          { note: 'G4', duration: 0.5 },
+          { note: 'A4', duration: 0.5 },
+          { note: 'A4', duration: 0.5 },
+          { note: 'G4', duration: 0.75 },
+          { note: 'F4', duration: 0.5 },
+          { note: 'F4', duration: 0.5 },
+          { note: 'E4', duration: 0.5 },
+          { note: 'E4', duration: 0.5 },
+          { note: 'D4', duration: 0.5 },
+          { note: 'D4', duration: 0.5 },
+          { note: 'C4', duration: 0.75 },
+        ];
+
+        // Build keyboard
+        this.buildKeyboard();
+
+        // Bind controls
+        this.bindSliders();
+        this.bindMelodyControls();
+
+        // Resume audio on interaction
+        this.resumeAudioOnInteraction();
+      }
+
+      buildKeyboard() {
+        this.keyboardEl.innerHTML = '';
+        for (const note of this.notes) {
+          const btn = document.createElement('button');
+          btn.className = 'lute-key';
+          btn.dataset.note = note;
+          btn.textContent = note.replace('4', '').replace('5', '');
+          btn.setAttribute('aria-label', `Play ${note}`);
+
+          btn.addEventListener('mousedown', (e) => {
+            e.preventDefault();
+            this.playNoteFromGUI(note);
+          });
+          btn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            this.playNoteFromGUI(note);
+          }, { passive: false });
+          this.keyboardEl.appendChild(btn);
+        }
+      }
+
+      playNoteFromGUI(note) {
+        const decay = parseFloat(this.decaySlider.value);
+        const gain = parseFloat(this.gainSlider.value);
+        this.instrument.playNote(note, decay, gain);
+        this.decayValue.textContent = decay.toFixed(2);
+        this.gainValue.textContent = gain.toFixed(2);
+      }
+
+      bindSliders() {
+        this.decaySlider.addEventListener('input', () => {
+          const val = parseFloat(this.decaySlider.value);
+          this.decayValue.textContent = val.toFixed(2);
+          this.instrument.setDecay(val);
+        });
+
+        this.gainSlider.addEventListener('input', () => {
+          const val = parseFloat(this.gainSlider.value);
+          this.gainValue.textContent = val.toFixed(2);
+          this.instrument.setGain(val);
+        });
+
+        this.bpmSlider.addEventListener('input', () => {
+          const val = parseFloat(this.bpmSlider.value);
+          this.bpmValue.textContent = val;
+          Tone.Transport.bpm.value = val;
+        });
+
+        // Set initial values
+        this.instrument.setDecay(parseFloat(this.decaySlider.value));
+        this.instrument.setGain(parseFloat(this.gainSlider.value));
+        this.decayValue.textContent = this.decaySlider.value;
+        this.gainValue.textContent = this.gainSlider.value;
+        this.bpmValue.textContent = this.bpmSlider.value;
+        Tone.Transport.bpm.value = parseFloat(this.bpmSlider.value);
+      }
+
+      bindMelodyControls() {
+        this.playMelodyBtn.addEventListener('click', () => {
+          this.playMelody();
+        });
+
+        this.stopMelodyBtn.addEventListener('click', () => {
+          this.stopMelody();
+        });
+      }
+
+      playMelody() {
+        if (this.instrument.isMelodyPlaying()) return;
+
+        const bpm = parseFloat(this.bpmSlider.value);
+        const decay = parseFloat(this.decaySlider.value);
+        const gain = parseFloat(this.gainSlider.value);
+
+        // Update instrument params
+        this.instrument.setDecay(decay);
+        this.instrument.setGain(gain);
+
+        // Update UI
+        this.playMelodyBtn.disabled = true;
+        this.stopMelodyBtn.disabled = false;
+
+        // Play the melody with callback for when it finishes
+        this.instrument.playMelody(this.defaultMelody, bpm, () => {
+          this.onMelodyComplete();
+        });
+      }
+
+      stopMelody() {
+        this.instrument.stopMelody();
+        this.onMelodyComplete();
+      }
+
+      onMelodyComplete() {
+        this.playMelodyBtn.disabled = false;
+        this.stopMelodyBtn.disabled = true;
+        
+        // Stop Transport if no other scheduled events exist
+        // (only stop if our events are the only ones)
+        if (Tone.Transport.state === 'started') {
+          // Check if Transport has any other scheduled events
+          // We can safely stop it since we manage all events
+          Tone.Transport.stop();
+          Tone.Transport.cancel(); // Clear all scheduled events
+        }
+      }
+
+      resumeAudioOnInteraction() {
+        const resume = () => {
+          if (Tone.context.state === 'suspended') {
+            Tone.context.resume();
+          }
+        };
+        document.addEventListener('click', resume, { once: false });
+        document.addEventListener('touchstart', resume, { once: false });
+        document.addEventListener('keydown', resume, { once: false });
+      }
+    }
+
+    // --------------------------------------------------------------
+    // 3. INSTANTIATE & START
+    // --------------------------------------------------------------
+    const lute = new ChiptuneLute({ decay: 0.45, gain: 0.55 });
+    const gui = new LuteGUI(lute);
+
+    // Clean up on page unload
+    window.addEventListener('beforeunload', () => {
+      Tone.Transport.stop();
+      Tone.Transport.cancel();
+      lute.dispose();
+    });
+
+  })();
+</script>
+</body>
+</html>
