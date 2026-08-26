@@ -119,6 +119,97 @@ function bard_game_init() {
 
   g_lute = lute;
 
+
+  let ui_id_enable_list = [
+    'ui_example',
+    'ui_ok',
+    'ui_ex1_1', 'ui_ex1_2', 'ui_ex1_3',
+    'ui_ex1_4', 'ui_ex1_5', 'ui_ex1_6'
+  ];
+
+  for (let i=0; i<ui_id_enable_list.length; i++) {
+    let _id = ui_id_enable_list[i];
+    let ele = document.getElementById(_id);
+    ele.style.pointerEvents = 'auto';
+    ele.style.opacity = 1.0;
+  }
+
+}
+
+function bard_note2tune_note(bard_note) {
+
+  let dur_map = {
+    "o": 1, "*": 0.5, "+": 0.25, ":":0.125, ".":1/16
+  };
+
+  let note_map = {
+    "c": "C", "u": "C#", "d": "D", "v": "D#",
+    "e": "E",
+    "f": "F", "w": "F#", "g": "G", "x": "G#", "a": "A", "y": "A#",
+    "b": "B",
+    "z": "z"
+  };
+
+  if (bard_note == 'z') {
+    return { "note": "z", "duration": 0.25 };
+  }
+
+
+  let _dur = dur_map[ bard_note[0] ];
+  let _basenote  = note_map[ bard_note[1] ];
+  let _octave  = ((bard_note.length == 3) ? bard_note[2] : "");
+
+  let _note = _basenote + _octave;
+
+  return { "note":_note, "duration":_dur };
+}
+
+function melody2tune(M) {
+
+  let _tune = [];
+
+  for (let measure_idx=0; measure_idx<M.length; measure_idx++) {
+    for (let pos_idx=0; pos_idx<M[measure_idx].length; pos_idx++) {
+      _tune.push( bard_note2tune_note( M[measure_idx][pos_idx] ) );
+    }
+  }
+
+  return _tune;
+}
+
+function bard_game_btn_ok(_name) {
+  let ele = document.getElementById("ui_text");
+
+  let s = ele.value;
+
+  let M = s2melody(s);
+
+  let _tune = melody2tune(M);
+
+  slop_lute_stop_melody( g_lute );
+  slop_lute_start_melody( g_lute, _tune, 30 );
+}
+
+function bard_game_btn_sol(_name) {
+  console.log(">>", _name);
+
+  let example_sol = {};
+  example_sol["ex1.1"] = ex1_1_example_solution();
+  example_sol["ex1.2"] = ex1_2_example_solution();
+  example_sol["ex1.3"] = ex1_3_example_solution();
+  example_sol["ex1.4"] = ex1_4_example_solution();
+  example_sol["ex1.5"] = ex1_5_example_solution();
+  example_sol["ex1.6"] = ex1_6_example_solution();
+
+  if (_name in example_sol) {
+    let ele = document.getElementById("ui_text");
+    ele.value = example_sol[_name];
+  }
+
+}
+
+function bard_game_test_tune() {
+  slop_lute_start_melody(g_lute, furElise);
 }
 
 function __bard_game_init() {

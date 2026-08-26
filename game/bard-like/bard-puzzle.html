@@ -21,7 +21,27 @@
 
   <div class='container'>
 
-    <a class='button' onclick='bard_game_init()'>init</a>
+    <a id='ui_init' class='button' onclick='bard_game_init()'>init</a>
+    <a id='ui_example' class='button' onclick='bard_game_test_tune()' style='pointer-events:none; opacity:0.5;'>furElise</a>
+
+  </div>
+
+  <div class='container'>
+
+    <textarea id='ui_text' class='u-full-width'></textarea>
+    <br>
+    <a id='ui_ok' class='button' onclick='bard_game_btn_ok()' style='pointer-events:none; opacity:0.5;'>ok</a>
+
+  </div>
+
+  <div class='container'>
+    <a id='ui_ex1_1' style='pointer-events:none; opacity:0.5;' class='button' onclick="bard_game_btn_sol('ex1.1')">ex1.1.sol</a>
+    <a id='ui_ex1_2' style='pointer-events:none; opacity:0.5;' class='button' onclick="bard_game_btn_sol('ex1.2')">ex1.2.sol</a>
+    <a id='ui_ex1_3' style='pointer-events:none; opacity:0.5;' class='button' onclick="bard_game_btn_sol('ex1.3')">ex1.3.sol</a>
+    <a id='ui_ex1_4' style='pointer-events:none; opacity:0.5;' class='button' onclick="bard_game_btn_sol('ex1.4')">ex1.4.sol</a>
+    <a id='ui_ex1_5' style='pointer-events:none; opacity:0.5;' class='button' onclick="bard_game_btn_sol('ex1.5')">ex1.5.sol</a>
+    <a id='ui_ex1_6' style='pointer-events:none; opacity:0.5;' class='button' onclick="bard_game_btn_sol('ex1.6')">ex1.6.sol</a>
+
   </div>
 
 </body>

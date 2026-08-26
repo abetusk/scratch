@@ -310,6 +310,7 @@
           const note = item.note;
           const duration = (item.duration * 60 / bpm) || 0.5;
 
+          if (note != 'z') {
           const event = Tone.Transport.schedule((time) => {
             if (!this._isMelodyPlaying) return;
 
@@ -349,6 +350,8 @@
           }, totalBeats);
 
           events.push(event);
+          }
+
           totalBeats += duration;
         });
 
