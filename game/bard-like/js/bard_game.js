@@ -186,8 +186,10 @@ function bard_game_btn_ok(_name) {
 
   let _tune = melody2tune(M);
 
+  let bpm = 60;
+
   slop_lute_stop_melody( g_lute );
-  slop_lute_start_melody( g_lute, _tune, 30 );
+  slop_lute_start_melody( g_lute, _tune, bpm);
 }
 
 function bard_game_btn_sol(_name) {
@@ -209,7 +211,7 @@ function bard_game_btn_sol(_name) {
 }
 
 function bard_game_test_tune() {
-  slop_lute_start_melody(g_lute, furElise);
+  slop_lute_start_melody(g_lute, furElise, 80);
 }
 
 function __bard_game_init() {
