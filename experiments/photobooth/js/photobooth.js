@@ -29,54 +29,33 @@ function sendPing() {
 
 
 function pic_feed() {
-  let data = g_ctx.canvas.toDataURL('image/png');
 
-  console.log( data );
+  let vid = g_ctx.vid;
 
-  g_ws.send( JSON.stringify({ "type": "png", "data": data }) );
+  g_ctx.canvas.width = vid.videoWidth;
+  g_ctx.canvas.height = vid.videoHeight;
+
+  let w = g_ctx.canvas.width;
+  let h = g_ctx.canvas.height;
+
+  g_ctx.ctx.drawImage(vid, 0, 0, w,h);
 
 
-  //setTimeout( pic_feed, 1000 );
+  g_ctx.ctx.canvas.toBlob( function(_b) {
+
+    //let url = URL.createObjectURL(_b);
+    let data = g_ctx.canvas.toDataURL('image/png');
+
+    //console.log(">>>", _b);
+
+    //let _img = document.createElement("img");
+    //_img.src = url;
+
+    g_ws.send( JSON.stringify({ "type": "png", "data": data }) );
+
+  });
+  setTimeout( pic_feed, 1000 );
 }
-
-
-/*
-
-//const socket = io("http://192.168.0.1:3000");
-//const socket = io("http://localhost:3000");
-const socket = io("http://localhost:8182");
-//const socket = io("http://127.0.0.1:3000");
-
-socket.on("connect_error", (err) => {
-  console.log("err", err.message);
-});
-
-socket.on("connection", () => {
-  console.log("connection?");
-  //log("Connected to server");
-});
-
-socket.on("connect", () => {
-  console.log("connect?");
-  //log("Connected to server");
-});
-
-socket.on("msg", data => {
-  log("Server: " + data);
-});
-
-function send() {
-  const t = document.getElementById("text").value;
-  socket.emit("msg", t);
-  log("Client: " + t);
-}
-
-function log(msg) {
-  const div = document.getElementById("log");
-  div.innerHTML += msg + "<br>";
-}
-*/
-
 
 //----
 //----
@@ -205,6 +184,11 @@ function init() {
   let ctx = canvas.getContext('2d');
   let vid = document.getElementById('ui_camera');
 
+  // hidden image for base64 conversion.
+  // hide from ui...
+  //
+  canvas.style["display"] = 'none';
+
 
   g_ctx.ctx = ctx;
   g_ctx.canvas = canvas;
@@ -276,10 +260,6 @@ function photo_snap() {
   g_ctx.ctx.canvas.toBlob( function(_b) {
 
     let url = URL.createObjectURL(_b);
-
-    let _img = document.createElement("img");
-    _img.src = url;
-
 
     let _user = "anonymous";
     let _pwhash = "xxxx";

@@ -53,11 +53,11 @@ srv.on('connection', (conn) => {
 
       // don't send back to original
       //
-      if (_to_conn == conn) { console.log("!!!"); }
+      if (_to_conn == conn) { } //console.log("!!!"); }
       else {
-        console.log(".._", conn_id, "_>",
-          g_ctx.conn_info[conn_id].id, 
-          g_ctx.conn_info[conn_id].type, JSON.stringify(snd_msg) );
+        //console.log(".._", conn_id, "_>",
+        //  g_ctx.conn_info[conn_id].id, 
+        //  g_ctx.conn_info[conn_id].type, JSON.stringify(snd_msg) );
 
         _to_conn.send( JSON.stringify(snd_msg) );
       }

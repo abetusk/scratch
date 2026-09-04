@@ -19,7 +19,12 @@ function _connect() {
       g_ctx.png = _from_msg.data;
 
       let ele = document.getElementById("ui_img");
-      ele.src = _from_msg.data;
+
+      //console.log("???", ele, _from_msg.data);
+
+
+
+      ele.src = _from_msg.data.toString();
     }
   };
 
