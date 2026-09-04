@@ -6,6 +6,42 @@ var g_ctx = {
 };
 
 
+var g_ws = new WebSocket('ws://localhost:8080');
+
+g_ws.onopen = function() { console.log('Connected to server'); }
+
+g_ws.onmessage = function(event) {
+  document.getElementById('ui_log').innerText = event.data;
+
+  var msg = JSON.parse(event.data);
+  console.log( msg );
+
+  if (msg.data == "click") {
+    console.log("SNAP");
+    photo_snap();
+  }
+
+};
+
+function sendPing() {
+  g_ws.send( JSON.stringify({"type": "text", "data":'Hello from client!'}) );
+}
+
+
+function pic_feed() {
+  let data = g_ctx.canvas.toDataURL('image/png');
+
+  console.log( data );
+
+  g_ws.send( JSON.stringify({ "type": "png", "data": data }) );
+
+
+  //setTimeout( pic_feed, 1000 );
+}
+
+
+/*
+
 //const socket = io("http://192.168.0.1:3000");
 //const socket = io("http://localhost:3000");
 const socket = io("http://localhost:8182");
@@ -39,6 +75,7 @@ function log(msg) {
   const div = document.getElementById("log");
   div.innerHTML += msg + "<br>";
 }
+*/
 
 
 //----
@@ -237,10 +274,12 @@ function photo_snap() {
 
 
   g_ctx.ctx.canvas.toBlob( function(_b) {
-    let _img = document.createElement("img");
+
     let url = URL.createObjectURL(_b);
 
+    let _img = document.createElement("img");
     _img.src = url;
+
 
     let _user = "anonymous";
     let _pwhash = "xxxx";

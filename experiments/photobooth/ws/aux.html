@@ -5,14 +5,18 @@
 </head>
 <body>
   <h2>WebSocket Live Test (aux)</h2>
-  <button onclick="send_msg()">Send Message</button>
+  <button onclick="send_msg('test')">test</button>
+  <button onclick="send_msg('click')">click</button>
   <p id="log"></p>
 
   <script>
     var dt_reconnect_attempt = 1000;
 
+    var g_ws = {};
+
     function _connect() {
       const ws = new WebSocket('ws://localhost:8080');
+      g_ws = ws;
       
       ws.onopen = function() { console.log('Connected to server'); }
       ws.onmessage = function(event) {
@@ -28,10 +32,10 @@
         }, dt_reconnect_attempt);
       };
 
-      function send_msg() {
-        ws.send( JSON.stringify({"message": "ok", "id": 0, "type": "click" }) );
-      }
+    }
 
+    function send_msg(v) {
+      g_ws.send( JSON.stringify({"message": "ok...", "id": 1, "type": v }) );
     }
 
     _connect();

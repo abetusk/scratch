@@ -5,6 +5,27 @@ app for fast scanning of photos.
 
 **Note: when installing anywhere but local, make sure appropriate permissions are setup and auth files are secured**
 
+| File | Description |
+|---|---|
+| `index.html` | Client web application (device that has camera, e.g. smartphone) |
+| `photobooth.js` | Client js app |
+| `ul.cgi` | Server side cgi (python) script that uploads files to `img/` and `manifest/` directories |
+| `desktop_manager.html` | Desktop manager |
+| `comm_server.js` | Websocket server to pass messages from desktop manager to photobooth client |
+
+Quick Start
+---
+
+```
+mkdir -p /tmp/manifest /tmp/img
+./photobooth_srv.sh >> log/pb.log &
+node comm_server.js >> log/cs.log &
+```
+
+
+CRUFT
+===
+
 Quick Start
 ---
 
