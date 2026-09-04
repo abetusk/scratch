@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Photobooth Desktop Manager</title>
+
+<script type='text/javascript' src='js/photobooth_desktop_manager.js'></script>
+
+</head>
+<body>
+  <h2>WebSocket Live Test (aux)</h2>
+  <button onclick="send_msg('test')">test</button>
+  <button onclick="send_msg('click')">click</button>
+
+
+  <p id="log"></p>
+  <!-- <a style='display:hidden' id='ui_png'><img id='ui_img'></img></a> -->
+  <img id='ui_img'></img>
+
+  <script>
+    init();
+    /*
+    var dt_reconnect_attempt = 1000;
+
+    var g_ws = {};
+
+    function _connect() {
+      const ws = new WebSocket('ws://localhost:8080');
+      g_ws = ws;
+      
+      ws.onopen = function() { console.log('Connected to server'); }
+      ws.onmessage = function(event) {
+        document.getElementById('log').innerText = event.data;
+        let _from_msg = JSON.parse(event.data);
+        if (_from_msg.type == 'png') {
+
+        }
+      };
+
+      ws.onclose = function(ev) {
+        console.log("connection lost... will retry");
+
+        setTimeout( () => {
+          console.log("attempting...");
+          _connect();
+        }, dt_reconnect_attempt);
+      };
+
+    }
+
+    function send_msg(v) {
+      //g_ws.send( JSON.stringify({"message": "ok...", "id": 1, "type": v }) );
+      g_ws.send( JSON.stringify({"data": "ok...", "id": 1, "type": v }) );
+    }
+
+    _connect();
+   */
+  </script>
+</body>
+</html>
