@@ -2,31 +2,27 @@
 var g_ctx = {
   "ctx": null,
   "canvas": null,
-  "btn": null
+  "btn": null,
+
+  "feed_state": "init"
 };
 
 
-var g_ws = new WebSocket('ws://localhost:8080');
+var HOST_ADDR = "localhost";
+var HOST_ADDR = "192.168.1.7";
+
+var g_ws = new WebSocket("wss://" + HOST_ADDR + ":8080");
 
 g_ws.onopen = function() { console.log('Connected to server'); }
-
 g_ws.onmessage = function(event) {
   document.getElementById('ui_log').innerText = event.data;
-
   var msg = JSON.parse(event.data);
-  console.log( msg );
-
   if (msg.data == "click") {
-    console.log("SNAP");
     photo_snap();
   }
-
 };
 
-function sendPing() {
-  g_ws.send( JSON.stringify({"type": "text", "data":'Hello from client!'}) );
-}
-
+//function sendPing() { g_ws.send( JSON.stringify({"type": "text", "data":'Hello from client!'}) ); }
 
 function pic_feed() {
 
@@ -42,20 +38,57 @@ function pic_feed() {
 
 
   g_ctx.ctx.canvas.toBlob( function(_b) {
-
-    //let url = URL.createObjectURL(_b);
     let data = g_ctx.canvas.toDataURL('image/png');
-
-    //console.log(">>>", _b);
-
-    //let _img = document.createElement("img");
-    //_img.src = url;
-
     g_ws.send( JSON.stringify({ "type": "png", "data": data }) );
 
   });
-  setTimeout( pic_feed, 1000 );
+
+  if (g_ctx.feed_state == "on") {
+    setTimeout( pic_feed, 1000 );
+  }
 }
+
+function photo_snap() {
+  let vid = g_ctx.vid;
+
+  g_ctx.canvas.width = vid.videoWidth;
+  g_ctx.canvas.height = vid.videoHeight;
+
+  let w = g_ctx.canvas.width;
+  let h = g_ctx.canvas.height;
+
+  g_ctx.ctx.drawImage(vid, 0, 0, w,h);
+
+  g_ctx.ctx.canvas.toBlob( function(_b) {
+
+    let url = URL.createObjectURL(_b);
+
+    let _user = "anonymous";
+    let _pwhash = "xxxx";
+
+    //var info = document.getElementById("fileInfo").value;
+
+    var formData = new FormData();
+    formData.append( "fileData", _b );
+    //formData.append( "username", _user );
+    //formData.append( "passhash", _pwhash );
+
+    //var uri = "ul.cgi";
+    var uri = "cgi-bin/ul.cgi";
+    //var uri = "cgi-bin/ul.py";
+    var xhr = new XMLHttpRequest();
+    xhr.upload.addEventListener("progress", uploadProgress, false );
+    xhr.addEventListener("load", uploadComplete, false );
+    xhr.addEventListener("error", uploadError, false );
+    xhr.addEventListener("abort", uploadAbort, false );
+
+    xhr.open( "POST", uri );
+    xhr.send( formData );
+  });
+
+}
+
+
 
 //----
 //----
@@ -134,13 +167,18 @@ function update_cookie_credential() {
 function _stream_func(s) {
   let video = document.getElementById("ui_camera");
   video.srcObject = s;
+
+  if (g_ctx.feed_state == "init") {
+    g_ctx.feed_state = "on";
+    pic_feed();
+  }
 }
 
 function _stream_err(e) {
   console.log("stream error:", e);
 
   let err_ele = document.getElementById("ui_error_message");
-  err_ele.innerHTML = e;
+  err_ele.innerHTML = "err:" + e.toString();
 }
 
 function init() {
@@ -150,22 +188,31 @@ function init() {
   let _desktop = false;
 
   let err_ele = document.getElementById("ui_error_message");
-  err_ele.innerHTML = "cp.0:" + JSON.stringify(navigator);
-
+  err_ele.innerHTML = "cp.5:" + JSON.stringify(navigator);
+  err_ele.innerHTML += JSON.stringify(navigator.userAgent);
 
   if (_desktop) {
+    err_ele.innerHTML += "a";
+
     navigator.mediaDevices.getUserMedia({"video": true})
       .then(_stream_func)
       .catch(_stream_err);
+
+    err_ele.innerHTML += "A!";
+
   }
   else {
+    err_ele.innerHTML += "b";
+
+    try {
+
     let _u = navigator.mediaDevices.getUserMedia({
       "video": {
         //"width": {"ideal":4096 },
-	//"height":{"ideal": 2160 },
-	//"height":{"ideal": 4096 },
-	//"height":{"ideal": 2160 },
-	"height":{"ideal": 3840 },
+        //"height":{"ideal": 2160 },
+        //"height":{"ideal": 4096 },
+        //"height":{"ideal": 2160 },
+        "height":{"ideal": 3840 },
         "facingMode":"environment"
       },
       "audio":false
@@ -173,8 +220,13 @@ function init() {
       .then(_stream_func)
       .catch(_stream_err);
 
-  let err_ele = document.getElementById("ui_error_message");
-  err_ele.innerHTML = _u;
+    } catch (_e) {
+      err_ele.innerHTML += "error:" + _e.toString();
+    }
+    //let err_ele = document.getElementById("ui_error_message");
+    //err_ele.innerHTML = _u;
+
+    err_ele.innerHTML += "B!";
 
   }
 
@@ -197,9 +249,6 @@ function init() {
 
   btn.addEventListener('click', photo_snap);
   vid.addEventListener('click', photo_snap);
-
-  //btn_dl.addEventListener('click', photo_download);
-
 }
 
 function uploadComplete(x) {
@@ -244,47 +293,6 @@ function uploadProgress() {
   console.log("upload progress");
 }
 
-
-function photo_snap() {
-  let vid = g_ctx.vid;
-
-  g_ctx.canvas.width = vid.videoWidth;
-  g_ctx.canvas.height = vid.videoHeight;
-
-  let w = g_ctx.canvas.width;
-  let h = g_ctx.canvas.height;
-
-  g_ctx.ctx.drawImage(vid, 0, 0, w,h);
-
-
-  g_ctx.ctx.canvas.toBlob( function(_b) {
-
-    let url = URL.createObjectURL(_b);
-
-    let _user = "anonymous";
-    let _pwhash = "xxxx";
-
-    //var info = document.getElementById("fileInfo").value;
-
-    var formData = new FormData();
-    formData.append( "fileData", _b );
-    //formData.append( "username", _user );
-    //formData.append( "passhash", _pwhash );
-
-    //var uri = "ul.cgi";
-    var uri = "cgi-bin/ul.cgi";
-    //var uri = "cgi-bin/ul.py";
-    var xhr = new XMLHttpRequest();
-    xhr.upload.addEventListener("progress", uploadProgress, false );
-    xhr.addEventListener("load", uploadComplete, false );
-    xhr.addEventListener("error", uploadError, false );
-    xhr.addEventListener("abort", uploadAbort, false );
-
-    xhr.open( "POST", uri );
-    xhr.send( formData );
-  });
-
-}
 
 function photo_download() {
   let dl_link;

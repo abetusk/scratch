@@ -1,6 +1,28 @@
 Photobooth
 ===
 
+Debug Log (temporary)
+---
+
+###### 2026-09-04
+
+wss connection from mobile isn't working. I suspect it's because wss (secure connection) is needed
+when doing https.
+The websocket server needs to be able to serve a connection, so will need to point to pub/priv keys.
+
+```
+var wss = new ws.WebSocketServer({
+  port: 8080,
+  cert: fs.readFileSync('./path/to/cert.pem'),
+  key: fs.readFileSync('./path/to/key.pem')
+});
+```
+
+
+
+Introduction
+---
+
 app for fast scanning of photos.
 
 **Note: when installing anywhere but local, make sure appropriate permissions are setup and auth files are secured**
@@ -22,6 +44,11 @@ mkdir -p /tmp/manifest /tmp/img
 node comm_server.js >> log/cs.log &
 ```
 
+Mobile browsers have restrictive policies about who can access the camera, so the `navigator.mediaDevices`
+is only defined when accessing the site securly.
+
+I'm not sure there's an easy way to get `http.server` to go through securly, so I've opted for a simpler
+path of just installing apache on my local system and using that.
 
 CRUFT
 ===

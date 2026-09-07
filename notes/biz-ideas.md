@@ -78,6 +78,13 @@ A 'print-on-demand' service could be provided that offers pre-cut paper that can
 | difficulty | medium |
 | target audience | hobbyists wanting to make papercraft models |
 
+### Alternatives
+
+* [osresearch/papercraft](https://github.com/osresearch/papercraft)
+* [rodrigorc/papercraft](https://github.com/rodrigorc/papercraft)
+
+
+
 Music Similarity Recommendation
 ---
 
@@ -88,6 +95,17 @@ Investigation has to be done to see if this is at all a viable strategy.
 One potential idea is to do melody tempo matching.
 Another is to compare just the drum tracks.
 Something like Spleeter could be used to help further refine the search.
+
+### Discussion
+
+I think with modern AI, both in terms of music generation and LLMs, this is
+a product whose utility is quickly vanishing.
+
+The assumption was that there was a proliferation of music that was undiscovered
+but in line with people's musical taste.
+Whether that was true or not, and I suspect it was close to not being true,
+it's clear to me that music generation, taylored to personal taste, will overtake
+any service that offers recommendations.
 
 | | |
 |---|---|
