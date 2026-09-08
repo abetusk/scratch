@@ -25,8 +25,12 @@ Regenerate the snake oil certs as necessary (`gen-self-signed.sh`).
 
 One of the reasons the latency is so high is because the preview image is massive.
 
-Zooming out on the desktop manager means the button is small, so we need to figure out what to do about that.
 
+TODO:
+
+* Allow for tags and text that will be stored in manifest
+* give feedback when picture is taken
+* figure out how to grab the files in `/tmp` somewhere more permanent
 
 
 
