@@ -4,6 +4,32 @@ Photobooth
 Debug Log (temporary)
 ---
 
+###### 2026-09-07
+
+Latency is pretty bad but it does look to be working.
+
+as a review:
+
+* copy all html and js files to system directory for web server
+* run the communication server: `node comm_server.js`
+* make sure `/tmp/manifest` and `/tmp/img` are created and accessible
+* point all browsers to `https://192.168.1.7:8080` and allow the self signed certificate
+  - this is *both* the mobile browser and the desktop manager
+* mobile to `https://192.168.1.7`
+* desktop to `https://192.168.1.7/desktop_manager.html`
+
+If there's any doubt, run `node comm_cli_test.js` to make sure the websocket communication server is running.
+Regenerate the snake oil certs as necessary (`gen-self-signed.sh`).
+
+---
+
+One of the reasons the latency is so high is because the preview image is massive.
+
+Zooming out on the desktop manager means the button is small, so we need to figure out what to do about that.
+
+
+
+
 ###### 2026-09-04
 
 wss connection from mobile isn't working. I suspect it's because wss (secure connection) is needed
@@ -20,6 +46,8 @@ var wss = new ws.WebSocketServer({
 
 For self signed certs you have to go to the address from the browser (`https://<localhost>:8080`) and allow
 the self signed cert yourself.
+
+
 
 Introduction
 ---
