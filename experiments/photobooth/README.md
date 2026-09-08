@@ -18,7 +18,8 @@ var wss = new ws.WebSocketServer({
 });
 ```
 
-
+For self signed certs you have to go to the address from the browser (`https://<localhost>:8080`) and allow
+the self signed cert yourself.
 
 Introduction
 ---

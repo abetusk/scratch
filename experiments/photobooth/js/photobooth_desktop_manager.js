@@ -6,8 +6,12 @@ var g_ctx = {
 
 var g_ws = {};
 
+var URL = "192.168.1.7";
+
 function _connect() {
-  const ws = new WebSocket('ws://localhost:8080');
+  //const ws = new WebSocket('ws://localhost:8080');
+  //const ws = new WebSocket('wss://localhost:8080');
+  const ws = new WebSocket('wss://' + URL + ':8080');
   g_ws = ws;
   
   ws.onopen = function() { console.log('Connected to server'); }

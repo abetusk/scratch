@@ -1,5 +1,21 @@
 const ws = require('ws');
-const srv = new ws.Server({ port: 8080 });
+var https = require("https");
+var fs = require("fs");
+
+var https_srv = https.createServer({
+  "cert": fs.readFileSync("./ssl/ssl-cert-snakeoil.pem"),
+  "key": fs.readFileSync("./ssl/ssl-cert-snakeoil.key")
+  }, function(req,res) {
+    res.writeHead(200);
+    res.end("wss srv running\n");
+  });
+
+
+
+//const srv = new ws.Server({ "port": 8080 });
+const srv = new ws.WebSocketServer({ "server": https_srv });
+
+//console.log(srv);
 
 var g_ctx = {
   "conn_info": {},
@@ -13,6 +29,8 @@ srv.on('connection', (conn) => {
   g_ctx.conn_info[ g_ctx.conn_id.toString() ] = {
     "id": g_ctx.conn_id,
     "conn": conn,
+    "cert": fs.readFileSync("./ssl/ssl-cert-snakeoil.pem"),
+    "key": fs.readFileSync("./ssl/ssl-cert-snakeoil.key"),
     "type": "client"
   };
   g_ctx.conn_id++;
@@ -82,4 +100,6 @@ srv.on('connection', (conn) => {
   });
 });
 
-console.log('Server running on ws://localhost:8080');
+https_srv.listen(8080, function() { console.log("wss://locahost:8080/ running"); });
+
+//console.log('Server running on localhost:8080');
