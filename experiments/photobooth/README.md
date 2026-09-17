@@ -4,6 +4,14 @@ Photobooth
 Debug Log (temporary)
 ---
 
+###### 2026-09-17
+
+* There should be two main items, wiki entries, representing
+  ideas, tags, dates, events, etc. and images
+  - wiki entries can have different images
+  - images have different tags associated with them
+* family trunk default wiki where all pictures go
+
 ###### 2026-09-07
 
 Latency is pretty bad but it does look to be working.

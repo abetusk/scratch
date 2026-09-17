@@ -5,12 +5,14 @@
 
 import re
 import cgi
-import cgitb
+#import cgitb
 import sys
 import json
 import uuid
 import subprocess as sp
 import os
+from urllib.parse import parse_qs
+
 
 from datetime import datetime, timezone
 
@@ -29,7 +31,7 @@ debug_print_file("foobar\n")
 #do_auth = False
 do_auth = True
 
-cgitb.enable();
+#cgitb.enable();
 
 u_id = -1
 
@@ -75,6 +77,7 @@ if do_auth:
 ## DEBUGGING!!
 ## DEBUGGING!!
 
+#qs = os.environ.get("QUERY_STRING", "")
 form = cgi.FieldStorage()
 if auth:
   if "fileData" in form:
