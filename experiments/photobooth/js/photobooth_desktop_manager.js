@@ -19,15 +19,13 @@ function _connect() {
     document.getElementById('log').innerText = event.data.slice(0,32) + "..." + event.data.slice(-1);
     let _from_msg = JSON.parse(event.data);
     if (_from_msg.type == 'png') {
-
       g_ctx.png = _from_msg.data;
-
       let ele = document.getElementById("ui_img");
-
-      //console.log("???", ele, _from_msg.data);
-
-
-
+      ele.src = _from_msg.data.toString();
+    }
+    else if (_from_msg.type == "jpeg") {
+      g_ctx.png = _from_msg.data;
+      let ele = document.getElementById("ui_img");
       ele.src = _from_msg.data.toString();
     }
   };

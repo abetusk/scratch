@@ -65,6 +65,10 @@ srv.on('connection', (conn) => {
         snd_msg.type = "png";
         snd_msg.data = _msg_json.data
       }
+      else if (_msg_json.type == "jpeg") {
+        snd_msg.type = "jpeg";
+        snd_msg.data = _msg_json.data
+      }
 
 
 

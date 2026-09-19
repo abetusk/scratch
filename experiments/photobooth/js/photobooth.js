@@ -38,8 +38,16 @@ function pic_feed() {
 
 
   g_ctx.ctx.canvas.toBlob( function(_b) {
-    let data = g_ctx.canvas.toDataURL('image/png');
-    g_ws.send( JSON.stringify({ "type": "png", "data": data }) );
+    //let data_png = g_ctx.canvas.toDataURL('image/png');
+    //let data_jpg = g_ctx.canvas.toDataURL("image/jpeg", 1.0);
+    //let data_jpg0_5 = g_ctx.canvas.toDataURL("image/jpeg", 0.5);
+    let data_jpg0_1 = g_ctx.canvas.toDataURL("image/jpeg", 0.1);
+
+    //console.log(">>>", data_png.length, data_jpg.length, data_jpg0_1.length);
+    //let data = data_png;
+
+    //g_ws.send( JSON.stringify({ "type": "png", "data": data }) );
+    g_ws.send( JSON.stringify({ "type": "jpeg", "data": data_jpg0_1 }) );
 
   });
 
