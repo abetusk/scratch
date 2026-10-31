@@ -83,9 +83,50 @@
   - plot twist could be poor friend knows of the artifact and is trying to destroy it
     + bullet/whatever from outside the influence radius
   - ending could be shattered artifacts causing littler mayhem from shattered pieces
-    
-  
-  
+* saints of everyday things
+  - inspired by "the patron saint of roadkill"
+  - post singularity, humans are waning, live on basic income but otherwise lead a meaningless existence
+  - some humans are grown on communes, away from technology
+  - one such commune has collapsed and is taken over by the singularity state
+  - one young adult, with neurodivergence issues (ocd, etc.) is given a choice to cure
+    neurodivergence or to work for ecclectic AIs that want to pay homage to their creators
+    by hiring neurodivergent humans to perform rituals ("shaman" class)
+    + AIs can't induce neurodivergence becuase that would be unethical
+    + so take humans from similar communes and give them free choice
+  - young adult accepts and does weird, esoteric shamanistic rituals that are filtered
+    through the AIs intricate but skewed vision of what such rituals might look like
+    + burial rights for roadkill
+    + blessing food grains for zoo animals
+    + washing dishes in simulated rivers to remain kosher for simulated dinner guests
+    + etc.
+* swords and circuits
+  - post singularity human society lives in isolation from singularity AIs
+    + commune to be left alone by AIs out of respect
+    + commune effectively knows about AIs outside but state is controlled by humans
+      and is strict about keeping it's redicency in the dark and enclosed in the commune
+  - black market gang (or corrupt ruling class?) have illegally and unethically made
+    copies of AIs for their personal use
+    + copies made when AIs visited, so unbeknownst to original AIs copied from (they wouldn't be happy)
+    + have crippled the AIs so they can't communicate offworld
+    + bind AIs to objects (swords, books, scrying devices, etc.)
+  - one such sword-AI, long thought lost in an ancient battle, bound to an ancient warrior ruler,
+    has been recently uncovered
+  - sword-AI is damaged but slowly coming back online
+  - enlists the help of a random person, a young adult
+  - sword-AI goes on various missions to get repaired and, eventually, un-nerf itself
+  - along the way, encounters other bound-AIs and their masters that try to stop, destroy
+    or capture the sword-AI
+  - culmination of communication established and broader AI singularity civizliation brought
+    to realization that human commune has broken treaty
+  - bound AIs are few (maybe less than a dozen) and tightly controlled
+    + different bound AIs have different powers
+      * immortality to keep masters perpetually alive
+      * communication and information processing (whispers, mind reading, scrying)
+      * power/electricity (fusion, solar, oil, etc.)
+      * ...
+    + masters of bound AIs are in perpetual uneasy alliance as they all need each other
+      to rule and not rat each other out but also want power within society
+
 ---
 
 * washed out T1000 like robot just hanging out, getting high, spare changing, etc.
