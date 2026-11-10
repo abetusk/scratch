@@ -32,7 +32,12 @@ bool stableState = HIGH;
 bool lastRaw     = HIGH;
 uint32_t lastChangeUs = 0;
 
+bool debug_led_state = HIGH;
+
 void sendPulse() {
+  digitalWrite(LED_BUILTIN_RX, debug_led_state);
+  debug_led_state = !debug_led_state;
+
   midiEventPacket_t on  = {0x09, uint8_t(0x90 | MIDI_CH), NOTE, 127};
   midiEventPacket_t off = {0x08, uint8_t(0x80 | MIDI_CH), NOTE, 0};
   MidiUSB.sendMIDI(on);
@@ -42,6 +47,7 @@ void sendPulse() {
 
 void setup() {
   pinMode(SENSOR_PIN, INPUT_PULLUP);
+  pinMode(LED_BUILTIN_RX, OUTPUT);
 }
 
 void loop() {

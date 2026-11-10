@@ -8,3 +8,8 @@ sudo usermod -aG dialout $USER     # re-login afterwards
 arduino-cli board list                     # find the port, usually /dev/ttyACM0
 arduino-cli compile --fqbn arduino:avr:leonardo BikeMidi
 arduino-cli upload  --fqbn arduino:avr:leonardo -p /dev/ttyACM0 BikeMidi
+
+
+
+aseqdump -l | grep -i midi
+aseqdump -p 20:0
