@@ -21,6 +21,8 @@ Wiring (Pro Micro or Leonardo)
   capacitor from pin 7 to GND to reject noise. This adds about 1 ms of filtering,
   which doesn’t matter here.
 
+  LED_BUILTIN_RX toggles as hall sensor goes around
+  DEBOUNCE_US changed to 3000 to accomodate hall sensor (seems to work just fine)
 */
 
 const uint8_t  SENSOR_PIN  = 7;
