@@ -1,0 +1,99 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dragon preview</title>
+<style>
+  html, body { margin: 0; height: 100%; overflow: hidden; background: #bfe0e6; }
+  #info { position: fixed; left: 10px; bottom: 8px; font: 12px system-ui, sans-serif; color: #234; }
+</style>
+</head>
+<body>
+<div id="info">drag to orbit, wheel to zoom</div>
+<script src="../vendor/three.min.js"></script>
+<script src="../vendor/lil-gui.umd.min.js"></script>
+<script src="../vendor/three-addons/BufferGeometryUtils.js"></script>
+<script src="../vendor/three-addons/GLTFLoader.js"></script>
+<script src="../js/wingsync.js"></script>
+<script src="../js/models.js"></script>
+<script src="../js/dragon.js"></script>
+<script src="../js/models-gltf.js"></script>
+<script>
+(function() {
+  var S = { model: DR.Models.FALLBACK, rider: true, cadence: 120, turn: 0, speed: 20, spin: false, yaw: 0.7, pitch: 0.25, dist: 16, paused: false };
+  var renderer = new THREE.WebGLRenderer({ antialias: true }), scene = new THREE.Scene(),
+      camera = new THREE.PerspectiveCamera(45, 1, 0.1, 200);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  document.body.appendChild(renderer.domElement);
+  scene.background = new THREE.Color(0xbfe0e6);
+  scene.add(new THREE.HemisphereLight(0xfff4e0, 0x6a7a60, 1.6));
+  var sun = new THREE.DirectionalLight(0xfff0d8, 1.6);
+  sun.position.set(-0.5, 1, 0.35);
+  scene.add(sun);
+  var d = null;
+  function setModel(id) {
+    DR.Models.create(id, function(m) {
+      if (d) { scene.remove(d.root); }
+      d = m;
+      scene.add(d.root);
+      if (d.setRider) { d.setRider(S.rider); }
+      if (window.PREVIEW) { PREVIEW.dragon = d; }
+    });
+  }
+  setModel(S.model);
+  var ground = new THREE.Mesh(new THREE.CircleGeometry(12, 40).rotateX(-Math.PI / 2), new THREE.MeshLambertMaterial({ color: 0x8fb26a }));
+  ground.position.y = -3;
+  scene.add(ground);
+
+  var gui = new lil.GUI();
+  gui.add(S, "model", DR.Models.options()).onChange(setModel);
+  gui.add(S, "rider").name("show rider").onChange(function(v) { if (d.setRider) { d.setRider(v); } });
+  gui.add(S, "cadence", 0, 200, 1);
+  gui.add(S, "turn", -1, 1, 0.05);
+  gui.add(S, "speed", 0, 40, 1);
+  gui.add(S, "spin").name("turntable");
+  gui.add(S, "paused");
+
+  var drag = null;
+  renderer.domElement.addEventListener("pointerdown", function(e) { drag = [e.clientX, e.clientY]; });
+  window.addEventListener("pointerup", function() { drag = null; });
+  window.addEventListener("pointermove", function(e) {
+    if (!drag) { return; }
+    S.yaw   -= (e.clientX - drag[0]) * 0.01;
+    S.pitch  = Math.max(-1.2, Math.min(1.4, S.pitch + ((e.clientY - drag[1]) * 0.01)));
+    drag = [e.clientX, e.clientY];
+  });
+  renderer.domElement.addEventListener("wheel", function(e) { S.dist = Math.max(4, Math.min(60, S.dist * (1 + (e.deltaY * 0.001)))); });
+
+  function resize() {
+    renderer.setSize(innerWidth, innerHeight);
+    camera.aspect = innerWidth / innerHeight;
+    camera.updateProjectionMatrix();
+  }
+  window.addEventListener("resize", resize);
+  resize();
+
+  var clock = new THREE.Clock(), sinceStroke = 0;
+  function frame() {
+    requestAnimationFrame(frame);
+    var dt = ( S.paused ? 0 : Math.min(clock.getDelta(), 0.05) );
+    if (S.spin) { S.yaw += dt * 0.4; }
+    // Strokes at the cadence, as the game sends them on each pedal press.
+    //
+    if ( (S.cadence > 0) && d.stroke ) {
+      sinceStroke += dt;
+      if (sinceStroke >= (60 / S.cadence)) { sinceStroke = 0;  d.stroke(); }
+    }
+    d.animate(dt, S.cadence, S.turn, S.speed);
+    d.root.rotation.z = -S.turn * 0.55;
+    camera.position.set(Math.sin(S.yaw) * Math.cos(S.pitch) * S.dist, Math.sin(S.pitch) * S.dist + 0.5, Math.cos(S.yaw) * Math.cos(S.pitch) * S.dist);
+    camera.lookAt(0, 0.5, -0.5);
+    renderer.render(scene, camera);
+  }
+  frame();
+  window.PREVIEW = { S: S, dragon: d };
+})();
+</script>
+</body>
+</html>

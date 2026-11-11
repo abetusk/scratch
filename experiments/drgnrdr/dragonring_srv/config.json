@@ -1,0 +1,250 @@
+{
+  "format": "dragonride-config",
+  "version": 1,
+  "seed": 1,
+  "level": {
+    "length": 4000,
+    "wind": 50,
+    "floorHalf": 120,
+    "wallHeight": 36,
+    "cruise": 27.5,
+    "townCruise": 8,
+    "tunnelR": 11,
+    "hoopSpacing": 155,
+    "hoopR": 10.5,
+    "finishR": 11,
+    "streetClear": 15.5,
+    "townDensity": 0.45
+  },
+  "flight": {
+    "radius": 2.7,
+    "vMax": 36,
+    "cadFull": 150,
+    "spinUp": 1.4,
+    "coast": 3.5,
+    "turnRate": 1.5,
+    "pitchRate": 1.3,
+    "pitchMax": 0.8,
+    "loops": false,
+    "pitchLevel": 1.2,
+    "liftSpeed": 10,
+    "sinkMax": 5,
+    "follow": 5,
+    "bounce": 0.4,
+    "hitSlow": 0.6,
+    "scrape": 0.5,
+    "forceSpeed": 40,
+    "forceBoost": 8
+  },
+  "view": {
+    "model": "mattbas-dragon",
+    "showRider": false,
+    "camDist": 5,
+    "camHeight": 5,
+    "fov": 40,
+    "showSphere": false,
+    "invertPitch": false,
+    "showMidiStatus": false,
+    "showStageName": true
+  },
+  "sky": {
+    "preset": "puffs",
+    "coverage": 0.98,
+    "billow": 0.7,
+    "variety": 0.4,
+    "curl": 1,
+    "cirrus": 0.5,
+    "relief": 0.95,
+    "glow": 0,
+    "sunHeight": 60,
+    "sunAngle": 15,
+    "speed": 1,
+    "scale": 2.2,
+    "wind": 30,
+    "volumeRes": 0.35,
+    "fogScale": 1.95
+  },
+  "keys": {
+    "pedal": [
+      "ArrowUp",
+      "Space"
+    ],
+    "up": [
+      "KeyS"
+    ],
+    "down": [
+      "KeyW"
+    ],
+    "left": [
+      "KeyA",
+      "ArrowLeft"
+    ],
+    "right": [
+      "KeyD",
+      "ArrowRight"
+    ],
+    "fFwd": [
+      "KeyI"
+    ],
+    "fBack": [
+      "KeyK"
+    ],
+    "fLeft": [
+      "KeyJ"
+    ],
+    "fRight": [
+      "KeyL"
+    ],
+    "fUp": [
+      "KeyU"
+    ],
+    "fDown": [
+      "KeyO"
+    ],
+    "fBoost": [
+      "ShiftLeft",
+      "ShiftRight"
+    ],
+    "reset": [
+      "KeyR"
+    ],
+    "restart": [
+      "Enter"
+    ],
+    "pause": [
+      "KeyP",
+      "Escape"
+    ],
+    "fullscreen": [
+      "KeyF"
+    ]
+  },
+  "midi": {
+    "enabled": true,
+    "source": "auto",
+    "device": "",
+    "note": 60,
+    "channel": 1,
+    "strokesPerPulse": 2
+  },
+  "gamepad": {
+    "enabled": true,
+    "deadzone": 0.15,
+    "turnAxis": 0,
+    "climbAxis": 1,
+    "invertTurn": false,
+    "invertClimb": false,
+    "forceXAxis": 2,
+    "forceZAxis": 3,
+    "pedal": [
+      0,
+      7
+    ],
+    "forceUp": [
+      5
+    ],
+    "forceDown": [
+      4
+    ],
+    "forceBoost": [
+      6
+    ],
+    "reset": [
+      3
+    ],
+    "restart": [
+      9
+    ],
+    "pause": [
+      8
+    ],
+    "fullscreen": [
+      10
+    ]
+  },
+  "session": {
+    "minutes": 15,
+    "seed": 72445,
+    "newSeed": true,
+    "types": "town,canyon,highlands,caves,spires,basin,falls,mesa,ruins,bridges,hoodoos,river,sunken,slot,terraces,overhang,cemetery,dunes,forest,floating,temples,swamp,crater,roman,village,giants",
+    "palettes": true,
+    "bold": true,
+    "palette": -1,
+    "stageLength": 2400,
+    "width": 1,
+    "hoopSpacing": 70,
+    "hoopR": 7,
+    "wallHeight": 1,
+    "flyHeight": 1,
+    "heightVariety": 1,
+    "curve": 1,
+    "townDensity": 0.4,
+    "spires": 12
+  },
+  "psx": {
+    "enabled": true,
+    "height": 240,
+    "snap": 120,
+    "bits": 5,
+    "dither": 1,
+    "bloom": true,
+    "bloomStrength": 0.6,
+    "bloomThreshold": 0.88,
+    "bloomRadius": 3
+  },
+  "fx": {
+    "rain": {
+      "enabled": true,
+      "chance": 0.3,
+      "amount": 1,
+      "speed": 30,
+      "length": 1.2,
+      "wind": 0.15,
+      "opacity": 0.45,
+      "color": "#b8c8e0",
+      "splashes": 1,
+      "splashRange": 500
+    },
+    "lightning": {
+      "enabled": true,
+      "every": 15,
+      "bolts": 0.6,
+      "brightness": 1
+    },
+    "snow": {
+      "enabled": true,
+      "chance": 0.2,
+      "amount": 1,
+      "speed": 3,
+      "size": 0.09,
+      "sway": 1,
+      "color": "#ffffff"
+    },
+    "geysers": {
+      "enabled": true,
+      "perStage": 4,
+      "height": 30,
+      "period": 9,
+      "color": "#f2f6f8"
+    },
+    "vents": {
+      "enabled": true,
+      "perStage": 3,
+      "height": 40,
+      "glow": "#ff6a20",
+      "smoke": "#2a2624"
+    },
+    "birds": {
+      "enabled": true,
+      "flocks": 3,
+      "size": 0.9,
+      "color": "#1e1c22"
+    },
+    "critters": {
+      "enabled": true,
+      "perStage": 14,
+      "size": 0.6,
+      "color": "#8a6a4a"
+    }
+  }
+}

@@ -1,0 +1,45 @@
+html, body { margin: 0; height: 100%; overflow: hidden; background: #bfe0e6; font: 14px/1.4 system-ui, sans-serif; }
+#view { position: fixed; inset: 0; }
+#view canvas { display: block; }
+
+#hud { position: fixed; left: 12px; top: 12px; padding: 8px 12px; min-width: 150px;
+       background: rgba(20, 30, 35, 0.55); color: #fff; border-radius: 8px; font-variant-numeric: tabular-nums; }
+#hud .k { color: #bcd; font-size: 12px; }
+#hud .bar { height: 8px; margin-top: 4px; background: rgba(255, 255, 255, 0.2); border-radius: 4px; overflow: hidden; }
+#cadbar { height: 100%; width: 0; background: #ff9b3d; }
+
+#msg { position: fixed; left: 50%; top: 22%; transform: translateX(-50%); max-width: 80vw; text-align: center;
+       color: #fff; font-size: 22px; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000, 0 2px 6px rgba(0, 0, 0, 0.6); pointer-events: none; }
+#stagebanner { position: fixed; left: 50%; top: 14%; transform: translateX(-50%); pointer-events: none; opacity: 0;
+               transition: opacity 0.6s; }
+#stagebanner canvas + canvas { margin-top: 6px; }
+#hint { position: fixed; left: 50%; bottom: 60px; transform: translateX(-50%); padding: 8px 14px; max-width: 80vw;
+        background: rgba(120, 40, 30, 0.8); color: #fff; border-radius: 8px; opacity: 0; transition: opacity 0.4s; pointer-events: none; }
+#keys { position: fixed; left: 12px; bottom: 10px; right: 12px; color: #fff; font-size: 12px;
+        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7); pointer-events: none; }
+
+.lil-gui.root { max-height: calc(100vh - 16px); overflow-y: auto; }
+
+.keymap { position: fixed; inset: 0; z-index: 1000; display: flex; align-items: center; justify-content: center;
+          background: rgba(10, 15, 20, 0.55); }
+.keymap .card { width: min(560px, calc(100vw - 32px)); max-height: calc(100vh - 32px); overflow-y: auto; padding: 14px 18px;
+                background: #1f2629; color: #e6ecee; border-radius: 10px; box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5); }
+.keymap h3 { margin: 0 0 4px; }
+.keymap .note { color: #9fb0b6; font-size: 12px; margin-bottom: 8px; min-height: 1.4em; }
+.keymap .row { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 4px 0;
+               border-top: 1px solid rgba(255, 255, 255, 0.07); }
+.keymap .act { flex: 0 0 auto; }
+.keymap .chips { display: flex; flex-wrap: wrap; gap: 4px; justify-content: flex-end; }
+.keymap button { font: inherit; font-size: 12px; padding: 3px 8px; border-radius: 5px; border: 1px solid #4a585e;
+                 background: #2c363a; color: #e6ecee; cursor: pointer; }
+.keymap .chip:hover { background: #7a3b34; border-color: #a65449; }
+.keymap .add { color: #ffb070; }
+.keymap .add.waiting { background: #ff9b3d; color: #1f2629; }
+.keymap .unbound { color: #e07a6a; font-size: 12px; }
+.keymap .bar { display: flex; justify-content: flex-end; gap: 8px; margin-top: 10px; }
+#midistat { position: fixed; left: 12px; top: 130px; max-width: 46vw; padding: 6px 10px; border-radius: 6px;
+             background: rgba(20, 30, 35, 0.6); color: #ffd890; font-size: 12px; pointer-events: none; }
+#credits { display: none; position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 20; max-width: min(560px, 90vw);
+            padding: 18px 22px; background: rgba(15, 20, 25, 0.92); color: #e8eef0; border-radius: 10px; font-size: 14px; }
+#credits h2 { margin: 0 0 10px; font-size: 18px; }
+#credits .close { color: #9fb0b6; font-size: 12px; margin-bottom: 0; }

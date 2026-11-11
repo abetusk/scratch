@@ -1,0 +1,129 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Level preview</title>
+<style>
+  body { margin: 0; padding: 12px; background: #20262b; color: #dde3e6; font: 13px/1.4 system-ui, sans-serif; }
+  .bar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 8px; }
+  input { width: 80px; }
+  canvas { display: block; background: #111; margin-bottom: 8px; max-width: 100%; }
+  #stats { white-space: pre-wrap; font-family: monospace; }
+</style>
+</head>
+<body>
+<div class="bar">
+  seed <input id="seed" type="number" value="1" min="1">
+  <button id="gen">generate</button>
+  <button id="rnd">random seed</button>
+  <button id="dl">download JSON</button>
+  <span>top: map (start left, finish right) &nbsp; bottom: path height (orange) over the ground (grey)</span>
+</div>
+<canvas id="map"></canvas>
+<canvas id="prof"></canvas>
+<div id="stats"></div>
+
+<script src="levelgen.js"></script>
+<script>
+(function() {
+  var L = null, SC = 0.8;
+
+  function draw() {
+    var T = L.terrain, F = LevelGen.sdf(L),
+        W = Math.round(L.length * SC), Hh = Math.round((T.nx - 1) * T.cell * SC),
+        cv = document.getElementById("map"), g = cv.getContext("2d");
+    cv.width = W;  cv.height = Hh;
+
+    // World (x, z) -> canvas: z runs left to right, x top to bottom.
+    //
+    function X(z) { return z * SC; }
+    function Y(x) { return (x - T.x0) * SC; }
+
+    var img = g.createImageData(W, Hh);
+    for (var py = 0; py < Hh; py++) {
+      for (var px = 0; px < W; px++) {
+        var x = T.x0 + (py / SC), z = px / SC, h = F.height(x, z),
+            k = 4 * (px + (py * W)), c;
+        if (h < L.water)    { c = [70, 140, 190]; }
+        else if (h < 3)    { c = [120, 160, 90]; }
+        else {
+          var t = Math.min(1, h / L.options.wallHeight);
+          c = [150 + (60 * t), 120 + (60 * t), 90 + (50 * t)];
+        }
+        img.data[k] = c[0];  img.data[k + 1] = c[1];  img.data[k + 2] = c[2];  img.data[k + 3] = 255;
+      }
+    }
+    g.putImageData(img, 0, 0);
+
+    L.rocks.forEach(function(k) {
+      g.fillStyle = "rgba(90,70,60,0.55)";
+      g.beginPath();
+      g.ellipse(X(k.center[2]), Y(k.center[0]), k.radii[2] * SC, k.radii[0] * SC, 0, 0, 2 * Math.PI);
+      g.fill();
+    });
+    L.buildings.forEach(function(b) {
+      g.save();
+      g.translate(X(b.z), Y(b.x));
+      g.rotate(b.rot);
+      g.fillStyle = ["#f2e6cf", "#e8d2b0", "#d9c7a7", "#f5f0e6"][b.wall];
+      g.strokeStyle = ["#c8553d", "#4a6070", "#3f8f8a"][b.roof];
+      g.lineWidth = 2;
+      g.fillRect(-b.d * SC / 2, -b.w * SC / 2, b.d * SC, b.w * SC);
+      g.strokeRect(-b.d * SC / 2, -b.w * SC / 2, b.d * SC, b.w * SC);
+      g.restore();
+    });
+    g.strokeStyle = "#ff9b3d";  g.lineWidth = 2;
+    g.beginPath();
+    L.path.forEach(function(p, i) { if (i === 0) { g.moveTo(X(p[2]), Y(p[0])); } else { g.lineTo(X(p[2]), Y(p[0])); } });
+    g.stroke();
+    g.strokeStyle = "#ffe14a";  g.lineWidth = 3;
+    L.hoops.concat([L.finish]).forEach(function(h) {
+      var nx = h.n[0], nz = h.n[2], l = Math.sqrt((nx * nx) + (nz * nz)) || 1;
+      g.beginPath();
+      g.moveTo(X(h.p[2] - (nx / l) * h.r), Y(h.p[0] + (nz / l) * h.r));
+      g.lineTo(X(h.p[2] + (nx / l) * h.r), Y(h.p[0] - (nz / l) * h.r));
+      g.stroke();
+    });
+
+    // Profile: path height and the ground under it.
+    //
+    var pc = document.getElementById("prof"), q = pc.getContext("2d"), PH = 140, top = L.ceiling;
+    pc.width = W;  pc.height = PH;
+    q.fillStyle = "#16191c";  q.fillRect(0, 0, W, PH);
+    function PY(y) { return PH - ((y + 5) / (top + 5)) * PH; }
+    q.fillStyle = "#555";
+    L.path.forEach(function(p) { var h = F.height(p[0], p[2]); q.fillRect(X(p[2]) - 4, PY(h), 8, PH - PY(h)); });
+    L.rocks.forEach(function(k) {
+      q.fillStyle = "rgba(150,110,90,0.6)";
+      q.fillRect(X(k.center[2] - k.radii[2]), PY(k.radii[1]), 2 * k.radii[2] * SC, PH - PY(k.radii[1]));
+    });
+    q.strokeStyle = "#ff9b3d";  q.lineWidth = 2;
+    q.beginPath();
+    L.path.forEach(function(p, i) { if (i === 0) { q.moveTo(X(p[2]), PY(p[1])); } else { q.lineTo(X(p[2]), PY(p[1])); } });
+    q.stroke();
+
+    document.getElementById("stats").textContent = JSON.stringify(L.meta, null, 1);
+  }
+
+  function gen() {
+    L = LevelGen.generate({ seed: parseInt(document.getElementById("seed").value, 10) || 1 });
+    draw();
+  }
+
+  document.getElementById("gen").onclick = gen;
+  document.getElementById("rnd").onclick = function() {
+    document.getElementById("seed").value = 1 + Math.floor(Math.random() * 99999);
+    gen();
+  };
+  document.getElementById("dl").onclick = function() {
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([JSON.stringify(L)], { type: "application/json" }));
+    a.download = "level-" + L.seed + ".json";
+    a.click();
+  };
+  gen();
+})();
+</script>
+</body>
+</html>

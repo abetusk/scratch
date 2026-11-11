@@ -1,0 +1,61 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dragon ride</title>
+<link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+<div id="view"></div>
+
+<div id="hud">
+  <div><span class="k">time</span> <span id="time">0:00.0</span></div>
+  <div><span class="k">hoops</span> <span id="hoops">0 / 0</span></div>
+  <div><span class="k">speed</span> <span id="speed">0</span></div>
+  <div><span class="k">cadence</span> <span id="cad">0</span> <span class="k">/min</span></div>
+  <div class="bar"><div id="cadbar"></div></div>
+</div>
+
+<div id="msg"></div>
+<div id="hint"></div>
+
+<div id="keys"></div>
+<div id="credits"><h2>Credits</h2>
+  <p>Dragon model (option "Simple dragon"): <b>Simple 3D Dragon Model</b> by MattBas, CC-BY-SA 4.0,
+     opengameart.org/content/simple-3d-dragon-model</p>
+  <p>Colour palettes: <b>nice-color-palettes</b> (color500), MIT, Jam3</p>
+  <p>three.js r159, MIT, the three.js authors &middot; lil-gui, MIT, George Michael Brower</p>
+  <p>Teal dragon, levels, game: this project. Full list in CREDITS.md.</p>
+  <p class="close">click to close</p></div>
+<div id="midistat"></div>
+<div id="stagebanner"></div>
+
+<script src="vendor/three.min.js"></script>
+<script src="vendor/lil-gui.umd.min.js"></script>
+<script src="vendor/three-addons/BufferGeometryUtils.js"></script>
+<script src="vendor/three-addons/GLTFLoader.js"></script>
+<script src="vendor/palettes500.js"></script>
+<script src="levelgen/levelgen.js"></script>
+<script src="levelgen/stages.js"></script>
+<script src="js/pixelfont.js"></script>
+<script src="js/input.js"></script>
+<script src="js/devices.js"></script>
+<script src="js/flight.js"></script>
+<script src="js/course.js"></script>
+<script src="js/session.js"></script>
+<script src="js/psx.js"></script>
+<script src="js/world.js"></script>
+<script src="js/fx.js"></script>
+<script src="js/sky-volume.js"></script>
+<script src="js/sky-deck.js"></script>
+<script src="js/sky-puffs.js"></script>
+<script src="js/sky.js"></script>
+<script src="js/wingsync.js"></script>
+<script src="js/models.js"></script>
+<script src="js/dragon.js"></script>
+<script src="js/models-gltf.js"></script>
+<script src="js/keymap.js"></script>
+<script src="js/game.js"></script>
+</body>
+</html>

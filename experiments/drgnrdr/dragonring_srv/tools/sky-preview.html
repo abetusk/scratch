@@ -1,0 +1,111 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sky preview</title>
+<style>
+  html, body { margin: 0; height: 100%; overflow: hidden; background: #c8ced3; }
+  #info { position: fixed; left: 10px; bottom: 8px; font: 12px system-ui, sans-serif; color: #234; }
+</style>
+</head>
+<body>
+<div id="info">drag to look around</div>
+<script src="../vendor/three.min.js"></script>
+<script src="../vendor/lil-gui.umd.min.js"></script>
+<script src="../js/sky-volume.js"></script>
+<script src="../js/sky-deck.js"></script>
+<script src="../js/sky-puffs.js"></script>
+<script src="../js/sky.js"></script>
+<script>
+(function() {
+  var S = Object.assign({}, DR.SKY_DEFAULTS), look = { yaw: 0, pitch: 0.35, fov: 75 };
+  var renderer = new THREE.WebGLRenderer({ antialias: true }), scene = new THREE.Scene(),
+      camera = new THREE.PerspectiveCamera(look.fov, 1, 0.1, 1500);
+  document.body.appendChild(renderer.domElement);
+  scene.fog = new THREE.Fog(0xffffff, 100, 600);
+  var hemi = new THREE.HemisphereLight(), sun = new THREE.DirectionalLight();
+  sun.position.set(-0.5, 1, 0.35);
+  scene.add(hemi, sun);
+  var sky = new DR.Sky(scene, hemi, sun);
+  sky.set(S);
+
+  // A few grey-green hills for the horizon.
+  //
+  var g = new THREE.PlaneGeometry(1200, 1200, 60, 60).rotateX(-Math.PI / 2), p = g.attributes.position;
+  for (var i = 0; i < p.count; i++) {
+    var x = p.getX(i), z = p.getZ(i);
+    p.setY(i, (Math.sin(x / 60) * Math.cos(z / 80) * 18) + (Math.sin(z / 37) * 6) - 10);
+  }
+  g.computeVertexNormals();
+  scene.add(new THREE.Mesh(g, new THREE.MeshLambertMaterial({ color: 0x8fb26a, flatShading: true })));
+
+  var gui = new lil.GUI();
+  function on() {
+    sky.set(S);
+    var off = DR.skyUnused(S.preset);
+    gui.controllers.forEach(function(c) { c.enable(off.indexOf(c.property) < 0); });
+  }
+  gui.add(S, "preset", Object.keys(DR.SKY_PRESETS)).onChange(on);
+  gui.add(S, "coverage", 0, 1, 0.01).name("cloud cover").onChange(on);
+  gui.add(S, "billow", 0, 1, 0.01).onChange(on);
+  gui.add(S, "variety", 0, 1, 0.01).name("variety (uneven cover)").onChange(on);
+  gui.add(S, "curl", 0, 1, 0.01).onChange(on);
+  gui.add(S, "relief", 0, 3, 0.05).name("relief (mammatus)").onChange(on);
+  gui.add(S, "volumeRes", 0.25, 1, 0.05).name("mammatus resolution").onChange(on);
+  gui.add(S, "cirrus", 0, 1, 0.01).name("high wisps").onChange(on);
+  gui.add(S, "glow", 0, 1.5, 0.01).name("sun glow").onChange(on);
+  gui.add(S, "sunHeight", -5, 60, 1).name("glow height (deg)").onChange(on);
+  gui.add(S, "sunAngle", -180, 180, 1).name("glow direction (deg)").onChange(on);
+  gui.add(S, "speed", 0, 20, 0.1).name("drift speed").onChange(on);
+  gui.add(S, "scale", 0.2, 4, 0.05).name("cloud size (1/x)").onChange(on);
+  gui.add(S, "wind", 0, 360, 1).name("wind direction").onChange(on);
+  gui.add(look, "fov", 30, 110, 1);
+  on();
+
+  var drag = null;
+  renderer.domElement.addEventListener("pointerdown", function(e) { drag = [e.clientX, e.clientY]; });
+  window.addEventListener("pointerup", function() { drag = null; });
+  window.addEventListener("pointermove", function(e) {
+    if (!drag) { return; }
+    look.yaw  += (e.clientX - drag[0]) * 0.005;
+    look.pitch = Math.max(-0.5, Math.min(1.5, look.pitch + ((e.clientY - drag[1]) * 0.005)));
+    drag = [e.clientX, e.clientY];
+  });
+  function resize() {
+    renderer.setSize(innerWidth, innerHeight);
+    camera.aspect = innerWidth / innerHeight;
+    camera.updateProjectionMatrix();
+  }
+  window.addEventListener("resize", resize);
+  resize();
+
+  var clock = new THREE.Clock();
+  function frame() {
+    requestAnimationFrame(frame);
+    var dt = Math.min(clock.getDelta(), 0.05);
+    camera.position.set(0, 25, 0);
+    camera.rotation.set(look.pitch, look.yaw, 0, "YXZ");
+    if (camera.fov !== look.fov) { camera.fov = look.fov;  camera.updateProjectionMatrix(); }
+    sky.update(dt, camera);
+    sky.prerender(renderer, camera);
+    renderer.render(scene, camera);
+  }
+  frame();
+  // Timing: average ms per frame (sky + scene) over n frames, waiting
+  // for the GPU after each, at the current window size.
+  //
+  function timeFrames(n) {
+    var gl = renderer.getContext(), t0 = performance.now();
+    for (var i = 0; i < n; i++) {
+      sky.prerender(renderer, camera);
+      renderer.render(scene, camera);
+      gl.finish();
+    }
+    return (performance.now() - t0) / n;
+  }
+  window.SKYP = { S: S, look: look, sky: sky, set: on, time: timeFrames };
+})();
+</script>
+</body>
+</html>
