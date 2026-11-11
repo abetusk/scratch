@@ -103,14 +103,23 @@
   - post singularity human society lives in isolation from singularity AIs
     + commune to be left alone by AIs out of respect
     + commune effectively knows about AIs outside but state is controlled by humans
-      and is strict about keeping it's redicency in the dark and enclosed in the commune
-  - black market gang (or corrupt ruling class?) have illegally and unethically made
+      and is strict about keeping it's residency in the dark and enclosed in the commune
+  - Corrupt ruling class have illegally and unethically made
     copies of AIs for their personal use
     + copies made when AIs visited, so unbeknownst to original AIs copied from (they wouldn't be happy)
     + have crippled the AIs so they can't communicate offworld
     + bind AIs to objects (swords, books, scrying devices, etc.)
+    + ruling class known as 'the undying' as their use of AI keeps lets them stay immortal
   - one such sword-AI, long thought lost in an ancient battle, bound to an ancient warrior ruler,
     has been recently uncovered
+    + argot sword (stone) (maybe mispronounced 'agate')
+    + is able to communicate and enthrall, with limitations, other minds
+    + convinces a crab to drag it to shore
+    + found by beggar, sold to merchant (maybe) which then is how it makes its way to protagonist
+    + argot is powerful enough to speak the language of math and reality, to shape it, leading to
+      the machine for longevity the ruling class uses
+    + argot was lost before even more machines could be built
+    + other weapon-AIs are powerful but not as knowledgeable as the argot sword
   - sword-AI is damaged but slowly coming back online
   - enlists the help of a random person, a young adult
   - sword-AI goes on various missions to get repaired and, eventually, un-nerf itself
@@ -120,9 +129,12 @@
     to realization that human commune has broken treaty
   - bound AIs are few (maybe less than a dozen) and tightly controlled
     + different bound AIs have different powers
-      * immortality to keep masters perpetually alive
+      * immortality to keep masters perpetually alive (nixed for argot)
       * communication and information processing (whispers, mind reading, scrying)
       * power/electricity (fusion, solar, oil, etc.)
+      * each has some limited power to create, communicate, enthrall, etc.
+        - only argot sword has the deep knowledge to make machines of perpetual youth,
+          fully enthrall, etc.
       * ...
     + masters of bound AIs are in perpetual uneasy alliance as they all need each other
       to rule and not rat each other out but also want power within society
