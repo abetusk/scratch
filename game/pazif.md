@@ -61,7 +61,7 @@ An interaction can be triggered if you do a certain task or
 give them an item.
 
 | Situation | Prompt | Trigger | Dialogue |
-|---|---|---|
+|---|---|---|---|
 | next to grave | `My [relation] used to love flowers` | place flowers on grave | `[relation] would have thought these flowers were so nice` |
 | next to tree | `My [relation] and I used to have picnics under this tree` | give mutton | `It's been so long since I picniced here` |
 | next to fire | `It gets so cold and lonely at night` | light fire, stay at night | `That fire is nice` |
