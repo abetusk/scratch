@@ -52,7 +52,7 @@ Feel free to use them without credit!
     + legs dangling/peddling as crank feedback, maybe bobbing up and down a bit?
     + potential assets ([pepper carrot 3d](https://sr.ht/~ultidonki/pepper_carrot_3d_platformer/))
     + [medieval voxel](https://felixstrefter.itch.io/medieval-voxel-assets)
-* unrailed clone
+* unrailed clone (done, working multiplayer game in [Kaboom Caboose](https://github.com/abetusk/KaboomCaboose))
   - voxel
     + [terrain](https://kytric.itch.io/voxel-path-and-terrain), [train](https://kytric.itch.io/voxel-vehicles)
   - AR compatible to play with friends
