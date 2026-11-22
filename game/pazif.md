@@ -65,7 +65,7 @@ give them an item.
 | next to grave | `My [relation] used to love flowers` | place flowers on grave | `[relation] would have thought these flowers were so nice` |
 | next to tree | `My [relation] and I used to have picnics under this tree` | give mutton | `It's been so long since I picniced here` |
 | next to fire | `It gets so cold and lonely at night` | light fire, stay at night | `That fire is nice` |
-| being still in the (rain\|snow) | `...` | stay still while it's raining | `It's so beuatiful when it (snows|rains).` |
+| being still in the (rain\|snow) | `...` | stay still while it's raining | `It's so beuatiful when it (snows\|rains).` |
 | next to (waves\|pond\|stream) | `...` | stand next to them for some time | `My [relation] and I used to come here and watch the water. It's nice to have someone listen` | 
 | n/a | `My [relation] and I used to read together` | give book | `It's been so long since I've seen this book` |
 | n/a | `My [relation] used to read poetry to me` | give scroll | `It's been so long since I've seen this poem` |
